@@ -116,7 +116,10 @@
 
                 href = "@Url.Action("Delete", new { area = "admin" })";
                 $.post(href, { ID: data[0].ID }, function (d) {
-                    ErrorMsg(d); 
+                    ErrorMsg(d);
+                    if (d.indexOf("成功") > -1) {
+                        $("#treeGrid").jqxTreeGrid('deleteRow', data[0].ID);
+                    }
                 });
             } else { ErrorMsg("请选择一条数据"); }
         }

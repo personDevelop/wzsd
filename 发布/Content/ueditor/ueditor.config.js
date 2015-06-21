@@ -334,7 +334,7 @@
         //tableDragable
         //表格是否可以拖拽
          , tableDragable: true
-
+        ,enterTag:""
         //,disabledTableInTable:true  //禁止表格嵌套
 
         //sourceEditor

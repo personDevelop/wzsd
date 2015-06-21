@@ -2,7 +2,7 @@
 @using System.Web.Mvc.Html
 @using MVCExtention
 
-@helper HiddenFor(string code,string value)
+@helper HiddenFor(string code, string value)
 {
     <input name="@code" id="@code" type="hidden" value="@value" />
 }
@@ -13,8 +13,38 @@
             @MVCExtention.ExtendHtmlInput.MvcHelper.Label(code, name)
         </dt>
         <dd>
+
             @MVCExtention.ExtendHtmlInput.MvcHelper.TextBox(code, defaultval as string, new { @class = "input normal " + otherClass, width = width })
             <span>@hint</span>
+        </dd>
+    </dl>
+}
+@helper DateTime(string code, string name, DateTime? defaultval, string hint = "", string otherClass = "", int width = 200)
+{
+    <dl>
+        <dt>
+            @MVCExtention.ExtendHtmlInput.MvcHelper.Label(code, name)
+        </dt>
+        <dd>
+            <div id="@code" name="@code"></div>
+            <span>@hint</span>
+            <script type="text/javascript">
+    $(function(){
+        @{
+                        string widthstr = width + "px";
+                        string dv = string.Empty;
+                        if (defaultval.HasValue && defaultval.Value.Year > 1980)
+                        {
+                            dv = ",value:\"" + defaultval.Value.ToString("yyyy-MM-dd") + "\"";
+                        }
+
+                    }
+        $("#@code").jqxDateTimeInput({width: '@widthstr' ,formatString: "yyyy-MM-dd" @MVCExtention.ExtendHtmlInput.MvcHelper.Raw(dv)});
+
+                });
+
+
+            </script>
         </dd>
     </dl>
 }
@@ -42,12 +72,12 @@
             <script type="text/javascript">
                 //实例化编辑器
                 //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
-
-                $(function () {
-                    UE.getEditor('@code', { textarea: "@code" });
-                    @*setContent('@code', "@defaultval");*@
-                })
-
+                UE.getEditor('@code', { textarea: "@code",initialContent: "@defaultval" });
+                @*@{ string uecode = "ue" + code;}
+                var  <text>@uecode</text> =  UE.getEditor('@code', { textarea: "@code",initialContent: "@defaultval" });
+                <text>@uecode</text>.ready(function() {
+                    <text>@uecode</text>.setContent('@defaultval');
+                });*@
             </script>
 
         </dd>
@@ -89,8 +119,7 @@
                                 }
                                 bool valb = false;
                                 bool.TryParse(val.ToString(), out valb);
-                                @ExtendHtmlInput.MvcHelper.CheckBox(item, val)
-
+                                <input type="checkbox" name="@item" checked="@val" />
                             }
                             <label for="@item">
                                 @nameArr[i]
@@ -211,7 +240,7 @@
 
 @helper ImageUpLoad(string code, string name, bool isAdd, string defaultval = null, int maxLength = 1, EasyCms.Web.FileUpCallBack callBack = null)
 {
-    <dl style="margin:10px">
+    <dl style="margin-bottom:20px">
         <dt>
             @MVCExtention.ExtendHtmlInput.MvcHelper.Label(code, name)
         </dt>
@@ -225,6 +254,7 @@
                 </div>
                 <div class="cp_img_jia" id="@filePicker"></div>
                 <button class="ctlBtn btn btn-default">开始上传</button>
+
             </div>
             <script type="text/javascript">
 
@@ -256,7 +286,7 @@
                             // 内部根据当前运行是创建，可能是input元素，也可能是flash.
                             pick: filePicker,
                             formData: {
-                                uid: $("#ID").val()
+                                uid:  "@defaultval"
                             },
                             //只允许选择图片
                             accept: {
@@ -421,19 +451,46 @@
                <text>
                 $.getJSON("/UpLoad/GetFiles",{refid:"@defaultval"}, function(data){
 
-                    var $list =("#@divConatinerID > .fileList");
+                    var $list =$("#@divConatinerID > .fileList");
                     if (data.length>0) {
                         for (var i = 0; i < data.length; i++) {
                             var file=data[0];
                             var $li = $(
-                     '<div id="' + file.id + '"fileid="'+file.id+'" class="cp_img  upload-state-done">' +
-                         '<img>' +
+                     '<div id="' + file.ID + '"fileid="'+file.ID+'" class="cp_img  upload-state-done">' +
+                         '<img src="'+file.WebFilePath+'">' +
                      '<div class="cp_img_jian"></div></div>'
-                     ),
-                 $img = $li.find('img');
+                     );
+
                             // $list为容器jQuery实例
                             $list.append($li);
                         }
+
+                        //显示删除按钮
+                        $list.find(".cp_img").on("mouseover", function () {
+                            $(this).children(".cp_img_jian").css('display', 'block');
+
+                        });
+                        //隐藏删除按钮
+                        $list.find(".cp_img").on("mouseout", function () {
+                            $(this).children(".cp_img_jian").css('display', 'none');
+                        });
+                        //执行删除方法
+                        $list.on("click", ".cp_img_jian", function () {
+                            var $li =  $(this).parent();
+                            var Id = $li.attr("id");
+                            $(this).parent().remove();
+
+                            if ( $li.attr("fileID" )) {
+                                //删除附件数据
+                                $.get("/UpLoad/deleteFile",{id:$li.attr("fileID" )});
+                            }
+                            @if (callBack!=null && !string.IsNullOrWhiteSpace(callBack.OnDeleteName))
+                            {
+                                <text> @callBack.OnDeleteName+"(Id);" </text>
+                            }
+
+
+                        });
                     }
 
                 }); </text>

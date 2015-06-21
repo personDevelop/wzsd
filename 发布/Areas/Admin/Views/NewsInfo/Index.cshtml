@@ -1,0 +1,194 @@
+﻿@using MVCExtention;
+@{
+    ViewBag.Title = "新闻信息";
+}
+
+<!--工具栏-->
+<div id="floatHead" class="toolbar-wrap">
+    <div class="toolbar">
+        <div class="box-wrap">
+            <a class="menu-btn"></a>
+            <div class="l-list">
+                <ul class="icon-list">
+                    <li><a class="add" href="@Url.Action("Edit")"><i></i><span>新增</span></a></li>
+                    <li><a class="add" href="javascript:;" onclick="Edit();"><i></i><span>编辑</span></a></li>
+                    <li><a class="del" href="javascript:;" onclick="Del( );"><i></i><span>删除</span></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/工具栏-->
+<!--列表-->
+<div class="table-container">
+    <div id="jqxgrid"></div>
+</div>
+<!--/列表-->
+@section  scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var url = "@Url.Action("GetList")";
+            // prepare the data
+            var source =
+            {
+                datatype: "json",
+                datafields: [
+                  { name: 'ID', type: 'string' },
+                  
+                { name: 'ClassName', type: 'string' },
+
+		{ name: 'ClassID', type: 'string' },
+
+		{ name: 'NewsTitle', type: 'string' },
+
+		{ name: 'SubTitle', type: 'string' },
+
+		{ name: 'Summary', type: 'string' },
+
+		{ name: 'Description', type: 'string' },
+
+		{ name: 'ImageUrl', type: 'string' },
+
+		{ name: 'ThumbImageUrl', type: 'string' },
+
+		{ name: 'NormalImageUrl', type: 'string' },
+
+		{ name: 'CreatedDate', type: 'string' },
+
+		{ name: 'CreatedUserID', type: 'string' },
+
+		{ name: 'LastEditUserID', type: 'string' },
+
+		{ name: 'LastEditDate', type: 'string' },
+
+		{ name: 'LinkUrl', type: 'string' },
+
+		{ name: 'PvCount', type: 'string' },
+
+		{ name: 'State', type: 'string' },
+
+		{ name: 'KeyWords', type: 'string' },
+
+		{ name: 'Sequence', type: 'string' },
+
+		{ name: 'IsRecomend', type: 'string' },
+
+		{ name: 'IsHot', type: 'string' },
+
+		{ name: 'IsColor', type: 'string' },
+
+		{ name: 'IsTop', type: 'string' },
+
+		{ name: 'Note', type: 'string' },
+
+		{ name: 'TotalComment', type: 'string' },
+
+		{ name: 'TotalSupport', type: 'string' },
+
+		{ name: 'TotalFav', type: 'string' },
+
+		{ name: 'TotalShare', type: 'string' },
+
+		{ name: 'BeFrom', type: 'string' },
+
+		{ name: 'Meta_Title', type: 'string' },
+
+		{ name: 'Meta_Description', type: 'string' },
+
+		{ name: 'Meta_Keywords', type: 'string' },
+
+		{ name: 'SeoUrl', type: 'string' },
+
+		{ name: 'SeoImageAlt', type: 'string' },
+
+		{ name: 'SeoImageTitle', type: 'string' },
+
+		{ name: 'StaticUrl', type: 'string' },
+
+		{ name: 'AllowPl', type: 'string' }
+                ],
+                id: 'id',
+                url: url, pagesize: 2,
+                pager: function (pagenum, pagesize, oldpagenum) {
+                    // callback called when a page or page size is changed.
+                }
+            };
+            var dataAdapter = new $.jqx.dataAdapter(source);
+            var totalHeight = $(window).outerHeight();
+            if (totalHeight == 0) {
+                totalHeight = $(window).clientHeight();
+            }
+            var topHight = 50;
+
+            var middleHeight = totalHeight - topHight;
+            $("#jqxgrid").jqxGrid(
+            {
+                width: "95%",
+                height: 490,
+                source: dataAdapter,
+                columnsresize: true,
+                pageable: true,
+                columns: [
+
+
+
+
+  { text: '标题', dataField: 'NewsTitle', type: 'string' },
+    { text: '所属类别', dataField: 'ClassName', type: 'string', width: 100 },
+  { text: '发布日期', dataField: 'LastEditDate', type: 'string', width: 140 },
+  { text: '浏览次数', dataField: 'PvCount', type: 'string', width: 80 },
+  { text: '顺序', dataField: 'Sequence', type: 'string', width: 40 },
+
+  { text: '推荐', dataField: 'IsRecomend', type: 'string', width: 50 },
+
+  { text: '热点', dataField: 'IsHot', type: 'string', width: 50 },
+
+  { text: '醒目', dataField: 'IsColor', type: 'string', width: 50 },
+
+  { text: '置顶', dataField: 'IsTop', type: 'string', width: 50 },
+
+  { text: '评论次数', dataField: 'TotalComment', type: 'string', width: 80 },
+
+  { text: '允许评论', dataField: 'AllowPl', type: 'string', width: 80 }
+                ]
+            });
+
+
+        });
+    </script>
+    <script type="text/javascript">
+        function Edit() {
+            var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindex');
+            if (rowindex == -1) {
+                ErrorMsg("请选择一条数据");
+            } else {
+                var data = $('#jqxgrid').jqxGrid('getrowdata', rowindex);
+
+                if (data) {
+
+                    href = "@Url.Action("Edit", new  { area="admin" })";
+                    location.href = href + "/" + data.ID;
+                } else { ErrorMsg("请选择一条数据"); }
+            }
+
+
+        }
+
+        function Del() {
+            var rowindexes = $('#jqxgrid').jqxGrid('getselectedrowindexes');
+
+          
+            if (rowindexes.length == 1) {
+                var data = $('#jqxgrid').jqxGrid('getrowdata', rowindexes[0]);
+                href = "@Url.Action("Delete", new { area = "admin" })";
+                $.post(href, { ID: data.ID }, function (d) {
+                    ErrorMsg(d);
+                    if (d.indexOf("成功") > -1) {
+                        $("#jqxgrid").jqxGrid('deleteRow', rowindexes[0]);
+                    }
+                });
+            } else { ErrorMsg("请选择一条数据"); }
+        }
+    </script>
+}
