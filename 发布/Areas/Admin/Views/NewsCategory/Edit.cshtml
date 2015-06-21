@@ -1,0 +1,199 @@
+﻿@model NewsCategory
+@{
+    ViewBag.Title = "编辑新闻分类";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEdit.cshtml";
+}
+
+@Styles.Render("~/bundles/upimgcss")
+@Scripts.Render("~/bundles/ueditor")
+@Scripts.Render("~/bundles/uploadJs")
+
+@using EasyCms.Model
+<!--内容-->
+<div id="floatHead" class="content-tab-wrap">
+    <div class="content-tab">
+        <div class="content-tab-ul-wrap">
+            <ul>
+                <li><a class="selected" href="javascript:;">基本信息</a></li>
+                <li><a href="javascript:;">扩展选项</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="tab-content">
+
+
+    @HelperExtend.HiddenFor("ID", Model.ID)
+    @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())
+
+    @HelperExtend.HiddenFor("ParentID", Model.ParentID)
+    @HelperExtend.HiddenFor("DescriptionText", Model.DescriptionText)
+    @if (string.IsNullOrWhiteSpace(Model.ImageUrl))
+    {
+        Model.ImageUrl = Guid.NewGuid().ToString();
+
+    }
+    @HelperExtend.HiddenFor("ImageUrl", Model.ImageUrl)
+    @Html.ValidationSummary()
+
+    @HelperExtend.HelpEdit("ParentID", "ParentName", "上级分类", defaultvalAndText: Model.ParentName, hint: "空为一级分类", dialogTitle: "选择上级分类", InnitFunc: "InnitFunc", onOk: "onOk", IsTree: true, DataControlID: "treeGrid")
+    @HelperExtend.TextBox("Code", "编号", defaultval: Model.Code, hint: "*编号不能重复")
+    @HelperExtend.TextBox("Name", "名称", defaultval: Model.Name, hint: "*名称不能重复.")
+    @HelperExtend.ImageUpLoad("ImageUrl", "缩略图", Model.RecordStatus == Sharp.Common.StatusType.add, defaultval: Model.ImageUrl, maxLength: 1);
+    @HelperExtend.RadioGroup("WebSiteType", "所属站点 ", "0,1", "默认站点,手机站点", defaultval: Model.WebSiteType)
+    @HelperExtend.RadioGroup("ClassTypeID", "栏目类型", "0,1", "主导航,可频道版块", defaultval: Model.ClassTypeID)
+    @HelperExtend.RadioGroup("ClassModel", "内容模式", "0,1", "文章列表,单文章", defaultval: Model.ClassModel)
+    @HelperExtend.TextBox("Keywords", "关键字", defaultval: Model.Keywords)
+    @HelperExtend.CheckBoxList("频道设置", "AllowAddContent,AllowSubclass", "允许增加内容,允许增加子类", defaultval: new object[] { Model.AllowSubclass, Model.AllowSubclass });
+    @HelperExtend.UEditor("Description", "栏目描述", defaultval: Model.Description);
+    
+    @HelperExtend.TextBox("OrderNo", "显示顺序", defaultval: Model.OrderNo)
+    @HelperExtend.TextArea("Note", "备注", defaultval: Model.Note)
+</div>
+
+<div class="tab-content" style="display:none">
+    @HelperExtend.TextBox("Meta_Title", "页面标题", defaultval: Model.Meta_Title)
+    @HelperExtend.TextArea("Meta_Keywords", "页面关键字", defaultval: Model.Meta_Keywords)
+    @HelperExtend.TextArea("Meta_Description", "页面描述", defaultval: Model.Meta_Description)
+
+</div>
+@section  scripts{
+
+
+    <script type="text/javascript">
+
+        $(function () {
+            //$.validator.setDefaults({
+            //    submitHandler: function (form) {
+            //        $("#TextArea").val(getContentTxt("Description"));
+            //        form.submit();
+            //    }
+            //});
+            //初始化表单验证
+            $("form").validate({
+                ignore: "",
+                rules: {
+                    "Code": {
+                        required: true,
+                        maxlength: 50,
+                        remote: {
+                            url: '@Url.Action("CheckRepeat")',
+                            data: {
+                                ID: function () { return $("#ID").val(); },
+                                ParentID: function () { return $("#ParentID").val(); },
+                                RecordStatus: function () { return $("#RecordStatus").val(); },
+                                val: function () { return $("#Code").val(); },
+                                IsCode: true
+                            }
+                        }
+                    },
+                    Name: {
+                        required: true,
+                        maxlength: 100,
+                        remote: {
+                            url: '@Url.Action("CheckRepeat")',
+                            data: {
+                                ID: function () { return $("#ID").val(); },
+                                ParentID: function () { return $("#ParentID").val(); },
+                                RecordStatus: function () { return $("#RecordStatus").val(); },
+                                val: function () { return $("#Name").val(); },
+                                IsCode: false
+                            }
+                        }
+                    },
+                    ClassTypeID: { required: true },
+                    Note: {
+                        maxlength: 500
+                    }
+                },
+                messages: {
+                    Code: {
+                        required: "请输入编号",
+                        maxlength: $.validator.format("编号长度不能大于{0}个字符"),
+                        remote: "同级分类下编号重复"
+                    },
+                    Name: {
+                        required: "请输入名称",
+                        maxlength: $.validator.format("名称长度不能大于{0}个字符"),
+                        remote: "同级分类下名称重复"
+                    }
+                },
+                errorPlacement: function (error, element) {
+
+                    if (element.is(":radio"))
+                        error.insertAfter($(element).parent());
+                    else if (element.is(":checkbox"))
+                        error.insertAfter($(element).parent());
+                    else
+                        error.insertAfter(element);
+                }
+
+            });
+        })
+    </script>
+
+    <script type="text/javascript">
+
+        function InnitFunc() {
+            var source =
+                        {
+                            dataType: "json",
+                            dataFields: [
+
+               { name: 'ID', type: 'string' },
+
+               { name: 'ParentID', type: 'string' },
+
+               { name: 'Code', type: 'string' },
+
+               { name: 'Name', type: 'string' },
+
+               { name: 'AllowSubclass', type: 'string' }
+                            ],
+                            timeout: 10000,
+                            hierarchy:
+                            {
+                                keyDataField: { name: 'ID' },
+                                parentDataField: { name: 'ParentID' }
+                            },
+                            id: 'ID',
+                            root: 'value',
+                            url: " @Url.Action("GetListForSelecte", "NewsCategory", new { area = "Admin" })"
+                        };
+            var dataAdapter = new $.jqx.dataAdapter(source);
+
+
+            $("#treeGrid").jqxTreeGrid(
+                       {
+                           width: "95%",
+                           height: "95%",
+                           source: dataAdapter,
+                           columns: [
+             { text: '编码', dataField: 'Code', type: 'string', width: 200 },
+             { text: '名称', dataField: 'Name', type: 'string', width: 200 }
+                           ]
+                       });
+        }
+        function onOk(data) {
+            if (data.length == 1) {
+
+                if (data[0].AllowSubclass) {
+                    $("#ParentName").val(data[0].Name);
+                    $("#ParentID").val(data[0].ID);
+                } else {
+
+                    ErrorMsg("当前分类不能有下级分类");
+                }
+
+            } else { ErrorMsg("请选择一条数据"); }
+        }
+        $(function () {
+
+            if ("@TempData.ContainsKey("IsSuccess").ToString().ToLower()" == "true") {
+                SucessMsg("@TempData["IsSuccess"]");
+            }
+
+
+        });
+    </script>
+}
