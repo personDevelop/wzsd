@@ -8,8 +8,8 @@
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,initial-scale=1.0,user-scalable=no" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <title>后台管理中心</title>
-    
-    @Styles.Render("~/bundles/css") 
+
+    @Styles.Render("~/bundles/css")
 </head>
 <body class="indexbody">
 
@@ -61,11 +61,19 @@
 
     <div class="main-left">
         <h1 class="logo"></h1>
-        <div id="sidebar-nav" class="sidebar-nav"></div>
+        <div id="sidebar-nav" class="sidebar-nav">
+            <ul>
+                <li> @Html.ActionLink("系统参数设置", "index", "ParameterInfo", null,new { style = "color:white", target = "mainframe" })</li>
+                <li>
+                    @Html.ActionLink("新闻分类管理", null, "NewsCategory", null, new { style = "color:white", target = "mainframe" })
+                </li>
+                <li>  @Html.ActionLink("新闻管理", null, "NewsInfo", null, new { style = "color:white", target = "mainframe" })</li>
+            </ul>
+        </div>
     </div>
 
     <div class="main-container">
-        @*<iframe id="mainframe" name="mainframe" frameborder="0" src="center.aspx"></iframe>*@
+        <iframe id="mainframe" name="mainframe" frameborder="0"></iframe>
     </div>
 
 
