@@ -1,0 +1,43 @@
+﻿<div id="messageNotification">
+    <div>
+        <div id="msgDiv"></div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    $(function () {
+        $("#messageNotification").jqxNotification({
+            width: 250, position: "top-right"
+        });
+    })
+    function SucessMsg(msg, append) {
+        $("#msgDiv").text(msg);
+        $("#messageNotification").jqxNotification({
+            template: "success", appendContainer: append
+        });
+        $("#messageNotification").jqxNotification("open");
+    }
+    function ErrorMsg(msg, append) {
+        $("#msgDiv").text(msg);
+        $("#messageNotification").jqxNotification({
+            template: "error", appendContainer: append
+        });
+        $("#messageNotification").jqxNotification("open");
+
+    }
+    function InfoMsg(msg, append) {
+        $("#msgDiv").text(msg);
+        $("#messageNotification").jqxNotification({
+            template: "info", appendContainer: append
+        });
+        $("#messageNotification").jqxNotification("open");
+    }
+    function WarningMsg(msg, append) {
+        $("#msgDiv").text(msg);
+        $("#messageNotification").jqxNotification({
+            template: "warning", appendContainer: append
+        });
+        $("#messageNotification").jqxNotification("open");
+    }
+</script>
+
