@@ -48,6 +48,7 @@
     <Compile Include="NewsInfo.cs" />
     <Compile Include="ParameterInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ShopBrandInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="验证类扩展字段.txt" />

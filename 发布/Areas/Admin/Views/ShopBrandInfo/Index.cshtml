@@ -1,6 +1,6 @@
 ﻿@using MVCExtention;
 @{
-    ViewBag.Title = "新闻信息";
+    ViewBag.Title = "品牌信息";
 }
 
 <!--工具栏-->
@@ -25,8 +25,8 @@
 </div>
 <!--/列表-->
 @section  scripts{
-   @Html.Partial("_Paging")
- 
+    @Html.Partial("_Paging")
+
     <script type="text/javascript">
         $(document).ready(function () {
             var url = "@Url.Action("GetList")";
@@ -35,80 +35,16 @@
             {
                 datatype: "json",
                 cache: false,
-                datafields: [
-                  { name: 'ID', type: 'string' },
+                datafields: [ 
+		{ name: 'ID', type: 'string' },
 
-                { name: 'ClassName', type: 'string' },
+		{ name: 'Code', type: 'string' },
 
-        { name: 'ClassID', type: 'string' },
+		{ name: 'Name', type: 'string' },
+ 
 
-        { name: 'NewsTitle', type: 'string' },
-
-        { name: 'SubTitle', type: 'string' },
-
-        { name: 'Summary', type: 'string' },
-
-        { name: 'Description', type: 'string' },
-
-        { name: 'ImageUrl', type: 'string' },
-
-        { name: 'ThumbImageUrl', type: 'string' },
-
-        { name: 'NormalImageUrl', type: 'string' },
-
-        { name: 'CreatedDate', type: 'string' },
-
-        { name: 'CreatedUserID', type: 'string' },
-
-        { name: 'LastEditUserID', type: 'string' },
-
-        { name: 'LastEditDate', type: 'string' },
-
-        { name: 'LinkUrl', type: 'string' },
-
-        { name: 'PvCount', type: 'string' },
-
-        { name: 'State', type: 'string' },
-
-        { name: 'KeyWords', type: 'string' },
-
-        { name: 'Sequence', type: 'string' },
-
-        { name: 'IsRecomend', type: 'string' },
-
-        { name: 'IsHot', type: 'string' },
-
-        { name: 'IsColor', type: 'string' },
-
-        { name: 'IsTop', type: 'string' },
-
-        { name: 'Note', type: 'string' },
-
-        { name: 'TotalComment', type: 'string' },
-
-        { name: 'TotalSupport', type: 'string' },
-
-        { name: 'TotalFav', type: 'string' },
-
-        { name: 'TotalShare', type: 'string' },
-
-        { name: 'BeFrom', type: 'string' },
-
-        { name: 'Meta_Title', type: 'string' },
-
-        { name: 'Meta_Description', type: 'string' },
-
-        { name: 'Meta_Keywords', type: 'string' },
-
-        { name: 'SeoUrl', type: 'string' },
-
-        { name: 'SeoImageAlt', type: 'string' },
-
-        { name: 'SeoImageTitle', type: 'string' },
-
-        { name: 'StaticUrl', type: 'string' },
-
-        { name: 'AllowPl', type: 'string' }
+		{ name: 'Logo', type: 'string' }, 
+		{ name: 'OrderNo', type: 'string' }  
                 ],
                 beforeprocessing: function (data) {
                     source.totalrecords = data.total;
@@ -139,25 +75,18 @@
                 pageSize: 20,
                 pageable: true,
                 columns: [
+                     
+{ text: '品牌名称', dataField: 'Name', type: 'string', width: 200 },
+  { text: '检索拼音', dataField: 'Code', type: 'string', width: 200 }, 
 
+  { text: '品牌图片', dataField: 'Logo', type: 'string', width: 200 },
 
-    { text: '标题', dataField: 'NewsTitle', type: 'string' },
-    { text: '所属类别', dataField: 'ClassName', type: 'string', width: 100 },
-    { text: '发布日期', dataField: 'LastEditDate', type: 'string', width: 140 },
-    { text: '浏览次数', dataField: 'PvCount', type: 'string', width: 80 },
-    { text: '顺序', dataField: 'Sequence', type: 'string', width: 40 },
+  { text: '品牌官方地址', dataField: 'CompanyUrl', type: 'string', width: 200 },
 
-    { text: '推荐', dataField: 'IsRecomend', type: 'string', width: 50 },
+  { text: '品牌介绍', dataField: 'Description', type: 'string', width: 200 },
 
-    { text: '热点', dataField: 'IsHot', type: 'string', width: 50 },
+  { text: '显示顺序', dataField: 'OrderNo', type: 'string', width: 200 } 
 
-    { text: '醒目', dataField: 'IsColor', type: 'string', width: 50 },
-
-    { text: '置顶', dataField: 'IsTop', type: 'string', width: 50 },
-
-    { text: '评论次数', dataField: 'TotalComment', type: 'string', width: 80 },
-
-    { text: '允许评论', dataField: 'AllowPl', type: 'string', width: 80 }
                 ]
             });
 

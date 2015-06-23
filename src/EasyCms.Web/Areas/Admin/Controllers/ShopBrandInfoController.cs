@@ -6,57 +6,51 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Sharp.Common;
-using System.Data;
 
 namespace EasyCms.Web.Areas.Admin.Controllers
 {
-    public class NewsInfoController : Controller
+    public class ShopBrandInfoController : Controller
     {
-        NewsInfoBll bll = new NewsInfoBll();
+        ShopBrandInfoBll bll = new ShopBrandInfoBll();
         //
-        // GET: /Admin/NewsInfo/
+        // GET: /Admin/ShopBrandInfo/
         public ActionResult Index()
         {
 
             return View();
         }
-        public string GetList(int pagenum, int pagesize)
+        public ActionResult GetList()
         {
-            int recordCount = 0;
-            System.Data.DataTable dt = bll.GetList(pagenum+1, pagesize, ref   recordCount);
-            string result = JsonConvert.Convert2Json(dt);
-            result = "{\"total\":\"" + recordCount.ToString() + "\",\"rows\":" + result + "}";
-            return result;
+            System.Data.DataTable dt = bll.GetList();
+            return Json(new { data = dt });
+
 
         }
-        public string GetListForSelecte(int pagenum, int pagesize)
+        public ActionResult GetListForSelecte()
         {
-            int recordCount = 0;
-            System.Data.DataTable dt = bll.GetList(pagenum, pagesize, ref   recordCount, true);
-            string result = JsonConvert.Convert2Json(dt);
-            result = "{\"total\":\"" + recordCount.ToString() + "\",\"rows\":" + result + "}";
-            return result;
+            System.Data.DataTable dt = bll.GetList(true);
+            return Json(new { data = dt });
         }
 
         //
-        // POST: /Admin/NewsInfo/Create
+        // POST: /Admin/ShopBrandInfo/Create
         [HttpPost]
         [ValidateInput(false)]
         public ActionResult Save(FormCollection collection)
         {
-            NewsInfo p = null; ;
+            ShopBrandInfo p = null; ;
 
             try
             {
                 if (collection["RecordStatus"] != "add")
                 {
                     p = bll.GetEntity(collection["ID"]);
-                    p.BindForm<NewsInfo>(collection);
+                    p.BindForm<ShopBrandInfo>(collection);
                 }
                 else
                 {
                     // TODO: Add insert logic here
-                    p = collection.Bind<NewsInfo>();
+                    p = collection.Bind<ShopBrandInfo>();
 
                 }
 
@@ -66,7 +60,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                     {
                         p.ID = Guid.NewGuid().ToString();
                     }
-                    p.CreatedUserID = Session.GetUserID();
+                   
                 }
                 bll.Save(p);
                 TempData.Add("IsSuccess", "保存成功");
@@ -83,14 +77,14 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         }
 
         //
-        // GET: /Admin/NewsInfo/Edit/5
+        // GET: /Admin/ShopBrandInfo/Edit/5
         public ActionResult Edit(string id)
         {
 
-            NewsInfo p = null;
+            ShopBrandInfo p = null;
             if (string.IsNullOrWhiteSpace(id))
             {
-                p = new NewsInfo();
+                p = new ShopBrandInfo();
             }
             else
                 p = bll.GetEntity(id);
@@ -99,7 +93,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
 
         [HttpPost]
         //
-        // GET: /Admin/NewsInfo/Delete/5
+        // GET: /Admin/ShopBrandInfo/Delete/5
         public string Delete(string id)
         {
             return bll.Delete(id);

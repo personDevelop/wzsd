@@ -52,6 +52,7 @@
     <Compile Include="NewsInfoBll.cs" />
     <Compile Include="ParameterInfoBll.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ShopBrandInfoBll.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EasyCms.Dal\EasyCms.Dal.csproj">

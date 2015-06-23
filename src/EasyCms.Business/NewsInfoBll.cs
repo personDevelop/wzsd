@@ -30,18 +30,23 @@ namespace EasyCms.Business
             return Dal.Save(item);
         }
 
-        public DataTable GetList(bool IsForSelected = false)
+        public DataTable GetList(int pagenum, int pagesize, ref int recordCount, bool IsForSelected = false)
         {
-            return Dal.GetList(IsForSelected);
+            return Dal.GetList(pagenum, pagesize, ref   recordCount, IsForSelected);
         }
-         
- 
+
+
         public NewsInfo GetEntity(string id)
         {
             return Dal.GetEntity(id);
         }
 
- 
 
+
+
+        public DataTable GetAppNews(int page)
+        {
+            return Dal.GetAppNews(page);
+        }
     }
 }
