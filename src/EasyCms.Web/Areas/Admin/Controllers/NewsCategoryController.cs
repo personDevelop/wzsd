@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Sharp.Common;
+using EasyCms.Web.Common;
 
 
 namespace EasyCms.Web.Areas.Admin.Controllers
@@ -23,15 +24,17 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         public string GetList()
         {
             System.Data.DataTable dt = bll.GetList();
-            string result = JsonConvert.Convert2Json(dt);
-            return result;
+            return JsonWithDataTable.Serialize(dt);
+            //string result = JsonConvert.Convert2Json(dt);
+            //return result;
 
         }
         public string GetListForSelecte()
         {
             System.Data.DataTable dt = bll.GetList(true);
-            string result = JsonConvert.Convert2Json(dt);
-            return result;
+            return JsonWithDataTable.Serialize(dt);
+            //string result = JsonConvert.Convert2Json(dt);
+            //return result;
         }
         public string CheckRepeat(string ID, string ParentID, string RecordStatus, string val, bool IsCode)
         {

@@ -9,32 +9,28 @@ using System.Data;
 using EasyCms.Business;
 using System.Text;
 using System.Web.Http;
+using System.Web.Mvc;
+using EasyCms.Web.Common; 
 
 namespace EasyCms.Web.API
 {
     public class APPController : ApiController
     {
-
+        string host { get { return this.Url.Request.RequestUri.Authority + RequestContext.VirtualPathRoot; } }
         public HttpResponseMessage GetNews(int id = 1)
         {
             //获取page  
-            int page = 1;
-
-            object pageobj = ControllerContext.RouteData.Values["page"];
-            if (pageobj != null)
-            {
-                string pagestr = pageobj.ToString();
-                int.TryParse(pagestr, out page);
-            }
+            int page = id;
             //新闻id，定标题，简介，缩略图，新闻url 
-            DataTable dt = new NewsInfoBll().GetAppNews(page);
-            string result = JsonConvert.Convert2Json(dt);
+            DataTable dt = new NewsInfoBll().GetAppNews(page, host);
+
+            string result = JsonWithDataTable.Serialize(dt) ;
             var resp = new HttpResponseMessage(HttpStatusCode.OK);
-            resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
+            resp.Content = new StringContent(result, Encoding.UTF8, "text/plain"); 
             return resp;
 
         }
-
+        
         public HttpResponseMessage GetNew(string id = "")
         {
 
@@ -52,8 +48,9 @@ namespace EasyCms.Web.API
                 {
                     news.Description = string.Empty;
                 }
-                resp.Content = new StringContent(news.Description, Encoding.UTF8, "text/plain");
-            }
+                string result = JsonWithDataTable.Serialize(news);
+                resp.Content = new StringContent(result, Encoding.UTF8, "application/json");
+            }  
             return resp;
 
 

@@ -234,9 +234,8 @@
     <Compile Include="Common\AuthorCheck.cs" />
     <Compile Include="Common\BaseControler.cs" />
     <Compile Include="Common\ExtentionMethod.cs" />
-    <Compile Include="Common\JsonConvert.cs" />
+    <Compile Include="Common\Json.cs" />
     <Compile Include="Common\JsonModelBinder.cs" />
-    <Compile Include="Common\JsonToDataSet.cs" />
     <Compile Include="Common\UEFileUpLoad\Config.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -1152,7 +1151,9 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>7161</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:7161/</IISUrl>
+          <IISUrl>http://localhost:7161</IISUrl>
+          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
+          <IISAppRootUrl>http://localhost:7161/aaa/</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

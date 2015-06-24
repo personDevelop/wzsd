@@ -36,17 +36,20 @@ namespace EasyCms.Business
         }
 
 
+        public NewsInfo GetEntity(string id, string host)
+        {
+            return Dal.GetEntity(id, host);
+        }
+
         public NewsInfo GetEntity(string id)
         {
             return Dal.GetEntity(id);
         }
 
 
-
-
-        public DataTable GetAppNews(int page)
+        public DataTable GetAppNews(int page, string host)
         {
-            return Dal.GetAppNews(page);
+            return Dal.GetAppNews(page, host);
         }
     }
 }

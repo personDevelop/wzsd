@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using System.Web.Http;
+using System.Net.Http.Formatting;
 
 
 namespace EasyCms.Web
@@ -17,6 +18,7 @@ namespace EasyCms.Web
 
             RouteTable.Routes.RouteExistingFiles = false;
             ModelBinders.Binders.DefaultBinder = new JsonModelBinder();
+            GlobalConfiguration.Configuration.Formatters.JsonFormatter.MediaTypeMappings.Add(new QueryStringMapping("json", "true", "application/json"));
             GlobalConfiguration.Configure(WebApiConfig.Register);
             AreaRegistration.RegisterAllAreas();
          
@@ -28,6 +30,10 @@ namespace EasyCms.Web
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngine());
             ViewEngines.Engines.Add(new WebFormViewEngine());
+
+            //删除xml的解析 当返回值是string 时 直接返回string不是json对象 
+            GlobalConfiguration.Configuration.Formatters.XmlFormatter.SupportedMediaTypes.Clear(); 
+
         }
         //protected void Application_Start()
         //{

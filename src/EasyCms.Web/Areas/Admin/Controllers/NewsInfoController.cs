@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using Sharp.Common;
 using System.Data;
+using EasyCms.Web.Common;
 
 namespace EasyCms.Web.Areas.Admin.Controllers
 {
@@ -23,9 +24,10 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         public string GetList(int pagenum, int pagesize)
         {
             int recordCount = 0;
-            System.Data.DataTable dt = bll.GetList(pagenum+1, pagesize, ref   recordCount);
-            string result = JsonConvert.Convert2Json(dt);
-            result = "{\"total\":\"" + recordCount.ToString() + "\",\"rows\":" + result + "}";
+            System.Data.DataTable dt = bll.GetList(pagenum + 1, pagesize, ref   recordCount);
+
+            string result = JsonWithDataTable.Serialize(dt);
+            result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
             return result;
 
         }
@@ -33,8 +35,8 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         {
             int recordCount = 0;
             System.Data.DataTable dt = bll.GetList(pagenum, pagesize, ref   recordCount, true);
-            string result = JsonConvert.Convert2Json(dt);
-            result = "{\"total\":\"" + recordCount.ToString() + "\",\"rows\":" + result + "}";
+            string result = JsonWithDataTable.Serialize(dt);
+            result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
             return result;
         }
 
