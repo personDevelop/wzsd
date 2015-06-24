@@ -35,21 +35,21 @@
             {
                 datatype: "json",
                 cache: false,
-                datafields: [ 
+                datafields: [
 		{ name: 'ID', type: 'string' },
 
 		{ name: 'Code', type: 'string' },
 
 		{ name: 'Name', type: 'string' },
- 
 
-		{ name: 'Logo', type: 'string' }, 
-		{ name: 'OrderNo', type: 'string' }  
+
+		{ name: 'Logo', type: 'string' },
+		{ name: 'OrderNo', type: 'string' }
                 ],
                 beforeprocessing: function (data) {
                     source.totalrecords = data.total;
                 },
-                root: 'rows',
+                root: 'Rows',
                 id: 'id',
                 url: url,
             };
@@ -64,7 +64,7 @@
             $("#jqxgrid").jqxGrid(
             {
                 width: "95%",
-                height: 490,
+                autoheight: true,
                 source: dataAdapter,
                 columnsresize: true,
                 virtualmode: true,
@@ -75,17 +75,12 @@
                 pageSize: 20,
                 pageable: true,
                 columns: [
-                     
+
 { text: '品牌名称', dataField: 'Name', type: 'string', width: 200 },
-  { text: '检索拼音', dataField: 'Code', type: 'string', width: 200 }, 
+  { text: '检索拼音', dataField: 'Code', type: 'string', width: 200 },
+  { text: '页面描述', dataField: 'Meta_Description', type: 'string' },
 
-  { text: '品牌图片', dataField: 'Logo', type: 'string', width: 200 },
-
-  { text: '品牌官方地址', dataField: 'CompanyUrl', type: 'string', width: 200 },
-
-  { text: '品牌介绍', dataField: 'Description', type: 'string', width: 200 },
-
-  { text: '显示顺序', dataField: 'OrderNo', type: 'string', width: 200 } 
+  { text: '显示顺序', dataField: 'OrderNo', type: 'string', width: 80 }
 
                 ]
             });

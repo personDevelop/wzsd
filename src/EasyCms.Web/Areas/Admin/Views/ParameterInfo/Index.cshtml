@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "系统参数设置";
 }
- 
+
 <!--工具栏-->
 <div id="floatHead" class="toolbar-wrap">
     <div class="toolbar">
@@ -25,8 +25,8 @@
     </div>
 </div>
 <!--/列表-->
-@section  scripts{ 
-    
+@section  scripts{
+
     <script type="text/javascript">
         $(document).ready(function () {
 
@@ -84,7 +84,7 @@
             $("#treeGrid").jqxTreeGrid(
                        {
                            width: "95%",
-                           height: 490,
+                           height: middleHeight,
                            source: dataAdapter,
                            columns: [
              { text: '编码', dataField: 'Code', type: 'string', width: 200 },

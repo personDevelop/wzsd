@@ -1,6 +1,6 @@
-﻿@model ShopBrandInfo
+﻿@model ShopCategory
 @{
-    ViewBag.Title = "编辑品牌信息";
+    ViewBag.Title = "编辑商品分类";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutEdit.cshtml";
 }
 
@@ -26,24 +26,30 @@
     @HelperExtend.HiddenFor("ID", Model.ID)
     @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())
 
-    @if (string.IsNullOrWhiteSpace(Model.Logo))
+    @HelperExtend.HiddenFor("ParentID", Model.ParentID)
+    @if (string.IsNullOrWhiteSpace(Model.SmallLogo))
     {
-        Model.Logo = Guid.NewGuid().ToString();
-
+        Model.SmallLogo = Guid.NewGuid().ToString();
+        Model.BigLogo = Guid.NewGuid().ToString();
     }
+    @HelperExtend.HiddenFor("SmallLogo", Model.SmallLogo)
+    @HelperExtend.HiddenFor("BigLogo", Model.BigLogo)
+    @Html.ValidationSummary() 
+    @HelperExtend.HelpEdit("ParentID", "ParentName", "上级分类", defaultvalAndText: Model.ParentName, hint: "空为一级分类", dialogTitle: "选择上级分类", InnitFunc: "InnitFunc", onOk: "onOk", IsTree: true, DataControlID: "treeGrid")
+    @HelperExtend.TextBox("Code", "编号", defaultval: Model.Code, hint: "*编号不能重复")
+    @HelperExtend.TextBox("Name", "名称", defaultval: Model.Name, hint: "*名称不能重复.")
+    @HelperExtend.ImageUpLoad("SmallLogo", "小图标", Model.RecordStatus == Sharp.Common.StatusType.add, defaultval: Model.SmallLogo, maxLength: 1)
+    @HelperExtend.ImageUpLoad("BigLogo", "大图标", Model.RecordStatus == Sharp.Common.StatusType.add, defaultval: Model.BigLogo, maxLength: 1)
 
-    @HelperExtend.HiddenFor("Logo", Model.Logo)
-    @Html.ValidationSummary()
-    @HelperExtend.TextBox("Name", "名称", defaultval: Model.Name, hint: "(*)长度限制在100个字符以内！")
-    @HelperExtend.TextBox("Code", "检索拼音", defaultval: Model.Code, hint: "请输入品牌的拼音缩写便于检索！")
-    @HelperExtend.ImageUpLoad("Logo", "缩略图", Model.RecordStatus == Sharp.Common.StatusType.add, defaultval: Model.Logo, maxLength: 1)
+    @HelperExtend.RadioGroup("IsEnable", "启用", "false,true", "否,是", defaultval: Model.IsEnable)
     @HelperExtend.TextBox("OrderNo", "显示顺序", defaultval: Model.OrderNo)
+    @HelperExtend.TextArea("Note", "备注", defaultval: Model.Note)
 </div>
-
 <div class="tab-content" style="display:none">
-    @HelperExtend.TextBox("Meta_Description", "页面描述", defaultval: Model.Meta_Description)
-    @HelperExtend.TextArea("Meta_Keywords", "页面关键词", defaultval: Model.Meta_Keywords) 
-    @HelperExtend.UEditor("Description", "品牌介绍", defaultval: Html.Raw(Model.Description)) 
+    @HelperExtend.TextBox("PageTitle", "页面标题", defaultval: Model.PageTitle)
+    @HelperExtend.TextArea("KewWord", "页面关键字", defaultval: Model.KewWord)
+    @HelperExtend.TextArea("Description", "页面描述", defaultval: Model.Description)
+
 </div>
 @section  scripts{
 
@@ -58,9 +64,18 @@
                 ignore: "",
                 rules: {
                     "Code": {
-                        
+                        required: true,
                         maxlength: 50,
-                        
+                        remote: {
+                            url: '@Url.Action("CheckRepeat")',
+                            data: {
+                                ID: function () { return $("#ID").val(); },
+                                ParentID: function () { return $("#ParentID").val(); },
+                                RecordStatus: function () { return $("#RecordStatus").val(); },
+                                val: function () { return $("#Code").val(); },
+                                IsCode: true
+                            }
+                        }
                     },
                     Name: {
                         required: true,
@@ -68,25 +83,29 @@
                         remote: {
                             url: '@Url.Action("CheckRepeat")',
                             data: {
-                                ID: function () { return $("#ID").val(); }, 
+                                ID: function () { return $("#ID").val(); },
+                                ParentID: function () { return $("#ParentID").val(); },
                                 RecordStatus: function () { return $("#RecordStatus").val(); },
                                 val: function () { return $("#Name").val(); },
                                 IsCode: false
                             }
                         }
-                       
-                    } 
+                    },
+                    ClassTypeID: { required: true },
+                    Note: {
+                        maxlength: 500
+                    }
                 },
                 messages: {
-                    Code: { 
-                        maxlength: $.validator.format("检索拼音长度不能大于{0}个字符") 
-                        
+                    Code: {
+                        required: "请输入编号",
+                        maxlength: $.validator.format("编号长度不能大于{0}个字符"),
+                        remote: "同级分类下编号重复"
                     },
                     Name: {
                         required: "请输入名称",
                         maxlength: $.validator.format("名称长度不能大于{0}个字符"),
-                        remote: "已存在相同名称的品牌"
-                        
+                        remote: "同级分类下名称重复"
                     }
                 },
                 errorPlacement: function (error, element) {
@@ -117,9 +136,7 @@
 
                { name: 'Code', type: 'string' },
 
-               { name: 'Name', type: 'string' },
-
-               { name: 'AllowSubclass', type: 'string' }
+               { name: 'Name', type: 'string' } 
                             ],
                             timeout: 10000,
                             hierarchy:
@@ -128,7 +145,7 @@
                                 parentDataField: { name: 'ParentID' }
                             },
                             id: 'ID',
-                            root: 'value',
+                            root: 'Rows',
                             url: " @Url.Action("GetListForSelecte", "NewsCategory", new { area = "Admin" })"
                         };
             var dataAdapter = new $.jqx.dataAdapter(source);

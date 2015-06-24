@@ -155,7 +155,7 @@
                         foreach (string item in codes)
                         {
                             IsSelected = "";
-                            if (defaultval != null && item.Equals(defaultval.ToString())) { IsSelected = "checked=\"checked\""; }
+                            if (defaultval != null && item.Equals(defaultval.ToString().ToLower())) { IsSelected = "checked=\"checked\""; }
                             string radioId = code;
                             if (i > 0)
                             {

@@ -10,38 +10,41 @@ using Sharp.Common;
 
 namespace EasyCms.Business
 {
-    public class ShopBrandInfoBll
+    public class ShopProductTypeBll
     {
-        ShopBrandInfoDal Dal = new ShopBrandInfoDal();
+        ShopProductTypeDal Dal = new ShopProductTypeDal();
         public string Delete(string id)
         {
 
             return Dal.Delete(id);
         }
 
-        public int Save(ShopBrandInfo item)
+        public int Save(ShopProductType item)
         {
             return Dal.Save(item);
         }
 
+        public DataTable GetList(bool IsForSelected = false)
+        {
+            return Dal.GetList(IsForSelected);
+        }
         public DataTable GetList(int pagenum, int pagesize, ref int recordCount, bool IsForSelected = false)
         {
             return Dal.GetList(pagenum, pagesize, ref   recordCount, IsForSelected);
         }
-
-
-        public bool Exit(string ID,   string RecordStatus, string val, bool IsCode)
+        public bool Exit(string ID,  string RecordStatus, string val, bool IsCode)
         {
             return Dal.Exit(ID,  RecordStatus, val, IsCode);
 
         }
-
-        public ShopBrandInfo GetEntity(string id)
+ 
+        public ShopProductType GetEntity(string id)
         {
             return Dal.GetEntity(id);
         }
 
 
+        
 
 
     }

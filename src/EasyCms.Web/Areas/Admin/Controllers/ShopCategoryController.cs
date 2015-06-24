@@ -10,59 +10,50 @@ using EasyCms.Web.Common;
 
 namespace EasyCms.Web.Areas.Admin.Controllers
 {
-    public class ShopBrandInfoController : Controller
+    public class ShopCategoryController : Controller
     {
-        ShopBrandInfoBll bll = new ShopBrandInfoBll();
+        ShopCategoryBll bll = new ShopCategoryBll();
         //
-        // GET: /Admin/ShopBrandInfo/
+        // GET: /Admin/ShopCategory/
         public ActionResult Index()
         {
 
             return View();
         }
-        public string GetList(int pagenum, int pagesize)
+        public string GetList()
         {
-            int recordCount = 0;
-            System.Data.DataTable dt = bll.GetList(pagenum + 1, pagesize, ref   recordCount);
-
-            string result = JsonWithDataTable.Serialize(dt);
-            result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
-            return result;
+            System.Data.DataTable dt = bll.GetList();
+            return JsonWithDataTable.Serialize(dt);
 
         }
-        public string GetListForSelecte(int pagenum, int pagesize)
+        public string GetListForSelecte()
         {
             int recordCount = 0;
-            System.Data.DataTable dt = bll.GetList(pagenum, pagesize, ref   recordCount, true);
+            System.Data.DataTable dt = bll.GetList(true);
             string result = JsonWithDataTable.Serialize(dt);
             result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
             return result;
         }
-        public string CheckRepeat(string ID,   string RecordStatus, string val, bool IsCode)
-        {
-            return bll.Exit(ID,  RecordStatus, val, IsCode).ToString().ToLower();
-
-        } 
 
         //
-        // POST: /Admin/ShopBrandInfo/Create
+        // POST: /Admin/ShopCategory/Create
         [HttpPost]
         [ValidateInput(false)]
         public ActionResult Save(FormCollection collection)
         {
-            ShopBrandInfo p = null; ;
+            ShopCategory p = null; ;
 
             try
             {
                 if (collection["RecordStatus"] != "add")
                 {
                     p = bll.GetEntity(collection["ID"]);
-                    p.BindForm<ShopBrandInfo>(collection);
+                    p.BindForm<ShopCategory>(collection);
                 }
                 else
                 {
                     // TODO: Add insert logic here
-                    p = collection.Bind<ShopBrandInfo>();
+                    p = collection.Bind<ShopCategory>();
 
                 }
 
@@ -72,7 +63,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                     {
                         p.ID = Guid.NewGuid().ToString();
                     }
-                   
+
                 }
                 bll.Save(p);
                 TempData.Add("IsSuccess", "保存成功");
@@ -87,16 +78,20 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             }
             return View("Edit", p);
         }
+        public string CheckRepeat(string ID, string ParentID, string RecordStatus, string val, bool IsCode)
+        {
+            return bll.Exit(ID, ParentID, RecordStatus, val, IsCode).ToString().ToLower();
 
+        }
         //
-        // GET: /Admin/ShopBrandInfo/Edit/5
+        // GET: /Admin/ShopCategory/Edit/5
         public ActionResult Edit(string id)
         {
 
-            ShopBrandInfo p = null;
+            ShopCategory p = null;
             if (string.IsNullOrWhiteSpace(id))
             {
-                p = new ShopBrandInfo();
+                p = new ShopCategory();
             }
             else
                 p = bll.GetEntity(id);
@@ -105,7 +100,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
 
         [HttpPost]
         //
-        // GET: /Admin/ShopBrandInfo/Delete/5
+        // GET: /Admin/ShopCategory/Delete/5
         public string Delete(string id)
         {
             return bll.Delete(id);

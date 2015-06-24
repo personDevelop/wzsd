@@ -220,6 +220,8 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\Controllers\NewsInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopBrandInfoController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ShopCategoryController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ShopProductTypeController.cs" />
     <Compile Include="Common\CmsSession.cs" />
     <Compile Include="App_Start\AuthConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -676,6 +678,10 @@
     <Content Include="Areas\Admin\Views\ShopBrandInfo\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\ShopBrandInfo\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_Paging.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopCategory\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopCategory\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopProductType\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopProductType\Index.cshtml" />
     <None Include="Properties\PublishProfiles\publish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />

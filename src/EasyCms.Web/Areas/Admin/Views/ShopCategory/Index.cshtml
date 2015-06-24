@@ -1,6 +1,6 @@
 ﻿@using MVCExtention;
 @{
-    ViewBag.Title = "系统参数设置";
+    ViewBag.Title = "商品分类";
 }
 
 <!--工具栏-->
@@ -35,31 +35,42 @@
                  dataType: "json",
                  dataFields: [
 
-    { name: 'ID', type: 'string' },
+		{ name: 'ID', type: 'string' },
 
-    { name: 'ParentID', type: 'string' },
+		{ name: 'Code', type: 'string' },
 
-    { name: 'Code', type: 'string' },
+		{ name: 'Name', type: 'string' },
 
-    { name: 'Name', type: 'string' },
+		{ name: 'ParentID', type: 'string' },
 
-    { name: 'ClassCode', type: 'string' },
+		{ name: 'ClassCode', type: 'string' },
 
-    { name: 'IsDetails', type: 'string' },
+		{ name: 'IsMx', type: 'string' },
 
-    { name: 'Series', type: 'string' },
+		{ name: 'OrderNo', type: 'string' },
 
-    { name: 'IsSystem', type: 'string' },
+		{ name: 'Theme', type: 'string' },
 
-    { name: 'IsEdit', type: 'string' },
+		{ name: 'PageTitle', type: 'string' },
 
-    { name: 'IsDelete', type: 'string' },
+		{ name: 'Description', type: 'string' },
 
-    { name: 'IsEnable', type: 'string' },
+		{ name: 'KewWord', type: 'string' },
 
-    { name: 'Note', type: 'string' },
+		{ name: 'Depth', type: 'string' },
 
-    { name: 'OrderNo', type: 'string' }
+		{ name: 'SKUPrefix', type: 'string' },
+
+		{ name: 'BigLogo', type: 'string' },
+
+		{ name: 'SmallLogo', type: 'string' },
+
+		{ name: 'IsEnable', type: 'string' },
+
+		{ name: 'Note', type: 'string' },
+
+		{ name: 'AssociatedProductType', type: 'string' },
+
 
                  ],
                  timeout: 10000,
@@ -70,9 +81,10 @@
                  },
                  id: 'ID',
                  root: 'Rows',
-                 url: " @Url.Action("GetList", "ParameterInfo", new { area = "Admin" })"
+                 url: " @Url.Action("GetList", "ShopCategory", new { area = "Admin" })"
              };
             var dataAdapter = new $.jqx.dataAdapter(source);
+           
             var totalHeight = $(window).outerHeight();
             if (totalHeight == 0) {
                 totalHeight = $(window).clientHeight();
@@ -84,16 +96,21 @@
             $("#treeGrid").jqxTreeGrid(
                        {
                            width: "95%",
-                           height: middleHeight,
+                          
+                           
                            source: dataAdapter,
                            columns: [
-             { text: '编码', dataField: 'Code', type: 'string', width: 200 },
-             { text: '名称', dataField: 'Name', type: 'string', width: 200 },
-             { text: '系统参数', dataField: 'IsSystem', type: 'string', width: 80 },
-             { text: '可编辑', dataField: 'IsEdit', type: 'string', width: 50 },
-             { text: '可删除', dataField: 'IsDelete', type: 'string', width: 50 },
-             { text: '可用', dataField: 'IsEnable', type: 'string', width: 50 },
-             { text: '备注', dataField: 'Note', type: 'string' }
+  { text: '编号', dataField: 'Code', type: 'string', width: 200 },
+
+  { text: '分类名称', dataField: 'Name', type: 'string', width: 200 },
+
+  { text: '上级分类', dataField: 'ParentName', type: 'string', width: 200 },
+
+  { text: '顺序', dataField: 'OrderNo', type: 'string', width: 80 },
+  { text: '启用', dataField: 'IsEnable', type: 'string', width: 80 },
+
+  { text: '分类描述', dataField: 'Note', type: 'string' }
+
                            ]
                        });
         });

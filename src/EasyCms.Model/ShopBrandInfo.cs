@@ -146,7 +146,7 @@ namespace EasyCms.Model
         ///  品牌图片,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "Logo", DbTypeString = "char", ColumnIsNull = true, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "Logo", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string Logo
         {
@@ -310,4 +310,5 @@ namespace EasyCms.Model
         }
         #endregion
     }
+
 }

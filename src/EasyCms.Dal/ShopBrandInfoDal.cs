@@ -52,16 +52,19 @@ namespace EasyCms.Dal
 
         }
 
-        public DataTable GetList(bool IsForSelected = false)
+        public DataTable GetList(int pagenum, int pagesize, ref int recordCount, bool IsForSelected = false)
         {
+            int pageCount = 0;
             if (IsForSelected)
             {
-                return Dal.From<ShopBrandInfo>().Select(ShopBrandInfo._.ID,  ShopBrandInfo._.Code, ShopBrandInfo._.Name ).OrderBy(ShopBrandInfo._.OrderNo).ToDataTable();
+                return Dal.From<ShopBrandInfo>().Select(ShopBrandInfo._.ID, ShopBrandInfo._.Name).OrderBy(ShopBrandInfo._.OrderNo).ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
             }
             else
-                return Dal.From<ShopBrandInfo>().OrderBy(ShopBrandInfo._.OrderNo).ToDataTable();
+                return Dal.From<ShopBrandInfo>().OrderBy(ShopBrandInfo._.OrderNo)
+                    .ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
         }
-        public bool Exit(string ID, string parentID, string RecordStatus, string val, bool IsCode)
+
+        public bool Exit(string ID,   string RecordStatus, string val, bool IsCode)
         {
             WhereClip where = null;
 
@@ -80,20 +83,15 @@ namespace EasyCms.Dal
             }
             return !Dal.Exists<ShopBrandInfo>(where);
         }
- 
+
         public ShopBrandInfo GetEntity(string id)
         {
-            WhereClip where = new WhereClip("a.id=@id");
-            where.Parameters.Add("id", id);
-
-            return Dal.From<ShopBrandInfo>("a").Join<ShopBrandInfo>("b", new WhereClip("a.ParentID=b.ID"), JoinType.leftJoin)
-                .Select(new ExpressionClip("a.*,b.Name ParentName"))
-                .Where(where)
-                .ToFirst<ShopBrandInfo>();
+            return Dal.Find<ShopBrandInfo>(id);
+          
         }
 
- 
+
 
     }
-     
+
 }

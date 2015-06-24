@@ -10,16 +10,17 @@ using EasyCms.Web.Common;
 
 namespace EasyCms.Web.Areas.Admin.Controllers
 {
-    public class ShopBrandInfoController : Controller
+    public class ShopProductTypeController : Controller
     {
-        ShopBrandInfoBll bll = new ShopBrandInfoBll();
+        ShopProductTypeBll bll = new ShopProductTypeBll();
         //
-        // GET: /Admin/ShopBrandInfo/
+        // GET: /Admin/ShopProductType/
         public ActionResult Index()
         {
 
             return View();
         }
+    
         public string GetList(int pagenum, int pagesize)
         {
             int recordCount = 0;
@@ -38,31 +39,31 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
             return result;
         }
-        public string CheckRepeat(string ID,   string RecordStatus, string val, bool IsCode)
+        public string CheckRepeat(string ID, string RecordStatus, string val, bool IsCode)
         {
-            return bll.Exit(ID,  RecordStatus, val, IsCode).ToString().ToLower();
+            return bll.Exit(ID, RecordStatus, val, IsCode).ToString().ToLower();
 
-        } 
+        }
 
         //
-        // POST: /Admin/ShopBrandInfo/Create
+        // POST: /Admin/ShopProductType/Create
         [HttpPost]
         [ValidateInput(false)]
         public ActionResult Save(FormCollection collection)
         {
-            ShopBrandInfo p = null; ;
+            ShopProductType p = null; ;
 
             try
             {
                 if (collection["RecordStatus"] != "add")
                 {
                     p = bll.GetEntity(collection["ID"]);
-                    p.BindForm<ShopBrandInfo>(collection);
+                    p.BindForm<ShopProductType>(collection);
                 }
                 else
                 {
                     // TODO: Add insert logic here
-                    p = collection.Bind<ShopBrandInfo>();
+                    p = collection.Bind<ShopProductType>();
 
                 }
 
@@ -72,7 +73,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                     {
                         p.ID = Guid.NewGuid().ToString();
                     }
-                   
+
                 }
                 bll.Save(p);
                 TempData.Add("IsSuccess", "保存成功");
@@ -89,14 +90,14 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         }
 
         //
-        // GET: /Admin/ShopBrandInfo/Edit/5
+        // GET: /Admin/ShopProductType/Edit/5
         public ActionResult Edit(string id)
         {
 
-            ShopBrandInfo p = null;
+            ShopProductType p = null;
             if (string.IsNullOrWhiteSpace(id))
             {
-                p = new ShopBrandInfo();
+                p = new ShopProductType();
             }
             else
                 p = bll.GetEntity(id);
@@ -105,7 +106,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
 
         [HttpPost]
         //
-        // GET: /Admin/ShopBrandInfo/Delete/5
+        // GET: /Admin/ShopProductType/Delete/5
         public string Delete(string id)
         {
             return bll.Delete(id);

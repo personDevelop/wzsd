@@ -49,7 +49,9 @@
     <Compile Include="ParameterInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShopBrandInfo.cs" />
+    <Compile Include="ShopCategory.cs" />
     <Compile Include="ShopProductType.cs" />
+    <Compile Include="ShopProductTypeAndBrand.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="验证类扩展字段.txt" />
