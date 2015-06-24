@@ -17,8 +17,9 @@ namespace EasyCms.Web
 
             RouteTable.Routes.RouteExistingFiles = false;
             ModelBinders.Binders.DefaultBinder = new JsonModelBinder();
-            AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
+            AreaRegistration.RegisterAllAreas();
+         
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             
