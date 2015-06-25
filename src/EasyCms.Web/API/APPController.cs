@@ -49,7 +49,7 @@ namespace EasyCms.Web.API
                     news.Description = string.Empty;
                 }
                 string result = JsonWithDataTable.Serialize(news);
-                resp.Content = new StringContent(result, Encoding.UTF8, "application/json");
+                resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
             }  
             return resp;
 

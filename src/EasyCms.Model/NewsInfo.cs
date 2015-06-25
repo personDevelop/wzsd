@@ -1,4 +1,5 @@
-﻿using Sharp.Common;
+﻿using Newtonsoft.Json;
+using Sharp.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace EasyCms.Model
     /// <summary>
     /// 新闻信息
     /// </summary>  
+   [JsonObject]
     public partial class NewsInfo : BaseEntity
     {
         public static Column _ = new Column("NewsInfo");
