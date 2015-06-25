@@ -528,6 +528,10 @@ namespace EasyCms.Model
     }
     public partial class ShopCategory
     {
+        protected override void OnCreate()
+        {
+            this.IsEnable = true;
+        }
         [NotDbCol]
         public string ParentName { get; set; }
     }

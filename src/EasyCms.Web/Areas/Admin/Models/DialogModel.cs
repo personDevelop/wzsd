@@ -21,7 +21,14 @@ namespace EasyCms.Web
         public bool IsTree { get; set; }
 
     }
-
+    public class EditDialogModel
+    {
+        public string DialogID { get; set; }
+        public string Title { get; set; }
+        public int Height { get; set; }
+        public int Width { get; set; }
+        public string HeadIconName { get; set; } 
+    }
     public class FileUpCallBack
     {
         public string OnDeleteName { get; set; }

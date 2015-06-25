@@ -19,9 +19,9 @@ namespace EasyCms.Business
             return Dal.Delete(id);
         }
 
-        public int Save(ShopBrandInfo item)
+        public int Save(ShopBrandInfo item, List<string> producTypeList)
         {
-            return Dal.Save(item);
+            return Dal.Save(item, producTypeList);
         }
 
         public DataTable GetList(int pagenum, int pagesize, ref int recordCount, bool IsForSelected = false)
@@ -44,5 +44,6 @@ namespace EasyCms.Business
 
 
 
+ 
     }
 }

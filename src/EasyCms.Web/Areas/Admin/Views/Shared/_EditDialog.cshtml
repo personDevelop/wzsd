@@ -1,0 +1,30 @@
+﻿@model   EasyCms.Web.EditDialogModel
+@using EasyCms.Web
+
+<div id="@Model.DialogID">
+    <div>
+        <span>
+            @HelperExtend.img(Model.HeadIconName)   @Model.Title
+        </span>
+    </div>
+    <div>
+
+        <div class="newslist_title">
+            <h1>添加新的规格</h1>
+            添加供客户可选的规格,如服装类型商品的颜色、尺码。
+        </div>
+        <div>
+            <input />
+        </div>
+        <!--工具栏-->
+        <div class="page-footer">
+            <div class="btn-wrap">
+                <input type="submit" value="提交保存" class="btn" />
+                <input name="btnReturn" type="button" value="返回上一页" class="btn yellow" onclick="javascript:history.back(-1);" />
+            </div>
+        </div>
+        <!--/工具栏-->
+
+    </div>
+</div>
+

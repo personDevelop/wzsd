@@ -74,7 +74,21 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                     }
                    
                 }
-                bll.Save(p);
+                //获取商品类型
+                List<string> producTypeList = new List<string>();
+                foreach (string item in collection.Keys)
+                {
+                    if (item.StartsWith("spt"))
+                    {
+                        string ptID = item.Substring(3);
+                        if (!string.IsNullOrWhiteSpace(ptID))
+                        {
+                            producTypeList.Add(ptID);
+                        }
+                            
+                    }
+                }
+                bll.Save(p, producTypeList);
                 TempData.Add("IsSuccess", "保存成功");
                 ModelState.Clear();
 

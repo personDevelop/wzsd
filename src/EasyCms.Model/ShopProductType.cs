@@ -148,4 +148,13 @@ namespace EasyCms.Model
         }
         #endregion
     }
+
+    public partial class ShopProductType
+    {
+        /// <summary>
+        /// 编辑品牌信息时用到
+        /// </summary>
+        [NotDbCol]
+        public bool IsSelected { get; set; }
+    }
 }

@@ -19,9 +19,9 @@ namespace EasyCms.Business
             return Dal.Delete(id);
         }
 
-        public int Save(ShopProductType item)
+        public int Save(ShopProductType item, List<string> brandList)
         {
-            return Dal.Save(item);
+            return Dal.Save(item, brandList);
         }
 
         public DataTable GetList(bool IsForSelected = false)
@@ -32,20 +32,29 @@ namespace EasyCms.Business
         {
             return Dal.GetList(pagenum, pagesize, ref   recordCount, IsForSelected);
         }
-        public bool Exit(string ID,  string RecordStatus, string val, bool IsCode)
+        public bool Exit(string ID, string RecordStatus, string val, bool IsCode)
         {
-            return Dal.Exit(ID,  RecordStatus, val, IsCode);
+            return Dal.Exit(ID, RecordStatus, val, IsCode);
 
         }
- 
+
         public ShopProductType GetEntity(string id)
         {
             return Dal.GetEntity(id);
         }
 
+        public List<ShopProductType> GetListWithBrand(string brandid, StatusType statusType)
+        {
+            return Dal.GetListWithBrand(brandid, statusType);
+        }
+        public List<ShopBrandInfo> GetListWithProductType(string ptid, StatusType statusType)
+        {
+            return Dal.GetListWithProductType(ptid, statusType);
+        }
 
-        
-
-
+        public DataTable GetAttrList(int pagenum, int pagesize, string ptypeid, bool isGg, ref int recordCount)
+        {
+            return Dal.GetAttrList(pagenum, pagesize, ptypeid, isGg, ref   recordCount);
+        }
     }
 }

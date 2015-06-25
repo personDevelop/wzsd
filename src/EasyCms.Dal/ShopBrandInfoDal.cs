@@ -46,9 +46,39 @@ namespace EasyCms.Dal
             //}
         }
 
-        public int Save(ShopBrandInfo item)
+        public int Save(ShopBrandInfo item, List<string> producTypeList)
         {
-            return Dal.Submit(item);
+            SessionFactory dal;
+            IDbTransaction tr = Dal.BeginTransaction(out dal);
+            try
+            {
+                dal.Delete<ShopProductTypeAndBrand>(ShopProductTypeAndBrand._.BrandId == item.ID, tr);
+                if (producTypeList.Count > 0)
+                {
+                    List<ShopProductTypeAndBrand> list = new List<ShopProductTypeAndBrand>();
+                    foreach (var ptid in producTypeList)
+                    {
+
+
+                        ShopProductTypeAndBrand ptb = new ShopProductTypeAndBrand();
+                        ptb.ID = Guid.NewGuid().ToString();
+                        ptb.BrandId = item.ID;
+                        ptb.ProductTypeId = ptid;
+                        list.Add(ptb);
+                    }
+                    dal.SubmitNew(tr, ref dal, list);
+                }
+                dal.SubmitNew(ref dal, item);
+                dal.CommitTransaction(tr);
+                return 1;
+            }
+            catch (Exception)
+            {
+                dal.RollbackTransaction(tr);
+                return -1;
+
+            }
+
 
         }
 
@@ -64,7 +94,7 @@ namespace EasyCms.Dal
                     .ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
         }
 
-        public bool Exit(string ID,   string RecordStatus, string val, bool IsCode)
+        public bool Exit(string ID, string RecordStatus, string val, bool IsCode)
         {
             WhereClip where = null;
 
@@ -87,7 +117,7 @@ namespace EasyCms.Dal
         public ShopBrandInfo GetEntity(string id)
         {
             return Dal.Find<ShopBrandInfo>(id);
-          
+
         }
 
 

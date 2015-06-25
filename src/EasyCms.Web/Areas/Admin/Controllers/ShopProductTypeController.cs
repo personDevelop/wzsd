@@ -20,7 +20,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
 
             return View();
         }
-    
+
         public string GetList(int pagenum, int pagesize)
         {
             int recordCount = 0;
@@ -39,6 +39,16 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
             return result;
         }
+
+        public string GetAttrList(int pagenum, int pagesize, string ptypeid, bool isGg)
+        {
+            int recordCount = 0;
+            System.Data.DataTable dt = bll.GetAttrList(pagenum, pagesize, ptypeid, isGg, ref   recordCount);
+            string result = JsonWithDataTable.Serialize(dt);
+            result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
+            return result;
+        }
+
         public string CheckRepeat(string ID, string RecordStatus, string val, bool IsCode)
         {
             return bll.Exit(ID, RecordStatus, val, IsCode).ToString().ToLower();
@@ -75,8 +85,30 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                     }
 
                 }
-                bll.Save(p);
-                TempData.Add("IsSuccess", "保存成功");
+                //获取商品类型
+                List<string> brandList = new List<string>();
+                foreach (string item in collection.Keys)
+                {
+                    if (item.StartsWith("sbd"))
+                    {
+                        string ptID = item.Substring(3);
+                        if (!string.IsNullOrWhiteSpace(ptID))
+                        {
+                            brandList.Add(ptID);
+                        }
+
+                    }
+                }
+                bll.Save(p, brandList);
+                if (TempData.ContainsKey(""))
+                {
+                    TempData.Add("IsSuccess", "保存成功");
+                }
+                else
+                {
+                    TempData["IsSuccess"] = "保存成功";
+                }
+
                 ModelState.Clear();
 
 
