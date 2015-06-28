@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using Sharp.Common;
 using EasyCms.Web.Common;
+using System.Web.Helpers;
 
 namespace EasyCms.Web.Areas.Admin.Controllers
 {
@@ -40,10 +41,10 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             return result;
         }
 
-        public string GetAttrList(int pagenum, int pagesize, string ptypeid, bool isGg)
+        public string GetAttrList( string ptypeid, bool isGg)
         {
             int recordCount = 0;
-            System.Data.DataTable dt = bll.GetAttrList(pagenum, pagesize, ptypeid, isGg, ref   recordCount);
+            System.Data.DataTable dt = bll.GetAttrList(  ptypeid, isGg );
             string result = JsonWithDataTable.Serialize(dt);
             result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
             return result;
@@ -143,5 +144,52 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         {
             return bll.Delete(id);
         }
+
+
+
+        //
+        // POST: /Admin/ShopProductType/Create
+        [HttpPost]
+        [ValidateInput(false)]
+        public ActionResult SaveExtend(FormCollection collection)
+        {
+            ShopExtendInfo p = null; ;
+
+            try
+            {
+                if (collection["RecordStatus"] != "add")
+                {
+                    p = bll.GetShopExtendInfo(collection["ID"]);
+                    p.BindForm<ShopExtendInfo>(collection);
+                }
+                else
+                {
+                    // TODO: Add insert logic here
+                    p = collection.Bind<ShopExtendInfo>();
+
+                }
+
+                if (p.RecordStatus == Sharp.Common.StatusType.add)
+                {
+                    if (string.IsNullOrWhiteSpace(p.ID))
+                    {
+                        p.ID = Guid.NewGuid().ToString();
+                    }
+
+                }
+
+                bll.SaveShopExtendInfo(p);
+                return Json(new { result = true, msg = string.Empty, id = p.ID, RecordStatus = p.RecordStatus.ToString() });
+
+            }
+            catch (Exception ex)
+            {
+
+                return Json(new { result = false, msg = ex.Message });
+
+            }
+
+        }
+
     }
 }

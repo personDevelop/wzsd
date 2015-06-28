@@ -22,6 +22,10 @@ namespace EasyCms.Web.Controllers
                 string fileid = Guid.NewGuid().ToString();
                 string extend = name.Substring(name.LastIndexOf('.') + 1);
                 string filePath = "~/Upload/" + types[0] + "/" + DateTime.Now.ToString("yyyyMMdd") + "/" + fileid + "." + extend;
+                if (string.IsNullOrWhiteSpace(uid))
+                {
+                    uid = fileid;
+                }
                 AttachFile af = new AttachFile()
                 {
                     ID = fileid,
@@ -48,7 +52,8 @@ namespace EasyCms.Web.Controllers
                     {
                         jsonrpc = "2.0",
                         id = id,
-                        uid = fileid
+                        uid = fileid,
+                        RefID = uid
                     });
                 }
                 else

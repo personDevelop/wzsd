@@ -52,6 +52,7 @@
     <Compile Include="ShopBrandInfo.cs" />
     <Compile Include="ShopCategory.cs" />
     <Compile Include="ShopExtendInfo.cs" />
+    <Compile Include="ShopExtendInfoValue.cs" />
     <Compile Include="ShopProductType.cs" />
     <Compile Include="ShopProductTypeAndBrand.cs" />
   </ItemGroup>

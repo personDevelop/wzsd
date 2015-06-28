@@ -121,68 +121,68 @@
 
     <script type="text/javascript">
 
-            $(function () {
+        $(function () {
 
 
-                //初始化表单验证
-                $("#form1").validate({
-                    ignore: "",
-                    rules: {
-                        "Code": {
-                            required: true,
-                            maxlength: 50,
-                            remote: {
-                                url: '@Url.Action("CheckRepeat")',
-                                data: {
-                                    ID: function () { return $("#ID").val(); },
-                                    RecordStatus: function () { return $("#RecordStatus").val(); },
-                                    val: function () { return $("#Code").val(); },
-                                    IsCode: true
-                                }
+            //初始化表单验证
+            $("#form1").validate({
+                ignore: "",
+                rules: {
+                    "Code": {
+                        required: true,
+                        maxlength: 50,
+                        remote: {
+                            url: '@Url.Action("CheckRepeat")',
+                            data: {
+                                ID: function () { return $("#ID").val(); },
+                                RecordStatus: function () { return $("#RecordStatus").val(); },
+                                val: function () { return $("#Code").val(); },
+                                IsCode: true
                             }
-                        },
-                        Name: {
-                            required: true,
-                            maxlength: 100,
-                            remote: {
-                                url: '@Url.Action("CheckRepeat")',
-                                data: {
-                                    ID: function () { return $("#ID").val(); },
-                                    RecordStatus: function () { return $("#RecordStatus").val(); },
-                                    val: function () { return $("#Name").val(); },
-                                    IsCode: false
-                                }
-                            }
-                        },
-                        ClassTypeID: { required: true },
-                        Note: {
-                            maxlength: 500
                         }
                     },
-                    messages: {
-                        Code: {
-                            required: "请输入编号",
-                            maxlength: $.validator.format("编号长度不能大于{0}个字符"),
-                            remote: "编号重复"
-                        },
-                        Name: {
-                            required: "请输入名称",
-                            maxlength: $.validator.format("名称长度不能大于{0}个字符"),
-                            remote: "名称重复"
+                    Name: {
+                        required: true,
+                        maxlength: 100,
+                        remote: {
+                            url: '@Url.Action("CheckRepeat")',
+                            data: {
+                                ID: function () { return $("#ID").val(); },
+                                RecordStatus: function () { return $("#RecordStatus").val(); },
+                                val: function () { return $("#Name").val(); },
+                                IsCode: false
+                            }
                         }
                     },
-                    errorPlacement: function (error, element) {
-
-                        if (element.is(":radio"))
-                            error.insertAfter($(element).parent());
-                        else if (element.is(":checkbox"))
-                            error.insertAfter($(element).parent());
-                        else
-                            error.insertAfter(element);
+                    ClassTypeID: { required: true },
+                    Note: {
+                        maxlength: 500
                     }
+                },
+                messages: {
+                    Code: {
+                        required: "请输入编号",
+                        maxlength: $.validator.format("编号长度不能大于{0}个字符"),
+                        remote: "编号重复"
+                    },
+                    Name: {
+                        required: "请输入名称",
+                        maxlength: $.validator.format("名称长度不能大于{0}个字符"),
+                        remote: "名称重复"
+                    }
+                },
+                errorPlacement: function (error, element) {
 
-                });
-            })
+                    if (element.is(":radio"))
+                        error.insertAfter($(element).parent());
+                    else if (element.is(":checkbox"))
+                        error.insertAfter($(element).parent());
+                    else
+                        error.insertAfter(element);
+                }
+
+            });
+        })
     </script>
 
     <script type="text/javascript">
@@ -343,20 +343,28 @@
     </script>
 
 
-    <div id="addge">
+    <div id="addge" style="display:none; padding:0px;" class="tab-content">
         <div>
             <span>
                 添加新的规格
             </span>
         </div>
-        <div>
+        <div >
 
             <div class="newslist_title">
                 <h1>添加新的规格</h1>
                 添加供客户可选的规格,如服装类型商品的颜色、尺码。
             </div>
             <div>
-                <input />
+                @HelperExtend.HiddenFor("ID", "")
+                @HelperExtend.HiddenFor("RecordStatus", "")
+                @HelperExtend.HiddenFor("ProductTypeID", Model.ID)
+                @HelperExtend.HiddenFor("UsageMode", "2")
+                @HelperExtend.TextBox("Name", "名称", defaultval: Model.Name, hint: "*名称不能重复.")
+                @HelperExtend.RadioGroup("ShowType", "展示方式 ", "0,1,2", "单选,多选,文本", defaultval: "")
+                @HelperExtend.RadioGroup("UseAttrImg", "类型", "0,1", "使用图片,文本", defaultval: 0)
+                @HelperExtend.RadioGroup("UseDefineImg", "自定义图标", "0,1", "否,是", defaultval: 0)
+                @HelperExtend.TextBox("DisplayOrder", "显示顺序", defaultval: 0)
             </div>
             <!--工具栏-->
             <div class="page-footer">
@@ -376,7 +384,7 @@
         $(function () {
             $('#addge').jqxWindow({
                 autoOpen: false, resizable: true, isModal: true,
-                showCollapseButton: false, maxHeight: 900, maxWidth: 1000, minHeight: 100, minWidth: 200,width:500,height:500
+                showCollapseButton: false, maxHeight: 900, maxWidth: 1000, minHeight: 100, minWidth: 200, width: 600, height: 400
             });
         });
 

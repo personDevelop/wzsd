@@ -221,6 +221,7 @@
     <Compile Include="Areas\Admin\Controllers\NewsInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopBrandInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopCategoryController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ShopExtendInfoValueController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopProductTypeController.cs" />
     <Compile Include="Common\CmsSession.cs" />
     <Compile Include="App_Start\AuthConfig.cs" />
@@ -683,12 +684,16 @@
     <Content Include="Areas\Admin\Views\ShopProductType\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\ShopProductType\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_EditDialog.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopExtendInfoValue\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopExtendInfoValue\Index.cshtml" />
     <None Include="Properties\PublishProfiles\publish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery-1.11.1.min.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />

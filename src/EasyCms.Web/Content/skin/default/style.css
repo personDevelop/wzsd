@@ -486,7 +486,7 @@ textarea.input{ width:300px; height:65px; }
     .single-select.up .arrow{ top:-13px; background:url(skin_icons.png) 0 -300px no-repeat; }
 
 .page-footer{ padding:10px 0; height:32px; font-size:12px; }
-	.page-footer .btn-wrap{ position:fixed; margin:0; padding:10px 0; top:auto; left:15px; right:15px; bottom:0; background:#fff; z-index:3; }
+	.page-footer .btn-wrap{ position:fixed; margin:0 auto; text-align:center; padding:10px 0; top:auto; left:15px; right:15px; bottom:0; background:#fff; z-index:3; }
 	.page-footer .btn-wrap:after{ clear:both;content:".";display:block;height:0;visibility:hidden; }
 /* ==========================编辑页样式.结束======================== */
 

@@ -5,15 +5,15 @@
  *作者：一些事情
 ====================================*/
 //绑定需要浮动的表头
-$(function(){
+$(function () {
     $(".ltable tr:nth-child(odd)").addClass("odd_bg"); //隔行变色
     $("#floatHead").smartFloat();
-	$(".rule-single-checkbox").ruleSingleCheckbox();
-	$(".rule-multi-checkbox").ruleMultiCheckbox();
-	$(".rule-multi-radio").ruleMultiRadio();
-	$(".rule-single-select").ruleSingleSelect();
-	$(".rule-multi-porp").ruleMultiPorp();
-	$(".rule-date-input").ruleDateInput();
+    $(".rule-single-checkbox").ruleSingleCheckbox();
+    $(".rule-multi-checkbox").ruleMultiCheckbox();
+    $(".rule-multi-radio").ruleMultiRadio();
+    $(".rule-single-select").ruleSingleSelect();
+    $(".rule-multi-porp").ruleMultiPorp();
+    $(".rule-date-input").ruleDateInput();
 });
 //全选取消按钮函数
 function checkAll(chkobj) {
@@ -52,8 +52,8 @@ function checkForFloat(obj, e) {
         } else { //Firefox 
             e.preventDefault();
         }
-    }  
-    return isOK;  
+    }
+    return isOK;
 }
 //检查短信字数
 function checktxt(obj, txtId) {
@@ -247,37 +247,37 @@ $.fn.initValidform = function () {
 //======================以上基于Validform插件======================
 
 //智能浮动层函数
-$.fn.smartFloat = function() {
-	var position = function(element) {
-		var obj = element.children("div");
-		var top = obj.position().top;
-		var pos = obj.css("position");
-		$(window).scroll(function() {
-			var scrolls = $(this).scrollTop();
-			if (scrolls > top) {
-				obj.width(element.width());
-				element.height(obj.outerHeight());
-				if (window.XMLHttpRequest) {
-					obj.css({
-						position: "fixed",
-						top: 0
-					});	
-				} else {
-					obj.css({
-						top: scrolls
-					});	
-				}
-			}else {
-				obj.css({
-					position: pos,
-					top: top
-				});	
-			}
-		});
-	};
-	return $(this).each(function() {
-		position($(this));						 
-	});
+$.fn.smartFloat = function () {
+    var position = function (element) {
+        var obj = element.children("div");
+        var top = obj.position().top;
+        var pos = obj.css("position");
+        $(window).scroll(function () {
+            var scrolls = $(this).scrollTop();
+            if (scrolls > top) {
+                obj.width(element.width());
+                element.height(obj.outerHeight());
+                if (window.XMLHttpRequest) {
+                    obj.css({
+                        position: "fixed",
+                        top: 0
+                    });
+                } else {
+                    obj.css({
+                        top: scrolls
+                    });
+                }
+            } else {
+                obj.css({
+                    position: pos,
+                    top: top
+                });
+            }
+        });
+    };
+    return $(this).each(function () {
+        position($(this));
+    });
 };
 
 //复选框
@@ -326,107 +326,107 @@ $.fn.ruleSingleCheckbox = function () {
 };
 
 //多项复选框
-$.fn.ruleMultiCheckbox = function() {
-	var multiCheckbox = function(parentObj){
-		parentObj.addClass("multi-checkbox"); //添加样式
-		parentObj.children().hide(); //隐藏内容
-		var divObj = $('<div class="boxwrap"></div>').prependTo(parentObj); //前插入一个DIV
-		parentObj.find(":checkbox").each(function(){
-			var indexNum = parentObj.find(":checkbox").index(this); //当前索引
-			var newObj = $('<a href="javascript:;">' + parentObj.find('label').eq(indexNum).text() + '</a>').appendTo(divObj); //查找对应Label创建选项
-			if($(this).prop("checked") == true){
-				newObj.addClass("selected"); //默认选中
-			}
-			//检查控件是否启用
-			if($(this).prop("disabled") == true){
-				newObj.css("cursor","default");
-				return;
-			}
-			//绑定事件
-			$(newObj).click(function(){
-				if($(this).hasClass("selected")){
-					$(this).removeClass("selected");
-					//parentObj.find(':checkbox').eq(indexNum).prop("checked",false);
-				}else{
-					$(this).addClass("selected");
-					//parentObj.find(':checkbox').eq(indexNum).prop("checked",true);
-				}
-				parentObj.find(':checkbox').eq(indexNum).trigger("click"); //触发对应的checkbox的click事件
-				//alert(parentObj.find(':checkbox').eq(indexNum).prop("checked"));
-			});
-		});
-	};
-	return $(this).each(function() {
-		multiCheckbox($(this));						 
-	});
+$.fn.ruleMultiCheckbox = function () {
+    var multiCheckbox = function (parentObj) {
+        parentObj.addClass("multi-checkbox"); //添加样式
+        parentObj.children().hide(); //隐藏内容
+        var divObj = $('<div class="boxwrap"></div>').prependTo(parentObj); //前插入一个DIV
+        parentObj.find(":checkbox").each(function () {
+            var indexNum = parentObj.find(":checkbox").index(this); //当前索引
+            var newObj = $('<a href="javascript:;">' + parentObj.find('label').eq(indexNum).text() + '</a>').appendTo(divObj); //查找对应Label创建选项
+            if ($(this).prop("checked") == true) {
+                newObj.addClass("selected"); //默认选中
+            }
+            //检查控件是否启用
+            if ($(this).prop("disabled") == true) {
+                newObj.css("cursor", "default");
+                return;
+            }
+            //绑定事件
+            $(newObj).click(function () {
+                if ($(this).hasClass("selected")) {
+                    $(this).removeClass("selected");
+                    //parentObj.find(':checkbox').eq(indexNum).prop("checked",false);
+                } else {
+                    $(this).addClass("selected");
+                    //parentObj.find(':checkbox').eq(indexNum).prop("checked",true);
+                }
+                parentObj.find(':checkbox').eq(indexNum).trigger("click"); //触发对应的checkbox的click事件
+                //alert(parentObj.find(':checkbox').eq(indexNum).prop("checked"));
+            });
+        });
+    };
+    return $(this).each(function () {
+        multiCheckbox($(this));
+    });
 }
 
 //多项选项PROP
-$.fn.ruleMultiPorp = function() {
-	var multiPorp = function(parentObj){
-		parentObj.addClass("multi-porp"); //添加样式
-		parentObj.children().hide(); //隐藏内容
-		var divObj = $('<ul></ul>').prependTo(parentObj); //前插入一个DIV
-		parentObj.find(":checkbox").each(function(){
-			var indexNum = parentObj.find(":checkbox").index(this); //当前索引
-			var liObj = $('<li></li>').appendTo(divObj)
-			var newObj = $('<a href="javascript:;">' + parentObj.find('label').eq(indexNum).text() + '</a><i></i>').appendTo(liObj); //查找对应Label创建选项
-			if($(this).prop("checked") == true){
-				liObj.addClass("selected"); //默认选中
-			}
-			//检查控件是否启用
-			if($(this).prop("disabled") == true){
-				newObj.css("cursor","default");
-				return;
-			}
-			//绑定事件
-			$(newObj).click(function(){
-				if($(this).parent().hasClass("selected")){
-					$(this).parent().removeClass("selected");
-				}else{
-					$(this).parent().addClass("selected");
-				}
-				parentObj.find(':checkbox').eq(indexNum).trigger("click"); //触发对应的checkbox的click事件
-				//alert(parentObj.find(':checkbox').eq(indexNum).prop("checked"));
-			});
-		});
-	};
-	return $(this).each(function() {
-		multiPorp($(this));						 
-	});
+$.fn.ruleMultiPorp = function () {
+    var multiPorp = function (parentObj) {
+        parentObj.addClass("multi-porp"); //添加样式
+        parentObj.children().hide(); //隐藏内容
+        var divObj = $('<ul></ul>').prependTo(parentObj); //前插入一个DIV
+        parentObj.find(":checkbox").each(function () {
+            var indexNum = parentObj.find(":checkbox").index(this); //当前索引
+            var liObj = $('<li></li>').appendTo(divObj)
+            var newObj = $('<a href="javascript:;">' + parentObj.find('label').eq(indexNum).text() + '</a><i></i>').appendTo(liObj); //查找对应Label创建选项
+            if ($(this).prop("checked") == true) {
+                liObj.addClass("selected"); //默认选中
+            }
+            //检查控件是否启用
+            if ($(this).prop("disabled") == true) {
+                newObj.css("cursor", "default");
+                return;
+            }
+            //绑定事件
+            $(newObj).click(function () {
+                if ($(this).parent().hasClass("selected")) {
+                    $(this).parent().removeClass("selected");
+                } else {
+                    $(this).parent().addClass("selected");
+                }
+                parentObj.find(':checkbox').eq(indexNum).trigger("click"); //触发对应的checkbox的click事件
+                //alert(parentObj.find(':checkbox').eq(indexNum).prop("checked"));
+            });
+        });
+    };
+    return $(this).each(function () {
+        multiPorp($(this));
+    });
 }
 
 //多项单选
-$.fn.ruleMultiRadio = function() {
-	var multiRadio = function(parentObj){
-		parentObj.addClass("multi-radio"); //添加样式
-		parentObj.children().hide(); //隐藏内容
-		var divObj = $('<div class="boxwrap"></div>').prependTo(parentObj); //前插入一个DIV
-		parentObj.find('input[type="radio"]').each(function(){
-			var indexNum = parentObj.find('input[type="radio"]').index(this); //当前索引
-			var newObj = $('<a href="javascript:;">' + parentObj.find('label').eq(indexNum).text() + '</a>').appendTo(divObj); //查找对应Label创建选项
-			if($(this).prop("checked") == true){
-				newObj.addClass("selected"); //默认选中
-			}
-			//检查控件是否启用
-			if($(this).prop("disabled") == true){
-				newObj.css("cursor","default");
-				return;
-			}
-			//绑定事件
-			$(newObj).click(function(){
-				$(this).siblings().removeClass("selected");
-				$(this).addClass("selected");
-				parentObj.find('input[type="radio"]').prop("checked",false);
-				parentObj.find('input[type="radio"]').eq(indexNum).prop("checked",true);
-				parentObj.find('input[type="radio"]').eq(indexNum).trigger("click"); //触发对应的radio的click事件
-				//alert(parentObj.find('input[type="radio"]').eq(indexNum).prop("checked"));
-			});
-		});
-	};
-	return $(this).each(function() {
-		multiRadio($(this));						 
-	});
+$.fn.ruleMultiRadio = function () {
+    var multiRadio = function (parentObj) {
+        parentObj.addClass("multi-radio"); //添加样式
+        parentObj.children().hide(); //隐藏内容
+        var divObj = $('<div class="boxwrap"></div>').prependTo(parentObj); //前插入一个DIV
+        parentObj.find('input[type="radio"]').each(function () {
+            var indexNum = parentObj.find('input[type="radio"]').index(this); //当前索引
+            var newObj = $('<a href="javascript:;">' + parentObj.find('label').eq(indexNum).text() + '</a>').appendTo(divObj); //查找对应Label创建选项
+            if ($(this).prop("checked") == true) {
+                newObj.addClass("selected"); //默认选中
+            }
+            //检查控件是否启用
+            if ($(this).prop("disabled") == true) {
+                newObj.css("cursor", "default");
+                return;
+            }
+            //绑定事件
+            $(newObj).click(function () {
+                $(this).siblings().removeClass("selected");
+                $(this).addClass("selected");
+                parentObj.find('input[type="radio"]').prop("checked", false);
+                parentObj.find('input[type="radio"]').eq(indexNum).prop("checked", true);
+                parentObj.find('input[type="radio"]').eq(indexNum).trigger("click"); //触发对应的radio的click事件
+                //alert(parentObj.find('input[type="radio"]').eq(indexNum).prop("checked"));
+            });
+        });
+    };
+    return $(this).each(function () {
+        multiRadio($(this));
+    });
 }
 
 //单选下拉框
@@ -469,7 +469,7 @@ $.fn.ruleSingleSelect = function () {
         //设置样式
         //titObj.css({ "width": titObj.innerWidth(), "overflow": "hidden" });
         //itemObj.children("ul").css({ "max-height": $(document).height() - titObj.offset().top - 62 });
-        
+
         //检查控件是否启用
         if (selectObj.prop("disabled") == true) {
             titObj.css("cursor", "default");
@@ -510,12 +510,33 @@ $.fn.ruleSingleSelect = function () {
 }
 
 //日期控件
-$.fn.ruleDateInput = function() {
-	var dateInput = function(parentObj){
-		parentObj.wrap('<div class="date-input"></div>');
-		parentObj.before('<i></i>');
-	};
-	return $(this).each(function() {
-		dateInput($(this));						 
-	});
+$.fn.ruleDateInput = function () {
+    var dateInput = function (parentObj) {
+        parentObj.wrap('<div class="date-input"></div>');
+        parentObj.before('<i></i>');
+    };
+    return $(this).each(function () {
+        dateInput($(this));
+    });
+}
+
+/*单选按钮 赋值*/
+function setRadioGroupVal(name, val, formid) {
+    var selectindex = -1;
+    if (!formid) {
+        formid = "form";
+    }
+    $(formid).find("input[name='" + name + "']").each(function (i, item) {
+        if ($(item).val() == val || $(item).val() == val.toString()) {
+            $(item).prop("checked", true);
+            selectindex = i;
+        } else { $(item).prop("checked", false); }
+
+    });
+    $(formid).find("#" + name + "0").parent().prev().children().each(function (j, alink) {
+
+        if (j == selectindex) {
+            $(alink).addClass("selected");
+        } else { $(alink).removeClass("selected"); }
+    });
 }

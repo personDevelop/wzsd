@@ -52,9 +52,44 @@ namespace EasyCms.Business
             return Dal.GetListWithProductType(ptid, statusType);
         }
 
-        public DataTable GetAttrList(int pagenum, int pagesize, string ptypeid, bool isGg, ref int recordCount)
+        public DataTable GetAttrList(  string ptypeid, bool isGg )
         {
-            return Dal.GetAttrList(pagenum, pagesize, ptypeid, isGg, ref   recordCount);
+            return Dal.GetAttrList(  ptypeid, isGg );
+        }
+
+        public ShopExtendInfo GetShopExtendInfo(string id)
+        {
+            return Dal.GetShopExtendInfo(id);
+        }
+
+        public int SaveShopExtendInfo(ShopExtendInfo p)
+        {
+            return Dal.SaveShopExtendInfo(p);
+        }
+
+        public DataTable GetValList(string attriID, int p, int pagesize, ref int recordCount)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ShopExtendInfoValue GetAttrVal(string p)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SaveAttrVal(ShopExtendInfoValue p)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ShopExtendInfoValue GetAttrEntity(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string DeleteAttrVal(string id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

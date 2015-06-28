@@ -157,9 +157,9 @@ namespace EasyCms.Dal
             }
         }
 
-        public DataTable GetAttrList(int pagenum, int pagesize, string ptypeid, bool isGg, ref int recordCount)
+        public DataTable GetAttrList(string ptypeid, bool isGg)
         {
-            int pageCount = 0;
+
             WhereClip where = ShopExtendInfo._.ProductTypeID == ptypeid;
             if (isGg)
             {
@@ -170,7 +170,17 @@ namespace EasyCms.Dal
                 where = where && ShopExtendInfo._.UsageMode < 2;
             }
             return Dal.From<ShopExtendInfo>().Where(where).OrderBy(ShopExtendInfo._.DisplayOrder)
-                     .ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
+                     .ToDataTable();
+        }
+
+        public int SaveShopExtendInfo(ShopExtendInfo p)
+        {
+            return Dal.Submit(p);
+        }
+
+        public ShopExtendInfo GetShopExtendInfo(string id)
+        {
+            return Dal.Find<ShopExtendInfo>(id);
         }
     }
 

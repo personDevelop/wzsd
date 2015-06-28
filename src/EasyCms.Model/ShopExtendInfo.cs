@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 namespace EasyCms.Model
 {
+     
     /// <summary>
     /// 扩展属性
     /// </summary>  
@@ -25,6 +26,8 @@ namespace EasyCms.Model
         private string _ID;
 
         private string _Name;
+
+        private string _UnitText;
 
         private int _ShowType;
 
@@ -78,6 +81,25 @@ namespace EasyCms.Model
             {
                 this.OnPropertyChanged("Name", this._Name, value);
                 this._Name = value;
+            }
+        }
+
+        /// <summary>
+        ///  单位,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "UnitText", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string UnitText
+        {
+            get
+            {
+                return this._UnitText;
+            }
+            set
+            {
+                this.OnPropertyChanged("UnitText", this._UnitText, value);
+                this._UnitText = value;
             }
         }
 
@@ -207,6 +229,8 @@ namespace EasyCms.Model
 
                 Name = new PropertyItem("Name", tableName);
 
+                UnitText = new PropertyItem("UnitText", tableName);
+
                 ShowType = new PropertyItem("ShowType", tableName);
 
                 DisplayOrder = new PropertyItem("DisplayOrder", tableName);
@@ -229,6 +253,10 @@ namespace EasyCms.Model
             /// 名称,
             /// </summary> 
             public PropertyItem Name = null;
+            /// <summary>
+            /// 单位,
+            /// </summary> 
+            public PropertyItem UnitText = null;
             /// <summary>
             /// 展示方式,单选、多选、文本
             /// </summary> 
