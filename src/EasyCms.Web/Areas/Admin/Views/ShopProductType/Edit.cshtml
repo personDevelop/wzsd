@@ -164,7 +164,7 @@
     <div class="tab-content" style="display:none">
         <h1>添加新规格</h1>
         添加供客户可选的规格,如服装类型商品的颜色、尺码。
-        @*规格*@
+      
         <div class="toolbar">
             <div class="box-wrap">
                 <a class="menu-btn"></a>
@@ -179,8 +179,7 @@
     </div>
     <div class="tab-content" style="display:none">
         <h1>添加扩展属性</h1>
-        商品类型是一系列属性的组合，可以用来向客户展示某些商品具有的特有的属性。
-        @*扩展属性*@
+        商品类型是一系列属性的组合，可以用来向客户展示某些商品具有的特有的属性。 
         <div class="toolbar">
             <div class="box-wrap">
                 <a class="menu-btn"></a>
@@ -581,7 +580,7 @@
                 if (data.UseAttrImg) {
                     $("#KzsxValImg").text("添加【" + data.Name + "】新的规格值");
                     $('#addKzsxImg').jqxWindow("open");
-                    $('#addKzsxImg').find("#AttributeId").val("");
+                    $('#addKzsxImg').find("#AttributeId").val(data.ID);
                     $('#addKzsxImg').find("#Note").val("");
                     var files = window.imgupload.ImageIDdivConatiner.getFiles();
                     for (var i = 0; i < files.length; i++) {
@@ -593,13 +592,13 @@
                 } else {
                     $("#KzsxValTitle").text("添加【" + data.Name + "】新的规格值");
                     $('#addKzsxVal').jqxWindow("open");
-                    $('#addKzsxVal').find("#AttributeId").val("");
+                    $('#addKzsxVal').find("#AttributeId").val(data.ID);
                     $('#addKzsxVal').find("#Vals").val("");
                 }
             } else {
                 $("#KzsxValTitle").text("添加【" + data.Name + "】新的属性值");
                 $('#addKzsxVal').jqxWindow("open");
-                $('#addKzsxVal').find("#AttributeId").val("");
+                $('#addKzsxVal').find("#AttributeId").val(data.ID);
                 $('#addKzsxVal').find("#Vals").val("");
             }
         }
@@ -611,7 +610,7 @@
             }
             var data = $(gridid).jqxGrid('getrowdata', rowindex);
 
-            window.location.href = "@Url.Action("index", "ShopExtendInfoValue")/" + data.ID;
+            window.location.href = "@Url.Action("index", "ShopExtendInfoValue")/index/" + data.ID;
         }
         function deleteExtendInfo(rowindex, isgg) {
 
@@ -667,7 +666,7 @@
             </span>
         </div>
         <div>
-            @using (Ajax.BeginForm("AddExtendVal", null, new AjaxOptions() { OnBegin = "return  $('#formKzsxValImg').validate();", AllowCache = false, OnSuccess = "OnKzsxValImgSuccess", OnFailure = "OnKzsxValImgFail" }, new { id = "formKzsxValImg" }))
+            @using (Ajax.BeginForm("AddExtendImgVal", null, new AjaxOptions() { OnBegin = "return  $('#formKzsxValImg').validate();", AllowCache = false, OnSuccess = "OnKzsxValImgSuccess", OnFailure = "OnKzsxValImgFail" }, new { id = "formKzsxValImg" }))
             {
                 <div>
 

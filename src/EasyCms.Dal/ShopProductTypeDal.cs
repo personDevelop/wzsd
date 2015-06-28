@@ -182,6 +182,43 @@ namespace EasyCms.Dal
         {
             return Dal.Find<ShopExtendInfo>(id);
         }
+
+        public int Save(List<ShopExtendInfoValue> list)
+        {
+            int count = Dal.Count<ShopExtendInfoValue>(ShopExtendInfoValue._.AttributeId == list[0].AttributeId, ShopExtendInfoValue._.ID, false);
+            foreach (var item in list)
+            {
+                item.DisplaySequence = count++ + 1;
+
+            }
+            return Dal.Submit(list);
+        }
+
+        public DataTable GetValList(string attriID, int page, int pagesize, ref int recordCount)
+        {
+            int pageCount = 0;
+            return Dal.From<ShopExtendInfoValue>().Where(ShopExtendInfoValue._.AttributeId == attriID).ToDataTable(pagesize, page, ref pageCount, ref recordCount);
+        }
+
+        public ShopExtendInfoValue GetAttrVal(string id)
+        {
+            return Dal.Find<ShopExtendInfoValue>(int.Parse(id));
+        }
+
+        public int SaveAttrVal(ShopExtendInfoValue p)
+        {
+            return Dal.Submit(p);
+        }
+
+        public ShopExtendInfoValue GetAttrEntity(string id)
+        {
+            return GetAttrVal(id);
+        }
+
+        public int DeleteAttrVal(string id)
+        {
+            return Dal.Delete<ShopExtendInfoValue>(int.Parse(id));
+        }
     }
 
 }

@@ -42,6 +42,8 @@ namespace EasyCms.Model
 
         private string _BigClass;
 
+        private int _OrderNo;
+
         #endregion
 
         #region 属性
@@ -165,7 +167,7 @@ namespace EasyCms.Model
         ///  引用主键,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "RefID", DbTypeString = "char", ColumnIsNull = true, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "RefID", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string RefID
         {
@@ -237,6 +239,25 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  顺序,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "OrderNo", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public int OrderNo
+        {
+            get
+            {
+                return this._OrderNo;
+            }
+            set
+            {
+                this.OnPropertyChanged("OrderNo", this._OrderNo, value);
+                this._OrderNo = value;
+            }
+        }
+
         #endregion
 
         #region 列定义
@@ -264,6 +285,8 @@ namespace EasyCms.Model
                 Note = new PropertyItem("Note", tableName);
 
                 BigClass = new PropertyItem("BigClass", tableName);
+
+                OrderNo = new PropertyItem("OrderNo", tableName);
 
 
             }
@@ -307,6 +330,10 @@ namespace EasyCms.Model
             /// 附件大类,image,vidio,file
             /// </summary> 
             public PropertyItem BigClass = null;
+            /// <summary>
+            /// 顺序,
+            /// </summary> 
+            public PropertyItem OrderNo = null;
         }
         #endregion
     }

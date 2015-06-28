@@ -67,29 +67,34 @@ namespace EasyCms.Business
             return Dal.SaveShopExtendInfo(p);
         }
 
-        public DataTable GetValList(string attriID, int p, int pagesize, ref int recordCount)
+        public DataTable GetValList(string attriID, int page, int pagesize, ref int recordCount)
         {
-            throw new NotImplementedException();
+            return Dal.GetValList(attriID, page, pagesize, ref   recordCount);
         }
 
         public ShopExtendInfoValue GetAttrVal(string p)
         {
-            throw new NotImplementedException();
+            return Dal.GetAttrVal(p);
         }
 
-        public void SaveAttrVal(ShopExtendInfoValue p)
+        public int SaveAttrVal(ShopExtendInfoValue p)
         {
-            throw new NotImplementedException();
+            return Dal.SaveAttrVal(p);
         }
 
         public ShopExtendInfoValue GetAttrEntity(string id)
         {
-            throw new NotImplementedException();
+            return Dal.GetAttrEntity(id);
         }
 
-        public string DeleteAttrVal(string id)
+        public int DeleteAttrVal(string id)
         {
-            throw new NotImplementedException();
+            return Dal.DeleteAttrVal(id);
+        }
+
+        public int Save(List<ShopExtendInfoValue> list)
+        {
+            return Dal.Save(list);
         }
     }
 }

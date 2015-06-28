@@ -1,8 +1,14 @@
 ﻿@using MVCExtention;
 @{
     ViewBag.Title = "扩展属性值";
+    EasyCms.Model.ShopExtendInfo Se = ViewData["ShopExtendInfoEntity"] as EasyCms.Model.ShopExtendInfo;
+    string typeName = Se.UsageMode > 1 ? "规格" : "属性";
+    
 }
-
+<div class="lbl">
+    <h1>编辑【@Se.Name】@typeName</h1>
+    您可以编辑或添加<text>@typeName</text>值
+</div>
 <!--工具栏-->
 <div id="floatHead" class="toolbar-wrap">
     <div class="toolbar">
@@ -35,6 +41,7 @@
             {
                 datatype: "json",
                 cache: false,
+                data:{attriID:"@ViewData["attriID"]"},
                 datafields: [
 
 		{ name: 'ID', type: 'string' },
@@ -75,17 +82,23 @@
                 columns: [
 
 
-  { text: '主键', dataField: 'ID',align: "center", cellsalign: "center", type: 'string', width: 200 },
-
-  { text: '扩展属性ID', dataField: 'AttributeId',align: "center", cellsalign: "center", type: 'string', width: 200 },
+   { text: '<text>@typeName</text>值', dataField: 'ValueStr', align: "center", cellsalign: "center", type: 'string', width: 200 },
 
   { text: '显示顺序', dataField: 'DisplaySequence',align: "center", cellsalign: "center", type: 'string', width: 200 },
+     {
+         text: '操作', datafield: 'ID', align: "center", cellsalign: "center", width: 200, cellsrenderer: function (row, column, value) {
 
-  { text: '属性值', dataField: 'ValueStr',align: "center", cellsalign: "center", type: 'string', width: 200 },
+             var html = "  <div style='text-align: center; overflow: hidden; padding-bottom: 2px; margin-top: 4px; text-overflow: ellipsis;'>";
 
-  { text: '对应图片ID', dataField: 'ImageID',align: "center", cellsalign: "center", type: 'string', width: 200 },
+             html +=  
+                  "<a href='javascript:;' onclick='EditExtendInfo(" + row + ",false);'  >修改</a> &nbsp;&nbsp;&nbsp;" +
+             "<a  href='javascript:;' onclick='deleteExtendInfo(" + row + ",false);'  >删除</a>";
 
-  { text: '图片描述', dataField: 'Note',align: "center", cellsalign: "center", type: 'string', width: 200 },
+             html += "</div>";
+             return html;
+             return
+         }
+     }
 
                 ]
             });

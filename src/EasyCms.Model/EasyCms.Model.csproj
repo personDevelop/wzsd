@@ -53,8 +53,15 @@
     <Compile Include="ShopCategory.cs" />
     <Compile Include="ShopExtendInfo.cs" />
     <Compile Include="ShopExtendInfoValue.cs" />
+    <Compile Include="ShopProducntSKURelation.cs" />
+    <Compile Include="ShopProductAndType.cs" />
+    <Compile Include="ShopProductCategory.cs" />
+    <Compile Include="ShopProductInfo.cs" />
+    <Compile Include="ShopProductSKU.cs" />
+    <Compile Include="ShopProductSKUInfo.cs" />
     <Compile Include="ShopProductType.cs" />
     <Compile Include="ShopProductTypeAndBrand.cs" />
+    <Compile Include="ShopRalationProduct.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="验证类扩展字段.txt" />

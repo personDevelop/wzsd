@@ -41,10 +41,10 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             return result;
         }
 
-        public string GetAttrList( string ptypeid, bool isGg)
+        public string GetAttrList(string ptypeid, bool isGg)
         {
             int recordCount = 0;
-            System.Data.DataTable dt = bll.GetAttrList(  ptypeid, isGg );
+            System.Data.DataTable dt = bll.GetAttrList(ptypeid, isGg);
             string result = JsonWithDataTable.Serialize(dt);
             result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
             return result;
@@ -190,6 +190,60 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             }
 
         }
+
+
+        public ActionResult AddExtendVal(string AttributeId, string Vals)
+        {
+            try
+            {
+                string[] vals = Vals.Split(new char[] { ',', ';', '，', '；' }, StringSplitOptions.RemoveEmptyEntries);
+                List<ShopExtendInfoValue> list = new List<ShopExtendInfoValue>();
+                foreach (var item in vals)
+                {
+                    ShopExtendInfoValue s = new ShopExtendInfoValue()
+                    {
+                        ValueStr = item,
+                        AttributeId = AttributeId
+                    };
+                    list.Add(s);
+
+                }
+
+
+
+                int i = bll.Save(list);
+                return Json(new { result = true, msg = string.Empty });
+            }
+            catch (Exception ex)
+            {
+
+                return Json(new { result = false, msg = ex.Message });
+            }
+        }
+        public ActionResult AddExtendImgVal(string AttributeId, string ImageID, string Note)
+        {
+            try
+            {
+                ShopExtendInfoValue s = new ShopExtendInfoValue()
+                {
+                    ImageID = ImageID,
+                    AttributeId = AttributeId,
+                    Note = Note,
+
+                };
+                List<ShopExtendInfoValue> list = new List<ShopExtendInfoValue>();
+                list.Add(s);
+                int i = bll.Save(list);
+                return Json(new { result = true, msg = string.Empty });
+            }
+            catch (Exception ex)
+            {
+
+                return Json(new { result = false, msg = ex.Message });
+            }
+
+        }
+
 
     }
 }

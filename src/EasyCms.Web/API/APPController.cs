@@ -39,7 +39,7 @@ namespace EasyCms.Web.API
 
             if (string.IsNullOrEmpty(id))
             {
-                resp.Content = new StringContent("此新闻已别删除或屏蔽", Encoding.UTF8, "text/plain");
+                resp.Content = new StringContent("此新闻已被删除或屏蔽", Encoding.UTF8, "text/plain");
             }
             else
             {

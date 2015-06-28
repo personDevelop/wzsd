@@ -15,23 +15,24 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         ShopProductTypeBll bll = new ShopProductTypeBll();
         //
         // GET: /Admin/ShopExtendInfoValue/
-        public ActionResult Index(string attriID)
+        public ActionResult Index(string ID)
         {
-            ViewData.Add("attriID", attriID);
+            ViewData.Add("attriID", ID);
+            ViewData.Add("ShopExtendInfoEntity", bll.GetShopExtendInfo(ID));
             return View();
         }
 
         public string GetList(int pagenum, int pagesize, string attriID)
         {
             int recordCount = 0;
-            System.Data.DataTable dt = bll.GetValList(attriID,pagenum + 1, pagesize, ref   recordCount);
+            System.Data.DataTable dt = bll.GetValList(attriID, pagenum + 1, pagesize, ref   recordCount);
 
             string result = JsonWithDataTable.Serialize(dt);
             result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
             return result;
 
         }
-      
+
         //
         // POST: /Admin/ShopExtendInfoValue/Create
         [HttpPost]
@@ -52,7 +53,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                     // TODO: Add insert logic here
                     p = collection.Bind<ShopExtendInfoValue>();
 
-                } 
+                }
                 bll.SaveAttrVal(p);
                 TempData.Add("IsSuccess", "保存成功");
                 ModelState.Clear();
@@ -87,7 +88,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         // GET: /Admin/ShopExtendInfoValue/Delete/5
         public string Delete(string id)
         {
-            return bll.DeleteAttrVal(id);
+            return bll.DeleteAttrVal(id).ToString();
         }
     }
 }
