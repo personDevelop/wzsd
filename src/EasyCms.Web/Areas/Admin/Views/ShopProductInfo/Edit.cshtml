@@ -90,6 +90,19 @@
 </div>
 <div class="tab-content" style="display:none">
     规格
+    <div id="floatHead" class="toolbar-wrap">
+        <div class="toolbar">
+            <div class="box-wrap">
+                <a class="menu-btn"></a>
+                <div class="l-list">
+                    <ul class="icon-list">
+                        <li><a class="add" href="javascript:;" onclick="StartGg();"><i></i><span>开启规格</span></a></li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="tab-content" style="display:none">
     @HelperExtend.TextBox("Meta_Title", "页面标题", defaultval: Model.Meta_Title, hint: "")
@@ -104,6 +117,16 @@
 
 
     <script type="text/javascript">
+        function StartGg() {
+            //先判断是否有选择商品类型
+            var typeid = $("#TypeId").val();
+            if (!typeid) {
+                ErrorMsg("请先选择商品类型");
+            } else {
+
+            }
+
+        }
         function changeType(event) {
             var args = event.args;
             if (args) {
