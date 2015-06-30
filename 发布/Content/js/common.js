@@ -540,3 +540,66 @@ function setRadioGroupVal(name, val, formid) {
         } else { $(alink).removeClass("selected"); }
     });
 }
+
+$.Hashtable = function () {
+    this.keys = new Array();
+    this.itemsCount = 0;
+    this.add = function (key, value) {
+        if (!this.containsKey(key)) {
+            this.keys[key] = new Array();
+
+        }
+        keys[key].push(value);
+        this.itemsCount++;
+    }
+
+    this.get = function (key) {
+        if (this.containsKey(key))
+            return this.keys[key];
+        else
+            return null;
+    }
+
+    this.remove = function (key) {
+        if (this.containsKey(key)) {
+            delete this.keys[key];
+            this.itemsCount--;
+        }
+        else
+            throw "key '" + key + "' does not exists."
+
+    }
+
+    this.containsKey = function (key) {
+        return typeof (this.keys[key]) != "undefined";
+    }
+
+    this.containsValue = function containsValue(value) {
+        for (var item in this.keys) {
+            for (var i = 0; i < this.keys[item].length; i++) {
+                if (this.keys[item][i] == value)
+                    return true;
+            }
+
+        }
+
+        return false;
+    }
+
+    this.contains = function (keyOrValue) {
+        return this.containsKey(keyOrValue) || this.containsValue(keyOrValue);
+    }
+
+    this.clear = function () {
+        this.keys = new Array();
+        itemsCount = 0;
+    }
+
+    this.size = function () {
+        return this.itemsCount;
+    }
+
+    this.isEmpty = function () {
+        return this.size() == 0;
+    }
+};
