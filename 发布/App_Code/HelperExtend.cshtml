@@ -19,6 +19,94 @@
         </dd>
     </dl>
 }
+
+@helper DropDownList(string code, string name, object defaultval = null, string hint = "", string otherClass = "", int width = 200, EasyCms.Web.DropDownListInfo downInfo = null)
+{
+    if (downInfo == null)
+    {
+        downInfo = new EasyCms.Web.DropDownListInfo();
+
+    }
+    if (string.IsNullOrWhiteSpace(downInfo.DisplayMember))
+    {
+        downInfo.DisplayMember = "Name";
+
+    }
+    if (string.IsNullOrWhiteSpace(downInfo.ValueMember))
+    {
+        downInfo.ValueMember = "ID";
+
+    } 
+    string ctrlID = "DropDownList" + code;
+    <dl>
+        <dt>
+            
+            @MVCExtention.ExtendHtmlInput.MvcHelper.Label(code, name)
+        </dt>
+        <dd>
+            <div id='@ctrlID'>
+            </div>
+            <input name="@code" id="@code" type="hidden" value="@(defaultval as string)" />
+            <span>@hint</span>
+        </dd>
+    </dl>
+    <script type="text/javascript">
+        $(function(){
+            var source =
+                   {
+                       datatype: "json",
+                       datafields: [
+                           { name: '@downInfo.ValueMember' },
+                           { name: '@downInfo.DisplayMember' }
+                       ],
+                       url: '@downInfo.Url',
+                       root:"Rows",
+                       async: false
+                   };
+            var dataAdapter = new $.jqx.dataAdapter(source);
+            // Create a jqxDropDownList
+            $("#@ctrlID").jqxDropDownList({
+                source: dataAdapter, displayMember: "@downInfo.DisplayMember", valueMember: "@downInfo.ValueMember", width: @width.ToString(), height: 25 });
+            @if (defaultval!=null  ) {
+
+                string val = defaultval.ToString();
+                if (!string.IsNullOrWhiteSpace(val))
+                {
+                    @MVCExtention.ExtendHtmlInput.MvcHelper.Raw("var item =$(\"#" + ctrlID + "\").jqxDropDownList('getItemByValue', '"+val+"');$(\"#" + ctrlID + "\").jqxDropDownList('selectItem', item ); ");
+                }
+            }
+
+            // subscribe to the select event.
+            @if (!string.IsNullOrWhiteSpace(downInfo.change))
+            {
+                @MVCExtention.ExtendHtmlInput.MvcHelper.Raw("$(\"#" + ctrlID + "\").on('change', function (event) { " + downInfo.change + "(event); });");
+            }
+            @if (!string.IsNullOrWhiteSpace(downInfo.select))
+             {
+                @MVCExtention.ExtendHtmlInput.MvcHelper.Raw("$(\"#" + ctrlID + "\").on('select', function (event) { " + downInfo.select + "(event); });");
+             }
+            @if (!string.IsNullOrWhiteSpace(downInfo.unselect))
+             {
+                @MVCExtention.ExtendHtmlInput.MvcHelper.Raw("$(\"#" + ctrlID + "\").on('unselect', function (event) { " + downInfo.unselect + "(event); });");
+             }
+            $("#@ctrlID").on('select', function (event) {
+                var args = event.args;
+                if (args) {
+                    // index represents the item's index.
+                    var index = args.index;
+                    var item = args.item;
+                    $("#@code").val(item.value);
+                }else
+                {
+                    $("#@code").val("");
+                }
+
+            });
+        });
+
+
+    </script>
+}
 @helper DateTime(string code, string name, DateTime? defaultval, string hint = "", string otherClass = "", int width = 200)
 {
     <dl>
@@ -29,8 +117,8 @@
             <div id="@code" name="@code"></div>
             <span>@hint</span>
             <script type="text/javascript">
-    $(function(){
-        @{
+                $(function(){
+                    @{
                         string widthstr = width + "px";
                         string dv = string.Empty;
                         if (defaultval.HasValue && defaultval.Value.Year > 1980)
@@ -39,7 +127,7 @@
                         }
 
                     }
-        $("#@code").jqxDateTimeInput({width: '@widthstr' ,formatString: "yyyy-MM-dd" @MVCExtention.ExtendHtmlInput.MvcHelper.Raw(dv)});
+                    $("#@code").jqxDateTimeInput({width: '@widthstr' ,formatString: "yyyy-MM-dd" @MVCExtention.ExtendHtmlInput.MvcHelper.Raw(dv)});
 
                 });
 
@@ -107,15 +195,24 @@
                             if (!string.IsNullOrWhiteSpace(item))
                             {
                                 object val = false;
-                                if (defaultval != null && defaultval.Length > 0)
+                                if (defaultval is Array)
                                 {
-                                    if (defaultval.Length == 1)
-                                    {
-                                        val = defaultval[0];
-                                    }
-                                    else
-                                    { val = defaultval[i]; }
 
+
+                                    if (defaultval != null && defaultval.Length > 0)
+                                    {
+                                        if (defaultval.Length == 1)
+                                        {
+                                            val = defaultval[0];
+                                        }
+                                        else
+                                        { val = defaultval[i]; }
+
+                                    }
+                                }
+                                else
+                                {
+                                    val = defaultval;
                                 }
                                 bool valb = false;
                                 bool.TryParse(val.ToString(), out valb);
@@ -157,10 +254,9 @@
                             IsSelected = "";
                             if (defaultval != null && item.Equals(defaultval.ToString().ToLower())) { IsSelected = "checked=\"checked\""; }
                             string radioId = code;
-                            if (i > 0)
-                            {
-                                radioId += i.ToString();
-                            }
+
+                            radioId += i.ToString();
+
                             <input id="@radioId" name="@code" type="radio" @IsSelected value="@item" />
                             <label for="@radioId">@nameArr[i]</label>
                             i++;
@@ -259,7 +355,6 @@
             <script type="text/javascript">
 
                 $(function () {
-
                     obj: {
                         var divConatiner = "#@divConatinerID";
                         var fileList = ".fileList";
@@ -273,6 +368,8 @@
                         thumbnailHeight = 90 * ratio,
                         // Web Uploader实例
                         uploader;
+                        window.imgupload={};
+
                         uploader = WebUploader.create({
                             // 选完文件后，是否自动上传。
                             auto: false,
@@ -286,7 +383,7 @@
                             // 内部根据当前运行是创建，可能是input元素，也可能是flash.
                             pick: filePicker,
                             formData: {
-                                uid:  "@defaultval"
+                                uid:   "@defaultval"||  $("#@divConatinerID").parents("form").find("#@code").val()
                             },
                             //只允许选择图片
                             accept: {
@@ -296,7 +393,7 @@
                             }
                         });
 
-
+                        window.imgupload.@divConatinerID =uploader;
 
                         uploader.on('fileQueued', function (file) {
                             if ($("#@divConatinerID > .fileList").children().length >=@maxLength ) {
@@ -355,7 +452,8 @@
                             }
                             @if (callBack!=null && !string.IsNullOrWhiteSpace(callBack.OnDeleteName))
                                 {
-                                 <text> @callBack.OnDeleteName+"(Id);" </text>
+                                 <text> @callBack.OnDeleteName</text><text>(Id);</text>;
+
                                 }
 
 
@@ -382,6 +480,7 @@
                     uploader.on('uploadSuccess', function (file, response) {
 
                         $('#' + file.id).addClass('upload-state-done');
+
                     });
 
                     // 文件上传失败，显示上传出错。
@@ -410,6 +509,13 @@
                             return false;
                         }
                         $li.attr("fileID",response.uid);
+                        $li.parents("form").find("#@code").val(response.RefID);
+                        uploader.options.formData.uid=response.RefID;
+                        @if (callBack!=null && !string.IsNullOrWhiteSpace(callBack.OnUpSccessName))
+                        {
+                            <text> @callBack.OnUpSccessName</text><text>();</text>;
+                        }
+
                     });
                     // 完成上传完了，成功或者失败，先删除进度条。
                     uploader.on('uploadComplete', function (file) {
@@ -429,10 +535,7 @@
                     //所有文件上传完毕
                     uploader.on("uploadFinished", function () {
                         //提交表单
-                        @if (callBack!=null && !string.IsNullOrWhiteSpace(callBack.OnUpSccessName))
-                             {
-                                 <text> @callBack.OnUpSccessName+"();" </text>
-                             }
+
                     });
 
                     //开始上传
@@ -454,7 +557,7 @@
                     var $list =$("#@divConatinerID > .fileList");
                     if (data.length>0) {
                         for (var i = 0; i < data.length; i++) {
-                            var file=data[0];
+                            var file=data[i];
                             var $li = $(
                      '<div id="' + file.ID + '"fileid="'+file.ID+'" class="cp_img  upload-state-done">' +
                          '<img src="'+file.WebFilePath+'">' +

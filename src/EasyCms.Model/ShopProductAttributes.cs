@@ -1,23 +1,23 @@
-﻿using Newtonsoft.Json;
-using Sharp.Common;
+﻿using Sharp.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 namespace EasyCms.Model
 {
     /// <summary>
-    /// 商品和类型关联表
+    /// 商品属性值
     /// </summary>  
     [JsonObject]
-    public partial class ShopProductAndType : BaseEntity
+    public partial class ShopProductAttributes : BaseEntity
     {
-        public static Column _ = new Column("ShopProductAndType");
+        public static Column _ = new Column("ShopProductAttributes");
 
-        public ShopProductAndType()
+        public ShopProductAttributes()
         {
-            this.TableName = "ShopProductAndType";
+            this.TableName = "ShopProductAttributes";
             OnCreate();
         }
 
@@ -30,7 +30,7 @@ namespace EasyCms.Model
 
         private string _AttributeId;
 
-        private long _ValueId;
+        private string _ValueId;
 
         #endregion
 
@@ -57,7 +57,7 @@ namespace EasyCms.Model
         }
 
         /// <summary>
-        ///  商品ID,
+        ///  编号,
         /// </summary>
 
         [DbProperty(MapingColumnName = "ProductId", DbTypeString = "char", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
@@ -76,7 +76,7 @@ namespace EasyCms.Model
         }
 
         /// <summary>
-        ///  规格ID,
+        ///  名称,
         /// </summary>
 
         [DbProperty(MapingColumnName = "AttributeId", DbTypeString = "char", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
@@ -95,12 +95,12 @@ namespace EasyCms.Model
         }
 
         /// <summary>
-        ///  规格值ID,
+        ///  对应值ID,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "ValueId", DbTypeString = "bigint", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ValueId", DbTypeString = "char", ColumnIsNull = false, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public long ValueId
+        public string ValueId
         {
             get
             {
@@ -136,18 +136,24 @@ namespace EasyCms.Model
             /// </summary> 
             public PropertyItem ID = null;
             /// <summary>
-            /// 商品ID,
+            /// 编号,
             /// </summary> 
             public PropertyItem ProductId = null;
             /// <summary>
-            /// 规格ID,
+            /// 名称,
             /// </summary> 
             public PropertyItem AttributeId = null;
             /// <summary>
-            /// 规格值ID,
+            /// 对应值ID,
             /// </summary> 
             public PropertyItem ValueId = null;
         }
         #endregion
+    }
+
+    public partial class ShopProductAttributes
+    {
+        [NotDbCol]
+        public string ValueStr { get; set; }
     }
 }

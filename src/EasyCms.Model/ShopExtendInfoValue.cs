@@ -1,4 +1,5 @@
-﻿using Sharp.Common;
+﻿using Newtonsoft.Json;
+using Sharp.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace EasyCms.Model
     /// <summary>
     /// 扩展属性值
     /// </summary>  
+    [JsonObject]
     public partial class ShopExtendInfoValue : BaseEntity
     {
         public static Column _ = new Column("ShopExtendInfoValue");
@@ -22,7 +24,7 @@ namespace EasyCms.Model
 
         #region 私有变量
 
-        private long _ID;
+        private string _ID;
 
         private string _AttributeId;
 
@@ -43,9 +45,9 @@ namespace EasyCms.Model
         /// </summary>
 
         [PrimaryKey]
-        [DbProperty(MapingColumnName = "ID", DbTypeString = "bigint", ColumnIsNull = false, IsUnique = true, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = true, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ID", DbTypeString = "char", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public long ID
+        public string ID
         {
             get
             {

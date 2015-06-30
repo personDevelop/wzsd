@@ -24,7 +24,7 @@
 
         var label = $("<div style='font-size: 11px; margin: 2px 3px; font-weight: bold; float: left;'></div>");
         if (datainfo.rowscount == 0) {
-            label.text("无符号条件的记录");
+            label.text("无符合条件的记录");
         } else {
             label.text("第" + (1 + paginginfo.pagenum * paginginfo.pagesize) + "-" + Math.min(datainfo.rowscount, (paginginfo.pagenum + 1) * paginginfo.pagesize) + '  条,共  ' + datainfo.rowscount + "条记录");
         }

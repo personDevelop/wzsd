@@ -55,6 +55,7 @@
     <Compile Include="ShopExtendInfoValue.cs" />
     <Compile Include="ShopProducntSKURelation.cs" />
     <Compile Include="ShopProductAndType.cs" />
+    <Compile Include="ShopProductAttributes.cs" />
     <Compile Include="ShopProductCategory.cs" />
     <Compile Include="ShopProductInfo.cs" />
     <Compile Include="ShopProductSKU.cs" />

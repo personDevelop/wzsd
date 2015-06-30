@@ -1,4 +1,5 @@
-﻿using Sharp.Common;
+﻿using Newtonsoft.Json;
+using Sharp.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace EasyCms.Model
     /// <summary>
     /// 商品信息
     /// </summary>  
+    [JsonObject]
     public partial class ShopProductInfo : BaseEntity
     {
         public static Column _ = new Column("ShopProductInfo");
@@ -58,7 +60,7 @@ namespace EasyCms.Model
 
         private int _SaleCounts;
 
-        private string _SaleNum;
+        private int _SaleNum;
 
         private int _DisplaySequence;
 
@@ -439,9 +441,9 @@ namespace EasyCms.Model
         ///  销售次数,指订单个数
         /// </summary>
 
-        [DbProperty(MapingColumnName = "SaleNum", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "SaleNum", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public string SaleNum
+        public int SaleNum
         {
             get
             {
@@ -932,4 +934,18 @@ namespace EasyCms.Model
         #endregion
     }
 
+    public partial class ShopProductInfo
+    {
+        [NotDbCol]
+        public string ShopCategoryName { get; set; }
+        [NotDbCol]
+        public string ShopCategoryID { get; set; }
+        protected override void OnCreate()
+        {
+            AddedDate = DateTime.Now;
+            SaleDate = AddedDate;
+            Stock = int.MinValue;
+        }
+    
+    }
 }

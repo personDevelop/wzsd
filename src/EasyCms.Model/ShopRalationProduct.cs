@@ -1,4 +1,5 @@
-﻿using Sharp.Common;
+﻿using Newtonsoft.Json;
+using Sharp.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;

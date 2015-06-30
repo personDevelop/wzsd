@@ -34,7 +34,7 @@
     }
     @HelperExtend.HiddenFor("SmallLogo", Model.SmallLogo)
     @HelperExtend.HiddenFor("BigLogo", Model.BigLogo)
-    @Html.ValidationSummary() 
+    @Html.ValidationSummary()
     @HelperExtend.HelpEdit("ParentID", "ParentName", "上级分类", defaultvalAndText: Model.ParentName, hint: "空为一级分类", dialogTitle: "选择上级分类", InnitFunc: "InnitFunc", onOk: "onOk", IsTree: true, DataControlID: "treeGrid")
     @HelperExtend.TextBox("Code", "编号", defaultval: Model.Code, hint: "*编号不能重复")
     @HelperExtend.TextBox("Name", "名称", defaultval: Model.Name, hint: "*名称不能重复.")
@@ -136,7 +136,7 @@
 
                { name: 'Code', type: 'string' },
 
-               { name: 'Name', type: 'string' } 
+               { name: 'Name', type: 'string' }
                             ],
                             timeout: 10000,
                             hierarchy:
@@ -146,7 +146,7 @@
                             },
                             id: 'ID',
                             root: 'Rows',
-                            url: " @Url.Action("GetListForSelecte", "NewsCategory", new { area = "Admin" })"
+                            url: " @Url.Action("GetListForSelecte", "ShopCategory", new { area = "Admin" })"
                         };
             var dataAdapter = new $.jqx.dataAdapter(source);
 
@@ -165,13 +165,10 @@
         function onOk(data) {
             if (data.length == 1) {
 
-                if (data[0].AllowSubclass) {
-                    $("#ParentName").val(data[0].Name);
-                    $("#ParentID").val(data[0].ID);
-                } else {
 
-                    ErrorMsg("当前分类不能有下级分类");
-                }
+                $("#ParentName").val(data[0].Name);
+                $("#ParentID").val(data[0].ID);
+
 
             } else { ErrorMsg("请选择一条数据"); }
         }

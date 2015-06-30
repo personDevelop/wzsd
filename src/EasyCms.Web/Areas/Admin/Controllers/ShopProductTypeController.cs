@@ -32,24 +32,19 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             return result;
 
         }
-        public string GetListForSelecte(int pagenum, int pagesize)
+        public string GetListForSelecte()
         {
-            int recordCount = 0;
-            System.Data.DataTable dt = bll.GetList(pagenum, pagesize, ref   recordCount, true);
-            string result = JsonWithDataTable.Serialize(dt);
-            result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
-            return result;
+
+            System.Data.DataTable dt = bll.GetList(true);
+            return JsonWithDataTable.Serialize(dt);
         }
 
         public string GetAttrList(string ptypeid, bool isGg)
-        {
-            int recordCount = 0;
+        { 
             System.Data.DataTable dt = bll.GetAttrList(ptypeid, isGg);
-            string result = JsonWithDataTable.Serialize(dt);
-            result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
-            return result;
+            return JsonWithDataTable.Serialize(dt);
         }
-
+      
         public string CheckRepeat(string ID, string RecordStatus, string val, bool IsCode)
         {
             return bll.Exit(ID, RecordStatus, val, IsCode).ToString().ToLower();
@@ -202,6 +197,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                 {
                     ShopExtendInfoValue s = new ShopExtendInfoValue()
                     {
+                        ID=Guid.NewGuid().ToString(),
                         ValueStr = item,
                         AttributeId = AttributeId
                     };

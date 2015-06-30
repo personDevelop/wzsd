@@ -19,6 +19,94 @@
         </dd>
     </dl>
 }
+
+@helper DropDownList(string code, string name, object defaultval = null, string hint = "", string otherClass = "", int width = 200, EasyCms.Web.DropDownListInfo downInfo = null)
+{
+    if (downInfo == null)
+    {
+        downInfo = new EasyCms.Web.DropDownListInfo();
+
+    }
+    if (string.IsNullOrWhiteSpace(downInfo.DisplayMember))
+    {
+        downInfo.DisplayMember = "Name";
+
+    }
+    if (string.IsNullOrWhiteSpace(downInfo.ValueMember))
+    {
+        downInfo.ValueMember = "ID";
+
+    } 
+    string ctrlID = "DropDownList" + code;
+    <dl>
+        <dt>
+            
+            @MVCExtention.ExtendHtmlInput.MvcHelper.Label(code, name)
+        </dt>
+        <dd>
+            <div id='@ctrlID'>
+            </div>
+            <input name="@code" id="@code" type="hidden" value="@(defaultval as string)" />
+            <span>@hint</span>
+        </dd>
+    </dl>
+    <script type="text/javascript">
+        $(function(){
+            var source =
+                   {
+                       datatype: "json",
+                       datafields: [
+                           { name: '@downInfo.ValueMember' },
+                           { name: '@downInfo.DisplayMember' }
+                       ],
+                       url: '@downInfo.Url',
+                       root:"Rows",
+                       async: false
+                   };
+            var dataAdapter = new $.jqx.dataAdapter(source);
+            // Create a jqxDropDownList
+            $("#@ctrlID").jqxDropDownList({
+                source: dataAdapter, displayMember: "@downInfo.DisplayMember", valueMember: "@downInfo.ValueMember", width: @width.ToString(), height: 25 });
+            @if (defaultval!=null  ) {
+
+                string val = defaultval.ToString();
+                if (!string.IsNullOrWhiteSpace(val))
+                {
+                    @MVCExtention.ExtendHtmlInput.MvcHelper.Raw("var item =$(\"#" + ctrlID + "\").jqxDropDownList('getItemByValue', '"+val+"');$(\"#" + ctrlID + "\").jqxDropDownList('selectItem', item ); ");
+                }
+            }
+
+            // subscribe to the select event.
+            @if (!string.IsNullOrWhiteSpace(downInfo.change))
+            {
+                @MVCExtention.ExtendHtmlInput.MvcHelper.Raw("$(\"#" + ctrlID + "\").on('change', function (event) { " + downInfo.change + "(event); });");
+            }
+            @if (!string.IsNullOrWhiteSpace(downInfo.select))
+             {
+                @MVCExtention.ExtendHtmlInput.MvcHelper.Raw("$(\"#" + ctrlID + "\").on('select', function (event) { " + downInfo.select + "(event); });");
+             }
+            @if (!string.IsNullOrWhiteSpace(downInfo.unselect))
+             {
+                @MVCExtention.ExtendHtmlInput.MvcHelper.Raw("$(\"#" + ctrlID + "\").on('unselect', function (event) { " + downInfo.unselect + "(event); });");
+             }
+            $("#@ctrlID").on('select', function (event) {
+                var args = event.args;
+                if (args) {
+                    // index represents the item's index.
+                    var index = args.index;
+                    var item = args.item;
+                    $("#@code").val(item.value);
+                }else
+                {
+                    $("#@code").val("");
+                }
+
+            });
+        });
+
+
+    </script>
+}
 @helper DateTime(string code, string name, DateTime? defaultval, string hint = "", string otherClass = "", int width = 200)
 {
     <dl>
@@ -128,11 +216,11 @@
                                 }
                                 bool valb = false;
                                 bool.TryParse(val.ToString(), out valb);
-                        <input type="checkbox" name="@item" checked="@val" />
+                                <input type="checkbox" name="@item" checked="@val" />
                             }
-                        <label for="@item">
-                            @nameArr[i]
-                        </label>
+                            <label for="@item">
+                                @nameArr[i]
+                            </label>
                             i++;
                         }
                     }
@@ -169,8 +257,8 @@
 
                             radioId += i.ToString();
 
-                        <input id="@radioId" name="@code" type="radio" @IsSelected value="@item" />
-                        <label for="@radioId">@nameArr[i]</label>
+                            <input id="@radioId" name="@code" type="radio" @IsSelected value="@item" />
+                            <label for="@radioId">@nameArr[i]</label>
                             i++;
                         }
 
@@ -266,249 +354,249 @@
             </div>
             <script type="text/javascript">
 
-    $(function () {
-        obj: {
-            var divConatiner = "#@divConatinerID";
-            var fileList = ".fileList";
-            var filePicker = "#@filePicker";
-            var $ = jQuery,
-            $list = $(divConatiner).find(fileList),
-            // 优化retina, 在retina下这个值是2
-            ratio = window.devicePixelRatio || 1,
-            // 缩略图大小
-            thumbnailWidth = 90 * ratio,
-            thumbnailHeight = 90 * ratio,
-            // Web Uploader实例
-            uploader;
-            window.imgupload={};
-           
-            uploader = WebUploader.create({
-                // 选完文件后，是否自动上传。
-                auto: false,
+                $(function () {
+                    obj: {
+                        var divConatiner = "#@divConatinerID";
+                        var fileList = ".fileList";
+                        var filePicker = "#@filePicker";
+                        var $ = jQuery,
+                        $list = $(divConatiner).find(fileList),
+                        // 优化retina, 在retina下这个值是2
+                        ratio = window.devicePixelRatio || 1,
+                        // 缩略图大小
+                        thumbnailWidth = 90 * ratio,
+                        thumbnailHeight = 90 * ratio,
+                        // Web Uploader实例
+                        uploader;
+                        window.imgupload={};
 
-                disableGlobalDnd: true,
-                // swf文件路径
-                swf: '/Content/ueditor/third-party/webuploader/Uploader.swf',
-                // 文件接收服务端。
-                server: '/UpLoad/UpLoadProcess',
-                // 选择文件的按钮。可选。
-                // 内部根据当前运行是创建，可能是input元素，也可能是flash.
-                pick: filePicker,
-                formData: {
-                    uid:   "@defaultval"||  $("#@divConatinerID").parents("form").find("#@code").val()
-                },
-                //只允许选择图片
-                accept: {
-                    title: 'Images',
-                    extensions: 'gif,jpg,jpeg,bmp,png',
-                    mimeTypes: 'image/*'
-                }
-            });
+                        uploader = WebUploader.create({
+                            // 选完文件后，是否自动上传。
+                            auto: false,
 
-            window.imgupload.@divConatinerID =uploader;
+                            disableGlobalDnd: true,
+                            // swf文件路径
+                            swf: '/Content/ueditor/third-party/webuploader/Uploader.swf',
+                            // 文件接收服务端。
+                            server: '/UpLoad/UpLoadProcess',
+                            // 选择文件的按钮。可选。
+                            // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+                            pick: filePicker,
+                            formData: {
+                                uid:   "@defaultval"||  $("#@divConatinerID").parents("form").find("#@code").val()
+                            },
+                            //只允许选择图片
+                            accept: {
+                                title: 'Images',
+                                extensions: 'gif,jpg,jpeg,bmp,png',
+                                mimeTypes: 'image/*'
+                            }
+                        });
 
-            uploader.on('fileQueued', function (file) {
-                if ($("#@divConatinerID > .fileList").children().length >=@maxLength ) {
-                    var msg="只能添加"+@maxLength+"个图片";
-                ErrorMsg(msg);
-                return false;
-            }
-            });
-        // 当有文件添加进来的时候
-        uploader.on('fileQueued', function (file) {
+                        window.imgupload.@divConatinerID =uploader;
 
-
-            var $li = $(
-                    '<div id="' + file.id + '" class="cp_img">' +
-                        '<img>' +
-                    '<div class="cp_img_jian"></div></div>'
-                    ),
-                $img = $li.find('img');
-            // $list为容器jQuery实例
-            $list.append($li);
-
-            // 创建缩略图
-            // 如果为非图片文件，可以不用调用此方法。
-            // thumbnailWidth x thumbnailHeight 为 100 x 100
-            uploader.makeThumb(file, function (error, src) {
-                if (error) {
-                    $img.replaceWith('<span>不能预览</span>');
-                    return;
-                }
-
-                $img.attr('src', src);
-
-            }, thumbnailWidth, thumbnailHeight);
+                        uploader.on('fileQueued', function (file) {
+                            if ($("#@divConatinerID > .fileList").children().length >=@maxLength ) {
+                                var msg="只能添加"+@maxLength+"个图片";
+                            ErrorMsg(msg);
+                            return false;
+                        }
+                        });
+                    // 当有文件添加进来的时候
+                    uploader.on('fileQueued', function (file) {
 
 
-            //显示删除按钮
-            $(divConatiner).find(".cp_img").on("mouseover", function () {
-                $(this).children(".cp_img_jian").css('display', 'block');
+                        var $li = $(
+                                '<div id="' + file.id + '" class="cp_img">' +
+                                    '<img>' +
+                                '<div class="cp_img_jian"></div></div>'
+                                ),
+                            $img = $li.find('img');
+                        // $list为容器jQuery实例
+                        $list.append($li);
 
-            });
-            //隐藏删除按钮
-            $(divConatiner).find(".cp_img").on("mouseout", function () {
-                $(this).children(".cp_img_jian").css('display', 'none');
-            });
-            //执行删除方法
-            $list.on("click", ".cp_img_jian", function () {
-                var Id = $(this).parent().attr("id");
-                var file=uploader.getFile(Id, true);
+                        // 创建缩略图
+                        // 如果为非图片文件，可以不用调用此方法。
+                        // thumbnailWidth x thumbnailHeight 为 100 x 100
+                        uploader.makeThumb(file, function (error, src) {
+                            if (error) {
+                                $img.replaceWith('<span>不能预览</span>');
+                                return;
+                            }
 
-                uploader.removeFile(file);
-                $(this).parent().remove();
-                var $li = $('#' + file.id);
-                if ( $li.attr("fileID" )) {
-                    //删除附件数据
-                    $.get("/UpLoad/deleteFile",{id:$li.attr("fileID" )});
-                }
-                @if (callBack!=null && !string.IsNullOrWhiteSpace(callBack.OnDeleteName))
+                            $img.attr('src', src);
+
+                        }, thumbnailWidth, thumbnailHeight);
+
+
+                        //显示删除按钮
+                        $(divConatiner).find(".cp_img").on("mouseover", function () {
+                            $(this).children(".cp_img_jian").css('display', 'block');
+
+                        });
+                        //隐藏删除按钮
+                        $(divConatiner).find(".cp_img").on("mouseout", function () {
+                            $(this).children(".cp_img_jian").css('display', 'none');
+                        });
+                        //执行删除方法
+                        $list.on("click", ".cp_img_jian", function () {
+                            var Id = $(this).parent().attr("id");
+                            var file=uploader.getFile(Id, true);
+
+                            uploader.removeFile(file);
+                            $(this).parent().remove();
+                            var $li = $('#' + file.id);
+                            if ( $li.attr("fileID" )) {
+                                //删除附件数据
+                                $.get("/UpLoad/deleteFile",{id:$li.attr("fileID" )});
+                            }
+                            @if (callBack!=null && !string.IsNullOrWhiteSpace(callBack.OnDeleteName))
                                 {
                                  <text> @callBack.OnDeleteName</text><text>(Id);</text>;
 
                                 }
 
 
-            });
+                        });
 
-        });
+                    });
 
-        // 文件上传过程中创建进度条实时显示。
-        uploader.on('uploadProgress', function (file, percentage) {
-            var $li = $('#' + file.id),
-                $percent = $li.find('.progress span');
+                    // 文件上传过程中创建进度条实时显示。
+                    uploader.on('uploadProgress', function (file, percentage) {
+                        var $li = $('#' + file.id),
+                            $percent = $li.find('.progress span');
 
-            // 避免重复创建
-            if (!$percent.length) {
-                $percent = $('<p class="progress"><span></span></p>')
-                        .appendTo($li)
-                        .find('span');
-            }
+                        // 避免重复创建
+                        if (!$percent.length) {
+                            $percent = $('<p class="progress"><span></span></p>')
+                                    .appendTo($li)
+                                    .find('span');
+                        }
 
-            $percent.css('width', percentage * 100 + '%');
-        });
+                        $percent.css('width', percentage * 100 + '%');
+                    });
 
-        // 文件上传成功，给item添加成功class, 用样式标记上传成功。
-        uploader.on('uploadSuccess', function (file, response) {
+                    // 文件上传成功，给item添加成功class, 用样式标记上传成功。
+                    uploader.on('uploadSuccess', function (file, response) {
 
-            $('#' + file.id).addClass('upload-state-done');
+                        $('#' + file.id).addClass('upload-state-done');
 
-        });
+                    });
 
-        // 文件上传失败，显示上传出错。
-        uploader.on('uploadError', function (file) {
-            var $li = $('#' + file.id),
-                $error = $li.find('div.error');
+                    // 文件上传失败，显示上传出错。
+                    uploader.on('uploadError', function (file) {
+                        var $li = $('#' + file.id),
+                            $error = $li.find('div.error');
 
-            // 避免重复创建
-            if (!$error.length) {
-                $error = $('<div class="error"></div>').appendTo($li);
-            }
+                        // 避免重复创建
+                        if (!$error.length) {
+                            $error = $('<div class="error"></div>').appendTo($li);
+                        }
 
-            $error.text('上传失败');
-        });
-        uploader.on( 'uploadAccept', function( file, response ) {
-            var $li = $('#' + file.file.id);
-            if ( response.error ) {
-                // 通过return false来告诉组件，此文件上传有错。
-                $error = $li.find('div.error');
+                        $error.text('上传失败');
+                    });
+                    uploader.on( 'uploadAccept', function( file, response ) {
+                        var $li = $('#' + file.file.id);
+                        if ( response.error ) {
+                            // 通过return false来告诉组件，此文件上传有错。
+                            $error = $li.find('div.error');
 
-                // 避免重复创建
-                if (!$error.length) {
-                    $error = $('<div class="error"></div>').appendTo($li);
-                }
-                $error.text(response.error.message);
-                return false;
-            }
-            $li.attr("fileID",response.uid);
-            $li.parents("form").find("#@code").val(response.RefID);
-            uploader.options.formData.uid=response.RefID;
-            @if (callBack!=null && !string.IsNullOrWhiteSpace(callBack.OnUpSccessName))
+                            // 避免重复创建
+                            if (!$error.length) {
+                                $error = $('<div class="error"></div>').appendTo($li);
+                            }
+                            $error.text(response.error.message);
+                            return false;
+                        }
+                        $li.attr("fileID",response.uid);
+                        $li.parents("form").find("#@code").val(response.RefID);
+                        uploader.options.formData.uid=response.RefID;
+                        @if (callBack!=null && !string.IsNullOrWhiteSpace(callBack.OnUpSccessName))
                         {
                             <text> @callBack.OnUpSccessName</text><text>();</text>;
                         }
 
-        });
-        // 完成上传完了，成功或者失败，先删除进度条。
-        uploader.on('uploadComplete', function (file) {
-            var $li = $('#' + file.id);
-            $li.find('.progress').remove();
-            $error = $li.find('div.error');
+                    });
+                    // 完成上传完了，成功或者失败，先删除进度条。
+                    uploader.on('uploadComplete', function (file) {
+                        var $li = $('#' + file.id);
+                        $li.find('.progress').remove();
+                        $error = $li.find('div.error');
 
-            // 避免重复创建
-            if (!$error.length) {
-                $error = $('<div class="error"></div>').appendTo($li);
-            }
+                        // 避免重复创建
+                        if (!$error.length) {
+                            $error = $('<div class="error"></div>').appendTo($li);
+                        }
 
-            $error.text("上传成功");
+                        $error.text("上传成功");
 
-        });
+                    });
 
-        //所有文件上传完毕
-        uploader.on("uploadFinished", function () {
-            //提交表单
+                    //所有文件上传完毕
+                    uploader.on("uploadFinished", function () {
+                        //提交表单
 
-        });
+                    });
 
-        //开始上传
-        $(divConatiner).find(".ctlBtn").click(function () {
-            uploader.upload();
-            return false;
-        });
-    }
+                    //开始上传
+                    $(divConatiner).find(".ctlBtn").click(function () {
+                        uploader.upload();
+                        return false;
+                    });
+                }
 
-    //加载现有图片
-    @if (!string.IsNullOrWhiteSpace(defaultval)   )
+                //加载现有图片
+                @if (!string.IsNullOrWhiteSpace(defaultval)   )
                 {
                     if (!isAdd)
                     {
 
                <text>
-    $.getJSON("/UpLoad/GetFiles",{refid:"@defaultval"}, function(data){
+                $.getJSON("/UpLoad/GetFiles",{refid:"@defaultval"}, function(data){
 
-        var $list =$("#@divConatinerID > .fileList");
-        if (data.length>0) {
-            for (var i = 0; i < data.length; i++) {
-                var file=data[0];
-                var $li = $(
-         '<div id="' + file.ID + '"fileid="'+file.ID+'" class="cp_img  upload-state-done">' +
-             '<img src="'+file.WebFilePath+'">' +
-         '<div class="cp_img_jian"></div></div>'
-         );
+                    var $list =$("#@divConatinerID > .fileList");
+                    if (data.length>0) {
+                        for (var i = 0; i < data.length; i++) {
+                            var file=data[i];
+                            var $li = $(
+                     '<div id="' + file.ID + '"fileid="'+file.ID+'" class="cp_img  upload-state-done">' +
+                         '<img src="'+file.WebFilePath+'">' +
+                     '<div class="cp_img_jian"></div></div>'
+                     );
 
-                // $list为容器jQuery实例
-                $list.append($li);
-            }
+                            // $list为容器jQuery实例
+                            $list.append($li);
+                        }
 
-            //显示删除按钮
-            $list.find(".cp_img").on("mouseover", function () {
-                $(this).children(".cp_img_jian").css('display', 'block');
+                        //显示删除按钮
+                        $list.find(".cp_img").on("mouseover", function () {
+                            $(this).children(".cp_img_jian").css('display', 'block');
 
-            });
-            //隐藏删除按钮
-            $list.find(".cp_img").on("mouseout", function () {
-                $(this).children(".cp_img_jian").css('display', 'none');
-            });
-            //执行删除方法
-            $list.on("click", ".cp_img_jian", function () {
-                var $li =  $(this).parent();
-                var Id = $li.attr("id");
-                $(this).parent().remove();
+                        });
+                        //隐藏删除按钮
+                        $list.find(".cp_img").on("mouseout", function () {
+                            $(this).children(".cp_img_jian").css('display', 'none');
+                        });
+                        //执行删除方法
+                        $list.on("click", ".cp_img_jian", function () {
+                            var $li =  $(this).parent();
+                            var Id = $li.attr("id");
+                            $(this).parent().remove();
 
-                if ( $li.attr("fileID" )) {
-                    //删除附件数据
-                    $.get("/UpLoad/deleteFile",{id:$li.attr("fileID" )});
-                }
-                @if (callBack!=null && !string.IsNullOrWhiteSpace(callBack.OnDeleteName))
+                            if ( $li.attr("fileID" )) {
+                                //删除附件数据
+                                $.get("/UpLoad/deleteFile",{id:$li.attr("fileID" )});
+                            }
+                            @if (callBack!=null && !string.IsNullOrWhiteSpace(callBack.OnDeleteName))
                             {
                                 <text> @callBack.OnDeleteName+"(Id);" </text>
                             }
 
 
-            });
-        }
+                        });
+                    }
 
-    }); </text>
+                }); </text>
 
 
 
@@ -521,7 +609,7 @@
 
 
 
-    });
+                });
 
             </script>
         </dd>

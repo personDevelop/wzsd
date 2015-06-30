@@ -222,6 +222,7 @@
     <Compile Include="Areas\Admin\Controllers\ShopBrandInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopCategoryController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopExtendInfoValueController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ShopProductInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopProductTypeController.cs" />
     <Compile Include="Common\CmsSession.cs" />
     <Compile Include="App_Start\AuthConfig.cs" />
@@ -686,6 +687,9 @@
     <Content Include="Areas\Admin\Views\Shared\_EditDialog.cshtml" />
     <Content Include="Areas\Admin\Views\ShopExtendInfoValue\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\ShopExtendInfoValue\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopProductInfo\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopProductInfo\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_SelecteShopCategory.cshtml" />
     <None Include="Properties\PublishProfiles\publish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />

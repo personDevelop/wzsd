@@ -35,5 +35,16 @@ namespace EasyCms.Web
         public string OnUpSccessName { get; set; }
     }
 
+
+    public class DropDownListInfo
+    {
+        public string Url { get; set; }
+        public string ValueMember { get; set; }
+        public string DisplayMember { get; set; }
+        public string select { get; set; }
+        public string unselect { get; set; }
+        public string change { get; set; }
+    }
+
     
 }
