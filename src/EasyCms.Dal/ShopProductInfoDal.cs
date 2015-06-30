@@ -62,7 +62,7 @@ namespace EasyCms.Dal
                 }
                 dal.SubmitNew(ref dal, item);
                 dal.SubmitNew(list, ref dal);
-                dal.SubmitNew(spas, ref dal); 
+                dal.SubmitNew(spas, ref dal);
                 dal.CommitTransaction(tr);
                 return 1;
             }
@@ -134,7 +134,7 @@ namespace EasyCms.Dal
                     <ShopProductAttributes>(ShopExtendInfo._.ID == ShopProductAttributes._.AttributeId
               && ShopProductAttributes._.ValueId == ShopExtendInfoValue._.ID && ShopProductAttributes._.ProductId == productID, JoinType.leftJoin)
               .Select(ShopExtendInfo._.ID, ShopExtendInfo._.Name, ShopExtendInfo._.ShowType
-              , ShopExtendInfoValue._.ID.Alias("ExtendInfoValueID"), ShopExtendInfoValue._.ValueStr,
+              , ShopExtendInfoValue._.ID.Alias("ExtendInfoValueID"), ShopExtendInfoValue._.ValueStr, ShopExtendInfoValue._.DisplaySequence,
            new ExpressionClip(" case when ShopProductAttributes.ValueId is null then 0 else 1 end HasValue"))
 
               .Where(ShopExtendInfo._.ProductTypeID == ptypeid && ShopExtendInfo._.UsageMode < 2)
@@ -143,6 +143,18 @@ namespace EasyCms.Dal
         }
 
 
+
+        public DataTable GetGgWithProdcutVal(string ptypeid, string productID)
+        {
+
+            return Dal.From<ShopExtendInfo>().Join<ShopExtendInfoValue>(ShopExtendInfo._.ID == ShopExtendInfoValue._.AttributeId)
+             .Select(ShopExtendInfo._.ID.All,
+              ShopExtendInfoValue._.ID.Alias("ExtendInfoValueID"), ShopExtendInfoValue._.ValueStr, ShopExtendInfoValue._.DisplaySequence, ShopExtendInfoValue._.ImageID, ShopExtendInfoValue._.Note
+          )
+             .Where(ShopExtendInfo._.ProductTypeID == ptypeid && ShopExtendInfo._.UsageMode > 1)
+
+             .OrderBy(ShopExtendInfo._.DisplayOrder, ShopExtendInfoValue._.DisplaySequence).ToDataTable();
+        }
     }
 
 

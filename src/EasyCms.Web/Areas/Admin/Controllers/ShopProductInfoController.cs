@@ -164,5 +164,11 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             System.Data.DataTable dt = bll.GetAttrWithProdcutVal(ptypeid, productID);
             return JsonWithDataTable.Serialize(dt);
         }
+
+        public string GetGgWithProdcutVal(string ptypeid, string productID)
+        {
+            System.Data.DataTable dt = bll.GetGgWithProdcutVal(ptypeid, productID);
+            return JsonWithDataTable.Serialize(dt);
+        }
     }
 }

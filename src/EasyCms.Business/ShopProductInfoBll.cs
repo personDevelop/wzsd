@@ -54,6 +54,11 @@ namespace EasyCms.Business
 
         }
 
-        
+
+
+        public DataTable GetGgWithProdcutVal(string ptypeid, string productID)
+        {
+            return Dal.GetGgWithProdcutVal(ptypeid, productID);
+        }
     }
 }

@@ -95,14 +95,18 @@
             <div class="box-wrap">
                 <a class="menu-btn"></a>
                 <div class="l-list">
-                    <ul class="icon-list">
-                        <li><a class="add" href="javascript:;" onclick="StartGg();"><i></i><span>开启规格</span></a></li>
-
+                    <ul class="icon-list"> 
+                        <li><a class="add" href="javascript:;" onclick="StartGg($('#TypeId').val());"><i></i><span>生成SKU信息</span></a></li> 
                     </ul>
                 </div>
             </div>
         </div>
     </div>
+    <fieldset id="ggInfo" style="border-width:1px; border-style:solid;  border-color:#eee">
+        <legend style=" text-align:center;     ">规格</legend>
+
+    </fieldset>
+    <div id="skugrid"></div>
 </div>
 <div class="tab-content" style="display:none">
     @HelperExtend.TextBox("Meta_Title", "页面标题", defaultval: Model.Meta_Title, hint: "")
@@ -117,39 +121,16 @@
 
 
     <script type="text/javascript">
-        function StartGg() {
-            //先判断是否有选择商品类型
-            var typeid = $("#TypeId").val();
-            if (!typeid) {
-                ErrorMsg("请先选择商品类型");
-            } else {
+    function StartGg(pid) {
+        //先判断是否有选择商品类型
 
-            }
-
-        }
-        function changeType(event) {
-            var args = event.args;
-            if (args) {
-                // index represents the item's index.
-                var index = args.index;
-                var item = args.item;
-                // get item's label and value.
-                var label = item.label;
-                var value = item.value;
-                GetAttri(value);
-            }
-
-        }
-
-        $(function () { GetAttri("@Model.TypeId"); });
-        function GetAttri(pid) {
-            if (!pid) {
-                return;
-            }
-            $.getJSON("@Url.Action("GetAttrWithProdcutVal")", { ptypeid: pid, productID: $("#ID").val() },
+        if (!pid) {
+            ErrorMsg("请先选择商品类型");
+        } else {
+            $.getJSON("@Url.Action("GetGgWithProdcutVal")", { ptypeid: pid, productID: $("#ID").val() },
             function (data, isSuccess) {
                 if (isSuccess == "success") {
-                    $("#extendInfo").find("dl").remove();
+                    $("#ggInfo").find("dl").remove();
                     if (data.Rows.length > 0) {
 
                         var html = "";
@@ -163,25 +144,14 @@
                                 html += "<dl> <dt> <label  >" + dar.Name + "</label> </dt> <dd> ";
                             }
 
-                            if (dar.ShowType == 0) {
-                                var checked = "";
-                                if (dar.HasValue == 1) {
-                                    checked = "checked='checked'"
-                                }
-                                html += "<input " + checked + "  type='radio' name='WithProdcutVal|" + dar.ID + "|" + dar.ShowType + "' value='" + dar.ID + "|" + dar.ExtendInfoValueID + "|" + dar.ShowType + "' />&nbsp;<label>" + dar.ValueStr + "</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-                            } else if (dar.ShowType == 1) {
-                                var checked = "";
-                                if (dar.HasValue == 1) {
-                                    checked = "checked='checked'"
-                                }
-                                html += "<input " + checked + "  type='checkbox' name='WithProdcutVal|" + dar.ID + "|" + dar.ShowType + "|" + dar.ExtendInfoValueID + "' value='" + dar.ID + "|" + dar.ExtendInfoValueID + "|" + dar.ShowType + "' />&nbsp;<label>" + dar.ValueStr + "</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-                            } else {
-                                var valtext = dar.ValueStr;
-                                if (!valtext) {
-                                    valtext = "";
-                                }
-                                html += "<input   name='WithProdcutVal|" + dar.ID + "|" + dar.ShowType + "' type='text' " + "value='" + valtext + "'/>";
+
+                            var checked = "";
+                            if (dar.HasValue == 1) {
+                                checked = "checked='checked'"
                             }
+                            html += "<input " + checked + " onclick='checkedGg();'  type='checkbox' name='WithProdcutVal|" +
+                                dar.ID + "|" + dar.Name + "|" + dar.ExtendInfoValueID +
+                                "' value='" + dar.ID + "|" + dar.ExtendInfoValueID + "|" + dar.ValueStr + "' />&nbsp;<label>" + dar.ValueStr + "</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 
 
                             if (i == data.Rows.length - 1) {
@@ -190,74 +160,210 @@
                                 html += "</dd></dl>"
                             }
                         }
-                        $("#extendInfo").append(html);
+                        $("#ggInfo").append(html);
                     }
                 }
             });
+            }
+
         }
-        var oldType = null;
-        function unselectType(event) {
+        function checkedGg() {
+            var hashtable = new $.Hashtable();
+            hashtable.add("hello", ["world", "hello world"]);
+            hashtable.add("aaa", ["111", "3333"]);
+            alert(hashtable.get("aaa")[1]);
+            var a = $("#ggInfo").find("input[type='checkbox']").each(
+
+                function (i, item) {
+
+                    var $item = $(item);
+                    if ($item.prop('checked')) {
+                        //获取规格ID,获取值ID,获取属性类型
+                        var val = $(item).val();
+                        var attrName = $(item).attr("name").split('|')[2];
+                        var vals = val.split('|');
+                        var attrid = vals[0];
+                        var valueid = vals[1];
+                        var valueText = vals[2];
+                        hashtable.add(attrid + "|" + attrName, { attid: attrid, valid: valueid, valText: valueText })
+                    }
+                });
+            var source =
+           {
+               datatype: "json",
+               datafields: [],
+
+           };
+            var columns = [];[
+                    { text: 'Company Name', datafield: 'CompanyName', width: 250 },
+                    { text: 'Contact Name', datafield: 'ContactName', width: 150 },
+                    { text: 'Contact Title', datafield: 'ContactTitle', width: 180 },
+                    { text: 'City', datafield: 'City', width: 120 },
+                    { text: 'Country', datafield: 'Country' }
+            ]
+            //生成表格
+            var data = {};
+            for (var item in hashtable.keys) {
+                //生成列
+                var attrIDAndName = item.split("|");
+                source.datafields.push({ name: item, type: 'string' });
+                columns.push({ text: attrIDAndName[1], datafield: item, width: 100 });
+                //生成数据
+                for (var v in hashtable.keys[item]) {
+                    data.push({ "item": v.valueText });
+                }
+            }
+
+
+
+            //添加其他列
+            source.datafields.push({ name: item, type: 'string' });
+            columns.push({ text: "", datafield: "", width: 100 });
+            source.localdata = data;
+            var dataAdapter = new $.jqx.dataAdapter(source);
+            $("#skugrid").jqxGrid(
+            {
+                width: 850,
+                source: dataAdapter,
+                columnsresize: true,
+                columns: columns
+            });
+
+
+
+        }
+        function changeType(event) {
             var args = event.args;
             if (args) {
-                oldType = args.item;
-            } else {
-                oldType = null;
+                // index represents the item's index.
+                var index = args.index;
+                var item = args.item;
+                // get item's label and value.
+                var label = item.label;
+                var value = item.value;
+                GetAttri(value);
+                StartGg(value);
             }
+
         }
 
-        $(function () {
+        $(function () { GetAttri("@Model.TypeId"); StartGg("@Model.TypeId") });
+    function GetAttri(pid) {
+        if (!pid) {
+            return;
+        }
+        $.getJSON("@Url.Action("GetAttrWithProdcutVal")", { ptypeid: pid, productID: $("#ID").val() },
+        function (data, isSuccess) {
+            if (isSuccess == "success") {
+                $("#extendInfo").find("dl").remove();
+                if (data.Rows.length > 0) {
 
-
-            //初始化表单验证
-            $("form").validate({
-                ignore: "",
-                rules: {
-                    "Code": {
-                        required: true,
-                        maxlength: 50,
-                        remote: {
-                            url: '@Url.Action("CheckRepeat")',
-                            data: {
-                                ID: function () { return $("#ID").val(); },
-                                RecordStatus: function () { return $("#RecordStatus").val(); },
-                                val: function () { return $("#Code").val(); }
-                            }
+                    var html = "";
+                    for (var i = 0; i < data.Rows.length; i++) {
+                        var dar = data.Rows[i];
+                        if (dar.ShowType < 2 && !dar.ExtendInfoValueID) {
+                            continue;
                         }
-                    },
-                    Name: {
-                        required: true,
-                        maxlength: 100
-                    },
-                    ShopCategoryName: { required: true }
-                    ,
-                    TypeId: { required: true }
 
-                },
-                messages: {
-                    Code: {
-                        required: "请输入编号",
-                        maxlength: $.validator.format("编号长度不能大于{0}个字符"),
-                        remote: "编号重复"
-                    },
-                    Name: {
-                        required: "请输入名称",
-                        maxlength: $.validator.format("名称长度不能大于{0}个字符")
-                    },
-                    ShopCategoryName: { required: "请输入商品分类" },
-                    TypeId: { required: "请输入商品类型" }
-                },
-                errorPlacement: function (error, element) {
+                        if (i == 0 || dar.ID != data.Rows[i - 1].ID) {
+                            html += "<dl> <dt> <label  >" + dar.Name + "</label> </dt> <dd> ";
+                        }
 
-                    if (element.is(":radio"))
-                        error.insertAfter($(element).parent());
-                    else if (element.is(":checkbox"))
-                        error.insertAfter($(element).parent());
-                    else
-                        error.insertAfter(element);
+                        if (dar.ShowType == 0) {
+                            var checked = "";
+                            if (dar.HasValue == 1) {
+                                checked = "checked='checked'"
+                            }
+                            html += "<input " + checked + "  type='radio' name='WithProdcutVal|" + dar.ID + "|" + dar.ShowType + "' value='" + dar.ID + "|" + dar.ExtendInfoValueID + "|" + dar.ShowType + "' />&nbsp;<label>" + dar.ValueStr + "</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                        } else if (dar.ShowType == 1) {
+                            var checked = "";
+                            if (dar.HasValue == 1) {
+                                checked = "checked='checked'"
+                            }
+                            html += "<input " + checked + "  type='checkbox' name='WithProdcutVal|" + dar.ID + "|" + dar.ShowType + "|" + dar.ExtendInfoValueID + "' value='" + dar.ID + "|" + dar.ExtendInfoValueID + "|" + dar.ShowType + "' />&nbsp;<label>" + dar.ValueStr + "</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                        } else {
+                            var valtext = dar.ValueStr;
+                            if (!valtext) {
+                                valtext = "";
+                            }
+                            html += "<input   name='WithProdcutVal|" + dar.ID + "|" + dar.ShowType + "' type='text' " + "value='" + valtext + "'/>";
+                        }
+
+
+                        if (i == data.Rows.length - 1) {
+                            html += "</dd></dl>"
+                        } else if (data.Rows[i + 1].ID != dar.ID) {
+                            html += "</dd></dl>"
+                        }
+                    }
+                    $("#extendInfo").append(html);
                 }
+            }
+        });
+    }
+    var oldType = null;
+    function unselectType(event) {
+        var args = event.args;
+        if (args) {
+            oldType = args.item;
+        } else {
+            oldType = null;
+        }
+    }
 
-            });
-        })
+    $(function () {
+
+
+        //初始化表单验证
+        $("form").validate({
+            ignore: "",
+            rules: {
+                "Code": {
+                    required: true,
+                    maxlength: 50,
+                    remote: {
+                        url: '@Url.Action("CheckRepeat")',
+                        data: {
+                            ID: function () { return $("#ID").val(); },
+                            RecordStatus: function () { return $("#RecordStatus").val(); },
+                            val: function () { return $("#Code").val(); }
+                        }
+                    }
+                },
+                Name: {
+                    required: true,
+                    maxlength: 100
+                },
+                ShopCategoryName: { required: true }
+                ,
+                TypeId: { required: true }
+
+            },
+            messages: {
+                Code: {
+                    required: "请输入编号",
+                    maxlength: $.validator.format("编号长度不能大于{0}个字符"),
+                    remote: "编号重复"
+                },
+                Name: {
+                    required: "请输入名称",
+                    maxlength: $.validator.format("名称长度不能大于{0}个字符")
+                },
+                ShopCategoryName: { required: "请输入商品分类" },
+                TypeId: { required: "请输入商品类型" }
+            },
+            errorPlacement: function (error, element) {
+
+                if (element.is(":radio"))
+                    error.insertAfter($(element).parent());
+                else if (element.is(":checkbox"))
+                    error.insertAfter($(element).parent());
+                else
+                    error.insertAfter(element);
+            }
+
+        });
+    })
     </script>
 
     <script type="text/javascript">
