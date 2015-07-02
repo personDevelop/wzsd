@@ -541,65 +541,119 @@ function setRadioGroupVal(name, val, formid) {
     });
 }
 
-$.Hashtable = function () {
-    this.keys = new Array();
-    this.itemsCount = 0;
-    this.add = function (key, value) {
-        if (!this.containsKey(key)) {
-            this.keys[key] = new Array();
+/**
+ * V1.0
+ * HashMap javascript版
+ * 2013-09-04
+ 
+ * 		var map = new $.HashMap();
+    		map.put("age","20");
+    		map.put("name","yk1");
+    		alert(map.get("age"));
+    		alert(map.toString());
+    		
+    		map = new $.HashMap({"username":"ycyk_168","password":"123456"});
+    		map.put("age","20");
+    		map.put("name","yk1");
+    		alert(map.get("username"));
+    		alert(map.get("password"));
+    		alert(map.get("age"));
+    		alert(map.get("name"));
+    		alert(map.toString());
+ *
+ */
+$.HashMap = function () {
+    //定义长度  
+    var length = 0;
+    //创建一个对象  
+    var obj = new Object();
 
-        }
-        keys[key].push(value);
-        this.itemsCount++;
-    }
-
-    this.get = function (key) {
-        if (this.containsKey(key))
-            return this.keys[key];
-        else
-            return null;
-    }
-
-    this.remove = function (key) {
-        if (this.containsKey(key)) {
-            delete this.keys[key];
-            this.itemsCount--;
-        }
-        else
-            throw "key '" + key + "' does not exists."
-
-    }
-
-    this.containsKey = function (key) {
-        return typeof (this.keys[key]) != "undefined";
-    }
-
-    this.containsValue = function containsValue(value) {
-        for (var item in this.keys) {
-            for (var i = 0; i < this.keys[item].length; i++) {
-                if (this.keys[item][i] == value)
-                    return true;
-            }
-
-        }
-
-        return false;
-    }
-
-    this.contains = function (keyOrValue) {
-        return this.containsKey(keyOrValue) || this.containsValue(keyOrValue);
-    }
-
-    this.clear = function () {
-        this.keys = new Array();
-        itemsCount = 0;
-    }
-
-    this.size = function () {
-        return this.itemsCount;
-    }
-
+    /** 
+    * 判断Map是否为空 
+    */
     this.isEmpty = function () {
-        return this.size() == 0;
-    }
+        return length == 0;
+    };
+
+    /** 
+    * 判断对象中是否包含给定Key 
+    */
+    this.containsKey = function (key) {
+        return (key in obj);
+    };
+
+    /** 
+    * 判断对象中是否包含给定的Value 
+    */
+    this.containsValue = function (value) {
+        for (var key in obj) {
+            if (obj[key] == value) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    /** 
+    *向map中添加数据 
+    */
+    this.put = function (key, value) {
+        if (!this.containsKey(key)) {
+            length++;
+        }
+        obj[key] = value;
+    };
+
+    /** 
+    * 根据给定的Key获得Value 
+    */
+    this.get = function (key) {
+        return this.containsKey(key) ? obj[key] : null;
+    };
+
+    /** 
+    * 根据给定的Key删除一个值 
+    */
+    this.remove = function (key) {
+        if (this.containsKey(key) && (delete obj[key])) {
+            length--;
+        }
+    };
+
+    /** 
+    * 获得Map中的所有Value 
+    */
+    this.values = function () {
+        var _values = new Array();
+        for (var key in obj) {
+            _values.push(obj[key]);
+        }
+        return _values;
+    };
+
+    /** 
+    * 获得Map中的所有Key 
+    */
+    this.keySet = function () {
+        var _keys = new Array();
+        for (var key in obj) {
+            _keys.push(key);
+        }
+        return _keys;
+    };
+
+    /** 
+    * 获得Map的长度 
+    */
+    this.size = function () {
+        return length;
+    };
+
+    /** 
+    * 清空Map 
+    */
+    this.clear = function () {
+        length = 0;
+        obj = new Object();
+    };
 };

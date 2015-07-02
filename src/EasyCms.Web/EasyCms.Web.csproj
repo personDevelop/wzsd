@@ -1117,7 +1117,7 @@
     <Content Include="Scripts\jqwidgets\styles\images\start\Thumbs.db" />
     <Content Include="Scripts\jqwidgets\styles\images\sunny\Thumbs.db" />
     <Content Include="Scripts\jqwidgets\styles\images\Thumbs.db" />
-    <Content Include="Upload\文件路径规则.log">
+    <Content Include="Upload\文件路径规则.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
