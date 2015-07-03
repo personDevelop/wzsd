@@ -59,20 +59,12 @@ function loadMenuTree(_islink) {
 	if (arguments.length == 1 && _islink) {
 		islink = true;
 	}
+	
+	$("#pop-menu .list-box").html($("#sidebar-nav").html());
+	initMenuTree(islink);
+	initPopMenuTree();
     //发送AJAX请求
-    $.ajax({
-        type: "post",
-        url: "../tools/admin_ajax.ashx?action=get_navigation_list&time=" + Math.random(),
-        dataType: "html",
-        success: function (data, textStatus) {
-            //将得到的数据插件到页面中
-            $("#sidebar-nav").html(data);
-            $("#pop-menu .list-box").html(data);
-            //初始化导航菜单
-            initMenuTree(islink);
-            initPopMenuTree();
-        }
-    });
+    
 }
 
 //初始化导航菜单

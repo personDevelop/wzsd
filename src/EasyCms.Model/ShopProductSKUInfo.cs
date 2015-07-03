@@ -48,6 +48,8 @@ namespace EasyCms.Model
 
         private bool _IsSale;
 
+        private int _OrderNo;
+
         #endregion
 
         #region 属性
@@ -281,6 +283,25 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  顺序,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "OrderNo", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public int OrderNo
+        {
+            get
+            {
+                return this._OrderNo;
+            }
+            set
+            {
+                this.OnPropertyChanged("OrderNo", this._OrderNo, value);
+                this._OrderNo = value;
+            }
+        }
+
         #endregion
 
         #region 列定义
@@ -312,6 +333,8 @@ namespace EasyCms.Model
                 SalePrice = new PropertyItem("SalePrice", tableName);
 
                 IsSale = new PropertyItem("IsSale", tableName);
+
+                OrderNo = new PropertyItem("OrderNo", tableName);
 
 
             }
@@ -363,7 +386,12 @@ namespace EasyCms.Model
             /// 是否上架,
             /// </summary> 
             public PropertyItem IsSale = null;
+            /// <summary>
+            /// 顺序,
+            /// </summary> 
+            public PropertyItem OrderNo = null;
         }
         #endregion
     }
+
 }

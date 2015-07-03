@@ -19,9 +19,9 @@ namespace EasyCms.Business
             return Dal.Delete(id);
         }
 
-        public int Save(ShopProductInfo item, List<BaseEntity> list, List<ShopProductAttributes> spa)
+        public int Save(ShopProductInfo item, List<BaseEntity> list, List<ShopProductAttributes> spa, List<ShopProductSKU> listSku, List<ShopProductSKUInfo> listSkuInfo)
         {
-            return Dal.Save(item, list,spa);
+            return Dal.Save(item, list, spa, listSku,  listSkuInfo);
         }
 
         public DataTable GetList(bool IsForSelected = false)
@@ -56,9 +56,11 @@ namespace EasyCms.Business
 
 
 
-        public DataTable GetGgWithProdcutVal(string ptypeid, string productID)
+        public DataSet GetGgWithProdcutVal(string ptypeid, string productID)
         {
             return Dal.GetGgWithProdcutVal(ptypeid, productID);
         }
+
+      
     }
 }

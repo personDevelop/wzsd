@@ -7,6 +7,51 @@
 @Styles.Render("~/bundles/upimgcss")
 @Scripts.Render("~/bundles/ueditor")
 @Scripts.Render("~/bundles/uploadJs")
+<style>
+    table, th, td, caption {
+        margin: 0px;
+        padding: 0px;
+        line-height: 18px;
+        color: #000;
+        font-size: 12px;
+    }
+
+    .mytable th {
+        background: #BCE774;
+        text-align: center;
+        font-weight: normal;
+        width: 150px;
+        padding: 6px;
+    }
+
+    .mytable caption {
+        background: #328AA4;
+        color: #FFF;
+        line-height: 30px;
+        border: 1px solid #FFF;
+    }
+
+    .mytable td {
+        background: #ECFBD4;
+        padding: 3px;
+        text-align: center;
+    }
+
+    .mytable th, .mytable td {
+        border-top: 1px solid #FFF;
+        border-left: 1px solid #FFF;
+    }
+
+    .mytable {
+        border-bottom: 1px solid #FFF;
+        border-right: 1px solid #FFF;
+        width: auto;
+    }
+
+    td input {
+        width: 50px;
+    }
+</style>
 
 @using EasyCms.Model
 <!--内容-->
@@ -50,6 +95,7 @@
     @HelperExtend.TextBox("RegionId", "所在地", defaultval: Model.RegionId, hint: "")
 
     @HelperExtend.TextBox("Unit", "计量单位", defaultval: Model.Unit, hint: "")
+    @HelperExtend.TextBox("Weight", "重量", defaultval: Model.Weight, hint: "")
     @HelperExtend.RadioGroup("SalesType", "销售类型 ", "0,1", "正常,赠品", defaultval: Model.SalesType)
 
     @HelperExtend.RadioGroup("SaleStatus", "商品状态 ", "0,1", "下架,上架,审批中,审批退回", defaultval: Model.SaleStatus)
@@ -106,7 +152,7 @@
         <legend style=" text-align:center;     ">规格</legend>
 
     </fieldset>
-    <table id="skugrid" border="1"></table>
+    <table id="skugrid" class="mytable"></table>
 </div>
 <div class="tab-content" style="display:none">
     @HelperExtend.TextBox("Meta_Title", "页面标题", defaultval: Model.Meta_Title, hint: "")
@@ -121,6 +167,8 @@
 
 
     <script type="text/javascript">
+
+
         function StartGg(pid) {
             //先判断是否有选择商品类型
 
@@ -131,16 +179,16 @@
                 function (data, isSuccess) {
                     if (isSuccess == "success") {
                         $("#ggInfo").find("dl").remove();
-                        if (data.Rows.length > 0) {
+                        if (data.Tables[0].Rows.length > 0) {
 
                             var html = "";
-                            for (var i = 0; i < data.Rows.length; i++) {
-                                var dar = data.Rows[i];
+                            for (var i = 0; i < data.Tables[0].Rows.length; i++) {
+                                var dar = data.Tables[0].Rows[i];
                                 if (dar.ShowType < 2 && !dar.ExtendInfoValueID) {
                                     continue;
                                 }
 
-                                if (i == 0 || dar.ID != data.Rows[i - 1].ID) {
+                                if (i == 0 || dar.ID != data.Tables[0].Rows[i - 1].ID) {
                                     html += "<dl> <dt> <label  >" + dar.Name + "</label> </dt> <dd> ";
                                 }
 
@@ -149,18 +197,62 @@
                                 if (dar.HasValue == 1) {
                                     checked = "checked='checked'"
                                 }
-                                html += "<input " + checked + "   type='checkbox' name='WithProdcutVal|" +
+                                html += "<input " + checked + "   type='checkbox' name='WithGgVal|" +
                                     dar.ID + "|" + dar.Name + "|" + dar.UseAttrImg + "|" + dar.UseDefineImg +
-                                    "' value='" + dar.ExtendInfoValueID + "|" + dar.ValueStr + "|" + dar.ImgPath + "|" + dar.Note + "' />&nbsp;<label>" + dar.ValueStr + "</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                                    "|" + dar.ExtendInfoValueID + "|" + dar.ValueStr + "|" + dar.ImgPath + "|" + dar.Note + "' />&nbsp;<label>" + dar.ValueStr + "</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 
 
-                                if (i == data.Rows.length - 1) {
+                                if (i == data.Tables[0].Rows.length - 1) {
                                     html += "</dd></dl>"
-                                } else if (data.Rows[i + 1].ID != dar.ID) {
+                                } else if (data.Tables[0].Rows[i + 1].ID != dar.ID) {
                                     html += "</dd></dl>"
                                 }
                             }
                             $("#ggInfo").append(html);
+                        }
+                        if (data.Tables.length>1 && data.Tables[1].Rows.length > 0) {
+                            $("#skugrid").html("");
+                            var html = "<thead></thead>";
+                            var headelemnt = $(html);
+                            headelemnt.append("<tr></tr>");
+                            for (var colName in data.Tables[1].Rows[0]) {
+                                if (colName != "SKUID") {
+                                    headelemnt.children().append("<th  >" + colName + "</th>");
+                                }
+                            }
+
+                            headelemnt.prependTo("#skugrid");
+                            for (var i = 0; i < data.Tables[1].Rows.length; i++) {
+                                var tr = "<tr> </tr>";
+                                var trelemnt = $(tr);
+                                var row = data.Tables[1].Rows[i];
+                                var col = 0;
+                                for (var colName in row) {
+                                    if (colName != "SKUID") {
+                                        var names = row[colName].toString().split('|');
+                                        var html = "<td>";
+                                        if (names.length == 3) {
+                                            html += "<input type='hidden' name='dtrow|" + i + "|" + col + "' value='" + names[0] + "|" + names[1] + "' />" + names[2];
+                                        } else {
+                                            if (colName == "上架") {
+                                                if (row[colName]) {
+                                                    html += "<input type='checkbox' checked='checked'   name='row|" + i + "|" + col + "|IsSale'   />";/*是否上架*/
+                                                }
+                                                else { html += "<input type='checkbox'     name='row|" + i + "|" + col + "|IsSale'   />";/*是否上架*/ }
+
+                                            } else {
+                                                html += "<input   name='row|" + i + "|" + col + "|" + colName + "'  value='" + row[colName] + "' />";
+                                            }
+                                        }
+                                        html += "</td>";
+                                        col++;
+
+                                        trelemnt.append(html);
+                                    }
+                                }
+                                $("#skugrid").append(trelemnt);
+                                
+                            }
 
                         }
                     }
@@ -188,26 +280,38 @@
                         } else {
                             coumn = columns.get(coumn.id);
                         }
-                        var vals = $(item).val().split('|');
-                        var attrval = { valid: vals[0], valstr: vals[1], imgPath: vals[2], imgNote: vals[3] };
+
+                        var attrval = { attrid: coumn.id, valid: names[5], valstr: names[6], imgPath: names[7], imgNote: names[8] };
                         if (!coumn.vals.containsKey(attrval.valid)) {
                             coumn.valsCount++;
                             coumn.vals.put(attrval.valid, attrval);
                         }
                     }
-
                 });
             var Rowscount = 1;
+            $("#skugrid").html("");
             var coumnAttray = columns.values();
-            var html = "<thead><tr> </tr></thead>";
+            var html = "<thead></thead>";
             var headelemnt = $(html);
+            headelemnt.append("<tr></tr>");
             for (var index in coumnAttray) {
                 var c = coumnAttray[index];
                 /*计算生成行的个数*/
                 Rowscount *= c.valsCount;
-                headelemnt.append("<th>" + c.name + "</th>");
-
+                headelemnt.children().append("<th  >" + c.name + "</th>");
             }
+            /*增加固定列 商品编号、售价、市场价、成本价、重量、库存、最大库存、最低库存,是否上架*/
+            headelemnt.children().append("<th   >商品编号</th>");
+            headelemnt.children().append("<th   >售价</th>");
+            headelemnt.children().append("<th   >市场价</th>");
+            headelemnt.children().append("<th  >成本价</th>");
+            headelemnt.children().append("<th  >重量</th>");
+            headelemnt.children().append("<th  >库存</th>");
+            headelemnt.children().append("<th  >最大库存</th>");
+            headelemnt.children().append("<th  >最低库存</th>");
+            headelemnt.children().append("<th  >上架</th>");
+            //headelemnt.wrap("");
+
             headelemnt.prependTo("#skugrid");
             var columnCount = columns.size();
             for (var i = 0; i < Rowscount; i++) {
@@ -216,29 +320,84 @@
                 for (var k = 0; k < columnCount; k++) {
                     trelemnt.append("<td> </td>");
                 }
-
+                trelemnt.append("<td></td>");
+                trelemnt.append("<td></td>");
+                trelemnt.append("<td></td>");
+                trelemnt.append("<td></td>");
+                trelemnt.append("<td></td>");
+                trelemnt.append("<td></td>");
+                trelemnt.append("<td></td>");
+                trelemnt.append("<td></td>");
+                trelemnt.append("<td></td>");
                 trelemnt.prependTo("#skugrid");
             }
-             
+
+            var currentCellCount = Rowscount;
             for (var index in coumnAttray) {
                 var c = coumnAttray[index];
                 var vals = c.vals.values();
-                var loopcount=0;
-                for (var i = 0; i < c.valsCount; i++) {
-                    loopcount++;
-                    var v = vals[i];
-                    //找到对应的单元格
-                    $("#skugrid").find("tr").eq(loopcount).find("td").eq(index).append(v.valstr);
-                    //重新循环查找
-                    if (i == vals.length - 1 && loopcount < Rowscount) {
-                        i = -1;
+                var loopcount = 0;
+                //计算循环次数
+                currentCellCount = currentCellCount / vals.length;
+                var rowindex = 0;
+                for (var i = 0; i < Rowscount; i++) {
+                    if (rowindex == c.valsCount) {
+                        rowindex = 0;
                     }
+                    var v = vals[rowindex++];
+                    for (var z = 0; z < currentCellCount; z++) {
+                        loopcount++;
+                        //找到对应的单元格
+                        var html = "<input type='hidden' name='dtrow|" + (loopcount - 1) + "|" + index + "' value='" + v.attrid + "|" + v.valid + "' />" + v.valstr;
+                        $("#skugrid").find("tr").eq(loopcount).find("td").eq(index).append(html);
 
+                    }
                 }
-                
-
             }
-           
+            var sku = $("#SKU").val();
+            if (!sku) {
+                sku = $("#Code").val();
+            }
+            sku += "-";
+            //给其他列填值
+            /*增加固定列 商品编号、售价、市场价、成本价、重量、库存、最大库存、最低库存,是否上架*/
+            for (var i = 0; i < Rowscount; i++) {
+                $("#skugrid").find("tr").eq(i + 1).find("td:gt(" + (columnCount - 1) + ")").each(function (col, item) {
+                    var tdthml = "";
+                    switch (col) {
+                        case 0:
+                            tdthml = "<input   name='row|" + i + "|" + col + "|SKU' value='" + (sku + i) + "'  />";/*商品编号*/
+
+                            break;
+                        case 1:
+                            tdthml = "<input   name='row|" + i + "|" + col + "|SalePrice'  value='" + $("#SalePrice").val() + "' />";/*售价*/
+                            break;
+                        case 2:
+                            tdthml = "<input   name='row|" + i + "|" + col + "|MarketPrice'   value='" + $("#MarketPrice").val() + "'/>";/*市场价*/
+                            break;
+                        case 3:
+                            tdthml = "<input   name='row|" + i + "|" + col + "|CostPrice'  value='" + $("#CostPrice").val() + "' />";/*成本价*/
+                            break;
+                        case 4:
+                            tdthml = "<input   name='row|" + i + "|" + col + "|Weight'  value='" + $("#Weight").val() + "' />";/*重量*/
+                            break;
+                        case 5:
+                            tdthml = "<input   name='row|" + i + "|" + col + "|Stock'  value='" + $("#Stock").val() + "' />";/*库存*/
+                            break;
+                        case 6:
+                            tdthml = "<input   name='row|" + i + "|" + col + "|MaxAlertStock'  value='" + $("#MaxQuantity").val() + "' />";/*最大库存*/
+                            break;
+                        case 7:
+                            tdthml = "<input   name='row|" + i + "|" + col + "|MinAlertStock'  value='" + $("#MinQuantity").val() + "' />";/*最低库存*/
+                            break;
+                        case 8:
+                            tdthml = "<input type='checkbox' checked='checked'   name='row|" + i + "|" + col + "|IsSale'   />";/*是否上架*/
+                            break;
+
+                    }
+                    $(item).html(tdthml);
+                });
+            }
 
         }
         function changeType(event) {

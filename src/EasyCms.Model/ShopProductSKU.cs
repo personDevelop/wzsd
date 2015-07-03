@@ -24,11 +24,11 @@ namespace EasyCms.Model
 
         #region 私有变量
 
-        private long _ID;
+        private string _ID;
 
         private string _AttributeId;
 
-        private long _ValueId;
+        private string _ValueId;
 
         private string _ImageID;
 
@@ -45,9 +45,9 @@ namespace EasyCms.Model
         /// </summary>
 
         [PrimaryKey]
-        [DbProperty(MapingColumnName = "ID", DbTypeString = "bigint", ColumnIsNull = false, IsUnique = true, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ID", DbTypeString = "char", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public long ID
+        public string ID
         {
             get
             {
@@ -64,6 +64,7 @@ namespace EasyCms.Model
         ///  规格ID,
         /// </summary>
 
+        [PrimaryKey]
         [DbProperty(MapingColumnName = "AttributeId", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = true, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string AttributeId
@@ -83,9 +84,10 @@ namespace EasyCms.Model
         ///  规则值ID,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "ValueId", DbTypeString = "bigint", ColumnIsNull = false, IsUnique = true, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [PrimaryKey]
+        [DbProperty(MapingColumnName = "ValueId", DbTypeString = "char", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public long ValueId
+        public string ValueId
         {
             get
             {
@@ -140,6 +142,7 @@ namespace EasyCms.Model
         ///  商品ID,
         /// </summary>
 
+        [PrimaryKey]
         [DbProperty(MapingColumnName = "ProductId", DbTypeString = "char", ColumnIsNull = false, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string ProductId
@@ -204,4 +207,5 @@ namespace EasyCms.Model
         }
         #endregion
     }
+
 }

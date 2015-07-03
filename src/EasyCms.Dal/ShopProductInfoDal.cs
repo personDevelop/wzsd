@@ -17,7 +17,7 @@ namespace EasyCms.Dal
             return "";
         }
 
-        public int Save(ShopProductInfo item, List<BaseEntity> list, List<ShopProductAttributes> spas)
+        public int Save(ShopProductInfo item, List<BaseEntity> list, List<ShopProductAttributes> spas, List<ShopProductSKU> listSku, List<ShopProductSKUInfo> listSkuInfo)
         {
             List<string> deleteShopProductAttributesIDS = new List<string>();
             foreach (ShopProductAttributes spa in spas)
@@ -60,15 +60,23 @@ namespace EasyCms.Dal
                 {
                     dal.Delete<ShopProductAttributes>(ShopProductAttributes._.ProductId == item.ID && ShopProductAttributes._.ValueId.In(deleteShopProductAttributesIDS), tr);
                 }
-                dal.SubmitNew(ref dal, item);
-                dal.SubmitNew(list, ref dal);
-                dal.SubmitNew(spas, ref dal);
+                if (item.RecordStatus == StatusType.update)
+                {
+                    dal.Delete<ShopProductSKUInfo>(ShopProductSKUInfo._.ProductId == item.ID, tr);
+                    dal.Delete<ShopProductSKU>(ShopProductSKU._.ProductId == item.ID, tr);
+                }
+                dal.SubmitNew(tr, ref dal, item);
+                dal.SubmitNew(tr, ref dal, list);
+                dal.SubmitNew(tr, ref dal, spas);
+                dal.SubmitNew(tr, ref dal, listSku);
+                dal.SubmitNew(tr, ref dal, listSkuInfo);
                 dal.CommitTransaction(tr);
                 return 1;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 dal.RollbackTransaction(tr);
+                throw;
                 return -1;
             }
 
@@ -139,21 +147,54 @@ namespace EasyCms.Dal
 
               .Where(ShopExtendInfo._.ProductTypeID == ptypeid && ShopExtendInfo._.UsageMode < 2)
 
-              .OrderBy(ShopExtendInfo._.DisplayOrder, ShopExtendInfoValue._.DisplaySequence).ToDataTable();
+              .OrderBy(ShopExtendInfo._.ID, ShopExtendInfo._.DisplayOrder, ShopExtendInfoValue._.DisplaySequence).ToDataTable();
         }
 
 
 
-        public DataTable GetGgWithProdcutVal(string ptypeid, string productID)
+        public DataSet GetGgWithProdcutVal(string ptypeid, string productID)
         {
 
-            return Dal.From<ShopExtendInfo>().Join<ShopExtendInfoValue>(ShopExtendInfo._.ID == ShopExtendInfoValue._.AttributeId)
+            DataSet ds =
+              Dal.From<ShopExtendInfo>().Join<ShopExtendInfoValue>(ShopExtendInfo._.ID == ShopExtendInfoValue._.AttributeId, JoinType.leftJoin)
+                .Join<ShopProductSKU>(ShopExtendInfoValue._.ID == ShopProductSKU._.ValueId && ShopProductSKU._.ProductId == productID, JoinType.leftJoin)
              .Select(ShopExtendInfo._.ID.All,
-              ShopExtendInfoValue._.ID.Alias("ExtendInfoValueID"), ShopExtendInfoValue._.ValueStr, ShopExtendInfoValue._.DisplaySequence, ShopExtendInfoValue._.ImageID, ShopExtendInfoValue._.Note
-          )
+              ShopExtendInfoValue._.ID.Alias("ExtendInfoValueID"), ShopExtendInfoValue._.ValueStr, ShopExtendInfoValue._.DisplaySequence, ShopExtendInfoValue._.ImageID, ShopExtendInfoValue._.Note,
+               new ExpressionClip(" case when ShopProductSKU.ID is null then 0 else 1 end HasValue"))
              .Where(ShopExtendInfo._.ProductTypeID == ptypeid && ShopExtendInfo._.UsageMode > 1)
+             .OrderBy(ShopExtendInfo._.ID, ShopExtendInfo._.DisplayOrder, ShopExtendInfoValue._.DisplaySequence).Distinct()
+             .ToDataSet();
+            string tempTable = "temp" + Guid.NewGuid().ToString().Replace("-", "");
+            Dictionary<string, object> dic = new Dictionary<string, object>();
+            Dal.FromStoredProcedure("PIVOTRowConvertCol").AddInputParameter("tableName", "ShopProductSKU,ShopExtendInfo,ShopExtendInfoValue")
+                       .AddInputParameter("groupColumn", "ShopProductSKU.ID SKUID")
+                       .AddInputParameter("pivotgroupColumn", "SKUID")
+                       .AddInputParameter("row2column", "ShopExtendInfo.Name")
+                       .AddInputParameter("pivotrow2column", "Name")
+                       .AddInputParameter("row2columnValue", "ShopExtendInfoValue.AttributeId+'|'+ShopExtendInfoValue.id+'|'+ShopExtendInfoValue.ValueStr as ValueStr")
+                        .AddInputParameter("pivotrow2columnValue", "ValueStr")
+                         .AddInputParameter("sql_where", "where  ShopExtendInfo.ProductTypeID='" + ptypeid + "' and ShopProductSKU.ProductId='" + productID + "'  and ShopProductSKU.ValueId = ShopExtendInfoValue.ID and ShopExtendInfoValue.AttributeId =  ShopExtendInfo.ID")
+                           .AddInputParameter("orderby", "DisplayOrder")
+                           .AddInputParameter("tempTableName", tempTable)
+                           .AddOutputParameter("result", 1, DbType.Int32)
+                      .ToScalar(out dic);
+            if (((int)dic["result"]) > 0)
+            {
 
-             .OrderBy(ShopExtendInfo._.DisplayOrder, ShopExtendInfoValue._.DisplaySequence).ToDataTable();
+
+                DataTable dt = Dal.FromCustomSql("select " + tempTable + @".*,  SKU AS 商品编号, SalePrice AS 售价, MarketPrice AS 市场价, CostPrice AS 成本价, Weight AS 重量, Stock AS 库存, MaxAlertStock AS 最大库存, 
+                      MinAlertStock AS 最低库存, IsSale AS 上架
+ from " + tempTable + " join ShopProductSKUInfo on SKURelationID=SKUID where ProductId='"
+                      + productID + "'  order by OrderNo").ToDataTable();
+                dt.TableName = tempTable;
+
+                ds.Tables.Add(dt.Copy());
+
+                //删除临时表
+                Dal.FromCustomSql("drop table " + tempTable).ExecuteNonQuery();
+            }
+            return ds;
+
         }
     }
 

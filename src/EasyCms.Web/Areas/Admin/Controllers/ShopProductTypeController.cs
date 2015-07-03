@@ -191,7 +191,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         {
             try
             {
-                string[] vals = Vals.Split(new char[] { ',', ';', '，', '；' }, StringSplitOptions.RemoveEmptyEntries);
+                string[] vals = Vals.Split(new char[] { ',', ';', '，', '；', '/', '\\', '、', '、' }, StringSplitOptions.RemoveEmptyEntries);
                 List<ShopExtendInfoValue> list = new List<ShopExtendInfoValue>();
                 foreach (var item in vals)
                 {
@@ -222,9 +222,10 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             {
                 ShopExtendInfoValue s = new ShopExtendInfoValue()
                 {
+                    ID=Guid.NewGuid().ToString(),
                     ImageID = ImageID,
                     AttributeId = AttributeId,
-                    Note = Note,
+                    ValueStr = Note,
 
                 };
                 List<ShopExtendInfoValue> list = new List<ShopExtendInfoValue>();

@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using Sharp.Common;
 using EasyCms.Web.Common;
+using System.Data;
 
 namespace EasyCms.Web.Areas.Admin.Controllers
 {
@@ -81,6 +82,11 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                     }
                 }
                 List<ShopProductAttributes> listAttri = new List<ShopProductAttributes>();
+                List<ShopProductSKU> listSku = new List<ShopProductSKU>();
+                List<ShopProductSKUInfo> listSkuInfo = new List<ShopProductSKUInfo>();
+                Dictionary<int, string> rowSpeckID = new Dictionary<int, string>();
+
+                Dictionary<int, ShopProductSKUInfo> rowShopProductSKUInfo = new Dictionary<int, ShopProductSKUInfo>();
                 foreach (string item in collection.Keys)
                 {
                     if (item.StartsWith("WithProdcutVal|"))
@@ -100,16 +106,124 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                             {
                                 ID = Guid.NewGuid().ToString(),
                                 AttributeId = vals[0],
-                                ValueId =vals[1],
+                                ValueId = vals[1],
                                 ProductId = p.ID
                             };
                         }
 
                         listAttri.Add(sav);
                     }
+                    else if (item.StartsWith("WithGgVal|"))
+                    {
+                        string s = collection[item];
+                        //选择的规格值
+                        //if ()
+                        //{
+
+                        //}
+                    }
+                    else if (item.StartsWith("dtrow|"))
+                    {
+                        //动态行的值信息
+                        ShopProductSKU sku = new ShopProductSKU();
+                        sku.ProductId = p.ID;
+                        string[] vals = item.Split('|');
+                        int rowindex = int.Parse(vals[1]);
+
+
+                        if (rowSpeckID.ContainsKey(rowindex))
+                        {
+                            sku.ID = rowSpeckID[rowindex];
+                        }
+                        else
+                        {
+                            sku.ID = Guid.NewGuid().ToString();
+                            rowSpeckID.Add(rowindex, sku.ID);
+
+                        }
+                        listSku.Add(sku);
+                        string[] fromVal = collection[item].Split('|');
+                        sku.AttributeId = fromVal[0];
+                        sku.ValueId = fromVal[1];
+
+
+                    }
+                    else if (item.StartsWith("row|"))
+                    {
+                        //固定行的值信息
+                        ShopProductSKUInfo skuinfo = null;
+                        string[] vals = item.Split('|');
+                        int rowindex = int.Parse(vals[1]);
+                        if (rowSpeckID.ContainsKey(rowindex) && rowShopProductSKUInfo.ContainsKey(rowindex))
+                        {
+                            skuinfo = rowShopProductSKUInfo[rowindex];
+
+                        }
+                        else
+                        {
+                            skuinfo = new ShopProductSKUInfo();
+                            skuinfo.ID = Guid.NewGuid().ToString();
+                            if (rowSpeckID.ContainsKey(rowindex))
+                            {
+                                skuinfo.SKURelationID = rowSpeckID[rowindex];
+                            }
+                            else
+                            {
+                                skuinfo.SKURelationID = Guid.NewGuid().ToString();
+                                rowSpeckID.Add(rowindex, skuinfo.SKURelationID);
+                            }
+                            rowShopProductSKUInfo.Add(rowindex, skuinfo);
+                            skuinfo.ProductId = p.ID;
+                            skuinfo.OrderNo = rowindex;
+                            listSkuInfo.Add(skuinfo);
+
+                        }
+                        decimal o = 0;
+                        decimal.TryParse(collection[item], out o);
+                        switch (vals[3])
+                        {
+                            case "商品编号":
+                                skuinfo.SKU = collection[item];
+                                break;
+                            case "售价":
+                                skuinfo.SalePrice = o;
+                                break;
+                            case "市场价":
+                                skuinfo.MarketPrice = o;
+                                break;
+                            case "成本价":
+                                skuinfo.CostPrice = o;
+                                break;
+                            case "重量":
+                                skuinfo.Weight = o;
+                                break;
+                            case "库存":
+                                skuinfo.Stock = o;
+                                break;
+                            case "最大库存":
+                                skuinfo.MaxAlertStock = o;
+                                break;
+                            case "最低库存":
+                                skuinfo.MinAlertStock = o;
+                                break;
+                            case "IsSale":
+                                if (collection[item] == "on")
+                                {
+                                    skuinfo.IsSale = true;
+                                }
+                                else
+                                {
+                                    skuinfo.IsSale = false;
+                                }
+                                break;
+                        }
+
+                    }
 
                 }
-                int i = bll.Save(p, list, listAttri);
+
+
+                int i = bll.Save(p, list, listAttri, listSku, listSkuInfo);
                 if (i > -1)
                 {
                     TempData.Add("IsSuccess", "保存成功");
@@ -167,7 +281,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
 
         public string GetGgWithProdcutVal(string ptypeid, string productID)
         {
-            System.Data.DataTable dt = bll.GetGgWithProdcutVal(ptypeid, productID);
+            DataSet dt = bll.GetGgWithProdcutVal(ptypeid, productID);
             return JsonWithDataTable.Serialize(dt);
         }
     }

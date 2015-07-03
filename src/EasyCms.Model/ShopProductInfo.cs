@@ -10,7 +10,7 @@ namespace EasyCms.Model
     /// <summary>
     /// 商品信息
     /// </summary>  
-    [JsonObject]
+    [JsonObject] 
     public partial class ShopProductInfo : BaseEntity
     {
         public static Column _ = new Column("ShopProductInfo");
@@ -43,6 +43,8 @@ namespace EasyCms.Model
         private string _ShortDescription;
 
         private string _Unit;
+
+        private string _Weight;
 
         private string _Description;
 
@@ -282,6 +284,25 @@ namespace EasyCms.Model
             {
                 this.OnPropertyChanged("Unit", this._Unit, value);
                 this._Unit = value;
+            }
+        }
+
+        /// <summary>
+        ///  重量,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "Weight", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string Weight
+        {
+            get
+            {
+                return this._Weight;
+            }
+            set
+            {
+                this.OnPropertyChanged("Weight", this._Weight, value);
+                this._Weight = value;
             }
         }
 
@@ -750,6 +771,8 @@ namespace EasyCms.Model
 
                 Unit = new PropertyItem("Unit", tableName);
 
+                Weight = new PropertyItem("Weight", tableName);
+
                 Description = new PropertyItem("Description", tableName);
 
                 Meta_Title = new PropertyItem("Meta_Title", tableName);
@@ -838,6 +861,10 @@ namespace EasyCms.Model
             /// 计量单位,
             /// </summary> 
             public PropertyItem Unit = null;
+            /// <summary>
+            /// 重量,
+            /// </summary> 
+            public PropertyItem Weight = null;
             /// <summary>
             /// 商品介绍,
             /// </summary> 
@@ -933,6 +960,7 @@ namespace EasyCms.Model
         }
         #endregion
     }
+
 
     public partial class ShopProductInfo
     {
