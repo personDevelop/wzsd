@@ -61,6 +61,11 @@ namespace EasyCms.Business
             return Dal.GetGgWithProdcutVal(ptypeid, productID);
         }
 
-      
+
+
+        public ShopProductInfo GetSaleEntity(string id)
+        {
+            return Dal.GetSaleEntity(id);
+        }
     }
 }

@@ -10,7 +10,7 @@ namespace EasyCms.Model
     /// <summary>
     /// 商品信息
     /// </summary>  
-    [JsonObject] 
+    [JsonObject]
     public partial class ShopProductInfo : BaseEntity
     {
         public static Column _ = new Column("ShopProductInfo");
@@ -974,6 +974,16 @@ namespace EasyCms.Model
             SaleDate = AddedDate;
             Stock = int.MinValue;
         }
-    
+        [NotDbCol]
+        public System.Data.DataTable dtImg { get; set; }
+        [NotDbCol]
+        public System.Data.DataTable dtAttr { get; set; }
+        [NotDbCol]
+        public System.Data.DataTable dtGg { get; set; }
+        [NotDbCol]
+        public System.Data.DataTable dtSku { get; set; }
+        [NotDbCol]
+        public System.Data.DataTable dtRelation { get; set; }
+
     }
 }

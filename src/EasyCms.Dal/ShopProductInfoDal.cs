@@ -196,6 +196,51 @@ namespace EasyCms.Dal
             return ds;
 
         }
+
+        public ShopProductInfo GetSaleEntity(string id)
+        {
+            ShopProductInfo p = Dal.Find<ShopProductInfo>(ShopProductInfo._.ID);
+            if (p != null)
+            {
+                if (p.SaleStatus != 1)
+                {
+                    p = null;
+                }
+                else
+                {
+                    //获取其图像
+                    p.dtImg = Dal.From<AttachFile>().Where(AttachFile._.RefID == p.ID).OrderBy(AttachFile._.OrderNo).ToDataTable();
+                    //获取其扩张属性
+                    p.dtAttr = Dal.From<ShopExtendInfo>().Join<ShopProductAttributes>(ShopProductAttributes._.AttributeId == ShopExtendInfo._.ID && ShopProductAttributes._.ProductId == id)
+                        .Join<ShopExtendInfoValue>(ShopProductAttributes._.ValueId == ShopExtendInfoValue._.ID)
+                        .Select(ShopProductAttributes._.AttributeId, ShopProductAttributes._.ValueId,
+                        ShopExtendInfo._.Name, ShopExtendInfoValue._.ValueStr).ToDataTable();
+                    //获取其规格
+
+                    p.dtGg = Dal.From<ShopProductSKU>().Join<ShopExtendInfo>(ShopProductSKU._.AttributeId == ShopExtendInfo._.ID)
+                        .Join<ShopExtendInfoValue>(ShopExtendInfoValue._.AttributeId == ShopExtendInfo._.ID)
+                        .Select(ShopProductSKU._.AttributeId, ShopExtendInfo._.Name, ShopExtendInfoValue._.ID.Alias("GGValID"), ShopExtendInfoValue._.ValueStr).Where(ShopProductSKU._.ProductId == id)
+                        .Distinct().ToDataTable();
+
+                    p.dtSku = Dal.From<ShopProductSKUInfo>().Join<ShopProductSKU>(ShopProductSKUInfo._.SKURelationID == ShopProductSKU._.ID)
+                        .Join<ShopExtendInfo>(ShopProductSKU._.AttributeId == ShopExtendInfo._.ID)
+                      .Join<ShopExtendInfoValue>(ShopExtendInfoValue._.AttributeId == ShopExtendInfo._.ID && ShopProductSKU._.ValueId == ShopExtendInfoValue._.ID)
+                      .Select(ShopProductSKU._.AttributeId, ShopExtendInfo._.Name, ShopExtendInfoValue._.ID.Alias("GGValID"), ShopExtendInfoValue._.ValueStr, ShopProductSKUInfo._.SKU, ShopProductSKUInfo._.SalePrice, ShopProductSKUInfo._.MarketPrice, ShopProductSKUInfo._.Stock, ShopProductSKUInfo._.Weight).Where(ShopProductSKU._.ProductId == id)
+                      .Distinct().ToDataTable();
+
+                    //获取其关联商品
+                    p.dtRelation = Dal.From<ShopProductInfo>().Join<ShopRalationProduct>(ShopProductInfo._.ID == ShopRalationProduct._.RlationProductID)
+                        .Join<AttachFile>(ShopProductInfo._.ID == AttachFile._.RefID && AttachFile._.OrderNo == 0, JoinType.leftJoin)
+                        .Where(ShopRalationProduct._.ProductID == id)
+
+                        .Select(ShopProductInfo._.ID, ShopProductInfo._.Name, ShopProductInfo._.Code, AttachFile._.FilePath)
+                        .ToDataTable();
+                    //获取其评价
+
+                }
+            }
+            return p;
+        }
     }
 
 

@@ -10,7 +10,7 @@ using EasyCms.Business;
 using System.Text;
 using System.Web.Http;
 using System.Web.Mvc;
-using EasyCms.Web.Common; 
+using EasyCms.Web.Common;
 
 namespace EasyCms.Web.API
 {
@@ -24,13 +24,13 @@ namespace EasyCms.Web.API
             //新闻id，定标题，简介，缩略图，新闻url 
             DataTable dt = new NewsInfoBll().GetAppNews(page, host);
 
-            string result = JsonWithDataTable.Serialize(dt) ;
+            string result = JsonWithDataTable.Serialize(dt);
             var resp = new HttpResponseMessage(HttpStatusCode.OK);
-            resp.Content = new StringContent(result, Encoding.UTF8, "text/plain"); 
+            resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
             return resp;
 
         }
-        
+
         public HttpResponseMessage GetNew(string id = "")
         {
 
@@ -50,10 +50,37 @@ namespace EasyCms.Web.API
                 }
                 string result = JsonWithDataTable.Serialize(news);
                 resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
-            }  
+            }
             return resp;
 
 
+        }
+        
+        public HttpResponseMessage GetProduct(string id = "")
+        {
+            var resp = new HttpResponseMessage(HttpStatusCode.OK);
+
+
+            if (string.IsNullOrEmpty(id))
+            {
+                resp.Content = new StringContent("此商品已下架", Encoding.UTF8, "text/plain");
+            }
+            else
+            {
+                ShopProductInfo p = new ShopProductInfoBll().GetSaleEntity(id);
+                if (p == null)
+                {
+                    resp.Content = new StringContent("此商品已下架", Encoding.UTF8, "text/plain");
+                }
+                else
+                {
+
+
+                    string result = JsonWithDataTable.Serialize(p);
+                    resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
+                }
+            }
+            return resp;
         }
 
     }
