@@ -36,11 +36,11 @@
     {
         downInfo.ValueMember = "ID";
 
-    } 
+    }
     string ctrlID = "DropDownList" + code;
     <dl>
         <dt>
-            
+
             @MVCExtention.ExtendHtmlInput.MvcHelper.Label(code, name)
         </dt>
         <dd>
@@ -216,11 +216,11 @@
                                 }
                                 bool valb = false;
                                 bool.TryParse(val.ToString(), out valb);
-                                <input type="checkbox" name="@item" checked="@val" />
+                <input type="checkbox" name="@item" checked="@val" />
                             }
-                            <label for="@item">
-                                @nameArr[i]
-                            </label>
+                <label for="@item">
+                    @nameArr[i]
+                </label>
                             i++;
                         }
                     }
@@ -257,8 +257,8 @@
 
                             radioId += i.ToString();
 
-                            <input id="@radioId" name="@code" type="radio" @IsSelected value="@item" />
-                            <label for="@radioId">@nameArr[i]</label>
+                    <input id="@radioId" name="@code" type="radio" @IsSelected value="@item" />
+                    <label for="@radioId">@nameArr[i]</label>
                             i++;
                         }
 
@@ -284,7 +284,7 @@
 *@
 @helper HelpEdit(string id, string code, string name, string defaultvalAndText = null, string hint = "", string otherClass = "", int width = 200,
                 string dialogTitle = "", int dialogWidth = 500, int dialogHeight = 500, string InnitFunc = "InnitFunc", string onOk = "onOk"
-                            , string DataControlID = "dataGrid", bool IsMutiSelect = false, bool IsTree = false)
+                            , string DataControlID = "dataGrid", bool IsMutiSelect = false, bool IsTree = false, bool IsHidButton = false)
 {
     string dialogID = code + Guid.NewGuid();
     string selectButtonID = code + Guid.NewGuid();
@@ -294,15 +294,21 @@
         </dt>
         <dd>
             @MVCExtention.ExtendHtmlInput.MvcHelper.TextBox(code, defaultvalAndText, new { @class = "input normal " + otherClass, width = width, @readonly = "readonly" })
-            <span class="input-group-btn">
 
-                <button class="btn blue btnHelp" id="@selectButtonID">
-                    选择
-                </button>
-                <button class="btn yellow btnHelp" onclick="javascript: $('#@id').val(''); $('#@code').val('');return false;">
-                    清除选择
-                </button>
-            </span>
+            @if (!IsHidButton)
+            {
+
+
+                <span class="input-group-btn">
+
+                    <button class="btn blue btnHelp" id="@selectButtonID">
+                        选择
+                    </button>
+                    <button class="btn yellow btnHelp" onclick="javascript: $('#@id').val(''); $('#@code').val('');return false;">
+                        清除选择
+                    </button>
+                </span>
+            }
             <span>@hint</span>
 
         </dd>
