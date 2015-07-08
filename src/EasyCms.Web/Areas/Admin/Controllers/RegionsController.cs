@@ -25,7 +25,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             System.Data.DataTable dt = bll.GetList(parentID, false);
             return JsonWithDataTable.Serialize(dt);
 
-           //vs提交测试
+         
         }
 
         public string GetListForSelecte(int parentID = 0)
