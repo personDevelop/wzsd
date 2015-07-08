@@ -152,7 +152,7 @@ namespace EasyCms.Dal
         {
             if (IsForSelected)
             {
-                return Dal.From<ShopCategory>().Select(ShopCategory._.ID, ShopCategory._.ParentID, ShopCategory._.Code, ShopCategory._.Name  ).OrderBy(ShopCategory._.OrderNo).ToDataTable();
+                return Dal.From<ShopCategory>().Select(ShopCategory._.ID, ShopCategory._.ParentID, ShopCategory._.Code, ShopCategory._.Name).OrderBy(ShopCategory._.OrderNo).ToDataTable();
             }
             else
                 return Dal.From<ShopCategory>().OrderBy(ShopCategory._.OrderNo).ToDataTable();
@@ -217,6 +217,22 @@ namespace EasyCms.Dal
         }
 
 
+
+        public DataTable GetAppEntity(string id)
+        {
+            WhereClip where = new WhereClip();
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                where = ShopCategory._.ParentID.IsNullOrEmpty();
+            }
+            else
+            {
+                where = ShopCategory._.ParentID == id;
+            }
+            DataTable dt = Dal.From<ShopCategory>().Where(where).Select(ShopCategory._.ID, ShopCategory._.Code, ShopCategory._.Name, ShopCategory._.ClassCode, ShopCategory._.SmallLogo)
+                .ToDataTable();
+            return dt;
+        }
     }
 
 

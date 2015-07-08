@@ -61,5 +61,11 @@ namespace EasyCms.Business
         }
 
 
+
+        public DataTable GetAppEntity(string id)
+        {
+            return Dal.GetAppEntity(id);
+          
+        }
     }
 }

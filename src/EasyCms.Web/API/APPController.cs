@@ -55,7 +55,21 @@ namespace EasyCms.Web.API
 
 
         }
-        
+
+        /// <summary>
+        /// id为空 则获取一级分类
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public HttpResponseMessage GetChildCategory(string id = "")
+        {
+            var resp = new HttpResponseMessage(HttpStatusCode.OK);  
+            DataTable dt = new ShopCategoryBll().GetAppEntity(id);
+            string result = JsonWithDataTable.Serialize(dt);
+            resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
+            return resp;
+           
+        }
         public HttpResponseMessage GetProduct(string id = "")
         {
             var resp = new HttpResponseMessage(HttpStatusCode.OK);
