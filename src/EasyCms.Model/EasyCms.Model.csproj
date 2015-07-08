@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdministrativeRegions.cs" />
     <Compile Include="AttachFile.cs" />
     <Compile Include="Coupon.cs" />
     <Compile Include="NewsCategory.cs" />

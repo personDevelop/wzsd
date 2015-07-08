@@ -219,6 +219,7 @@
     <Compile Include="API\APPController.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\Controllers\NewsInfoController.cs" />
+    <Compile Include="Areas\Admin\Controllers\RegionsController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopBrandInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopCategoryController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopExtendInfoValueController.cs" />
@@ -690,6 +691,8 @@
     <Content Include="Areas\Admin\Views\ShopProductInfo\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\ShopProductInfo\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_SelecteShopCategory.cshtml" />
+    <Content Include="Areas\Admin\Views\Regions\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\Regions\Index.cshtml" />
     <None Include="Properties\PublishProfiles\publish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />

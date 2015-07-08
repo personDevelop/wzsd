@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdministrativeRegionsDal.cs" />
     <Compile Include="AttachFileDal.cs" />
     <Compile Include="NewsCategoryDal.cs" />
     <Compile Include="NewsInfoDal.cs" />
