@@ -21,7 +21,7 @@ namespace EasyCms.Business
 
         public int Save(ShopProductInfo item, List<BaseEntity> list, List<ShopProductAttributes> spa, List<ShopProductSKU> listSku, List<ShopProductSKUInfo> listSkuInfo)
         {
-            return Dal.Save(item, list, spa, listSku,  listSkuInfo);
+            return Dal.Save(item, list, spa, listSku, listSkuInfo);
         }
 
         public DataTable GetList(bool IsForSelected = false)
@@ -66,6 +66,11 @@ namespace EasyCms.Business
         public ShopProductInfo GetSaleEntity(string id)
         {
             return Dal.GetSaleEntity(id);
+        }
+
+        public DataTable GetProductsByCategory(string categoryID, int pageindex, ref int pageCount, ref int recordCount)
+        {
+            return Dal.GetProductsByCategory(categoryID, pageindex, ref   pageCount, ref   recordCount);
         }
     }
 }

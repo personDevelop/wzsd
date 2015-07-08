@@ -241,6 +241,21 @@ namespace EasyCms.Dal
             }
             return p;
         }
+
+        public DataTable GetProductsByCategory(string categoryID, int pageindex, ref int pageCount, ref int recordCount)
+        {
+
+            DataTable dt = Dal.From<ShopProductCategory>().Join<ShopProductInfo>(
+         ShopProductCategory._.ProductID == ShopProductInfo._.ID)
+         .Join<ShopBrandInfo>(ShopBrandInfo._.ID == ShopProductInfo._.BrandId, JoinType.leftJoin)
+         .Join<ShopProductType>(ShopProductType._.ID == ShopProductInfo._.TypeId, JoinType.leftJoin)
+         .Join<AttachFile>(AttachFile._.RefID == ShopProductInfo._.ID && AttachFile._.OrderNo == 1, JoinType.leftJoin)
+         .Select(ShopProductInfo._.ID, ShopProductInfo._.BrandId, ShopProductInfo._.TypeId, ShopProductInfo._.Code, ShopProductInfo._.Name,ShopProductInfo._.SKU,         ShopProductInfo._.SaleCounts, ShopProductInfo._.SalePrice, ShopProductInfo._.MarketPrice, ShopBrandInfo._.Name.Alias("BrandName"), ShopProductType._.Name.Alias("TypeName"), AttachFile._.FilePath)
+         .OrderBy(ShopProductInfo._.SaleNum.Desc)
+         .Where(ShopProductCategory._.CategoryID==categoryID)
+         .ToDataTable(20, pageindex, ref pageCount, ref recordCount);
+            return dt;
+        }
     }
 
 

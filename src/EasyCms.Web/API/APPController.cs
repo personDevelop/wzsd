@@ -63,12 +63,12 @@ namespace EasyCms.Web.API
         /// <returns></returns>
         public HttpResponseMessage GetChildCategory(string id = "")
         {
-            var resp = new HttpResponseMessage(HttpStatusCode.OK);  
+            var resp = new HttpResponseMessage(HttpStatusCode.OK);
             DataTable dt = new ShopCategoryBll().GetAppEntity(id);
             string result = JsonWithDataTable.Serialize(dt);
             resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
             return resp;
-           
+
         }
         public HttpResponseMessage GetProduct(string id = "")
         {
@@ -96,6 +96,27 @@ namespace EasyCms.Web.API
             }
             return resp;
         }
+        public HttpResponseMessage GetProductsByCategory(string id = "", int pageIndex = 1)
+        {
+            var resp = new HttpResponseMessage(HttpStatusCode.OK);
 
+            if (pageIndex == 0)
+            {
+                pageIndex = 1;
+            }
+            if (string.IsNullOrEmpty(id))
+            {
+                resp.Content = new StringContent("商品类型不能为空", Encoding.UTF8, "text/plain");
+            }
+            else
+            {
+                int pagecount = 0, recordCount = 0;
+                DataTable dt = new ShopProductInfoBll().GetProductsByCategory(id, pageIndex, ref pagecount, ref recordCount);
+                string result = JsonWithDataTable.Serialize(new { PageIndex = pageIndex, RecordCount = dt.Rows.Count, TotalPageCount = pagecount, TotalRecourdCount = recordCount, Data = dt });
+                resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
+
+            }
+            return resp;
+        }
     }
 }

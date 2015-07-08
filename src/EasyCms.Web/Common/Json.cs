@@ -16,7 +16,7 @@ namespace EasyCms.Web.Common
             Type type = value.GetType();
 
             JsonSerializer json = new JsonSerializer();
-            json.NullValueHandling = NullValueHandling.Ignore;
+            json.NullValueHandling = NullValueHandling.Include;
             json.ObjectCreationHandling = ObjectCreationHandling.Replace;
             json.MissingMemberHandling = MissingMemberHandling.Ignore;
             json.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;

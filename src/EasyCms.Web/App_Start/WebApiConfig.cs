@@ -23,8 +23,8 @@ namespace EasyCms.Web
 
             config.Routes.MapHttpRoute(
               name: "ApiWithAction",
-              routeTemplate: "api/{controller}/{action}/{id}",
-            defaults: new { id = RouteParameter.Optional });
+              routeTemplate: "api/{controller}/{action}/{id}/{pageIndex}",
+            defaults: new { id = RouteParameter.Optional, pageIndex = RouteParameter.Optional });
 
         }
 
