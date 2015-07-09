@@ -111,8 +111,8 @@ namespace EasyCms.Dal
             WhereClip where = new WhereClip("a.id=@id");
             where.Parameters.Add("id", id);
 
-            return Dal.From<RedeemRules>("a").Join<RedeemRules>("b", new WhereClip("a.ParentID=b.ID"), JoinType.leftJoin)
-                .Select(new ExpressionClip("a.*,b.Name ParentName"))
+            return Dal.From<RedeemRules>("a").
+                Select(new ExpressionClip("a.*"))
                 .Where(where)
                 .ToFirst<RedeemRules>();
         }
