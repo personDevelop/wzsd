@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="AdministrativeRegionsDal.cs" />
     <Compile Include="AttachFileDal.cs" />
+    <Compile Include="ManagerUserInfoDal.cs" />
     <Compile Include="NewsCategoryDal.cs" />
     <Compile Include="NewsInfoDal.cs" />
     <Compile Include="ParameterInfoDal.cs" />
@@ -62,6 +63,7 @@
     <Compile Include="ShopCategoryDal.cs" />
     <Compile Include="ShopProductInfoDal.cs" />
     <Compile Include="ShopProductTypeDal.cs" />
+    <Compile Include="SysRoleInfoDal.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EasyCms.Model\EasyCms.Model.csproj">

@@ -21,7 +21,7 @@ namespace EasyCms.Dal
                 if (ad == null)
                 {
                     return "删除失败，行政区域ID不合法";
-
+                   
                 }
                 else
                 {

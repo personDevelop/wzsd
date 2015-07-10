@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 
@@ -44,6 +45,11 @@ namespace EasyCms.Web
         public string select { get; set; }
         public string unselect { get; set; }
         public string change { get; set; }
+
+        /// <summary>
+        /// 初始数据，如果不是从url 异步获取，则通过该innitdata 主动后台赋值
+        /// </summary>
+        public DataTable InnitData { get; set; }
     }
 
     

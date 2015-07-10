@@ -193,3 +193,10 @@ FakesAssemblies/
 
 # Visual Studio 6 workspace options file
 *.opt
+src/EasyCms.Web/bin/EasyCms.Business.dll
+src/EasyCms.Web/bin/EasyCms.Dal.dll
+src/EasyCms.Web/bin/EasyCms.Dal.dll
+src/EasyCms.Web/bin/EasyCms.Business.dll
+src/EasyCms.Web/bin/EasyCms.Model.dll
+src/EasyCms.Web/bin/EasyCms.Web.dll
+src/EasyCms.Web/bin/MVCExtention.dll

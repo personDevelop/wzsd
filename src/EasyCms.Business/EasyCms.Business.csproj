@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="AdministrativeRegionsBll.cs" />
     <Compile Include="AttachFileBll.cs" />
+    <Compile Include="ManagerUserInfoBll.cs" />
     <Compile Include="NewsCategoryBll.cs" />
     <Compile Include="NewsInfoBll.cs" />
     <Compile Include="ParameterInfoBll.cs" />
@@ -58,6 +59,7 @@
     <Compile Include="ShopCategoryBll.cs" />
     <Compile Include="ShopProductInfoBll.cs" />
     <Compile Include="ShopProductTypeBll.cs" />
+    <Compile Include="SysRoleInfoBll.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EasyCms.Dal\EasyCms.Dal.csproj">
