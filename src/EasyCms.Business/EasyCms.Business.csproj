@@ -49,7 +49,9 @@
   <ItemGroup>
     <Compile Include="AdministrativeRegionsBll.cs" />
     <Compile Include="AttachFileBll.cs" />
+    <Compile Include="FunctionInfoBll.cs" />
     <Compile Include="ManagerUserInfoBll.cs" />
+    <Compile Include="MemberOrderBll.cs" />
     <Compile Include="NewsCategoryBll.cs" />
     <Compile Include="NewsInfoBll.cs" />
     <Compile Include="ParameterInfoBll.cs" />

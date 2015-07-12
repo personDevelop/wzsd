@@ -53,7 +53,9 @@
   <ItemGroup>
     <Compile Include="AdministrativeRegionsDal.cs" />
     <Compile Include="AttachFileDal.cs" />
+    <Compile Include="FunctionInfoDal.cs" />
     <Compile Include="ManagerUserInfoDal.cs" />
+    <Compile Include="MemberOrderDal.cs" />
     <Compile Include="NewsCategoryDal.cs" />
     <Compile Include="NewsInfoDal.cs" />
     <Compile Include="ParameterInfoDal.cs" />

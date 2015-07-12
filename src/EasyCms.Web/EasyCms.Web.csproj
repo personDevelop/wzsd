@@ -218,7 +218,9 @@
   <ItemGroup>
     <Compile Include="API\APPController.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Areas\Admin\Controllers\FunctionInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\ManagerUserInfoController.cs" />
+    <Compile Include="Areas\Admin\Controllers\MemberOrderController.cs" />
     <Compile Include="Areas\Admin\Controllers\NewsInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\RedeemRulesController.cs" />
     <Compile Include="Areas\Admin\Controllers\RegionsController.cs" />
@@ -702,6 +704,10 @@
     <Content Include="Areas\Admin\Views\ManagerUserInfo\Index.cshtml" />
     <Content Include="Areas\Admin\Views\SysRoleInfo\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\SysRoleInfo\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\MemberOrder\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\MemberOrder\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\FunctionInfo\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\FunctionInfo\Edit.cshtml" />
     <None Include="Properties\PublishProfiles\publish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />

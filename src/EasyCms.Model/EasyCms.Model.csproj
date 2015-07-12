@@ -47,7 +47,9 @@
     <Compile Include="AdministrativeRegions.cs" />
     <Compile Include="AttachFile.cs" />
     <Compile Include="Coupon.cs" />
+    <Compile Include="FunctionInfo.cs" />
     <Compile Include="ManagerUserInfo.cs" />
+    <Compile Include="MemberOrder.cs" />
     <Compile Include="NewsCategory.cs" />
     <Compile Include="NewsInfo.cs" />
     <Compile Include="ParameterInfo.cs" />
