@@ -65,6 +65,7 @@
     <Compile Include="ShopCategoryDal.cs" />
     <Compile Include="ShopProductInfoDal.cs" />
     <Compile Include="ShopProductTypeDal.cs" />
+    <Compile Include="ShopShoppingCartsDal.cs" />
     <Compile Include="SysRoleInfoDal.cs" />
   </ItemGroup>
   <ItemGroup>

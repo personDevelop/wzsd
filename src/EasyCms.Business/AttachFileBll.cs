@@ -13,7 +13,7 @@ namespace EasyCms.Business
         AttachFileDal Dal = new AttachFileDal();
         public int Save(AttachFile af)
         {
-              
+       
             return Dal.Save(  af);
 
         }

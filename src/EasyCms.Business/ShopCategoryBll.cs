@@ -67,5 +67,10 @@ namespace EasyCms.Business
             return Dal.GetAppEntity(id);
           
         }
+
+        public string GetClassCode(string categoryID)
+        {
+            return Dal.GetClassCode(categoryID);
+        }
     }
 }

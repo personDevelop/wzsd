@@ -250,11 +250,39 @@ namespace EasyCms.Dal
          .Join<ShopBrandInfo>(ShopBrandInfo._.ID == ShopProductInfo._.BrandId, JoinType.leftJoin)
          .Join<ShopProductType>(ShopProductType._.ID == ShopProductInfo._.TypeId, JoinType.leftJoin)
          .Join<AttachFile>(AttachFile._.RefID == ShopProductInfo._.ID && AttachFile._.OrderNo == 1, JoinType.leftJoin)
-         .Select(ShopProductInfo._.ID, ShopProductInfo._.BrandId, ShopProductInfo._.TypeId, ShopProductInfo._.Code, ShopProductInfo._.Name,ShopProductInfo._.SKU,         ShopProductInfo._.SaleCounts, ShopProductInfo._.SalePrice, ShopProductInfo._.MarketPrice, ShopBrandInfo._.Name.Alias("BrandName"), ShopProductType._.Name.Alias("TypeName"), AttachFile._.FilePath)
+         .Select(ShopProductInfo._.ID, ShopProductInfo._.BrandId, ShopProductInfo._.TypeId, ShopProductInfo._.Code, ShopProductInfo._.Name, ShopProductInfo._.SKU, ShopProductInfo._.SaleCounts, ShopProductInfo._.SalePrice, ShopProductInfo._.MarketPrice, ShopBrandInfo._.Name.Alias("BrandName"), ShopProductType._.Name.Alias("TypeName"), AttachFile._.FilePath)
          .OrderBy(ShopProductInfo._.SaleNum.Desc)
-         .Where(ShopProductCategory._.CategoryID==categoryID)
+         .Where(ShopProductCategory._.CategoryID == categoryID)
          .ToDataTable(20, pageindex, ref pageCount, ref recordCount);
             return dt;
+        }
+
+        public DataTable GetProductByWhere(WhereClip where, int pageNum, ref int pageCount, ref int recordCount)
+        {
+            return
+                Dal.From<ShopProductInfo>().Join<ShopProductCategory>(ShopProductInfo._.ID == ShopProductCategory._.ProductID)
+                .Join<AttachFile>(AttachFile._.RefID == ShopProductInfo._.ID && AttachFile._.OrderNo == 1)
+                .Where(where).Select(ShopProductInfo._.ID, ShopProductInfo._.Code, ShopProductInfo._.Name, ShopProductInfo._.SalePrice, ShopProductInfo._.MarketPrice, AttachFile._.FilePath.SubString(1).Alias("FilePath")).ToDataTable(20, pageNum, ref pageCount, ref recordCount);
+        }
+
+        public int SaveStation(ShopProductStationMode s)
+        {
+            return Dal.Submit(s);
+        }
+
+        public DataTable GetProductsByStation(int id, int pageIndex, int pageSize, ref int pagecount, ref int recordCount)
+        {
+            return
+               Dal.From<ShopProductInfo>().Join<ShopProductStationMode>(ShopProductInfo._.ID == ShopProductStationMode._.ProductID)
+               .Join<AttachFile>(AttachFile._.RefID == ShopProductInfo._.ID && AttachFile._.OrderNo == 1)
+               .Where(ShopProductStationMode._.StationMode == id).Select(ShopProductStationMode._.ID.Alias("StationID"), ShopProductInfo._.ID, ShopProductStationMode._.OrderNo, ShopProductInfo._.Code, ShopProductInfo._.Name, ShopProductInfo._.SalePrice, ShopProductInfo._.MarketPrice, AttachFile._.FilePath.SubString(1).Alias("FilePath"))
+               .OrderBy(ShopProductStationMode._.OrderNo.Desc)
+               .ToDataTable(pageSize, pageIndex, ref pagecount, ref recordCount);
+        }
+
+        public int DeleteStation(string StationID)
+        {
+            return Dal.Delete<ShopProductStationMode>(StationID);
         }
     }
 

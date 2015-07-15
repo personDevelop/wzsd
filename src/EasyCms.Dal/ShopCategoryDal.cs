@@ -233,6 +233,11 @@ namespace EasyCms.Dal
                 .ToDataTable();
             return dt;
         }
+
+        public string GetClassCode(string categoryID)
+        {
+            return Dal.From<ShopCategory>().Where(ShopCategory._.ID == categoryID).Select(ShopCategory._.ClassCode).ToScalar() as string;
+        }
     }
 
 

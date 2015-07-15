@@ -59,15 +59,20 @@
     <Compile Include="ShopCategory.cs" />
     <Compile Include="ShopExtendInfo.cs" />
     <Compile Include="ShopExtendInfoValue.cs" />
+    <Compile Include="ShopOrder.cs" />
+    <Compile Include="ShopOrderItem.cs" />
     <Compile Include="ShopProducntSKURelation.cs" />
     <Compile Include="ShopProductAttributes.cs" />
     <Compile Include="ShopProductCategory.cs" />
     <Compile Include="ShopProductInfo.cs" />
     <Compile Include="ShopProductSKU.cs" />
     <Compile Include="ShopProductSKUInfo.cs" />
+    <Compile Include="ShopProductStationMode.cs" />
     <Compile Include="ShopProductType.cs" />
     <Compile Include="ShopProductTypeAndBrand.cs" />
     <Compile Include="ShopRalationProduct.cs" />
+    <Compile Include="ShopShoppingCarts.cs" />
+    <Compile Include="StaticValue.cs" />
     <Compile Include="SysRoleInfo.cs" />
   </ItemGroup>
   <ItemGroup>

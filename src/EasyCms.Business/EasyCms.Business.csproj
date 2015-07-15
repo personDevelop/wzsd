@@ -61,6 +61,7 @@
     <Compile Include="ShopCategoryBll.cs" />
     <Compile Include="ShopProductInfoBll.cs" />
     <Compile Include="ShopProductTypeBll.cs" />
+    <Compile Include="ShopShoppingCartsBll.cs" />
     <Compile Include="SysRoleInfoBll.cs" />
   </ItemGroup>
   <ItemGroup>

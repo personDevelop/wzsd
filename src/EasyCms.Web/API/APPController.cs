@@ -9,7 +9,6 @@ using System.Data;
 using EasyCms.Business;
 using System.Text;
 using System.Web.Http;
-using System.Web.Mvc;
 using EasyCms.Web.Common;
 
 namespace EasyCms.Web.API
@@ -116,6 +115,105 @@ namespace EasyCms.Web.API
                 resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
 
             }
+            return resp;
+        }
+
+        public HttpResponseMessage GetProductsByWhere()
+        {
+            var resp = new HttpResponseMessage(HttpStatusCode.OK);
+            string categoryID = Request.GetQueryValue("categoryID");
+            string productName = Request.GetQueryValue("ProductName");
+            string pageNumStr = Request.GetQueryValue("pagenum");
+            string stationMode = Request.GetQueryValue("stationMode");
+            int pageNum = 1;
+
+            if (int.TryParse(pageNumStr, out pageNum))
+            {
+
+            }
+            else pageNum = 1;
+            WhereClip where = new WhereClip();
+            if (!string.IsNullOrWhiteSpace(categoryID))
+            {
+                string ClassCode = new ShopCategoryBll().GetClassCode(categoryID);
+                string[] classcode = ClassCode.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+
+                if (classcode.Length > 1)
+                {
+                    where = ShopProductCategory._.CategoryID.In(classcode);
+                }
+                else
+                {
+                    where = ShopProductCategory._.CategoryID == categoryID;
+                }
+
+            }
+            if (string.IsNullOrWhiteSpace(productName))
+            {
+                where = where && ShopProductInfo._.Name.Contains(productName);
+            }
+            where = where && new WhereClip(" not EXISTS (select 1 from ShopProductStationMode where StationMode=" + stationMode + "  and ShopProductInfo.ID=ProductID)");
+            int pagecount = 0, recordCount = 0;
+
+            System.Data.DataTable dt = new ShopProductInfoBll().GetProductByWhere(where, pageNum, ref pagecount, ref   recordCount);
+
+            string result = JsonWithDataTable.Serialize(new { PageIndex = pageNum, RecordCount = dt.Rows.Count, TotalPageCount = pagecount, TotalRecourdCount = recordCount, Data = dt });
+            resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
+            return resp;
+        }
+
+        public HttpResponseMessage PostTj([FromBody] ShopProductStationMode sm)
+        {
+
+
+            var resp = new HttpResponseMessage(HttpStatusCode.OK);
+
+            sm.ID = Guid.NewGuid().ToString();
+            sm.StationModeName = ((StationMode)sm.StationMode).ToString();
+            int dt = new ShopProductInfoBll().SaveStation(sm);
+
+            string result = JsonWithDataTable.Serialize(sm);
+            resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
+            return resp;
+        }
+        [HttpGet]
+        public HttpResponseMessage DeleteTj(string id)
+        {
+
+
+            var resp = new HttpResponseMessage(HttpStatusCode.OK);
+
+
+            int dt = new ShopProductInfoBll().DeleteStation(id);
+
+            string result = JsonWithDataTable.Serialize("成功");
+            resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
+            return resp;
+        }
+
+        public HttpResponseMessage GetProductsByStation()
+        {
+            var resp = new HttpResponseMessage(HttpStatusCode.OK);
+
+            int id = 0, pageIndex = 1, pagesize = 20;
+            string StationModestr = Request.GetQueryValue("StationMode");
+            int.TryParse(StationModestr, out id);
+            string pagenumstr = Request.GetQueryValue("pagenum");
+            string pagesizestr = Request.GetQueryValue("pagesize");
+            int.TryParse(pagenumstr, out pageIndex);
+            int.TryParse(pagesizestr, out pagesize);
+            //string pagesizestr = Request.GetQueryValue("pagesize");
+            //int.TryParse(pagenumstr, out pageIndex);
+
+            pageIndex += 1;
+
+
+            int pagecount = 0, recordCount = 0;
+            DataTable dt = new ShopProductInfoBll().GetProductsByStation(id, pageIndex, pagesize, ref pagecount, ref recordCount);
+            string result = JsonWithDataTable.Serialize(new { PageIndex = pageIndex, RecordCount = dt.Rows.Count, TotalPageCount = pagecount, TotalRecourdCount = recordCount, Data = dt });
+            resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
+
+
             return resp;
         }
     }

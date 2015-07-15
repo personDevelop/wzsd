@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Sharp.Common;
+using EasyCms.Web.Common;
 
 namespace EasyCms.Web.Areas.Admin.Controllers
 {
@@ -25,27 +26,18 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             return JsonWithDataTable.Serialize(dt);
 
         }
-        public string GetList(int pagenum, int pagesize)
+        
+        public string GetListForSelecte()
         {
-            int recordCount = 0;
-            System.Data.DataTable dt = bll.GetList(pagenum + 1, pagesize, ref   recordCount);
-
+         
+            System.Data.DataTable dt = bll.GetList(true);
             string result = JsonWithDataTable.Serialize(dt);
-            result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
-            return result;
-
-        }
-        public string GetListForSelecte(int pagenum, int pagesize)
-        {
-            int recordCount = 0;
-            System.Data.DataTable dt = bll.GetList(pagenum, pagesize, ref   recordCount, true);
-            string result = JsonWithDataTable.Serialize(dt);
-            result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
+            
             return result;
         }
-        public string CheckRepeat(string ID, string ParentID, string RecordStatus, string val, bool IsCode)
+        public string CheckRepeat(string ID, string RecordStatus, string val, bool IsCode)
         {
-            return bll.Exit(ID, ParentID, RecordStatus, val, IsCode).ToString().ToLower();
+            return bll.Exit(ID, RecordStatus, val, IsCode).ToString().ToLower();
 
         }
         //
@@ -76,7 +68,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                     {
                         p.ID = Guid.NewGuid().ToString();
                     }
-                    p.CreatedUserID = Session.GetUserID();
+
                 }
                 bll.Save(p);
                 TempData.Add("IsSuccess", "保存成功");

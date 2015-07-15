@@ -12,6 +12,7 @@ namespace EasyCms.Dal
     {
         public int Save(Model.AttachFile af)
         {
+            af.OrderNo = Dal.Count<AttachFile>(AttachFile._.RefID == af.RefID, AttachFile._.ID, false)+1;
             return Dal.Submit(af);
         }
 

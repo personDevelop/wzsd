@@ -72,5 +72,25 @@ namespace EasyCms.Business
         {
             return Dal.GetProductsByCategory(categoryID, pageindex, ref   pageCount, ref   recordCount);
         }
+
+        public DataTable GetProductByWhere(WhereClip where, int pageNum, ref int pageCount, ref int recordCount)
+        {
+            return Dal.GetProductByWhere(where, pageNum, ref   pageCount, ref   recordCount);
+        }
+
+        public int SaveStation(ShopProductStationMode s)
+        {
+            return Dal.SaveStation(s);
+        }
+
+        public DataTable GetProductsByStation(int id, int pageIndex,int pageSize, ref int pagecount, ref int recordCount)
+        {
+            return Dal.GetProductsByStation(id, pageIndex, pageSize, ref   pagecount, ref   recordCount);
+        }
+
+        public int DeleteStation(string StationID)
+        {
+            return Dal.DeleteStation(StationID);
+        }
     }
 }
