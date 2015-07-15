@@ -217,6 +217,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\APPController.cs" />
+    <Compile Include="API\ShopCartController.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\Controllers\FunctionInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\ManagerUserInfoController.cs" />
@@ -228,6 +229,7 @@
     <Compile Include="Areas\Admin\Controllers\ShopCategoryController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopExtendInfoValueController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopProductInfoController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ShopProductStationModeController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopProductTypeController.cs" />
     <Compile Include="Areas\Admin\Controllers\SysRoleInfoController.cs" />
     <Compile Include="Common\CmsSession.cs" />
@@ -708,6 +710,7 @@
     <Content Include="Areas\Admin\Views\MemberOrder\Index.cshtml" />
     <Content Include="Areas\Admin\Views\FunctionInfo\Index.cshtml" />
     <Content Include="Areas\Admin\Views\FunctionInfo\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopProductStationMode\Index.cshtml" />
     <None Include="Properties\PublishProfiles\publish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
