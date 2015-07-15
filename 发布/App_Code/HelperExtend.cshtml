@@ -216,11 +216,11 @@
                                 }
                                 bool valb = false;
                                 bool.TryParse(val.ToString(), out valb);
-                <input type="checkbox" name="@item" checked="@val" />
+                                <input type="checkbox" name="@item" checked="@val" />
                             }
-                <label for="@item">
-                    @nameArr[i]
-                </label>
+                            <label for="@item">
+                                @nameArr[i]
+                            </label>
                             i++;
                         }
                     }
@@ -257,8 +257,8 @@
 
                             radioId += i.ToString();
 
-                    <input id="@radioId" name="@code" type="radio" @IsSelected value="@item" />
-                    <label for="@radioId">@nameArr[i]</label>
+                            <input id="@radioId" name="@code" type="radio" @IsSelected value="@item" />
+                            <label for="@radioId">@nameArr[i]</label>
                             i++;
                         }
 
@@ -621,7 +621,81 @@
         </dd>
     </dl>
 }
+@*级联下来框*@
+@helper DropDownListClass(string code, string name, string url, string valuemember = "ID", string displaymember = "Name", string hint = "", string otherClass = "")
+{
+    string dropid = "jqxDropDownList" + code;
+    <dl>
+        <dt>
+            @MVCExtention.ExtendHtmlInput.MvcHelper.Label(code, name)
+        </dt>
+        <dd>
+        <dd>
+            <input type="hidden" id="@code" name="@code" value="">
+            <div style='float: left;' id='@dropid'>
+            </div>
+            <script type="text/javascript">
+                $(document).ready(function () {
 
+                    var url = "@url";
+                    var source =
+                    {
+                        datatype: "json",
+                        datafields: [
+                            { name: '@valuemember' },
+                            { name: '@displaymember' }
+                        ],
+                        id: 'ID',
+                        url: url
+                    };
+                    // create a new instance of the jqx.dataAdapter.
+                    var dataAdapter = new $.jqx.dataAdapter(source);
+                    $("#"+"@dropid").jqxDropDownList({ source: dataAdapter, displayMember: "@displaymember", valueMember: "@valuemember", width: 'auto', height: '25px' });
+
+                    $("#"+"@dropid").on('select', function (event) {
+                        onSelectChange(event);
+                    });
+
+
+                    function onSelectChange(event)
+                    {
+                        var args = event.args;
+                        if (args) {
+                            var item = args.item;
+                            var categroy = item.value;
+                            $("#"+"@code").val(item.value);
+                            //删除其子类
+                            $(event.currentTarget).  nextAll().remove();
+                            //创建其子类
+                            //同时生成dropdownlist
+                            $.getJSON(url, { id: categroy }, function () {
+                                var guid = "dropdown" + categroy;
+                                $(event.currentTarget).parent().append("<div style='float: left;' id='" + guid + "'> </div>");
+                                source. url= url + "/" + categroy;
+                                var dataAdapter1 = new $.jqx.dataAdapter(source);
+                                $("#" + guid).jqxDropDownList({ source: dataAdapter1, displayMember: "Name", valueMember: "ID",  width: 'auto',height: '25px' });
+
+                                $("#"+guid).on('select', function (event) {
+                                    onSelectChange(event);
+                                });
+                                $("#"+guid).on('bindingComplete', function (event) {
+
+                                    if ( $("#"+guid).jqxDropDownList('getItems').length==0) {
+                                        $(event.currentTarget) .remove();
+                                    }
+
+                                });
+
+                            });
+                        }
+                    }
+                });
+            </script>
+
+        </dd>
+
+    </dl>
+}
 @helper img(string imgName, string otherStyle = "")
 {
     <img src="~/Content/Images/@imgName" alt="" style="@otherStyle" />
