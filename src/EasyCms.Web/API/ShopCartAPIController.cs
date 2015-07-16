@@ -12,7 +12,7 @@ using System.Web.Http;
 
 namespace EasyCms.Web.API
 {
-    public class ShopCartController : ApiController
+    public class ShopCartAPIController : ApiController
     {
        
 
@@ -24,7 +24,7 @@ namespace EasyCms.Web.API
             DataTable dt = new ShopShoppingCartsBll().GetList(id); 
             string result = JsonWithDataTable.Serialize(dt); 
             resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
-            return resp;
+            return resp; 
 
         }
 

@@ -12,6 +12,17 @@ namespace EasyCms.Model
         /// 旅游分类ID
         /// </summary>
         public const string TravelCategoryID = "";
+
+        public static string GeneratoRandom()
+        {
+            Random r = new Random();
+            string temMsg = string.Empty;
+            for (int i = 0; i < 4; i++)
+            {
+                temMsg += r.Next(0, 9);
+            }
+            return temMsg;
+        }
     }
 
 

@@ -74,5 +74,13 @@ namespace EasyCms.Business
 
 
 
+
+        public string Regist(RegistModel registModel)
+        {
+           return Dal.Regist(  registModel);
+        }
+
+
+      
     }
 }

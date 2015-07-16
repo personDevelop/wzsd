@@ -14,9 +14,9 @@ namespace EasyCms.Dal
     {
         public string Delete(string id)
         {
-            
-                return "删除失败";
-            
+
+            return "删除失败";
+
         }
 
         public int Save(ManagerUserInfo item)
@@ -65,6 +65,40 @@ namespace EasyCms.Dal
         }
 
 
+
+        public string Regist(RegistModel registModel)
+        {
+            if (Dal.Exists<ManagerUserInfo>(ManagerUserInfo._.Code == registModel.TelPhone))
+            {
+                return "当前手机号已注册过";
+            }
+            else
+            {
+                ManagerUserInfo user = new ManagerUserInfo()
+                {
+                    ID = Guid.NewGuid().ToString(),
+                    Code = registModel.TelPhone,
+                    Name = registModel.TelPhone,
+                    ContactPhone = registModel.TelPhone,
+                    NickyName = registModel.NiceName,
+                    Pwd = registModel.Pwd.EncryptSHA1(),
+                    CreateDate = DateTime.Now,
+                    LastModifyDate = DateTime.Now,
+                    Status = 1
+                };
+                try
+                {
+                    Dal.Submit(user);
+                    return "注册成功";
+                }
+                catch (Exception ex)
+                {
+
+                    return "注册失败" + ex.Message;
+                }
+
+            }
+        }
     }
 
 
