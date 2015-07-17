@@ -62,6 +62,7 @@
     <Compile Include="ShopExtendInfoValue.cs" />
     <Compile Include="ShopOrder.cs" />
     <Compile Include="ShopOrderItem.cs" />
+    <Compile Include="ShopPaymentTypes.cs" />
     <Compile Include="ShopProducntSKURelation.cs" />
     <Compile Include="ShopProductAttributes.cs" />
     <Compile Include="ShopProductCategory.cs" />
@@ -72,6 +73,8 @@
     <Compile Include="ShopProductType.cs" />
     <Compile Include="ShopProductTypeAndBrand.cs" />
     <Compile Include="ShopRalationProduct.cs" />
+    <Compile Include="ShopShippingAddress.cs" />
+    <Compile Include="ShopShippingType.cs" />
     <Compile Include="ShopShoppingCarts.cs" />
     <Compile Include="StaticValue.cs" />
     <Compile Include="SysRoleInfo.cs" />

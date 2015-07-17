@@ -26,13 +26,13 @@ namespace EasyCms.Web
             #region javascript
 
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Scripts/jquery-1.10.2.js",
+                        "~/Scripts/jquery-1.10.2.js" ,
                         "~/Content/jquery/jquery.nicescroll.js",
-             "~/Content/artdialog/dialog-plus-min.js",
-                "~/Content/js/layindex.js",
-                   "~/Content/js/common.js",
-                   "~/Content/js/laymain.js"
-                        ));
+            "~/Content/artdialog/dialog-plus-min.js",   
+            "~/Content/js/layindex.js",
+               "~/Content/js/common.js",
+               "~/Content/js/laymain.js"
+                    ));
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Content/js/jquery.validate.js",
                 //   "~/Content/js/jquery.metadata.js" ,

@@ -217,6 +217,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\APPController.cs" />
+    <Compile Include="API\ShippingAddressAPIController.cs" />
     <Compile Include="API\ShopCartAPIController.cs" />
     <Compile Include="API\UserApiController.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
@@ -712,6 +713,7 @@
     <Content Include="Areas\Admin\Views\FunctionInfo\Index.cshtml" />
     <Content Include="Areas\Admin\Views\FunctionInfo\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\ShopProductStationMode\Index.cshtml" />
+    <Content Include="Gateway.config" />
     <None Include="Properties\PublishProfiles\publish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
