@@ -84,6 +84,7 @@ namespace EasyCms.Dal
                     Pwd = registModel.Pwd.EncryptSHA1(),
                     CreateDate = DateTime.Now,
                     LastModifyDate = DateTime.Now,
+                    StatusChangeDate = DateTime.Now,
                     Status = 1
                 };
                 try

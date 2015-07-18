@@ -27,7 +27,7 @@
     @Html.ValidationSummary() 
 
     @HelperExtend.TextBox("Name", "支付方式名称", defaultval: Model.Name, hint: "*必填,<BR/>  支付方式名称的长度限制在50个字符以内")
-    @HelperExtend.TextBox("DrivePath", "接口类型", defaultval: Model.DrivePath, hint: "*必填,<BR/>在选择一个接口类型之前，必须具备一个在该支付公司注册过的账号，然后按照支付公司提供的账户信息填写此支付方式所需的信息，<BR/>不同的接口类型要求填写的信息可能会不一样")
+    @HelperExtend.DropDownList("DrivePath", "接口类型", defaultval: Model.DrivePath, hint: "*必填,<BR/>在选择一个接口类型之前，必须具备一个在该支付公司注册过的账号，然后按照支付公司提供的账户信息填写此支付方式所需的信息，<BR/>不同的接口类型要求填写的信息可能会不一样", downInfo: new DropDownListInfo() { DisplayMember = "description", ValueMember = "name", Url = "", select = "" })
 
     @HelperExtend.TextBox("MerchantCode", "商户号", defaultval: Model.MerchantCode, hint: "*必填,<BR/>商户号一般是您在支付公司注册的账号，<BR/>您也可以登陆支付公司后按照说明查找您的商户号，长度限制在300个字符以内")
 

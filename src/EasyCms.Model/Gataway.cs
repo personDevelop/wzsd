@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -30,7 +31,28 @@ namespace EasyCms.Model
 
         public static Gataway Phrase(XElement node)
         {
-            return null;
+            Gataway g = new Gataway();
+            PropertyInfo[] ps = g.GetType().GetProperties();
+            foreach (PropertyInfo item in ps)
+            {
+                XAttribute atr = node.Attribute(item.Name);
+                if (atr != null)
+                {
+                    string s = atr.Value;
+                    if (item.DeclaringType.Equals(typeof(bool)))
+                    {
+                        bool d = false;
+                        bool.TryParse(s, out d);
+                        item.SetValue(g, d);
+                    }
+                    else
+                    {
+                        item.SetValue(g, s);
+                    }
+                }
+
+            }
+            return g;
         }
     }
 }

@@ -61,6 +61,7 @@ namespace EasyCms.Web.API
         }
 
         // POST api/userapi
+        [HttpPost]
         public HttpResponseMessage Regist([FromBody]RegistModel registModel)
         {
             //检验验证码是否正确，
