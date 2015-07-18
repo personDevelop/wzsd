@@ -229,7 +229,9 @@ namespace EasyCms.Dal
             {
                 where = ShopCategory._.ParentID == id;
             }
-            DataTable dt = Dal.From<ShopCategory>().Where(where).Select(ShopCategory._.ID, ShopCategory._.Code, ShopCategory._.Name, ShopCategory._.ClassCode, ShopCategory._.SmallLogo)
+            DataTable dt = Dal.From<ShopCategory>()
+                .Join<AttachFile>(ShopCategory._.SmallLogo==AttachFile._.RefID, JoinType.leftJoin )
+                .Where(where).Select(ShopCategory._.ID, ShopCategory._.Code, ShopCategory._.Name, ShopCategory._.ClassCode,AttachFile._.FilePath.Replace("~","").Alias("SmallLogo"))
                 .ToDataTable();
             return dt;
         }
