@@ -24,7 +24,13 @@ namespace EasyCms.Model
 
         #region 私有变量
 
-        private string _ModeId;
+        private string _ID;
+
+        private string _Name;
+
+        private string _DrivePath;
+
+        private string _Gateway;
 
         private string _MerchantCode;
 
@@ -38,11 +44,7 @@ namespace EasyCms.Model
 
         private string _Partner;
 
-        private string _Name;
-
-        private string _Description;
-
-        private string _Gateway;
+        private bool _IsEnable;
 
         private int _DisplaySequence;
 
@@ -54,29 +56,86 @@ namespace EasyCms.Model
 
         private string _Logo;
 
-        private string _DrivePath;
+        private string _Description;
 
         #endregion
 
         #region 属性
 
         /// <summary>
-        ///  主键,
+        ///  主键ID,
         /// </summary>
 
         [PrimaryKey]
-        [DbProperty(MapingColumnName = "ModeId", DbTypeString = "char", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = true, StepSize = 1, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ID", DbTypeString = "char", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = true, StepSize = 1, ColumnDefaultValue = "")]
 
-        public string ModeId
+        public string ID
         {
             get
             {
-                return this._ModeId;
+                return this._ID;
             }
             set
             {
-                this.OnPropertyChanged("ModeId", this._ModeId, value);
-                this._ModeId = value;
+                this.OnPropertyChanged("ID", this._ID, value);
+                this._ID = value;
+            }
+        }
+
+        /// <summary>
+        ///  名称,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "Name", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 200, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string Name
+        {
+            get
+            {
+                return this._Name;
+            }
+            set
+            {
+                this.OnPropertyChanged("Name", this._Name, value);
+                this._Name = value;
+            }
+        }
+
+        /// <summary>
+        ///  接口类型,1是支持电脑,2是支持手机，多个值之间用|隔开
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "DrivePath", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "(N'|1|')")]
+
+        public string DrivePath
+        {
+            get
+            {
+                return this._DrivePath;
+            }
+            set
+            {
+                this.OnPropertyChanged("DrivePath", this._DrivePath, value);
+                this._DrivePath = value;
+            }
+        }
+
+        /// <summary>
+        ///  支付接口编号,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "Gateway", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 400, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string Gateway
+        {
+            get
+            {
+                return this._Gateway;
+            }
+            set
+            {
+                this.OnPropertyChanged("Gateway", this._Gateway, value);
+                this._Gateway = value;
             }
         }
 
@@ -100,7 +159,7 @@ namespace EasyCms.Model
         }
 
         /// <summary>
-        ///  商户邮件,
+        ///  商户邮箱,
         /// </summary>
 
         [DbProperty(MapingColumnName = "EmailAddress", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 510, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
@@ -122,7 +181,7 @@ namespace EasyCms.Model
         ///  商户密钥,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "SecretKey", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 8000, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "SecretKey", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 4000, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string SecretKey
         {
@@ -141,7 +200,7 @@ namespace EasyCms.Model
         ///  第二密钥,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "SecondKey", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 8000, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "SecondKey", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 4000, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string SecondKey
         {
@@ -160,7 +219,7 @@ namespace EasyCms.Model
         ///  密码,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "Password", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 8000, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "Password", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 4000, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string Password
         {
@@ -195,59 +254,21 @@ namespace EasyCms.Model
         }
 
         /// <summary>
-        ///  名称,
+        ///  启用,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "Name", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 200, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "IsEnable", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public string Name
+        public bool IsEnable
         {
             get
             {
-                return this._Name;
+                return this._IsEnable;
             }
             set
             {
-                this.OnPropertyChanged("Name", this._Name, value);
-                this._Name = value;
-            }
-        }
-
-        /// <summary>
-        ///  描述,
-        /// </summary>
-
-        [DbProperty(MapingColumnName = "Description", DbTypeString = "text", ColumnIsNull = true, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
-
-        public string Description
-        {
-            get
-            {
-                return this._Description;
-            }
-            set
-            {
-                this.OnPropertyChanged("Description", this._Description, value);
-                this._Description = value;
-            }
-        }
-
-        /// <summary>
-        ///  支付接口编号,
-        /// </summary>
-
-        [DbProperty(MapingColumnName = "Gateway", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 400, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
-
-        public string Gateway
-        {
-            get
-            {
-                return this._Gateway;
-            }
-            set
-            {
-                this.OnPropertyChanged("Gateway", this._Gateway, value);
-                this._Gateway = value;
+                this.OnPropertyChanged("IsEnable", this._IsEnable, value);
+                this._IsEnable = value;
             }
         }
 
@@ -347,21 +368,21 @@ namespace EasyCms.Model
         }
 
         /// <summary>
-        ///  接口类型,1是支持电脑,2是支持手机，多个值之间用|隔开
+        ///  描述,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "DrivePath", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 510, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "(N'|1|')")]
+        [DbProperty(MapingColumnName = "Description", DbTypeString = "text", ColumnIsNull = true, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public string DrivePath
+        public string Description
         {
             get
             {
-                return this._DrivePath;
+                return this._Description;
             }
             set
             {
-                this.OnPropertyChanged("DrivePath", this._DrivePath, value);
-                this._DrivePath = value;
+                this.OnPropertyChanged("Description", this._Description, value);
+                this._Description = value;
             }
         }
 
@@ -373,7 +394,13 @@ namespace EasyCms.Model
             public Column(string tableName)
             {
 
-                ModeId = new PropertyItem("ModeId", tableName);
+                ID = new PropertyItem("ID", tableName);
+
+                Name = new PropertyItem("Name", tableName);
+
+                DrivePath = new PropertyItem("DrivePath", tableName);
+
+                Gateway = new PropertyItem("Gateway", tableName);
 
                 MerchantCode = new PropertyItem("MerchantCode", tableName);
 
@@ -387,11 +414,7 @@ namespace EasyCms.Model
 
                 Partner = new PropertyItem("Partner", tableName);
 
-                Name = new PropertyItem("Name", tableName);
-
-                Description = new PropertyItem("Description", tableName);
-
-                Gateway = new PropertyItem("Gateway", tableName);
+                IsEnable = new PropertyItem("IsEnable", tableName);
 
                 DisplaySequence = new PropertyItem("DisplaySequence", tableName);
 
@@ -403,20 +426,32 @@ namespace EasyCms.Model
 
                 Logo = new PropertyItem("Logo", tableName);
 
-                DrivePath = new PropertyItem("DrivePath", tableName);
+                Description = new PropertyItem("Description", tableName);
 
 
             }
             /// <summary>
-            /// 主键,
+            /// 主键ID,
             /// </summary> 
-            public PropertyItem ModeId = null;
+            public PropertyItem ID = null;
+            /// <summary>
+            /// 名称,
+            /// </summary> 
+            public PropertyItem Name = null;
+            /// <summary>
+            /// 接口类型,1是支持电脑,2是支持手机，多个值之间用|隔开
+            /// </summary> 
+            public PropertyItem DrivePath = null;
+            /// <summary>
+            /// 支付接口编号,
+            /// </summary> 
+            public PropertyItem Gateway = null;
             /// <summary>
             /// 商户号,
             /// </summary> 
             public PropertyItem MerchantCode = null;
             /// <summary>
-            /// 商户邮件,
+            /// 商户邮箱,
             /// </summary> 
             public PropertyItem EmailAddress = null;
             /// <summary>
@@ -436,17 +471,9 @@ namespace EasyCms.Model
             /// </summary> 
             public PropertyItem Partner = null;
             /// <summary>
-            /// 名称,
+            /// 启用,
             /// </summary> 
-            public PropertyItem Name = null;
-            /// <summary>
-            /// 描述,
-            /// </summary> 
-            public PropertyItem Description = null;
-            /// <summary>
-            /// 支付接口编号,
-            /// </summary> 
-            public PropertyItem Gateway = null;
+            public PropertyItem IsEnable = null;
             /// <summary>
             /// 显示顺序,
             /// </summary> 
@@ -468,10 +495,18 @@ namespace EasyCms.Model
             /// </summary> 
             public PropertyItem Logo = null;
             /// <summary>
-            /// 接口类型,1是支持电脑,2是支持手机，多个值之间用|隔开
+            /// 描述,
             /// </summary> 
-            public PropertyItem DrivePath = null;
+            public PropertyItem Description = null;
         }
         #endregion
+    }
+
+    public partial class ShopPaymentTypes
+    {
+        protected override void OnCreate()
+        {
+            this.IsEnable = true;
+        }
     }
 }

@@ -232,7 +232,7 @@ namespace EasyCms.Dal
             DataTable dt = Dal.From<ShopCategory>()
                 .Join<AttachFile>(ShopCategory._.SmallLogo==AttachFile._.RefID, JoinType.leftJoin )
                 .Where(where).Select(ShopCategory._.ID, ShopCategory._.Code, ShopCategory._.Name, ShopCategory._.ClassCode,AttachFile._.FilePath.Replace("~","").Alias("SmallLogo"))
-                .ToDataTable();
+                .OrderBy(ShopCategory._.OrderNo).ToDataTable();
             return dt;
         }
 

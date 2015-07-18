@@ -1,0 +1,148 @@
+﻿@model ShopPaymentTypes
+@{
+    ViewBag.Title = "编辑支付方式";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEdit.cshtml";
+}
+
+@Styles.Render("~/bundles/upimgcss")
+@Scripts.Render("~/bundles/ueditor")
+@Scripts.Render("~/bundles/uploadJs")
+
+@using EasyCms.Model
+<!--内容-->
+<div id="floatHead" class="content-tab-wrap">
+    <div class="content-tab">
+        <div class="content-tab-ul-wrap">
+            <ul>
+                <li><a class="selected" href="javascript:;">基本信息</a></li> 
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="tab-content">
+
+
+    @HelperExtend.HiddenFor("ID", Model.ID)
+    @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString()) 
+    @Html.ValidationSummary() 
+
+    @HelperExtend.TextBox("Name", "支付方式名称", defaultval: Model.Name, hint: "*必填,<BR/>  支付方式名称的长度限制在50个字符以内")
+    @HelperExtend.TextBox("DrivePath", "接口类型", defaultval: Model.DrivePath, hint: "*必填,<BR/>在选择一个接口类型之前，必须具备一个在该支付公司注册过的账号，然后按照支付公司提供的账户信息填写此支付方式所需的信息，<BR/>不同的接口类型要求填写的信息可能会不一样")
+
+    @HelperExtend.TextBox("MerchantCode", "商户号", defaultval: Model.MerchantCode, hint: "*必填,<BR/>商户号一般是您在支付公司注册的账号，<BR/>您也可以登陆支付公司后按照说明查找您的商户号，长度限制在300个字符以内")
+
+    @HelperExtend.TextBox("EmailAddress", "商户邮件", defaultval: Model.EmailAddress, hint: "")
+
+    @HelperExtend.TextBox("SecretKey", "商户密钥", defaultval: Model.SecretKey, hint: "<BR/>为了保证支付的安全性和真实性，<BR/>很多支付公司都为商家提供了一个密钥并要求使用此密钥验证支付信息，<BR/>也有的支付公司称之为校验码或验证码 ")
+
+    @HelperExtend.TextBox("SecondKey", "第二密钥", defaultval: Model.SecondKey, hint: "")
+
+    @HelperExtend.TextBox("Password", "密码", defaultval: Model.Password, hint: "")
+
+    @HelperExtend.TextBox("Partner", "合作伙伴", defaultval: Model.Partner, hint: "")
+
+  
+
+  
+
+    @HelperExtend.TextBox("Gateway", "支付接口编号", defaultval: Model.Gateway, hint: "")
+
+ 
+
+    @HelperExtend.TextBox("Charge", "手续费", defaultval: Model.Charge, hint: "<BR/>设置顾客选择此支付方式时需要额外支付的手续费，<BR/>如果选中百分比，则表示支付手续费的金额根据订单金额<BR/>按照设置的百分比收取， 如果不需要顾客支付手续费，则设为0")
+    
+    @HelperExtend.RadioGroup("IsPercent", "是否按百分比收费", "false,true", "否,是", defaultval: Model.IsPercent)
+    @HelperExtend.RadioGroup("IsEnable", "启用", "false,true", "禁用,启用", defaultval: Model.IsEnable)
+     
+    @HelperExtend.TextBox("DisplaySequence", "显示顺序", defaultval: Model.DisplaySequence, hint: "<BR/>设置顾客下订单选择支付方式时，此支付方式显示的位置")
+    @HelperExtend.TextArea("Description", "详细介绍", defaultval: Model.Description)
+
+
+
+     
+</div>
+ 
+@section  scripts{
+
+
+    <script type="text/javascript">
+
+        $(function () {
+
+
+            //初始化表单验证
+            $("form").validate({
+                ignore: "",
+                rules: {
+                    "Code": {
+                        required: true,
+                        maxlength: 50,
+                        remote: {
+                            url: '@Url.Action("CheckRepeat")',
+                            data: {
+                                ID: function () { return $("#ID").val(); },
+                                ParentID: function () { return $("#ParentID").val(); },
+                                RecordStatus: function () { return $("#RecordStatus").val(); },
+                                val: function () { return $("#Code").val(); },
+                                IsCode: true
+                            }
+                        }
+                    },
+                    Name: {
+                        required: true,
+                        maxlength: 100,
+                        remote: {
+                            url: '@Url.Action("CheckRepeat")',
+                            data: {
+                                ID: function () { return $("#ID").val(); },
+                                ParentID: function () { return $("#ParentID").val(); },
+                                RecordStatus: function () { return $("#RecordStatus").val(); },
+                                val: function () { return $("#Name").val(); },
+                                IsCode: false
+                            }
+                        }
+                    },
+                    ClassTypeID: { required: true },
+                    Note: {
+                        maxlength: 500
+                    }
+                },
+                messages: {
+                    Code: {
+                        required: "请输入编号",
+                        maxlength: $.validator.format("编号长度不能大于{0}个字符"),
+                        remote: "同级分类下编号重复"
+                    },
+                    Name: {
+                        required: "请输入名称",
+                        maxlength: $.validator.format("名称长度不能大于{0}个字符"),
+                        remote: "同级分类下名称重复"
+                    }
+                },
+                errorPlacement: function (error, element) {
+
+                    if (element.is(":radio"))
+                        error.insertAfter($(element).parent());
+                    else if (element.is(":checkbox"))
+                        error.insertAfter($(element).parent());
+                    else
+                        error.insertAfter(element);
+                }
+
+            });
+        })
+    </script>
+
+    <script type="text/javascript">
+
+        
+        $(function () {
+
+            if ("@TempData.ContainsKey("IsSuccess").ToString().ToLower()" == "true") {
+                SucessMsg("@TempData["IsSuccess"]");
+            }
+
+
+        });
+    </script>
+}

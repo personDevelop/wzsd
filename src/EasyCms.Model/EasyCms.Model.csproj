@@ -48,6 +48,7 @@
     <Compile Include="AttachFile.cs" />
     <Compile Include="Coupon.cs" />
     <Compile Include="FunctionInfo.cs" />
+    <Compile Include="Gataway.cs" />
     <Compile Include="ManagerUserInfo.cs" />
     <Compile Include="MemberOrder.cs" />
     <Compile Include="NewsCategory.cs" />

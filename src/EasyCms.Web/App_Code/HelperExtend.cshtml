@@ -14,8 +14,10 @@
         </dt>
         <dd>
 
-            @MVCExtention.ExtendHtmlInput.MvcHelper.TextBox(code, defaultval as string, new { @class = "input normal " + otherClass, width = width })
-            <span>@hint</span>
+            
+                @MVCExtention.ExtendHtmlInput.MvcHelper.TextBox(code, defaultval as string, new { @class = "input normal " + otherClass, width = width })
+            
+            <span>@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(hint)</span>
         </dd>
     </dl>
 }
