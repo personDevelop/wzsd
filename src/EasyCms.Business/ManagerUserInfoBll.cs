@@ -42,7 +42,7 @@ namespace EasyCms.Business
                 error = "密码不正确！";
                 item = null;
             }
-            else if (item.Status != 2)
+            else if (item.Status != 1)
             {
 
                 error = "账号不允许登陆！";
