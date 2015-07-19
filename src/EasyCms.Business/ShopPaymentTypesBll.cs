@@ -40,8 +40,13 @@ namespace EasyCms.Business
             return Dal.GetEntity(id);
         }
 
- 
 
 
+
+
+        public DataTable GetPayType()
+        {
+            return Dal.GetPayType( );
+        }
     }
 }

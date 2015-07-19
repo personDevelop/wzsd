@@ -42,7 +42,7 @@ namespace EasyCms.Dal
             {
 
                 DataTable dt = Dal.From<ShopPaymentTypes>().OrderBy(ShopPaymentTypes._.DisplaySequence).ToDataTable();
-               
+
                 return dt;
             }
 
@@ -65,6 +65,13 @@ namespace EasyCms.Dal
 
 
 
+
+        public DataTable GetPayType()
+        {
+            return Dal.From<ShopPaymentTypes>().Where(ShopPaymentTypes._.IsEnable == true && ShopPaymentTypes._.DrivePath.Contains("1"))
+                .OrderBy(ShopPaymentTypes._.DisplaySequence)
+                .Select(ShopPaymentTypes._.ID, ShopPaymentTypes._.AllowRecharge, ShopPaymentTypes._.Charge, ShopPaymentTypes._.Name).ToDataTable();
+        }
     }
 
 }

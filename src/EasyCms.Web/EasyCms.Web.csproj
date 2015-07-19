@@ -219,6 +219,7 @@
     <Compile Include="API\APPController.cs" />
     <Compile Include="API\ShippingAddressAPIController.cs" />
     <Compile Include="API\ShopCartAPIController.cs" />
+    <Compile Include="API\ShopPayTypeApiController.cs" />
     <Compile Include="API\UserApiController.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\Controllers\FunctionInfoController.cs" />
@@ -1154,6 +1155,7 @@
     <Folder Include="Content\css\" />
     <Folder Include="Scripts\jGui\" />
     <Folder Include="Views\Home\" />
+    <Folder Include="Views\ShopPayTypeApi\" />
     <Folder Include="Views\UpLoad\" />
     <Folder Include="Views\UserApi\" />
   </ItemGroup>
