@@ -21,7 +21,7 @@ namespace EasyCms.Dal
                 if (ad == null)
                 {
                     return "删除失败，行政区域ID不合法";
-                   
+
                 }
                 else
                 {
@@ -146,6 +146,19 @@ namespace EasyCms.Dal
         }
 
 
+
+        public DataTable GetOne(int id)
+        {
+            return Dal.From<AdministrativeRegions>().Where(AdministrativeRegions._.ID == id).ToDataTable();
+
+        }
+
+        public DataTable GetPathByFullPath(string fullPath)
+        {
+            return Dal.From<AdministrativeRegions>().Where(AdministrativeRegions._.ID.In(fullPath.Split('|')))
+                .OrderBy(AdministrativeRegions._.Jb).ToDataTable();
+
+        }
     }
 
 

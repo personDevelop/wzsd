@@ -53,5 +53,15 @@ namespace EasyCms.Business
         }
 
 
+
+        public DataTable GetOne(int id)
+        {
+            return Dal.GetOne(id);
+        }
+
+        public DataTable GetPathByFullPath(string fullPath)
+        {
+            return Dal.GetPathByFullPath(fullPath);
+        }
     }
 }
