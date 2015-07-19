@@ -52,6 +52,7 @@
     <Compile Include="ManagerUserInfo.cs" />
     <Compile Include="MemberOrder.cs" />
     <Compile Include="NewsCategory.cs" />
+    <Compile Include="NewsComment.cs" />
     <Compile Include="NewsInfo.cs" />
     <Compile Include="ParameterInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -68,6 +69,7 @@
     <Compile Include="ShopProductAttributes.cs" />
     <Compile Include="ShopProductCategory.cs" />
     <Compile Include="ShopProductInfo.cs" />
+    <Compile Include="ShopProductReviews.cs" />
     <Compile Include="ShopProductSKU.cs" />
     <Compile Include="ShopProductSKUInfo.cs" />
     <Compile Include="ShopProductStationMode.cs" />
