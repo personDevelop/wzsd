@@ -75,6 +75,7 @@
     <Compile Include="ShopProductTypeAndBrand.cs" />
     <Compile Include="ShopRalationProduct.cs" />
     <Compile Include="ShopShippingAddress.cs" />
+    <Compile Include="ShopShippingPayment.cs" />
     <Compile Include="ShopShippingType.cs" />
     <Compile Include="ShopShoppingCarts.cs" />
     <Compile Include="StaticValue.cs" />
