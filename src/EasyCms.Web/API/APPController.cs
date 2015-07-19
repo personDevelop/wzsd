@@ -9,9 +9,10 @@ using System.Data;
 using EasyCms.Business;
 using System.Text;
 using System.Web.Http;
-using EasyCms.Web.Common;
+using EasyCms.Web.Common; 
 
-namespace EasyCms.Web.API
+
+using System.Web.Hosting;namespace EasyCms.Web.API
 {
     public class APPController : ApiController
     {
@@ -215,6 +216,17 @@ namespace EasyCms.Web.API
 
 
             return resp;
+        }
+
+        public HttpResponseMessage GetGateway()
+        {
+            var resp = new HttpResponseMessage(HttpStatusCode.OK);
+        
+           
+            string result = JsonWithDataTable.Serialize(GatawayConfig.GetAllGataway());
+            resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
+            return resp;
+
         }
     }
 }

@@ -44,7 +44,7 @@ namespace EasyCms.Model
 
         private string _IDNumber;
 
-        private DateTime _Birthday;
+        private DateTime? _Birthday;
 
         private int _Sex;
 
@@ -223,7 +223,7 @@ namespace EasyCms.Model
         ///  个性签名,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "Signature", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 500, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "Signature", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 500, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string Signature
         {
@@ -242,7 +242,7 @@ namespace EasyCms.Model
         ///  身份证,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "IDNumber", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "IDNumber", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string IDNumber
         {
@@ -263,7 +263,7 @@ namespace EasyCms.Model
 
         [DbProperty(MapingColumnName = "Birthday", DbTypeString = "datetime", ColumnIsNull = true, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public DateTime Birthday
+        public DateTime? Birthday
         {
             get
             {

@@ -39,7 +39,13 @@ namespace EasyCms.Dal
                 return Dal.From<ShopPaymentTypes>().Select(ShopPaymentTypes._.ID, ShopPaymentTypes._.Name).OrderBy(ShopPaymentTypes._.DisplaySequence).ToDataTable();
             }
             else
-                return Dal.From<ShopPaymentTypes>().OrderBy(ShopPaymentTypes._.DisplaySequence).ToDataTable();
+            {
+
+                DataTable dt = Dal.From<ShopPaymentTypes>().OrderBy(ShopPaymentTypes._.DisplaySequence).ToDataTable();
+               
+                return dt;
+            }
+
         }
         public bool Exit(string ID, string parentID, string RecordStatus, string val, bool IsCode)
         {

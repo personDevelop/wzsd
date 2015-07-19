@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using Sharp.Common;
 using EasyCms.Web.Common;
+using System.Data;
 
 namespace EasyCms.Web.Areas.Admin.Controllers
 {
@@ -23,14 +24,26 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         public string GetList()
         {
             System.Data.DataTable dt = bll.GetList();
+            DataColumn dc = new DataColumn("GatewayName");
+            dt.Columns.Add(dc);
+            List<Gataway> list = GatawayConfig.GetAllGataway();
+            foreach (DataRow item in dt.Rows)
+            {
+                string gateway = item["Gateway"] as string;
+                if (list.Exists(p => p.name == gateway))
+                {
+                    item["GatewayName"] = list.Find(p => p.name == gateway).displayName;
+                } 
+            }
+            dt.AcceptChanges();
             return JsonWithDataTable.Serialize(dt);
 
         }
-       
+
         public string GetListForSelecte(int pagenum, int pagesize)
         {
             int recordCount = 0;
-            System.Data.DataTable dt = bll.GetList(  true);
+            System.Data.DataTable dt = bll.GetList(true);
             string result = JsonWithDataTable.Serialize(dt);
             result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
             return result;
@@ -68,8 +81,17 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                     {
                         p.ID = Guid.NewGuid().ToString();
                     }
-                   
+
                 }
+                p.DrivePath = string.Empty;
+                if ( collection["DrivePath1"] == "on")
+                {
+                    p.DrivePath = "1";
+                }
+                if (collection["DrivePath2"] == "on")
+                {
+                    p.DrivePath += "|2";
+                } 
                 bll.Save(p);
                 TempData.Add("IsSuccess", "保存成功");
                 ModelState.Clear();

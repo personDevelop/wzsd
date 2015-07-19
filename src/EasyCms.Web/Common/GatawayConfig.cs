@@ -5,28 +5,32 @@ using System.Xml.Linq;
 using System.Web;
 using System.IO;
 using EasyCms.Model;
+using System.Web.Hosting;
 
 namespace EasyCms.Web.Common
 {
     public class GatawayConfig
     {
-        static XDocument doc = null;
-        public static List<Gataway> GatawayList = new List<Gataway>();
+
         private const string ConfigPath = "~/Gateway.config";
-        static GatawayConfig()
+
+        static List<Gataway> GatawayList = null;
+        public static List<Gataway> GetAllGataway()
         {
-            doc = XDocument.Load(Path.Combine(System.Environment.CurrentDirectory, ConfigPath));
-            GetAllGataway();
-
-        }
-
-        static void GetAllGataway()
-        {
-
-            foreach (var item in doc.Root.Element("providers").Elements("add"))
+            if (GatawayList == null)
             {
-                GatawayList.Add(Gataway.Phrase(item));
+
+
+                GatawayList = new List<Gataway>();
+
+                XDocument doc = XDocument.Load(HostingEnvironment.MapPath(ConfigPath));
+
+                foreach (var item in doc.Root.Element("providers").Elements("add"))
+                {
+                    GatawayList.Add(Gataway.Phrase(item));
+                }
             }
+            return GatawayList;
         }
 
     }

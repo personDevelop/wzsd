@@ -39,15 +39,23 @@ namespace EasyCms.Model
                 if (atr != null)
                 {
                     string s = atr.Value;
-                    if (item.DeclaringType.Equals(typeof(bool)))
+                    try
                     {
-                        bool d = false;
-                        bool.TryParse(s, out d);
-                        item.SetValue(g, d);
+                        if (item.PropertyType.FullName=="System.Boolean")
+                        {
+                            bool d = false;
+                            bool.TryParse(s, out d);
+                            item.SetValue(g, d);
+                        }
+                        else
+                        {
+                            item.SetValue(g, s);
+                        }
                     }
-                    else
+                    catch (Exception)
                     {
-                        item.SetValue(g, s);
+                        
+                        throw;
                     }
                 }
 
