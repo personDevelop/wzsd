@@ -48,7 +48,7 @@ namespace EasyCms.Model
 
         private decimal _HandselCount;
 
-        private decimal _RealCount;
+        private decimal _ReturnCount;
 
         private decimal _UseJf;
 
@@ -62,7 +62,7 @@ namespace EasyCms.Model
 
         private decimal _TotalPrice;
 
-        private decimal _RealJe;
+        private decimal _ReturnMoney;
 
         private decimal _Point;
 
@@ -304,21 +304,21 @@ namespace EasyCms.Model
         }
 
         /// <summary>
-        ///  实收数量,
+        ///  退回数量,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "RealCount", DbTypeString = "decimal", ColumnIsNull = false, IsUnique = false, ColumnLength = 15, ColumnJingDu = 2, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ReturnCount", DbTypeString = "decimal", ColumnIsNull = false, IsUnique = false, ColumnLength = 15, ColumnJingDu = 2, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public decimal RealCount
+        public decimal ReturnCount
         {
             get
             {
-                return this._RealCount;
+                return this._ReturnCount;
             }
             set
             {
-                this.OnPropertyChanged("RealCount", this._RealCount, value);
-                this._RealCount = value;
+                this.OnPropertyChanged("ReturnCount", this._ReturnCount, value);
+                this._ReturnCount = value;
             }
         }
 
@@ -418,7 +418,7 @@ namespace EasyCms.Model
         }
 
         /// <summary>
-        ///  总价,
+        ///  总价,单价*数量-优惠金额
         /// </summary>
 
         [DbProperty(MapingColumnName = "TotalPrice", DbTypeString = "decimal", ColumnIsNull = false, IsUnique = false, ColumnLength = 15, ColumnJingDu = 2, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
@@ -437,21 +437,21 @@ namespace EasyCms.Model
         }
 
         /// <summary>
-        ///  实际金额,订单物料公司确认回单后，订单金额减去客户退货金额后的值
+        ///  退回金额,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "RealJe", DbTypeString = "decimal", ColumnIsNull = false, IsUnique = false, ColumnLength = 15, ColumnJingDu = 2, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ReturnMoney", DbTypeString = "decimal", ColumnIsNull = false, IsUnique = false, ColumnLength = 15, ColumnJingDu = 2, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public decimal RealJe
+        public decimal ReturnMoney
         {
             get
             {
-                return this._RealJe;
+                return this._ReturnMoney;
             }
             set
             {
-                this.OnPropertyChanged("RealJe", this._RealJe, value);
-                this._RealJe = value;
+                this.OnPropertyChanged("ReturnMoney", this._ReturnMoney, value);
+                this._ReturnMoney = value;
             }
         }
 
@@ -544,7 +544,7 @@ namespace EasyCms.Model
 
                 HandselCount = new PropertyItem("HandselCount", tableName);
 
-                RealCount = new PropertyItem("RealCount", tableName);
+                ReturnCount = new PropertyItem("ReturnCount", tableName);
 
                 UseJf = new PropertyItem("UseJf", tableName);
 
@@ -558,7 +558,7 @@ namespace EasyCms.Model
 
                 TotalPrice = new PropertyItem("TotalPrice", tableName);
 
-                RealJe = new PropertyItem("RealJe", tableName);
+                ReturnMoney = new PropertyItem("ReturnMoney", tableName);
 
                 Point = new PropertyItem("Point", tableName);
 
@@ -617,9 +617,9 @@ namespace EasyCms.Model
             /// </summary> 
             public PropertyItem HandselCount = null;
             /// <summary>
-            /// 实收数量,
+            /// 退回数量,
             /// </summary> 
-            public PropertyItem RealCount = null;
+            public PropertyItem ReturnCount = null;
             /// <summary>
             /// 使用积分数,
             /// </summary> 
@@ -641,13 +641,13 @@ namespace EasyCms.Model
             /// </summary> 
             public PropertyItem Preferential = null;
             /// <summary>
-            /// 总价,
+            /// 总价,单价*数量-优惠金额
             /// </summary> 
             public PropertyItem TotalPrice = null;
             /// <summary>
-            /// 实际金额,订单物料公司确认回单后，订单金额减去客户退货金额后的值
+            /// 退回金额,
             /// </summary> 
-            public PropertyItem RealJe = null;
+            public PropertyItem ReturnMoney = null;
             /// <summary>
             /// 积分,
             /// </summary> 
@@ -663,4 +663,5 @@ namespace EasyCms.Model
         }
         #endregion
     }
+
 }

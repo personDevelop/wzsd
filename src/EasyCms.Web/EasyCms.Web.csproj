@@ -232,6 +232,7 @@
     <Compile Include="Areas\Admin\Controllers\ShopBrandInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopCategoryController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopExtendInfoValueController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ShopOrderController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopPaymentTypesController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopProductInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopProductStationModeController.cs" />
@@ -1153,6 +1154,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\Admin\Views\ShopOrder\" />
     <Folder Include="Content\css\" />
     <Folder Include="Scripts\jGui\" />
     <Folder Include="Views\Home\" />

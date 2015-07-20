@@ -28,11 +28,13 @@ namespace EasyCms.Model
 
         private string _Code;
 
+        private int _OrderType;
+
+        private string _OrderResId;
+
         private string _ParentID;
 
-        private DateTime _CreateDate;
-
-        private DateTime _UpdateDate;
+        private bool _HasChildren;
 
         private string _MemberID;
 
@@ -60,6 +62,20 @@ namespace EasyCms.Model
 
         private string _ShipModeName;
 
+        private string _PayTypeID;
+
+        private string _PayTypeName;
+
+        private string _PayTypeGateWay;
+
+        private string _ExpressCompanyID;
+
+        private string _ExpressCompanyName;
+
+        private string _ShipOrderNum;
+
+        private bool _IsFreeShiping;
+
         private decimal _Freight;
 
         private decimal _FreightAdjust;
@@ -68,45 +84,33 @@ namespace EasyCms.Model
 
         private decimal _Weight;
 
-        private int _ShipStatus;
-
-        private string _ShipOrderNum;
-
-        private string _ExpressCompanyID;
-
-        private string _ExpressCompanyName;
-
-        private string _PayTypeID;
-
-        private string _PayTypeName;
-
-        private string _PayTypeGateWay;
-
-        private int _PayStatus;
-
-        private int _RefundStatus;
-
-        private decimal _TotalPrice;
-
-        private decimal _OrderPoint;
-
-        private bool _IsInvoice;
-
-        private string _InvoiceInfo;
-
         private decimal _CostPrice;
 
         private decimal _Discount;
 
-        private decimal _DiscountOrderPrice;
+        private decimal _TotalPrice;
 
         private decimal _PayMoney;
 
-        private int _OrderType;
+        private string _Remark;
 
-        private string _OrderResId;
+        private decimal _OrderPoint;
+
+        private int _ShipStatus;
+
+        private int _PayStatus;
 
         private int _OrderStatus;
+
+        private bool _HasReturn;
+
+        private decimal _ReturnMoney;
+
+        private int _RefundStatus;
+
+        private bool _IsInvoice;
+
+        private string _InvoiceInfo;
 
         private string _SellerID;
 
@@ -124,11 +128,17 @@ namespace EasyCms.Model
 
         private bool _CommentStatus;
 
-        private bool _HasChildren;
+        private int _DeliveryTime;
 
-        private bool _IsFreeShiping;
+        private DateTime? _SpecifiedDate;
 
-        private string _Remark;
+        private int _ExportCount;
+
+        private DateTime _CreateDate;
+
+        private DateTime _UpdateDate;
+
+        private bool _HasDelete;
 
         #endregion
 
@@ -174,6 +184,44 @@ namespace EasyCms.Model
         }
 
         /// <summary>
+        ///  订单类型,0，普通，1促销，2团购
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "OrderType", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public int OrderType
+        {
+            get
+            {
+                return this._OrderType;
+            }
+            set
+            {
+                this.OnPropertyChanged("OrderType", this._OrderType, value);
+                this._OrderType = value;
+            }
+        }
+
+        /// <summary>
+        ///  订单对应的销售模式ID,团购、促销ID
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "OrderResId", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string OrderResId
+        {
+            get
+            {
+                return this._OrderResId;
+            }
+            set
+            {
+                this.OnPropertyChanged("OrderResId", this._OrderResId, value);
+                this._OrderResId = value;
+            }
+        }
+
+        /// <summary>
         ///  主订单ID,
         /// </summary>
 
@@ -193,40 +241,21 @@ namespace EasyCms.Model
         }
 
         /// <summary>
-        ///  创建日期,
+        ///  有拆分的子单,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "CreateDate", DbTypeString = "datetime", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "HasChildren", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public DateTime CreateDate
+        public bool HasChildren
         {
             get
             {
-                return this._CreateDate;
+                return this._HasChildren;
             }
             set
             {
-                this.OnPropertyChanged("CreateDate", this._CreateDate, value);
-                this._CreateDate = value;
-            }
-        }
-
-        /// <summary>
-        ///  最后修改日期,
-        /// </summary>
-
-        [DbProperty(MapingColumnName = "UpdateDate", DbTypeString = "datetime", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
-
-        public DateTime UpdateDate
-        {
-            get
-            {
-                return this._UpdateDate;
-            }
-            set
-            {
-                this.OnPropertyChanged("UpdateDate", this._UpdateDate, value);
-                this._UpdateDate = value;
+                this.OnPropertyChanged("HasChildren", this._HasChildren, value);
+                this._HasChildren = value;
             }
         }
 
@@ -367,8 +396,7 @@ namespace EasyCms.Model
         ///  邮编,
         /// </summary>
 
-        [PrimaryKey]
-        [DbProperty(MapingColumnName = "ShipZip", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ShipZip", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string ShipZip
         {
@@ -444,7 +472,7 @@ namespace EasyCms.Model
         ///  配送方式ID,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "ShipModeID", DbTypeString = "char", ColumnIsNull = false, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ShipModeID", DbTypeString = "char", ColumnIsNull = true, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string ShipModeID
         {
@@ -463,7 +491,7 @@ namespace EasyCms.Model
         ///  配送方式,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "ShipModeName", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ShipModeName", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string ShipModeName
         {
@@ -475,6 +503,139 @@ namespace EasyCms.Model
             {
                 this.OnPropertyChanged("ShipModeName", this._ShipModeName, value);
                 this._ShipModeName = value;
+            }
+        }
+
+        /// <summary>
+        ///  付款方式ID,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "PayTypeID", DbTypeString = "char", ColumnIsNull = false, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string PayTypeID
+        {
+            get
+            {
+                return this._PayTypeID;
+            }
+            set
+            {
+                this.OnPropertyChanged("PayTypeID", this._PayTypeID, value);
+                this._PayTypeID = value;
+            }
+        }
+
+        /// <summary>
+        ///  付款方式,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "PayTypeName", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string PayTypeName
+        {
+            get
+            {
+                return this._PayTypeName;
+            }
+            set
+            {
+                this.OnPropertyChanged("PayTypeName", this._PayTypeName, value);
+                this._PayTypeName = value;
+            }
+        }
+
+        /// <summary>
+        ///  付款网关,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "PayTypeGateWay", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 500, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string PayTypeGateWay
+        {
+            get
+            {
+                return this._PayTypeGateWay;
+            }
+            set
+            {
+                this.OnPropertyChanged("PayTypeGateWay", this._PayTypeGateWay, value);
+                this._PayTypeGateWay = value;
+            }
+        }
+
+        /// <summary>
+        ///  快递公司ID,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "ExpressCompanyID", DbTypeString = "char", ColumnIsNull = true, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string ExpressCompanyID
+        {
+            get
+            {
+                return this._ExpressCompanyID;
+            }
+            set
+            {
+                this.OnPropertyChanged("ExpressCompanyID", this._ExpressCompanyID, value);
+                this._ExpressCompanyID = value;
+            }
+        }
+
+        /// <summary>
+        ///  快递公司名称,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "ExpressCompanyName", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string ExpressCompanyName
+        {
+            get
+            {
+                return this._ExpressCompanyName;
+            }
+            set
+            {
+                this.OnPropertyChanged("ExpressCompanyName", this._ExpressCompanyName, value);
+                this._ExpressCompanyName = value;
+            }
+        }
+
+        /// <summary>
+        ///  物流运单号,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "ShipOrderNum", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string ShipOrderNum
+        {
+            get
+            {
+                return this._ShipOrderNum;
+            }
+            set
+            {
+                this.OnPropertyChanged("ShipOrderNum", this._ShipOrderNum, value);
+                this._ShipOrderNum = value;
+            }
+        }
+
+        /// <summary>
+        ///  免运费,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "IsFreeShiping", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public bool IsFreeShiping
+        {
+            get
+            {
+                return this._IsFreeShiping;
+            }
+            set
+            {
+                this.OnPropertyChanged("IsFreeShiping", this._IsFreeShiping, value);
+                this._IsFreeShiping = value;
             }
         }
 
@@ -555,253 +716,6 @@ namespace EasyCms.Model
         }
 
         /// <summary>
-        ///  物流状态,
-        /// </summary>
-
-        [DbProperty(MapingColumnName = "ShipStatus", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
-
-        public int ShipStatus
-        {
-            get
-            {
-                return this._ShipStatus;
-            }
-            set
-            {
-                this.OnPropertyChanged("ShipStatus", this._ShipStatus, value);
-                this._ShipStatus = value;
-            }
-        }
-
-        /// <summary>
-        ///  物流运单号,
-        /// </summary>
-
-        [DbProperty(MapingColumnName = "ShipOrderNum", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
-
-        public string ShipOrderNum
-        {
-            get
-            {
-                return this._ShipOrderNum;
-            }
-            set
-            {
-                this.OnPropertyChanged("ShipOrderNum", this._ShipOrderNum, value);
-                this._ShipOrderNum = value;
-            }
-        }
-
-        /// <summary>
-        ///  快递公司ID,
-        /// </summary>
-
-        [DbProperty(MapingColumnName = "ExpressCompanyID", DbTypeString = "char", ColumnIsNull = true, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
-
-        public string ExpressCompanyID
-        {
-            get
-            {
-                return this._ExpressCompanyID;
-            }
-            set
-            {
-                this.OnPropertyChanged("ExpressCompanyID", this._ExpressCompanyID, value);
-                this._ExpressCompanyID = value;
-            }
-        }
-
-        /// <summary>
-        ///  快递公司名称,
-        /// </summary>
-
-        [DbProperty(MapingColumnName = "ExpressCompanyName", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
-
-        public string ExpressCompanyName
-        {
-            get
-            {
-                return this._ExpressCompanyName;
-            }
-            set
-            {
-                this.OnPropertyChanged("ExpressCompanyName", this._ExpressCompanyName, value);
-                this._ExpressCompanyName = value;
-            }
-        }
-
-        /// <summary>
-        ///  付款方式ID,
-        /// </summary>
-
-        [DbProperty(MapingColumnName = "PayTypeID", DbTypeString = "char", ColumnIsNull = false, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
-
-        public string PayTypeID
-        {
-            get
-            {
-                return this._PayTypeID;
-            }
-            set
-            {
-                this.OnPropertyChanged("PayTypeID", this._PayTypeID, value);
-                this._PayTypeID = value;
-            }
-        }
-
-        /// <summary>
-        ///  付款方式,
-        /// </summary>
-
-        [DbProperty(MapingColumnName = "PayTypeName", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
-
-        public string PayTypeName
-        {
-            get
-            {
-                return this._PayTypeName;
-            }
-            set
-            {
-                this.OnPropertyChanged("PayTypeName", this._PayTypeName, value);
-                this._PayTypeName = value;
-            }
-        }
-
-        /// <summary>
-        ///  付款网关,
-        /// </summary>
-
-        [DbProperty(MapingColumnName = "PayTypeGateWay", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 500, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
-
-        public string PayTypeGateWay
-        {
-            get
-            {
-                return this._PayTypeGateWay;
-            }
-            set
-            {
-                this.OnPropertyChanged("PayTypeGateWay", this._PayTypeGateWay, value);
-                this._PayTypeGateWay = value;
-            }
-        }
-
-        /// <summary>
-        ///  付款状态,
-        /// </summary>
-
-        [DbProperty(MapingColumnName = "PayStatus", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
-
-        public int PayStatus
-        {
-            get
-            {
-                return this._PayStatus;
-            }
-            set
-            {
-                this.OnPropertyChanged("PayStatus", this._PayStatus, value);
-                this._PayStatus = value;
-            }
-        }
-
-        /// <summary>
-        ///  退款状态,
-        /// </summary>
-
-        [DbProperty(MapingColumnName = "RefundStatus", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
-
-        public int RefundStatus
-        {
-            get
-            {
-                return this._RefundStatus;
-            }
-            set
-            {
-                this.OnPropertyChanged("RefundStatus", this._RefundStatus, value);
-                this._RefundStatus = value;
-            }
-        }
-
-        /// <summary>
-        ///  订单总价格,
-        /// </summary>
-
-        [DbProperty(MapingColumnName = "TotalPrice", DbTypeString = "decimal", ColumnIsNull = false, IsUnique = false, ColumnLength = 15, ColumnJingDu = 2, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
-
-        public decimal TotalPrice
-        {
-            get
-            {
-                return this._TotalPrice;
-            }
-            set
-            {
-                this.OnPropertyChanged("TotalPrice", this._TotalPrice, value);
-                this._TotalPrice = value;
-            }
-        }
-
-        /// <summary>
-        ///  订单积分,
-        /// </summary>
-
-        [DbProperty(MapingColumnName = "OrderPoint", DbTypeString = "decimal", ColumnIsNull = false, IsUnique = false, ColumnLength = 15, ColumnJingDu = 2, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
-
-        public decimal OrderPoint
-        {
-            get
-            {
-                return this._OrderPoint;
-            }
-            set
-            {
-                this.OnPropertyChanged("OrderPoint", this._OrderPoint, value);
-                this._OrderPoint = value;
-            }
-        }
-
-        /// <summary>
-        ///  发票,
-        /// </summary>
-
-        [DbProperty(MapingColumnName = "IsInvoice", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
-
-        public bool IsInvoice
-        {
-            get
-            {
-                return this._IsInvoice;
-            }
-            set
-            {
-                this.OnPropertyChanged("IsInvoice", this._IsInvoice, value);
-                this._IsInvoice = value;
-            }
-        }
-
-        /// <summary>
-        ///  发票填写客户名称,
-        /// </summary>
-
-        [DbProperty(MapingColumnName = "InvoiceInfo", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 200, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
-
-        public string InvoiceInfo
-        {
-            get
-            {
-                return this._InvoiceInfo;
-            }
-            set
-            {
-                this.OnPropertyChanged("InvoiceInfo", this._InvoiceInfo, value);
-                this._InvoiceInfo = value;
-            }
-        }
-
-        /// <summary>
         ///  成本价,
         /// </summary>
 
@@ -840,26 +754,26 @@ namespace EasyCms.Model
         }
 
         /// <summary>
-        ///  折扣后金额,
+        ///  订单总价格,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "DiscountOrderPrice", DbTypeString = "decimal", ColumnIsNull = false, IsUnique = false, ColumnLength = 15, ColumnJingDu = 2, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "TotalPrice", DbTypeString = "decimal", ColumnIsNull = false, IsUnique = false, ColumnLength = 15, ColumnJingDu = 2, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public decimal DiscountOrderPrice
+        public decimal TotalPrice
         {
             get
             {
-                return this._DiscountOrderPrice;
+                return this._TotalPrice;
             }
             set
             {
-                this.OnPropertyChanged("DiscountOrderPrice", this._DiscountOrderPrice, value);
-                this._DiscountOrderPrice = value;
+                this.OnPropertyChanged("TotalPrice", this._TotalPrice, value);
+                this._TotalPrice = value;
             }
         }
 
         /// <summary>
-        ///  实际金额,
+        ///  实际支付金额,订单总金额-折扣金额+运费
         /// </summary>
 
         [DbProperty(MapingColumnName = "PayMoney", DbTypeString = "decimal", ColumnIsNull = false, IsUnique = false, ColumnLength = 15, ColumnJingDu = 2, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
@@ -878,40 +792,78 @@ namespace EasyCms.Model
         }
 
         /// <summary>
-        ///  订单类型,0，普通，1促销，2团购
+        ///  订单说明,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "OrderType", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "Remark", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 500, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public int OrderType
+        public string Remark
         {
             get
             {
-                return this._OrderType;
+                return this._Remark;
             }
             set
             {
-                this.OnPropertyChanged("OrderType", this._OrderType, value);
-                this._OrderType = value;
+                this.OnPropertyChanged("Remark", this._Remark, value);
+                this._Remark = value;
             }
         }
 
         /// <summary>
-        ///  订单对应的类型ID,团购、促销ID
+        ///  订单积分,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "OrderResId", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "OrderPoint", DbTypeString = "decimal", ColumnIsNull = false, IsUnique = false, ColumnLength = 15, ColumnJingDu = 2, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public string OrderResId
+        public decimal OrderPoint
         {
             get
             {
-                return this._OrderResId;
+                return this._OrderPoint;
             }
             set
             {
-                this.OnPropertyChanged("OrderResId", this._OrderResId, value);
-                this._OrderResId = value;
+                this.OnPropertyChanged("OrderPoint", this._OrderPoint, value);
+                this._OrderPoint = value;
+            }
+        }
+
+        /// <summary>
+        ///  物流状态,0,未发货，1已发货，2已签收，3已拒收
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "ShipStatus", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public int ShipStatus
+        {
+            get
+            {
+                return this._ShipStatus;
+            }
+            set
+            {
+                this.OnPropertyChanged("ShipStatus", this._ShipStatus, value);
+                this._ShipStatus = value;
+            }
+        }
+
+        /// <summary>
+        ///  付款状态,0,未付款，1已付款
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "PayStatus", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public int PayStatus
+        {
+            get
+            {
+                return this._PayStatus;
+            }
+            set
+            {
+                this.OnPropertyChanged("PayStatus", this._PayStatus, value);
+                this._PayStatus = value;
             }
         }
 
@@ -931,6 +883,101 @@ namespace EasyCms.Model
             {
                 this.OnPropertyChanged("OrderStatus", this._OrderStatus, value);
                 this._OrderStatus = value;
+            }
+        }
+
+        /// <summary>
+        ///  有发起退款申请,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "HasReturn", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public bool HasReturn
+        {
+            get
+            {
+                return this._HasReturn;
+            }
+            set
+            {
+                this.OnPropertyChanged("HasReturn", this._HasReturn, value);
+                this._HasReturn = value;
+            }
+        }
+
+        /// <summary>
+        ///  退款金额,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "ReturnMoney", DbTypeString = "decimal", ColumnIsNull = false, IsUnique = false, ColumnLength = 15, ColumnJingDu = 2, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public decimal ReturnMoney
+        {
+            get
+            {
+                return this._ReturnMoney;
+            }
+            set
+            {
+                this.OnPropertyChanged("ReturnMoney", this._ReturnMoney, value);
+                this._ReturnMoney = value;
+            }
+        }
+
+        /// <summary>
+        ///  退款状态,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "RefundStatus", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public int RefundStatus
+        {
+            get
+            {
+                return this._RefundStatus;
+            }
+            set
+            {
+                this.OnPropertyChanged("RefundStatus", this._RefundStatus, value);
+                this._RefundStatus = value;
+            }
+        }
+
+        /// <summary>
+        ///  发票,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "IsInvoice", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public bool IsInvoice
+        {
+            get
+            {
+                return this._IsInvoice;
+            }
+            set
+            {
+                this.OnPropertyChanged("IsInvoice", this._IsInvoice, value);
+                this._IsInvoice = value;
+            }
+        }
+
+        /// <summary>
+        ///  发票填写客户名称,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "InvoiceInfo", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 200, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string InvoiceInfo
+        {
+            get
+            {
+                return this._InvoiceInfo;
+            }
+            set
+            {
+                this.OnPropertyChanged("InvoiceInfo", this._InvoiceInfo, value);
+                this._InvoiceInfo = value;
             }
         }
 
@@ -1087,59 +1134,116 @@ namespace EasyCms.Model
         }
 
         /// <summary>
-        ///  有拆分的子单,
+        ///  送货时机,0,任意，1周一-周五，2周末，3指定日期
         /// </summary>
 
-        [DbProperty(MapingColumnName = "HasChildren", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "DeliveryTime", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public bool HasChildren
+        public int DeliveryTime
         {
             get
             {
-                return this._HasChildren;
+                return this._DeliveryTime;
             }
             set
             {
-                this.OnPropertyChanged("HasChildren", this._HasChildren, value);
-                this._HasChildren = value;
+                this.OnPropertyChanged("DeliveryTime", this._DeliveryTime, value);
+                this._DeliveryTime = value;
             }
         }
 
         /// <summary>
-        ///  免运费,
+        ///  指定日期,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "IsFreeShiping", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "SpecifiedDate", DbTypeString = "datetime", ColumnIsNull = true, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public bool IsFreeShiping
+        public DateTime? SpecifiedDate
         {
             get
             {
-                return this._IsFreeShiping;
+                return this._SpecifiedDate;
             }
             set
             {
-                this.OnPropertyChanged("IsFreeShiping", this._IsFreeShiping, value);
-                this._IsFreeShiping = value;
+                this.OnPropertyChanged("SpecifiedDate", this._SpecifiedDate, value);
+                this._SpecifiedDate = value;
             }
         }
 
         /// <summary>
-        ///  订单说明,
+        ///  导出次数,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "Remark", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 500, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ExportCount", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public string Remark
+        public int ExportCount
         {
             get
             {
-                return this._Remark;
+                return this._ExportCount;
             }
             set
             {
-                this.OnPropertyChanged("Remark", this._Remark, value);
-                this._Remark = value;
+                this.OnPropertyChanged("ExportCount", this._ExportCount, value);
+                this._ExportCount = value;
+            }
+        }
+
+        /// <summary>
+        ///  创建日期,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "CreateDate", DbTypeString = "datetime", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public DateTime CreateDate
+        {
+            get
+            {
+                return this._CreateDate;
+            }
+            set
+            {
+                this.OnPropertyChanged("CreateDate", this._CreateDate, value);
+                this._CreateDate = value;
+            }
+        }
+
+        /// <summary>
+        ///  最后修改日期,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "UpdateDate", DbTypeString = "datetime", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public DateTime UpdateDate
+        {
+            get
+            {
+                return this._UpdateDate;
+            }
+            set
+            {
+                this.OnPropertyChanged("UpdateDate", this._UpdateDate, value);
+                this._UpdateDate = value;
+            }
+        }
+
+        /// <summary>
+        ///  已删除,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "HasDelete", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public bool HasDelete
+        {
+            get
+            {
+                return this._HasDelete;
+            }
+            set
+            {
+                this.OnPropertyChanged("HasDelete", this._HasDelete, value);
+                this._HasDelete = value;
             }
         }
 
@@ -1155,11 +1259,13 @@ namespace EasyCms.Model
 
                 Code = new PropertyItem("Code", tableName);
 
+                OrderType = new PropertyItem("OrderType", tableName);
+
+                OrderResId = new PropertyItem("OrderResId", tableName);
+
                 ParentID = new PropertyItem("ParentID", tableName);
 
-                CreateDate = new PropertyItem("CreateDate", tableName);
-
-                UpdateDate = new PropertyItem("UpdateDate", tableName);
+                HasChildren = new PropertyItem("HasChildren", tableName);
 
                 MemberID = new PropertyItem("MemberID", tableName);
 
@@ -1187,6 +1293,20 @@ namespace EasyCms.Model
 
                 ShipModeName = new PropertyItem("ShipModeName", tableName);
 
+                PayTypeID = new PropertyItem("PayTypeID", tableName);
+
+                PayTypeName = new PropertyItem("PayTypeName", tableName);
+
+                PayTypeGateWay = new PropertyItem("PayTypeGateWay", tableName);
+
+                ExpressCompanyID = new PropertyItem("ExpressCompanyID", tableName);
+
+                ExpressCompanyName = new PropertyItem("ExpressCompanyName", tableName);
+
+                ShipOrderNum = new PropertyItem("ShipOrderNum", tableName);
+
+                IsFreeShiping = new PropertyItem("IsFreeShiping", tableName);
+
                 Freight = new PropertyItem("Freight", tableName);
 
                 FreightAdjust = new PropertyItem("FreightAdjust", tableName);
@@ -1195,45 +1315,33 @@ namespace EasyCms.Model
 
                 Weight = new PropertyItem("Weight", tableName);
 
-                ShipStatus = new PropertyItem("ShipStatus", tableName);
-
-                ShipOrderNum = new PropertyItem("ShipOrderNum", tableName);
-
-                ExpressCompanyID = new PropertyItem("ExpressCompanyID", tableName);
-
-                ExpressCompanyName = new PropertyItem("ExpressCompanyName", tableName);
-
-                PayTypeID = new PropertyItem("PayTypeID", tableName);
-
-                PayTypeName = new PropertyItem("PayTypeName", tableName);
-
-                PayTypeGateWay = new PropertyItem("PayTypeGateWay", tableName);
-
-                PayStatus = new PropertyItem("PayStatus", tableName);
-
-                RefundStatus = new PropertyItem("RefundStatus", tableName);
-
-                TotalPrice = new PropertyItem("TotalPrice", tableName);
-
-                OrderPoint = new PropertyItem("OrderPoint", tableName);
-
-                IsInvoice = new PropertyItem("IsInvoice", tableName);
-
-                InvoiceInfo = new PropertyItem("InvoiceInfo", tableName);
-
                 CostPrice = new PropertyItem("CostPrice", tableName);
 
                 Discount = new PropertyItem("Discount", tableName);
 
-                DiscountOrderPrice = new PropertyItem("DiscountOrderPrice", tableName);
+                TotalPrice = new PropertyItem("TotalPrice", tableName);
 
                 PayMoney = new PropertyItem("PayMoney", tableName);
 
-                OrderType = new PropertyItem("OrderType", tableName);
+                Remark = new PropertyItem("Remark", tableName);
 
-                OrderResId = new PropertyItem("OrderResId", tableName);
+                OrderPoint = new PropertyItem("OrderPoint", tableName);
+
+                ShipStatus = new PropertyItem("ShipStatus", tableName);
+
+                PayStatus = new PropertyItem("PayStatus", tableName);
 
                 OrderStatus = new PropertyItem("OrderStatus", tableName);
+
+                HasReturn = new PropertyItem("HasReturn", tableName);
+
+                ReturnMoney = new PropertyItem("ReturnMoney", tableName);
+
+                RefundStatus = new PropertyItem("RefundStatus", tableName);
+
+                IsInvoice = new PropertyItem("IsInvoice", tableName);
+
+                InvoiceInfo = new PropertyItem("InvoiceInfo", tableName);
 
                 SellerID = new PropertyItem("SellerID", tableName);
 
@@ -1251,11 +1359,17 @@ namespace EasyCms.Model
 
                 CommentStatus = new PropertyItem("CommentStatus", tableName);
 
-                HasChildren = new PropertyItem("HasChildren", tableName);
+                DeliveryTime = new PropertyItem("DeliveryTime", tableName);
 
-                IsFreeShiping = new PropertyItem("IsFreeShiping", tableName);
+                SpecifiedDate = new PropertyItem("SpecifiedDate", tableName);
 
-                Remark = new PropertyItem("Remark", tableName);
+                ExportCount = new PropertyItem("ExportCount", tableName);
+
+                CreateDate = new PropertyItem("CreateDate", tableName);
+
+                UpdateDate = new PropertyItem("UpdateDate", tableName);
+
+                HasDelete = new PropertyItem("HasDelete", tableName);
 
 
             }
@@ -1268,17 +1382,21 @@ namespace EasyCms.Model
             /// </summary> 
             public PropertyItem Code = null;
             /// <summary>
+            /// 订单类型,0，普通，1促销，2团购
+            /// </summary> 
+            public PropertyItem OrderType = null;
+            /// <summary>
+            /// 订单对应的销售模式ID,团购、促销ID
+            /// </summary> 
+            public PropertyItem OrderResId = null;
+            /// <summary>
             /// 主订单ID,
             /// </summary> 
             public PropertyItem ParentID = null;
             /// <summary>
-            /// 创建日期,
+            /// 有拆分的子单,
             /// </summary> 
-            public PropertyItem CreateDate = null;
-            /// <summary>
-            /// 最后修改日期,
-            /// </summary> 
-            public PropertyItem UpdateDate = null;
+            public PropertyItem HasChildren = null;
             /// <summary>
             /// 会员ID,
             /// </summary> 
@@ -1332,6 +1450,34 @@ namespace EasyCms.Model
             /// </summary> 
             public PropertyItem ShipModeName = null;
             /// <summary>
+            /// 付款方式ID,
+            /// </summary> 
+            public PropertyItem PayTypeID = null;
+            /// <summary>
+            /// 付款方式,
+            /// </summary> 
+            public PropertyItem PayTypeName = null;
+            /// <summary>
+            /// 付款网关,
+            /// </summary> 
+            public PropertyItem PayTypeGateWay = null;
+            /// <summary>
+            /// 快递公司ID,
+            /// </summary> 
+            public PropertyItem ExpressCompanyID = null;
+            /// <summary>
+            /// 快递公司名称,
+            /// </summary> 
+            public PropertyItem ExpressCompanyName = null;
+            /// <summary>
+            /// 物流运单号,
+            /// </summary> 
+            public PropertyItem ShipOrderNum = null;
+            /// <summary>
+            /// 免运费,
+            /// </summary> 
+            public PropertyItem IsFreeShiping = null;
+            /// <summary>
             /// 运费,
             /// </summary> 
             public PropertyItem Freight = null;
@@ -1348,58 +1494,6 @@ namespace EasyCms.Model
             /// </summary> 
             public PropertyItem Weight = null;
             /// <summary>
-            /// 物流状态,
-            /// </summary> 
-            public PropertyItem ShipStatus = null;
-            /// <summary>
-            /// 物流运单号,
-            /// </summary> 
-            public PropertyItem ShipOrderNum = null;
-            /// <summary>
-            /// 快递公司ID,
-            /// </summary> 
-            public PropertyItem ExpressCompanyID = null;
-            /// <summary>
-            /// 快递公司名称,
-            /// </summary> 
-            public PropertyItem ExpressCompanyName = null;
-            /// <summary>
-            /// 付款方式ID,
-            /// </summary> 
-            public PropertyItem PayTypeID = null;
-            /// <summary>
-            /// 付款方式,
-            /// </summary> 
-            public PropertyItem PayTypeName = null;
-            /// <summary>
-            /// 付款网关,
-            /// </summary> 
-            public PropertyItem PayTypeGateWay = null;
-            /// <summary>
-            /// 付款状态,
-            /// </summary> 
-            public PropertyItem PayStatus = null;
-            /// <summary>
-            /// 退款状态,
-            /// </summary> 
-            public PropertyItem RefundStatus = null;
-            /// <summary>
-            /// 订单总价格,
-            /// </summary> 
-            public PropertyItem TotalPrice = null;
-            /// <summary>
-            /// 订单积分,
-            /// </summary> 
-            public PropertyItem OrderPoint = null;
-            /// <summary>
-            /// 发票,
-            /// </summary> 
-            public PropertyItem IsInvoice = null;
-            /// <summary>
-            /// 发票填写客户名称,
-            /// </summary> 
-            public PropertyItem InvoiceInfo = null;
-            /// <summary>
             /// 成本价,
             /// </summary> 
             public PropertyItem CostPrice = null;
@@ -1408,25 +1502,53 @@ namespace EasyCms.Model
             /// </summary> 
             public PropertyItem Discount = null;
             /// <summary>
-            /// 折扣后金额,
+            /// 订单总价格,
             /// </summary> 
-            public PropertyItem DiscountOrderPrice = null;
+            public PropertyItem TotalPrice = null;
             /// <summary>
-            /// 实际金额,
+            /// 实际支付金额,订单总金额-折扣金额+运费
             /// </summary> 
             public PropertyItem PayMoney = null;
             /// <summary>
-            /// 订单类型,0，普通，1促销，2团购
+            /// 订单说明,
             /// </summary> 
-            public PropertyItem OrderType = null;
+            public PropertyItem Remark = null;
             /// <summary>
-            /// 订单对应的类型ID,团购、促销ID
+            /// 订单积分,
             /// </summary> 
-            public PropertyItem OrderResId = null;
+            public PropertyItem OrderPoint = null;
+            /// <summary>
+            /// 物流状态,0,未发货，1已发货，2已签收，3已拒收
+            /// </summary> 
+            public PropertyItem ShipStatus = null;
+            /// <summary>
+            /// 付款状态,0,未付款，1已付款
+            /// </summary> 
+            public PropertyItem PayStatus = null;
             /// <summary>
             /// 订单状态,
             /// </summary> 
             public PropertyItem OrderStatus = null;
+            /// <summary>
+            /// 有发起退款申请,
+            /// </summary> 
+            public PropertyItem HasReturn = null;
+            /// <summary>
+            /// 退款金额,
+            /// </summary> 
+            public PropertyItem ReturnMoney = null;
+            /// <summary>
+            /// 退款状态,
+            /// </summary> 
+            public PropertyItem RefundStatus = null;
+            /// <summary>
+            /// 发票,
+            /// </summary> 
+            public PropertyItem IsInvoice = null;
+            /// <summary>
+            /// 发票填写客户名称,
+            /// </summary> 
+            public PropertyItem InvoiceInfo = null;
             /// <summary>
             /// 卖家ID,
             /// </summary> 
@@ -1460,18 +1582,31 @@ namespace EasyCms.Model
             /// </summary> 
             public PropertyItem CommentStatus = null;
             /// <summary>
-            /// 有拆分的子单,
+            /// 送货时机,0,任意，1周一-周五，2周末，3指定日期
             /// </summary> 
-            public PropertyItem HasChildren = null;
+            public PropertyItem DeliveryTime = null;
             /// <summary>
-            /// 免运费,
+            /// 指定日期,
             /// </summary> 
-            public PropertyItem IsFreeShiping = null;
+            public PropertyItem SpecifiedDate = null;
             /// <summary>
-            /// 订单说明,
+            /// 导出次数,
             /// </summary> 
-            public PropertyItem Remark = null;
+            public PropertyItem ExportCount = null;
+            /// <summary>
+            /// 创建日期,
+            /// </summary> 
+            public PropertyItem CreateDate = null;
+            /// <summary>
+            /// 最后修改日期,
+            /// </summary> 
+            public PropertyItem UpdateDate = null;
+            /// <summary>
+            /// 已删除,
+            /// </summary> 
+            public PropertyItem HasDelete = null;
         }
         #endregion
     }
+
 }
