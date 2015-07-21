@@ -35,7 +35,7 @@ namespace EasyCms.Web.API
             resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
             return resp;
         }
-
+        [HttpGet]
         public HttpResponseMessage Delete(string id)
         {
             var resp = new HttpResponseMessage(HttpStatusCode.OK);
@@ -44,7 +44,7 @@ namespace EasyCms.Web.API
             resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
             return resp;
         }
-
+        [HttpGet]
         public HttpResponseMessage SetDefault(string id)
         {
             var resp = new HttpResponseMessage(HttpStatusCode.OK);
