@@ -65,6 +65,7 @@
     <Compile Include="ShopOrder.cs" />
     <Compile Include="ShopOrderAction.cs" />
     <Compile Include="ShopOrderItem.cs" />
+    <Compile Include="ShopOrderModel.cs" />
     <Compile Include="ShopPaymentTypes.cs" />
     <Compile Include="ShopProducntSKURelation.cs" />
     <Compile Include="ShopProductAttributes.cs" />

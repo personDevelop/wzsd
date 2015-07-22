@@ -220,6 +220,7 @@
     <Compile Include="API\RegionController.cs" />
     <Compile Include="API\ShippingAddressAPIController.cs" />
     <Compile Include="API\ShopCartAPIController.cs" />
+    <Compile Include="API\ShopOrderApiController.cs" />
     <Compile Include="API\ShopPayTypeApiController.cs" />
     <Compile Include="API\UserApiController.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />

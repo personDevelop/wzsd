@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EasyCms.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -16,14 +17,14 @@ namespace EasyCms
         public static string GetUserID(this HttpSessionStateBase session)
         {
             string userid = session[UserID] as string;
-            return userid??"root";
+            return userid ?? "root";
         }
         public static string GetRoleID(this HttpSessionStateBase session)
         {
             return session[RoleID] as string;
         }
         public static string MapPathCms(this HttpServerUtility server, string path)
-        { 
+        {
             if (!path.StartsWith("/") && !path.StartsWith("~"))
             {
                 path = "/" + path;
@@ -33,6 +34,17 @@ namespace EasyCms
                 path = "~" + path;
             }
             return server.MapPath(path);
+        }
+
+
+        public static string GetAccountID(this string token)
+        {
+            ManagerUserInfo user = LoginModel.GetCachUserInfo(token);
+            if (user != null)
+            {
+                return user.ID;
+            }
+            return string.Empty;
         }
     }
 }

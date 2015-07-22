@@ -21,7 +21,7 @@ namespace EasyCms.Web.API
         {
             var resp = new HttpResponseMessage(HttpStatusCode.OK);
 
-            DataTable dt = new ShopShoppingCartsBll().GetList(id); 
+            DataTable dt = new ShopShoppingCartsBll().GetList(id.GetAccountID()); 
             string result = JsonWithDataTable.Serialize(dt); 
             resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
             return resp; 
@@ -31,6 +31,7 @@ namespace EasyCms.Web.API
         // POST api/shopcart
         public int Post([FromBody]ShopShoppingCarts shopCart)
         {
+            shopCart.UserId = shopCart.UserId.GetAccountID();
             return new ShopShoppingCartsBll().Save(shopCart);
         }
 

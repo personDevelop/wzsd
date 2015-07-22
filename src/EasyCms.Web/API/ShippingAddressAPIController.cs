@@ -19,8 +19,8 @@ namespace EasyCms.Web.API
         public HttpResponseMessage Get(string id)
         {
             var resp = new HttpResponseMessage(HttpStatusCode.OK);
-
-            DataTable dt = new ShopShippingAddressBll().GetList(id, false);
+            
+            DataTable dt = new ShopShippingAddressBll().GetList(id.GetAccountID(), false);
             string result = JsonWithDataTable.Serialize(dt);
             resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
             return resp;
@@ -30,7 +30,7 @@ namespace EasyCms.Web.API
         {
             var resp = new HttpResponseMessage(HttpStatusCode.OK);
 
-            DataTable dt = new ShopShippingAddressBll().GetList(id, true);
+            DataTable dt = new ShopShippingAddressBll().GetList(id.GetAccountID(), true);
             string result = JsonWithDataTable.Serialize(dt);
             resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
             return resp;
@@ -40,7 +40,7 @@ namespace EasyCms.Web.API
         {
             var resp = new HttpResponseMessage(HttpStatusCode.OK);
 
-            string result = new ShopShippingAddressBll().Delete(id);
+            string result = new ShopShippingAddressBll().Delete(id );
             resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
             return resp;
         }
@@ -84,7 +84,7 @@ namespace EasyCms.Web.API
                 }
                 else
                 {
-
+                    shopShippingAddress.UserId = shopShippingAddress.UserId.GetAccountID();
                     msg = new ShopShippingAddressBll().Save(shopShippingAddress);
                 }
 

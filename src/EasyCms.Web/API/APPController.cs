@@ -9,10 +9,11 @@ using System.Data;
 using EasyCms.Business;
 using System.Text;
 using System.Web.Http;
-using EasyCms.Web.Common; 
+using EasyCms.Web.Common;
 
 
-using System.Web.Hosting;namespace EasyCms.Web.API
+using System.Web.Hosting;
+namespace EasyCms.Web.API
 {
     public class APPController : ApiController
     {
@@ -221,12 +222,24 @@ using System.Web.Hosting;namespace EasyCms.Web.API
         public HttpResponseMessage GetGateway()
         {
             var resp = new HttpResponseMessage(HttpStatusCode.OK);
-        
-           
+
+
             string result = JsonWithDataTable.Serialize(GatawayConfig.GetAllGataway());
             resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
             return resp;
 
+        }
+
+        public HttpResponseMessage GetSku(string id)
+        {
+            var resp = new HttpResponseMessage(HttpStatusCode.OK);
+
+
+            //System.Data.DataTable dt = new ShopProductInfoBll().GetProductSkuByProductID(id);
+
+            //string result = JsonWithDataTable.Serialize(dt);
+            //resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
+            return resp;
         }
     }
 }
