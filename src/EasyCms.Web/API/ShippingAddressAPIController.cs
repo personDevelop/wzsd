@@ -19,9 +19,17 @@ namespace EasyCms.Web.API
         public HttpResponseMessage Get()
         {
             var resp = new HttpResponseMessage(HttpStatusCode.OK);
-
-            DataTable dt = new ShopShippingAddressBll().GetList(Request.GetAccountID(), false);
-            string result = JsonWithDataTable.Serialize(dt);
+            string userid = Request.GetAccountID();
+            string result = string.Empty;
+            if (string.IsNullOrWhiteSpace(userid))
+            {
+                result = "无效令牌";
+            }
+            else
+            {
+                DataTable dt = new ShopShippingAddressBll().GetList(userid, false);
+                  result = JsonWithDataTable.Serialize(dt);
+            }
             resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
             return resp;
 
