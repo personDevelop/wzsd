@@ -56,10 +56,10 @@ namespace EasyCms.Dal
                 return "操作成功";
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 dal.RollbackTransaction(tr);
-                return "操作失败";
+                return "操作失败" + ex.Message;
             }
 
         }
