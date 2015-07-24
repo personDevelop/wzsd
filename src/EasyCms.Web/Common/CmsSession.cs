@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Web;
 
 namespace EasyCms
@@ -37,14 +38,60 @@ namespace EasyCms
         }
 
 
-        public static string GetAccountID(this string token)
+        public static string GetAccountID(this HttpRequestMessage Request)
         {
-            ManagerUserInfo user = LoginModel.GetCachUserInfo(token);
-            if (user != null)
+            string token = Request.GetToken();
+            if (string.IsNullOrWhiteSpace(token))
             {
-                return user.ID;
+                return string.Empty;
+            }
+            else
+            {
+                ManagerUserInfo user = LoginModel.GetCachUserInfo(token);
+                if (user != null)
+                {
+                    return user.ID;
+                }
+
             }
             return string.Empty;
+
+
         }
+        public static string GetToken(this HttpRequestMessage Request)
+        {
+            string result = null;
+            ClientEnum clientType = ClientEnum.PC;
+            var cookie = Request.Headers.GetCookies("t").FirstOrDefault();
+            if (cookie != null)
+            {
+                result = cookie["t"].Value;
+                clientType = ClientEnum.Android;
+
+            }
+            else
+            {
+                result = (Request.Headers.GetValues("t")).FirstOrDefault();
+                if (string.IsNullOrWhiteSpace(result))
+                {
+                    result = null;
+                }
+                else
+                {
+                    clientType = ClientEnum.IOS;
+                }
+            }
+            if (!string.IsNullOrWhiteSpace(result))
+            {
+                ManagerUserInfo user = LoginModel.GetCachUserInfo(result);
+                if (user != null)
+                {
+                    user.ClientType = (int)clientType;
+
+                }
+            }
+            return result;
+        }
+
     }
 }

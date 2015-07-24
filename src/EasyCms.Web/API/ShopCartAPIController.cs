@@ -14,24 +14,24 @@ namespace EasyCms.Web.API
 {
     public class ShopCartAPIController : ApiController
     {
-       
+
 
         // GET api/shopcart/5
         public HttpResponseMessage Get(string id)
         {
             var resp = new HttpResponseMessage(HttpStatusCode.OK);
 
-            DataTable dt = new ShopShoppingCartsBll().GetList(id.GetAccountID()); 
-            string result = JsonWithDataTable.Serialize(dt); 
+            DataTable dt = new ShopShoppingCartsBll().GetList(Request.GetAccountID());
+            string result = JsonWithDataTable.Serialize(dt);
             resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
-            return resp; 
+            return resp;
 
         }
 
         // POST api/shopcart
         public int Post([FromBody]ShopShoppingCarts shopCart)
         {
-            shopCart.UserId = shopCart.UserId.GetAccountID();
+            shopCart.UserId = Request.GetAccountID();
             return new ShopShoppingCartsBll().Save(shopCart);
         }
 

@@ -140,6 +140,8 @@ namespace EasyCms.Model
 
         private bool _HasDelete;
 
+        private int _ClientType;
+
         #endregion
 
         #region 属性
@@ -1247,6 +1249,25 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  客户端类型,0 pc 1 android 2 iod 3其他
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "ClientType", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public int ClientType
+        {
+            get
+            {
+                return this._ClientType;
+            }
+            set
+            {
+                this.OnPropertyChanged("ClientType", this._ClientType, value);
+                this._ClientType = value;
+            }
+        }
+
         #endregion
 
         #region 列定义
@@ -1370,6 +1391,8 @@ namespace EasyCms.Model
                 UpdateDate = new PropertyItem("UpdateDate", tableName);
 
                 HasDelete = new PropertyItem("HasDelete", tableName);
+
+                ClientType = new PropertyItem("ClientType", tableName);
 
 
             }
@@ -1605,6 +1628,10 @@ namespace EasyCms.Model
             /// 已删除,
             /// </summary> 
             public PropertyItem HasDelete = null;
+            /// <summary>
+            /// 客户端类型,0 pc 1 android 2 iod 3其他
+            /// </summary> 
+            public PropertyItem ClientType = null;
         }
         #endregion
     }

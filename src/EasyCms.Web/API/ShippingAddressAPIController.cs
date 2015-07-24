@@ -16,21 +16,21 @@ namespace EasyCms.Web.API
     {
 
         // GET api/shopcart/5
-        public HttpResponseMessage Get(string id)
+        public HttpResponseMessage Get()
         {
             var resp = new HttpResponseMessage(HttpStatusCode.OK);
-            
-            DataTable dt = new ShopShippingAddressBll().GetList(id.GetAccountID(), false);
+
+            DataTable dt = new ShopShippingAddressBll().GetList(Request.GetAccountID(), false);
             string result = JsonWithDataTable.Serialize(dt);
             resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
             return resp;
 
         }
-        public HttpResponseMessage GetDefault(string id)
+        public HttpResponseMessage GetDefault()
         {
             var resp = new HttpResponseMessage(HttpStatusCode.OK);
 
-            DataTable dt = new ShopShippingAddressBll().GetList(id.GetAccountID(), true);
+            DataTable dt = new ShopShippingAddressBll().GetList(Request.GetAccountID(), true);
             string result = JsonWithDataTable.Serialize(dt);
             resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
             return resp;
@@ -40,7 +40,7 @@ namespace EasyCms.Web.API
         {
             var resp = new HttpResponseMessage(HttpStatusCode.OK);
 
-            string result = new ShopShippingAddressBll().Delete(id );
+            string result = new ShopShippingAddressBll().Delete(id);
             resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
             return resp;
         }
@@ -67,7 +67,7 @@ namespace EasyCms.Web.API
                 {
                     msg = "收件地区不能为空";
                 }
-                else 
+                else
                     if (string.IsNullOrWhiteSpace(shopShippingAddress.ShipName))
                     {
                         msg = "收件人姓名不能为空";
@@ -84,13 +84,13 @@ namespace EasyCms.Web.API
                 }
                 else
                 {
-                    shopShippingAddress.UserId = shopShippingAddress.UserId.GetAccountID();
+                    shopShippingAddress.UserId = Request.GetAccountID();
                     msg = new ShopShippingAddressBll().Save(shopShippingAddress);
                 }
 
             bool isSuccess = msg == "添加成功";
-            var resp = new HttpResponseMessage(HttpStatusCode.OK); 
-            string result = JsonWithDataTable.Serialize(new { IsSuccess = isSuccess, msg = msg,data=shopShippingAddress });
+            var resp = new HttpResponseMessage(HttpStatusCode.OK);
+            string result = JsonWithDataTable.Serialize(new { IsSuccess = isSuccess, msg = msg, data = shopShippingAddress });
             resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
             return resp;
 

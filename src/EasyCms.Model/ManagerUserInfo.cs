@@ -62,6 +62,8 @@ namespace EasyCms.Model
 
         private string _Note;
 
+        private int _ClientType;
+
         #endregion
 
         #region 属性
@@ -428,6 +430,25 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  客户端类型,0 pc 1 android 2 iod 3其他
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "ClientType", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public int ClientType
+        {
+            get
+            {
+                return this._ClientType;
+            }
+            set
+            {
+                this.OnPropertyChanged("ClientType", this._ClientType, value);
+                this._ClientType = value;
+            }
+        }
+
         #endregion
 
         #region 列定义
@@ -473,6 +494,8 @@ namespace EasyCms.Model
                 Status = new PropertyItem("Status", tableName);
 
                 Note = new PropertyItem("Note", tableName);
+
+                ClientType = new PropertyItem("ClientType", tableName);
 
 
             }
@@ -552,6 +575,10 @@ namespace EasyCms.Model
             /// 备注,
             /// </summary> 
             public PropertyItem Note = null;
+            /// <summary>
+            /// 客户端类型,0 pc 1 android 2 iod 3其他
+            /// </summary> 
+            public PropertyItem ClientType = null;
         }
         #endregion
     }
@@ -562,6 +589,14 @@ namespace EasyCms.Model
         {
             CreateDate = LastModifyDate = StatusChangeDate = DateTime.Now;
         }
+    }
+
+    public enum ClientEnum
+    {
+        PC,
+        Android,
+        IOS,
+        Other
     }
 
 }
