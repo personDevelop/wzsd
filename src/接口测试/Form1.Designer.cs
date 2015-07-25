@@ -53,6 +53,8 @@
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
+            this.checkBox1.Checked = true;
+            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox1.Location = new System.Drawing.Point(54, 40);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(48, 16);
@@ -66,6 +68,7 @@
             this.txtUrl.Name = "txtUrl";
             this.txtUrl.Size = new System.Drawing.Size(468, 21);
             this.txtUrl.TabIndex = 2;
+            this.txtUrl.Text = "http://localhost:7161/api/UserApi/Login";
             // 
             // label1
             // 
@@ -110,7 +113,7 @@
             this.txtBody.Name = "txtBody";
             this.txtBody.Size = new System.Drawing.Size(468, 121);
             this.txtBody.TabIndex = 6;
-            this.txtBody.Text = "key:val";
+            this.txtBody.Text = "Account=admin&Pwd=123456";
             // 
             // label4
             // 

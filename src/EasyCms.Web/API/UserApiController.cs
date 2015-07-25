@@ -26,7 +26,7 @@ namespace EasyCms.Web.API
                 string msgInfo = string.Format("您注册【我在山东】的验证码为{0}，请于{1}分钟内正确输入验证码", code, 2);
                 //SendMsg(valiCodeModel.TelNo, msgInfo);
                 return "获取成功".FormatSuccess();
-                
+
             }
             catch (Exception ex)
             {
@@ -64,13 +64,13 @@ namespace EasyCms.Web.API
                 }
                 if (isSuccess)
                 {
-                    return msg.FormatError();
+                    return token.FormatSuccess();
                 }
                 else
                 {
-                    return token.FormatSuccess();
+                    return msg.FormatError();
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -130,8 +130,8 @@ namespace EasyCms.Web.API
                                             msg = new ManagerUserInfoBll().Regist(registModel);
                                         }
 
-               
-                return msg.FormatError(); 
+
+                return msg.FormatError();
             }
             catch (Exception ex)
             {

@@ -12,13 +12,11 @@ namespace EasyCms.Web.Common
     public static class FormatResponse
     {
         public static HttpResponseMessage Format(this Exception ex)
-        {
-
+        { 
             var resp = new HttpResponseMessage(HttpStatusCode.OK);
             string result = JsonWithDataTable.Serialize(new { IsSuccess = false, Msg = ex.Message });
             resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
-            return resp;
-
+            return resp; 
         }
         public static HttpResponseMessage FormatError(this string error)
         {
@@ -31,23 +29,18 @@ namespace EasyCms.Web.Common
 
         }
         public static HttpResponseMessage FormatSuccess(this string resultStr)
-        {
-
+        { 
             var resp = new HttpResponseMessage(HttpStatusCode.OK);
             string result = JsonWithDataTable.Serialize(new { IsSuccess = true, Msg = "操作成功", data = resultStr });
             resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
-            return resp;
-
-        }
-
+            return resp; 
+        } 
         public static HttpResponseMessage Format(this DataTable dt)
-        {
-
+        { 
             var resp = new HttpResponseMessage(HttpStatusCode.OK);
             string result = JsonWithDataTable.Serialize(new { IsSuccess = true, Msg = "操作成功", data = dt });
             resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
-            return resp;
-
+            return resp; 
         }
     }
 }

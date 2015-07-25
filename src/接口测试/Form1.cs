@@ -28,7 +28,15 @@ namespace 接口测试
 
             try
             {
-                txtResponse.Text = Sharp.Common.HttpModle.HttpGet(url, null,new string[]{ header});
+                if (checkBox1.Checked)
+                {
+                    string ss = Sharp.Common.HttpModle.HttpPost(url, body, null, new string[] { header });
+
+
+                    txtResponse.Text = ss;
+                }
+                else
+                    txtResponse.Text = Sharp.Common.HttpModle.HttpGet(url, null, new string[] { header });
 
             }
             catch (Exception ex)
