@@ -19,27 +19,52 @@ namespace EasyCms.Web.API
         // GET api/shopcart/5
         public HttpResponseMessage Get(string id)
         {
-            var resp = new HttpResponseMessage(HttpStatusCode.OK);
+            try
+            {
 
-            DataTable dt = new ShopShoppingCartsBll().GetList(Request.GetAccountID());
-            string result = JsonWithDataTable.Serialize(dt);
-            resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
-            return resp;
+                DataTable dt = new ShopShoppingCartsBll().GetList(Request.GetAccountID());
+                return dt.Format();
+            }
+            catch (Exception ex)
+            {
+                return ex.Format();
+
+            }
 
         }
 
         // POST api/shopcart
-        public int Post([FromBody]ShopShoppingCarts shopCart)
+        public HttpResponseMessage Post([FromBody]ShopShoppingCarts shopCart)
         {
-            shopCart.UserId = Request.GetAccountID();
-            return new ShopShoppingCartsBll().Save(shopCart);
+            try
+            {
+                shopCart.UserId = Request.GetAccountID();
+                new ShopShoppingCartsBll().Save(shopCart);
+                return "操作成功".FormatSuccess();
+
+            }
+            catch (Exception ex)
+            {
+                return ex.Format();
+
+            }
+
         }
 
 
         // DELETE api/shopcart/5
-        public string Delete(string id)
+        public HttpResponseMessage Delete(string id)
         {
-            return new ShopShoppingCartsBll().Delete(id);
+            try
+            {
+                return new ShopShoppingCartsBll().Delete(id).FormatError();
+                
+            }
+            catch (Exception ex)
+            {
+                return ex.Format();
+
+            }
         }
     }
 }

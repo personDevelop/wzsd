@@ -15,29 +15,40 @@ namespace EasyCms.Web.API
     public class RegionController : ApiController
     {
 
-        public HttpResponseMessage GetChildRegion(int id=0)
+        public HttpResponseMessage GetChildRegion(int id = 0)
         {
+            try
+            {
 
-            DataTable dt = new AdministrativeRegionsBll().GetList(id, true);
-            string result = JsonWithDataTable.Serialize(dt);
-            var resp = new HttpResponseMessage(HttpStatusCode.OK);
-            resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
-            return resp;
+                DataTable dt = new AdministrativeRegionsBll().GetList(id, true);
+
+                return dt.Format();
+            }
+            catch (Exception ex)
+            {
+                return ex.Format();
+
+            }
         }
 
         public HttpResponseMessage GetRegionPath(int id)
         {
-            DataTable dt= new AdministrativeRegionsBll().GetOne(id);
-        
-            if (dt.Rows[0]["FullPath"].ToString().Contains("|"))
+            try
             {
-                dt = new AdministrativeRegionsBll().GetPathByFullPath(dt.Rows[0]["FullPath"].ToString());
-            } 
-          
-            string result = JsonWithDataTable.Serialize(dt);
-            var resp = new HttpResponseMessage(HttpStatusCode.OK);
-            resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
-            return resp;
+                DataTable dt = new AdministrativeRegionsBll().GetOne(id);
+
+                if (dt.Rows[0]["FullPath"].ToString().Contains("|"))
+                {
+                    dt = new AdministrativeRegionsBll().GetPathByFullPath(dt.Rows[0]["FullPath"].ToString());
+                }
+
+                return dt.Format();
+            }
+            catch (Exception ex)
+            {
+                return ex.Format();
+
+            }
         }
     }
 }

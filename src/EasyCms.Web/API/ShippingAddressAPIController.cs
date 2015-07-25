@@ -18,89 +18,129 @@ namespace EasyCms.Web.API
         // GET api/shopcart/5
         public HttpResponseMessage Get()
         {
-            var resp = new HttpResponseMessage(HttpStatusCode.OK);
-            string userid = Request.GetAccountID();
-            string result = string.Empty;
-            if (string.IsNullOrWhiteSpace(userid))
+            try
             {
-                result = "无效令牌";
+                var resp = new HttpResponseMessage(HttpStatusCode.OK);
+                string userid = Request.GetAccountID();
+                string result = string.Empty;
+                if (string.IsNullOrWhiteSpace(userid))
+                {
+                    return "无效令牌".FormatError();
+                    
+                }
+                else
+                {
+                    DataTable dt = new ShopShippingAddressBll().GetList(userid, false);
+                    return dt.Format();
+                }
             }
-            else
+            catch (Exception ex)
             {
-                DataTable dt = new ShopShippingAddressBll().GetList(userid, false);
-                  result = JsonWithDataTable.Serialize(dt);
+                return ex.Format();
+
             }
-            resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
-            return resp;
 
         }
         public HttpResponseMessage GetDefault()
         {
-            var resp = new HttpResponseMessage(HttpStatusCode.OK);
+            try
+            {
 
-            DataTable dt = new ShopShippingAddressBll().GetList(Request.GetAccountID(), true);
-            string result = JsonWithDataTable.Serialize(dt);
-            resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
-            return resp;
+                DataTable dt = new ShopShippingAddressBll().GetList(Request.GetAccountID(), true);
+                return dt.Format();
+            }
+            catch (Exception ex)
+            {
+                return ex.Format();
+
+            }
         }
         [HttpGet]
         public HttpResponseMessage Delete(string id)
         {
-            var resp = new HttpResponseMessage(HttpStatusCode.OK);
+            try
+            {
 
-            string result = new ShopShippingAddressBll().Delete(id);
-            resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
-            return resp;
+
+                string result = new ShopShippingAddressBll().Delete(id);
+                return result.FormatError();
+
+            }
+            catch (Exception ex)
+            {
+                return ex.Format();
+
+            }
         }
         [HttpGet]
         public HttpResponseMessage SetDefault(string id)
         {
-            var resp = new HttpResponseMessage(HttpStatusCode.OK);
+            try
+            {
 
-            string result = new ShopShippingAddressBll().SetDefault(id);
-            resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
-            return resp;
+                string result = new ShopShippingAddressBll().SetDefault(id);
+                return result.FormatError();
+            }
+            catch (Exception ex)
+            {
+                return ex.Format();
+
+            }
         }
 
         public HttpResponseMessage Post([FromBody]ShopShippingAddress shopShippingAddress)
         {
-            //检验验证码是否正确，
-            string msg = string.Empty;
-            if (string.IsNullOrWhiteSpace(shopShippingAddress.UserId))
+            try
             {
-                msg = "用户ID不能为空";
-            }
-            else
-                if (shopShippingAddress.RegionId < 1)
+                //检验验证码是否正确，
+                string msg = string.Empty;
+                if (string.IsNullOrWhiteSpace(shopShippingAddress.UserId))
                 {
-                    msg = "收件地区不能为空";
+                    msg = "用户ID不能为空";
                 }
                 else
-                    if (string.IsNullOrWhiteSpace(shopShippingAddress.ShipName))
+                    if (shopShippingAddress.RegionId < 1)
                     {
-                        msg = "收件人姓名不能为空";
+                        msg = "收件地区不能为空";
+                    }
+                    else
+                        if (string.IsNullOrWhiteSpace(shopShippingAddress.ShipName))
+                        {
+                            msg = "收件人姓名不能为空";
+                        }
+
+                if (string.IsNullOrWhiteSpace(shopShippingAddress.CelPhone))
+                {
+                    msg = "收件人电话不能为空";
+                }
+                else
+                    if (string.IsNullOrWhiteSpace(shopShippingAddress.Address))
+                    {
+                        msg = "详细地址不能为空";
+                    }
+                    else
+                    {
+                        shopShippingAddress.UserId = Request.GetAccountID();
+                        msg = new ShopShippingAddressBll().Save(shopShippingAddress);
                     }
 
-            if (string.IsNullOrWhiteSpace(shopShippingAddress.CelPhone))
-            {
-                msg = "收件人电话不能为空";
-            }
-            else
-                if (string.IsNullOrWhiteSpace(shopShippingAddress.Address))
+                bool isSuccess = msg == "添加成功";
+                if (isSuccess)
                 {
-                    msg = "详细地址不能为空";
+                    return JsonWithDataTable.Serialize(shopShippingAddress).FormatSuccess();
+
                 }
                 else
                 {
-                    shopShippingAddress.UserId = Request.GetAccountID();
-                    msg = new ShopShippingAddressBll().Save(shopShippingAddress);
+                    return msg.FormatError();
                 }
+            }
+            catch (Exception ex)
+            {
+                return ex.Format();
 
-            bool isSuccess = msg == "添加成功";
-            var resp = new HttpResponseMessage(HttpStatusCode.OK);
-            string result = JsonWithDataTable.Serialize(new { IsSuccess = isSuccess, msg = msg, data = shopShippingAddress });
-            resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
-            return resp;
+            }
+            
 
         }
 

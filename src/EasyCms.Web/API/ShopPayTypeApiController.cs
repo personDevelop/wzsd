@@ -16,12 +16,17 @@ namespace EasyCms.Web.API
         public HttpResponseMessage GetPayType()
         {
 
-            DataTable dt = new ShopPaymentTypesBll().GetPayType();
+            try
+            {
+                DataTable dt = new ShopPaymentTypesBll().GetPayType();
+                return dt.Format();
+               
+            }
+            catch (Exception ex)
+            {
+                return ex.Format();
 
-            string result = JsonWithDataTable.Serialize(dt);
-            var resp = new HttpResponseMessage(HttpStatusCode.OK);
-            resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
-            return resp;
+            }
 
         }
     }

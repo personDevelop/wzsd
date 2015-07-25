@@ -253,6 +253,7 @@
     <Compile Include="Common\AuthorCheck.cs" />
     <Compile Include="Common\BaseControler.cs" />
     <Compile Include="Common\ExtentionMethod.cs" />
+    <Compile Include="Common\FormatResponse.cs" />
     <Compile Include="Common\GatawayConfig.cs" />
     <Compile Include="Common\Json.cs" />
     <Compile Include="Common\JsonModelBinder.cs" />

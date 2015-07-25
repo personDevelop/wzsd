@@ -12,52 +12,71 @@ using System.Web.Http;
 namespace EasyCms.Web.API
 {
     public class UserApiController : ApiController
-    { 
+    {
         [HttpPost]
         public HttpResponseMessage GetValiCode([FromBody] ValiCodeModel valiCodeModel)
         {
-            var resp = new HttpResponseMessage(HttpStatusCode.OK);
-            bool isSuccess = true;
-            string code = "2222";//生成验证码StaticValue.GeneratoRandom();
-            Sharp.Common.CacheContainer.AddCache(valiCodeModel.TelNo, code, 60 * 2);//有效期2分钟
-            //通过手机发送出去
-            string msgInfo = string.Format("您注册【我在山东】的验证码为{0}，请于{1}分钟内正确输入验证码", code, 2);
-            //SendMsg(valiCodeModel.TelNo, msgInfo);
-            string result = JsonWithDataTable.Serialize(new { IsSuccess = isSuccess, errmsg = "" });
-            resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
-            return resp;
+            try
+            {
+                var resp = new HttpResponseMessage(HttpStatusCode.OK);
+                bool isSuccess = true;
+                string code = "2222";//生成验证码StaticValue.GeneratoRandom();
+                Sharp.Common.CacheContainer.AddCache(valiCodeModel.TelNo, code, 60 * 2);//有效期2分钟
+                //通过手机发送出去
+                string msgInfo = string.Format("您注册【我在山东】的验证码为{0}，请于{1}分钟内正确输入验证码", code, 2);
+                //SendMsg(valiCodeModel.TelNo, msgInfo);
+                return "获取成功".FormatSuccess();
+                
+            }
+            catch (Exception ex)
+            {
+                return ex.Format();
+
+            }
         }
         // GET api/userapi/5
         public HttpResponseMessage Login([FromBody]LoginModel loginModel)
         {
-            string msg = string.Empty;
-            bool isSuccess = false;
-            string token = string.Empty;
-            if (string.IsNullOrWhiteSpace(loginModel.Account))
+            try
             {
-                msg = "登录账号不能为空";
-            }
-            else if (string.IsNullOrWhiteSpace(loginModel.Pwd))
-            {
-                msg = "登录密码不能为空";
-            }
-            else
-            {
-                ManagerUserInfo user = new ManagerUserInfoBll().Login(loginModel.Account, loginModel.Pwd, out msg);
+                string msg = string.Empty;
+                bool isSuccess = false;
+                string token = string.Empty;
+                if (string.IsNullOrWhiteSpace(loginModel.Account))
+                {
+                    msg = "登录账号不能为空";
+                }
+                else if (string.IsNullOrWhiteSpace(loginModel.Pwd))
+                {
+                    msg = "登录密码不能为空";
+                }
+                else
+                {
+                    ManagerUserInfo user = new ManagerUserInfoBll().Login(loginModel.Account, loginModel.Pwd, out msg);
 
-                isSuccess = user != null;
+                    isSuccess = user != null;
+                    if (isSuccess)
+                    {
+
+                        token = loginModel.GenerateToken();
+                        LoginModel.AddToken(token, loginModel.Account, loginModel.DeviceID, user);
+                    }
+                }
                 if (isSuccess)
                 {
-
-                    token = loginModel.GenerateToken();
-                    LoginModel.AddToken(token, loginModel.Account, loginModel.DeviceID, user);
+                    return msg.FormatError();
                 }
+                else
+                {
+                    return token.FormatSuccess();
+                }
+                
             }
-            var resp = new HttpResponseMessage(HttpStatusCode.OK);
+            catch (Exception ex)
+            {
+                return ex.Format();
 
-            string result = JsonWithDataTable.Serialize(new { IsSuccess = isSuccess, msg = msg, token = token });
-            resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
-            return resp;
+            }
         }
 
         // POST api/userapi
@@ -65,62 +84,63 @@ namespace EasyCms.Web.API
         public HttpResponseMessage Regist([FromBody]RegistModel registModel)
         {
             //检验验证码是否正确，
-            string msg = string.Empty;
-            if (string.IsNullOrWhiteSpace(registModel.Pwd))
+            try
             {
-                msg = "密码不能为空";
-            }
-            else
-                if (string.IsNullOrWhiteSpace(registModel.ComfirmPwd))
+                string msg = string.Empty;
+                if (string.IsNullOrWhiteSpace(registModel.Pwd))
                 {
-                    msg = "确认密码不能为空";
+                    msg = "密码不能为空";
                 }
                 else
-                    if (!registModel.Pwd.Equals(registModel.ComfirmPwd))
+                    if (string.IsNullOrWhiteSpace(registModel.ComfirmPwd))
                     {
-                        msg = "确认密码和密码不相同";
+                        msg = "确认密码不能为空";
                     }
                     else
-                        if (string.IsNullOrWhiteSpace(registModel.TelPhone))
+                        if (!registModel.Pwd.Equals(registModel.ComfirmPwd))
                         {
-                            msg = "手机号不能为空";
+                            msg = "确认密码和密码不相同";
                         }
                         else
-                            if (string.IsNullOrWhiteSpace(registModel.TelVaiCode))
+                            if (string.IsNullOrWhiteSpace(registModel.TelPhone))
                             {
-                                msg = "手机验证码不能为空";
+                                msg = "手机号不能为空";
                             }
                             else
-                                if (!Sharp.Common.CacheContainer.Contains(registModel.TelPhone))
+                                if (string.IsNullOrWhiteSpace(registModel.TelVaiCode))
                                 {
-                                    msg = "请先获取手机验证码";
+                                    msg = "手机验证码不能为空";
                                 }
                                 else
-                                    if (!Sharp.Common.CacheContainer.GetCache(registModel.TelPhone).Equals(registModel.TelVaiCode))
+                                    if (!Sharp.Common.CacheContainer.Contains(registModel.TelPhone))
                                     {
-                                        msg = "验证码不正确";
+                                        msg = "请先获取手机验证码";
                                     }
                                     else
-                                    {
-                                        if (string.IsNullOrWhiteSpace(registModel.NiceName))
+                                        if (!Sharp.Common.CacheContainer.GetCache(registModel.TelPhone).Equals(registModel.TelVaiCode))
                                         {
-                                            registModel.NiceName = registModel.TelPhone;
+                                            msg = "验证码不正确";
                                         }
-                                        msg = new ManagerUserInfoBll().Regist(registModel);
-                                    }
+                                        else
+                                        {
+                                            if (string.IsNullOrWhiteSpace(registModel.NiceName))
+                                            {
+                                                registModel.NiceName = registModel.TelPhone;
+                                            }
+                                            msg = new ManagerUserInfoBll().Regist(registModel);
+                                        }
 
-            bool isSuccess = msg == "注册成功";
-            var resp = new HttpResponseMessage(HttpStatusCode.OK);
+               
+                return msg.FormatError(); 
+            }
+            catch (Exception ex)
+            {
+                return ex.Format();
 
-
-
-
-            string result = JsonWithDataTable.Serialize(new { IsSuccess = isSuccess, msg = msg });
-            resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
-            return resp;
+            }
 
         }
 
-       
+
     }
 }
