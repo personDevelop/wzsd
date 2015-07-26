@@ -17,7 +17,13 @@ namespace EasyCms.Web.API
 {
     public class APPController : ApiController
     {
-        string host { get { return this.Url.Request.RequestUri.Authority + RequestContext.VirtualPathRoot; } }
+        string host { get {
+            
+            string url=this.Url.Request.RequestUri.Authority + RequestContext.VirtualPathRoot;
+            if (!url.StartsWith("http://")) url+="http://";
+            return url;
+        }
+        }
         public HttpResponseMessage GetNews(int id = 1)
         {
             try
@@ -27,7 +33,7 @@ namespace EasyCms.Web.API
                 //新闻id，定标题，简介，缩略图，新闻url 
                 DataTable dt = new NewsInfoBll().GetAppNews(page, host);
                 return dt.Format();
-                
+
             }
             catch (Exception ex)
             {
@@ -103,7 +109,7 @@ namespace EasyCms.Web.API
                     if (p == null)
                     {
                         return "此商品已下架".FormatError();
-                        
+
                     }
                     else
                     {
@@ -174,14 +180,9 @@ namespace EasyCms.Web.API
                     string ClassCode = new ShopCategoryBll().GetClassCode(categoryID);
                     string[] classcode = ClassCode.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
 
-                    if (classcode.Length > 1)
-                    {
-                        where = ShopProductCategory._.CategoryID.In(classcode);
-                    }
-                    else
-                    {
-                        where = ShopProductCategory._.CategoryID == categoryID;
-                    }
+                    
+                    where = ShopProductCategory._.CategoryID.In(classcode);
+                     
 
                 }
                 if (string.IsNullOrWhiteSpace(productName))
@@ -191,10 +192,16 @@ namespace EasyCms.Web.API
                 where = where && new WhereClip(" not EXISTS (select 1 from ShopProductStationMode where StationMode=" + stationMode + "  and ShopProductInfo.ID=ProductID)");
                 int pagecount = 0, recordCount = 0;
 
-                System.Data.DataTable dt = new ShopProductInfoBll().GetProductByWhere(where, pageNum, ref pagecount, ref   recordCount);
-
-                string result = JsonWithDataTable.Serialize(new { PageIndex = pageNum, RecordCount = dt.Rows.Count, TotalPageCount = pagecount, TotalRecourdCount = recordCount, Data = dt });
-                return result.FormatSuccess();
+                System.Data.DataTable dt = new ShopProductInfoBll().GetProductByWhere(where, pageNum, host, ref pagecount, ref   recordCount);
+                return new
+                {
+                    PageIndex = pageNum,
+                    RecordCount = dt.Rows.Count,
+                    TotalPageCount = pagecount,
+                    TotalRecourdCount = recordCount,
+                    Data = dt
+                }.FormatObj();
+                
             }
             catch (Exception ex)
             {
@@ -233,7 +240,7 @@ namespace EasyCms.Web.API
 
                 int dt = new ShopProductInfoBll().DeleteStation(id);
                 return "成功".FormatSuccess();
-                
+
             }
             catch (Exception ex)
             {
@@ -262,8 +269,8 @@ namespace EasyCms.Web.API
                 }
                 int pagecount = 0, recordCount = 0;
                 DataTable dt = new ShopProductInfoBll().GetProductsByStation(id, pageIndex, pagesize, ref pagecount, ref recordCount);
-                string result = JsonWithDataTable.Serialize(new { PageIndex = pageIndex, RecordCount = dt.Rows.Count, TotalPageCount = pagecount, TotalRecourdCount = recordCount, Data = dt });
-                return result.FormatSuccess();
+
+                return new { PageIndex = pageIndex, RecordCount = dt.Rows.Count, TotalPageCount = pagecount, TotalRecourdCount = recordCount, Data = dt }.FormatObj();
             }
             catch (Exception ex)
             {

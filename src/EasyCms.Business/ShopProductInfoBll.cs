@@ -73,9 +73,9 @@ namespace EasyCms.Business
             return Dal.GetProductsByCategory(categoryID, pageindex, ref   pageCount, ref   recordCount);
         }
 
-        public DataTable GetProductByWhere(WhereClip where, int pageNum, ref int pageCount, ref int recordCount)
+        public DataTable GetProductByWhere(WhereClip where, int pageNum,string host, ref int pageCount, ref int recordCount)
         {
-            return Dal.GetProductByWhere(where, pageNum, ref   pageCount, ref   recordCount);
+            return Dal.GetProductByWhere(where, pageNum, host, ref   pageCount, ref   recordCount);
         }
 
         public int SaveStation(ShopProductStationMode s)

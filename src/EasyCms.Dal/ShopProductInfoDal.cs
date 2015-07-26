@@ -257,12 +257,12 @@ namespace EasyCms.Dal
             return dt;
         }
 
-        public DataTable GetProductByWhere(WhereClip where, int pageNum, ref int pageCount, ref int recordCount)
+        public DataTable GetProductByWhere(WhereClip where, int pageNum, string host, ref int pageCount, ref int recordCount)
         {
             return
                 Dal.From<ShopProductInfo>().Join<ShopProductCategory>(ShopProductInfo._.ID == ShopProductCategory._.ProductID)
                 .Join<AttachFile>(AttachFile._.RefID == ShopProductInfo._.ID && AttachFile._.OrderNo == 1)
-                .Where(where).Select(ShopProductInfo._.ID, ShopProductInfo._.Code, ShopProductInfo._.Name, ShopProductInfo._.SalePrice, ShopProductInfo._.MarketPrice, AttachFile._.FilePath.SubString(1).Alias("FilePath")).ToDataTable(20, pageNum, ref pageCount, ref recordCount);
+                .Where(where).Select(ShopProductInfo._.ID, ShopProductInfo._.Code, ShopProductInfo._.Name, ShopProductInfo._.SalePrice, ShopProductInfo._.MarketPrice,(new ExpressionClip("'"+host+"'")+   AttachFile._.FilePath.SubString(1)).Alias("FilePath")).ToDataTable(20, pageNum, ref pageCount, ref recordCount);
         }
 
         public int SaveStation(ShopProductStationMode s)
