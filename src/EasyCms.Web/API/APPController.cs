@@ -20,7 +20,7 @@ namespace EasyCms.Web.API
         string host { get {
             
             string url=this.Url.Request.RequestUri.Authority + RequestContext.VirtualPathRoot;
-            if (!url.StartsWith("http://")) url+="http://";
+            if (!url.StartsWith("http://")) url="http://"+url;
             return url;
         }
         }
