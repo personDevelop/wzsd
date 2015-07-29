@@ -17,12 +17,15 @@ namespace EasyCms.Web.API
 {
     public class APPController : ApiController
     {
-        string host { get {
-            
-            string url=this.Url.Request.RequestUri.Authority + RequestContext.VirtualPathRoot;
-            if (!url.StartsWith("http://")) url="http://"+url;
-            return url;
-        }
+        string host
+        {
+            get
+            {
+
+                string url = this.Url.Request.RequestUri.Authority + RequestContext.VirtualPathRoot;
+                if (!url.StartsWith("http://")) url = "http://" + url;
+                return url;
+            }
         }
         public HttpResponseMessage GetNews(int id = 1)
         {
@@ -82,7 +85,7 @@ namespace EasyCms.Web.API
             try
             {
 
-                DataTable dt = new ShopCategoryBll().GetAppEntity(id);
+                DataTable dt = new ShopCategoryBll().GetAppEntity(id, host);
                 return dt.Format();
             }
             catch (Exception ex)
@@ -105,7 +108,7 @@ namespace EasyCms.Web.API
                 }
                 else
                 {
-                    ShopProductInfo p = new ShopProductInfoBll().GetSaleEntity(id);
+                    ShopProductInfo p = new ShopProductInfoBll().GetSaleEntity(id, host);
                     if (p == null)
                     {
                         return "此商品已下架".FormatError();
@@ -127,7 +130,7 @@ namespace EasyCms.Web.API
             }
 
         }
-        public HttpResponseMessage GetProductsByCategory(string id = "", int pageIndex = 1)
+        public HttpResponseMessage GetProductsByCategory(string id = "", int pageIndex = 1, string other = "")
         {
             try
             {
@@ -145,7 +148,7 @@ namespace EasyCms.Web.API
                 else
                 {
                     int pagecount = 0, recordCount = 0;
-                    DataTable dt = new ShopProductInfoBll().GetProductsByCategory(id, pageIndex, ref pagecount, ref recordCount);
+                    DataTable dt = new ShopProductInfoBll().GetProductsByCategory(id, pageIndex, other, host, ref pagecount, ref recordCount);
                     return dt.Format();
 
                 }
@@ -180,9 +183,9 @@ namespace EasyCms.Web.API
                     string ClassCode = new ShopCategoryBll().GetClassCode(categoryID);
                     string[] classcode = ClassCode.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
 
-                    
+
                     where = ShopProductCategory._.CategoryID.In(classcode);
-                     
+
 
                 }
                 if (string.IsNullOrWhiteSpace(productName))
@@ -201,7 +204,7 @@ namespace EasyCms.Web.API
                     TotalRecourdCount = recordCount,
                     Data = dt
                 }.FormatObj();
-                
+
             }
             catch (Exception ex)
             {
@@ -268,9 +271,25 @@ namespace EasyCms.Web.API
                     pagesize = 20;
                 }
                 int pagecount = 0, recordCount = 0;
-                DataTable dt = new ShopProductInfoBll().GetProductsByStation(id, pageIndex, pagesize, ref pagecount, ref recordCount);
+                DataTable dt = new ShopProductInfoBll().GetProductsByStation(id, pageIndex, pagesize, host, ref pagecount, ref recordCount);
 
                 return new { PageIndex = pageIndex, RecordCount = dt.Rows.Count, TotalPageCount = pagecount, TotalRecourdCount = recordCount, Data = dt }.FormatObj();
+            }
+            catch (Exception ex)
+            {
+                return ex.Format();
+
+            }
+        }
+
+        public HttpResponseMessage GetProductsByMutilStation(string id, int pageIndex = 5)
+        {
+            try
+            {
+                string error = string.Empty;
+                DataSet ds = new ShopProductInfoBll().GetProductsByMutilStation(id, pageIndex, host, out   error);
+                if (ds == null) return error.FormatError();
+                return ds.FormatObj();
             }
             catch (Exception ex)
             {
@@ -305,6 +324,12 @@ namespace EasyCms.Web.API
             //string result = JsonWithDataTable.Serialize(dt);
             //resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
             return resp;
+        }
+
+        public HttpResponseMessage GetRegistAgreement()
+        {
+            string RA = new ParameterInfoBll().GetRegistAgreement();
+            return RA.FormatSuccess();
         }
     }
 }

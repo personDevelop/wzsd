@@ -218,7 +218,7 @@ namespace EasyCms.Dal
 
 
 
-        public DataTable GetAppEntity(string id)
+        public DataTable GetAppEntity(string id,string host)
         {
             WhereClip where = new WhereClip();
             if (string.IsNullOrWhiteSpace(id))
@@ -231,7 +231,7 @@ namespace EasyCms.Dal
             }
             DataTable dt = Dal.From<ShopCategory>()
                 .Join<AttachFile>(ShopCategory._.SmallLogo==AttachFile._.RefID, JoinType.leftJoin )
-                .Where(where).Select(ShopCategory._.ID, ShopCategory._.Code, ShopCategory._.Name, ShopCategory._.ClassCode,AttachFile._.FilePath.Replace("~","").Alias("SmallLogo"))
+                .Where(where).Select(ShopCategory._.ID, ShopCategory._.Code, ShopCategory._.Name, ShopCategory._.ClassCode, AttachFile.GetFilePath(host, "SmallLogo") )
                 .OrderBy(ShopCategory._.OrderNo).ToDataTable();
             return dt;
         }

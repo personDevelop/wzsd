@@ -338,7 +338,14 @@ namespace EasyCms.Model
         #endregion
     }
 
-
+    public partial class AttachFile
+    {
+        public static ExpressionClip GetFilePath(string host, string alias = "FilePath")
+        {
+            return (new ExpressionClip("'" + host + "'") + AttachFile._.FilePath.SubString(1)).Alias(alias);
+        
+        }
+    }
     public class SimpalFile
     {
         public string ID { get; set; }
@@ -347,5 +354,7 @@ namespace EasyCms.Model
 
         public string FilePath { get; set; }
         public string WebFilePath { get { return FilePath.Replace("~", ""); } }
+
+
     }
 }

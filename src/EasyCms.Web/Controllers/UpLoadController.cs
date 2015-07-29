@@ -11,6 +11,16 @@ namespace EasyCms.Web.Controllers
 {
     public class UpLoadController : Controller
     {
+        string host
+        {
+            get
+            {
+                
+                string url = Request.Url.Authority + Request.ApplicationPath;
+                if (!url.StartsWith("http://")) url = "http://" + url;
+                return url;
+            }
+        }
         //
         // GET: /UpLoad/
         public ActionResult UpLoadProcess(string uid, string id, string name, string type, string lastModifiedDate, int size, HttpPostedFileBase file)
@@ -73,11 +83,11 @@ namespace EasyCms.Web.Controllers
         {
             new AttachFileBll().deleteFile(id);
         }
-       
+
         public ActionResult GetFiles(string refid)
         {
-            List<SimpalFile> list = new AttachFileBll().GetFiles(refid);
-          
+            List<SimpalFile> list = new AttachFileBll().GetFiles(refid, host);
+
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 

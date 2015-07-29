@@ -21,10 +21,10 @@ namespace EasyCms.Dal
             return Dal.Delete<AttachFile>(id);
         }
 
-        public List<SimpalFile> GetFiles(string refid)
+        public List<SimpalFile> GetFiles(string refid,string host )
         {
             return Dal.From<AttachFile>().Where(AttachFile._.RefID == refid)
-                .Select(AttachFile._.ID, AttachFile._.RefID, AttachFile._.FilePath)
+                .Select(AttachFile._.ID, AttachFile._.RefID, AttachFile.GetFilePath(host))
                 .ToDataTable().ToList<SimpalFile>();
         }
     }

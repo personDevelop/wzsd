@@ -40,6 +40,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         //
         // POST: /Admin/ParameterInfo/Create
         [HttpPost]
+        [ValidateInput(false)]
         public ActionResult Save(FormCollection collection)
         {
             ParameterInfo p = null; ;

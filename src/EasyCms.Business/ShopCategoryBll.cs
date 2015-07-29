@@ -62,9 +62,9 @@ namespace EasyCms.Business
 
 
 
-        public DataTable GetAppEntity(string id)
+        public DataTable GetAppEntity(string id,string host)
         {
-            return Dal.GetAppEntity(id);
+            return Dal.GetAppEntity(id,host);
           
         }
 

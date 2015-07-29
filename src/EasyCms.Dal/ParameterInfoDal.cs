@@ -210,5 +210,10 @@ namespace EasyCms.Dal
         }
 
 
+
+        public string GetRegistAgreement()
+        {
+            return Dal.From<ParameterInfo>().Where(ParameterInfo._.ID == StaticValue.RegistAgreementID).Select(ParameterInfo._.Value5).ToScalar() as string;
+        }
     }
 }

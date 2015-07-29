@@ -24,11 +24,11 @@
     @HelperExtend.TextBox("Code", "编号", defaultval: Model.Code, hint: "请输入编号，编号同一级内不能重复")
     @HelperExtend.TextBox("Name", "名称", defaultval: Model.Name, hint: "请输入名称，名称同一级内不能重复.")
     @HelperExtend.CheckBoxList("参数设置", "IsSystem,IsEdit,IsDelete,IsEnable,IsCanHasLeaf", "系统参数,可编辑,可删除,启用,可有叶子节点", defaultval: new object[] { Model.IsSystem, Model.IsEdit, Model.IsDelete, Model.IsEnable, Model.IsCanHasLeaf });
-    @HelperExtend.TextBox("Value", "扩展值1", defaultval: Model.Value)
-    @HelperExtend.TextBox("Value2", "扩展值2", defaultval: Model.Value2)
-    @HelperExtend.TextBox("Value3", "扩展值3", defaultval: Model.Value3)
-    @HelperExtend.TextBox("Value4", "扩展值4", defaultval: Model.Value4)
-    @HelperExtend.TextBox("Value5", "扩展值5", defaultval: Model.Value5)
+    @HelperExtend.TextArea("Value", "扩展值1", defaultval: Model.Value)
+    @HelperExtend.TextArea("Value2", "扩展值2", defaultval: Model.Value2)
+    @HelperExtend.TextArea("Value3", "扩展值3", defaultval: Model.Value3)
+    @HelperExtend.TextArea("Value4", "扩展值4", defaultval: Model.Value4)
+    @HelperExtend.TextArea("Value5", "扩展值5", defaultval: Model.Value5)
     @HelperExtend.TextArea("Note", "备注", defaultval: Model.Note)
 </div>
 
@@ -70,21 +70,7 @@
                             }
                         }
                     },
-                    Value: {
-                        maxlength: 3000
-                    },
-                    Value2: {
-                        maxlength: 3000
-                    },
-                    Value3: {
-                        maxlength: 3000
-                    },
-                    Value4: {
-                        maxlength: 3000
-                    },
-                    Value5: {
-                        maxlength: 3000
-                    },
+                     
                     Note: {
                         maxlength: 500
                     }

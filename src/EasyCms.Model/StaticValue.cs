@@ -12,7 +12,10 @@ namespace EasyCms.Model
         /// 旅游分类ID
         /// </summary>
         public const string TravelCategoryID = "";
-
+        /// <summary>
+        /// 用户注册协议ID
+        /// </summary>
+        public const string RegistAgreementID = "60544642-c2dd-411b-acdf-5ba2ca6c92b9";
         public static string GeneratoRandom()
         {
             Random r = new Random();

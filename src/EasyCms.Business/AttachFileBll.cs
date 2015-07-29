@@ -24,9 +24,9 @@ namespace EasyCms.Business
             return Dal.deleteFile(id);
         }
 
-        public List<SimpalFile> GetFiles(string refid)
+        public List<SimpalFile> GetFiles(string refid, string host)
         {
-            return Dal.GetFiles(refid);
+            return Dal.GetFiles(refid,host);
         }
     }
 }

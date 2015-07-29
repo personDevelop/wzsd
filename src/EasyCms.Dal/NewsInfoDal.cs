@@ -83,7 +83,7 @@ namespace EasyCms.Dal
         { //新闻id，定标题，简介，缩略图，新闻url 
             int pagecount = 0;
             return Dal.From<NewsInfo>().Join<AttachFile>(NewsInfo._.ImageUrl == AttachFile._.RefID, JoinType.leftJoin)
-                .Select(NewsInfo._.ID, NewsInfo._.NewsTitle, NewsInfo._.Summary, new ExpressionClip("'" + host + "'+replace( FilePath,'~','') as FilePath"), new ExpressionClip("'" + host + "/api/app/getNew/'+ NewsInfo.id as Url"))
+                .Select(NewsInfo._.ID, NewsInfo._.NewsTitle, NewsInfo._.Summary,AttachFile.GetFilePath(host) , new ExpressionClip("'" + host + "/api/app/getNew/'+ NewsInfo.id as Url"))
                 .OrderBy(NewsInfo._.LastEditDate.Desc).ToDataTable(20, page, ref pagecount, ref pagecount);
         }
     }

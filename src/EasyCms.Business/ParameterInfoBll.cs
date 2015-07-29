@@ -4,9 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sharp.Common;
 
 namespace EasyCms.Business
 {
@@ -98,5 +95,11 @@ namespace EasyCms.Business
         public const string LogWriterOrder = "56bf6b05-339d-4aeb-90cd-c869e95d4e44";
         #endregion
 
+
+        public string GetRegistAgreement()
+        {
+          return  Dal.GetRegistAgreement();
+        }
+ 
     }
 }
