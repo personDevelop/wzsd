@@ -271,6 +271,13 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         {
             return bll.Delete(id);
         }
+        [HttpPost]
+        //
+        // GET: /Admin/ShopProductInfo/Delete/5
+        public string IsSJOperator(string id , int opcode)
+        {
+            return bll.IsSJOperator(id, opcode);
+        }
 
 
         public string GetAttrWithProdcutVal(string ptypeid, string productID)

@@ -104,11 +104,11 @@ namespace EasyCms.Web.API
             {
                 if (string.IsNullOrEmpty(id))
                 {
-                    return "此商品已下架".FormatError();
+                    return "传递的参数不能为空".FormatError();
                 }
                 else
                 {
-                    ShopProductInfo p = new ShopProductInfoBll().GetSaleEntity(id, host);
+                    ShopSaleProductInfo p = new ShopProductInfoBll().GetSaleEntity(id, host);
                     if (p == null)
                     {
                         return "此商品已下架".FormatError();
@@ -118,8 +118,8 @@ namespace EasyCms.Web.API
                     {
 
 
-                        string result = JsonWithDataTable.Serialize(p);
-                        return result.FormatSuccess();
+                       
+                        return p.FormatObj();
                     }
                 }
             }
@@ -314,18 +314,24 @@ namespace EasyCms.Web.API
 
         }
 
+        public HttpResponseMessage GetGg(string id)
+        {
+
+            string err = string.Empty;
+            List<ShopExtendWithValue> ds = new ShopProductInfoBll().GetProductGgInfo(id, out err);
+            if (string.IsNullOrWhiteSpace(err))
+                return ds.FormatObj();
+            else return err.FormatError();
+        }
         public HttpResponseMessage GetSku(string id)
         {
-            var resp = new HttpResponseMessage(HttpStatusCode.OK);
 
-
-            //System.Data.DataTable dt = new ShopProductInfoBll().GetProductSkuByProductID(id);
-
-            //string result = JsonWithDataTable.Serialize(dt);
-            //resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
-            return resp;
+            string err = string.Empty;
+            DataTable dt = new ShopProductInfoBll().GetProductSkuInfo(id, out err);
+            if (string.IsNullOrWhiteSpace(err))
+                return dt.Format();
+            else return err.FormatError();
         }
-
         public HttpResponseMessage GetRegistAgreement()
         {
             string RA = new ParameterInfoBll().GetRegistAgreement();

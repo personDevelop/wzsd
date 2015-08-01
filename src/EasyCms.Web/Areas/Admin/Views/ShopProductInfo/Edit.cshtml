@@ -96,7 +96,7 @@
 
     @HelperExtend.TextBox("Unit", "计量单位", defaultval: Model.Unit, hint: "")
     @HelperExtend.TextBox("Weight", "重量", defaultval: Model.Weight, hint: "")
-    @HelperExtend.RadioGroup("SalesType", "销售类型 ", "0,1", "正常,赠品", defaultval: Model.SalesType)
+    @HelperExtend.RadioGroup("SalesType", "销售类型 ", "0,1", "赠品,正常", defaultval: Model.SalesType)
 
     @HelperExtend.RadioGroup("SaleStatus", "商品状态 ", "0,1", "下架,上架,审批中,审批退回", defaultval: Model.SaleStatus)
 
@@ -229,7 +229,11 @@
                                 var col = 0;
                                 for (var colName in row) {
                                     if (colName != "SKUID") {
-                                        var names = row[colName].toString().split('|');
+                                        var names = row[colName];
+                                        if (!names) {
+                                            names = "";
+                                        }
+                                        var names = names.toString().split('|');
                                         var html = "<td>";
                                         if (names.length == 3) {
                                             html += "<input type='hidden' name='dtrow|" + i + "|" + col + "' value='" + names[0] + "|" + names[1] + "' />" + names[2];

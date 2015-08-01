@@ -1,15 +1,19 @@
-﻿using Sharp.Common;
+﻿using Newtonsoft.Json;
+using Sharp.Common;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 namespace EasyCms.Model
 {
-     
+
     /// <summary>
     /// 扩展属性
     /// </summary>  
+    [JsonObject]
+
     public partial class ShopExtendInfo : BaseEntity
     {
         public static Column _ = new Column("ShopExtendInfo");
@@ -284,5 +288,41 @@ namespace EasyCms.Model
         }
         #endregion
     }
+    [JsonObject]
+    public class ShopExtendWithValue
+    {
+        #region 属性
+        /// <summary>
+        ///  主键,
+        /// </summary> 
+        public string AttributeId
+        {
+            get;
+            set;
+        }
 
+        /// <summary>
+        ///  名称,
+        /// </summary> 
+        public string Name
+        {
+            get;
+            set;
+        }
+        public DataTable Values { get; set; }
+        #endregion
+        public override bool Equals(object obj)
+        {
+            if (obj is ShopExtendWithValue)
+            {
+
+
+                return this.AttributeId == (obj as ShopExtendWithValue).AttributeId;
+            } return false;
+        }
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+    }
 }

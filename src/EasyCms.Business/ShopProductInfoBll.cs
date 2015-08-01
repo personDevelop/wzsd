@@ -63,17 +63,17 @@ namespace EasyCms.Business
 
 
 
-        public ShopProductInfo GetSaleEntity(string id,string host)
+        public ShopSaleProductInfo GetSaleEntity(string id, string host)
         {
-            return Dal.GetSaleEntity(id,host);
+            return Dal.GetSaleEntity(id, host);
         }
 
-        public DataTable GetProductsByCategory(string categoryID, int pageindex,string orderby,string host, ref int pageCount, ref int recordCount)
+        public DataTable GetProductsByCategory(string categoryID, int pageindex, string orderby, string host, ref int pageCount, ref int recordCount)
         {
             return Dal.GetProductsByCategory(categoryID, pageindex, orderby, host, ref   pageCount, ref   recordCount);
         }
 
-        public DataTable GetProductByWhere(WhereClip where, int pageNum,string host, ref int pageCount, ref int recordCount)
+        public DataTable GetProductByWhere(WhereClip where, int pageNum, string host, ref int pageCount, ref int recordCount)
         {
             return Dal.GetProductByWhere(where, pageNum, host, ref   pageCount, ref   recordCount);
         }
@@ -85,7 +85,7 @@ namespace EasyCms.Business
 
         public DataTable GetProductsByStation(int id, int pageIndex, int pageSize, string host, ref int pagecount, ref int recordCount)
         {
-            return Dal.GetProductsByStation(id, pageIndex, pageSize,host, ref   pagecount, ref   recordCount);
+            return Dal.GetProductsByStation(id, pageIndex, pageSize, host, ref   pagecount, ref   recordCount);
         }
 
         public int DeleteStation(string StationID)
@@ -95,7 +95,22 @@ namespace EasyCms.Business
 
         public DataSet GetProductsByMutilStation(string id, int pagesize, string host, out string error)
         {
-            return Dal.GetProductsByMutilStation(id, pagesize,host, out   error);
+            return Dal.GetProductsByMutilStation(id, pagesize, host, out   error);
+        }
+
+        public List<ShopExtendWithValue> GetProductGgInfo(string id, out string error)
+        {
+            return Dal.GetProductGgInfo(id, out   error);
+        }
+
+        public DataTable GetProductSkuInfo(string id, out string err)
+        {
+            return Dal.GetProductSkuInfo(id, out   err);
+        }
+
+        public string IsSJOperator(string ids, int opcode )
+        {
+            return Dal.IsSJOperator(ids, opcode);
         }
     }
 }

@@ -84,13 +84,15 @@ namespace EasyCms.Model
 
         private bool _IsVirtualProduct;
 
-        private DateTime _ManufactureDate;
+        private DateTime? _ManufactureDate;
 
-        private DateTime _LaunchDate;
+        private DateTime? _LaunchDate;
 
         private DateTime _SaleDate;
 
         private DateTime _AddedDate;
+
+        private bool _IsEnableSku;
 
         #endregion
 
@@ -291,7 +293,7 @@ namespace EasyCms.Model
         ///  重量,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "Weight", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "Weight", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string Weight
         {
@@ -673,7 +675,7 @@ namespace EasyCms.Model
 
         [DbProperty(MapingColumnName = "ManufactureDate", DbTypeString = "datetime", ColumnIsNull = true, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public DateTime ManufactureDate
+        public DateTime? ManufactureDate
         {
             get
             {
@@ -692,7 +694,7 @@ namespace EasyCms.Model
 
         [DbProperty(MapingColumnName = "LaunchDate", DbTypeString = "datetime", ColumnIsNull = true, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public DateTime LaunchDate
+        public DateTime? LaunchDate
         {
             get
             {
@@ -740,6 +742,25 @@ namespace EasyCms.Model
             {
                 this.OnPropertyChanged("AddedDate", this._AddedDate, value);
                 this._AddedDate = value;
+            }
+        }
+
+        /// <summary>
+        ///  启用SKU,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "IsEnableSku", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public bool IsEnableSku
+        {
+            get
+            {
+                return this._IsEnableSku;
+            }
+            set
+            {
+                this.OnPropertyChanged("IsEnableSku", this._IsEnableSku, value);
+                this._IsEnableSku = value;
             }
         }
 
@@ -818,6 +839,8 @@ namespace EasyCms.Model
                 SaleDate = new PropertyItem("SaleDate", tableName);
 
                 AddedDate = new PropertyItem("AddedDate", tableName);
+
+                IsEnableSku = new PropertyItem("IsEnableSku", tableName);
 
 
             }
@@ -957,6 +980,10 @@ namespace EasyCms.Model
             /// 添加日期,
             /// </summary> 
             public PropertyItem AddedDate = null;
+            /// <summary>
+            /// 启用SKU,
+            /// </summary> 
+            public PropertyItem IsEnableSku = null;
         }
         #endregion
     }
@@ -973,17 +1000,245 @@ namespace EasyCms.Model
             AddedDate = DateTime.Now;
             SaleDate = AddedDate;
             Stock = int.MinValue;
+            SalesType = 1;
+            SaleStatus = 1;
         }
+
+    }
+
+    /// <summary>
+    /// 供接口使用，传递给前台
+    /// </summary>
+    [JsonObject]
+    public class ShopSaleProductInfo
+    {
+        #region 属性
+        /// <summary>
+        ///  主键,
+        /// </summary> 
+        public string ID
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        ///  编号,
+        /// </summary> 
+        public string Code
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        ///  名称,
+        /// </summary> 
+        public string Name
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        ///  SKU码,
+        /// </summary> 
+        public string SKU
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        ///  商品类型,
+        /// </summary> 
+        public string TypeId
+        {
+            get;
+            set;
+        }
+        public string TypeName
+        {
+            get;
+            set;
+        }
+        /// <summary>
+        ///  品牌,
+        /// </summary> 
+        public string BrandId
+        {
+            get;
+            set;
+        }
+        /// <summary>
+        ///  品牌,
+        /// </summary> 
+        public string BrandName
+        {
+            get;
+            set;
+        }
+        /// <summary>
+        ///  商家,
+        /// </summary> 
+        public string SupplierName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        ///  所在地,
+        /// </summary> 
+        public string RegionName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        ///  简单描述,
+        /// </summary> 
+        public string ShortDescription
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        ///  计量单位,
+        /// </summary> 
+        public string Unit
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        ///  重量,
+        /// </summary> 
+        public string Weight
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        ///  商品介绍,
+        /// </summary> 
+        public string Description
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        ///  销售类型,0 赠品  1 正常销售
+        /// </summary> 
+        public int SalesType
+        {
+            get;
+            set;
+        }
+
+
+        /// <summary>
+        ///  销售个数,
+        /// </summary> 
+        public int SaleCounts
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        ///  市场价,
+        /// </summary> 
+        public decimal MarketPrice
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        ///  销售价,
+        /// </summary> 
+        public decimal SalePrice
+        {
+            get;
+            set;
+        }
+
+
+        /// <summary>
+        ///  可得积分,
+        /// </summary> 
+        public decimal Points
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        ///  库存,
+        /// </summary> 
+        public decimal Stock
+        {
+            get;
+            set;
+        }
+        /// <summary>
+        ///  虚拟产品,虚拟产品无需物流
+        /// </summary> 
+        public bool IsVirtualProduct
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        ///  生产日期,
+        /// </summary> 
+        public DateTime? ManufactureDate
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        ///  上市日期,
+        /// </summary> 
+        public DateTime? LaunchDate
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        ///  上架日期,
+        /// </summary> 
+        public DateTime SaleDate
+        {
+            get;
+            set;
+        }
+        /// <summary>
+        ///  启用SKU,
+        /// </summary> 
+        public bool IsEnableSku
+        {
+            get;
+            set;
+        }
+
         [NotDbCol]
         public System.Data.DataTable dtImg { get; set; }
         [NotDbCol]
         public System.Data.DataTable dtAttr { get; set; }
-        [NotDbCol]
-        public System.Data.DataTable dtGg { get; set; }
-        [NotDbCol]
-        public System.Data.DataTable dtSku { get; set; }
-        [NotDbCol]
-        public System.Data.DataTable dtRelation { get; set; }
 
+        #endregion
     }
+
+
+
 }

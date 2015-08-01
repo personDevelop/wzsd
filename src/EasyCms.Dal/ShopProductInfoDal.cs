@@ -51,6 +51,7 @@ namespace EasyCms.Dal
                 else
                 { deleteShopProductAttributesIDS.Add(spa.ValueId); }
             }
+            item.IsEnableSku = listSkuInfo.Count > 0;
             SessionFactory dal;
             IDbTransaction tr = Dal.BeginTransaction(out dal);
             try
@@ -102,7 +103,11 @@ namespace EasyCms.Dal
                     .OrderBy(ShopProductInfo._.AddedDate.Desc).ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
             }
             else
-                return Dal.From<ShopProductInfo>().OrderBy(ShopProductInfo._.AddedDate.Desc)
+                return Dal.From<ShopProductInfo>()
+                    .Join<ShopProductType>(ShopProductType._.ID == ShopProductInfo._.TypeId, JoinType.leftJoin)
+                    .Join<ShopBrandInfo>(ShopBrandInfo._.ID == ShopProductInfo._.BrandId, JoinType.leftJoin)
+                    .Select(ShopProductInfo._.ID.All, ShopProductType._.Name.Alias("TypeName"), ShopBrandInfo._.Name.Alias("BrandName"))
+                    .OrderBy(ShopProductInfo._.AddedDate.Desc)
                     .ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
         }
 
@@ -138,14 +143,14 @@ namespace EasyCms.Dal
 
         public DataTable GetAttrWithProdcutVal(string ptypeid, string productID)
         {
-            return Dal.From<ShopExtendInfo>().Join<ShopExtendInfoValue>(ShopExtendInfo._.ID == ShopExtendInfoValue._.AttributeId, JoinType.leftJoin).Join
+            return Dal.From<ShopExtendInfo>().Join<ShopExtendInfoValue>(ShopExtendInfo._.ID == ShopExtendInfoValue._.AttributeId).Join
                     <ShopProductAttributes>(ShopExtendInfo._.ID == ShopProductAttributes._.AttributeId
               && ShopProductAttributes._.ValueId == ShopExtendInfoValue._.ID && ShopProductAttributes._.ProductId == productID, JoinType.leftJoin)
               .Select(ShopExtendInfo._.ID, ShopExtendInfo._.Name, ShopExtendInfo._.ShowType
               , ShopExtendInfoValue._.ID.Alias("ExtendInfoValueID"), ShopExtendInfoValue._.ValueStr, ShopExtendInfoValue._.DisplaySequence,
            new ExpressionClip(" case when ShopProductAttributes.ValueId is null then 0 else 1 end HasValue"))
 
-              .Where(ShopExtendInfo._.ProductTypeID == ptypeid && ShopExtendInfo._.UsageMode < 2)
+              .Where(ShopProductAttributes._.ProductId == productID && ShopExtendInfo._.ProductTypeID == ptypeid && ShopExtendInfo._.UsageMode < 2)
 
               .OrderBy(ShopExtendInfo._.ID, ShopExtendInfo._.DisplayOrder, ShopExtendInfoValue._.DisplaySequence).ToDataTable();
         }
@@ -197,47 +202,44 @@ namespace EasyCms.Dal
 
         }
 
-        public ShopProductInfo GetSaleEntity(string id, string host)
+        public ShopSaleProductInfo GetSaleEntity(string id, string host)
         {
-            ShopProductInfo p = Dal.Find<ShopProductInfo>(ShopProductInfo._.ID);
+            ShopSaleProductInfo p = Dal.From<ShopProductInfo>()
+                .Join<ShopProductType>(ShopProductInfo._.TypeId == ShopProductType._.ID)
+                .Where(ShopProductInfo._.ID == id && ShopProductInfo._.SaleStatus == 1).ToFirst<ShopSaleProductInfo>();
             if (p != null)
             {
-                if (p.SaleStatus != 1)
-                {
-                    p = null;
-                }
-                else
-                {
-                    //获取其图像
-                    p.dtImg = Dal.From<AttachFile>().Where(AttachFile._.RefID == p.ID).OrderBy(AttachFile._.OrderNo).ToDataTable();
-                    //获取其扩张属性
-                    p.dtAttr = Dal.From<ShopExtendInfo>().Join<ShopProductAttributes>(ShopProductAttributes._.AttributeId == ShopExtendInfo._.ID && ShopProductAttributes._.ProductId == id)
-                        .Join<ShopExtendInfoValue>(ShopProductAttributes._.ValueId == ShopExtendInfoValue._.ID)
-                        .Select(ShopProductAttributes._.AttributeId, ShopProductAttributes._.ValueId,
-                        ShopExtendInfo._.Name, ShopExtendInfoValue._.ValueStr).ToDataTable();
-                    //获取其规格
 
-                    p.dtGg = Dal.From<ShopProductSKU>().Join<ShopExtendInfo>(ShopProductSKU._.AttributeId == ShopExtendInfo._.ID)
-                        .Join<ShopExtendInfoValue>(ShopExtendInfoValue._.AttributeId == ShopExtendInfo._.ID)
-                        .Select(ShopProductSKU._.AttributeId, ShopExtendInfo._.Name, ShopExtendInfoValue._.ID.Alias("GGValID"), ShopExtendInfoValue._.ValueStr).Where(ShopProductSKU._.ProductId == id)
-                        .Distinct().ToDataTable();
+                //获取其图像
+                p.dtImg = Dal.From<AttachFile>().Where(AttachFile._.RefID == p.ID).Select(AttachFile.GetFilePath(host)).OrderBy(AttachFile._.OrderNo).ToDataTable();
+                //获取其扩张属性
+                p.dtAttr = Dal.From<ShopExtendInfo>().Join<ShopProductAttributes>(ShopProductAttributes._.AttributeId == ShopExtendInfo._.ID && ShopProductAttributes._.ProductId == id)
+                    .Join<ShopExtendInfoValue>(ShopProductAttributes._.ValueId == ShopExtendInfoValue._.ID)
+                    .Select(
+                    ShopExtendInfo._.Name.Alias("AttrName"), ShopExtendInfoValue._.ValueStr.Alias("AttrValue")).ToDataTable();
+                #region 单独分出接口来
+                ////获取其规格
 
-                    p.dtSku = Dal.From<ShopProductSKUInfo>().Join<ShopProductSKU>(ShopProductSKUInfo._.SKURelationID == ShopProductSKU._.ID)
-                        .Join<ShopExtendInfo>(ShopProductSKU._.AttributeId == ShopExtendInfo._.ID)
-                      .Join<ShopExtendInfoValue>(ShopExtendInfoValue._.AttributeId == ShopExtendInfo._.ID && ShopProductSKU._.ValueId == ShopExtendInfoValue._.ID)
-                      .Select(ShopProductSKU._.AttributeId, ShopExtendInfo._.Name, ShopExtendInfoValue._.ID.Alias("GGValID"), ShopExtendInfoValue._.ValueStr, ShopProductSKUInfo._.SKU, ShopProductSKUInfo._.SalePrice, ShopProductSKUInfo._.MarketPrice, ShopProductSKUInfo._.Stock, ShopProductSKUInfo._.Weight).Where(ShopProductSKU._.ProductId == id)
-                      .Distinct().ToDataTable();
+                //p.dtGg = Dal.From<ShopProductSKU>().Join<ShopExtendInfo>(ShopProductSKU._.AttributeId == ShopExtendInfo._.ID)
+                //    .Join<ShopExtendInfoValue>(ShopExtendInfoValue._.AttributeId == ShopExtendInfo._.ID)
+                //    .Select(ShopProductSKU._.AttributeId, ShopExtendInfo._.Name, ShopExtendInfoValue._.ID.Alias("GGValID"), ShopExtendInfoValue._.ValueStr).Where(ShopProductSKU._.ProductId == id)
+                //    .Distinct().ToDataTable();
 
-                    //获取其关联商品
-                    p.dtRelation = Dal.From<ShopProductInfo>().Join<ShopRalationProduct>(ShopProductInfo._.ID == ShopRalationProduct._.RlationProductID)
-                        .Join<AttachFile>(ShopProductInfo._.ID == AttachFile._.RefID && AttachFile._.OrderNo == 0, JoinType.leftJoin)
-                        .Where(ShopRalationProduct._.ProductID == id)
+                //p.dtSku = Dal.From<ShopProductSKUInfo>().Join<ShopProductSKU>(ShopProductSKUInfo._.SKURelationID == ShopProductSKU._.ID)
+                //    .Join<ShopExtendInfo>(ShopProductSKU._.AttributeId == ShopExtendInfo._.ID)
+                //  .Join<ShopExtendInfoValue>(ShopExtendInfoValue._.AttributeId == ShopExtendInfo._.ID && ShopProductSKU._.ValueId == ShopExtendInfoValue._.ID)
+                //  .Select(ShopProductSKU._.AttributeId, ShopExtendInfo._.Name, ShopExtendInfoValue._.ID.Alias("GGValID"), ShopExtendInfoValue._.ValueStr, ShopProductSKUInfo._.SKU, ShopProductSKUInfo._.SalePrice, ShopProductSKUInfo._.MarketPrice, ShopProductSKUInfo._.Stock, ShopProductSKUInfo._.Weight).Where(ShopProductSKU._.ProductId == id)
+                //  .Distinct().ToDataTable();
 
-                        .Select(ShopProductInfo._.ID, ShopProductInfo._.Name, ShopProductInfo._.Code, AttachFile.GetFilePath(host))
-                        .ToDataTable();
-                    //获取其评价
+                ////获取其关联商品
+                //p.dtRelation = Dal.From<ShopProductInfo>().Join<ShopRalationProduct>(ShopProductInfo._.ID == ShopRalationProduct._.RlationProductID)
+                //    .Join<AttachFile>(ShopProductInfo._.ID == AttachFile._.RefID && AttachFile._.OrderNo == 0, JoinType.leftJoin)
+                //    .Where(ShopRalationProduct._.ProductID == id)
 
-                }
+                //    .Select(ShopProductInfo._.ID, ShopProductInfo._.Name, ShopProductInfo._.Code, AttachFile.GetFilePath(host))
+                //    .ToDataTable();
+                //获取其评价 
+                #endregion
             }
             return p;
         }
@@ -314,24 +316,157 @@ namespace EasyCms.Dal
                     if (int.TryParse(station[i], out tem))
                     {
                         intstation[i] = tem;
-                      DataTable dt=  GetProductsByStation(tem, 1, pagesize, host, ref tem, ref tem).Copy();
-                      dt.TableName = "Table" + i;
-                      ds.Tables.Add(dt);
+                        DataTable dt = GetProductsByStation(tem, 1, pagesize, host, ref tem, ref tem).Copy();
+                        dt.TableName = "Table" + i;
+                        ds.Tables.Add(dt);
                     }
                     else
                     {
                         error = string.Format("第{0}个位置参数{1}不正确", i + 1, station[i]); return null;
                     }
                 }
-          
+
                 return ds;
 
-                
+
 
             }
 
         }
+
+        public List<ShopExtendWithValue> GetProductGgInfo(string id, out string err)
+        {
+            err = string.Empty;
+            ShopProductInfo product = Dal.From<ShopProductInfo>().Where(ShopProductInfo._.ID == id).Select(ShopProductInfo._.TypeId, ShopProductInfo._.SaleStatus, ShopProductInfo._.IsEnableSku).ToFirst<ShopProductInfo>();
+            if (product == null || product.SaleStatus != 1)
+            {
+                err = "当前商品可能已下架";
+                return null;
+            }
+            else
+                if (!product.IsEnableSku)
+                {
+                    err = "当前商品没启用SKU";
+                    return null;
+
+                }
+                else
+                {
+
+                    DataTable dtGg = Dal.From<ShopProductSKU>().Join<ShopExtendInfo>(ShopProductSKU._.AttributeId == ShopExtendInfo._.ID)
+                         .Join<ShopExtendInfoValue>(ShopExtendInfoValue._.AttributeId == ShopExtendInfo._.ID)
+
+                         .Select(ShopProductSKU._.AttributeId,
+                         ShopExtendInfo._.Name,
+                         ShopExtendInfoValue._.ID.Alias("GGValID"), ShopExtendInfoValue._.ValueStr, ShopExtendInfo._.DisplayOrder, ShopExtendInfoValue._.DisplaySequence).
+                         Where(ShopProductSKU._.ProductId == id).OrderBy(ShopProductSKU._.AttributeId, ShopExtendInfo._.DisplayOrder, ShopExtendInfoValue._.DisplaySequence)
+                         .Distinct().ToDataTable();
+
+                    List<ShopExtendWithValue> gglist = new List<ShopExtendWithValue>();
+
+                    foreach (DataRow item in dtGg.Rows)
+                    {
+                        string attid = item["AttributeId"] as string;
+                        if (!gglist.Exists(p => p.AttributeId == attid))
+                        {
+                            gglist.Add(item.ToFirst<ShopExtendWithValue>());
+                        }
+                    }
+
+                    DataTable dtvalue = new DataTable();
+                    dtvalue.Columns.Add("GGValID");
+                    dtvalue.Columns.Add("ValueStr");
+                    dtvalue.AcceptChanges();
+                    foreach (ShopExtendWithValue item in gglist)
+                    {
+                        item.Values = dtvalue.Clone();
+                        var data = from dt in dtGg.AsEnumerable()
+                                   where dt.Field<string>("AttributeId") == item.AttributeId
+                                   select dt;
+                        foreach (var row in data)
+                        {
+                            DataRow dr = item.Values.NewRow();
+                            dr["GGValID"] = row.Field<string>("GGValID");
+                            dr["ValueStr"] = row.Field<string>("ValueStr");
+                            item.Values.AddRow(dr);
+                        }
+                        item.Values.AcceptChanges();
+                    }
+                    return gglist;
+                }
+        }
+
+        public DataTable GetProductSkuInfo(string productID, out string err)
+        {
+            err = string.Empty;
+            ShopProductInfo product = Dal.From<ShopProductInfo>().Where(ShopProductInfo._.ID == productID).Select(ShopProductInfo._.TypeId, ShopProductInfo._.SaleStatus, ShopProductInfo._.IsEnableSku).ToFirst<ShopProductInfo>();
+            if (product == null || product.SaleStatus != 1)
+            {
+                err = "当前商品可能已下架";
+                return null;
+            }
+            else
+                if (!product.IsEnableSku)
+                {
+                    err = "当前商品没启用SKU";
+                    return null;
+
+                }
+                else
+                {
+                    DataTable dt = Dal.From<ShopProductSKUInfo>().Where(ShopProductSKUInfo._.ProductId == productID).OrderBy(ShopProductSKUInfo._.OrderNo)
+                           .Select(ShopProductSKUInfo._.ID.Alias("SkuID"), ShopProductSKUInfo._.IsSale, ShopProductSKUInfo._.MarketPrice, ShopProductSKUInfo._.SalePrice, ShopProductSKUInfo._.SKU, ShopProductSKUInfo._.SKURelationID
+                           , ShopProductSKUInfo._.Stock).ToDataTable();
+
+                    DataTable dtSku = Dal.From<ShopProductSKU>().Where(ShopProductSKU._.ProductId == productID)
+                        .Join<ShopExtendInfo>(ShopExtendInfo._.ID == ShopProductSKU._.AttributeId).Join<ShopExtendInfoValue>(ShopProductSKU._.ValueId == ShopExtendInfoValue._.ID)
+                        .OrderBy(ShopProductSKU._.AttributeId, ShopExtendInfo._.DisplayOrder, ShopExtendInfoValue._.DisplaySequence)
+                        .Select(ShopProductSKU._.ID, ShopProductSKU._.AttributeId, ShopProductSKU._.ValueId).ToDataTable();
+                    DataColumn dcAttrVal = new DataColumn("AttriVal");
+                    dt.Columns.Add(dcAttrVal);
+                    foreach (DataRow item in dt.Rows)
+                    {
+                        var query = from dr in dtSku.AsEnumerable() where (dr.Field<string>("ID") == item["SKURelationID"] as string) select dr.Field<string>("ValueId");
+                        string resut = string.Empty;
+                        foreach (var oneval in query)
+                        {
+                            if (!string.IsNullOrWhiteSpace(resut))
+                            {
+                                resut += "|";
+                            }
+                            resut += oneval;
+                        }
+                        item["AttriVal"] = resut;
+
+                    }
+                    dt.Columns.Remove("SKURelationID");
+                    dt.AcceptChanges();
+                    return dt;
+                }
+        }
+
+        public string IsSJOperator(string ids, int opcode)
+        {
+            string err = string.Empty;
+
+            try
+            {
+                ShopProductInfo p = new ShopProductInfo();
+                p.RecordStatus = StatusType.update;
+                p.Where = ShopProductInfo._.ID.In(ids.Split(';')) && ShopProductInfo._.SaleStatus != opcode;
+                p.SaleStatus = opcode;
+                Dal.Submit(p);
+                err = "操作成功";
+            }
+            catch (Exception ex)
+            {
+                err = ex.Message;
+            }
+
+            return err;
+        }
     }
+
 
 
 }
