@@ -12,8 +12,8 @@
                 <ul class="icon-list">
                     <li><a class="add" href="@Url.Action("Edit")"><i></i><span>新增</span></a></li>
                     <li><a class="save" href="javascript:;" onclick="Edit();"><i></i><span>编辑</span></a></li>
-                    <li><a class="list" href="javascript:;" onclick="Del( );"><i></i><span>批量上架</span></a></li>
-                    <li><a class="lock" href="javascript:;" onclick="Del( );"><i></i><span>批量下架</span></a></li>
+                    <li><a class="list" href="javascript:;" onclick="isSJ(1 );"><i></i><span>批量上架</span></a></li>
+                    <li><a class="lock" href="javascript:;" onclick="isSJ(0);"><i></i><span>批量下架</span></a></li>
                     <li><a class="del" href="javascript:;" onclick="Del( );"><i></i><span>删除</span></a></li>
                 </ul>
             </div>
@@ -47,9 +47,9 @@
 
 		{ name: 'SKU', type: 'string' },
 
-		{ name: 'TypeId', type: 'string' },
+		{ name: 'TypeName', type: 'string' },
 
-		{ name: 'BrandId', type: 'string' },
+		{ name: 'BrandId', type: 'BrandName' },
 
 		{ name: 'SupplierId', type: 'string' },
 
@@ -122,6 +122,8 @@
                 source: dataAdapter,
                 columnsresize: true,
                 virtualmode: true,
+                selectionmode: 'checkbox',
+                altrows: true,
                 rendergridrows: function (params) {
                     return params.data;
                 },
@@ -129,31 +131,56 @@
                 pageSize: 20,
                 pageable: true,
                 columns: [
-  { text: '编号', dataField: 'Code', align: "center", cellsalign: "center", type: 'string', width: 200 },
+  { text: '编号', dataField: 'Code', align: "center", cellsalign: "center", type: 'string', width: 100 },
 
-  { text: '名称', dataField: 'Name', align: "center", cellsalign: "center", type: 'string', width: 200 },
-  { text: '商品类型', dataField: 'TypeId', align: "center", cellsalign: "center", type: 'string', width: 200 },
-  { text: '品牌', dataField: 'BrandId', align: "center", cellsalign: "center", type: 'string', width: 200 },
-  { text: '销售类型', dataField: 'SalesType', align: "center", cellsalign: "center", type: 'string', width: 200 },
-  { text: '商品状态', dataField: 'SaleStatus', align: "center", cellsalign: "center", type: 'string', width: 200 },
-  { text: '访问次数', dataField: 'VistiCounts', align: "center", cellsalign: "center", type: 'string', width: 200 },
-  { text: '销售个数', dataField: 'SaleCounts', align: "center", cellsalign: "center", type: 'string', width: 200 },
-  { text: '销售次数', dataField: 'SaleNum', align: "center", cellsalign: "center", type: 'string', width: 200 },
-  { text: '显示顺序', dataField: 'DisplaySequence', align: "center", cellsalign: "center", type: 'string', width: 200 },
+  { text: '名称', dataField: 'Name', align: "center", cellsalign: "center", type: 'string', width: '300' },
+  { text: '商品类型', dataField: 'TypeName', align: "center", cellsalign: "center", type: 'string', width:80 },
+  { text: '品牌', dataField: 'BrandName', align: "center", cellsalign: "center", type: 'string', width: 80 },
+  {
+      text: '销售类型', dataField: 'SalesType', align: "center", cellsalign: "center", type: 'string', width: 80, cellsrenderer: function (row, columnfield, value, defaulthtml, columnproperties) {
+          if (value ==0) {
+              return '赠品';
+          }
+          else {
+              return '普通商品';
+          }
+      }
+  },
+  {
+      text: '商品状态', dataField: 'SaleStatus', align: "center", cellsalign: "center", type: 'string', width: 80, cellsrenderer: function (row, columnfield, value, defaulthtml, columnproperties) {
+          switch (value)
+          {
+              case 0:
+                  return "下架";
+                  break;
+              case 1:
+                  return "上架";
+                  break
+              case 2:
+                  return "待审批";
+                  break 
+          }
+          
+      }
+  },
+  { text: '访问次数', dataField: 'VistiCounts', align: "center", cellsalign: "center", type: 'string', width: 80 },
+  { text: '销售个数', dataField: 'SaleCounts', align: "center", cellsalign: "center", type: 'string', width: 80 },
+  { text: '销售次数', dataField: 'SaleNum', align: "center", cellsalign: "center", type: 'string', width: 80 },
+  { text: '显示顺序', dataField: 'DisplaySequence', align: "center", cellsalign: "center", type: 'string', width: 80 },
 
-  { text: '市场价', dataField: 'MarketPrice', align: "center", cellsalign: "center", type: 'string', width: 200 },
+  { text: '市场价', dataField: 'MarketPrice', align: "center", cellsalign: "center", type: 'string', width: 80 },
 
-  { text: '销售价', dataField: 'SalePrice', align: "center", cellsalign: "center", type: 'string', width: 200 },
+  { text: '销售价', dataField: 'SalePrice', align: "center", cellsalign: "center", type: 'string', width: 80 },
 
-  { text: '成本价', dataField: 'CostPrice', align: "center", cellsalign: "center", type: 'string', width: 200 },
+  { text: '成本价', dataField: 'CostPrice', align: "center", cellsalign: "center", type: 'string', width: 80 },
 
-  { text: '可得积分', dataField: 'Points', align: "center", cellsalign: "center", type: 'string', width: 200 },
+  { text: '可得积分', dataField: 'Points', align: "center", cellsalign: "center", type: 'string', width: 80 },
 
-  { text: '库存', dataField: 'Stock', align: "center", cellsalign: "center", type: 'string', width: 200 },
+  { text: '库存', dataField: 'Stock', align: "center", cellsalign: "center", type: 'string', width: 80 },
 
-  { text: '上架日期', dataField: 'SaleDate', align: "center", cellsalign: "center", type: 'string', width: 200 },
+  { text: '上架日期', dataField: 'SaleDate', align: "center", cellsalign: "center", type: 'string', width: 80 },
 
-  { text: '添加日期', dataField: 'AddedDate', align: "center", cellsalign: "center", type: 'string', width: 200 }
+  { text: '添加日期', dataField: 'AddedDate', align: "center", cellsalign: "center", type: 'string', width: 80 }
 
                 ]
             });
@@ -163,11 +190,12 @@
     </script>
     <script type="text/javascript">
         function Edit() {
-            var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindex');
-            if (rowindex == -1) {
+            var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindexes');
+
+            if (rowindex.length != 1) {
                 ErrorMsg("请选择一条数据");
             } else {
-                var data = $('#jqxgrid').jqxGrid('getrowdata', rowindex);
+                var data = $('#jqxgrid').jqxGrid('getrowdata', rowindex[0]);
 
                 if (data) {
 
@@ -189,10 +217,42 @@
                 $.post(href, { ID: data.ID }, function (d) {
                     ErrorMsg(d);
                     if (d.indexOf("成功") > -1) {
+
                         $("#jqxgrid").jqxGrid('deleteRow', rowindexes[0]);
                     }
                 });
             } else { ErrorMsg("请选择一条数据"); }
+        }
+
+        function isSJ(opcode) {
+            var rowindexes = $('#jqxgrid').jqxGrid('getselectedrowindexes');
+
+
+            if (rowindexes.length > 0) {
+
+
+                href = "@Url.Action("IsSJOperator", new { area = "admin" })";
+                $.post(href, { ID: getSelectIDS(rowindexes), opcode: opcode }, function (d) {
+                  
+                    if (d.indexOf("成功") > -1) {
+                        SucessMsg(d);
+                        $('#jqxgrid').jqxGrid('updatebounddata');
+                    } else { ErrorMsg(d); }
+                });
+            } else { ErrorMsg("请选择至少一条数据"); }
+        }
+
+
+        function getSelectIDS(rowindexes) {
+            var ids = null;
+            for (var i in rowindexes) {
+                if (ids) {
+                    ids += ";";
+                }
+                var data = $('#jqxgrid').jqxGrid('getrowdata', rowindexes[i]);
+                ids += data.ID;
+            }
+            return ids;
         }
     </script>
 
