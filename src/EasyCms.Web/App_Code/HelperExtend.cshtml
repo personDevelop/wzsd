@@ -14,9 +14,9 @@
         </dt>
         <dd>
 
-            
-                @MVCExtention.ExtendHtmlInput.MvcHelper.TextBox(code, defaultval as string, new { @class = "input normal " + otherClass, width = width })
-            
+
+            @MVCExtention.ExtendHtmlInput.MvcHelper.TextBox(code, defaultval as string, new { @class = "input normal " + otherClass, width = width })
+
             <span>@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(hint)</span>
         </dd>
     </dl>
@@ -49,7 +49,7 @@
             <div id='@ctrlID'>
             </div>
             <input name="@code" id="@code" type="hidden" value="@(defaultval as string)" />
-             <span style="float:left">@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(hint)</span>
+            <span style="float:left">@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(hint)</span>
         </dd>
     </dl>
     <script type="text/javascript">
@@ -117,7 +117,7 @@
         </dt>
         <dd>
             <div id="@code" name="@code"></div>
-             <span>@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(hint)</span>
+            <span>@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(hint)</span>
             <script type="text/javascript">
                 $(function(){
                     @{
@@ -146,12 +146,19 @@
         </dt>
         <dd>
             @MVCExtention.ExtendHtmlInput.MvcHelper.TextArea(code, defaultval as string, row, col, new { @class = "input " + otherClass })
-             <span>@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(hint)</span>
+            <span>@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(hint)</span>
         </dd>
     </dl>
 }
 @helper UEditor(string code, string name, object defaultval = null, int editorHeight = 300, int EditorWidth = 800)
 {
+    string vitualPath = HttpContext.Current.Request.ApplicationPath;
+    if (vitualPath == "/")
+    {
+        vitualPath = string.Empty;
+    }
+    string homeUrl = vitualPath + "/Content/ueditor/";
+    string serverUrl = vitualPath + "/api/controller.ashx";
     <dl>
         <dt>
             @MVCExtention.ExtendHtmlInput.MvcHelper.Label(code, name)
@@ -162,7 +169,7 @@
             <script type="text/javascript">
                 //实例化编辑器
                 //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
-                UE.getEditor('@code', { textarea: "@code",initialContent: "@defaultval" });
+                UE.getEditor('@code', { textarea: "@code",initialContent: "@defaultval",UEDITOR_HOME_URL:"@homeUrl",serverUrl:"@serverUrl" });
                 @*@{ string uecode = "ue" + code;}
                 var  <text>@uecode</text> =  UE.getEditor('@code', { textarea: "@code",initialContent: "@defaultval" });
                 <text>@uecode</text>.ready(function() {
@@ -311,7 +318,7 @@
                     </button>
                 </span>
             }
-             <span>@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(hint)</span>
+            <span>@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(hint)</span>
 
         </dd>
     </dl>
@@ -352,6 +359,15 @@
             @{
                 string divConatinerID = code + "divConatiner";
                 string filePicker = code + "filePicker";
+                string deleFileUrl = MVCExtention.ExtendHtmlInput.MvcUrl.Action("deleteFile", "UpLoad", new { area = string.Empty });
+                string GetFilesUrl = MVCExtention.ExtendHtmlInput.MvcUrl.Action("GetFiles", "UpLoad", new { area = string.Empty });
+                string UploadUrl = MVCExtention.ExtendHtmlInput.MvcUrl.Action("UpLoadProcess", "UpLoad", new { area = string.Empty });
+                string vitualPath = HttpContext.Current.Request.ApplicationPath;
+                if (vitualPath == "/")
+                {
+                    vitualPath = string.Empty;
+                }
+                string swfurl = vitualPath + "/Content/ueditor/third-party/webuploader/Uploader.swf";
             }
             <div id="@divConatinerID">
                 <div class="fileList">
@@ -384,9 +400,9 @@
 
                             disableGlobalDnd: true,
                             // swf文件路径
-                            swf: '/Content/ueditor/third-party/webuploader/Uploader.swf',
+                            swf:'@swfurl',
                             // 文件接收服务端。
-                            server: '/UpLoad/UpLoadProcess',
+                            server: '@UploadUrl',
                             // 选择文件的按钮。可选。
                             // 内部根据当前运行是创建，可能是input元素，也可能是flash.
                             pick: filePicker,
@@ -456,7 +472,7 @@
                             var $li = $('#' + file.id);
                             if ( $li.attr("fileID" )) {
                                 //删除附件数据
-                                $.get("/UpLoad/deleteFile",{id:$li.attr("fileID" )});
+                                $.get("@deleFileUrl",{id:$li.attr("fileID" )});
                             }
                             @if (callBack!=null && !string.IsNullOrWhiteSpace(callBack.OnDeleteName))
                                 {
@@ -560,7 +576,8 @@
                     {
 
                <text>
-                $.getJSON("/UpLoad/GetFiles",{refid:"@defaultval"}, function(data){
+                 var GetFilesUrl='@GetFilesUrl';
+                $.getJSON(GetFilesUrl,{refid:"@defaultval"}, function(data){
 
                     var $list =$("#@divConatinerID > .fileList");
                     if (data.length>0) {
@@ -593,7 +610,8 @@
 
                             if ( $li.attr("fileID" )) {
                                 //删除附件数据
-                                $.get("/UpLoad/deleteFile",{id:$li.attr("fileID" )});
+                                var url='@deleFileUrl';
+                                $.get(url,{id:$li.attr("fileID" )});
                             }
                             @if (callBack!=null && !string.IsNullOrWhiteSpace(callBack.OnDeleteName))
                             {

@@ -39,7 +39,7 @@ namespace EasyCms.Dal
                     if (item.RecordStatus == Sharp.Common.StatusType.add)
                     {
                         item.ClassCode = item.ID;
-
+                        item.Js = 1;
                         item.OrderNo = Dal.Count<FunctionInfo>(FunctionInfo._.ParentID.IsNullOrEmpty(), FunctionInfo._.ID, false);
                     }
                     else
@@ -48,16 +48,19 @@ namespace EasyCms.Dal
                         {
                             //说明是从非根级调整到根级节点 
 
+                            int oldSeries = item.Js;
 
+                            item.Js = 1;
+                            int seriesChaZhi = oldSeries - item.Js;//级数调整前后的差值
 
                             item.OrderNo = Dal.Count<FunctionInfo>(FunctionInfo._.ParentID.IsNullOrEmpty(), FunctionInfo._.ID, false);
 
                             string oldParentClassCode = item.ClassCode.Substring(0, item.ClassCode.IndexOf(item.ID) + 1);
 
-                            sql = "update FunctionInfo set ClassCode=Replace(ClassCode,@classcode,'')  where ClassCode like '@oldClassCode%'";
+                            sql = "update FunctionInfo set ClassCode=Replace(ClassCode,@classcode,''),js=js-@Series   where ClassCode like '@oldClassCode%'";
                             tr = Dal.BeginTransaction(out dal);
                             csql = dal.FromCustomSql(sql, tr).AddInputParameter("classcode", oldParentClassCode)
-
+                                 .AddInputParameter("Series", seriesChaZhi)
                                  .AddInputParameter("oldClassCode", item.ClassCode)
                                   ;
                         }
@@ -72,7 +75,7 @@ namespace EasyCms.Dal
                     {
 
                         item.ClassCode = parent.ClassCode + ";" + item.ID;
-
+                        item.Js = item.ClassCode.Count(p => p == ';') + 1;
                         item.OrderNo = Dal.Count<FunctionInfo>(FunctionInfo._.ParentID == item.ParentID, FunctionInfo._.ID, false);
                     }
                     else
@@ -82,18 +85,18 @@ namespace EasyCms.Dal
                             //调整父编码了
                             item.OrderNo = Dal.Count<FunctionInfo>(FunctionInfo._.ParentID == item.ParentID, FunctionInfo._.ID, false);
                             string oldClassCode = item.ClassCode;
-
+                            int oldSeries = item.Js;
                             item.ClassCode = parent.ClassCode + ";" + item.ID;
-
-
+                            item.Js = item.ClassCode.Count(p => p == ';') + 1;
+                            int seriesChaZhi = item.Js - oldSeries;//级数调整前后的差值
                             string oldParentClassCode = item.ClassCode.Substring(0, item.ClassCode.IndexOf(item.ID) + 1);
                             //更新子级的 级数 和分级编号 
 
-                            sql = "update FunctionInfo set ClassCode=Replace(ClassCode,@classcode,'@newParentClassCOde')  where ClassCode like '@oldClassCode%'";
+                            sql = "update FunctionInfo set ClassCode=Replace(ClassCode,@classcode,'@newParentClassCOde'),js=js+@Series  where ClassCode like '@oldClassCode%'";
                             tr = Dal.BeginTransaction(out dal);
                             csql = dal.FromCustomSql(sql, tr).AddInputParameter("classcode", oldParentClassCode)
                                 .AddInputParameter("newParentClassCOde", parent.ClassCode)
-
+                                   .AddInputParameter("Series", seriesChaZhi)
                                 .AddInputParameter("oldClassCode", oldClassCode)
                                  ;
                         }
@@ -120,18 +123,18 @@ namespace EasyCms.Dal
 
         }
 
-     
+
         public bool Exit(string ID, string parentID, string RecordStatus, string val, bool IsCode)
         {
-            WhereClip where = null;
+            WhereClip where = FunctionInfo._.ParentID == parentID;
 
             if (IsCode)
             {
-                where = FunctionInfo._.Code == val;
+                where = where && FunctionInfo._.Code == val;
             }
             else
             {
-                where = FunctionInfo._.Name == val;
+                where = where && FunctionInfo._.Name == val;
             }
             if (RecordStatus == StatusType.update.ToString())
             {
@@ -150,7 +153,7 @@ namespace EasyCms.Dal
                     OrderBy(FunctionInfo._.OrderNo).ToDataTable();
             }
             else
-                return Dal.From<FunctionInfo>(). 
+                return Dal.From<FunctionInfo>().
                    OrderBy(FunctionInfo._.OrderNo).ToDataTable();
         }
         public DataTable GetListByParentId(string parentId)
@@ -182,6 +185,26 @@ namespace EasyCms.Dal
         }
 
 
+
+        public DataTable GetParentMoudle()
+        {
+            int pageCount = 0;
+            return Dal.From<FunctionInfo>().
+                    Select(FunctionInfo._.ID, FunctionInfo._.Code, FunctionInfo._.ShowText, FunctionInfo._.Name, FunctionInfo._.ParentID, FunctionInfo._.AccessType).
+                    Where(FunctionInfo._.Enable == true && FunctionInfo._.AccessType < 2).
+                    OrderBy(FunctionInfo._.OrderNo).ToDataTable();
+        }
+
+        public List<FunctionInfo> GetListWithUrl(int funcType)
+        {
+            List<FunctionInfo> list=
+             Dal.From<FunctionInfo>().
+                    Select(FunctionInfo._.ID, FunctionInfo._.ShowText, FunctionInfo._.ClassCode, FunctionInfo._.AccessType, FunctionInfo._.ParentID, FunctionInfo._.URL, FunctionInfo._.CallArea, FunctionInfo._.CallControler, FunctionInfo._.CallAction, FunctionInfo._.Description, FunctionInfo._.Js).
+                    Where(FunctionInfo._.Enable == true && FunctionInfo._.FuncType == funcType)
+                    .OrderBy(FunctionInfo._.Js,FunctionInfo._.OrderNo).
+                     List<FunctionInfo>(); 
+            return list ;
+        }
     }
 
 }

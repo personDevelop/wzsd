@@ -39,12 +39,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AuthorityClient">
-      <HintPath>..\..\..\..\01-WinFramework-新架构\GoldStart\bin\Release\AuthorityClient.dll</HintPath>
-    </Reference>
-    <Reference Include="AuthorityEntity">
-      <HintPath>..\..\..\..\01-WinFramework-新架构\GoldStart\bin\Release\AuthorityEntity.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp">
       <Private>True</Private>
     </Reference>
@@ -290,6 +284,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="API\controller.ashx" />
+    <Content Include="Areas\Admin\Views\Index\HtmlPage1.html" />
     <Content Include="config.json" />
     <Content Include="Config\System\DataBaseConnect.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -723,6 +718,7 @@
     <Content Include="Gateway.config" />
     <Content Include="Areas\Admin\Views\ShopPaymentTypes\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\ShopPaymentTypes\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Index\Index - 复制.cshtml" />
     <None Include="Properties\PublishProfiles\publish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />

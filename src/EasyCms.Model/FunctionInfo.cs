@@ -30,7 +30,7 @@ namespace EasyCms.Model
 
         private string _Name;
 
-        private int _Type;
+        private int _FuncType;
 
         private string _Image;
 
@@ -63,6 +63,8 @@ namespace EasyCms.Model
         private bool _IsMust;
 
         private string _Description;
+
+        private int _Js;
 
         #endregion
 
@@ -130,18 +132,18 @@ namespace EasyCms.Model
         ///  功能类型,后台菜单、网站导航、其它
         /// </summary>
 
-        [DbProperty(MapingColumnName = "Type", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "FuncType", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public int Type
+        public int FuncType
         {
             get
             {
-                return this._Type;
+                return this._FuncType;
             }
             set
             {
-                this.OnPropertyChanged("Type", this._Type, value);
-                this._Type = value;
+                this.OnPropertyChanged("FuncType", this._FuncType, value);
+                this._FuncType = value;
             }
         }
 
@@ -149,7 +151,7 @@ namespace EasyCms.Model
         ///  图标,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "Image", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 100, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "Image", DbTypeString = "char", ColumnIsNull = true, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string Image
         {
@@ -165,7 +167,7 @@ namespace EasyCms.Model
         }
 
         /// <summary>
-        ///  功能访问类型,0,层级模块，1,mvc,2url, 
+        ///  功能访问类型,0层级模块,1普通模块,2MVC功能,3URL功能,4其它
         /// </summary>
 
         [DbProperty(MapingColumnName = "AccessType", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
@@ -263,7 +265,7 @@ namespace EasyCms.Model
         ///  启用,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "Enable", DbTypeString = "bit", ColumnIsNull = true, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "Enable", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public bool Enable
         {
@@ -282,7 +284,7 @@ namespace EasyCms.Model
         ///  可见,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "Visible", DbTypeString = "bit", ColumnIsNull = true, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "Visible", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public bool Visible
         {
@@ -301,7 +303,7 @@ namespace EasyCms.Model
         ///  是否多开,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "MultilInstance", DbTypeString = "bit", ColumnIsNull = true, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "MultilInstance", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public bool MultilInstance
         {
@@ -396,7 +398,7 @@ namespace EasyCms.Model
         ///  必定不展示的权限,一般给设计人员使用的功能
         /// </summary>
 
-        [DbProperty(MapingColumnName = "IsMustNot", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 1, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "((0))")]
+        [DbProperty(MapingColumnName = "IsMustNot", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "((0))")]
 
         public bool IsMustNot
         {
@@ -415,7 +417,7 @@ namespace EasyCms.Model
         ///  基本必备功能,不用设置权限也会使用的基本功能
         /// </summary>
 
-        [DbProperty(MapingColumnName = "IsMust", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 1, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "((0))")]
+        [DbProperty(MapingColumnName = "IsMust", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "((0))")]
 
         public bool IsMust
         {
@@ -434,7 +436,7 @@ namespace EasyCms.Model
         ///  功能模块描述,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "Description", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 8000, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "Description", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 4000, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string Description
         {
@@ -446,6 +448,25 @@ namespace EasyCms.Model
             {
                 this.OnPropertyChanged("Description", this._Description, value);
                 this._Description = value;
+            }
+        }
+
+        /// <summary>
+        ///  级数,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "Js", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public int Js
+        {
+            get
+            {
+                return this._Js;
+            }
+            set
+            {
+                this.OnPropertyChanged("Js", this._Js, value);
+                this._Js = value;
             }
         }
 
@@ -463,7 +484,7 @@ namespace EasyCms.Model
 
                 Name = new PropertyItem("Name", tableName);
 
-                Type = new PropertyItem("Type", tableName);
+                FuncType = new PropertyItem("FuncType", tableName);
 
                 Image = new PropertyItem("Image", tableName);
 
@@ -497,6 +518,8 @@ namespace EasyCms.Model
 
                 Description = new PropertyItem("Description", tableName);
 
+                Js = new PropertyItem("Js", tableName);
+
 
             }
             /// <summary>
@@ -514,13 +537,13 @@ namespace EasyCms.Model
             /// <summary>
             /// 功能类型,后台菜单、网站导航、其它
             /// </summary> 
-            public PropertyItem Type = null;
+            public PropertyItem FuncType = null;
             /// <summary>
             /// 图标,
             /// </summary> 
             public PropertyItem Image = null;
             /// <summary>
-            /// 功能访问类型,0,层级模块，1,mvc,2url, 
+            /// 功能访问类型,0层级模块,1普通模块,2MVC功能,3URL功能,4其它
             /// </summary> 
             public PropertyItem AccessType = null;
             /// <summary>
@@ -579,13 +602,22 @@ namespace EasyCms.Model
             /// 功能模块描述,
             /// </summary> 
             public PropertyItem Description = null;
+            /// <summary>
+            /// 级数,
+            /// </summary> 
+            public PropertyItem Js = null;
         }
         #endregion
     }
 
-     public partial class FunctionInfo 
-     {
-         [NotDbCol]
-         public string ParentName { get; set; }
-     }
+
+    public partial class FunctionInfo
+    {
+        protected override void OnCreate()
+        {
+            Enable = Visible =   true;
+        }
+        [NotDbCol]
+        public string ParentName { get; set; }
+    }
 }

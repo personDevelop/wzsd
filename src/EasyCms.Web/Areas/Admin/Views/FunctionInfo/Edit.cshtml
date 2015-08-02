@@ -15,7 +15,7 @@
         <div class="content-tab-ul-wrap">
             <ul>
                 <li><a class="selected" href="javascript:;">基本信息</a></li>
-                
+
             </ul>
         </div>
     </div>
@@ -27,55 +27,45 @@
     @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())
 
     @HelperExtend.HiddenFor("ParentID", Model.ParentID)
-     
 
-    @HelperExtend.HiddenFor("ImageUrl", Model.Image)
+    @if (string.IsNullOrWhiteSpace(Model.Image))
+    {
+        Model.Image = Guid.NewGuid().ToString();
+
+    }
+
     @Html.ValidationSummary()
 
 
+    @HelperExtend.HelpEdit("ParentID", "ParentName", "上级功能", defaultvalAndText: Model.ParentName, hint: "空为一级模块", dialogTitle: "选择上级功能", InnitFunc: "InnitFunc", onOk: "onOk", IsTree: true, DataControlID: "treeGrid")
 
-   
 
     @HelperExtend.TextBox("Code", "编码", defaultval: Model.Code, hint: "")
 
     @HelperExtend.TextBox("Name", "名称", defaultval: Model.Name, hint: "")
+    @HelperExtend.TextBox("ShowText", "窗口显示的名称", defaultval: Model.ShowText, hint: "")
+    @HelperExtend.RadioGroup("FuncType", "功能类型 ", "0,1,2,3", "后台菜单,商城导航,APP导航,其它", defaultval: Model.FuncType)
 
-    @HelperExtend.TextBox("Type", "功能类型", defaultval: Model.Type, hint: "")
-
-    @HelperExtend.ImageUpLoad("Image", "图标",Model.RecordStatus== Sharp.Common.StatusType.add, Model.Image,1)
-
-    @HelperExtend.TextBox("AccessType", "功能访问类型", defaultval: Model.AccessType, hint: "")
-
+    @HelperExtend.ImageUpLoad("Image", "图标", Model.RecordStatus == Sharp.Common.StatusType.add, defaultval: Model.Image, maxLength: 1)
+    @HelperExtend.RadioGroup("AccessType", "功能类型 ", "0,1,2,3,4", "层级模块,普通模块,MVC功能,URL功能,其它", defaultval: Model.AccessType)
     @HelperExtend.TextBox("URL", "网址", defaultval: Model.URL, hint: "")
 
     @HelperExtend.TextBox("CallArea", "域", defaultval: Model.CallArea, hint: "")
-
     @HelperExtend.TextBox("CallControler", "控制器", defaultval: Model.CallControler, hint: "")
-
     @HelperExtend.TextBox("CallAction", "动作", defaultval: Model.CallAction, hint: "")
+    @HelperExtend.RadioGroup("Enable", "启用", "false,true", "否,是", defaultval: Model.Enable)
+    @HelperExtend.RadioGroup("Visible", "可见", "false,true", "否,是", defaultval: Model.Visible)
+    @HelperExtend.RadioGroup("MultilInstance", "是否多开", "false,true", "否,是", defaultval: Model.MultilInstance)
+    @HelperExtend.RadioGroup("IsMust", "基本必备功能", "false,true", "否,是", defaultval: Model.IsMust)
 
-    @HelperExtend.TextBox("Enable", "启用", defaultval: Model.Enable, hint: "")
+    @HelperExtend.RadioGroup("IsMustNot", "不在权限中展示", "false,true", "否,是", defaultval: Model.IsMustNot)
 
-    @HelperExtend.TextBox("Visible", "可见", defaultval: Model.Visible, hint: "")
-
-    @HelperExtend.TextBox("MultilInstance", "是否多开", defaultval: Model.MultilInstance, hint: "")
-
-    @HelperExtend.TextBox("ShowText", "窗口显示的名称", defaultval: Model.ShowText, hint: "")
-
-    @HelperExtend.TextBox("ParentID", "父对象", defaultval: Model.ParentID, hint: "")
-
-    @HelperExtend.TextBox("ClassCode", "分级码", defaultval: Model.ClassCode, hint: "")
 
     @HelperExtend.TextBox("OrderNo", "顺序", defaultval: Model.OrderNo, hint: "")
+    @HelperExtend.TextArea("Description", "功能模块描述", defaultval: Model.Description, hint: "")
 
-    @HelperExtend.TextBox("IsMustNot", "必定不展示的权限", defaultval: Model.IsMustNot, hint: "")
-
-    @HelperExtend.TextBox("IsMust", "基本必备功能", defaultval: Model.IsMust, hint: "")
-
-    @HelperExtend.TextBox("Description", "功能模块描述", defaultval: Model.Description, hint: "") 
-      
 </div>
- 
+
 @section  scripts{
 
 
@@ -163,7 +153,7 @@
 
                { name: 'Name', type: 'string' },
 
-               { name: 'AllowSubclass', type: 'string' }
+               { name: 'AccessType', type: 'string' }
                             ],
                             timeout: 10000,
                             hierarchy:
@@ -172,8 +162,8 @@
                                 parentDataField: { name: 'ParentID' }
                             },
                             id: 'ID',
-                            root: 'value',
-                            url: " @Url.Action("GetListForSelecte", "NewsCategory", new { area = "Admin" })"
+                            root: 'Rows',
+                            url: " @Url.Action("GetParentMoudle", "FunctionInfo", new { area = "Admin" })"
                         };
             var dataAdapter = new $.jqx.dataAdapter(source);
 
@@ -192,7 +182,7 @@
         function onOk(data) {
             if (data.length == 1) {
 
-                if (data[0].AllowSubclass) {
+                if (data[0].AccessType < 2) {
                     $("#ParentName").val(data[0].Name);
                     $("#ParentID").val(data[0].ID);
                 } else {

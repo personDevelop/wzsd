@@ -26,14 +26,24 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             return JsonWithDataTable.Serialize(dt);
 
         }
-        
-        public string GetListForSelecte( )
+
+        public string GetListForSelecte()
         {
             int recordCount = 0;
-            System.Data.DataTable dt = bll.GetList( true);
+            System.Data.DataTable dt = bll.GetList(true);
             string result = JsonWithDataTable.Serialize(dt);
             result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
             return result;
+        }
+
+
+        public string GetParentMoudle( )
+        {
+             
+            System.Data.DataTable dt = bll.GetParentMoudle( );
+
+            return JsonWithDataTable.Serialize(dt);
+
         }
         public string CheckRepeat(string ID, string ParentID, string RecordStatus, string val, bool IsCode)
         {
@@ -68,7 +78,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                     {
                         p.ID = Guid.NewGuid().ToString();
                     }
-                   
+
                 }
                 bll.Save(p);
                 TempData.Add("IsSuccess", "保存成功");
@@ -81,6 +91,11 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                 ModelState.AddModelError("error", ex.Message);
 
             }
+            if (collection["IsContinueAdd"] == "1")
+            {
+                p = new FunctionInfo();
+
+            } 
             return View("Edit", p);
         }
 

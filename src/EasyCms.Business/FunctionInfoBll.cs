@@ -28,7 +28,7 @@ namespace EasyCms.Business
         {
             return Dal.GetList(IsForSelected);
         }
-       
+
         public bool Exit(string ID, string ParentID, string RecordStatus, string val, bool IsCode)
         {
             return Dal.Exit(ID, ParentID, RecordStatus, val, IsCode);
@@ -58,5 +58,15 @@ namespace EasyCms.Business
         }
 
 
+
+        public DataTable GetParentMoudle()
+        {
+            return Dal.GetParentMoudle();
+        }
+
+        public List<FunctionInfo> GetListWithUrl(int functype)
+        {
+            return Dal.GetListWithUrl(functype);
+        }
     }
 }
