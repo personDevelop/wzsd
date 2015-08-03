@@ -1,0 +1,158 @@
+﻿@model ParameterInfo
+@{
+    ViewBag.Title = "编辑系统参数信息";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEdit.cshtml";
+}
+@using EasyCms.Model
+<!--内容-->
+<div id="floatHead" class="content-tab-wrap">
+    <div class="content-tab">
+        <div class="content-tab-ul-wrap">
+            <ul>
+                <li><a class="selected" href="javascript:;">@ViewBag.Title</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="tab-content">
+
+    @Html.HiddenFor(model => model.ID)
+    @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())
+    @Html.HiddenFor(model => model.ParentID)
+    @Html.ValidationSummary()
+    @HelperExtend.HelpEdit("ParentID", "ParentName", "上级参数", defaultvalAndText: Model.ParentName, hint: "空为一级参数", dialogTitle: "选择上级参数", InnitFunc: "InnitFunc", onOk: "onOk", IsTree: true, DataControlID: "treeGrid")
+    @HelperExtend.TextBox("Code", "编号", defaultval: Model.Code, hint: "请输入编号，编号同一级内不能重复")
+    @HelperExtend.TextBox("Name", "名称", defaultval: Model.Name, hint: "请输入名称，名称同一级内不能重复.")
+    @HelperExtend.CheckBoxList("参数设置", "IsSystem,IsEdit,IsDelete,IsEnable,IsCanHasLeaf", "系统参数,可编辑,可删除,启用,可有叶子节点", defaultval: new object[] { Model.IsSystem, Model.IsEdit, Model.IsDelete, Model.IsEnable, Model.IsCanHasLeaf });
+    @HelperExtend.TextArea("Value", "扩展值1", defaultval: Model.Value)
+    @HelperExtend.TextArea("Value2", "扩展值2", defaultval: Model.Value2)
+    @HelperExtend.TextArea("Value3", "扩展值3", defaultval: Model.Value3)
+    @HelperExtend.TextArea("Value4", "扩展值4", defaultval: Model.Value4)
+    @HelperExtend.TextArea("Value5", "扩展值5", defaultval: Model.Value5)
+    @HelperExtend.TextArea("Note", "备注", defaultval: Model.Note)
+</div>
+
+
+@section  scripts{
+
+
+    <script type="text/javascript">
+
+        $(function () {
+            //初始化表单验证
+            $("form").validate({
+                rules: {
+                    "Code": {
+                        required: true,
+                        maxlength: 50,
+                        remote: {
+                            url: '@Url.Action("CheckRepeat")',
+                            data: {
+                                ID: function () { return $("#ID").val(); },
+                                ParentID: function () { return $("#ParentID").val(); },
+                                RecordStatus: function () { return $("#RecordStatus").val(); },
+                                val: function () { return $("#Code").val(); },
+                                IsCode: true
+                            }
+                        }
+                    },
+                    Name: {
+                        required: true,
+                        maxlength: 100,
+                        remote: {
+                            url: '@Url.Action("CheckRepeat")',
+                            data: {
+                                ID: function () { return $("#ID").val(); },
+                                ParentID: function () { return $("#ParentID").val(); },
+                                RecordStatus: function () { return $("#RecordStatus").val(); },
+                                val: function () { return $("#Name").val(); },
+                                IsCode: false
+                            }
+                        }
+                    },
+                     
+                    Note: {
+                        maxlength: 500
+                    }
+                },
+                messages: {
+                    Code: {
+                        required: "请输入编号",
+                        maxlength: $.validator.format("编号长度不能大于{0}个字符"),
+                        remote: "同级参数下编号重复"
+                    },
+                    Name: {
+                        required: "请输入名称",
+                        maxlength: $.validator.format("名称长度不能大于{0}个字符"),
+                        remote: "同级参数下名称重复"
+                    }
+                }
+            });
+        })
+    </script>
+
+    <script type="text/javascript">
+
+        function InnitFunc() {
+            var source =
+                        {
+                            dataType: "json",
+                            dataFields: [
+
+               { name: 'ID', type: 'string' },
+
+               { name: 'ParentID', type: 'string' },
+
+               { name: 'Code', type: 'string' },
+
+               { name: 'Name', type: 'string' },
+
+               { name: 'IsCanHasLeaf', type: 'string' }
+                            ],
+                            timeout: 10000,
+                            hierarchy:
+                            {
+                                keyDataField: { name: 'ID' },
+                                parentDataField: { name: 'ParentID' }
+                            },
+                            id: 'ID',
+                            root: 'Rows',
+                            url: " @Url.Action("GetListForSelecte", "ParameterInfo", new { area = "Admin" })"
+                        };
+            var dataAdapter = new $.jqx.dataAdapter(source);
+
+
+            $("#treeGrid").jqxTreeGrid(
+                       {
+                           width: "95%",
+                           height: "95%",
+                           source: dataAdapter,
+                           columns: [
+             { text: '编码', dataField: 'Code', type: 'string', width: 200 },
+             { text: '名称', dataField: 'Name', type: 'string', width: 200 }
+                           ]
+                       });
+        }
+        function onOk(data) {
+            if (data.length == 1) {
+
+                if (data[0].IsCanHasLeaf) {
+                    $("#ParentName").val(data[0].Name);
+                    $("#ParentID").val(data[0].ID);
+                } else {
+
+                    ErrorMsg("当前参数不能有下级参数");
+                }
+
+            } else { ErrorMsg("请选择一条数据"); }
+        }
+        $(function () {
+
+            if ("@TempData.ContainsKey("IsSuccess").ToString().ToLower()" == "true") {
+                SucessMsg("@TempData["IsSuccess"]");
+            }
+
+
+        });
+    </script>
+}

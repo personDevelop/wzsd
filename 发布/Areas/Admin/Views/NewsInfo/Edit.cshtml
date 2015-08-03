@@ -1,0 +1,166 @@
+﻿@model NewsInfo
+@{
+    ViewBag.Title = "编辑新闻信息";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEdit.cshtml";
+}
+
+@Styles.Render("~/bundles/upimgcss")
+@Scripts.Render("~/bundles/ueditor")
+@Scripts.Render("~/bundles/uploadJs")
+
+@using EasyCms.Model
+<!--内容-->
+<div id="floatHead" class="content-tab-wrap">
+    <div class="content-tab">
+        <div class="content-tab-ul-wrap">
+            <ul>
+                <li><a class="selected" href="javascript:;">基本信息</a></li>
+                <li><a href="javascript:;">详细描述</a></li>
+                <li><a href="javascript:;">扩展选项</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="tab-content">
+
+
+    @HelperExtend.HiddenFor("ID", Model.ID)
+    @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())
+    @HelperExtend.HiddenFor("ClassID", Model.ClassID)
+
+    @if (string.IsNullOrWhiteSpace(Model.ImageUrl))
+    {
+        Model.ImageUrl = Guid.NewGuid().ToString();
+
+    }
+    @HelperExtend.HiddenFor("ImageUrl", Model.ImageUrl)
+    @Html.ValidationSummary()
+
+    @HelperExtend.HelpEdit("ClassID", "ClassName", "所属类别", defaultvalAndText: Model.ClassName, dialogTitle: "选择所属类别", hint: "(*必填)", InnitFunc: "InnitFunc", onOk: "onOk", IsTree: true, DataControlID: "treeGrid")
+    @HelperExtend.TextBox("NewsTitle", "标题", defaultval: Model.NewsTitle, hint: "(*必填)")
+    @HelperExtend.TextBox("SubTitle", "副标题", defaultval: Model.SubTitle)
+    @HelperExtend.RadioGroup("State", "显示状态 ", "0,1,2", "正常,待审核,不显示", defaultval: Model.State)
+    @HelperExtend.CheckBoxList("推荐设置", "AllowPl,IsTop,IsRecomend,IsHot,IsColor", "允许评论,置顶,推荐,热门,醒目", defaultval: new object[] { Model.AllowPl, Model.IsTop, Model.IsRecomend, Model.IsHot, Model.IsColor })
+    @HelperExtend.TextBox("Sequence", "顺序", defaultval: Model.Sequence)
+    @HelperExtend.TextBox("PvCount", "浏览次数", defaultval: Model.PvCount)
+    @HelperExtend.DateTime("LastEditDate", "最后修改时间", defaultval: Model.LastEditDate) 
+    @HelperExtend.ImageUpLoad("ImageUrl", "封面图片", Model.RecordStatus == Sharp.Common.StatusType.add, defaultval: Model.ImageUrl, maxLength: 1)
+    @HelperExtend.TextArea("Note", "备注", defaultval: Model.Note)
+</div>
+<div class="tab-content" style="display:none">
+    @HelperExtend.TextBox("Summary", "内容摘要", defaultval: Model.Summary)
+    @HelperExtend.TextBox("KeyWords", "关键字", defaultval: Model.KeyWords)
+    @HelperExtend.UEditor("Description", "内容", defaultval: Html.Raw(Model.Description)) 
+
+</div>
+<div class="tab-content" style="display:none">
+    @HelperExtend.TextBox("Meta_Title", "页面标题", defaultval: Model.Meta_Title)
+    @HelperExtend.TextArea("Meta_Keywords", "页面关键字", defaultval: Model.Meta_Keywords)
+    @HelperExtend.TextArea("Meta_Description", "页面描述", defaultval: Model.Meta_Description)
+
+</div>
+@section  scripts{
+
+
+    <script type="text/javascript">
+
+        $(function () {
+
+
+            //初始化表单验证
+            $("form").validate({
+                ignore: "",
+                rules: {
+                    NewsTitle: {
+                        required: true,
+                        maxlength:300 
+                    },
+                    ClassName: {
+                        required: true 
+                    } 
+                 
+                },
+                messages: {
+                    NewsTitle: {
+                        required: "请输入标题",
+                        maxlength: $.validator.format("编号长度不能大于{0}个字符") 
+                        
+                    },
+                    ClassName: {
+                        required: "请选择所属类别" 
+                    } 
+                },
+                errorPlacement: function (error, element) {
+
+                    if (element.is(":radio"))
+                        error.insertAfter($(element).parent());
+                    else if (element.is(":checkbox"))
+                        error.insertAfter($(element).parent());
+                    else
+                        error.insertAfter(element);
+                }
+
+            });
+        })
+    </script>
+
+    <script type="text/javascript">
+
+        function InnitFunc() {
+            var source =
+                        {
+                            dataType: "json",
+                            dataFields: [
+
+               { name: 'ID', type: 'string' },
+
+               { name: 'ParentID', type: 'string' },
+
+               { name: 'Code', type: 'string' },
+
+               { name: 'Name', type: 'string' },
+
+               { name: 'AllowSubclass', type: 'string' }
+                            ],
+                            timeout: 10000,
+                            hierarchy:
+                            {
+                                keyDataField: { name: 'ID' },
+                                parentDataField: { name: 'ParentID' }
+                            },
+                            id: 'ID',
+                            root: 'Rows',
+                            url: " @Url.Action("GetListForSelecte", "NewsCategory", new { area = "Admin" })"
+                        };
+            var dataAdapter = new $.jqx.dataAdapter(source);
+
+
+            $("#treeGrid").jqxTreeGrid(
+                       {
+                           width: "95%",
+                           height: "95%",
+                           source: dataAdapter,
+                           columns: [
+             { text: '编码', dataField: 'Code', type: 'string', width: 200 },
+             { text: '名称', dataField: 'Name', type: 'string', width: 200 }
+                           ]
+                       });
+        }
+        function onOk(data) {
+            if (data.length == 1) {
+
+                $("#ClassName").val(data[0].Name);
+                $("#ClassID").val(data[0].ID);
+
+            } else { ErrorMsg("请选择一条数据"); }
+        }
+        $(function () {
+
+            if ("@TempData.ContainsKey("IsSuccess").ToString().ToLower()" == "true") {
+                SucessMsg("@TempData["IsSuccess"]");
+            }
+
+
+        });
+    </script>
+}

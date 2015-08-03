@@ -1,0 +1,599 @@
+﻿@model ShopProductInfo
+@{
+    ViewBag.Title = "编辑商品信息";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEdit.cshtml";
+}
+
+@Styles.Render("~/bundles/upimgcss")
+@Scripts.Render("~/bundles/ueditor")
+@Scripts.Render("~/bundles/uploadJs")
+<style>
+    table, th, td, caption {
+        margin: 0px;
+        padding: 0px;
+        line-height: 18px;
+        color: #000;
+        font-size: 12px;
+    }
+
+    .mytable th {
+        background: #BCE774;
+        text-align: center;
+        font-weight: normal;
+        width: 150px;
+        padding: 6px;
+    }
+
+    .mytable caption {
+        background: #328AA4;
+        color: #FFF;
+        line-height: 30px;
+        border: 1px solid #FFF;
+    }
+
+    .mytable td {
+        background: #ECFBD4;
+        padding: 3px;
+        text-align: center;
+    }
+
+    .mytable th, .mytable td {
+        border-top: 1px solid #FFF;
+        border-left: 1px solid #FFF;
+    }
+
+    .mytable {
+        border-bottom: 1px solid #FFF;
+        border-right: 1px solid #FFF;
+        width: auto;
+    }
+
+    td input {
+        width: 50px;
+    }
+</style>
+
+@using EasyCms.Model
+<!--内容-->
+<div id="floatHead" class="content-tab-wrap">
+    <div class="content-tab">
+        <div class="content-tab-ul-wrap">
+            <ul>
+                <li><a class="selected" href="javascript:;">基本信息</a></li>
+                <li><a href="javascript:;">详细介绍</a></li>
+                <li><a href="javascript:;">规格</a></li>
+                <li><a href="javascript:;">SEO相关</a></li>
+                <li><a href="javascript:;">相关商品</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="tab-content">
+
+    @if (string.IsNullOrWhiteSpace(Model.ID))
+    {
+        Model.ID = Guid.NewGuid().ToString();
+    }
+    @HelperExtend.HiddenFor("ID", Model.ID)
+    @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())
+    @HelperExtend.HiddenFor("ShopCategoryID", Model.ShopCategoryID)
+    @Html.ValidationSummary()
+    @HelperExtend.HelpEdit("ShopCategoryID", "ShopCategoryName", "商品分类", defaultvalAndText: Model.ShopCategoryName, hint: "*必填", dialogTitle: "选择商品分类", InnitFunc: "InnitFunc", onOk: "onOk", IsMutiSelect: true, IsTree: true, DataControlID: "treeGrid")
+
+    @HelperExtend.TextBox("Code", "编号", defaultval: Model.Code, hint: "*编号不能重复")
+    @HelperExtend.TextBox("Name", "名称", defaultval: Model.Name, hint: "*必填,长度限制在100个字符以内.")
+    @HelperExtend.TextBox("SKU", "SKU码", defaultval: Model.SKU, hint: "")
+    @HelperExtend.DropDownList("TypeId", "商品类型", defaultval: Model.TypeId, hint: "", downInfo: new DropDownListInfo() { Url = Url.Action("GetListForSelecte", "ShopProductType"), change = "changeType", unselect = "unselectType" })
+
+    <fieldset id="extendInfo" style="border-width:1px; border-style:solid;  border-color:#eee">
+        <legend style=" text-align:center;     ">扩展属性</legend>
+    </fieldset>
+
+    @HelperExtend.TextBox("BrandId", "品牌", defaultval: Model.BrandId, hint: "")
+    @HelperExtend.ImageUpLoad("ID", "商品图片", Model.RecordStatus == Sharp.Common.StatusType.add, defaultval: Model.ID, maxLength: 7)
+    @HelperExtend.TextBox("SupplierId", "商家", defaultval: Model.SupplierId, hint: "")
+    @HelperExtend.TextBox("RegionId", "所在地", defaultval: Model.RegionId, hint: "")
+
+    @HelperExtend.TextBox("Unit", "计量单位", defaultval: Model.Unit, hint: "")
+    @HelperExtend.TextBox("Weight", "重量", defaultval: Model.Weight, hint: "")
+    @HelperExtend.RadioGroup("SalesType", "销售类型 ", "0,1", "赠品,正常", defaultval: Model.SalesType)
+
+    @HelperExtend.RadioGroup("SaleStatus", "商品状态 ", "0,1", "下架,上架,审批中,审批退回", defaultval: Model.SaleStatus)
+
+
+    @HelperExtend.TextBox("VistiCounts", "访问次数", defaultval: Model.VistiCounts, hint: "")
+
+    @HelperExtend.TextBox("SaleCounts", "销售个数", defaultval: Model.SaleCounts, hint: "")
+
+    @HelperExtend.TextBox("SaleNum", "销售次数", defaultval: Model.SaleNum, hint: "")
+    @HelperExtend.TextBox("DisplaySequence", "显示顺序", defaultval: Model.DisplaySequence, hint: "")
+
+
+    @HelperExtend.TextBox("MarketPrice", "市场价", defaultval: Model.MarketPrice, hint: "")
+
+    @HelperExtend.TextBox("SalePrice", "销售价", defaultval: Model.SalePrice, hint: "")
+
+    @HelperExtend.TextBox("CostPrice", "成本价", defaultval: Model.CostPrice, hint: "")
+
+    @HelperExtend.TextBox("Points", "可得积分", defaultval: Model.Points, hint: "")
+
+    @HelperExtend.TextBox("Stock", "库存", defaultval: Model.Stock, hint: "")
+
+    @HelperExtend.TextBox("MaxQuantity", "警戒最高库存", defaultval: Model.MaxQuantity, hint: "")
+
+    @HelperExtend.TextBox("MinQuantity", "警戒最低库存", defaultval: Model.MinQuantity, hint: "")
+
+    @HelperExtend.RadioGroup("IsVirtualProduct", "虚拟产品", "false,true", "否,是", defaultval: Model.IsVirtualProduct)
+    @HelperExtend.DateTime("ManufactureDate", "生产日期", defaultval: Model.ManufactureDate, hint: "")
+    @HelperExtend.DateTime("LaunchDate", "上市日期", defaultval: Model.LaunchDate, hint: "")
+    @HelperExtend.DateTime("SaleDate", "上架日期", defaultval: Model.SaleDate, hint: "")
+    @HelperExtend.DateTime("AddedDate", "添加日期", defaultval: Model.AddedDate, hint: "")
+</div>
+
+<div class="tab-content" style="display:none">
+    @HelperExtend.TextArea("ShortDescription", "简单描述", defaultval: Model.ShortDescription)
+    @HelperExtend.UEditor("Description", "详细介绍", defaultval: Html.Raw(Model.Description))
+</div>
+<div class="tab-content" style="display:none">
+    规格
+    <div id="floatHead" class="toolbar-wrap">
+        <div class="toolbar">
+            <div class="box-wrap">
+                <a class="menu-btn"></a>
+                <div class="l-list">
+                    <ul class="icon-list">
+                        <li><a class="add" href="javascript:;" onclick="GenerateSku( );"><i></i><span>生成SKU信息</span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <fieldset id="ggInfo" style="border-width:1px; border-style:solid;  border-color:#eee">
+        <legend style=" text-align:center;     ">规格</legend>
+
+    </fieldset>
+    <table id="skugrid" class="mytable"></table>
+</div>
+<div class="tab-content" style="display:none">
+    @HelperExtend.TextBox("Meta_Title", "页面标题", defaultval: Model.Meta_Title, hint: "")
+    @HelperExtend.TextBox("Tags", "标签", defaultval: Model.Tags, hint: "")
+    @HelperExtend.TextBox("Meta_Description", "Meta描述", defaultval: Model.Meta_Description, hint: "")
+    @HelperExtend.TextBox("Meta_Keywords", "Meta关键字", defaultval: Model.Meta_Keywords, hint: "")
+</div>
+<div class="tab-content" style="display:none">
+    相关商品
+</div>
+@section  scripts{
+
+
+    <script type="text/javascript">
+
+
+        function StartGg(pid) {
+            //先判断是否有选择商品类型
+
+            if (!pid) {
+                ErrorMsg("请先选择商品类型");
+            } else {
+                $.getJSON("@Url.Action("GetGgWithProdcutVal")", { ptypeid: pid, productID: $("#ID").val() },
+                function (data, isSuccess) {
+                    if (isSuccess == "success") {
+                        $("#ggInfo").find("dl").remove();
+                        if (data.Tables[0].Rows.length > 0) {
+
+                            var html = "";
+                            for (var i = 0; i < data.Tables[0].Rows.length; i++) {
+                                var dar = data.Tables[0].Rows[i];
+                                if (dar.ShowType < 2 && !dar.ExtendInfoValueID) {
+                                    continue;
+                                }
+
+                                if (i == 0 || dar.ID != data.Tables[0].Rows[i - 1].ID) {
+                                    html += "<dl> <dt> <label  >" + dar.Name + "</label> </dt> <dd> ";
+                                }
+
+
+                                var checked = "";
+                                if (dar.HasValue == 1) {
+                                    checked = "checked='checked'"
+                                }
+                                html += "<input " + checked + "   type='checkbox' name='WithGgVal|" +
+                                    dar.ID + "|" + dar.Name + "|" + dar.UseAttrImg + "|" + dar.UseDefineImg +
+                                    "|" + dar.ExtendInfoValueID + "|" + dar.ValueStr + "|" + dar.ImgPath + "|" + dar.Note + "' />&nbsp;<label>" + dar.ValueStr + "</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+
+
+                                if (i == data.Tables[0].Rows.length - 1) {
+                                    html += "</dd></dl>"
+                                } else if (data.Tables[0].Rows[i + 1].ID != dar.ID) {
+                                    html += "</dd></dl>"
+                                }
+                            }
+                            $("#ggInfo").append(html);
+                        }
+                        if (data.Tables.length>1 && data.Tables[1].Rows.length > 0) {
+                            $("#skugrid").html("");
+                            var html = "<thead></thead>";
+                            var headelemnt = $(html);
+                            headelemnt.append("<tr></tr>");
+                            for (var colName in data.Tables[1].Rows[0]) {
+                                if (colName != "SKUID") {
+                                    headelemnt.children().append("<th  >" + colName + "</th>");
+                                }
+                            }
+
+                            headelemnt.prependTo("#skugrid");
+                            for (var i = 0; i < data.Tables[1].Rows.length; i++) {
+                                var tr = "<tr> </tr>";
+                                var trelemnt = $(tr);
+                                var row = data.Tables[1].Rows[i];
+                                var col = 0;
+                                for (var colName in row) {
+                                    if (colName != "SKUID") {
+                                        var names = row[colName];
+                                        if (!names) {
+                                            names = "";
+                                        }
+                                        var names = names.toString().split('|');
+                                        var html = "<td>";
+                                        if (names.length == 3) {
+                                            html += "<input type='hidden' name='dtrow|" + i + "|" + col + "' value='" + names[0] + "|" + names[1] + "' />" + names[2];
+                                        } else {
+                                            if (colName == "上架") {
+                                                if (row[colName]) {
+                                                    html += "<input type='checkbox' checked='checked'   name='row|" + i + "|" + col + "|IsSale'   />";/*是否上架*/
+                                                }
+                                                else { html += "<input type='checkbox'     name='row|" + i + "|" + col + "|IsSale'   />";/*是否上架*/ }
+
+                                            } else {
+                                                html += "<input   name='row|" + i + "|" + col + "|" + colName + "'  value='" + row[colName] + "' />";
+                                            }
+                                        }
+                                        html += "</td>";
+                                        col++;
+
+                                        trelemnt.append(html);
+                                    }
+                                }
+                                $("#skugrid").append(trelemnt);
+                                
+                            }
+
+                        }
+                    }
+                });
+            }
+
+        }
+        function GenerateSku() {
+            /*需要知道  规格的ID、规格的名称、规格是否使用图标、是否自定义图标、 拥有的值的ID、值、图片路径、图片描述*/
+            var columns = new $.HashMap();
+
+
+            var a = $("#ggInfo").find("input[type='checkbox']").each(
+
+                function (i, item) {
+
+                    var $item = $(item);
+                    if ($item.prop('checked')) {
+                        //获取规格ID,获取值ID,获取属性类型
+                        var names = $(item).attr("name").split('|');
+                        var coumn = { id: names[1], name: names[2], useImg: names[3], isDefineImg: names[4], valsCount: 0 };
+                        if (!columns.containsKey(coumn.id)) {
+                            coumn.vals = new $.HashMap();
+                            columns.put(coumn.id, coumn);
+                        } else {
+                            coumn = columns.get(coumn.id);
+                        }
+
+                        var attrval = { attrid: coumn.id, valid: names[5], valstr: names[6], imgPath: names[7], imgNote: names[8] };
+                        if (!coumn.vals.containsKey(attrval.valid)) {
+                            coumn.valsCount++;
+                            coumn.vals.put(attrval.valid, attrval);
+                        }
+                    }
+                });
+            var Rowscount = 1;
+            $("#skugrid").html("");
+            var coumnAttray = columns.values();
+            var html = "<thead></thead>";
+            var headelemnt = $(html);
+            headelemnt.append("<tr></tr>");
+            for (var index in coumnAttray) {
+                var c = coumnAttray[index];
+                /*计算生成行的个数*/
+                Rowscount *= c.valsCount;
+                headelemnt.children().append("<th  >" + c.name + "</th>");
+            }
+            /*增加固定列 商品编号、售价、市场价、成本价、重量、库存、最大库存、最低库存,是否上架*/
+            headelemnt.children().append("<th   >商品编号</th>");
+            headelemnt.children().append("<th   >售价</th>");
+            headelemnt.children().append("<th   >市场价</th>");
+            headelemnt.children().append("<th  >成本价</th>");
+            headelemnt.children().append("<th  >重量</th>");
+            headelemnt.children().append("<th  >库存</th>");
+            headelemnt.children().append("<th  >最大库存</th>");
+            headelemnt.children().append("<th  >最低库存</th>");
+            headelemnt.children().append("<th  >上架</th>");
+            //headelemnt.wrap("");
+
+            headelemnt.prependTo("#skugrid");
+            var columnCount = columns.size();
+            for (var i = 0; i < Rowscount; i++) {
+                var tr = "<tr> </tr>";
+                var trelemnt = $(tr);
+                for (var k = 0; k < columnCount; k++) {
+                    trelemnt.append("<td> </td>");
+                }
+                trelemnt.append("<td></td>");
+                trelemnt.append("<td></td>");
+                trelemnt.append("<td></td>");
+                trelemnt.append("<td></td>");
+                trelemnt.append("<td></td>");
+                trelemnt.append("<td></td>");
+                trelemnt.append("<td></td>");
+                trelemnt.append("<td></td>");
+                trelemnt.append("<td></td>");
+                trelemnt.prependTo("#skugrid");
+            }
+
+            var currentCellCount = Rowscount;
+            for (var index in coumnAttray) {
+                var c = coumnAttray[index];
+                var vals = c.vals.values();
+                var loopcount = 0;
+                //计算循环次数
+                currentCellCount = currentCellCount / vals.length;
+                var rowindex = 0;
+                for (var i = 0; i < Rowscount; i++) {
+                    if (rowindex == c.valsCount) {
+                        rowindex = 0;
+                    }
+                    var v = vals[rowindex++];
+                    for (var z = 0; z < currentCellCount; z++) {
+                        loopcount++;
+                        //找到对应的单元格
+                        var html = "<input type='hidden' name='dtrow|" + (loopcount - 1) + "|" + index + "' value='" + v.attrid + "|" + v.valid + "' />" + v.valstr;
+                        $("#skugrid").find("tr").eq(loopcount).find("td").eq(index).append(html);
+
+                    }
+                }
+            }
+            var sku = $("#SKU").val();
+            if (!sku) {
+                sku = $("#Code").val();
+            }
+            sku += "-";
+            //给其他列填值
+            /*增加固定列 商品编号、售价、市场价、成本价、重量、库存、最大库存、最低库存,是否上架*/
+            for (var i = 0; i < Rowscount; i++) {
+                $("#skugrid").find("tr").eq(i + 1).find("td:gt(" + (columnCount - 1) + ")").each(function (col, item) {
+                    var tdthml = "";
+                    switch (col) {
+                        case 0:
+                            tdthml = "<input   name='row|" + i + "|" + col + "|SKU' value='" + (sku + i) + "'  />";/*商品编号*/
+
+                            break;
+                        case 1:
+                            tdthml = "<input   name='row|" + i + "|" + col + "|SalePrice'  value='" + $("#SalePrice").val() + "' />";/*售价*/
+                            break;
+                        case 2:
+                            tdthml = "<input   name='row|" + i + "|" + col + "|MarketPrice'   value='" + $("#MarketPrice").val() + "'/>";/*市场价*/
+                            break;
+                        case 3:
+                            tdthml = "<input   name='row|" + i + "|" + col + "|CostPrice'  value='" + $("#CostPrice").val() + "' />";/*成本价*/
+                            break;
+                        case 4:
+                            tdthml = "<input   name='row|" + i + "|" + col + "|Weight'  value='" + $("#Weight").val() + "' />";/*重量*/
+                            break;
+                        case 5:
+                            tdthml = "<input   name='row|" + i + "|" + col + "|Stock'  value='" + $("#Stock").val() + "' />";/*库存*/
+                            break;
+                        case 6:
+                            tdthml = "<input   name='row|" + i + "|" + col + "|MaxAlertStock'  value='" + $("#MaxQuantity").val() + "' />";/*最大库存*/
+                            break;
+                        case 7:
+                            tdthml = "<input   name='row|" + i + "|" + col + "|MinAlertStock'  value='" + $("#MinQuantity").val() + "' />";/*最低库存*/
+                            break;
+                        case 8:
+                            tdthml = "<input type='checkbox' checked='checked'   name='row|" + i + "|" + col + "|IsSale'   />";/*是否上架*/
+                            break;
+
+                    }
+                    $(item).html(tdthml);
+                });
+            }
+
+        }
+        function changeType(event) {
+            var args = event.args;
+            if (args) {
+                // index represents the item's index.
+                var index = args.index;
+                var item = args.item;
+                // get item's label and value.
+                var label = item.label;
+                var value = item.value;
+                GetAttri(value);
+                StartGg(value);
+            }
+
+        }
+
+        $(function () { GetAttri("@Model.TypeId"); StartGg("@Model.TypeId") });
+        function GetAttri(pid) {
+            if (!pid) {
+                return;
+            }
+            $.getJSON("@Url.Action("GetAttrWithProdcutVal")", { ptypeid: pid, productID: $("#ID").val() },
+            function (data, isSuccess) {
+                if (isSuccess == "success") {
+                    $("#extendInfo").find("dl").remove();
+                    if (data.Rows.length > 0) {
+
+                        var html = "";
+                        for (var i = 0; i < data.Rows.length; i++) {
+                            var dar = data.Rows[i];
+                            if (dar.ShowType < 2 && !dar.ExtendInfoValueID) {
+                                continue;
+                            }
+
+                            if (i == 0 || dar.ID != data.Rows[i - 1].ID) {
+                                html += "<dl> <dt> <label  >" + dar.Name + "</label> </dt> <dd> ";
+                            }
+
+                            if (dar.ShowType == 0) {
+                                var checked = "";
+                                if (dar.HasValue == 1) {
+                                    checked = "checked='checked'"
+                                }
+                                html += "<input " + checked + "  type='radio' name='WithProdcutVal|" + dar.ID + "|" + dar.ShowType + "' value='" + dar.ID + "|" + dar.ExtendInfoValueID + "|" + dar.ShowType + "' />&nbsp;<label>" + dar.ValueStr + "</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                            } else if (dar.ShowType == 1) {
+                                var checked = "";
+                                if (dar.HasValue == 1) {
+                                    checked = "checked='checked'"
+                                }
+                                html += "<input " + checked + "  type='checkbox' name='WithProdcutVal|" + dar.ID + "|" + dar.ShowType + "|" + dar.ExtendInfoValueID + "' value='" + dar.ID + "|" + dar.ExtendInfoValueID + "|" + dar.ShowType + "' />&nbsp;<label>" + dar.ValueStr + "</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                            } else {
+                                var valtext = dar.ValueStr;
+                                if (!valtext) {
+                                    valtext = "";
+                                }
+                                html += "<input   name='WithProdcutVal|" + dar.ID + "|" + dar.ShowType + "' type='text' " + "value='" + valtext + "'/>";
+                            }
+
+
+                            if (i == data.Rows.length - 1) {
+                                html += "</dd></dl>"
+                            } else if (data.Rows[i + 1].ID != dar.ID) {
+                                html += "</dd></dl>"
+                            }
+                        }
+                        $("#extendInfo").append(html);
+                    }
+                }
+            });
+        }
+        var oldType = null;
+        function unselectType(event) {
+            var args = event.args;
+            if (args) {
+                oldType = args.item;
+            } else {
+                oldType = null;
+            }
+        }
+
+        $(function () {
+
+
+            //初始化表单验证
+            $("form").validate({
+                ignore: "",
+                rules: {
+                    "Code": {
+                        required: true,
+                        maxlength: 50,
+                        remote: {
+                            url: '@Url.Action("CheckRepeat")',
+                            data: {
+                                ID: function () { return $("#ID").val(); },
+                                RecordStatus: function () { return $("#RecordStatus").val(); },
+                                val: function () { return $("#Code").val(); }
+                            }
+                        }
+                    },
+                    Name: {
+                        required: true,
+                        maxlength: 100
+                    },
+                    ShopCategoryName: { required: true }
+                    ,
+                    TypeId: { required: true }
+
+                },
+                messages: {
+                    Code: {
+                        required: "请输入编号",
+                        maxlength: $.validator.format("编号长度不能大于{0}个字符"),
+                        remote: "编号重复"
+                    },
+                    Name: {
+                        required: "请输入名称",
+                        maxlength: $.validator.format("名称长度不能大于{0}个字符")
+                    },
+                    ShopCategoryName: { required: "请输入商品分类" },
+                    TypeId: { required: "请输入商品类型" }
+                },
+                errorPlacement: function (error, element) {
+
+                    if (element.is(":radio"))
+                        error.insertAfter($(element).parent());
+                    else if (element.is(":checkbox"))
+                        error.insertAfter($(element).parent());
+                    else
+                        error.insertAfter(element);
+                }
+
+            });
+        })
+    </script>
+
+    <script type="text/javascript">
+
+        function InnitFunc() {
+            var source =
+                        {
+                            dataType: "json",
+                            dataFields: [
+
+               { name: 'ID', type: 'string' },
+
+               { name: 'ParentID', type: 'string' },
+
+               { name: 'Code', type: 'string' },
+
+               { name: 'Name', type: 'string' }
+                            ],
+                            timeout: 10000,
+                            hierarchy:
+                            {
+                                keyDataField: { name: 'ID' },
+                                parentDataField: { name: 'ParentID' }
+                            },
+                            id: 'ID',
+                            root: 'Rows',
+                            url: " @Url.Action("GetListForSelecte", "ShopCategory", new { area = "Admin" })"
+                        };
+            var dataAdapter = new $.jqx.dataAdapter(source);
+
+
+            $("#treeGrid").jqxTreeGrid(
+                       {
+                           width: "95%",
+                           height: "95%",
+                           source: dataAdapter,
+                           columns: [
+             { text: '编码', dataField: 'Code', type: 'string', width: 200 },
+             { text: '名称', dataField: 'Name', type: 'string', width: 200 }
+                           ]
+                       });
+        }
+        function onOk(data) {
+            if (data.length == 1) {
+
+
+                $("#ShopCategoryName").val(data[0].Name);
+                $("#ShopCategoryID").val(data[0].ID);
+
+            } else { ErrorMsg("请选择一条数据"); }
+        }
+        $(function () {
+
+            if ("@TempData.ContainsKey("IsSuccess").ToString().ToLower()" == "true") {
+                SucessMsg("@TempData["IsSuccess"]");
+            }
+
+
+        });
+    </script>
+}

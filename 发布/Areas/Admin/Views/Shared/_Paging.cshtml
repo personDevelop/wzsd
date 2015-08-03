@@ -1,0 +1,64 @@
+﻿<script type="text/javascript">
+    var theme = "";
+   
+    var pagerrenderer = function (gridid) {
+        var pageelement;
+        if (!gridid) {
+            gridid = "#jqxgrid";
+        }
+        var datainfo = $(gridid).jqxGrid('getdatainformation');
+        var paginginfo = datainfo.paginginformation;
+
+        pageelement = $("<div style='margin-left: 10px; margin-top: 5px; width: 100%; height: 100%;'></div>");
+
+        var leftButton = $("<div style='padding: 0px; float: left;'><div style='margin-left: 9px; width: 16px; height: 16px;'></div></div>");
+        leftButton.find('div').addClass('jqx-icon-arrow-left');
+        leftButton.width(36);
+        leftButton.jqxButton({ theme: theme });
+        var rightButton = $("<div style='padding: 0px; margin: 0px 3px; float: left;'><div style='margin-left: 9px; width: 16px; height: 16px;'></div></div>");
+        rightButton.find('div').addClass('jqx-icon-arrow-right');
+        rightButton.width(36);
+        rightButton.jqxButton({ theme: theme });
+        leftButton.appendTo(pageelement);
+        rightButton.appendTo(pageelement);
+
+        var label = $("<div style='font-size: 11px; margin: 2px 3px; font-weight: bold; float: left;'></div>");
+        if (datainfo.rowscount == 0) {
+            label.text("无符合条件的记录");
+        } else {
+            label.text("第" + (1 + paginginfo.pagenum * paginginfo.pagesize) + "-" + Math.min(datainfo.rowscount, (paginginfo.pagenum + 1) * paginginfo.pagesize) + '  条,共  ' + datainfo.rowscount + "条记录");
+        }
+
+        label.appendTo(pageelement);
+        self.label = label;
+
+        // update buttons states.
+        var handleStates = function (event, button, className, add) {
+            button.on(event, function () {
+                if (add == true) {
+                    button.find('div').addClass(className);
+                }
+                else button.find('div').removeClass(className);
+            });
+        }
+        if (theme != '') {
+            handleStates('mousedown', rightButton, 'jqx-icon-arrow-right-selected-' + theme, true);
+            handleStates('mouseup', rightButton, 'jqx-icon-arrow-right-selected-' + theme, false);
+            handleStates('mousedown', leftButton, 'jqx-icon-arrow-left-selected-' + theme, true);
+            handleStates('mouseup', leftButton, 'jqx-icon-arrow-left-selected-' + theme, false);
+            handleStates('mouseenter', rightButton, 'jqx-icon-arrow-right-hover-' + theme, true);
+            handleStates('mouseleave', rightButton, 'jqx-icon-arrow-right-hover-' + theme, false);
+            handleStates('mouseenter', leftButton, 'jqx-icon-arrow-left-hover-' + theme, true);
+            handleStates('mouseleave', leftButton, 'jqx-icon-arrow-left-hover-' + theme, false);
+        }
+        rightButton.click(function () {
+            $(gridid).jqxGrid('gotonextpage');
+        });
+        leftButton.click(function () {
+            $(gridid).jqxGrid('gotoprevpage');
+        });
+
+        return pageelement;
+    }
+
+</script>
