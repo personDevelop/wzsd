@@ -188,7 +188,7 @@ namespace EasyCms.Dal
 
 
                 DataTable dt = Dal.FromCustomSql("select " + tempTable + @".*,  SKU AS 商品编号, SalePrice AS 售价, MarketPrice AS 市场价, CostPrice AS 成本价, Weight AS 重量, Stock AS 库存, MaxAlertStock AS 最大库存, 
-                      MinAlertStock AS 最低库存, IsSale AS 上架
+                      MinAlertStock AS 最低库存, IsSale AS 上架, IsDefault AS 默认商品
  from " + tempTable + " join ShopProductSKUInfo on SKURelationID=SKUID where ProductId='"
                       + productID + "'  order by OrderNo").ToDataTable();
                 dt.TableName = tempTable;
@@ -217,6 +217,57 @@ namespace EasyCms.Dal
                     .Join<ShopExtendInfoValue>(ShopProductAttributes._.ValueId == ShopExtendInfoValue._.ID)
                     .Select(
                     ShopExtendInfo._.Name.Alias("AttrName"), ShopExtendInfoValue._.ValueStr.Alias("AttrValue")).ToDataTable();
+                //获取其价格
+                if (p.IsEnableSku)
+                {
+                    object maxPrice = Dal.Max<ShopProductSKUInfo>(ShopProductSKUInfo._.ProductId == p.ID, ShopProductSKUInfo._.SalePrice);
+                    object minPrice = Dal.Min<ShopProductSKUInfo>(ShopProductSKUInfo._.ProductId == p.ID, ShopProductSKUInfo._.SalePrice);
+                    string maxPriceStr = string.Empty;
+                    string minPriceStr = string.Empty;
+                    if (!(maxPrice is DBNull))
+                    {
+                        maxPriceStr = maxPrice.ToString();
+                    }
+                    if (!(minPrice is DBNull))
+                    {
+                        minPriceStr = minPrice.ToString();
+                    }
+                    if (maxPriceStr == minPriceStr)
+                    {
+                        p.PriceRange = minPriceStr;
+                    }
+                    else
+                    {
+                        p.PriceRange = minPriceStr + "-" + maxPriceStr;
+                    }
+                    //获取其默认规格
+                    ShopProductSKUInfo defaultSku = Dal.Find<ShopProductSKUInfo>(ShopProductSKUInfo._.ProductId == p.ID && ShopProductSKUInfo._.IsDefault == true);
+                    if (defaultSku != null)
+                    {
+                        p.DefaultSkuID = defaultSku.ID;
+                        List<ShopProductSKU> listGg = Dal.From<ShopProductSKU>()
+                            .Join<ShopExtendInfo>(ShopExtendInfo._.ID == ShopProductSKU._.AttributeId)
+                            .Where(ShopProductSKU._.ID == defaultSku.SKURelationID).OrderBy(ShopExtendInfo._.DisplayOrder)
+                            .Select(ShopProductSKU._.AttributeId, ShopProductSKU._.ValueId)
+                            .List<ShopProductSKU>();
+                        string result = string.Empty;
+                        foreach (var item in listGg)
+                        {
+                            if (!string.IsNullOrWhiteSpace(result))
+                            {
+                                result += ",";
+                            }
+                            result += item.AttributeId + "|" + item.ValueId;
+                        }
+                        p.DefaultGgVals = result;
+                    }
+
+                }
+                else
+                {
+                    p.PriceRange = p.SalePrice.ToString();
+                }
+
                 #region 单独分出接口来
                 ////获取其规格
 

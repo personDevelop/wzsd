@@ -183,27 +183,35 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                         switch (vals[3])
                         {
                             case "商品编号":
+                            case "SKU":
                                 skuinfo.SKU = collection[item];
                                 break;
                             case "售价":
+                            case "SalePrice":
                                 skuinfo.SalePrice = o;
                                 break;
                             case "市场价":
+                            case "MarketPrice":
                                 skuinfo.MarketPrice = o;
                                 break;
                             case "成本价":
+                            case "CostPrice":
                                 skuinfo.CostPrice = o;
                                 break;
                             case "重量":
+                            case "Weight":
                                 skuinfo.Weight = o;
                                 break;
                             case "库存":
+                            case "Stock":
                                 skuinfo.Stock = o;
                                 break;
                             case "最大库存":
+                            case "MaxAlertStock":
                                 skuinfo.MaxAlertStock = o;
                                 break;
                             case "最低库存":
+                            case "MinAlertStock":
                                 skuinfo.MinAlertStock = o;
                                 break;
                             case "IsSale":
@@ -215,6 +223,16 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                                 {
                                     skuinfo.IsSale = false;
                                 }
+                                break;
+                            case "IsDefault":
+                                if (collection[item] == "on")
+                                {
+                                    skuinfo.IsDefault = true;
+                                }
+                                else
+                                {
+                                    skuinfo.IsDefault = false;
+                                } 
                                 break;
                         }
 

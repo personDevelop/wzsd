@@ -244,6 +244,13 @@
                                                 }
                                                 else { html += "<input type='checkbox'     name='row|" + i + "|" + col + "|IsSale'   />";/*是否上架*/ }
 
+                                            } else 
+                                            if (colName == "默认商品") {
+                                                if (row[colName]) {
+                                                    html += "<input type='checkbox' checked='checked' onclick='chage(" + i + ")'   name='row|" + i + "|" + col + "|IsDefault'   />";/*是否默认*/
+                                                }
+                                                else { html += "<input type='checkbox' onclick='chage("+i+")'     name='row|" + i + "|" + col + "|IsDefault'   />";/*是否默认*/ }
+
                                             } else {
                                                 html += "<input   name='row|" + i + "|" + col + "|" + colName + "'  value='" + row[colName] + "' />";
                                             }
@@ -314,6 +321,7 @@
             headelemnt.children().append("<th  >最大库存</th>");
             headelemnt.children().append("<th  >最低库存</th>");
             headelemnt.children().append("<th  >上架</th>");
+            headelemnt.children().append("<th  >默认商品</th>");
             //headelemnt.wrap("");
 
             headelemnt.prependTo("#skugrid");
@@ -324,6 +332,7 @@
                 for (var k = 0; k < columnCount; k++) {
                     trelemnt.append("<td> </td>");
                 }
+                trelemnt.append("<td></td>");
                 trelemnt.append("<td></td>");
                 trelemnt.append("<td></td>");
                 trelemnt.append("<td></td>");
@@ -397,12 +406,32 @@
                         case 8:
                             tdthml = "<input type='checkbox' checked='checked'   name='row|" + i + "|" + col + "|IsSale'   />";/*是否上架*/
                             break;
+                        case 9:
+                            if (i==0) {
+                                tdthml = "<input type='checkbox' checked='checked' onclick='chage(" + i + ")'   name='row|" + i + "|" + col + "|IsDefault'   />";/*是否默认*/
+                            }else
+                                tdthml = "<input type='checkbox'   onclick='chage(" + i + ")'   name='row|" + i + "|" + col + "|IsDefault'   />";/*是否默认*/
+                            break;
 
                     }
                     $(item).html(tdthml);
                 });
             }
 
+        }
+        function chage(index)
+        {
+            $("#skugrid").find("input[type='checkbox']").each(function (i,elemnt) {
+                if ($(elemnt).attr("name").indexOf("IsDefault") > 0) {
+                    var nameStr = $(elemnt).attr("name");
+                    var arr = nameStr.split('|');
+                    if (arr[1] != index) {
+                        $(elemnt).attr("checked", false);
+                    }
+                }
+                 
+               
+            });
         }
         function changeType(event) {
             var args = event.args;

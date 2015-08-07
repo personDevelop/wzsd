@@ -1231,6 +1231,19 @@ namespace EasyCms.Model
             set;
         }
 
+        /// <summary>
+        /// 价格范围
+        /// </summary>
+        public string PriceRange { get; set; }
+        /// <summary>
+        /// 价格范围
+        /// </summary>
+        public string DefaultSkuID { get; set; }
+        /// <summary>
+        /// 价格范围
+        /// </summary>
+        public string DefaultGgVals { get; set; }
+
         [NotDbCol]
         public System.Data.DataTable dtImg { get; set; }
         [NotDbCol]

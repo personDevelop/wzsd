@@ -50,6 +50,8 @@ namespace EasyCms.Model
 
         private int _OrderNo;
 
+        private bool _IsDefault;
+
         #endregion
 
         #region 属性
@@ -302,6 +304,25 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  是否默认,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "IsDefault", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public bool IsDefault
+        {
+            get
+            {
+                return this._IsDefault;
+            }
+            set
+            {
+                this.OnPropertyChanged("IsDefault", this._IsDefault, value);
+                this._IsDefault = value;
+            }
+        }
+
         #endregion
 
         #region 列定义
@@ -335,6 +356,8 @@ namespace EasyCms.Model
                 IsSale = new PropertyItem("IsSale", tableName);
 
                 OrderNo = new PropertyItem("OrderNo", tableName);
+
+                IsDefault = new PropertyItem("IsDefault", tableName);
 
 
             }
@@ -390,6 +413,10 @@ namespace EasyCms.Model
             /// 顺序,
             /// </summary> 
             public PropertyItem OrderNo = null;
+            /// <summary>
+            /// 是否默认,
+            /// </summary> 
+            public PropertyItem IsDefault = null;
         }
         #endregion
     }
