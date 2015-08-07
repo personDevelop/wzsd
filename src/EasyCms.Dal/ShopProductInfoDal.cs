@@ -241,25 +241,32 @@ namespace EasyCms.Dal
                         p.PriceRange = minPriceStr + "-" + maxPriceStr;
                     }
                     //获取其默认规格
-                    ShopProductSKUInfo defaultSku = Dal.Find<ShopProductSKUInfo>(ShopProductSKUInfo._.ProductId == p.ID && ShopProductSKUInfo._.IsDefault == true);
+                    ShopProductSKUInfo defaultSku = Dal.Find<ShopProductSKUInfo>
+                        (ShopProductSKUInfo._.ProductId == p.ID && ShopProductSKUInfo._.IsDefault == true);
                     if (defaultSku != null)
                     {
+                        p.SalePrice = defaultSku.SalePrice;
                         p.DefaultSkuID = defaultSku.ID;
                         List<ShopProductSKU> listGg = Dal.From<ShopProductSKU>()
                             .Join<ShopExtendInfo>(ShopExtendInfo._.ID == ShopProductSKU._.AttributeId)
+                              .Join<ShopExtendInfoValue>(ShopExtendInfoValue._.ID == ShopProductSKU._.ValueId)
                             .Where(ShopProductSKU._.ID == defaultSku.SKURelationID).OrderBy(ShopExtendInfo._.DisplayOrder)
-                            .Select(ShopProductSKU._.AttributeId, ShopProductSKU._.ValueId)
+                            .Select(ShopProductSKU._.AttributeId, ShopProductSKU._.ValueId, ShopExtendInfoValue._.ValueStr)
                             .List<ShopProductSKU>();
                         string result = string.Empty;
+                        string names = string.Empty;
                         foreach (var item in listGg)
                         {
                             if (!string.IsNullOrWhiteSpace(result))
                             {
                                 result += ",";
+                                names += " ";
                             }
                             result += item.AttributeId + "|" + item.ValueId;
+                            names += item.ValueStr;
                         }
                         p.DefaultGgVals = result;
+                        p.DefaultGgText = names;
                     }
 
                 }
