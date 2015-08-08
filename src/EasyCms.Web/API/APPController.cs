@@ -15,18 +15,9 @@ using EasyCms.Web.Common;
 using System.Web.Hosting;
 namespace EasyCms.Web.API
 {
-    public class APPController : ApiController
+    public class APPController : BaseAPIControl
     {
-        string host
-        {
-            get
-            {
 
-                string url = this.Url.Request.RequestUri.Authority + RequestContext.VirtualPathRoot;
-                if (!url.StartsWith("http://")) url = "http://" + url;
-                return url;
-            }
-        }
         public HttpResponseMessage GetNews(int id = 1)
         {
             try
@@ -118,7 +109,7 @@ namespace EasyCms.Web.API
                     {
 
 
-                       
+
                         return p.FormatObj();
                     }
                 }

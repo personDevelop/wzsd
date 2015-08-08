@@ -84,6 +84,7 @@
     <Compile Include="StaticValue.cs" />
     <Compile Include="SysRoleInfo.cs" />
     <Compile Include="ValiCodeModel.cs" />
+    <Compile Include="View_ProductInfoBySkuid.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="验证类扩展字段.txt" />

@@ -42,6 +42,28 @@ namespace EasyCms.Dal
         {
             return Dal.Find<ShopShoppingCarts>(id);
         }
+
+        public DataTable GetCardInfo(List<string> productIDS, List<string> SKUIDS, string host)
+        {
+            WhereClip where = View_ProductInfoBySkuid._.ID.In(productIDS);
+            if (SKUIDS==null || SKUIDS.Count==0)
+	{
+		  where =where&& View_ProductInfoBySkuid._.SKUID == string.Empty;
+            
+            }else
+            {
+                where = where && (
+
+                  View_ProductInfoBySkuid._.SKUID.In(SKUIDS) || View_ProductInfoBySkuid._.SKUID == string.Empty
+
+                  );
+            }
+
+            return Dal.From<View_ProductInfoBySkuid>().Join<AttachFile>(View_ProductInfoBySkuid._.ID == AttachFile._.RefID, JoinType.leftJoin)
+                .Select(View_ProductInfoBySkuid._.ID.All, AttachFile.GetFilePath(host))
+                .Where( where )
+                .ToDataTable();
+        }
     }
 
 }

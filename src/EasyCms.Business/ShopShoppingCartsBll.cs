@@ -35,8 +35,14 @@ namespace EasyCms.Business
             return Dal.GetEntity(id);
         }
 
- 
 
 
+
+
+        public DataTable GetCardInfo(List<string> productIDS, List<string> SKUIDS, string host)
+        {
+
+            return Dal.GetCardInfo( productIDS,  SKUIDS,   host);
+        }
     }
 }
