@@ -262,7 +262,8 @@ namespace EasyCms.Dal
                                 result += ",";
                                 names += " ";
                             }
-                            result += item.AttributeId + "|" + item.ValueId;
+                            //result += item.AttributeId + "|" + item.ValueId;
+                            result +=   item.ValueId;
                             names += item.ValueStr;
                         }
                         p.DefaultGgVals = result;
