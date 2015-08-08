@@ -287,7 +287,9 @@
   <ItemGroup>
     <Content Include="API\controller.ashx" />
     <Content Include="Areas\Admin\Views\Index\HtmlPage1.html" />
-    <Content Include="config.json" />
+    <Content Include="config.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Config\System\DataBaseConnect.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

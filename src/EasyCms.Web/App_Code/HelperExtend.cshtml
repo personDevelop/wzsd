@@ -169,7 +169,7 @@
             <script type="text/javascript">
                 //实例化编辑器
                 //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
-                UE.getEditor('@code', { textarea: "@code",initialContent: "@defaultval",UEDITOR_HOME_URL:"@homeUrl",serverUrl:"@serverUrl" });
+                UE.getEditor('@code', { textarea: "@code",initialContent:UE.utils.html( UE.utils.unhtml( "@defaultval" )),UEDITOR_HOME_URL:"@homeUrl",serverUrl:"@serverUrl" });
                 @*@{ string uecode = "ue" + code;}
                 var  <text>@uecode</text> =  UE.getEditor('@code', { textarea: "@code",initialContent: "@defaultval" });
                 <text>@uecode</text>.ready(function() {
@@ -225,11 +225,11 @@
                                 }
                                 bool valb = false;
                                 bool.TryParse(val.ToString(), out valb);
-                                <input type="checkbox" name="@item" checked="@val" />
+                        <input type="checkbox" name="@item" checked="@val" />
                             }
-                            <label for="@item">
-                                @nameArr[i]
-                            </label>
+                        <label for="@item">
+                            @nameArr[i]
+                        </label>
                             i++;
                         }
                     }
@@ -266,8 +266,8 @@
 
                             radioId += i.ToString();
 
-                            <input id="@radioId" name="@code" type="radio" @IsSelected value="@item" />
-                            <label for="@radioId">@nameArr[i]</label>
+                        <input id="@radioId" name="@code" type="radio" @IsSelected value="@item" />
+                        <label for="@radioId">@nameArr[i]</label>
                             i++;
                         }
 

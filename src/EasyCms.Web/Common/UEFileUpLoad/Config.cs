@@ -24,9 +24,23 @@ public static class Config
     {
         get
         {
+            
             if (noCache || _Items == null)
             {
                 _Items = BuildItems();
+                string virtualPath = HttpContext.Current.Request.ApplicationPath;
+                if (virtualPath == "/")
+                {
+                    virtualPath = string.Empty;
+                }
+                _Items["imageUrlPrefix"] = virtualPath;
+                _Items["scrawlUrlPrefix"] = virtualPath;
+                _Items["snapscreenUrlPrefix"] = virtualPath;
+                _Items["catcherUrlPrefix"] = virtualPath;
+                _Items["videoUrlPrefix"] = virtualPath;
+                _Items["fileUrlPrefix"] = virtualPath;
+                _Items["imageManagerUrlPrefix"] = virtualPath;
+                _Items["fileManagerUrlPrefix"] = virtualPath; 
             }
             return _Items;
         }
