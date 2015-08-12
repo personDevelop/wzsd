@@ -23,10 +23,20 @@ namespace EasyCms.Web.API
             {
                 var resp = new HttpResponseMessage(HttpStatusCode.OK);
                 string userid = Request.GetAccountID();
+
                 string result = string.Empty;
                 if (string.IsNullOrWhiteSpace(userid))
                 {
-                    return "无效令牌".FormatError();
+                    //测试token  获取所有token
+                    string token = Request.GetToken();
+                    string msg = "当前的token值是【{0}】；系统里包含的token值是【{1}】";
+                    string oldToken = string.Empty;
+                    foreach (var item in Class1.list)
+                    {
+                        oldToken += item + " ";
+                    }
+                    msg = string.Format(msg, token, oldToken);
+                    return ("无效令牌" + msg).FormatError();
 
                 }
                 else
@@ -95,7 +105,7 @@ namespace EasyCms.Web.API
             {
                 //检验验证码是否正确，
                 string msg = string.Empty;
-                
+
                 if (shopShippingAddress.RegionId < 1)
                 {
                     msg = "收件地区不能为空";
@@ -131,10 +141,10 @@ namespace EasyCms.Web.API
                                 }
                                 else
                                 {
-                                    
+
                                     entity = shopShippingAddress;
                                 }
-                                
+
                                 msg = bll.Save(entity);
                             }
 

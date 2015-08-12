@@ -589,6 +589,9 @@ namespace EasyCms.Model
         {
             CreateDate = LastModifyDate = StatusChangeDate = DateTime.Now;
         }
+
+        [NotDbCol]
+        public string DeviceID { get; set; }
     }
 
     public enum ClientEnum

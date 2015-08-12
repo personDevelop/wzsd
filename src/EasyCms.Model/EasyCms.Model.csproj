@@ -77,6 +77,7 @@
     <Compile Include="ShopProductStationMode.cs" />
     <Compile Include="ShopProductType.cs" />
     <Compile Include="ShopProductTypeAndBrand.cs" />
+    <Compile Include="ShopPromotion.cs" />
     <Compile Include="ShopRalationProduct.cs" />
     <Compile Include="ShopShippingAddress.cs" />
     <Compile Include="ShopShippingPayment.cs" />
