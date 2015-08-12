@@ -84,7 +84,7 @@ namespace EasyCms
             }
             if (!string.IsNullOrWhiteSpace(result))
             {
-                result = System.Web.HttpUtility.UrlDecode(result,Encoding.UTF8);
+                result = System.Web.HttpUtility.UrlEncode(result,Encoding.UTF8);
                 ManagerUserInfo user = LoginModel.GetCachUserInfo(result);
                 if (user != null)
                 {
