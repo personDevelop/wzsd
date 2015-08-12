@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Web;
 
 namespace EasyCms
@@ -83,6 +84,7 @@ namespace EasyCms
             }
             if (!string.IsNullOrWhiteSpace(result))
             {
+                result = System.Web.HttpUtility.UrlDecode(result,Encoding.UTF8);
                 ManagerUserInfo user = LoginModel.GetCachUserInfo(result);
                 if (user != null)
                 {
