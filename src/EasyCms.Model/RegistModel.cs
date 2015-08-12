@@ -61,6 +61,7 @@ namespace EasyCms.Model
             this.TimeStamp = DateTime.Now.ToString("yyyyMMddHHmmssfff");
             string source = this.Account + "|" + this.Pwd + "|" + this.TimeStamp + "|" + this.DeviceID;
             string token = source.EncryptSHA1();
+            token = System.Web.HttpUtility.HtmlEncode(token); 
             Class1.list.Add(token);
             return token;
 
