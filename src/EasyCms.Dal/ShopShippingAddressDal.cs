@@ -41,6 +41,7 @@ namespace EasyCms.Dal
                     item.ID = Guid.NewGuid().ToString();
                     
                 }
+                item.IsDefault = true;
                 ShopShippingAddress s = new ShopShippingAddress();
                 s.RecordStatus = StatusType.update;
                 s.Where = ShopShippingAddress._.UserId == item.UserId;
