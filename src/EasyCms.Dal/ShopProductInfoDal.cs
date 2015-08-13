@@ -259,11 +259,11 @@ namespace EasyCms.Dal
                         {
                             if (!string.IsNullOrWhiteSpace(result))
                             {
-                                result += ",";
+                                result += "|";
                                 names += " ";
                             }
                             //result += item.AttributeId + "|" + item.ValueId;
-                            result +=   item.ValueId;
+                            result += item.ValueId;
                             names += item.ValueStr;
                         }
                         p.DefaultGgVals = result;
