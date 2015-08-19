@@ -47,7 +47,7 @@
   <ItemGroup>
     <Compile Include="AdministrativeRegions.cs" />
     <Compile Include="AttachFile.cs" />
-    <Compile Include="Coupon.cs" />
+    <Compile Include="CouponRule.cs" />
     <Compile Include="FunctionInfo.cs" />
     <Compile Include="Gataway.cs" />
     <Compile Include="ManagerUserInfo.cs" />

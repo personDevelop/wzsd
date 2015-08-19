@@ -15,7 +15,7 @@
         <div class="content-tab-ul-wrap">
             <ul>
                 <li><a class="selected" href="javascript:;">基本信息</a></li>
-             
+
             </ul>
         </div>
     </div>
@@ -25,37 +25,23 @@
 
     @HelperExtend.HiddenFor("ID", Model.ID)
     @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())
-
-     
-     
-  
     @Html.ValidationSummary()
-
-
-
-  
-
-    @HelperExtend.RadioGroup("RuleType", "类型", "0,1", "规则1,规则2", defaultval: Model.RuleType)
+    @HelperExtend.DropDownList("RuleType", "类型", defaultval: Model.RuleType, downInfo: new DropDownListInfo()
+{
+    Url = Url.Action("GetIdAndNameByParentId", "ParameterInfo", new { area = "Admin", id = StaticValue.RuleType })
+})
 
     @HelperExtend.TextBox("Name", "规则名称", defaultval: Model.Name, hint: "")
-
+    @HelperExtend.RadioGroup("ComputeType", "计算方式", "0,1", "按比例,按定额", defaultval: Model.ComputeType)
     @HelperExtend.TextBox("BaseNum", "基数", defaultval: Model.BaseNum, hint: "")
-
     @HelperExtend.TextBox("ReleNum", "兑换数值", defaultval: Model.ReleNum, hint: "")
-
     @HelperExtend.TextBox("BL", "不能超过商品单价比例", defaultval: Model.BL, hint: "")
-
-  
-
     @HelperExtend.RadioGroup("IsEnable", "是否启用", "false,true", "否,是", defaultval: Model.IsEnable)
     @HelperExtend.TextBox("Remark", "备注", defaultval: Model.Remark, hint: "")
 
-
- 
-   
 </div>
 
- 
+
 @section  scripts{
 
 
@@ -70,7 +56,7 @@
                 rules: {
                     "RuleType": {
                         required: true,
-                        maxlength: 50 
+                        maxlength: 50
                     },
                     Name: {
                         required: true,
@@ -93,7 +79,7 @@
                 messages: {
                     RuleType: {
                         required: "请选择类型",
-                        maxlength: $.validator.format("编号长度不能大于{0}个字符") 
+                        maxlength: $.validator.format("编号长度不能大于{0}个字符")
                     },
                     Name: {
                         required: "请输入名称",

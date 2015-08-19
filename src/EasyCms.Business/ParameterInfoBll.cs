@@ -100,6 +100,11 @@ namespace EasyCms.Business
         {
           return  Dal.GetRegistAgreement();
         }
- 
+
+
+        public DataTable GetIdAndNameByParentId(string parentID)
+        {
+            return Dal.GetIdAndNameByParentId(  parentID);
+        }
     }
 }

@@ -524,6 +524,66 @@ namespace EasyCms.Dal
 
             return err;
         }
+
+        public DataTable GetSkuByProductID(string productID, out string err)
+        {
+            err = string.Empty;
+            ShopProductInfo product = Dal.From<ShopProductInfo>().Where(ShopProductInfo._.ID == productID).Select(ShopProductInfo._.SaleStatus, ShopProductInfo._.IsEnableSku).ToFirst<ShopProductInfo>();
+            if (product == null || product.SaleStatus != 1)
+            {
+                err = "当前商品可能已下架";
+                return null;
+            }
+            else
+                if (!product.IsEnableSku)
+                {
+                    err = "当前商品没启用SKU";
+                    return null;
+
+                }
+                else
+                {
+                    DataTable dt = Dal.From<ShopProductSKUInfo>().Where(ShopProductSKUInfo._.ProductId == productID
+                        && ShopProductSKUInfo._.IsSale == true
+
+                        ).OrderBy(ShopProductSKUInfo._.OrderNo)
+                           .Select(ShopProductSKUInfo._.ID.Alias("SkuID"), ShopProductSKUInfo._.IsSale, ShopProductSKUInfo._.MarketPrice, ShopProductSKUInfo._.SalePrice, ShopProductSKUInfo._.SKU, ShopProductSKUInfo._.SKURelationID
+                           , ShopProductSKUInfo._.Stock).ToDataTable();
+
+                    DataTable dtSku = Dal.From<ShopProductSKU>().Where(ShopProductSKU._.ProductId == productID)
+                        .Join<ShopExtendInfo>(ShopExtendInfo._.ID == ShopProductSKU._.AttributeId).Join<ShopExtendInfoValue>(ShopProductSKU._.ValueId == ShopExtendInfoValue._.ID)
+                        .OrderBy(ShopProductSKU._.AttributeId, ShopExtendInfo._.DisplayOrder, ShopExtendInfoValue._.DisplaySequence)
+                        .Select(ShopProductSKU._.ID, ShopExtendInfoValue._.ValueStr).ToDataTable();
+                    DataColumn dcAttrVal = new DataColumn("AttriVal");
+                    dt.Columns.Add(dcAttrVal);
+                    foreach (DataRow item in dt.Rows)
+                    {
+                        var query = from dr in dtSku.AsEnumerable() where (dr.Field<string>("ID") == item["SKURelationID"] as string) select dr.Field<string>("ValueStr");
+                        string resut = string.Empty;
+                        foreach (var oneval in query)
+                        {
+                            if (!string.IsNullOrWhiteSpace(resut))
+                            {
+                                resut += "   ";
+                            }
+                            resut += oneval;
+                        }
+                        item["AttriVal"] = resut;
+
+                    }
+                    dt.Columns.Remove("SKURelationID");
+                    dt.AcceptChanges();
+                    return dt;
+                }
+        }
+
+        public DataTable GetProduct(int pageIndex, int pagesize, ref int pagecount, ref int recordCount)
+        {
+            
+            return Dal.From<ShopProductInfo>().Select(ShopProductInfo._.ID,ShopProductInfo._.Code, ShopProductInfo._.Name
+                , ShopProductInfo._.MarketPrice
+                , ShopProductInfo._.SalePrice).ToDataTable(pagesize, pageIndex, ref pagecount, ref recordCount);
+        }
     }
 
 

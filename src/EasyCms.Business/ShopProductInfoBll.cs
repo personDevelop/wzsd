@@ -112,5 +112,15 @@ namespace EasyCms.Business
         {
             return Dal.IsSJOperator(ids, opcode);
         }
+
+        public DataTable GetSkuByProductID(string id, out string err)
+        {
+            return Dal.GetSkuByProductID(id, out   err);
+        }
+ 
+        public DataTable GetProduct(int pageIndex, int pagesize, ref int pagecount, ref int recordCount)
+        {
+            return Dal.GetProduct(pageIndex,   pagesize, ref   pagecount, ref   recordCount);
+        }
     }
 }

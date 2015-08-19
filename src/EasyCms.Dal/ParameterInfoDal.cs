@@ -215,5 +215,12 @@ namespace EasyCms.Dal
         {
             return Dal.From<ParameterInfo>().Where(ParameterInfo._.ID == StaticValue.RegistAgreementID).Select(ParameterInfo._.Value5).ToScalar() as string;
         }
+
+        public DataTable GetIdAndNameByParentId(string parentID)
+        {
+            return Dal.From<ParameterInfo>().Where(ParameterInfo._.ParentID == parentID && ParameterInfo._.IsEnable == true)
+                .Select(ParameterInfo._.ID, ParameterInfo._.Name).ToDataTable();
+
+        }
     }
 }

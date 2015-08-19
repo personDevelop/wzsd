@@ -26,7 +26,7 @@
 
     @HelperExtend.HiddenFor("ID", Model.ID)
     @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())
-    @HelperExtend.HiddenFor("ClassID", Model.ClassID)
+   
 
     @if (string.IsNullOrWhiteSpace(Model.ImageUrl))
     {
@@ -36,7 +36,7 @@
     @HelperExtend.HiddenFor("ImageUrl", Model.ImageUrl)
     @Html.ValidationSummary()
 
-    @HelperExtend.HelpEdit("ClassID", "ClassName", "所属类别", defaultvalAndText: Model.ClassName, dialogTitle: "选择所属类别", hint: "(*必填)", InnitFunc: "InnitFunc", onOk: "onOk", IsTree: true, DataControlID: "treeGrid")
+    @HelperExtend.HelpEdit("ClassID", "ClassName", "所属类别", defaultText: Model.ClassName, dialogTitle: "选择所属类别", hint: "(*必填)", InnitFunc: "InnitFunc", onOk: "onOk", IsTree: true, DataControlID: "treeGrid")
     @HelperExtend.TextBox("NewsTitle", "标题", defaultval: Model.NewsTitle, hint: "(*必填)")
     @HelperExtend.TextBox("SubTitle", "副标题", defaultval: Model.SubTitle)
     @HelperExtend.RadioGroup("State", "显示状态 ", "0,1,2", "正常,待审核,不显示", defaultval: Model.State)

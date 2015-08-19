@@ -140,7 +140,8 @@ namespace EasyCms.Web.API
                 {
                     int pagecount = 0, recordCount = 0;
                     DataTable dt = new ShopProductInfoBll().GetProductsByCategory(id, pageIndex, other, host, ref pagecount, ref recordCount);
-                    return dt.Format();
+
+                    return new { PageIndex = pageIndex, RecordCount = dt.Rows.Count, TotalPageCount = pagecount, TotalRecourdCount = recordCount, Data = dt }.FormatObj();
 
                 }
             }

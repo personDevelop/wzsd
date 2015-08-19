@@ -11,7 +11,7 @@
     <div>
         <div class="mainSplitter">
             <div class="splitter-panel">
-                <div id="treeGrid">
+                <div id="@Model.DataControlID">
                 </div>
             </div>
             <div class="splitter-panel">
@@ -35,25 +35,35 @@
             splitBarSize: 0,showSplitBar: true ,    orientation: 'horizontal', panels: [{   size:"90%",collapsed:false }, { size:"5%" ,collapsed:false}] });
         $('#@btnOkID').click(function(){
             var result;
+
             if (@Model.IsTree.ToString().ToLower() ) {
                 if (@Model.IsMutiSelect.ToString().ToLower() ) {
                 result = $("#@Model.DataControlID").jqxTreeGrid('getSelection');
-              
+
             }else
             {
                 result = $("#@Model.DataControlID").jqxTreeGrid('getSelection');
-             
+
             }
         }else
     {
          if (@Model.IsMutiSelect.ToString().ToLower() ) {
-        result =$("#@Model.DataControlID").jqxDataTable('getSelection');
+        result =$("#@Model.DataControlID").jqxGrid('getselectedrowindexes');
+        var arryval=new   Array ();
+        for (var i  in result)
+        {
+            arryval.push(  $('#@Model.DataControlID').jqxGrid('getrowdata', i));
+        }
+        result=arryval;
+
     }else
     {
-      result =$("#@Model.DataControlID").jqxDataTable('getSelection');
+      result =$("#@Model.DataControlID").jqxGrid('getselectedrowindex');
+    result = $('#@Model.DataControlID').jqxGrid('getrowdata', result);
+
     }
     }
-      @{@Model.OnOk}(result);
+    @{@Model.OnOk}(result);
 
     });
     });

@@ -25,11 +25,11 @@
     @HelperExtend.HiddenFor("ID", Model.ID.ToString())
     @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())
 
-    @HelperExtend.HiddenFor("ParentID", Model.ParentID.ToString())
+   
     @Html.ValidationSummary()
 
 
-    @HelperExtend.HelpEdit("ParentID", "ParentName", "上级区域", defaultvalAndText: Model.ParentName, hint: "空为一级行政区域", dialogTitle: "选择上级行政区域", InnitFunc: "InnitFunc", onOk: "onOk", IsTree: true, DataControlID: "treeGrid", IsHidButton: Model.RecordStatus == Sharp.Common.StatusType.update)
+    @HelperExtend.HelpEdit("ParentID", "ParentName", "上级区域", defaultText: Model.ParentName, hint: "空为一级行政区域", dialogTitle: "选择上级行政区域", InnitFunc: "InnitFunc", onOk: "onOk", IsTree: true, DataControlID: "treeGrid", IsHidButton: Model.RecordStatus == Sharp.Common.StatusType.update)
 
     @HelperExtend.TextBox("Code", "编号", defaultval: Model.Code, hint: "")
 

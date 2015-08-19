@@ -76,9 +76,9 @@
     }
     @HelperExtend.HiddenFor("ID", Model.ID)
     @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())
-    @HelperExtend.HiddenFor("ShopCategoryID", Model.ShopCategoryID)
+   
     @Html.ValidationSummary()
-    @HelperExtend.HelpEdit("ShopCategoryID", "ShopCategoryName", "商品分类", defaultvalAndText: Model.ShopCategoryName, hint: "*必填", dialogTitle: "选择商品分类", InnitFunc: "InnitFunc", onOk: "onOk", IsMutiSelect: true, IsTree: true, DataControlID: "treeGrid")
+    @HelperExtend.HelpEdit("ShopCategoryID", "ShopCategoryName", "商品分类", defaultVal:Model.ShopCategoryID, defaultText: Model.ShopCategoryName, hint: "*必填", dialogTitle: "选择商品分类", InnitFunc: "InnitFunc", onOk: "onOk", IsMutiSelect: true, IsTree: true, DataControlID: "treeGrid")
 
     @HelperExtend.TextBox("Code", "编号", defaultval: Model.Code, hint: "*编号不能重复")
     @HelperExtend.TextBox("Name", "名称", defaultval: Model.Name, hint: "*必填,长度限制在100个字符以内.")

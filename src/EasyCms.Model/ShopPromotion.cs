@@ -56,15 +56,19 @@ namespace EasyCms.Model
 
         private decimal _MaxPrice;
 
-        private DateTime _StartDate;
+        private DateTime? _StartDate;
 
-        private DateTime _EndDate;
+        private DateTime? _EndDate;
 
-        private int _ActiveStatus;
+        private bool _IsEnable;
 
         private string _CreateUser;
 
         private DateTime _CreateDate;
+
+        private string _Note;
+
+        private int _ActionStatus;
 
         #endregion
 
@@ -379,9 +383,9 @@ namespace EasyCms.Model
         ///  活动开始时间,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "StartDate", DbTypeString = "datetime", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "StartDate", DbTypeString = "datetime", ColumnIsNull = true, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public DateTime StartDate
+        public DateTime? StartDate
         {
             get
             {
@@ -398,9 +402,9 @@ namespace EasyCms.Model
         ///  活动结束时间,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "EndDate", DbTypeString = "datetime", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "EndDate", DbTypeString = "datetime", ColumnIsNull = true, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public DateTime EndDate
+        public DateTime? EndDate
         {
             get
             {
@@ -417,18 +421,18 @@ namespace EasyCms.Model
         ///  状态,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "ActiveStatus", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "IsEnable", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public int ActiveStatus
+        public bool IsEnable
         {
             get
             {
-                return this._ActiveStatus;
+                return this._IsEnable;
             }
             set
             {
-                this.OnPropertyChanged("ActiveStatus", this._ActiveStatus, value);
-                this._ActiveStatus = value;
+                this.OnPropertyChanged("IsEnable", this._IsEnable, value);
+                this._IsEnable = value;
             }
         }
 
@@ -467,6 +471,44 @@ namespace EasyCms.Model
             {
                 this.OnPropertyChanged("CreateDate", this._CreateDate, value);
                 this._CreateDate = value;
+            }
+        }
+
+        /// <summary>
+        ///  备注,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "Note", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 500, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string Note
+        {
+            get
+            {
+                return this._Note;
+            }
+            set
+            {
+                this.OnPropertyChanged("Note", this._Note, value);
+                this._Note = value;
+            }
+        }
+
+        /// <summary>
+        ///  活动状态,0有效，1无效
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "ActionStatus", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public int ActionStatus
+        {
+            get
+            {
+                return this._ActionStatus;
+            }
+            set
+            {
+                this.OnPropertyChanged("ActionStatus", this._ActionStatus, value);
+                this._ActionStatus = value;
             }
         }
 
@@ -514,11 +556,15 @@ namespace EasyCms.Model
 
                 EndDate = new PropertyItem("EndDate", tableName);
 
-                ActiveStatus = new PropertyItem("ActiveStatus", tableName);
+                IsEnable = new PropertyItem("IsEnable", tableName);
 
                 CreateUser = new PropertyItem("CreateUser", tableName);
 
                 CreateDate = new PropertyItem("CreateDate", tableName);
+
+                Note = new PropertyItem("Note", tableName);
+
+                ActionStatus = new PropertyItem("ActionStatus", tableName);
 
 
             }
@@ -597,7 +643,7 @@ namespace EasyCms.Model
             /// <summary>
             /// 状态,
             /// </summary> 
-            public PropertyItem ActiveStatus = null;
+            public PropertyItem IsEnable = null;
             /// <summary>
             /// 创建人,
             /// </summary> 
@@ -606,7 +652,32 @@ namespace EasyCms.Model
             /// 创建时间,
             /// </summary> 
             public PropertyItem CreateDate = null;
+            /// <summary>
+            /// 备注,
+            /// </summary> 
+            public PropertyItem Note = null;
+            /// <summary>
+            /// 活动状态,0有效，1无效
+            /// </summary> 
+            public PropertyItem ActionStatus = null;
         }
         #endregion
+    }
+    public partial class ShopPromotion
+    {
+        protected override void OnCreate()
+        {
+            CreateDate = DateTime.Now;
+            IsEnable = true;
+        }
+        [NotDbCol]
+        public string BuySKUCode { get; set; }
+
+        [NotDbCol]
+        public string HandSKUCode { get; set; }
+        [NotDbCol]
+        public string HandProductName { get; set; }
+        
+        
     }
 }

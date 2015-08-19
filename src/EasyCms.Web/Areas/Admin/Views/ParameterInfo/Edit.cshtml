@@ -18,9 +18,9 @@
 
     @Html.HiddenFor(model => model.ID)
     @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())
-    @Html.HiddenFor(model => model.ParentID)
+    
     @Html.ValidationSummary()
-    @HelperExtend.HelpEdit("ParentID", "ParentName", "上级参数", defaultvalAndText: Model.ParentName, hint: "空为一级参数", dialogTitle: "选择上级参数", InnitFunc: "InnitFunc", onOk: "onOk", IsTree: true, DataControlID: "treeGrid")
+    @HelperExtend.HelpEdit("ParentID", "ParentName", "上级参数", defaultText: Model.ParentName, hint: "空为一级参数", dialogTitle: "选择上级参数", InnitFunc: "InnitFunc", onOk: "onOk", IsTree: true, DataControlID: "treeGrid")
     @HelperExtend.TextBox("Code", "编号", defaultval: Model.Code, hint: "请输入编号，编号同一级内不能重复")
     @HelperExtend.TextBox("Name", "名称", defaultval: Model.Name, hint: "请输入名称，名称同一级内不能重复.")
     @HelperExtend.CheckBoxList("参数设置", "IsSystem,IsEdit,IsDelete,IsEnable,IsCanHasLeaf", "系统参数,可编辑,可删除,启用,可有叶子节点", defaultval: new object[] { Model.IsSystem, Model.IsEdit, Model.IsDelete, Model.IsEnable, Model.IsCanHasLeaf });

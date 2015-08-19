@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="AdministrativeRegionsDal.cs" />
     <Compile Include="AttachFileDal.cs" />
+    <Compile Include="CouponRuleDal.cs" />
     <Compile Include="FunctionInfoDal.cs" />
     <Compile Include="ManagerUserInfoDal.cs" />
     <Compile Include="MemberOrderDal.cs" />
@@ -67,6 +68,7 @@
     <Compile Include="ShopPaymentTypesDal.cs" />
     <Compile Include="ShopProductInfoDal.cs" />
     <Compile Include="ShopProductTypeDal.cs" />
+    <Compile Include="ShopPromotionDal.cs" />
     <Compile Include="ShopShippingAddressDal.cs" />
     <Compile Include="ShopShoppingCartsDal.cs" />
     <Compile Include="SysRoleInfoDal.cs" />

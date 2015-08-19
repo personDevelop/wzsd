@@ -30,13 +30,13 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         public string GetListForSelecte()
         {
             System.Data.DataTable dt = bll.GetList(true);
-            return JsonWithDataTable.Serialize(dt); 
+            return JsonWithDataTable.Serialize(dt);
         }
         public string CheckRepeat(string ID, string ParentID, string RecordStatus, string val, bool IsCode)
         {
             return bll.Exit(ID, ParentID, RecordStatus, val, IsCode).ToString().ToLower();
 
-        } 
+        }
         //
         // POST: /Admin/ParameterInfo/Create
         [HttpPost]
@@ -65,7 +65,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                     {
                         p.ID = Guid.NewGuid().ToString();
                     }
-                    
+
                 }
                 bll.Save(p);
                 TempData.Add("IsSuccess", "保存成功");
@@ -80,7 +80,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             }
             return View("Edit", p);
         }
-     
+
 
         //
         // GET: /Admin/ParameterInfo/Edit/5
@@ -96,13 +96,23 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                 p = bll.GetEntity(id);
             return View("Edit", p);
         }
-         
+
         [HttpPost]
         //
         // GET: /Admin/ParameterInfo/Delete/5
         public string Delete(string id)
         {
             return bll.Delete(id);
+        }
+
+
+
+        public string GetIdAndNameByParentId(string id)
+        {
+            System.Data.DataTable dt = bll.GetIdAndNameByParentId(id);
+            return JsonWithDataTable.Serialize(dt);
+            ;
+
         }
     }
 }

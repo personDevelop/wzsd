@@ -26,8 +26,7 @@
     @HelperExtend.HiddenFor("ID", Model.ID)
     @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())
 
-    @HelperExtend.HiddenFor("ParentID", Model.ParentID)
-
+    
     @if (string.IsNullOrWhiteSpace(Model.Image))
     {
         Model.Image = Guid.NewGuid().ToString();
@@ -37,7 +36,7 @@
     @Html.ValidationSummary()
 
 
-    @HelperExtend.HelpEdit("ParentID", "ParentName", "上级功能", defaultvalAndText: Model.ParentName, hint: "空为一级模块", dialogTitle: "选择上级功能", InnitFunc: "InnitFunc", onOk: "onOk", IsTree: true, DataControlID: "treeGrid")
+    @HelperExtend.HelpEdit("ParentID", "ParentName", "上级功能", defaultVal:Model.ParentID, defaultText: Model.ParentName, hint: "空为一级模块", dialogTitle: "选择上级功能", InnitFunc: "InnitFunc", onOk: "onOk", IsTree: true, DataControlID: "treeGrid")
 
 
     @HelperExtend.TextBox("Code", "编码", defaultval: Model.Code, hint: "")

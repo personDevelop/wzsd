@@ -26,7 +26,7 @@
     @HelperExtend.HiddenFor("ID", Model.ID)
     @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())
 
-    @HelperExtend.HiddenFor("ParentID", Model.ParentID)
+   
     @if (string.IsNullOrWhiteSpace(Model.SmallLogo))
     {
         Model.SmallLogo = Guid.NewGuid().ToString();
@@ -35,7 +35,7 @@
     @HelperExtend.HiddenFor("SmallLogo", Model.SmallLogo)
     @HelperExtend.HiddenFor("BigLogo", Model.BigLogo)
     @Html.ValidationSummary()
-    @HelperExtend.HelpEdit("ParentID", "ParentName", "上级分类", defaultvalAndText: Model.ParentName, hint: "空为一级分类", dialogTitle: "选择上级分类", InnitFunc: "InnitFunc", onOk: "onOk", IsTree: true, DataControlID: "treeGrid")
+    @HelperExtend.HelpEdit("ParentID", "ParentName", "上级分类", defaultText: Model.ParentName, hint: "空为一级分类", dialogTitle: "选择上级分类", InnitFunc: "InnitFunc", onOk: "onOk", IsTree: true, DataControlID: "treeGrid")
     @HelperExtend.TextBox("Code", "编号", defaultval: Model.Code, hint: "*编号不能重复")
     @HelperExtend.TextBox("Name", "名称", defaultval: Model.Name, hint: "*名称不能重复.")
     @HelperExtend.ImageUpLoad("SmallLogo", "小图标", Model.RecordStatus == Sharp.Common.StatusType.add, defaultval: Model.SmallLogo, maxLength: 1)

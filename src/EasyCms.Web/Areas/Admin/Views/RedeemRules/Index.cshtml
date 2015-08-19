@@ -39,7 +39,7 @@
 
 		{ name: 'ID', type: 'string' },
 
-		{ name: 'RuleType', type: 'string' },
+		{ name: 'RuleTypeName', type: 'string' },
 
 		{ name: 'Name', type: 'string' },
 
@@ -80,7 +80,7 @@
                 columns: [
 
  
-  { text: '类型', dataField: 'RuleType',align: "center", cellsalign: "center", type: 'string', width: 200 },
+  { text: '类型', dataField: 'RuleTypeName', align: "center", cellsalign: "center", type: 'string', width: 200 },
 
   { text: '规则名称', dataField: 'Name',align: "center", cellsalign: "center", type: 'string', width: 200 },
 
@@ -97,7 +97,7 @@
                 ],
                 groupable: true,
 
-                groups: ['RuleType']
+                groups: ['RuleTypeName']
             });
 
 

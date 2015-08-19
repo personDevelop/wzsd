@@ -26,7 +26,7 @@
     @HelperExtend.HiddenFor("ID", Model.ID)
     @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())
 
-    @HelperExtend.HiddenFor("ParentID", Model.ParentID)
+    
     @HelperExtend.HiddenFor("DescriptionText", Model.DescriptionText)
     @if (string.IsNullOrWhiteSpace(Model.ImageUrl))
     {
@@ -36,7 +36,7 @@
     @HelperExtend.HiddenFor("ImageUrl", Model.ImageUrl)
     @Html.ValidationSummary()
 
-    @HelperExtend.HelpEdit("ParentID", "ParentName", "上级分类", defaultvalAndText: Model.ParentName, hint: "空为一级分类", dialogTitle: "选择上级分类", InnitFunc: "InnitFunc", onOk: "onOk", IsTree: true, DataControlID: "treeGrid")
+    @HelperExtend.HelpEdit("ParentID", "ParentName", "上级分类", defaultText: Model.ParentName, hint: "空为一级分类", dialogTitle: "选择上级分类", InnitFunc: "InnitFunc", onOk: "onOk", IsTree: true, DataControlID: "treeGrid")
     @HelperExtend.TextBox("Code", "编号", defaultval: Model.Code, hint: "*编号不能重复")
     @HelperExtend.TextBox("Name", "名称", defaultval: Model.Name, hint: "*名称不能重复.")
     @HelperExtend.ImageUpLoad("ImageUrl", "缩略图", Model.RecordStatus == Sharp.Common.StatusType.add, defaultval: Model.ImageUrl, maxLength: 1) 

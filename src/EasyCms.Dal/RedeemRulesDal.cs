@@ -18,8 +18,8 @@ namespace EasyCms.Dal
             {
                 return "要删除的参数值不能为空";
             }
-           
-           
+
+
             int i = Dal.Delete<RedeemRules>(id);
             if (i == 0)
             {
@@ -45,7 +45,7 @@ namespace EasyCms.Dal
                 CustomSqlSection csql = null;
 
                 string sql = string.Empty;
-                 
+
                 if (dal == null)
                 {
                     tr = Dal.BeginTransaction(out dal);
@@ -71,10 +71,10 @@ namespace EasyCms.Dal
         {
             if (IsForSelected)
             {
-                return Dal.From<RedeemRules>().Select(RedeemRules._.ID.All).ToDataTable();
+                return Dal.From<RedeemRules>().Join<ParameterInfo>(ParameterInfo._.ID == RedeemRules._.RuleType).Select(RedeemRules._.ID, RedeemRules._.Name , ParameterInfo._.Name.Alias("RuleTypeName")).ToDataTable();
             }
             else
-                return Dal.From<RedeemRules>().Select(RedeemRules._.ID.All).ToDataTable();
+                return Dal.From<RedeemRules>().Join<ParameterInfo>(ParameterInfo._.ID == RedeemRules._.RuleType).Select(RedeemRules._.ID.All, ParameterInfo._.Name.Alias("RuleTypeName")). ToDataTable();
         }
         public bool Exit(string ID, string parentID, string RecordStatus, string val, bool IsCode)
         {
@@ -100,12 +100,12 @@ namespace EasyCms.Dal
             int pageCount = 0;
             if (IsForSelected)
             {
-                return Dal.From<RedeemRules>().Select(RedeemRules._.ID.All).ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
+                return Dal.From<RedeemRules>().Join<ParameterInfo>(ParameterInfo._.ID == RedeemRules._.RuleType).Select(RedeemRules._.ID, RedeemRules._.Name, ParameterInfo._.Name.Alias("RuleTypeName")).ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
             }
             else
-                return Dal.From<RedeemRules> ().Select(RedeemRules._.ID.All).ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
+                return Dal.From<RedeemRules>().Join<ParameterInfo>(ParameterInfo._.ID == RedeemRules._.RuleType).Select(RedeemRules._.ID.All, ParameterInfo._.Name.Alias("RuleTypeName")).ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
         }
-       
+
         public RedeemRules GetEntity(string id)
         {
             WhereClip where = new WhereClip("a.id=@id");
@@ -118,11 +118,11 @@ namespace EasyCms.Dal
         }
 
 
-         
 
-         
+
+
 
 
     }
- 
+
 }

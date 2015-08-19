@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Web;
+using System.Web.Http;
 
-namespace EasyCms 
+namespace EasyCms
 {
     public static class ExtentionMethod
     {
@@ -24,10 +25,19 @@ namespace EasyCms
                     value = item.Value;
                     break;
                 }
-            } 
-            return value; 
+            }
+            return value;
         }
 
+        public static System.Web.HttpContextWrapper Request(this ApiController control)
+        {
+            return control.Request.Properties["MS_HttpContext"] as System.Web.HttpContextWrapper;
 
+        }
+        public static string QueryString(this HttpContextWrapper requestContext, string key)
+        {
+            return requestContext.QueryString(key);
+
+        }
     }
 }

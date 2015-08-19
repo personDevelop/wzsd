@@ -22,7 +22,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
 
             return View();
         }
-         
+
         public string GetList(int pagenum, int pagesize)
         {
             int recordCount = 0;
@@ -33,13 +33,12 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             return result;
 
         }
-        public string GetListForSelecte(int pagenum, int pagesize)
+        public string GetListForSelecte()
         {
-            int recordCount = 0;
-            System.Data.DataTable dt = bll.GetList(pagenum, pagesize, ref   recordCount, true);
-            string result = JsonWithDataTable.Serialize(dt);
-            result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
-            return result;
+
+            System.Data.DataTable dt = bll.GetList(true);
+
+            return JsonWithDataTable.Serialize(dt);
         }
         public string CheckRepeat(string ID, string ParentID, string RecordStatus, string val, bool IsCode)
         {

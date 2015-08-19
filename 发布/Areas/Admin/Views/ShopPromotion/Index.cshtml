@@ -1,0 +1,191 @@
+﻿@using MVCExtention;
+@{
+    ViewBag.Title = "促销活动";
+}
+
+<!--工具栏-->
+<div id="floatHead" class="toolbar-wrap">
+    <div class="toolbar">
+        <div class="box-wrap">
+            <a class="menu-btn"></a>
+            <div class="l-list">
+                <ul class="icon-list">
+                    <li><a class="add" href="@Url.Action("Edit")"><i></i><span>新增</span></a></li>
+                    <li><a class="add" href="javascript:;" onclick="Edit();"><i></i><span>编辑</span></a></li>
+                    <li><a class="del" href="javascript:;" onclick="Del( );"><i></i><span>删除</span></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/工具栏-->
+<!--列表-->
+<div class="table-container">
+    <div id="jqxgrid"></div>
+</div>
+<!--/列表-->
+@section  scripts{
+    @Html.Partial("_Paging")
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var url = "@Url.Action("GetList")";
+            // prepare the data
+            var source =
+            {
+                datatype: "json",
+                cache: false,
+                datafields: [
+
+		{ name: 'ID', type: 'string' },
+
+		{ name: 'RuleID', type: 'string' },
+
+		{ name: 'BuyCategoryId', type: 'string' },
+
+		{ name: 'BuyCategoryName', type: 'string' },
+
+		{ name: 'BuyProductId', type: 'string' },
+
+		{ name: 'BuyProductName', type: 'string' },
+
+		{ name: 'BuySKUID', type: 'string' },
+
+		{ name: 'BuyCount', type: 'string' },
+
+		{ name: 'HandsaleProductId', type: 'string' },
+
+		{ name: 'HandsaleProductSKUID', type: 'string' },
+
+		{ name: 'CouponID', type: 'string' },
+
+		{ name: 'CouponName', type: 'string' },
+
+		{ name: 'HandsaleMaxCount', type: 'string' },
+
+		{ name: 'HandsaleCount', type: 'string' },
+
+		{ name: 'MinPrice', type: 'string' },
+
+		{ name: 'MaxPrice', type: 'string' },
+
+		{ name: 'StartDate', type: 'string' },
+
+		{ name: 'EndDate', type: 'string' },
+
+		{ name: 'ActiveStatus', type: 'string' },
+
+		{ name: 'CreateUser', type: 'string' },
+
+		{ name: 'CreateDate', type: 'string' },
+
+                ],
+                beforeprocessing: function (data) {
+                    source.totalrecords = data.total;
+                },
+                root: 'Rows',
+                id: 'id',
+                url: url,
+            };
+            var dataAdapter = new $.jqx.dataAdapter(source);
+
+            $("#jqxgrid").jqxGrid(
+            {
+                width: "95%",
+                  autoheight: true,
+                source: dataAdapter,
+                columnsresize: true,
+                virtualmode: true,
+                rendergridrows: function (params) {
+                    return params.data;
+                },
+                pagerrenderer: pagerrenderer,
+                pageSize: 20,
+                pageable: true,
+                columns: [
+
+
+  { text: '主键', dataField: 'ID',align: "center", cellsalign: "center", type: 'string', width: 200 },
+
+  { text: '促销规则', dataField: 'RuleID',align: "center", cellsalign: "center", type: 'string', width: 200 },
+
+  { text: '促销商品分类', dataField: 'BuyCategoryId',align: "center", cellsalign: "center", type: 'string', width: 200 },
+
+  { text: '商品分类名称', dataField: 'BuyCategoryName',align: "center", cellsalign: "center", type: 'string', width: 200 },
+
+  { text: '促销商品ID', dataField: 'BuyProductId',align: "center", cellsalign: "center", type: 'string', width: 200 },
+
+  { text: '商品名称', dataField: 'BuyProductName',align: "center", cellsalign: "center", type: 'string', width: 200 },
+
+  { text: '促销商品SKUid', dataField: 'BuySKUID',align: "center", cellsalign: "center", type: 'string', width: 200 },
+
+  { text: '购买指定数量', dataField: 'BuyCount',align: "center", cellsalign: "center", type: 'string', width: 200 },
+
+  { text: '赠送商品ID', dataField: 'HandsaleProductId',align: "center", cellsalign: "center", type: 'string', width: 200 },
+
+  { text: '赠送商品SKUID', dataField: 'HandsaleProductSKUID',align: "center", cellsalign: "center", type: 'string', width: 200 },
+
+  { text: '赠送优惠券ID', dataField: 'CouponID',align: "center", cellsalign: "center", type: 'string', width: 200 },
+
+  { text: '赠送优惠券名称', dataField: 'CouponName',align: "center", cellsalign: "center", type: 'string', width: 200 },
+
+  { text: '最多赠送数量', dataField: 'HandsaleMaxCount',align: "center", cellsalign: "center", type: 'string', width: 200 },
+
+  { text: '赠送数量', dataField: 'HandsaleCount',align: "center", cellsalign: "center", type: 'string', width: 200 },
+
+  { text: '限制最低金额', dataField: 'MinPrice',align: "center", cellsalign: "center", type: 'string', width: 200 },
+
+  { text: '限制最高金额', dataField: 'MaxPrice',align: "center", cellsalign: "center", type: 'string', width: 200 },
+
+  { text: '活动开始时间', dataField: 'StartDate',align: "center", cellsalign: "center", type: 'string', width: 200 },
+
+  { text: '活动结束时间', dataField: 'EndDate',align: "center", cellsalign: "center", type: 'string', width: 200 },
+
+  { text: '状态', dataField: 'ActiveStatus',align: "center", cellsalign: "center", type: 'string', width: 200 },
+
+  { text: '创建人', dataField: 'CreateUser',align: "center", cellsalign: "center", type: 'string', width: 200 },
+
+  { text: '创建时间', dataField: 'CreateDate',align: "center", cellsalign: "center", type: 'string', width: 200 },
+
+                ]
+            });
+
+
+        });
+    </script>
+    <script type="text/javascript">
+        function Edit() {
+            var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindex');
+            if (rowindex == -1) {
+                ErrorMsg("请选择一条数据");
+            } else {
+                var data = $('#jqxgrid').jqxGrid('getrowdata', rowindex);
+
+                if (data) {
+
+                    href = "@Url.Action("Edit", new  { area="admin" })";
+                    location.href = href + "/" + data.ID;
+                } else { ErrorMsg("请选择一条数据"); }
+            }
+
+
+        }
+
+        function Del() {
+            var rowindexes = $('#jqxgrid').jqxGrid('getselectedrowindexes');
+
+
+            if (rowindexes.length == 1) {
+                var data = $('#jqxgrid').jqxGrid('getrowdata', rowindexes[0]);
+                href = "@Url.Action("Delete", new { area = "admin" })";
+                $.post(href, { ID: data.ID }, function (d) {
+                    ErrorMsg(d);
+                    if (d.indexOf("成功") > -1) {
+                        $("#jqxgrid").jqxGrid('deleteRow', rowindexes[0]);
+                    }
+                });
+            } else { ErrorMsg("请选择一条数据"); }
+        }
+    </script>
+
+}

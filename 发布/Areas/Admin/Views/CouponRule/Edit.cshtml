@@ -1,0 +1,413 @@
+﻿@model CouponRule
+@{
+    ViewBag.Title = "编辑优惠券管理";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEdit.cshtml";
+}
+
+@Styles.Render("~/bundles/upimgcss")
+@Scripts.Render("~/bundles/ueditor")
+@Scripts.Render("~/bundles/uploadJs")
+
+@using EasyCms.Model
+<!--内容-->
+<div id="floatHead" class="content-tab-wrap">
+    <div class="content-tab">
+        <div class="content-tab-ul-wrap">
+            <ul>
+                <li><a class="selected" href="javascript:;">基本信息</a></li>
+                <li><a href="javascript:;">适用商品</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="tab-content">
+
+
+    @HelperExtend.HiddenFor("ID", Model.ID)
+    @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())
+    @Html.ValidationSummary()
+
+
+    @HelperExtend.TextBox("Name", "优惠券名称", defaultval: Model.Name, hint: "")
+
+    @HelperExtend.RadioGroup("CouponType", "优惠券类型", "0,1,2", "普通优惠券,兑换优惠券,赠送优惠券", defaultval: Model.CouponType, hint: "")
+    @HelperExtend.DropDownList("ClassId", "获取方式", defaultval: Model.ClassId, downInfo: new DropDownListInfo()
+{
+    Url = Url.Action("GetIdAndNameByParentId", "ParameterInfo", new { area = "Admin", id = StaticValue.CouponType })
+})
+
+    @HelperExtend.TextBox("JE", "面值", defaultval: Model.JE, hint: "")
+    @HelperExtend.TextBox("NeedPoint", "需要积分", defaultval: Model.NeedPoint, hint: "")
+    @HelperExtend.RadioGroup("QxLx", "期限类型", "0,1", "期限范围,固定天数", defaultval: Model.QxLx, hint: "")
+
+
+    @HelperExtend.RadioGroup("IsCongZengSongKaiShi", "从获取开始计算时间", "false,true", "否,是", defaultval: Model.IsCongZengSongKaiShi)
+
+    @HelperExtend.DateTime("StartDate", "有效时间起", defaultval: Model.StartDate, hint: "")
+
+    @HelperExtend.DateTime("EndDate", "有效时间止", defaultval: Model.EndDate, hint: "")
+
+    @HelperExtend.TextBox("QXTS", "期限天数", defaultval: Model.QXTS, hint: "")
+
+
+    @HelperExtend.TextBox("MinPrice", "最低消费金额", defaultval: Model.MinPrice, hint: "")
+
+    @HelperExtend.TextBox("MaxPrice", "最大消费金额", defaultval: Model.MaxPrice, hint: "")
+    @HelperExtend.RadioGroup("IsEnable", "是否启用", "false,true", "否,是", defaultval: Model.IsEnable)
+
+
+</div>
+
+<div class="tab-content" style="display:none">
+    @HelperExtend.TextBox("SendCount", "生成数量", defaultval: Model.SendCount, hint: "")
+
+    @HelperExtend.TextBox("PreName", "优惠券前缀", defaultval: Model.PreName, hint: "不超过5个字符")
+
+    @HelperExtend.TextBox("CpLength", "优惠券卡号长度", defaultval: Model.CpLength, hint: "")
+
+    @HelperExtend.RadioGroup("IsPwd", "需要密码", "false,true", "否,是", defaultval: Model.IsPwd)
+
+    @HelperExtend.HelpEdit("CategoryId", "ShopCategoryName", "商品分类",defaultVal:Model.CategoryId, defaultText: Model.ShopCategoryName, hint: "不选择商品分类，就适合全部商品", dialogTitle: "选择商品分类", InnitFunc: "InnitFunc", DataControlID: "treeGrid", IsTree: true, onOk: "onOk")
+
+    @HelperExtend.HelpEdit("ProductId", "ShopName", "商品", defaultVal:Model.ProductId,defaultText: Model.ShopName, hint: "不选择商品，就适合当前分类下所有商品", dialogTitle: "选择商品", InnitFunc: "InnitShopFunc", DataControlID: "shopGrid", onOk: "onSpOk", OnBefore: "OnBeforeSp")
+
+
+    @HelperExtend.HelpEdit("ProductSku", "ShopSkuCode", "商品SKU", defaultVal:Model.ProductSku,defaultText: Model.ShopSkuCode, hint: "不选择SKU,就适合当前商品下所有规格类型商品", dialogTitle: "选择商品SKU", InnitFunc: "InnitSKUFunc",  DataControlID: "SKUGrid",onOk: "onSkuOk", OnBefore: "OnBeforeSku")
+
+
+
+    @HelperExtend.ImageUpLoad("ImageUrl", "图片", Model.RecordStatus == Sharp.Common.StatusType.add, defaultval: Model.ImageUrl, maxLength: 1)
+
+    @HelperExtend.TextArea("Note", "备注", defaultval: Model.Note, hint: "")
+
+
+</div>
+@section  scripts{
+
+
+    <script type="text/javascript">
+
+        $(function () {
+
+
+            //初始化表单验证
+            $("form").validate({
+                ignore: "",
+                rules: {
+
+                    Name: {
+                        required: true,
+                        maxlength: 400,
+                        remote: {
+                            url: '@Url.Action("CheckRepeat")',
+                            data: {
+                                ID: function () { return $("#ID").val(); }, 
+                                RecordStatus: function () { return $("#RecordStatus").val(); },
+                                val: function () { return $("#Name").val(); },
+                                IsCode: false
+                            }
+                        }
+                    },
+                    ClassTypeID: { required: true },
+
+                },
+                messages: {
+
+                    Name: {
+                        required: "请输入名称",
+                        maxlength: $.validator.format("名称长度不能大于{0}个字符"),
+                        remote: "名称重复"
+                    }
+                },
+                errorPlacement: function (error, element) {
+
+                    if (element.is(":radio"))
+                        error.insertAfter($(element).parent());
+                    else if (element.is(":checkbox"))
+                        error.insertAfter($(element).parent());
+                    else
+                        error.insertAfter(element);
+                }
+
+            });
+        })
+    </script>
+
+    <script type="text/javascript">
+
+        function isShow(element) {
+            var val;
+            if (!element  ) {
+                val =0;
+            } else {
+                val = $(element).val();
+            }
+            if (val == 0) {
+                $("input[name='IsCongZengSongKaiShi']").closest("dl").hide();
+                $("#QXTS").closest("dl").hide();
+                $("#StartDate").closest("dl").show();
+
+            } else {
+
+                $("input[name='IsCongZengSongKaiShi']").closest("dl").show();
+                $("#QXTS").closest("dl").show();
+                $("#StartDate").closest("dl").hide();
+
+            }
+        }
+        $(function () {
+            isShow();
+            $("input[name='QxLx']").click(function () {
+
+                isShow(this);
+            });
+            if ("@TempData.ContainsKey("IsSuccess").ToString().ToLower()" == "true") {
+                SucessMsg("@TempData["IsSuccess"]");
+            }
+
+
+        });
+    </script>
+
+    @Html.Partial("_Paging" )
+    <script type="text/javascript">
+        function OnBeforeSp() {
+            var categorid = $("#CategoryId").val();
+            if (!categorid) {
+                ErrorMsg("请先选择商品分类");
+                return false;
+            }
+            var oldcategorid = $('#shopGrid').data("CategoryId");  // undefined
+
+            if (oldcategorid && oldcategorid != categorid) {
+                $('#shopGrid').jqxGrid('updatebounddata');
+            }
+            $('#shopGrid').data("CategoryId", categorid);
+            return true;
+        }
+        function OnBeforeSku() {
+            var categorid = $("#ProductId").val();
+            if (!categorid) {
+                ErrorMsg("请先选择商品");
+                return false;
+            }
+
+
+            var oldcategorid = $('#SKUGrid').data("CategoryId");  // undefined
+
+            if (oldcategorid && oldcategorid != categorid) {
+                $('#SKUGrid').jqxGrid('updatebounddata');
+            }
+            $('#SKUGrid').data("CategoryId", categorid);
+            return true;
+            return true;
+        }
+
+        function InnitFunc() {
+            var source =
+                        {
+                            dataType: "json",
+                            dataFields: [
+
+               { name: 'ID', type: 'string' },
+
+               { name: 'ParentID', type: 'string' },
+
+               { name: 'Code', type: 'string' },
+
+               { name: 'Name', type: 'string' }
+                            ],
+                            timeout: 10000,
+                            hierarchy:
+                            {
+                                keyDataField: { name: 'ID' },
+                                parentDataField: { name: 'ParentID' }
+                            },
+                            id: 'ID',
+                            root: 'Rows',
+                            url: "@Url.Action("GetListForSelecte", "ShopCategory", new { area = "Admin" })"
+                        };
+            var dataAdapter = new $.jqx.dataAdapter(source);
+
+
+            $("#treeGrid").jqxTreeGrid(
+                       {
+                           width: "95%",
+                           height: "95%",
+                           source: dataAdapter,
+                           columns: [
+             { text: '编码', dataField: 'Code', type: 'string', width: 200 },
+             { text: '名称', dataField: 'Name', type: 'string', width: 200 }
+                           ]
+                       });
+        }
+        function onOk(data) {
+            if (data.length == 1) {
+
+
+                $("#ShopCategoryName").val(data[0].Name);
+                $("#CategoryId").val(data[0].ID);
+
+            } else { ErrorMsg("请选择一条数据"); }
+        }
+
+
+
+        function InnitShopFunc() {
+            var source =
+          {
+              datatype: "json",
+              cache: false,
+              datafields: [
+
+      { name: 'ID', type: 'string' },
+      { name: 'Code', type: 'string' },
+      { name: 'Name', type: 'string' },
+      { name: 'MarketPrice', type: 'string' },
+      { name: 'SalePrice', type: 'string' }
+
+              ],
+              beforeprocessing: function (data) {
+                  source.totalrecords = data.total;
+
+              },
+              root: 'data',
+              id: 'ID',
+              url: "@Url.HttpRouteUrl("ApiWithWeb", new { controller = "APP", action = "GetProductsByCategory" })"
+          };
+
+            var dataAdapter = new $.jqx.dataAdapter(source,
+                   {
+
+                       formatData: function (data) {
+
+                           $.extend(data, {
+                               id: $("#CategoryId").val()
+                           });
+                           return data;
+                       }
+
+                   }
+
+               );
+            $("#shopGrid").jqxGrid(
+            {
+                width: "95%",
+                autoheight: true,
+                source: dataAdapter,
+                columnsresize: true,
+                virtualmode: true,
+                altrows: true,
+                rendergridrows: function (params) {
+                    return params.data;
+                },
+                pagerrenderer: function () { pagerrenderer("#shopGrid") },
+                pageSize: 20,
+                pageable: true,
+                columns: [
+        { text: '编号', dataField: 'Code', align: "center", cellsalign: "center", type: 'string', width: 100 },
+
+        { text: '名称', dataField: 'Name', align: "center", cellsalign: "center", type: 'string', width: '300' },
+
+        { text: '市场价', dataField: 'MarketPrice', align: "center", cellsalign: "center", type: 'string', width: 80 },
+
+        { text: '销售价', dataField: 'SalePrice', align: "center", cellsalign: "center", type: 'string', width: 80 }
+
+
+
+                ]
+            });
+
+        }
+        function onSpOk(data) {
+            if (!data) {
+
+                ErrorMsg("请选择一条数据");
+
+
+            } else {
+                $("#ShopName").val(data.Name);
+                $("#ProductId").val(data.ID);
+            }
+        }
+
+
+
+        function InnitSKUFunc() {
+            var source =
+                        {
+                            dataType: "json",
+                            dataFields: [
+
+               { name: 'SkuID', type: 'string' },
+
+
+
+               { name: 'SKU', type: 'string' },
+
+               { name: 'AttriVal', type: 'string' },
+      { name: 'MarketPrice', type: 'string' },
+      { name: 'SalePrice', type: 'string' }
+                            ],
+
+                            root: 'data',
+                            id: 'SkuID',
+                            url: "@Url.HttpRouteUrl("ApiWithWeb", new { controller = "ShopProductApi", action = "GetSkuByProductID" })"
+                        };
+            var dataAdapter = new $.jqx.dataAdapter(source,
+                     {
+
+                         formatData: function (data) {
+
+                             $.extend(data, {
+                                 id: $("#ProductId").val()
+                             });
+                             return data;
+                         }
+
+                     }
+
+                 );
+
+            $("#SKUGrid").jqxGrid(
+                       {
+                           width: "95%",
+                           autoheight: true,
+                           source: dataAdapter,
+                           columnsresize: true,
+                           virtualmode: true,
+                           altrows: true,
+                           rendergridrows: function (params) {
+                               return params.data;
+                           },
+                           pagerrenderer: function () { pagerrenderer("#SKUGrid") },
+                           pageSize: 20,
+                           pageable: true,
+                           columns: [
+                   { text: 'SKU编号', dataField: 'SKU', align: "center", cellsalign: "center", type: 'string', width: 100 },
+
+
+                    { text: '规格', dataField: 'AttriVal', align: "center", cellsalign: "center", type: 'string', width: '300' },
+
+                   { text: '市场价', dataField: 'MarketPrice', align: "center", cellsalign: "center", type: 'string', width: 80 },
+
+                   { text: '销售价', dataField: 'SalePrice', align: "center", cellsalign: "center", type: 'string', width: 80 }
+
+
+
+                           ]
+                       });
+        }
+        function onSkuOk(data) {
+            if (!data) {
+
+                ErrorMsg("请选择一条数据");
+
+
+            } else {
+                $("#ShopSkuCode").val(data.AttriVal);
+                $("#ProductSku").val(data.SkuID);
+            }
+        }
+    </script>
+}

@@ -212,14 +212,17 @@
   <ItemGroup>
     <Compile Include="API\APPController.cs" />
     <Compile Include="API\BaseAPIControl.cs" />
+    <Compile Include="API\CouponApiController.cs" />
     <Compile Include="API\RegionController.cs" />
     <Compile Include="API\ShippingAddressAPIController.cs" />
     <Compile Include="API\ShopController.cs" />
     <Compile Include="API\ShopCartAPIController.cs" />
     <Compile Include="API\ShopOrderApiController.cs" />
     <Compile Include="API\ShopPayTypeApiController.cs" />
+    <Compile Include="API\ShopProductApiController.cs" />
     <Compile Include="API\UserApiController.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Areas\Admin\Controllers\CouponRuleController.cs" />
     <Compile Include="Areas\Admin\Controllers\FunctionInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\ManagerUserInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\MemberOrderController.cs" />
@@ -234,6 +237,7 @@
     <Compile Include="Areas\Admin\Controllers\ShopProductInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopProductStationModeController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopProductTypeController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ShopPromotionController.cs" />
     <Compile Include="Areas\Admin\Controllers\SysRoleInfoController.cs" />
     <Compile Include="Common\CmsSession.cs" />
     <Compile Include="App_Start\AuthConfig.cs" />
@@ -723,6 +727,10 @@
     <Content Include="Areas\Admin\Views\ShopPaymentTypes\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\ShopPaymentTypes\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Index\Index - 复制.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopPromotion\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopPromotion\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\CouponRule\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\CouponRule\Index.cshtml" />
     <None Include="Properties\PublishProfiles\publish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />

@@ -26,6 +26,16 @@ namespace EasyCms.Model
             }
             return temMsg;
         }
+        /// <summary>
+        /// 促销规则
+        /// </summary>
+        public const string RuleType = "84e88925-afdb-4385-8622-acac8e689dee";
+
+        /// <summary>
+        /// 促销规则
+        /// </summary>
+        public const string CouponType = "482d62aa-5302-4773-b719-ae39acf012a5";
+        
     }
 
 

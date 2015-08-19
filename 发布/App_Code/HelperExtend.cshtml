@@ -225,11 +225,11 @@
                                 }
                                 bool valb = false;
                                 bool.TryParse(val.ToString(), out valb);
-                        <input type="checkbox" name="@item" checked="@val" />
+                                <input type="checkbox" name="@item" checked="@val" />
                             }
-                        <label for="@item">
-                            @nameArr[i]
-                        </label>
+                            <label for="@item">
+                                @nameArr[i]
+                            </label>
                             i++;
                         }
                     }
@@ -266,8 +266,8 @@
 
                             radioId += i.ToString();
 
-                        <input id="@radioId" name="@code" type="radio" @IsSelected value="@item" />
-                        <label for="@radioId">@nameArr[i]</label>
+                            <input id="@radioId" name="@code" type="radio" @IsSelected value="@item" />
+                            <label for="@radioId">@nameArr[i]</label>
                             i++;
                         }
 
@@ -291,18 +291,22 @@
 
 
 *@
-@helper HelpEdit(string id, string code, string name, string defaultvalAndText = null, string hint = "", string otherClass = "", int width = 200,
+@helper HelpEdit(string id, string code, string name, string defaultVal = null, string defaultText = null, string hint = "", string otherClass = "", int width = 200,
                 string dialogTitle = "", int dialogWidth = 500, int dialogHeight = 500, string InnitFunc = "InnitFunc", string onOk = "onOk"
-                            , string DataControlID = "dataGrid", bool IsMutiSelect = false, bool IsTree = false, bool IsHidButton = false)
+                            , string DataControlID = "dataGrid", bool IsMutiSelect = false, bool IsTree = false, bool IsHidButton = false, string OnBefore = "")
 {
     string dialogID = code + Guid.NewGuid();
     string selectButtonID = code + Guid.NewGuid();
+    string OnBeforeFunc = "isContienu=" + OnBefore + "();";
     <dl>
         <dt>
             @MVCExtention.ExtendHtmlInput.MvcHelper.Label(code, name)
+            @MVCExtention.ExtendHtmlInput.MvcHelper.Hidden(id,defaultVal)
+            
+            
         </dt>
         <dd>
-            @MVCExtention.ExtendHtmlInput.MvcHelper.TextBox(code, defaultvalAndText, new { @class = "input normal " + otherClass, width = width, @readonly = "readonly" })
+            @MVCExtention.ExtendHtmlInput.MvcHelper.TextBox(code, defaultText, new { @class = "input normal " + otherClass, width = width, @readonly = "readonly" })
 
             @if (!IsHidButton)
             {
@@ -327,8 +331,15 @@
         $(function () {
 
             $("#@selectButtonID").click(function () {
-
-                $("#@dialogID").jqxWindow('open');
+                var isContienu=true;
+                @if (!string.IsNullOrWhiteSpace(OnBefore))
+	{
+                     @OnBeforeFunc
+	}
+                if (isContienu) {
+                    $("#@dialogID").jqxWindow('open');
+                   
+                }
                 return false;
             });
 
