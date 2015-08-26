@@ -50,6 +50,8 @@ namespace EasyCms.Web
         /// 初始数据，如果不是从url 异步获取，则通过该innitdata 主动后台赋值
         /// </summary>
         public DataTable InnitData { get; set; }
+
+        public string JsonDataRoor { get; set; }
     }
 
     

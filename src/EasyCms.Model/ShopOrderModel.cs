@@ -6,6 +6,17 @@ using System.Threading.Tasks;
 
 namespace EasyCms.Model
 {
+    /// <summary>
+    /// app提交时，得分三步
+    /// 第一步，预提交：主要是根据选择的商品信息，返回促销活动（这个主要是提示作用，不参与金额计算），和可用的优惠券列表，
+    /// app端 根据客户选择使用的优惠券 计算实际订单金额。
+    /// 第二步，真正提交：提交成功后， 返回的字段包括  
+    ///            是否成功、
+    ///            支付方式是否是立即付款（如果时，调用相应的支付接口）、
+    ///            对应的支付接口码（如果是立即支付，返回一个事先商定的支付接口码，调用不同的支付接口）
+    /// 第三步 （只有需要支付的才会有）
+    ///        调用相应的支付接口后，根据支付结果，通知服务端支付结果
+    /// </summary>
     public class ShopOrderModel
     {
         /// <summary>
@@ -15,8 +26,14 @@ namespace EasyCms.Model
 
         /// <summary>
         /// 订单对应的销售模式ID,普通订单的为空
+        /// 这个就是对应的促销活动ID，这个如果是当前购买的商品符合一定的促销活动，会根据促销活动定价。
         /// </summary>
         public string OrderResId { get; set; }
+
+        /// <summary>
+        /// 使用优惠券ID
+        /// </summary>
+        public string UsingCouponsID { get; set; }
 
         /// <summary>
         /// 收件人地址ID
@@ -25,18 +42,16 @@ namespace EasyCms.Model
         /// <summary>
         /// 支付方式ID
         /// </summary>
-        public string PayTypeID { get; set; }
+        public string PayTypeID { get; set; } 
 
         /// <summary>
-        /// 使用优惠券ID
+        /// 是否使用发票
         /// </summary>
-        public string UsingCouponsID { get; set; }
-
+        public string IsInvoice { get; set; }
         /// <summary>
-        /// 使用积分数量
-        /// </summary>
-        public decimal UsingIntegral { get; set; }
-
+        /// 发票填写客户名称,
+        /// </summary> 
+        public string InvoiceInfo { get; set; }
         /// <summary>
         /// 订单备注
         /// </summary>
@@ -48,10 +63,30 @@ namespace EasyCms.Model
 
     public class OrderItem
     {
+        /// <summary>
+        /// 商品id
+        /// </summary>
         public string ProductID { get; set; }
 
+        /// <summary>
+        /// 商品SKUID
+        /// </summary>
         public string Sku { get; set; }
+        /// <summary>
+        /// 商品购买数量
+        /// </summary>
         public decimal BuyCount { get; set; }
+
+
+        /// <summary>
+        /// 是否是赠品
+        /// </summary>
+        public bool IsGifts { get; set; }
+
+        /// <summary>
+        /// 使用优惠券ID
+        /// </summary>
+        public string UsingCouponsID { get; set; }
 
 
     }

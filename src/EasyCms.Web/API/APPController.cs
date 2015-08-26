@@ -295,8 +295,8 @@ namespace EasyCms.Web.API
             try
             {
 
-                string result = JsonWithDataTable.Serialize(GatawayConfig.GetAllGataway());
-                return result.FormatSuccess();
+                return GatawayConfig.GetAllGataway().FormatObj();
+                
             }
             catch (Exception ex)
             {
