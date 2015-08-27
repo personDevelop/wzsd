@@ -32,119 +32,126 @@
 <div class="tab-content">
 
     <script type="text/javascript">
+        var selectType = 0;
+        function AddValue(productID, type, rowindex) {
 
-    function AddValue(productID, type, rowindex) {
-         
-        $.post("@Url.HttpRouteUrl("ApiWithWeb", new { controller = "APP", action = "PostTj" })", { ProductID: productID, StationMode: type }, function (d) {
-            $("#dataTable").jqxDataTable('deleteRow', rowindex);
-            $("#HasAdddataTable").jqxDataTable('updateBoundData');
-        });
-
-    }
-    function DeleteValue(StationID, rowindex) {
-        
-        $.get("@Url.HttpRouteUrl("ApiWithWeb", new { controller = "APP", action = "DeleteTj" })", { id: StationID }, function () {
-
-            $("#HasAdddataTable").jqxDataTable('updateBoundData');
-        });
-      
-
-
-    }
-
-    $(document).ready(function () {
-        $('.TjSy').jqxSplitter({ width: '100%', height: 480, panels: [{ size: '50%' }] });
-        $(".jqxExpander").jqxExpander({ width: '100%', height: 480, showArrow: false });
-        $("#BtnqryCateTj").jqxButton({ width: '100', template: "success" });
-        $('#BtnqryCateTj').on('click', function () {
-
-            var source =
-        {
-            dataType: "json",
-            dataFields: [
-                 { name: 'ID', type: 'string' },
-                { name: 'Code', type: 'string' },
-                { name: 'Name', type: 'string' },
-                  { name: 'FilePath', type: 'string' },
-                { name: 'SalePrice', type: 'float' },
-                { name: 'MarketPrice', type: 'float' }
-            ],
-            id: 'ID',
-            root: "Data",
-            url: "@Url.HttpRouteUrl("ApiWithWeb", new { controller = "APP", action = "GetProductsByWhere" })"
-        };
-            var dataAdapter = new $.jqx.dataAdapter(source,
-        {
-            formatData: function (data) {
-
-                // update the $skip and $top params of the OData service.
-                // data.pagenum - page number starting from 0.
-                // data.pagesize - page size
-                data.categoryID = $("#qryTjCategory").val();
-                data.ProductName = $("#ProductName").val();
-                data.stationMode = 0;
-
-
-                return data;
-            },
-            downloadComplete: function (data, status, xhr) {
-
-                source.totalRecords = data.TotalRecourdCount;
-                source.value = data.Data;
-
-
-            },
-            loadError: function (xhr, status, error) {
-                throw new Error("http://services.odata.org: " + error.toString());
-            }
-        });
-
-            $("#dataTable").jqxDataTable(
-            {
-                width: "99%",
-                source: dataAdapter,
-
-                pageable: true,
-                pageSize: 20,
-                pagerButtonsCount: 5,
-                enableHover: false,
-                selectionMode: 'none',
-                columns: [
-                   {
-                       text: ' ', align: 'center', dataField: 'FilePath', width: 80,
-                       // row - row's index.
-                       // column - column's data field.
-                       // value - cell's value.
-                       // rowData - rendered row's object.
-                       cellsRenderer: function (row, column, value, rowData) {
-                           var image = "<div style='margin: 5px; margin-bottom: 3px;'>";
-                           var imgurl = value;
-                           var img = '<img width="60" height="60" style="display: block;" src="' + imgurl + '"/>';
-                           image += img;
-                           image += "</div>";
-                           return image;
-                       }
-                   },
-                  { text: '名称', align: 'center', dataField: 'Name' },
-                   { text: '市场价', align: 'center', dataField: 'MarketPrice', cellsAlign: "right", width: 50 },
-                    { text: '售价', align: 'center', dataField: 'SalePrice', cellsAlign: "right", width: 50 },
-                     {
-                         text: '操作', align: 'center', dataField: 'ID', width: 50, cellsRenderer: function (row, column, value, rowData) {
-                             var html = "  <div style='text-align: center; overflow: hidden; padding-bottom: 2px; margin-top: 4px; text-overflow: ellipsis;'>";
-
-                             html += "<a  href='javascript:;' onclick='AddValue(\"" + value + "\",0," + row + "  );'   >添加 </a> ";
-
-                             html += "</div>";
-                             return html;
-                         }
-                     }
-
-
-                ]
+            $.post("@Url.HttpRouteUrl("ApiWithWeb", new { controller = "APP", action = "PostTj" })", { ProductID: productID, StationMode: type }, function (d) {
+                $("#dataTable").jqxDataTable('deleteRow', rowindex);
+                $("#HasAdddataTable").jqxDataTable('updateBoundData');
             });
-        });
 
-    });
+        }
+        function DeleteValue(StationID, rowindex) {
+
+            $.get("@Url.HttpRouteUrl("ApiWithWeb", new { controller = "APP", action = "DeleteTj" })", { id: StationID }, function () {
+
+                $("#HasAdddataTable").jqxDataTable('updateBoundData');
+            });
+
+
+
+        }
+
+        $(document).ready(function () {
+            $(".content-tab-ul-wrap ul li").click(function () {
+                //alert($(this).index());
+                selectType = $(this).index();
+                $(".tab-content").show();
+                $("#dataTable").jqxDataTable('updateBoundData');
+                $("#HasAdddataTable").jqxDataTable('updateBoundData');
+            });
+            $('.TjSy').jqxSplitter({ width: '100%', height: 480, panels: [{ size: '50%' }] });
+            $(".jqxExpander").jqxExpander({ width: '100%', height: 480, showArrow: false });
+            $("#BtnqryCateTj").jqxButton({ width: '100', template: "success" });
+            $('#BtnqryCateTj').on('click', function () {
+
+                var source =
+            {
+                dataType: "json",
+                dataFields: [
+                     { name: 'ID', type: 'string' },
+                    { name: 'Code', type: 'string' },
+                    { name: 'Name', type: 'string' },
+                      { name: 'FilePath', type: 'string' },
+                    { name: 'SalePrice', type: 'float' },
+                    { name: 'MarketPrice', type: 'float' }
+                ],
+                id: 'ID',
+                root: "Data",
+                url: "@Url.HttpRouteUrl("ApiWithWeb", new { controller = "APP", action = "GetProductsByWhere" })"
+            };
+                var dataAdapter = new $.jqx.dataAdapter(source,
+            {
+                formatData: function (data) {
+
+                    // update the $skip and $top params of the OData service.
+                    // data.pagenum - page number starting from 0.
+                    // data.pagesize - page size
+                    data.categoryID = $("#qryTjCategory").val();
+                    data.ProductName = $("#ProductName").val();
+                    data.stationMode = selectType;
+
+
+                    return data;
+                },
+                downloadComplete: function (data, status, xhr) {
+
+                    source.totalRecords = data.TotalRecourdCount;
+                    source.value = data.Data;
+
+
+                },
+                loadError: function (xhr, status, error) {
+                    throw new Error("http://services.odata.org: " + error.toString());
+                }
+            });
+
+                $("#dataTable").jqxDataTable(
+                {
+                    width: "99%",
+                    source: dataAdapter,
+
+                    pageable: true,
+                    pageSize: 20,
+                    pagerButtonsCount: 5,
+                    enableHover: false,
+                    selectionMode: 'none',
+                    columns: [
+                       {
+                           text: ' ', align: 'center', dataField: 'FilePath', width: 80,
+                           // row - row's index.
+                           // column - column's data field.
+                           // value - cell's value.
+                           // rowData - rendered row's object.
+                           cellsRenderer: function (row, column, value, rowData) {
+                               var image = "<div style='margin: 5px; margin-bottom: 3px;'>";
+                               var imgurl = value;
+                               var img = '<img width="60" height="60" style="display: block;" src="' + imgurl + '"/>';
+                               image += img;
+                               image += "</div>";
+                               return image;
+                           }
+                       },
+                      { text: '名称', align: 'center', dataField: 'Name' },
+                       { text: '市场价', align: 'center', dataField: 'MarketPrice', cellsAlign: "right", width: 50 },
+                        { text: '售价', align: 'center', dataField: 'SalePrice', cellsAlign: "right", width: 50 },
+                         {
+                             text: '操作', align: 'center', dataField: 'ID', width: 50, cellsRenderer: function (row, column, value, rowData) {
+                                 var html = "  <div style='text-align: center; overflow: hidden; padding-bottom: 2px; margin-top: 4px; text-overflow: ellipsis;'>";
+
+                                 html += "<a  href='javascript:;' onclick='AddValue(\"" + value + "\"," + selectType + "," + row + "  );'   >添加 </a> ";
+
+                                 html += "</div>";
+                                 return html;
+                             }
+                         }
+
+
+                    ]
+                });
+            });
+
+        });
     </script>
     <script type="text/javascript">
 
@@ -170,13 +177,13 @@
             var dataAdapter = new $.jqx.dataAdapter(source,
             {
                 formatData: function (data) {
-                   
-                        // update the $skip and $top params of the OData service.
-                        // data.pagenum - page number starting from 0.
-                        // data.pagesize - page size
-                        data.StationMode = 0;
-                         
-                    
+
+                    // update the $skip and $top params of the OData service.
+                    // data.pagenum - page number starting from 0.
+                    // data.pagesize - page size
+                    data.StationMode = selectType;
+
+
                     return data;
                 },
                 downloadComplete: function (data, status, xhr) {
