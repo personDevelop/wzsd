@@ -579,10 +579,39 @@ namespace EasyCms.Dal
 
         public DataTable GetProduct(int pageIndex, int pagesize, ref int pagecount, ref int recordCount)
         {
-            
-            return Dal.From<ShopProductInfo>().Select(ShopProductInfo._.ID,ShopProductInfo._.Code, ShopProductInfo._.Name
+
+            return Dal.From<ShopProductInfo>().Select(ShopProductInfo._.ID, ShopProductInfo._.Code, ShopProductInfo._.Name
                 , ShopProductInfo._.MarketPrice
                 , ShopProductInfo._.SalePrice).ToDataTable(pagesize, pageIndex, ref pagecount, ref recordCount);
+        }
+
+        public DataTable GetProductsBySearchKey(string searchKey, int pageIndex, string orderbystr, string host, ref int pagecount, ref int recordCount)
+        {
+
+            OrderByClip orderby = ShopProductInfo._.SaleNum.Desc;
+            if (!string.IsNullOrWhiteSpace(orderbystr))
+            {
+                orderby = new OrderByClip(orderbystr);
+            }
+            WhereClip searchWhere = new WhereClip();
+            searchWhere = ShopProductInfo._.SaleStatus == 1;
+
+            searchWhere = searchWhere && (ShopProductInfo._.Name.Contains(searchKey) || ShopProductInfo._.ShortDescription.Contains(searchKey)
+                || ShopCategory._.Name.Contains(searchKey) || ShopCategory._.Description.Contains(searchKey)
+                || ShopBrandInfo._.Name.Contains(searchKey)
+                || ShopProductType._.Name.Contains(searchKey)
+                  );
+            DataTable dt = Dal.From<ShopProductCategory>().Join<ShopProductInfo>(
+         ShopProductCategory._.ProductID == ShopProductInfo._.ID)
+         .Join<ShopCategory>(ShopCategory._.ID == ShopProductCategory._.CategoryID)
+         .Join<ShopBrandInfo>(ShopBrandInfo._.ID == ShopProductInfo._.BrandId, JoinType.leftJoin)
+         .Join<ShopProductType>(ShopProductType._.ID == ShopProductInfo._.TypeId, JoinType.leftJoin)
+         .Join<AttachFile>(AttachFile._.RefID == ShopProductInfo._.ID && AttachFile._.OrderNo == 1, JoinType.leftJoin)
+         .Select(ShopProductInfo._.ID, ShopProductCategory._.CategoryID, ShopCategory._.Name.Alias("CategoryName"), ShopProductInfo._.BrandId, ShopProductInfo._.TypeId, ShopProductInfo._.Code, ShopProductInfo._.Name, ShopProductInfo._.SKU, ShopProductInfo._.SaleCounts, ShopProductInfo._.SalePrice, ShopProductInfo._.MarketPrice, ShopBrandInfo._.Name.Alias("BrandName"), ShopProductType._.Name.Alias("TypeName"), AttachFile.GetFilePath(host))
+         .OrderBy(orderby)
+         .Where(searchWhere)
+         .ToDataTable(20, pageIndex, ref pagecount, ref recordCount);
+            return dt;
         }
     }
 

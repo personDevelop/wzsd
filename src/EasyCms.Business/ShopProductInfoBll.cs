@@ -108,7 +108,7 @@ namespace EasyCms.Business
             return Dal.GetProductSkuInfo(id, out   err);
         }
 
-        public string IsSJOperator(string ids, int opcode )
+        public string IsSJOperator(string ids, int opcode)
         {
             return Dal.IsSJOperator(ids, opcode);
         }
@@ -117,10 +117,15 @@ namespace EasyCms.Business
         {
             return Dal.GetSkuByProductID(id, out   err);
         }
- 
+
         public DataTable GetProduct(int pageIndex, int pagesize, ref int pagecount, ref int recordCount)
         {
-            return Dal.GetProduct(pageIndex,   pagesize, ref   pagecount, ref   recordCount);
+            return Dal.GetProduct(pageIndex, pagesize, ref   pagecount, ref   recordCount);
+        }
+
+        public DataTable GetProductsBySearchKey(string searchKey, int pageIndex,string other, string host, ref int pagecount, ref int recordCount)
+        {
+            return Dal.GetProductsBySearchKey(searchKey, pageIndex, other, host, ref   pagecount, ref   recordCount);
         }
     }
 }

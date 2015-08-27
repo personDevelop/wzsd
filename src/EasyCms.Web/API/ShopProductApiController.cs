@@ -46,5 +46,37 @@ namespace EasyCms.Web.API
             return new { PageIndex = pageIndex, RecordCount = dt.Rows.Count, TotalPageCount = pagecount, TotalRecourdCount = recordCount, Data = dt }.FormatObj();
 
         }
+
+        [HttpGet]
+        public HttpResponseMessage Search(string id, int pageIndex = 1, string other = "")
+        {
+            try
+            {
+                var resp = new HttpResponseMessage(HttpStatusCode.OK);
+
+                if (pageIndex == 0)
+                {
+                    pageIndex = 1;
+                }
+                if (string.IsNullOrEmpty(id))
+                {
+                    return "搜索关键字不能为空".FormatError();
+
+                }
+                else
+                {
+                    int pagecount = 0, recordCount = 0;
+                    DataTable dt = new ShopProductInfoBll().GetProductsBySearchKey(id, pageIndex,other, host, ref pagecount, ref recordCount);
+
+                    return new { PageIndex = pageIndex, RecordCount = dt.Rows.Count, TotalPageCount = pagecount, TotalRecourdCount = recordCount, Data = dt }.FormatObj();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Format();
+
+            }
+        }
     }
 }

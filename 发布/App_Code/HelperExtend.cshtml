@@ -39,6 +39,10 @@
         downInfo.ValueMember = "ID";
 
     }
+    if (string.IsNullOrWhiteSpace(downInfo.JsonDataRoor))
+    {
+        downInfo.JsonDataRoor = "Rows";
+    }
     string ctrlID = "DropDownList" + code;
     <dl>
         <dt>
@@ -62,7 +66,7 @@
                            { name: '@downInfo.DisplayMember' }
                        ],
                        url: '@downInfo.Url',
-                       root:"Rows",
+                       root:"@downInfo.JsonDataRoor",
                        async: false
                    };
             var dataAdapter = new $.jqx.dataAdapter(source);
