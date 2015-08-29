@@ -136,7 +136,7 @@
             } else {
                 var index = $("#DropDownListGateway").jqxDropDownList('getSelectedIndex');
                 var source = $('#DropDownListGateway').jqxDropDownList('source');
-                var dataarray = source.loadedData
+                var dataarray = source.loadedData.data;
                 var data = dataarray[index];
                 loadLogo(data);
                 if (data.emailAddress) {
