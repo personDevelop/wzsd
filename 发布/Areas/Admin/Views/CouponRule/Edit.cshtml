@@ -273,7 +273,7 @@
               },
               root: 'data',
               id: 'ID',
-              url: "@Url.HttpRouteUrl("ApiWithWeb", new { controller = "APP", action = "GetProductsByCategory" })"
+              url: "@Url.RouteUrl("ApiWithWeb", new { controller = "APP", action = "GetProductsByCategory" })"
           };
 
             var dataAdapter = new $.jqx.dataAdapter(source,
@@ -352,7 +352,7 @@
 
                             root: 'data',
                             id: 'SkuID',
-                            url: "@Url.HttpRouteUrl("ApiWithWeb", new { controller = "ShopProductApi", action = "GetSkuByProductID" })"
+                            url: "@Url.RouteUrl("ApiWithWeb", new { controller = "ShopProductApi", action = "GetSkuByProductID" })"
                         };
             var dataAdapter = new $.jqx.dataAdapter(source,
                      {

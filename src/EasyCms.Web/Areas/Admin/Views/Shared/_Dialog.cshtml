@@ -11,12 +11,17 @@
     <div>
         <div class="mainSplitter">
             <div class="splitter-panel">
+                @if (Model.IsMutiSelect)
+                {
+                    <text> 按住Ctrl 或Shift可以多选</text>
+                }
                 <div id="@Model.DataControlID">
                 </div>
             </div>
             <div class="splitter-panel">
-
+               
                 <div class="btn-wrap" style="margin:2px auto; text-align:center">
+                   
                     <input id="@btnOkID" type="button" value="确定" class="btn" onclick="javascript: @Model.OnOk;$('#@Model.DialogID').jqxWindow('close');" />
                     <input name="btnReturn" type="button" value="取消" class="btn yellow" onclick="javascript: $('#@Model.DialogID').jqxWindow('close');" />
                 </div>

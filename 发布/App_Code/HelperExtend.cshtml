@@ -703,7 +703,7 @@
                             $(event.currentTarget).  nextAll().remove();
                             //创建其子类
                             //同时生成dropdownlist
-                            $.getJSON(url, { id: categroy }, function () {
+                            //$.getJSON(url, { id: categroy }, function () {
                                 var guid = "dropdown" + categroy;
                                 $(event.currentTarget).parent().append("<div style='float: left;' id='" + guid + "'> </div>");
                                 source. url= url + "/" + categroy;
@@ -721,7 +721,7 @@
 
                                 });
 
-                            });
+                            //});
                         }
                     }
                 });

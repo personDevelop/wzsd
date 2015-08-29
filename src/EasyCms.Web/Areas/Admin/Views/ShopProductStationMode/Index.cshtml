@@ -35,7 +35,7 @@
         var selectType = 0;
         function AddValue(productID, type, rowindex) {
 
-            $.post("@Url.HttpRouteUrl("ApiWithWeb", new { controller = "APP", action = "PostTj" })", { ProductID: productID, StationMode: type }, function (d) {
+            $.post("@Url.RouteUrl("ApiWithWeb", new { controller = "APP", action = "PostTj" })", { ProductID: productID, StationMode: type }, function (d) {
                 $("#dataTable").jqxDataTable('deleteRow', rowindex);
                 $("#HasAdddataTable").jqxDataTable('updateBoundData');
             });
@@ -43,7 +43,7 @@
         }
         function DeleteValue(StationID, rowindex) {
 
-            $.get("@Url.HttpRouteUrl("ApiWithWeb", new { controller = "APP", action = "DeleteTj" })", { id: StationID }, function () {
+            $.get("@Url.RouteUrl("ApiWithWeb", new { controller = "APP", action = "DeleteTj" })", { id: StationID }, function () {
 
                 $("#HasAdddataTable").jqxDataTable('updateBoundData');
             });
@@ -78,7 +78,7 @@
                 ],
                 id: 'ID',
                 root: "Data",
-                url: "@Url.HttpRouteUrl("ApiWithWeb", new { controller = "APP", action = "GetProductsByWhere" })"
+                url: "@Url.RouteUrl("ApiWithWeb", new { controller = "APP", action = "GetProductsByWhere" })"
             };
                 var dataAdapter = new $.jqx.dataAdapter(source,
             {
@@ -172,7 +172,7 @@
                     ],
                     id: 'ID',
                     root: "Data",
-                    url: "@Url.HttpRouteUrl("ApiWithWeb", new { controller = "APP", action = "GetProductsByStation" })"
+                    url: "@Url.RouteUrl("ApiWithWeb", new { controller = "APP", action = "GetProductsByStation" })"
                 };
             var dataAdapter = new $.jqx.dataAdapter(source,
             {
@@ -249,7 +249,7 @@
                     <h1> 需要推荐的商品</h1>
                 </div>
                 <div>
-                    @HelperExtend.DropDownListClass("qryTjCategory", "商品分类", Url.HttpRouteUrl("ApiWithWeb", new { controller = "APP", action = "GetChildCategory" }))
+                    @HelperExtend.DropDownListClass("qryTjCategory", "商品分类", Url.RouteUrl("ApiWithWeb", new { controller = "APP", action = "GetChildCategory" }))
 
                     <dl>
                         <dt>

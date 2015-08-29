@@ -998,8 +998,7 @@ namespace EasyCms.Model
         protected override void OnCreate()
         {
             AddedDate = DateTime.Now;
-            SaleDate = AddedDate;
-            Stock = int.MinValue;
+            SaleDate = AddedDate; 
             SalesType = 1;
             SaleStatus = 1;
         }

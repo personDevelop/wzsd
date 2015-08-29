@@ -87,7 +87,10 @@ namespace EasyCms.Business
         {
             return Dal.GetProductsByStation(id, pageIndex, pageSize, host, ref   pagecount, ref   recordCount);
         }
-
+        public DataTable GetProductsByStation(string categoryid, int pageIndex, int pageSize, string host, ref int pagecount, ref int recordCount)
+        {
+            return Dal.GetProductsByStation(categoryid, pageIndex, pageSize, host, ref   pagecount, ref   recordCount);
+        }
         public int DeleteStation(string StationID)
         {
             return Dal.DeleteStation(StationID);
@@ -123,7 +126,7 @@ namespace EasyCms.Business
             return Dal.GetProduct(pageIndex, pagesize, ref   pagecount, ref   recordCount);
         }
 
-        public DataTable GetProductsBySearchKey(string searchKey, int pageIndex,string other, string host, ref int pagecount, ref int recordCount)
+        public DataTable GetProductsBySearchKey(string searchKey, int pageIndex, string other, string host, ref int pagecount, ref int recordCount)
         {
             return Dal.GetProductsBySearchKey(searchKey, pageIndex, other, host, ref   pagecount, ref   recordCount);
         }

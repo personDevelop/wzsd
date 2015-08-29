@@ -214,6 +214,7 @@ namespace EasyCms.Web.API
 
                 sm.ID = Guid.NewGuid().ToString();
                 sm.StationModeName = ((StationMode)sm.StationMode).ToString();
+                
                 int dt = new ShopProductInfoBll().SaveStation(sm);
                 string result = JsonWithDataTable.Serialize(sm);
                 return result.FormatSuccess();
@@ -290,6 +291,25 @@ namespace EasyCms.Web.API
             }
         }
 
+        public HttpResponseMessage GetProductsByCategoryStation(string id, int pageIndex = 1, int other = 5)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(id))
+                {
+                    return "分类不能为空".FormatError();
+                }
+                int pagecount = 0, recordCount = 0;
+                DataTable dt = new ShopProductInfoBll().GetProductsByStation(id, pageIndex, other, host, ref pagecount, ref recordCount);
+
+                return new { PageIndex = pageIndex, RecordCount = dt.Rows.Count, TotalPageCount = pagecount, TotalRecourdCount = recordCount, Data = dt }.FormatObj();
+            }
+            catch (Exception ex)
+            {
+                return ex.Format();
+
+            }
+        }
         public HttpResponseMessage GetGateway()
         {
             try

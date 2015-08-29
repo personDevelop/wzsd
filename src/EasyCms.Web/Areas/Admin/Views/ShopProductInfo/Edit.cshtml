@@ -76,9 +76,9 @@
     }
     @HelperExtend.HiddenFor("ID", Model.ID)
     @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())
-   
+
     @Html.ValidationSummary()
-    @HelperExtend.HelpEdit("ShopCategoryID", "ShopCategoryName", "商品分类", defaultVal:Model.ShopCategoryID, defaultText: Model.ShopCategoryName, hint: "*必填", dialogTitle: "选择商品分类", InnitFunc: "InnitFunc", onOk: "onOk", IsMutiSelect: true, IsTree: true, DataControlID: "treeGrid")
+    @HelperExtend.HelpEdit("ShopCategoryID", "ShopCategoryName", "商品分类", defaultVal: Model.ShopCategoryID, defaultText: Model.ShopCategoryName, hint: "*必填", dialogTitle: "选择商品分类", InnitFunc: "InnitFunc", onOk: "onOk", IsMutiSelect: true, IsTree: true, DataControlID: "treeGrid")
 
     @HelperExtend.TextBox("Code", "编号", defaultval: Model.Code, hint: "*编号不能重复")
     @HelperExtend.TextBox("Name", "名称", defaultval: Model.Name, hint: "*必填,长度限制在100个字符以内.")
@@ -132,7 +132,7 @@
 
 <div class="tab-content" style="display:none">
     @HelperExtend.TextArea("ShortDescription", "简单描述", defaultval: Model.ShortDescription)
-    @HelperExtend.UEditor("Description", "详细介绍", defaultval:  Model.Description )
+    @HelperExtend.UEditor("Description", "详细介绍", defaultval: Model.Description)
 </div>
 <div class="tab-content" style="display:none">
     规格
@@ -210,7 +210,7 @@
                             }
                             $("#ggInfo").append(html);
                         }
-                        if (data.Tables.length>1 && data.Tables[1].Rows.length > 0) {
+                        if (data.Tables.length > 1 && data.Tables[1].Rows.length > 0) {
                             $("#skugrid").html("");
                             var html = "<thead></thead>";
                             var headelemnt = $(html);
@@ -244,16 +244,16 @@
                                                 }
                                                 else { html += "<input type='checkbox'     name='row|" + i + "|" + col + "|IsSale'   />";/*是否上架*/ }
 
-                                            } else 
-                                            if (colName == "默认商品") {
-                                                if (row[colName]) {
-                                                    html += "<input type='checkbox' checked='checked' onclick='chage(" + i + ")'   name='row|" + i + "|" + col + "|IsDefault'   />";/*是否默认*/
-                                                }
-                                                else { html += "<input type='checkbox' onclick='chage("+i+")'     name='row|" + i + "|" + col + "|IsDefault'   />";/*是否默认*/ }
+                                            } else
+                                                if (colName == "默认商品") {
+                                                    if (row[colName]) {
+                                                        html += "<input type='checkbox' checked='checked' onclick='chage(" + i + ")'   name='row|" + i + "|" + col + "|IsDefault'   />";/*是否默认*/
+                                                    }
+                                                    else { html += "<input type='checkbox' onclick='chage(" + i + ")'     name='row|" + i + "|" + col + "|IsDefault'   />";/*是否默认*/ }
 
-                                            } else {
-                                                html += "<input   name='row|" + i + "|" + col + "|" + colName + "'  value='" + row[colName] + "' />";
-                                            }
+                                                } else {
+                                                    html += "<input   name='row|" + i + "|" + col + "|" + colName + "'  value='" + row[colName] + "' />";
+                                                }
                                         }
                                         html += "</td>";
                                         col++;
@@ -262,7 +262,7 @@
                                     }
                                 }
                                 $("#skugrid").append(trelemnt);
-                                
+
                             }
 
                         }
@@ -407,9 +407,9 @@
                             tdthml = "<input type='checkbox' checked='checked'   name='row|" + i + "|" + col + "|IsSale'   />";/*是否上架*/
                             break;
                         case 9:
-                            if (i==0) {
+                            if (i == 0) {
                                 tdthml = "<input type='checkbox' checked='checked' onclick='chage(" + i + ")'   name='row|" + i + "|" + col + "|IsDefault'   />";/*是否默认*/
-                            }else
+                            } else
                                 tdthml = "<input type='checkbox'   onclick='chage(" + i + ")'   name='row|" + i + "|" + col + "|IsDefault'   />";/*是否默认*/
                             break;
 
@@ -419,9 +419,8 @@
             }
 
         }
-        function chage(index)
-        {
-            $("#skugrid").find("input[type='checkbox']").each(function (i,elemnt) {
+        function chage(index) {
+            $("#skugrid").find("input[type='checkbox']").each(function (i, elemnt) {
                 if ($(elemnt).attr("name").indexOf("IsDefault") > 0) {
                     var nameStr = $(elemnt).attr("name");
                     var arr = nameStr.split('|');
@@ -429,8 +428,8 @@
                         $(elemnt).attr("checked", false);
                     }
                 }
-                 
-               
+
+
             });
         }
         function changeType(event) {
@@ -608,13 +607,21 @@
                        });
         }
         function onOk(data) {
-            if (data.length == 1) {
+            if (data.length > 0) {
 
+                var ids = "",names="";
+                for (var i = 0; i < data.length; i++) {
+                    if (i > 0) {
+                        ids += ",";
+                        names += ",";
+                    }
+                    ids += data[i].ID;
+                    names += data[i].Name;
+                }
+                $("#ShopCategoryName").val(names);
+                $("#ShopCategoryID").val(ids);
 
-                $("#ShopCategoryName").val(data[0].Name);
-                $("#ShopCategoryID").val(data[0].ID);
-
-            } else { ErrorMsg("请选择一条数据"); }
+            } else { ErrorMsg("请至少选择一条数据"); }
         }
         $(function () {
 

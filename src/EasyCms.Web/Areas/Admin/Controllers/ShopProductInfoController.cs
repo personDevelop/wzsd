@@ -76,8 +76,15 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                 if (!string.IsNullOrWhiteSpace(p.ShopCategoryID))
                 {
                     string[] categorys = p.ShopCategoryID.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                    List<string> listHasAdd = new List<string>();
+
                     foreach (var item in categorys)
                     {
+                        if (listHasAdd.Contains(item))
+                        {
+                            continue;
+                        }
+                        listHasAdd.Add(item);
                         list.Add(new ShopProductCategory() { ID = Guid.NewGuid().ToString(), CategoryID = item, ProductID = p.ID });
                     }
                 }
@@ -232,7 +239,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                                 else
                                 {
                                     skuinfo.IsDefault = false;
-                                } 
+                                }
                                 break;
                         }
 
@@ -292,7 +299,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         [HttpPost]
         //
         // GET: /Admin/ShopProductInfo/Delete/5
-        public string IsSJOperator(string id , int opcode)
+        public string IsSJOperator(string id, int opcode)
         {
             return bll.IsSJOperator(id, opcode);
         }
