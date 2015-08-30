@@ -1,0 +1,116 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <script src="http://localhost:7161/Scripts/jquery-1.10.2.js"></script>
+    <script type="text/javascript">
+        function sumitJson() {
+
+            var data = {};
+            //data.Remark = $("#Remark").val();
+            data.OrderItems = [{}, {}, {}];
+            data.OrderItems[0].Sku = $("#OrderItems0Sku").val();
+            data.OrderItems[0].BuyCount = $("#OrderItems0BuyCount").val();
+            data.OrderItems[0].UsingCouponsID = $("#OrderItems0UsingCouponsID").val();
+
+            data.OrderItems[1].Sku = $("#OrderItems1Sku").val();
+            data.OrderItems[1].BuyCount = $("#OrderItems1BuyCount").val();
+            data.OrderItems[1].UsingCouponsID = $("#OrderItems1UsingCouponsID").val();
+
+            data.OrderItems[2].Sku = $("#OrderItems2Sku").val();
+            data.OrderItems[2].BuyCount = $("#OrderItems2BuyCount").val();
+            data.OrderItems[2].UsingCouponsID = $("#OrderItems2UsingCouponsID").val();
+
+            $.ajax({
+                url: "http://localhost:7161/api/ShopOrderApi/CreateOrder",
+                type: "POST",
+                data: data,
+                dataType: "json",
+                success: function () { alert("成功"); }
+            });
+        }
+
+     
+        function sumitJson1() {
+
+            var data = [];
+            data["Remark"] = $("#Remark").val();
+
+            data["OrderItems[0].Sku"] = $("#OrderItems0Sku").val();
+            data["OrderItems[0].BuyCount"] = $("#OrderItems0BuyCount").val();
+            data["OrderItems[0].UsingCouponsID"] = $("#OrderItems0UsingCouponsID").val();
+
+            data["OrderItems[1].Sku"] = $("#OrderItems1Sku").val();
+            data["OrderItems[1].BuyCount"] = $("#OrderItems1BuyCount").val();
+            data["OrderItems[1].UsingCouponsID"] = $("#OrderItems1UsingCouponsID").val();
+
+            data["OrderItems[2].Sku"] = $("#OrderItems2Sku").val();
+            data["OrderItems[2].BuyCount"] = $("#OrderItems2BuyCount").val();
+            data["OrderItems[2].UsingCouponsID"] = $("#OrderItems2UsingCouponsID").val();
+
+            $.ajax({
+                url: "http://localhost:7161/api/ShopOrderApi/CreateOrder",
+                type: "POST",
+                data: data,
+                dataType: "json",
+                success: function () { alert("成功"); }
+            });
+        }
+        function sumitJson2() {
+
+            var data = "";
+
+            data += "Remark=" + $("#Remark").val();
+            data += "&OrderItems[0].Sku=" + $("#OrderItems0Sku").val();
+            data += "&OrderItems[0].BuyCount=" + $("#OrderItems0BuyCount").val();
+            data += "&OrderItems[0].UsingCouponsID=" + $("#OrderItems0UsingCouponsID").val();
+            data += "&OrderItems[1].Sku=" + $("#OrderItems1Sku").val();
+            data += "&OrderItems[1].BuyCount=" + $("#OrderItems1BuyCount").val();
+            data += "&OrderItems[1].UsingCouponsID=" + $("#OrderItems1UsingCouponsID").val();
+            data += "&OrderItems[2].Sku=" + $("#OrderItems2Sku").val();
+            data += "&OrderItems[2].BuyCount=" + $("#OrderItems2BuyCount").val();
+            data += "&OrderItems[2].UsingCouponsID=" + $("#OrderItems2UsingCouponsID").val();
+
+
+            $.ajax({
+                url: "http://localhost:7161/api/ShopOrderApi/CreateOrder",
+                type: "POST",
+                data: data,
+                dataType: "json",
+                success: function () { alert("成功"); }
+            });
+        }
+    </script>
+</head>
+<body>
+    <form action="http://localhost:7161/api/ShopOrderApi/CreateOrder" method="post">
+
+        订单主表<br /><br /><br />
+        备注  <input type="text" id="Remark" name="Remark" value="备注" />
+        <br /><br /><br /><br />
+        订单商品明细表<br /><br /><br />
+        <table style="width:100%;">
+            <tr>
+                <td><input id="OrderItems0Sku" name="OrderItems[0].Sku" type="text" value="Sku1" /> </td>
+                <td><input id="OrderItems0BuyCount" name="OrderItems[0].BuyCount" type="text" value="4" /></td>
+                <td><input id="OrderItems0UsingCouponsID" name="OrderItems[0].UsingCouponsID" type="text" value="优惠券id1" /></td>
+            </tr>
+            <tr>
+                <td><input id="OrderItems1Sku" name="OrderItems[1].Sku" type="text" value="Sku2" /> </td>
+                <td><input id="OrderItems1BuyCount" name="OrderItems[1].BuyCount" type="text" value="5" /></td>
+                <td><input id="OrderItems1UsingCouponsID" name="OrderItems[1].UsingCouponsID" type="text" value="优惠券id2" /></td>
+            </tr>
+            <tr>
+                <td><input id="OrderItems2Sku" name="OrderItems[2].Sku" type="text" value="Sku3" /> </td>
+                <td><input id="OrderItems2BuyCount" name="OrderItems[2].BuyCount" type="text" value="6" /></td>
+                <td><input id="OrderItems2UsingCouponsID" name="OrderItems[2].UsingCouponsID" type="text" value="优惠券id3" /></td>
+            </tr>
+        </table>
+        <input id="Submit1" type="submit" value="提交" />
+        <input id="btn" type="button" onclick="sumitJson(); return false;" value="Json提交" />
+        <input id="btn" type="button" onclick="sumitJson1(); return false;" value="Json数组提交" />
+        <input id="btn" type="button" onclick="sumitJson2(); return false;" value="字符串键值对提交" />
+    </form>
+</body>
+</html>

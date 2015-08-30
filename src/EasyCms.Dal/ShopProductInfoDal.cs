@@ -52,6 +52,21 @@ namespace EasyCms.Dal
                 { deleteShopProductAttributesIDS.Add(spa.ValueId); }
             }
             item.IsEnableSku = listSkuInfo.Count > 0;
+            //处理sku信息，保留skuid不变化
+            if (item.RecordStatus == StatusType.update && item.IsEnableSku)
+            {
+                //获取其旧的sku信息
+                List<ShopProductSKUInfo> oldSkuInfoList = Dal.From<ShopProductSKUInfo>().Where(ShopProductSKUInfo._.ProductId == item.ID).List<ShopProductSKUInfo>();
+                foreach (ShopProductSKUInfo newSku in listSkuInfo)
+                {
+                    if (oldSkuInfoList.Exists(p => p.Name == newSku.Name))
+                    {
+                        ShopProductSKUInfo oldSku = oldSkuInfoList.Find(p => p.Name == newSku.Name);
+                        newSku.ID = oldSku.ID;
+                    }
+                }
+
+            }
             SessionFactory dal;
             IDbTransaction tr = Dal.BeginTransaction(out dal);
             try
@@ -341,7 +356,7 @@ namespace EasyCms.Dal
 
         public int SaveStation(ShopProductStationMode s)
         {
-             
+
             return Dal.Submit(s);
         }
 

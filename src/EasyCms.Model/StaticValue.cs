@@ -35,7 +35,7 @@ namespace EasyCms.Model
         /// 促销规则
         /// </summary>
         public const string CouponType = "482d62aa-5302-4773-b719-ae39acf012a5";
-        
+
     }
 
 
@@ -49,4 +49,21 @@ namespace EasyCms.Model
         畅销精品,
         分类首页推荐
     }
+    public enum ShopBuyType
+    {
+        普通购物,
+        赠品,
+        套餐,
+        团购,
+        秒杀
+    }
+
+    public enum ShopSaleStatus
+    {
+        下架,
+        上架,
+        上架审批,
+        上架退回
+    }
+
 }

@@ -83,7 +83,11 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                 bll.Save(p);
                 TempData.Add("IsSuccess", "保存成功");
                 ModelState.Clear();
+                if (collection["IsContinueAdd"] == "1")
+                {
+                    p = new FunctionInfo();
 
+                } 
 
             }
             catch (Exception ex)
@@ -91,11 +95,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                 ModelState.AddModelError("error", ex.Message);
 
             }
-            if (collection["IsContinueAdd"] == "1")
-            {
-                p = new FunctionInfo();
-
-            } 
+           
             return View("Edit", p);
         }
 

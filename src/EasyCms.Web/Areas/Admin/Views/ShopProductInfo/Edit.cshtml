@@ -117,7 +117,7 @@
 
     @HelperExtend.TextBox("Points", "可得积分", defaultval: Model.Points, hint: "")
 
-    @HelperExtend.TextBox("Stock", "库存", defaultval: Model.Stock, hint: "")
+    @HelperExtend.TextBox("Stock", "库存", defaultval: Model.Stock, hint: "库存等于最小的负整数时， 表示不控制库存")
 
     @HelperExtend.TextBox("MaxQuantity", "警戒最高库存", defaultval: Model.MaxQuantity, hint: "")
 
@@ -210,6 +210,7 @@
                             }
                             $("#ggInfo").append(html);
                         }
+                        //展示之前生成的sku信息
                         if (data.Tables.length > 1 && data.Tables[1].Rows.length > 0) {
                             $("#skugrid").html("");
                             var html = "<thead></thead>";
@@ -229,14 +230,14 @@
                                 var col = 0;
                                 for (var colName in row) {
                                     if (colName != "SKUID") {
-                                        var names = row[colName];
-                                        if (!names) {
-                                            names = "";
+                                        var nameStr = row[colName];
+                                        if (!nameStr) {
+                                            nameStr = "";
                                         }
-                                        var names = names.toString().split('|');
+                                        var names = nameStr.toString().split('|');
                                         var html = "<td>";
                                         if (names.length == 3) {
-                                            html += "<input type='hidden' name='dtrow|" + i + "|" + col + "' value='" + names[0] + "|" + names[1] + "' />" + names[2];
+                                            html += "<input type='hidden' name='dtrow|" + i + "|" + col + "' value='" + nameStr + "|" + colName + "' />" + names[2];
                                         } else {
                                             if (colName == "上架") {
                                                 if (row[colName]) {
@@ -361,8 +362,9 @@
                     for (var z = 0; z < currentCellCount; z++) {
                         loopcount++;
                         //找到对应的单元格
-                        var html = "<input type='hidden' name='dtrow|" + (loopcount - 1) + "|" + index + "' value='" + v.attrid + "|" + v.valid + "' />" + v.valstr;
-                        $("#skugrid").find("tr").eq(loopcount).find("td").eq(index).append(html);
+                        var html = "<input type='hidden' name='dtrow|" + (loopcount - 1) + "|" +
+                            index + "' value='" + v.attrid + "|" + v.valid + "|" + v.valstr + "|" + columns.get(v.attrid).name + "' />" + v.valstr;
+                        $("#skugrid").find("tr").eq(loopcount).find("td").eq(index).append(html); 
 
                     }
                 }
@@ -609,7 +611,7 @@
         function onOk(data) {
             if (data.length > 0) {
 
-                var ids = "",names="";
+                var ids = "", names = "";
                 for (var i = 0; i < data.length; i++) {
                     if (i > 0) {
                         ids += ",";

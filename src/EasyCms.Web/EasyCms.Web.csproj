@@ -723,7 +723,9 @@
     <Content Include="Areas\Admin\Views\FunctionInfo\Index.cshtml" />
     <Content Include="Areas\Admin\Views\FunctionInfo\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\ShopProductStationMode\Index.cshtml" />
-    <Content Include="Gateway.config" />
+    <Content Include="Gateway.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Areas\Admin\Views\ShopPaymentTypes\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\ShopPaymentTypes\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Index\Index - 复制.cshtml" />
@@ -1140,6 +1142,7 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="test\testSubmitOrder.html" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -1167,10 +1170,6 @@
     <Folder Include="Areas\Admin\Views\ShopOrder\" />
     <Folder Include="Content\css\" />
     <Folder Include="Scripts\jGui\" />
-    <Folder Include="Views\Home\" />
-    <Folder Include="Views\ShopPayTypeApi\" />
-    <Folder Include="Views\UpLoad\" />
-    <Folder Include="Views\UserApi\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

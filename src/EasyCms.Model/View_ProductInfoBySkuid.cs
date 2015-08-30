@@ -44,6 +44,10 @@ namespace EasyCms.Model
 
         private string _SKUID;
 
+        private bool _IsSale;
+
+        private int _SaleStatus;
+
         #endregion
 
         #region 属性
@@ -239,6 +243,44 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  是否在售,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "IsSale", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public bool IsSale
+        {
+            get
+            {
+                return this._IsSale;
+            }
+            set
+            {
+                this.OnPropertyChanged("IsSale", this._IsSale, value);
+                this._IsSale = value;
+            }
+        }
+
+        /// <summary>
+        ///  商品销售状态,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "SaleStatus", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public int SaleStatus
+        {
+            get
+            {
+                return this._SaleStatus;
+            }
+            set
+            {
+                this.OnPropertyChanged("SaleStatus", this._SaleStatus, value);
+                this._SaleStatus = value;
+            }
+        }
+
         #endregion
 
         #region 列定义
@@ -266,6 +308,10 @@ namespace EasyCms.Model
                 Stock = new PropertyItem("Stock", tableName);
 
                 SKUID = new PropertyItem("SKUID", tableName);
+
+                IsSale = new PropertyItem("IsSale", tableName);
+
+                SaleStatus = new PropertyItem("SaleStatus", tableName);
 
 
             }
@@ -309,7 +355,16 @@ namespace EasyCms.Model
             /// SKUID,
             /// </summary> 
             public PropertyItem SKUID = null;
+            /// <summary>
+            /// 是否在售,
+            /// </summary> 
+            public PropertyItem IsSale = null;
+            /// <summary>
+            /// 商品销售状态,
+            /// </summary> 
+            public PropertyItem SaleStatus = null;
         }
         #endregion
     }
+
 }

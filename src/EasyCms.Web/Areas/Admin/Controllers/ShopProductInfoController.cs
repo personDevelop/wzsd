@@ -92,7 +92,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                 List<ShopProductSKU> listSku = new List<ShopProductSKU>();
                 List<ShopProductSKUInfo> listSkuInfo = new List<ShopProductSKUInfo>();
                 Dictionary<int, string> rowSpeckID = new Dictionary<int, string>();
-
+                Dictionary<string, string> SkuIDName = new Dictionary<string, string>();
                 Dictionary<int, ShopProductSKUInfo> rowShopProductSKUInfo = new Dictionary<int, ShopProductSKUInfo>();
                 foreach (string item in collection.Keys)
                 {
@@ -144,6 +144,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                         }
                         else
                         {
+
                             sku.ID = Guid.NewGuid().ToString();
                             rowSpeckID.Add(rowindex, sku.ID);
 
@@ -152,8 +153,14 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                         string[] fromVal = collection[item].Split('|');
                         sku.AttributeId = fromVal[0];
                         sku.ValueId = fromVal[1];
-
-
+                        if (SkuIDName.ContainsKey(sku.ID))
+                        {
+                            SkuIDName[sku.ID] += "  " + fromVal[3] + ":" + fromVal[2];
+                        }
+                        else
+                        {
+                            SkuIDName.Add(sku.ID, fromVal[3] + ":" + fromVal[2]);
+                        } 
                     }
                     else if (item.StartsWith("row|"))
                     {
@@ -246,12 +253,24 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                     }
 
                 }
-
+                foreach (var item in listSkuInfo)
+                {
+                    if (SkuIDName.ContainsKey(item.SKURelationID))
+                    {
+                        item.Name = SkuIDName[item.SKURelationID];
+                    }
+                }
 
                 int i = bll.Save(p, list, listAttri, listSku, listSkuInfo);
                 if (i > -1)
                 {
                     TempData.Add("IsSuccess", "保存成功");
+                    if (collection["IsContinueAdd"] == "1")
+                    {
+                        p = new ShopProductInfo();
+
+                    }
+
                 }
                 else
                 {

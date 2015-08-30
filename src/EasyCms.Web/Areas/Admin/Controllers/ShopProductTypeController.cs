@@ -99,6 +99,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                 if (TempData.ContainsKey(""))
                 {
                     TempData.Add("IsSuccess", "保存成功");
+
                 }
                 else
                 {
@@ -106,6 +107,11 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                 }
 
                 ModelState.Clear();
+                if (collection["IsContinueAdd"] == "1")
+                {
+                    p = new ShopProductType();
+
+                } 
 
 
             }

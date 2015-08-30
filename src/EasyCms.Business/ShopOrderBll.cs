@@ -23,18 +23,23 @@ namespace EasyCms.Business
         {
             return Dal.Save(item);
         }
-         
+
         public DataTable GetList(int pagenum, int pagesize, ref int recordCount, bool IsForSelected = false)
         {
             return Dal.GetList(pagenum, pagesize, ref   recordCount, IsForSelected);
         }
-        
+
         public ShopOrder GetEntity(string id)
         {
             return Dal.GetEntity(id);
         }
 
- 
 
+
+
+        public ShopOrderModel CreateOrder(List<OrderItem> list, out string err)
+        {
+            return Dal.CreateOrder(list, out err);
+        }
     }
 }

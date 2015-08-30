@@ -52,6 +52,8 @@ namespace EasyCms.Model
 
         private bool _IsDefault;
 
+        private string _Name;
+
         #endregion
 
         #region 属性
@@ -323,6 +325,25 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  名称,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "Name", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 500, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string Name
+        {
+            get
+            {
+                return this._Name;
+            }
+            set
+            {
+                this.OnPropertyChanged("Name", this._Name, value);
+                this._Name = value;
+            }
+        }
+
         #endregion
 
         #region 列定义
@@ -358,6 +379,8 @@ namespace EasyCms.Model
                 OrderNo = new PropertyItem("OrderNo", tableName);
 
                 IsDefault = new PropertyItem("IsDefault", tableName);
+
+                Name = new PropertyItem("Name", tableName);
 
 
             }
@@ -417,6 +440,10 @@ namespace EasyCms.Model
             /// 是否默认,
             /// </summary> 
             public PropertyItem IsDefault = null;
+            /// <summary>
+            /// 名称,
+            /// </summary> 
+            public PropertyItem Name = null;
         }
         #endregion
     }

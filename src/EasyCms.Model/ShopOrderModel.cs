@@ -89,5 +89,18 @@ namespace EasyCms.Model
         public string UsingCouponsID { get; set; }
 
 
+        /// <summary>
+        /// 0，普通，1促销，2团购
+        /// </summary>
+        public int OrderType { get; set; }
+
+        /// <summary>
+        /// 订单对应的销售模式ID,普通订单的为空
+        /// 这个就是对应的促销活动ID，这个如果是当前购买的商品符合一定的促销活动，会根据促销活动定价。
+        /// </summary>
+        public string OrderResId { get; set; }
+
+        
+
     }
 }

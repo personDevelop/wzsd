@@ -68,6 +68,11 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                 TempData.Add("IsSuccess", "保存成功");
                 ModelState.Clear();
 
+                if (collection["IsContinueAdd"] == "1")
+                {
+                    p = new AdministrativeRegions();
+
+                } 
 
             }
             catch (Exception ex)
