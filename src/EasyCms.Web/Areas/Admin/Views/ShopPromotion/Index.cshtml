@@ -39,35 +39,19 @@
 
 		{ name: 'ID', type: 'string' },
 
-		{ name: 'RuleID', type: 'string' },
-
-		{ name: 'BuyCategoryId', type: 'string' },
+		{ name: 'RuleName', type: 'string' },
 
 		{ name: 'BuyCategoryName', type: 'string' },
-
-		{ name: 'BuyProductId', type: 'string' },
-
 		{ name: 'BuyProductName', type: 'string' },
-
-		{ name: 'BuySKUID', type: 'string' },
 
 		{ name: 'BuyCount', type: 'string' },
 
-		{ name: 'HandsaleProductId', type: 'string' },
-
-		{ name: 'HandsaleProductSKUID', type: 'string' },
-
-		{ name: 'CouponID', type: 'string' },
-
 		{ name: 'CouponName', type: 'string' },
 
-		{ name: 'HandsaleMaxCount', type: 'string' },
-
-		{ name: 'HandsaleCount', type: 'string' },
 
 		{ name: 'MinPrice', type: 'string' },
 
-		{ name: 'MaxPrice', type: 'string' },
+
 
 		{ name: 'StartDate', type: 'string' },
 
@@ -92,7 +76,7 @@
             $("#jqxgrid").jqxGrid(
             {
                 width: "95%",
-                  autoheight: true,
+                autoheight: true,
                 source: dataAdapter,
                 columnsresize: true,
                 virtualmode: true,
@@ -103,49 +87,23 @@
                 pageSize: 20,
                 pageable: true,
                 columns: [
+  { text: '促销规则', dataField: 'RuleName', align: "center", type: 'string', width: 150 },
+  { text: '开始时间', dataField: 'StartDate', align: "center", cellsalign: "center", type: 'string', width: 130 },
 
+  { text: '结束时间', dataField: 'EndDate', align: "center", cellsalign: "center", type: 'string', width: 130 },
 
-  { text: '主键', dataField: 'ID',align: "center", cellsalign: "center", type: 'string', width: 200 },
+  { text: '商品分类名称', dataField: 'BuyCategoryName', align: "center", type: 'string', width: 100 },
 
-  { text: '促销规则', dataField: 'RuleID',align: "center", cellsalign: "center", type: 'string', width: 200 },
+  { text: '商品名称', dataField: 'BuyProductName', align: "center", type: 'string', width: 200 },
 
-  { text: '促销商品分类', dataField: 'BuyCategoryId',align: "center", cellsalign: "center", type: 'string', width: 200 },
+  { text: '购买数量', dataField: 'BuyCount', align: "center", cellsalign: "right", type: 'string', width: 80 },
 
-  { text: '商品分类名称', dataField: 'BuyCategoryName',align: "center", cellsalign: "center", type: 'string', width: 200 },
+  { text: '赠送优惠券', dataField: 'CouponName', align: "center", type: 'string', width: 100 },
+  { text: '最低金额', dataField: 'MinPrice', align: "center", cellsalign: "right", type: 'string', width: 80 },
+   
+  { text: '创建人', dataField: 'CreateUser', align: "center", cellsalign: "center", type: 'string', width: 100 },
 
-  { text: '促销商品ID', dataField: 'BuyProductId',align: "center", cellsalign: "center", type: 'string', width: 200 },
-
-  { text: '商品名称', dataField: 'BuyProductName',align: "center", cellsalign: "center", type: 'string', width: 200 },
-
-  { text: '促销商品SKUid', dataField: 'BuySKUID',align: "center", cellsalign: "center", type: 'string', width: 200 },
-
-  { text: '购买指定数量', dataField: 'BuyCount',align: "center", cellsalign: "center", type: 'string', width: 200 },
-
-  { text: '赠送商品ID', dataField: 'HandsaleProductId',align: "center", cellsalign: "center", type: 'string', width: 200 },
-
-  { text: '赠送商品SKUID', dataField: 'HandsaleProductSKUID',align: "center", cellsalign: "center", type: 'string', width: 200 },
-
-  { text: '赠送优惠券ID', dataField: 'CouponID',align: "center", cellsalign: "center", type: 'string', width: 200 },
-
-  { text: '赠送优惠券名称', dataField: 'CouponName',align: "center", cellsalign: "center", type: 'string', width: 200 },
-
-  { text: '最多赠送数量', dataField: 'HandsaleMaxCount',align: "center", cellsalign: "center", type: 'string', width: 200 },
-
-  { text: '赠送数量', dataField: 'HandsaleCount',align: "center", cellsalign: "center", type: 'string', width: 200 },
-
-  { text: '限制最低金额', dataField: 'MinPrice',align: "center", cellsalign: "center", type: 'string', width: 200 },
-
-  { text: '限制最高金额', dataField: 'MaxPrice',align: "center", cellsalign: "center", type: 'string', width: 200 },
-
-  { text: '活动开始时间', dataField: 'StartDate',align: "center", cellsalign: "center", type: 'string', width: 200 },
-
-  { text: '活动结束时间', dataField: 'EndDate',align: "center", cellsalign: "center", type: 'string', width: 200 },
-
-  { text: '状态', dataField: 'ActiveStatus',align: "center", cellsalign: "center", type: 'string', width: 200 },
-
-  { text: '创建人', dataField: 'CreateUser',align: "center", cellsalign: "center", type: 'string', width: 200 },
-
-  { text: '创建时间', dataField: 'CreateDate',align: "center", cellsalign: "center", type: 'string', width: 200 },
+  { text: '创建时间', dataField: 'CreateDate', align: "center", cellsalign: "center", type: 'string', width: 130 }
 
                 ]
             });

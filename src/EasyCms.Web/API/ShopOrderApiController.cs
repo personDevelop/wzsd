@@ -12,7 +12,7 @@ using System.Web.Http;
 
 namespace EasyCms.Web.API
 {
-    public class ShopOrderApiController : ApiController
+    public class ShopOrderApiController : BaseAPIControl
     {
         /// <summary>
         /// 创建订单
@@ -30,14 +30,37 @@ namespace EasyCms.Web.API
             {
                 string err = string.Empty;
 
-                order = new ShopOrderBll().CreateOrder(order.OrderItems, out err);
-                if (string.IsNullOrWhiteSpace(err))
+                try
                 {
-                    return order.FormatObj();
+                    order = new ShopOrderBll().CreateOrder(order, host, out err);
+                    if (!string.IsNullOrWhiteSpace(err))
+                    {
+                        return err.FormatError();
+
+                    }
+                    else
+                    {
+                        //获取默认地址
+                        order.ShopAddress = new ShopShippingAddressBll().GetDefaultShopAddressForShow(Request.GetAccountID());
+                        //获取促销信息
+                        //获取运费,先固定0
+                        order.Freight = 0;
+
+                        //获取配送信息  //先不获取了
+                        if (string.IsNullOrWhiteSpace(err))
+                        {
+                            return order.FormatObj();
+                        }
+                        else
+                        {
+                            return err.FormatError();
+                        }
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    return err.FormatError();
+
+                    return ex.Format();
                 }
             }
 

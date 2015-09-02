@@ -37,9 +37,9 @@ namespace EasyCms.Business
 
 
 
-        public ShopOrderModel CreateOrder(List<OrderItem> list, out string err)
+        public ShopOrderModel CreateOrder(ShopOrderModel order,string host, out string err)
         {
-            return Dal.CreateOrder(list, out err);
+            return Dal.CreateOrder(order, host, out err);
         }
     }
 }

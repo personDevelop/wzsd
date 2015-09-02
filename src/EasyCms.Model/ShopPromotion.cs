@@ -56,9 +56,9 @@ namespace EasyCms.Model
 
         private decimal _MaxPrice;
 
-        private DateTime? _StartDate;
+        private DateTime _StartDate;
 
-        private DateTime? _EndDate;
+        private DateTime _EndDate;
 
         private bool _IsEnable;
 
@@ -383,9 +383,9 @@ namespace EasyCms.Model
         ///  活动开始时间,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "StartDate", DbTypeString = "datetime", ColumnIsNull = true, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "StartDate", DbTypeString = "datetime", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public DateTime? StartDate
+        public DateTime StartDate
         {
             get
             {
@@ -402,9 +402,9 @@ namespace EasyCms.Model
         ///  活动结束时间,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "EndDate", DbTypeString = "datetime", ColumnIsNull = true, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "EndDate", DbTypeString = "datetime", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public DateTime? EndDate
+        public DateTime EndDate
         {
             get
             {
@@ -663,6 +663,7 @@ namespace EasyCms.Model
         }
         #endregion
     }
+
     public partial class ShopPromotion
     {
         protected override void OnCreate()
@@ -677,7 +678,40 @@ namespace EasyCms.Model
         public string HandSKUCode { get; set; }
         [NotDbCol]
         public string HandProductName { get; set; }
-        
-        
+
+
+        [NotDbCol]
+        public string RuleName { get; set; }
+
+
+        [NotDbCol]
+        public string RuleTypeCode { get; set; }
+        [NotDbCol]
+        public string RuleTypeName { get; set; }
+
+
+    }
+
+
+    public class ShopPromotionSimpal
+    {
+        /// <summary>
+        /// 促销活动ID
+        /// </summary>
+        public string ID { get; set; }
+        /// <summary>
+        /// 活动名称
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// 赠送产品名称
+        /// </summary>
+        public string HandsaleProductName { get; set; }
+
+        /// <summary>
+        /// 赠送优惠券名称
+        /// </summary>
+        public string HandsaleCouponName { get; set; }
     }
 }

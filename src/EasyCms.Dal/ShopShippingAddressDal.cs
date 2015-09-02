@@ -39,7 +39,7 @@ namespace EasyCms.Dal
                 if (string.IsNullOrWhiteSpace(item.ID))
                 {
                     item.ID = Guid.NewGuid().ToString();
-                    
+
                 }
                 item.IsDefault = true;
                 ShopShippingAddress s = new ShopShippingAddress();
@@ -75,8 +75,33 @@ namespace EasyCms.Dal
                 return Dal.From<ShopShippingAddress>().Where(ShopShippingAddress._.UserId == userID).ToDataTable();
 
         }
-       
 
+        public DataTable GetShopAddressForShow(string userID, bool IsDefault)
+        {
+            if (IsDefault)
+            {
+                return Dal.From<ShopShippingAddress>()
+                    .Join<AdministrativeRegions>(ShopShippingAddress._.RegionId == AdministrativeRegions._.ID)
+                    .Select(ShopShippingAddress._.ID,
+                    ShopShippingAddress._.RegionId,
+                    ShopShippingAddress._.ShipName,
+                    ShopShippingAddress._.CelPhone,
+                        ShopShippingAddress._.IsDefault,
+                     new ExpressionClip("replace (path,'/','') + Address").Alias("Address"))
+                    .Where(ShopShippingAddress._.UserId == userID && ShopShippingAddress._.IsDefault == IsDefault).ToDataTable(1);
+            }
+            else
+                return Dal.From<ShopShippingAddress>()
+                    .Join<AdministrativeRegions>(ShopShippingAddress._.RegionId == AdministrativeRegions._.ID)
+                    .Select(ShopShippingAddress._.ID,
+                    ShopShippingAddress._.RegionId,
+                    ShopShippingAddress._.ShipName,
+                    ShopShippingAddress._.CelPhone,
+                        ShopShippingAddress._.IsDefault,
+                     new ExpressionClip("replace (path,'/','') + Address").Alias("Address"))
+                    .Where(ShopShippingAddress._.UserId == userID).ToDataTable();
+
+        }
         public ShopShippingAddress GetEntity(string id)
         {
             return Dal.Find<ShopShippingAddress>(id);

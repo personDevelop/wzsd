@@ -35,9 +35,10 @@
 {
     Url = Url.Action("GetIdAndNameByParentId", "ParameterInfo", new { area = "Admin", id = StaticValue.CouponType })
 })
-
+    @HelperExtend.RadioGroup("UseType", "使用方式", "0,1", "一次性,多次使用", defaultval: Model.UseType, hint: "一次性使用：多余的金额的不找零，目前系统暂不支持多次使用")
+    @HelperExtend.RadioGroup("IsCanCombie", "可合并使用", "true,false", "合并使用,单独使用", defaultval: Model.UseType, hint: "合并使用：可和其他优惠券一并使用，单独使用：不能和其他优惠券一并使用")
     @HelperExtend.TextBox("JE", "面值", defaultval: Model.JE, hint: "")
-    @HelperExtend.TextBox("NeedPoint", "需要积分", defaultval: Model.NeedPoint, hint: "")
+    @HelperExtend.TextBox("NeedPoint", "需要积分", defaultval: Model.NeedPoint, hint: "如果使用积分兑换的方式获取，需要多少积分")
     @HelperExtend.RadioGroup("QxLx", "期限类型", "0,1", "期限范围,固定天数", defaultval: Model.QxLx, hint: "")
 
 

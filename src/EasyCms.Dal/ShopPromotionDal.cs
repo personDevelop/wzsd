@@ -45,7 +45,10 @@ namespace EasyCms.Dal
                 return Dal.From<ShopPromotion>().OrderBy(ShopPromotion._.StartDate.Desc).ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
             }
             else
-                return Dal.From<ShopPromotion>().OrderBy(ShopPromotion._.StartDate.Desc)
+                return Dal.From<ShopPromotion>() 
+                .Join<RedeemRules>(ShopPromotion._.RuleID == RedeemRules._.ID) 
+                .Select(ShopPromotion._.ID.All, RedeemRules._.Name.Alias("RuleName")  )
+                .OrderBy(ShopPromotion._.StartDate.Desc)
 
                     .ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
         }
@@ -59,6 +62,126 @@ namespace EasyCms.Dal
 
 
 
+
+        public List<ShopPromotionSimpal> GetValidPromotionList(List<OrderItem> orderItemlist)
+        {
+            List<ShopPromotionSimpal> result = new List<ShopPromotionSimpal>();
+            //先更新过期日期小于今天的为无效
+            ShopPromotion updatePromotion = new ShopPromotion() { RecordStatus = StatusType.update, ActionStatus = (int)ValidEnum.无效 };
+            updatePromotion.Where = ShopPromotion._.EndDate < DateTime.Now;
+            Dal.Submit(updatePromotion);
+            List<string> productIdList = orderItemlist.Select(p => p.ProductID).ToList();
+            //获取当前时间所有可用的促销活动
+            List<ShopPromotion> list = Dal.From<ShopPromotion>()
+
+                .Join<RedeemRules>(ShopPromotion._.RuleID == RedeemRules._.ID)
+                .Join<ParameterInfo>(RedeemRules._.RuleType == ParameterInfo._.ID)
+                .Where(ShopPromotion._.IsEnable == true && RedeemRules._.IsEnable == true && ParameterInfo._.IsEnable == true
+                && ShopPromotion._.StartDate < DateTime.Now)
+                .Select(ShopPromotion._.ID.All, RedeemRules._.Name.Alias("RuleName") , ParameterInfo._.Code.Alias("RuleTypeCode"), ParameterInfo._.Name.Alias("RuleTypeName"))
+                
+                .List<ShopPromotion>();
+            foreach (ShopPromotion item in list)
+            {
+                if (!string.IsNullOrWhiteSpace(item.BuySKUID))
+                {  //先检测 SKU
+                    if (orderItemlist.Exists(p => p.Sku == item.BuySKUID))
+                    {
+                        //包含该种商品
+                        foreach (OrderItem order in orderItemlist.Where(p => p.Sku == item.BuySKUID))
+                        {
+                            if ((order.BuyCount < item.BuyCount && item.BuyCount > 0) ||
+                               (order.BuyCount * order.SalePrice < item.MinPrice && item.MinPrice > 0))
+                            {
+
+                            }
+                            else
+                            { //满足
+                                order.AddPromotion(item);
+                            }
+
+                        }
+                    }
+                    else
+                    { continue; }
+
+
+                }
+                else
+                    if (!string.IsNullOrWhiteSpace(item.BuyProductId))
+                    {
+                        //检测商品
+                        if (orderItemlist.Exists(p => p.ProductID == item.BuyProductId))
+                        {
+                            //包含该种商品
+                            foreach (OrderItem order in orderItemlist.Where(p => p.ProductID == item.BuyProductId))
+                            {
+                                if ((order.BuyCount < item.BuyCount && item.BuyCount > 0) ||
+                                 (order.BuyCount * order.SalePrice < item.MinPrice && item.MinPrice > 0))
+                                {
+
+                                }
+                                else
+                                    order.AddPromotion(item);
+
+                            }
+                        }
+                        else
+                        { continue; }
+                    }
+
+                    else
+                        if (!string.IsNullOrWhiteSpace(item.BuyCategoryId))
+                        {
+                            //检测分类
+                            string[] products = Dal.From<ShopProductCategory>().Where(ShopProductCategory._.CategoryID == item.BuyCategoryId
+                                   && ShopProductCategory._.ProductID.In(productIdList)).Select(ShopProductCategory._.ProductID).ToSinglePropertyArray();
+                            if (products != null && products.Length > 0)
+                            {
+
+                                foreach (OrderItem order in orderItemlist.Where(p => products.Contains(p.ProductID)))
+                                {
+                                    if ((order.BuyCount < item.BuyCount && item.BuyCount > 0) ||
+                                        (order.BuyCount * order.SalePrice < item.MinPrice && item.MinPrice > 0))
+                                    {
+
+                                    }
+                                    else
+                                        order.AddPromotion(item);
+
+                                }
+                            }
+                            else
+                            {
+                                continue;
+                            }
+                        }
+                        else
+                        {
+                            //适合所有商品的促销活动,这个算在总订单里
+                            //包含该种商品
+                            //计算总个数 和总金额
+                            decimal totalPrice = orderItemlist.Sum(p => p.SalePrice);
+                            decimal totalCount = orderItemlist.Sum(p => p.BuyCount);
+
+
+
+                            if ((totalCount < item.BuyCount && item.BuyCount > 0) ||
+                                      (totalPrice < item.MinPrice && item.MinPrice > 0))
+                            {
+
+                            }
+                            else
+                                result.Add(new ShopPromotionSimpal() { ID = item.ID, Name = item.RuleName, HandsaleProductName = item.HandProductName, HandsaleCouponName = item.CouponName });
+
+
+                        }
+
+            }
+
+
+            return result;
+        }
     }
 
 

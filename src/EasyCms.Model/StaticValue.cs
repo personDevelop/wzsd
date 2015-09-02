@@ -66,4 +66,11 @@ namespace EasyCms.Model
         上架退回
     }
 
+    public enum ValidEnum
+    { 
+        有效,
+        无效
+
+    
+    }
 }

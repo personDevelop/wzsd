@@ -48,6 +48,10 @@ namespace EasyCms.Model
 
         private int _SaleStatus;
 
+        private string _SKUName;
+
+        private decimal _Points;
+
         #endregion
 
         #region 属性
@@ -281,6 +285,44 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  商品SKU名称,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "SKUName", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string SKUName
+        {
+            get
+            {
+                return this._SKUName;
+            }
+            set
+            {
+                this.OnPropertyChanged("SKUName", this._SKUName, value);
+                this._SKUName = value;
+            }
+        }
+
+        /// <summary>
+        ///  积分,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "Points", DbTypeString = "decimal", ColumnIsNull = false, IsUnique = false, ColumnLength = 15, ColumnJingDu = 2, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public decimal Points
+        {
+            get
+            {
+                return this._Points;
+            }
+            set
+            {
+                this.OnPropertyChanged("Points", this._Points, value);
+                this._Points = value;
+            }
+        }
+
         #endregion
 
         #region 列定义
@@ -312,6 +354,10 @@ namespace EasyCms.Model
                 IsSale = new PropertyItem("IsSale", tableName);
 
                 SaleStatus = new PropertyItem("SaleStatus", tableName);
+
+                SKUName = new PropertyItem("SKUName", tableName);
+
+                Points = new PropertyItem("Points", tableName);
 
 
             }
@@ -363,6 +409,14 @@ namespace EasyCms.Model
             /// 商品销售状态,
             /// </summary> 
             public PropertyItem SaleStatus = null;
+            /// <summary>
+            /// 商品SKU名称,
+            /// </summary> 
+            public PropertyItem SKUName = null;
+            /// <summary>
+            /// 积分,
+            /// </summary> 
+            public PropertyItem Points = null;
         }
         #endregion
     }

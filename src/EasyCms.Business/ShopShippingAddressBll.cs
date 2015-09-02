@@ -19,16 +19,16 @@ namespace EasyCms.Business
             return Dal.Delete(id);
         }
 
-        public string Save(ShopShippingAddress item )
+        public string Save(ShopShippingAddress item)
         {
             return Dal.Save(item);
         }
 
         public DataTable GetList(string userID, bool IsDefault)
         {
-            return Dal.GetList(userID,   IsDefault);
+            return Dal.GetList(userID, IsDefault);
         }
-      
+
         public ShopShippingAddress GetEntity(string id)
         {
             return Dal.GetEntity(id);
@@ -41,6 +41,11 @@ namespace EasyCms.Business
         public string SetDefault(string id)
         {
             return Dal.SetDefault(id);
+        }
+
+        public ShopShippingAddress GetDefaultShopAddressForShow(string userID)
+        {
+            return Dal.GetShopAddressForShow(userID, true).ToFirst<ShopShippingAddress>();
         }
     }
 }

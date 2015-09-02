@@ -32,6 +32,8 @@ namespace EasyCms.Model
 
         private string _ClassId;
 
+        private int _UseType;
+
         private int _SendCount;
 
         private string _PreName;
@@ -77,6 +79,8 @@ namespace EasyCms.Model
         private int _Status;
 
         private string _Note;
+
+        private bool _IsCanCombie;
 
         #endregion
 
@@ -156,6 +160,25 @@ namespace EasyCms.Model
             {
                 this.OnPropertyChanged("ClassId", this._ClassId, value);
                 this._ClassId = value;
+            }
+        }
+
+        /// <summary>
+        ///  使用方式,0使用一次，1可分次使用
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "UseType", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public int UseType
+        {
+            get
+            {
+                return this._UseType;
+            }
+            set
+            {
+                this.OnPropertyChanged("UseType", this._UseType, value);
+                this._UseType = value;
             }
         }
 
@@ -596,6 +619,25 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  可合并使用,如果是，则可以和其他优惠券合并使用
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "IsCanCombie", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public bool IsCanCombie
+        {
+            get
+            {
+                return this._IsCanCombie;
+            }
+            set
+            {
+                this.OnPropertyChanged("IsCanCombie", this._IsCanCombie, value);
+                this._IsCanCombie = value;
+            }
+        }
+
         #endregion
 
         #region 列定义
@@ -611,6 +653,8 @@ namespace EasyCms.Model
                 CouponType = new PropertyItem("CouponType", tableName);
 
                 ClassId = new PropertyItem("ClassId", tableName);
+
+                UseType = new PropertyItem("UseType", tableName);
 
                 SendCount = new PropertyItem("SendCount", tableName);
 
@@ -658,6 +702,8 @@ namespace EasyCms.Model
 
                 Note = new PropertyItem("Note", tableName);
 
+                IsCanCombie = new PropertyItem("IsCanCombie", tableName);
+
 
             }
             /// <summary>
@@ -676,6 +722,10 @@ namespace EasyCms.Model
             /// 优惠券分类,
             /// </summary> 
             public PropertyItem ClassId = null;
+            /// <summary>
+            /// 使用方式,0使用一次，1可分次使用
+            /// </summary> 
+            public PropertyItem UseType = null;
             /// <summary>
             /// 生成数量,
             /// </summary> 
@@ -768,6 +818,10 @@ namespace EasyCms.Model
             /// 备注,
             /// </summary> 
             public PropertyItem Note = null;
+            /// <summary>
+            /// 可合并使用,如果是，则可以和其他优惠券合并使用
+            /// </summary> 
+            public PropertyItem IsCanCombie = null;
         }
         #endregion
     }
@@ -783,6 +837,7 @@ namespace EasyCms.Model
             CreateDate = DateTime.Now;
             StartDate = DateTime.Now;
             EndDate = DateTime.Now.AddMonths(3);
+
             JE = 100;
         }
         [NotDbCol]
@@ -792,6 +847,9 @@ namespace EasyCms.Model
         public string ShopName { get; set; }
         [NotDbCol]
         public string ShopSkuCode { get; set; }
-        
+
     }
+
+
+   
 }

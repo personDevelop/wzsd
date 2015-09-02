@@ -48,8 +48,11 @@
     <Compile Include="AdministrativeRegions.cs" />
     <Compile Include="AttachFile.cs" />
     <Compile Include="CouponRule.cs" />
+    <Compile Include="CouponUseRecord.cs" />
+    <Compile Include="CusomerAndCoupon.cs" />
     <Compile Include="FunctionInfo.cs" />
     <Compile Include="Gataway.cs" />
+    <Compile Include="JFHistory.cs" />
     <Compile Include="ManagerUserInfo.cs" />
     <Compile Include="MemberOrder.cs" />
     <Compile Include="NewsCategory.cs" />

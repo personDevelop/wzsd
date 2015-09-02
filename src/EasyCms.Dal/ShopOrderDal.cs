@@ -56,18 +56,20 @@ namespace EasyCms.Dal
 
 
 
-        public ShopOrderModel CreateOrder(List<OrderItem> list, out string err)
+        public ShopOrderModel CreateOrder(ShopOrderModel order, string host, out string err)
         {
+            List<OrderItem> list = order.OrderItems;
             err = string.Empty;
             List<OrderItem> listActivty = list.Where(p => p.OrderType > 0 && !string.IsNullOrWhiteSpace(p.OrderResId)).ToList();
             foreach (var item in listActivty)
             {
                 //对应参与活动的商品 查看其是否已过期,后续做完商品促销活动后再补充
-
+                throw new Exception("还没有设置团购功能");
             }
             //获取商品较详细信息 
-            List<View_ProductInfoBySkuid> orderItemList = GetProductWithOrder(list, out err);
-            return new ShopOrderModel();
+            GetProductWithOrder(order, host, out err);
+
+            return order;
 
         }
         /// <summary>
@@ -75,11 +77,18 @@ namespace EasyCms.Dal
         /// </summary>
         /// <param name="list"></param>
         /// <returns></returns>
-        private List<View_ProductInfoBySkuid> GetProductWithOrder(List<OrderItem> list, out string err)
+        private ShopOrderModel GetProductWithOrder(ShopOrderModel order, string host, out string err)
         {
             err = string.Empty;
-            List<View_ProductInfoBySkuid> Viewlist = new List<View_ProductInfoBySkuid>();
+            List<OrderItem> list = order.OrderItems;
+            if (list == null || list.Count == 0)
+            {
+                err = "请选择要购买的商品";
+                return null;
+            }
             int i = 1;
+            List<string> productIdList = list.Select(p => p.ProductID).ToList();
+
             foreach (var item in list)
             {
                 View_ProductInfoBySkuid v = null;
@@ -93,7 +102,7 @@ namespace EasyCms.Dal
                 }
                 if (v == null)
                 {
-                    err = string.Format("您购买的第{0}条商品{1}已下架", i, v.Name);
+                    err = string.Format("您购买的第{0}条商品已下架", i);
                     break;
                 }
                 if (v.Stock < -10000000)
@@ -122,12 +131,43 @@ namespace EasyCms.Dal
                         break;
                     }
                 }
+                item.ProductName = v.Name;
+                if (!string.IsNullOrEmpty(v.SKUName))
+                {
+                    item.ProductName += "  " + v.SKUName;
+                }
+                item.SalePrice = v.SalePrice;
+                item.MarketPrice = v.MarketPrice;
+                if (!string.IsNullOrEmpty(v.SKUCode))
+                {
+                    item.ProductCode = v.SKUCode;
+                }
+                else
+                {
+                    item.ProductCode = v.Code;
 
-                Viewlist.Add(v);
+                }
+                item.Point = (int)v.Points;
                 i++;
 
             }
-            return Viewlist;
+            //获取默认第一张图片
+            List<SimpalFile> fileList = new AttachFileDal().GetFiles(host, productIdList);
+            foreach (var item in list)
+            {
+                SimpalFile sf = fileList.FirstOrDefault(p => p.RefID == item.ProductID);
+                if (sf != null)
+                {
+                    item.ImgPath = sf.WebFilePath;
+                }
+            }
+
+            //获取可用促销活动
+
+            order.Promotion = new ShopPromotionDal().GetValidPromotionList(list);
+            //获取可用优惠券
+            order.Coupon = new CouponRuleDal().GetValidCouponList(list); 
+            return order;
 
         }
     }

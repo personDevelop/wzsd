@@ -72,7 +72,7 @@ namespace EasyCms.Model
         ///  类型,直接存文字，商品金钱转积分换算，商品积分转金钱换算，订单金钱转积分换算，订单积分转金钱换算，注册增积分
         /// </summary>
 
-        [DbProperty(MapingColumnName = "RuleType", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 20, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "RuleType", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string RuleType
         {
