@@ -5,6 +5,8 @@ ShopOrderModel order
    ProductID  商品id
    Sku         如果有的话，传递SKUID
    BuyCount   购买个数
+   OrderType   商品购买方式（0普通购物  1赠品 2套餐  3团购  4秒杀）
+   OrderResId  对应团购或秒杀或套餐的ID  
    
 
 返回信息   ShopOrderModel order
