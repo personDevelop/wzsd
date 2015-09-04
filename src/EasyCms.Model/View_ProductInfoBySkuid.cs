@@ -52,6 +52,20 @@ namespace EasyCms.Model
 
         private decimal _Points;
 
+        private string _TypeId;
+
+        private decimal _CostPrice;
+
+        private string _ShortDescription;
+
+        private decimal _Weight;
+
+        private bool _IsVirtualProduct;
+
+        private string _BrandId;
+
+        private string _SupplierId;
+
         #endregion
 
         #region 属性
@@ -323,6 +337,139 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  商品类型ID,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "TypeId", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string TypeId
+        {
+            get
+            {
+                return this._TypeId;
+            }
+            set
+            {
+                this.OnPropertyChanged("TypeId", this._TypeId, value);
+                this._TypeId = value;
+            }
+        }
+
+        /// <summary>
+        ///  成本价,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "CostPrice", DbTypeString = "decimal", ColumnIsNull = false, IsUnique = false, ColumnLength = 15, ColumnJingDu = 2, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public decimal CostPrice
+        {
+            get
+            {
+                return this._CostPrice;
+            }
+            set
+            {
+                this.OnPropertyChanged("CostPrice", this._CostPrice, value);
+                this._CostPrice = value;
+            }
+        }
+
+        /// <summary>
+        ///  商品描述,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "ShortDescription", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string ShortDescription
+        {
+            get
+            {
+                return this._ShortDescription;
+            }
+            set
+            {
+                this.OnPropertyChanged("ShortDescription", this._ShortDescription, value);
+                this._ShortDescription = value;
+            }
+        }
+
+        /// <summary>
+        ///  单重(kg),
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "Weight", DbTypeString = "decimal", ColumnIsNull = false, IsUnique = false, ColumnLength = 15, ColumnJingDu = 2, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public decimal Weight
+        {
+            get
+            {
+                return this._Weight;
+            }
+            set
+            {
+                this.OnPropertyChanged("Weight", this._Weight, value);
+                this._Weight = value;
+            }
+        }
+
+        /// <summary>
+        ///  是虚拟产品,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "IsVirtualProduct", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public bool IsVirtualProduct
+        {
+            get
+            {
+                return this._IsVirtualProduct;
+            }
+            set
+            {
+                this.OnPropertyChanged("IsVirtualProduct", this._IsVirtualProduct, value);
+                this._IsVirtualProduct = value;
+            }
+        }
+
+        /// <summary>
+        ///  品牌ID,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "BrandId", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string BrandId
+        {
+            get
+            {
+                return this._BrandId;
+            }
+            set
+            {
+                this.OnPropertyChanged("BrandId", this._BrandId, value);
+                this._BrandId = value;
+            }
+        }
+
+        /// <summary>
+        ///  供应商ID,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "SupplierId", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string SupplierId
+        {
+            get
+            {
+                return this._SupplierId;
+            }
+            set
+            {
+                this.OnPropertyChanged("SupplierId", this._SupplierId, value);
+                this._SupplierId = value;
+            }
+        }
+
         #endregion
 
         #region 列定义
@@ -358,6 +505,20 @@ namespace EasyCms.Model
                 SKUName = new PropertyItem("SKUName", tableName);
 
                 Points = new PropertyItem("Points", tableName);
+
+                TypeId = new PropertyItem("TypeId", tableName);
+
+                CostPrice = new PropertyItem("CostPrice", tableName);
+
+                ShortDescription = new PropertyItem("ShortDescription", tableName);
+
+                Weight = new PropertyItem("Weight", tableName);
+
+                IsVirtualProduct = new PropertyItem("IsVirtualProduct", tableName);
+
+                BrandId = new PropertyItem("BrandId", tableName);
+
+                SupplierId = new PropertyItem("SupplierId", tableName);
 
 
             }
@@ -417,8 +578,45 @@ namespace EasyCms.Model
             /// 积分,
             /// </summary> 
             public PropertyItem Points = null;
+            /// <summary>
+            /// 商品类型ID,
+            /// </summary> 
+            public PropertyItem TypeId = null;
+            /// <summary>
+            /// 成本价,
+            /// </summary> 
+            public PropertyItem CostPrice = null;
+            /// <summary>
+            /// 商品描述,
+            /// </summary> 
+            public PropertyItem ShortDescription = null;
+            /// <summary>
+            /// 单重(kg),
+            /// </summary> 
+            public PropertyItem Weight = null;
+            /// <summary>
+            /// 是虚拟产品,
+            /// </summary> 
+            public PropertyItem IsVirtualProduct = null;
+            /// <summary>
+            /// 品牌ID,
+            /// </summary> 
+            public PropertyItem BrandId = null;
+            /// <summary>
+            /// 供应商ID,
+            /// </summary> 
+            public PropertyItem SupplierId = null;
         }
         #endregion
     }
 
+    public partial class View_ProductInfoBySkuid
+    {
+        [NotDbCol]
+        public string BrandName { get; set; }
+        [NotDbCol]
+        public string ProductTypeName { get; set; }
+        [NotDbCol]
+        public string FilePath { get; set; }
+    }
 }

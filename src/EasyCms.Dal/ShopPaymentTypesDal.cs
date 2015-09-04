@@ -72,6 +72,11 @@ namespace EasyCms.Dal
                 .OrderBy(ShopPaymentTypes._.DisplaySequence)
                 .Select(ShopPaymentTypes._.ID, ShopPaymentTypes._.AllowRecharge, ShopPaymentTypes._.Charge, ShopPaymentTypes._.Name).ToDataTable();
         }
+
+        internal string GetPayTypeName(string p1, bool p2)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 }

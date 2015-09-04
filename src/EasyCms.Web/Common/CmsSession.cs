@@ -59,6 +59,26 @@ namespace EasyCms
 
 
         }
+
+
+        public static ManagerUserInfo GetAccount(this HttpRequestMessage Request)
+        {
+            string token = Request.GetToken();
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                return null;
+            }
+            else
+            {
+                ManagerUserInfo user = LoginModel.GetCachUserInfo(token);
+                return user;
+
+            }
+            return null;
+
+
+        }
+
         public static string GetToken(this HttpRequestMessage Request)
         {
             string result = null;

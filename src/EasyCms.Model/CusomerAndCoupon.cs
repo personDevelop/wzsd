@@ -361,11 +361,17 @@ namespace EasyCms.Model
         /// 最低消费金额
         /// </summary>
         public decimal MinPrice { get; set; }
-        
+
         /// <summary>
         /// 优惠券面值
         /// </summary>
         public decimal HaveCount { get; set; }
+
+
+        /// <summary>
+        /// 本次购物使用优惠券个数
+        /// </summary>
+        public decimal UsingCount { get; set; }
         public string CategoryId { get; set; }
         public string ProductId { get; set; }
         public string ProductSku { get; set; }

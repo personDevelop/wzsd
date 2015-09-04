@@ -26,8 +26,6 @@ namespace EasyCms.Model
 
         private string _ID;
 
-        private string _Code;
-
         private int _OrderType;
 
         private string _OrderResId;
@@ -142,16 +140,18 @@ namespace EasyCms.Model
 
         private int _ClientType;
 
+        private string _InvoiceNote;
+
         #endregion
 
         #region 属性
 
         /// <summary>
-        ///  主键,
+        ///  订单编号,
         /// </summary>
 
         [PrimaryKey]
-        [DbProperty(MapingColumnName = "ID", DbTypeString = "char", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ID", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = true, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string ID
         {
@@ -163,25 +163,6 @@ namespace EasyCms.Model
             {
                 this.OnPropertyChanged("ID", this._ID, value);
                 this._ID = value;
-            }
-        }
-
-        /// <summary>
-        ///  订单编号,
-        /// </summary>
-
-        [DbProperty(MapingColumnName = "Code", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = true, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
-
-        public string Code
-        {
-            get
-            {
-                return this._Code;
-            }
-            set
-            {
-                this.OnPropertyChanged("Code", this._Code, value);
-                this._Code = value;
             }
         }
 
@@ -965,7 +946,7 @@ namespace EasyCms.Model
         }
 
         /// <summary>
-        ///  发票填写客户名称,
+        ///  发票抬头,
         /// </summary>
 
         [DbProperty(MapingColumnName = "InvoiceInfo", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 200, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
@@ -1268,6 +1249,25 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  发票说明,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "InvoiceNote", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 200, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string InvoiceNote
+        {
+            get
+            {
+                return this._InvoiceNote;
+            }
+            set
+            {
+                this.OnPropertyChanged("InvoiceNote", this._InvoiceNote, value);
+                this._InvoiceNote = value;
+            }
+        }
+
         #endregion
 
         #region 列定义
@@ -1277,8 +1277,6 @@ namespace EasyCms.Model
             {
 
                 ID = new PropertyItem("ID", tableName);
-
-                Code = new PropertyItem("Code", tableName);
 
                 OrderType = new PropertyItem("OrderType", tableName);
 
@@ -1394,16 +1392,14 @@ namespace EasyCms.Model
 
                 ClientType = new PropertyItem("ClientType", tableName);
 
+                InvoiceNote = new PropertyItem("InvoiceNote", tableName);
+
 
             }
             /// <summary>
-            /// 主键,
-            /// </summary> 
-            public PropertyItem ID = null;
-            /// <summary>
             /// 订单编号,
             /// </summary> 
-            public PropertyItem Code = null;
+            public PropertyItem ID = null;
             /// <summary>
             /// 订单类型,0，普通，1促销，2团购
             /// </summary> 
@@ -1569,7 +1565,7 @@ namespace EasyCms.Model
             /// </summary> 
             public PropertyItem IsInvoice = null;
             /// <summary>
-            /// 发票填写客户名称,
+            /// 发票抬头,
             /// </summary> 
             public PropertyItem InvoiceInfo = null;
             /// <summary>
@@ -1632,10 +1628,13 @@ namespace EasyCms.Model
             /// 客户端类型,0 pc 1 android 2 iod 3其他
             /// </summary> 
             public PropertyItem ClientType = null;
+            /// <summary>
+            /// 发票说明,
+            /// </summary> 
+            public PropertyItem InvoiceNote = null;
         }
         #endregion
     }
-
 
   
 

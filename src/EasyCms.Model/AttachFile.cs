@@ -342,8 +342,12 @@ namespace EasyCms.Model
     {
         public static ExpressionClip GetFilePath(string host, string alias = "FilePath")
         {
+            if (string.IsNullOrWhiteSpace(host))
+            {
+                return AttachFile._.FilePath.SubString(1).Alias(alias);
+            }
             return (new ExpressionClip("'" + host + "'") + AttachFile._.FilePath.SubString(1)).Alias(alias);
-        
+
         }
     }
     public class SimpalFile

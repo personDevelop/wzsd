@@ -31,12 +31,12 @@ namespace EasyCms.Model
         /// <summary>
         /// 订单邮寄地址，提交订单时传递
         /// </summary>
-        public string AddressID { get; set; }
+        public int AddressID { get; set; }
 
         /// <summary>
         /// 是否使用发票
         /// </summary>
-        public string IsInvoice { get; set; }
+        public bool IsInvoice { get; set; }
         /// <summary>
         /// 发票填写客户名称,
         /// </summary> 
@@ -45,8 +45,15 @@ namespace EasyCms.Model
         /// 发票说明 比如 发票打印明细  是否增值税发票  发票内容 等等 可以在这里填写
         /// </summary>
         public string InvoiceNote { get; set; }
-      
 
+
+
+
+
+        /// <summary>
+        /// 总价格
+        /// </summary>
+        public decimal TotalPrice { get; set; }
 
         /// <summary>
         /// 运费
@@ -59,7 +66,7 @@ namespace EasyCms.Model
         /// 收货地址，生成订单时，返回给前台
         /// </summary>
         public ShopShippingAddress ShopAddress { get; set; }
-         
+
         public List<ShopPromotionSimpal> Promotion { get; set; }
 
         /// <summary>
@@ -136,6 +143,11 @@ namespace EasyCms.Model
         /// </summary>
         public int Point { get; set; }
 
+        /// <summary>
+        /// 是否是虚拟产品
+        /// </summary>
+        public bool IsVirtualProduct { get; set; }
+
         public List<ShopPromotionSimpal> Promotion { get; set; }
 
         /// <summary>
@@ -158,7 +170,12 @@ namespace EasyCms.Model
 
         public void AddCoupon(CouponAccount item)
         {
-            throw new NotImplementedException();
+            if (Coupon == null)
+            {
+                Coupon = new List<CouponAccount>();
+            }
+            Coupon.Add(item);
+
         }
     }
 }

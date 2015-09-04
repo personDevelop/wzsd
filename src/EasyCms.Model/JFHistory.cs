@@ -43,6 +43,14 @@ namespace EasyCms.Model
 
         private DateTime _CreateDate;
 
+        private int _JFType;
+
+        private string _CouponID;
+
+        private string _UserCouponID;
+
+        private string _ActivityID;
+
         #endregion
 
         #region 属性
@@ -219,6 +227,82 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  类型,0,积分，1优惠券
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "JFType", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public int JFType
+        {
+            get
+            {
+                return this._JFType;
+            }
+            set
+            {
+                this.OnPropertyChanged("JFType", this._JFType, value);
+                this._JFType = value;
+            }
+        }
+
+        /// <summary>
+        ///  优惠券ID,优惠券ID
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "CouponID", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string CouponID
+        {
+            get
+            {
+                return this._CouponID;
+            }
+            set
+            {
+                this.OnPropertyChanged("CouponID", this._CouponID, value);
+                this._CouponID = value;
+            }
+        }
+
+        /// <summary>
+        ///  会员优惠券ID,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "UserCouponID", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string UserCouponID
+        {
+            get
+            {
+                return this._UserCouponID;
+            }
+            set
+            {
+                this.OnPropertyChanged("UserCouponID", this._UserCouponID, value);
+                this._UserCouponID = value;
+            }
+        }
+
+        /// <summary>
+        ///  活动ID,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "ActivityID", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string ActivityID
+        {
+            get
+            {
+                return this._ActivityID;
+            }
+            set
+            {
+                this.OnPropertyChanged("ActivityID", this._ActivityID, value);
+                this._ActivityID = value;
+            }
+        }
+
         #endregion
 
         #region 列定义
@@ -244,6 +328,14 @@ namespace EasyCms.Model
                 JFState = new PropertyItem("JFState", tableName);
 
                 CreateDate = new PropertyItem("CreateDate", tableName);
+
+                JFType = new PropertyItem("JFType", tableName);
+
+                CouponID = new PropertyItem("CouponID", tableName);
+
+                UserCouponID = new PropertyItem("UserCouponID", tableName);
+
+                ActivityID = new PropertyItem("ActivityID", tableName);
 
 
             }
@@ -283,6 +375,22 @@ namespace EasyCms.Model
             /// 创建日期,
             /// </summary> 
             public PropertyItem CreateDate = null;
+            /// <summary>
+            /// 类型,0,积分，1优惠券
+            /// </summary> 
+            public PropertyItem JFType = null;
+            /// <summary>
+            /// 优惠券ID,优惠券ID
+            /// </summary> 
+            public PropertyItem CouponID = null;
+            /// <summary>
+            /// 会员优惠券ID,
+            /// </summary> 
+            public PropertyItem UserCouponID = null;
+            /// <summary>
+            /// 活动ID,
+            /// </summary> 
+            public PropertyItem ActivityID = null;
         }
         #endregion
     }

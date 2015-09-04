@@ -33,7 +33,7 @@ namespace EasyCms.Web.API
                 try
                 {
                     string userid = Request.GetAccountID();
-                    order = new ShopOrderBll().CreateOrder(order, host,userid, out err);
+                    order = new ShopOrderBll().CreateOrder(order, host, userid, out err);
                     if (!string.IsNullOrWhiteSpace(err))
                     {
                         return err.FormatError();
@@ -78,13 +78,35 @@ namespace EasyCms.Web.API
         [HttpPost]
         public HttpResponseMessage PostOrder([FromBody] ShopOrderModel order)
         {
-            string msg = string.Empty;
+            if (order.OrderItems == null || order.OrderItems.Count == 0)
+            {
+                return "请选择要购买的商品".FormatError();
+            }
+            else
+            {
+                string err = string.Empty;
 
-            bool isSuccess = msg == "订单提交成功";
-            var resp = new HttpResponseMessage(HttpStatusCode.OK);
-            string result = JsonWithDataTable.Serialize(new { IsSuccess = isSuccess, msg = msg });
-            resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
-            return resp;
+                try
+                {
+                    ManagerUserInfo user = Request.GetAccount();
+
+                    string orderID = new ShopOrderBll().Submit(order, user, out err);
+                    if (!string.IsNullOrWhiteSpace(err))
+                    {
+                        return err.FormatError();
+
+                    }
+                    else
+                    {
+                        return orderID.FormatObj();
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                    return ex.Format();
+                }
+            }
         }
 
     }

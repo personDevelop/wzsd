@@ -200,6 +200,16 @@ namespace EasyCms.Dal
 
             return result;
         }
+
+        internal bool CheckValid(List<string> listPromot)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal List<ShopPromotion> GetList(WhereClip whereClip)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 

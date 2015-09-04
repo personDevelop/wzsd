@@ -39,6 +39,9 @@ ShopOrderModel order
                 MarketPrice  市场价
                 SalePrice    销售价
                 Point        购买本商品可能获得的积分
+		IsVirtualProduct  是否是虚拟产品 （如果是虚拟产品 不能选择货到付款,而且 虚拟产品不能和其他商品同一个订单 ）
+
+
         针对当前商品的促销信息集合        Promotion （纯展示，仅仅返回那些有设置到具体商品促销信息，且满足促销活动的条件的促销活动集合,）
                每条包含的属性
                 ID                     促销活动id

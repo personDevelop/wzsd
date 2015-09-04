@@ -212,6 +212,11 @@ namespace EasyCms.Dal
 
             return result;
         }
+
+        internal bool CheckValid(List<string> listCoupon)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 

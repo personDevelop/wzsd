@@ -1,25 +1,5 @@
     
- IF OBJECT_ID ('dbo.JFHistory') IS NOT NULL
-	DROP TABLE dbo.JFHistory
-GO
-
-CREATE TABLE dbo.JFHistory
-	(
-	ID            NVARCHAR (36) NOT NULL,
-	MemberID      NVARCHAR (36) NOT NULL,
-	FX            INT NOT NULL,
-	JFSouce       NVARCHAR (40) NOT NULL,
-	JFSouceMainID NVARCHAR (50) NOT NULL,
-	JFSouceSubID  NVARCHAR (36),
-	JFCount       DECIMAL (9, 2) NOT NULL,
-	JFState       INT NOT NULL,
-	CreateDate    DATETIME NOT NULL,
-	CONSTRAINT PK_JFHistory PRIMARY KEY (ID)
-	)
-	
-	 IF OBJECT_ID ('dbo.RedeemRules') IS NOT NULL
-	DROP TABLE dbo.RedeemRules
-GO
+ 
 
 CREATE TABLE dbo.RedeemRules
 	(
@@ -145,8 +125,30 @@ CREATE TABLE dbo.ShopPromotion
 	)
 GO
 
+IF OBJECT_ID ('dbo.JFHistory') IS NOT NULL
+	DROP TABLE dbo.JFHistory
+GO
 
- IF OBJECT_ID ('dbo.View_ProductInfoBySkuid') IS NOT NULL
+CREATE TABLE dbo.JFHistory
+	(
+	ID            NVARCHAR (36) NOT NULL,
+	MemberID      NVARCHAR (36) NOT NULL,
+	FX            INT NOT NULL,
+	JFSouce       NVARCHAR (40) NOT NULL,
+	JFSouceMainID NVARCHAR (50) NOT NULL,
+	JFSouceSubID  NVARCHAR (36),
+	JFCount       DECIMAL (9, 2) NOT NULL,
+	JFState       INT NOT NULL,
+	CreateDate    DATETIME NOT NULL,
+	JFType        INT NOT NULL,
+	CouponID      NVARCHAR (50),
+	UserCouponID  NVARCHAR (50),
+	ActivityID    NVARCHAR (50),
+	CONSTRAINT PK_JFHistory PRIMARY KEY (ID)
+	)
+GO
+
+IF OBJECT_ID ('dbo.View_ProductInfoBySkuid') IS NOT NULL
 	DROP VIEW dbo.View_ProductInfoBySkuid
 GO
 
@@ -157,11 +159,18 @@ SELECT DISTINCT
                       ISNULL(dbo.ShopProductSKUInfo.SKU, dbo.ShopProductInfo.SKU) AS SKUCode, ISNULL(dbo.ShopProductSKUInfo.SalePrice, dbo.ShopProductInfo.SalePrice) 
                       AS SalePrice, ISNULL(dbo.ShopProductSKUInfo.Stock, dbo.ShopProductInfo.Stock) AS Stock, ISNULL(dbo.ShopProductSKUInfo.MarketPrice, 
                       dbo.ShopProductInfo.MarketPrice) AS MarketPrice, ISNULL(dbo.ShopProductSKUInfo.ID, '') AS SKUID, dbo.ShopProductInfo.SaleStatus, 
-                      dbo.ShopProductSKUInfo.IsSale, dbo.ShopProductSKUInfo.Name AS SKUName, dbo.ShopProductInfo.Points
+                      dbo.ShopProductSKUInfo.IsSale, dbo.ShopProductSKUInfo.Name AS SKUName, dbo.ShopProductInfo.Points, dbo.ShopProductInfo.TypeId, 
+                      ISNULL(dbo.ShopProductSKUInfo.CostPrice, dbo.ShopProductInfo.CostPrice) AS CostPrice, dbo.ShopProductInfo.ShortDescription, 
+                      ISNULL(dbo.ShopProductSKUInfo.Weight, dbo.ShopProductInfo.Weight) AS Weight, dbo.ShopProductInfo.IsVirtualProduct, dbo.ShopProductInfo.BrandId, 
+                      dbo.ShopProductInfo.SupplierId
 FROM         dbo.ShopProductInfo LEFT OUTER JOIN
                       dbo.ShopProductSKU ON dbo.ShopProductSKU.ProductId = dbo.ShopProductInfo.ID LEFT OUTER JOIN
                       dbo.ShopProductSKUInfo ON dbo.ShopProductSKU.ID = dbo.ShopProductSKUInfo.SKURelationID
 
+GO
+
+
+ 
 GO
  IF OBJECT_ID ('dbo.View_ShopPromotion') IS NOT NULL
 	DROP VIEW dbo.View_ShopPromotion

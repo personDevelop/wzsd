@@ -30,15 +30,15 @@ namespace EasyCms.Model
 
         private string _ProductID;
 
+        private string _ProductSKU;
+
         private string _ProductType;
 
         private string _ProductCode;
 
-        private string _ProductSKU;
+        private string _ProductName;
 
         private string _AttributeVal;
-
-        private string _ProductName;
 
         private string _ProductThumb;
 
@@ -46,15 +46,17 @@ namespace EasyCms.Model
 
         private decimal _Count;
 
+        private bool _IsHandsel;
+
         private decimal _HandselCount;
 
         private decimal _ReturnCount;
 
         private decimal _UseJf;
 
-        private bool _IsHandsel;
-
         private decimal _CostPrice;
+
+        private decimal _MarketPrice;
 
         private decimal _Price;
 
@@ -69,6 +71,20 @@ namespace EasyCms.Model
         private int _Sequence;
 
         private string _Remark;
+
+        private string _ProductTypeName;
+
+        private string _BrandName;
+
+        private string _SupplierName;
+
+        private string _RegionName;
+
+        private string _ShortDescription;
+
+        private decimal _Weight;
+
+        private bool _IsVirtualProduct;
 
         #endregion
 
@@ -98,7 +114,7 @@ namespace EasyCms.Model
         ///  订单ID,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "OrderID", DbTypeString = "char", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "OrderID", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = true, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string OrderID
         {
@@ -133,10 +149,29 @@ namespace EasyCms.Model
         }
 
         /// <summary>
+        ///  商品SKU,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "ProductSKU", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string ProductSKU
+        {
+            get
+            {
+                return this._ProductSKU;
+            }
+            set
+            {
+                this.OnPropertyChanged("ProductSKU", this._ProductSKU, value);
+                this._ProductSKU = value;
+            }
+        }
+
+        /// <summary>
         ///  商品类型,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "ProductType", DbTypeString = "char", ColumnIsNull = false, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ProductType", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string ProductType
         {
@@ -171,21 +206,21 @@ namespace EasyCms.Model
         }
 
         /// <summary>
-        ///  商品SKU,
+        ///  商品名称,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "ProductSKU", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ProductName", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 500, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public string ProductSKU
+        public string ProductName
         {
             get
             {
-                return this._ProductSKU;
+                return this._ProductName;
             }
             set
             {
-                this.OnPropertyChanged("ProductSKU", this._ProductSKU, value);
-                this._ProductSKU = value;
+                this.OnPropertyChanged("ProductName", this._ProductName, value);
+                this._ProductName = value;
             }
         }
 
@@ -205,25 +240,6 @@ namespace EasyCms.Model
             {
                 this.OnPropertyChanged("AttributeVal", this._AttributeVal, value);
                 this._AttributeVal = value;
-            }
-        }
-
-        /// <summary>
-        ///  商品名称,
-        /// </summary>
-
-        [DbProperty(MapingColumnName = "ProductName", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 500, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
-
-        public string ProductName
-        {
-            get
-            {
-                return this._ProductName;
-            }
-            set
-            {
-                this.OnPropertyChanged("ProductName", this._ProductName, value);
-                this._ProductName = value;
             }
         }
 
@@ -285,6 +301,25 @@ namespace EasyCms.Model
         }
 
         /// <summary>
+        ///  是否赠送,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "IsHandsel", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public bool IsHandsel
+        {
+            get
+            {
+                return this._IsHandsel;
+            }
+            set
+            {
+                this.OnPropertyChanged("IsHandsel", this._IsHandsel, value);
+                this._IsHandsel = value;
+            }
+        }
+
+        /// <summary>
         ///  赠送数量,
         /// </summary>
 
@@ -342,25 +377,6 @@ namespace EasyCms.Model
         }
 
         /// <summary>
-        ///  是否赠送,
-        /// </summary>
-
-        [DbProperty(MapingColumnName = "IsHandsel", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
-
-        public bool IsHandsel
-        {
-            get
-            {
-                return this._IsHandsel;
-            }
-            set
-            {
-                this.OnPropertyChanged("IsHandsel", this._IsHandsel, value);
-                this._IsHandsel = value;
-            }
-        }
-
-        /// <summary>
         ///  成本价,
         /// </summary>
 
@@ -376,6 +392,25 @@ namespace EasyCms.Model
             {
                 this.OnPropertyChanged("CostPrice", this._CostPrice, value);
                 this._CostPrice = value;
+            }
+        }
+
+        /// <summary>
+        ///  市场价,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "MarketPrice", DbTypeString = "decimal", ColumnIsNull = false, IsUnique = false, ColumnLength = 15, ColumnJingDu = 2, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public decimal MarketPrice
+        {
+            get
+            {
+                return this._MarketPrice;
+            }
+            set
+            {
+                this.OnPropertyChanged("MarketPrice", this._MarketPrice, value);
+                this._MarketPrice = value;
             }
         }
 
@@ -512,6 +547,139 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  商品类型名称,以下是扩展商品字段
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "ProductTypeName", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 200, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string ProductTypeName
+        {
+            get
+            {
+                return this._ProductTypeName;
+            }
+            set
+            {
+                this.OnPropertyChanged("ProductTypeName", this._ProductTypeName, value);
+                this._ProductTypeName = value;
+            }
+        }
+
+        /// <summary>
+        ///  品牌名称,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "BrandName", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 200, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string BrandName
+        {
+            get
+            {
+                return this._BrandName;
+            }
+            set
+            {
+                this.OnPropertyChanged("BrandName", this._BrandName, value);
+                this._BrandName = value;
+            }
+        }
+
+        /// <summary>
+        ///  供应商名称,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "SupplierName", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 200, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string SupplierName
+        {
+            get
+            {
+                return this._SupplierName;
+            }
+            set
+            {
+                this.OnPropertyChanged("SupplierName", this._SupplierName, value);
+                this._SupplierName = value;
+            }
+        }
+
+        /// <summary>
+        ///  地区,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "RegionName", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 200, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string RegionName
+        {
+            get
+            {
+                return this._RegionName;
+            }
+            set
+            {
+                this.OnPropertyChanged("RegionName", this._RegionName, value);
+                this._RegionName = value;
+            }
+        }
+
+        /// <summary>
+        ///  简单描述,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "ShortDescription", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 5000, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string ShortDescription
+        {
+            get
+            {
+                return this._ShortDescription;
+            }
+            set
+            {
+                this.OnPropertyChanged("ShortDescription", this._ShortDescription, value);
+                this._ShortDescription = value;
+            }
+        }
+
+        /// <summary>
+        ///  重量,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "Weight", DbTypeString = "decimal", ColumnIsNull = false, IsUnique = false, ColumnLength = 15, ColumnJingDu = 2, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public decimal Weight
+        {
+            get
+            {
+                return this._Weight;
+            }
+            set
+            {
+                this.OnPropertyChanged("Weight", this._Weight, value);
+                this._Weight = value;
+            }
+        }
+
+        /// <summary>
+        ///  虚拟产品,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "IsVirtualProduct", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public bool IsVirtualProduct
+        {
+            get
+            {
+                return this._IsVirtualProduct;
+            }
+            set
+            {
+                this.OnPropertyChanged("IsVirtualProduct", this._IsVirtualProduct, value);
+                this._IsVirtualProduct = value;
+            }
+        }
+
         #endregion
 
         #region 列定义
@@ -526,15 +694,15 @@ namespace EasyCms.Model
 
                 ProductID = new PropertyItem("ProductID", tableName);
 
+                ProductSKU = new PropertyItem("ProductSKU", tableName);
+
                 ProductType = new PropertyItem("ProductType", tableName);
 
                 ProductCode = new PropertyItem("ProductCode", tableName);
 
-                ProductSKU = new PropertyItem("ProductSKU", tableName);
+                ProductName = new PropertyItem("ProductName", tableName);
 
                 AttributeVal = new PropertyItem("AttributeVal", tableName);
-
-                ProductName = new PropertyItem("ProductName", tableName);
 
                 ProductThumb = new PropertyItem("ProductThumb", tableName);
 
@@ -542,15 +710,17 @@ namespace EasyCms.Model
 
                 Count = new PropertyItem("Count", tableName);
 
+                IsHandsel = new PropertyItem("IsHandsel", tableName);
+
                 HandselCount = new PropertyItem("HandselCount", tableName);
 
                 ReturnCount = new PropertyItem("ReturnCount", tableName);
 
                 UseJf = new PropertyItem("UseJf", tableName);
 
-                IsHandsel = new PropertyItem("IsHandsel", tableName);
-
                 CostPrice = new PropertyItem("CostPrice", tableName);
+
+                MarketPrice = new PropertyItem("MarketPrice", tableName);
 
                 Price = new PropertyItem("Price", tableName);
 
@@ -565,6 +735,20 @@ namespace EasyCms.Model
                 Sequence = new PropertyItem("Sequence", tableName);
 
                 Remark = new PropertyItem("Remark", tableName);
+
+                ProductTypeName = new PropertyItem("ProductTypeName", tableName);
+
+                BrandName = new PropertyItem("BrandName", tableName);
+
+                SupplierName = new PropertyItem("SupplierName", tableName);
+
+                RegionName = new PropertyItem("RegionName", tableName);
+
+                ShortDescription = new PropertyItem("ShortDescription", tableName);
+
+                Weight = new PropertyItem("Weight", tableName);
+
+                IsVirtualProduct = new PropertyItem("IsVirtualProduct", tableName);
 
 
             }
@@ -581,6 +765,10 @@ namespace EasyCms.Model
             /// </summary> 
             public PropertyItem ProductID = null;
             /// <summary>
+            /// 商品SKU,
+            /// </summary> 
+            public PropertyItem ProductSKU = null;
+            /// <summary>
             /// 商品类型,
             /// </summary> 
             public PropertyItem ProductType = null;
@@ -589,17 +777,13 @@ namespace EasyCms.Model
             /// </summary> 
             public PropertyItem ProductCode = null;
             /// <summary>
-            /// 商品SKU,
+            /// 商品名称,
             /// </summary> 
-            public PropertyItem ProductSKU = null;
+            public PropertyItem ProductName = null;
             /// <summary>
             /// 规格值,
             /// </summary> 
             public PropertyItem AttributeVal = null;
-            /// <summary>
-            /// 商品名称,
-            /// </summary> 
-            public PropertyItem ProductName = null;
             /// <summary>
             /// 商品图像,
             /// </summary> 
@@ -613,6 +797,10 @@ namespace EasyCms.Model
             /// </summary> 
             public PropertyItem Count = null;
             /// <summary>
+            /// 是否赠送,
+            /// </summary> 
+            public PropertyItem IsHandsel = null;
+            /// <summary>
             /// 赠送数量,
             /// </summary> 
             public PropertyItem HandselCount = null;
@@ -625,13 +813,13 @@ namespace EasyCms.Model
             /// </summary> 
             public PropertyItem UseJf = null;
             /// <summary>
-            /// 是否赠送,
-            /// </summary> 
-            public PropertyItem IsHandsel = null;
-            /// <summary>
             /// 成本价,
             /// </summary> 
             public PropertyItem CostPrice = null;
+            /// <summary>
+            /// 市场价,
+            /// </summary> 
+            public PropertyItem MarketPrice = null;
             /// <summary>
             /// 单价,
             /// </summary> 
@@ -660,8 +848,37 @@ namespace EasyCms.Model
             /// 备注,
             /// </summary> 
             public PropertyItem Remark = null;
+            /// <summary>
+            /// 商品类型名称,以下是扩展商品字段
+            /// </summary> 
+            public PropertyItem ProductTypeName = null;
+            /// <summary>
+            /// 品牌名称,
+            /// </summary> 
+            public PropertyItem BrandName = null;
+            /// <summary>
+            /// 供应商名称,
+            /// </summary> 
+            public PropertyItem SupplierName = null;
+            /// <summary>
+            /// 地区,
+            /// </summary> 
+            public PropertyItem RegionName = null;
+            /// <summary>
+            /// 简单描述,
+            /// </summary> 
+            public PropertyItem ShortDescription = null;
+            /// <summary>
+            /// 重量,
+            /// </summary> 
+            public PropertyItem Weight = null;
+            /// <summary>
+            /// 虚拟产品,
+            /// </summary> 
+            public PropertyItem IsVirtualProduct = null;
         }
         #endregion
     }
+
 
 }
