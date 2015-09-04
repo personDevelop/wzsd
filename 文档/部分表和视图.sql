@@ -209,9 +209,7 @@ CREATE TABLE dbo.SerialNo
 GO
 
 
-USE [∏£≤ ªπ‘≠≤‚ ‘”√]
-GO
-
+ 
 /****** Object:  StoredProcedure [dbo].[GetSerialNo]    Script Date: 09/03/2015 00:04:15 ******/
 SET ANSI_NULLS ON
 GO
