@@ -32,7 +32,8 @@ namespace EasyCms.Web.API
 
                 try
                 {
-                    order = new ShopOrderBll().CreateOrder(order, host, out err);
+                    string userid = Request.GetAccountID();
+                    order = new ShopOrderBll().CreateOrder(order, host,userid, out err);
                     if (!string.IsNullOrWhiteSpace(err))
                     {
                         return err.FormatError();
@@ -41,7 +42,7 @@ namespace EasyCms.Web.API
                     else
                     {
                         //获取默认地址
-                        order.ShopAddress = new ShopShippingAddressBll().GetDefaultShopAddressForShow(Request.GetAccountID());
+                        order.ShopAddress = new ShopShippingAddressBll().GetDefaultShopAddressForShow(userid);
                         //获取促销信息
                         //获取运费,先固定0
                         order.Freight = 0;

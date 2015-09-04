@@ -30,7 +30,7 @@
 {
     Url = Url.Action("GetIdAndNameByParentId", "ParameterInfo", new { area = "Admin", id = StaticValue.RuleType })
 })
-
+    @HelperExtend.Lable("")
     @HelperExtend.TextBox("Name", "规则名称", defaultval: Model.Name, hint: "")
     @HelperExtend.RadioGroup("ComputeType", "计算方式", "0,1", "按比例,按定额", defaultval: Model.ComputeType)
     @HelperExtend.TextBox("BaseNum", "基数", defaultval: Model.BaseNum, hint: "")

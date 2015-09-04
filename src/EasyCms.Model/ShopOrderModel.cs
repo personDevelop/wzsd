@@ -20,29 +20,18 @@ namespace EasyCms.Model
     public class ShopOrderModel
     {
         /// <summary>
-        /// 0，普通，1促销，2团购
+        /// 是否是货到付款
         /// </summary>
-        public int OrderType { get; set; }
-
-        /// <summary>
-        /// 订单对应的销售模式ID,普通订单的为空
-        /// 这个就是对应的促销活动ID，这个如果是当前购买的商品符合一定的促销活动，会根据促销活动定价。
-        /// </summary>
-        public string OrderResId { get; set; }
-
-        /// <summary>
-        /// 使用优惠券ID
-        /// </summary>
-        public string UsingCouponsID { get; set; }
-
-        /// <summary>
-        /// 收件人地址ID
-        /// </summary>
-        public string AddressID { get; set; }
+        public bool CashOnDelivery { get; set; }
         /// <summary>
         /// 支付方式ID
         /// </summary>
         public string PayTypeID { get; set; }
+
+        /// <summary>
+        /// 订单邮寄地址，提交订单时传递
+        /// </summary>
+        public string AddressID { get; set; }
 
         /// <summary>
         /// 是否使用发票
@@ -53,9 +42,10 @@ namespace EasyCms.Model
         /// </summary> 
         public string InvoiceInfo { get; set; }
         /// <summary>
-        /// 订单备注
+        /// 发票说明 比如 发票打印明细  是否增值税发票  发票内容 等等 可以在这里填写
         /// </summary>
-        public string Remark { get; set; }
+        public string InvoiceNote { get; set; }
+      
 
 
         /// <summary>
@@ -66,27 +56,22 @@ namespace EasyCms.Model
         public List<OrderItem> OrderItems { get; set; }
 
         /// <summary>
-        /// 收货地址
+        /// 收货地址，生成订单时，返回给前台
         /// </summary>
         public ShopShippingAddress ShopAddress { get; set; }
+         
+        public List<ShopPromotionSimpal> Promotion { get; set; }
 
         /// <summary>
         /// 会员本次购买可使用的优惠券
         /// </summary>
-        public List<ShopShippingAddress> AccountCoupon { get; set; }
-
-
-        /// <summary>
-        /// 可送积分,再总订单金额的基础上 看是否有满足情况的送积分规则
-        /// </summary>
-        public int Point { get; set; }
-
-        public List<ShopPromotionSimpal> Promotion { get; set; }
-
-        /// <summary>
-        /// 赠送优惠券
-        /// </summary>
         public List<CouponAccount> Coupon { get; set; }
+
+
+        /// <summary>
+        /// 订单备注
+        /// </summary>
+        public string Remark { get; set; }
     }
 
     public class OrderItem

@@ -32,13 +32,12 @@ namespace EasyCms.Web.Common
             {
                 using (JsonTextWriter writer = new JsonTextWriter(sw))
                 {
-                    writer.Formatting = Formatting.Indented;
-                    //if (this.FormatJsonOutput)
-                    //    writer.Formatting = Formatting.Indented;
-                    //else
-                    //    writer.Formatting = Formatting.None;
-
+                    writer.Formatting = Formatting.Indented; 
                     writer.QuoteChar = '"';
+                    if (value==null)
+                    {
+                        value = string.Empty;
+                    }
                     json.Serialize(writer, value);
                     output = sw.ToString();
                 }

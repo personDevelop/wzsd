@@ -56,7 +56,7 @@ namespace EasyCms.Dal
 
 
 
-        public ShopOrderModel CreateOrder(ShopOrderModel order, string host, out string err)
+        public ShopOrderModel CreateOrder(ShopOrderModel order, string host, string accuontID, out string err)
         {
             List<OrderItem> list = order.OrderItems;
             err = string.Empty;
@@ -67,7 +67,7 @@ namespace EasyCms.Dal
                 throw new Exception("还没有设置团购功能");
             }
             //获取商品较详细信息 
-            GetProductWithOrder(order, host, out err);
+            GetProductWithOrder(order, host, accuontID, out err);
 
             return order;
 
@@ -77,7 +77,7 @@ namespace EasyCms.Dal
         /// </summary>
         /// <param name="list"></param>
         /// <returns></returns>
-        private ShopOrderModel GetProductWithOrder(ShopOrderModel order, string host, out string err)
+        private ShopOrderModel GetProductWithOrder(ShopOrderModel order, string host,  string accuontID,out string err)
         {
             err = string.Empty;
             List<OrderItem> list = order.OrderItems;
@@ -164,7 +164,7 @@ namespace EasyCms.Dal
 
             //获取可用促销活动
 
-            order.Promotion = new ShopPromotionDal().GetValidPromotionList(list);
+            order.Promotion = new ShopPromotionDal().GetValidPromotionList(list,accuontID);
             //获取可用优惠券
             order.Coupon = new CouponRuleDal().GetValidCouponList(list); 
             return order;

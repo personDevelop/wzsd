@@ -45,9 +45,9 @@ namespace EasyCms.Dal
                 return Dal.From<ShopPromotion>().OrderBy(ShopPromotion._.StartDate.Desc).ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
             }
             else
-                return Dal.From<ShopPromotion>() 
-                .Join<RedeemRules>(ShopPromotion._.RuleID == RedeemRules._.ID) 
-                .Select(ShopPromotion._.ID.All, RedeemRules._.Name.Alias("RuleName")  )
+                return Dal.From<ShopPromotion>()
+                .Join<RedeemRules>(ShopPromotion._.RuleID == RedeemRules._.ID)
+                .Select(ShopPromotion._.ID.All, RedeemRules._.Name.Alias("RuleName"))
                 .OrderBy(ShopPromotion._.StartDate.Desc)
 
                     .ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
@@ -63,7 +63,7 @@ namespace EasyCms.Dal
 
 
 
-        public List<ShopPromotionSimpal> GetValidPromotionList(List<OrderItem> orderItemlist)
+        public List<ShopPromotionSimpal> GetValidPromotionList(List<OrderItem> orderItemlist, string accuontID)
         {
             List<ShopPromotionSimpal> result = new List<ShopPromotionSimpal>();
             //先更新过期日期小于今天的为无效
@@ -78,11 +78,29 @@ namespace EasyCms.Dal
                 .Join<ParameterInfo>(RedeemRules._.RuleType == ParameterInfo._.ID)
                 .Where(ShopPromotion._.IsEnable == true && RedeemRules._.IsEnable == true && ParameterInfo._.IsEnable == true
                 && ShopPromotion._.StartDate < DateTime.Now)
-                .Select(ShopPromotion._.ID.All, RedeemRules._.Name.Alias("RuleName") , ParameterInfo._.Code.Alias("RuleTypeCode"), ParameterInfo._.Name.Alias("RuleTypeName"))
-                
+                .Select(ShopPromotion._.ID.All, RedeemRules._.Name.Alias("RuleName"), ParameterInfo._.Code.Alias("RuleTypeCode"), ParameterInfo._.Name.Alias("RuleTypeName"))
+
                 .List<ShopPromotion>();
+            bool? IsFirst = null;
             foreach (ShopPromotion item in list)
             {
+                if (item.RuleTypeName.StartsWith("注册"))
+                {
+                    continue;
+
+                }
+                if (item.RuleTypeName.StartsWith("首单"))
+                {
+                    if (IsFirst == null)
+                    {
+                        bool isHave = Dal.Exists<ShopOrder>(ShopOrder._.MemberID == accuontID);
+                        IsFirst = isHave == false;
+                    }
+                    if (!IsFirst.Value)
+                    {
+                        continue;
+                    }
+                }
                 if (!string.IsNullOrWhiteSpace(item.BuySKUID))
                 {  //先检测 SKU
                     if (orderItemlist.Exists(p => p.Sku == item.BuySKUID))

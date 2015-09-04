@@ -6,6 +6,17 @@
 {
     <input name="@code" id="@code" type="hidden" value="@value" />
 }
+@helper Lable(string text)
+{
+    <dl>
+        <dt>
+
+        </dt>
+        <dd>
+            @MVCExtention.ExtendHtmlInput.MvcHelper.Raw(text)
+        </dd>
+    </dl>
+}
 @helper TextBox(string code, string name, object defaultval = null, string hint = "", string otherClass = "", int width = 200)
 {
     <dl>
@@ -229,11 +240,11 @@
                                 }
                                 bool valb = false;
                                 bool.TryParse(val.ToString(), out valb);
-                                <input type="checkbox" name="@item" checked="@val" />
+                <input type="checkbox" name="@item" checked="@val" />
                             }
-                            <label for="@item">
-                                @nameArr[i]
-                            </label>
+                <label for="@item">
+                    @nameArr[i]
+                </label>
                             i++;
                         }
                     }
@@ -270,8 +281,8 @@
 
                             radioId += i.ToString();
 
-                            <input id="@radioId" name="@code" type="radio" @IsSelected value="@item" />
-                            <label for="@radioId">@nameArr[i]</label>
+                    <input id="@radioId" name="@code" type="radio" @IsSelected value="@item" />
+                    <label for="@radioId">@nameArr[i]</label>
                             i++;
                         }
 
@@ -306,8 +317,8 @@
         <dt>
             @MVCExtention.ExtendHtmlInput.MvcHelper.Label(code, name)
             @MVCExtention.ExtendHtmlInput.MvcHelper.Hidden(id,defaultVal)
-            
-            
+
+
         </dt>
         <dd>
             @MVCExtention.ExtendHtmlInput.MvcHelper.TextBox(code, defaultText, new { @class = "input normal " + otherClass, width = width, @readonly = "readonly" })
@@ -316,15 +327,15 @@
             {
 
 
-                <span class="input-group-btn">
+            <span class="input-group-btn">
 
-                    <button class="btn blue btnHelp" id="@selectButtonID">
-                        选择
-                    </button>
-                    <button class="btn yellow btnHelp" onclick="javascript: $('#@id').val(''); $('#@code').val('');return false;">
-                        清除选择
-                    </button>
-                </span>
+                <button class="btn blue btnHelp" id="@selectButtonID">
+                    选择
+                </button>
+                <button class="btn yellow btnHelp" onclick="javascript: $('#@id').val(''); $('#@code').val('');return false;">
+                    清除选择
+                </button>
+            </span>
             }
             <span>@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(hint)</span>
 
@@ -342,7 +353,7 @@
 	}
                 if (isContienu) {
                     $("#@dialogID").jqxWindow('open');
-                   
+
                 }
                 return false;
             });
