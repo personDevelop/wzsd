@@ -20,7 +20,7 @@ namespace EasyCms.Web.Common
             json.ObjectCreationHandling = ObjectCreationHandling.Replace;
             json.MissingMemberHandling = MissingMemberHandling.Ignore;
             json.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-
+        
             if (type == typeof(DataRow))
                 json.Converters.Add(new DataRowConverter());
             else if (type == typeof(DataTable))
@@ -42,7 +42,7 @@ namespace EasyCms.Web.Common
                     output = sw.ToString();
                 }
             }
-            return output;
+            return output.Replace(": null", ":\"\"");  
         }
 
         public static object Deserialize(string jsonText, Type valueType)
@@ -114,7 +114,7 @@ namespace EasyCms.Web.Common
  
     }
 
-
+   
     /// <summary>
     /// Converts a DataTable to JSON. Note no support for deserialization
     /// </summary>
