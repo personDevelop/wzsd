@@ -733,6 +733,8 @@
     <Content Include="Areas\Admin\Views\ShopPromotion\Index.cshtml" />
     <Content Include="Areas\Admin\Views\CouponRule\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\CouponRule\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopOrder\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopOrder\Edit.cshtml" />
     <None Include="Properties\PublishProfiles\publish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -1167,7 +1169,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\Admin\Views\ShopOrder\" />
     <Folder Include="Content\css\" />
     <Folder Include="Scripts\jGui\" />
   </ItemGroup>

@@ -1,3 +1,6 @@
+ 虚拟产品不能和其他商品同一个订单，也不能选择货到付款 
+
+
 ShopOrderModel order
 传递参数 ：
   传递数组  OrderItem
@@ -27,6 +30,7 @@ ShopOrderModel order
 		CardValue              优惠券面值 
 		MinPrice               此优惠券要求订单的总价格的最小值（如果=0，表示不限制）
                 HaveCount	       当前会员拥有该优惠券的个数 
+		IsCanCombie             可合并使用
 3.商品集合      OrderItems  （本次订单购买的商品明细）
                 每条包含的属性
                 ProductID  商品id
@@ -61,6 +65,7 @@ ShopOrderModel order
                 CategoryId             优惠券可以商品分类ID（一般也就是当前商品所在分类）
                 ProductId              优惠券可以商品ID（一般也就是当前商品）
 	        ProductSku             优惠券可以商品skuID（一般也就是当前商品）
+		IsCanCombie             可合并使用
 
    
                   

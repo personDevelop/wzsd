@@ -66,10 +66,7 @@ namespace EasyCms.Dal
         public List<ShopPromotionSimpal> GetValidPromotionList(List<OrderItem> orderItemlist, string accuontID)
         {
             List<ShopPromotionSimpal> result = new List<ShopPromotionSimpal>();
-            //先更新过期日期小于今天的为无效
-            ShopPromotion updatePromotion = new ShopPromotion() { RecordStatus = StatusType.update, ActionStatus = (int)ValidEnum.无效 };
-            updatePromotion.Where = ShopPromotion._.EndDate < DateTime.Now;
-            Dal.Submit(updatePromotion);
+            UpdatePromotion();
             List<string> productIdList = orderItemlist.Select(p => p.ProductID).ToList();
             //获取当前时间所有可用的促销活动
             List<ShopPromotion> list = Dal.From<ShopPromotion>()
@@ -201,14 +198,27 @@ namespace EasyCms.Dal
             return result;
         }
 
+        private void UpdatePromotion()
+        {
+            //先更新过期日期小于今天的为无效
+            ShopPromotion updatePromotion = new ShopPromotion() { RecordStatus = StatusType.update, ActionStatus = (int)ValidEnum.无效 };
+            updatePromotion.Where = ShopPromotion._.EndDate < DateTime.Now;
+            Dal.Submit(updatePromotion);
+        }
+
         internal bool CheckValid(List<string> listPromot)
         {
-            throw new NotImplementedException();
+            UpdatePromotion();
+            if (Dal.Exists<ShopPromotion>(ShopPromotion._.ID.In(listPromot) && ShopPromotion._.ActionStatus == (int)ValidEnum.无效))
+            {
+                return false;
+            }
+            return true;
         }
 
         internal List<ShopPromotion> GetList(WhereClip whereClip)
         {
-            throw new NotImplementedException();
+            return Dal.From<ShopPromotion>().Where(whereClip).List<ShopPromotion>();
         }
     }
 

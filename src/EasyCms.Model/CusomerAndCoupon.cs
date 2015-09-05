@@ -357,13 +357,18 @@ namespace EasyCms.Model
         /// </summary>
         public decimal CardValue { get; set; }
 
+       /// <summary>
+       /// 可合并使用
+       /// </summary>
+        public bool IsCanCombie { get; set; }
+        
         /// <summary>
         /// 最低消费金额
         /// </summary>
         public decimal MinPrice { get; set; }
 
         /// <summary>
-        /// 优惠券面值
+        /// 拥有的数量
         /// </summary>
         public decimal HaveCount { get; set; }
 

@@ -100,10 +100,7 @@ namespace EasyCms.Dal
         internal List<CouponAccount> GetValidCouponList(List<OrderItem> orderItemlist)
         {
             List<CouponAccount> result = new List<CouponAccount>();
-            //先更新过期日期小于今天的为无效
-            CusomerAndCoupon updateCoupon = new CusomerAndCoupon() { RecordStatus = StatusType.update, IsOutDate = true };
-            updateCoupon.Where = CusomerAndCoupon._.EndDate < DateTime.Now;
-            Dal.Submit(updateCoupon);
+            UpdateCoupon();
             List<string> productIdList = orderItemlist.Select(p => p.ProductID).ToList();
             //获取当前时间所有可用的优惠券
             List<CouponAccount> list = Dal.From<CusomerAndCoupon>()
@@ -112,7 +109,7 @@ namespace EasyCms.Dal
 
                 .Where(CouponRule._.IsEnable == true && CusomerAndCoupon._.IsOutDate == false && CusomerAndCoupon._.HaveCount > 0)
                 .Select(CusomerAndCoupon._.ID, CouponRule._.Name, CusomerAndCoupon._.CardValue, CusomerAndCoupon._.HaveCount,
-               CouponRule._.MinPrice,
+               CouponRule._.MinPrice,CouponRule._.IsCanCombie,
                 CouponRule._.ProductId, CouponRule._.ProductSku, CouponRule._.CategoryId)
                 .OrderBy(ShopPromotion._.StartDate)
                 .List<CouponAccount>();
@@ -213,9 +210,22 @@ namespace EasyCms.Dal
             return result;
         }
 
+        private void UpdateCoupon()
+        {
+            //先更新过期日期小于今天的为无效
+            CusomerAndCoupon updateCoupon = new CusomerAndCoupon() { RecordStatus = StatusType.update, IsOutDate = true };
+            updateCoupon.Where = CusomerAndCoupon._.EndDate < DateTime.Now;
+            Dal.Submit(updateCoupon);
+        }
+
         internal bool CheckValid(List<string> listCoupon)
         {
-            throw new NotImplementedException();
+            UpdateCoupon();
+            if (Dal.Exists<CusomerAndCoupon>(CusomerAndCoupon._.ID.In(listCoupon) && CusomerAndCoupon._.IsOutDate==true))
+            {
+                return false;
+            }
+            return true;
         }
     }
 

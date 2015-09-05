@@ -1,0 +1,275 @@
+﻿@using MVCExtention;
+@{
+    ViewBag.Title = "订单管理";
+}
+<style type="text/css">
+
+</style>
+<!--工具栏-->
+<div id="floatHead" class="toolbar-wrap">
+    <div class="toolbar">
+        <div class="box-wrap">
+            <a class="menu-btn"></a>
+            <div class="l-list">
+                <ul class="icon-list">
+                    <li><a class="add" href="javascript:;" onclick="Edit();"><i></i><span>查看</span></a></li>
+                    <li><a class="edit" href="javascript:;" onclick="Edit();"><i></i><span>修改状态</span></a></li>
+                    <li><a class="expandable" href="javascript:;" onclick="Edit();"><i></i><span>导出</span></a></li>
+                    <li><a class="del" href="javascript:;" onclick="Del( );"><i></i><span>删除</span></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <table>
+        <tr>
+            <td>订单号：</td>
+            <td><input /></td>
+            <td>收件人：</td>
+            <td><input /></td> 
+            <td>用户名：</td>
+            <td><input /></td>
+            <td>订单日期：</td>
+            <td><input />~<input /></td>
+        </tr>
+        <tr>
+            <td>付款状态：</td>
+            <td><input /></td>
+            <td> 订单状态：</td>
+            <td><input /></td>
+            <td>分页展示：</td>
+            <td><input type="checkbox" /></td>
+            <td> </td>
+            <td><input type="button" value="搜索" /></td>
+            <td> </td>
+            <td> </td>
+        </tr>
+    </table>
+    <div class="content-tab">
+        <div class="content-tab-ul-wrap">
+            <ul>
+                <li><a class="selected" href="javascript:;">近三个月订单</a></li>
+                <li><a href="javascript:;">等待付款</a></li>
+                <li><a href="javascript:;">等待付款确认</a></li>
+                <li><a href="javascript:;">等待处理</a></li>
+                <li><a href="javascript:;">已发货</a></li>
+                <li><a href="javascript:;">取消订单</a></li>
+                <li><a href="javascript:;">已完成</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!--/工具栏-->
+<!--列表-->
+<div class="table-container">
+    <div id="treeGrid">
+    </div>
+</div>
+<!--/列表-->
+@section  scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            var source =
+             {
+                 dataType: "json",
+                 dataFields: [
+
+		{ name: 'ID', type: 'string' },
+
+		{ name: 'OrderType', type: 'string' },
+
+		{ name: 'OrderResId', type: 'string' },
+
+		{ name: 'ParentID', type: 'string' },
+
+		{ name: 'HasChildren', type: 'string' },
+
+		{ name: 'MemberID', type: 'string' },
+
+		{ name: 'MemberName', type: 'string' },
+
+		{ name: 'MemberEmail', type: 'string' },
+
+		{ name: 'MemberCallPhone', type: 'string' },
+
+		{ name: 'RegionID', type: 'string' },
+
+		{ name: 'ShipRegion', type: 'string' },
+
+		{ name: 'ShipAddress', type: 'string' },
+
+		{ name: 'ShipZip', type: 'string' },
+
+		{ name: 'ShipName', type: 'string' },
+
+		{ name: 'ShipTel', type: 'string' },
+
+		{ name: 'ShipEmail', type: 'string' },
+
+		{ name: 'ShipModeID', type: 'string' },
+
+		{ name: 'ShipModeName', type: 'string' },
+
+		{ name: 'PayTypeID', type: 'string' },
+
+		{ name: 'PayTypeName', type: 'string' },
+
+		{ name: 'PayTypeGateWay', type: 'string' },
+
+		{ name: 'ExpressCompanyID', type: 'string' },
+
+		{ name: 'ExpressCompanyName', type: 'string' },
+
+		{ name: 'ShipOrderNum', type: 'string' },
+
+		{ name: 'IsFreeShiping', type: 'string' },
+
+		{ name: 'Freight', type: 'string' },
+
+		{ name: 'FreightAdjust', type: 'string' },
+
+		{ name: 'FreightActual', type: 'string' },
+
+		{ name: 'Weight', type: 'string' },
+
+		{ name: 'CostPrice', type: 'string' },
+
+		{ name: 'Discount', type: 'string' },
+
+		{ name: 'TotalPrice', type: 'string' },
+
+		{ name: 'PayMoney', type: 'string' },
+
+		{ name: 'Remark', type: 'string' },
+
+		{ name: 'OrderPoint', type: 'string' },
+
+		{ name: 'ShipStatus', type: 'string' },
+
+		{ name: 'PayStatus', type: 'string' },
+
+		{ name: 'OrderStatus', type: 'string' },
+
+		{ name: 'HasReturn', type: 'string' },
+
+		{ name: 'ReturnMoney', type: 'string' },
+
+		{ name: 'RefundStatus', type: 'string' },
+
+		{ name: 'IsInvoice', type: 'string' },
+
+		{ name: 'InvoiceInfo', type: 'string' },
+
+		{ name: 'SellerID', type: 'string' },
+
+		{ name: 'SellerName', type: 'string' },
+
+		{ name: 'SellerEmail', type: 'string' },
+
+		{ name: 'SellerPhone', type: 'string' },
+
+		{ name: 'SupplierID', type: 'string' },
+
+		{ name: 'SupplierName', type: 'string' },
+
+		{ name: 'OrderIP', type: 'string' },
+
+		{ name: 'CommentStatus', type: 'string' },
+
+		{ name: 'DeliveryTime', type: 'string' },
+
+		{ name: 'SpecifiedDate', type: 'string' },
+
+		{ name: 'ExportCount', type: 'string' },
+
+		{ name: 'CreateDate', type: 'string' },
+
+		{ name: 'UpdateDate', type: 'string' },
+
+		{ name: 'HasDelete', type: 'string' },
+
+		{ name: 'ClientType', type: 'string' },
+
+		{ name: 'InvoiceNote', type: 'string' }
+                 ],
+                 timeout: 10000,
+                 hierarchy:
+                 {
+                     keyDataField: { name: 'ID' },
+                     parentDataField: { name: 'ParentID' }
+                 },
+                 id: 'ID',
+                 root: 'Rows',
+                 url: " @Url.Action("GetList", "ShopOrder", new { area = "Admin" })"
+             };
+            var dataAdapter = new $.jqx.dataAdapter(source);
+            var dataAdapter = new $.jqx.dataAdapter(source);
+            var totalHeight = $(window).outerHeight();
+            if (totalHeight == 0) {
+                totalHeight = $(window).clientHeight();
+            }
+            var topHight = 50;
+
+            var middleHeight = totalHeight - topHight;
+
+            $("#treeGrid").jqxTreeGrid(
+                       {
+                           width: "95%",
+        height:"360",
+                           source: dataAdapter,
+                           columns: [
+
+  { text: '订单号', dataField: 'ID', align: "center", cellsalign: "center", type: 'string', width: 150 },
+     { text: '收件人', dataField: 'ShipName', align: "center", cellsalign: "center", type: 'string', width: 100 },
+  { text: '收件电话', dataField: 'ShipTel', align: "center", cellsalign: "center", type: 'string', width: 100 },
+
+  { text: '会员姓名', dataField: 'MemberName', align: "center", cellsalign: "center", type: 'string', width: 100 },
+
+  { text: '会员电话', dataField: 'MemberCallPhone', align: "center", cellsalign: "center", type: 'string', width: 100 },
+
+  { text: '地区', dataField: 'ShipRegion', align: "center", cellsalign: "center", type: 'string', width: 100 },
+  { text: '付款方式', dataField: 'PayTypeName', align: "center", cellsalign: "center", type: 'string', width: 100 },
+
+  { text: '快递公司', dataField: 'ExpressCompanyName', align: "center", cellsalign: "center", type: 'string', width: 100 },
+
+  { text: '运单号', dataField: 'ShipOrderNum', align: "center", cellsalign: "center", type: 'string', width: 100 },
+
+  { text: '总价格', dataField: 'TotalPrice', align: "center", cellsalign: "center", type: 'string', width: 100 },
+  { text: '付款状态', dataField: 'PayStatus', align: "center", cellsalign: "center", type: 'string', width: 100 },
+  { text: '订单状态', dataField: 'OrderStatus', align: "center", cellsalign: "center", type: 'string', width: 100 },
+  { text: '导出次数', dataField: 'ExportCount', align: "center", cellsalign: "center", type: 'string', width: 100 },
+  { text: '创建日期', dataField: 'CreateDate', align: "center", cellsalign: "center", type: 'string', width: 100 },
+    { text: '发票抬头', dataField: 'InvoiceInfo', align: "center", cellsalign: "center", type: 'string', width: 200 },
+      { text: '发票说明', dataField: 'InvoiceNote', align: "center", cellsalign: "center", type: 'string', width: 200 }
+                           ]
+                       });
+        });
+    </script>
+    <script type="text/javascript">
+        function Edit() {
+            var data = $("#treeGrid").jqxTreeGrid('getSelection');
+            if (data.length == 1) {
+
+                href = "@Url.Action("Edit", new  { area="admin" })";
+                location.href = href + "/" + data[0].ID;
+            } else { ErrorMsg("请选择一条数据"); }
+
+
+        }
+
+        function Del() {
+            var data = $("#treeGrid").jqxTreeGrid('getSelection');
+            if (data.length == 1) {
+
+                href = "@Url.Action("Delete", new { area = "admin" })";
+                $.post(href, { ID: data[0].ID }, function (d) {
+                    ErrorMsg(d);
+                    if (d.indexOf("成功") > -1) {
+                        $("#treeGrid").jqxTreeGrid('deleteRow', data[0].ID);
+                    }
+                });
+            } else { ErrorMsg("请选择一条数据"); }
+        }
+    </script>
+}
