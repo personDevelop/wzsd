@@ -200,3 +200,4 @@ src/EasyCms.Web/bin/EasyCms.Business.dll
 src/EasyCms.Web/bin/EasyCms.Model.dll
 src/EasyCms.Web/bin/EasyCms.Web.dll
 src/EasyCms.Web/bin/MVCExtention.dll
+发布/Upload/*
