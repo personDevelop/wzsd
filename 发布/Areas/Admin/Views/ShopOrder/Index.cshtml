@@ -193,18 +193,13 @@
 
 		{ name: 'InvoiceNote', type: 'string' }
                  ],
-                 timeout: 10000,
-                 hierarchy:
-                 {
-                     keyDataField: { name: 'ID' },
-                     parentDataField: { name: 'ParentID' }
-                 },
+                 timeout: 10000, 
                  id: 'ID',
                  root: 'Rows',
                  url: " @Url.Action("GetList", "ShopOrder", new { area = "Admin" })"
              };
             var dataAdapter = new $.jqx.dataAdapter(source);
-            var dataAdapter = new $.jqx.dataAdapter(source);
+          
             var totalHeight = $(window).outerHeight();
             if (totalHeight == 0) {
                 totalHeight = $(window).clientHeight();
