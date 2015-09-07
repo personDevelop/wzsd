@@ -48,106 +48,10 @@ namespace EasyCms.Dal
 
         public int Save(ShopCategory item)
         {
-            //分级码 级数     顺序
-            /*如果是新增的   
-             有上级  则更新上级为 是否明细  =false , 分级码重新计算分级码 
-             */
-            IDbTransaction tr = null;
-            Sharp.Data.SessionFactory dal = null;
-            try
-            {
-
-                CustomSqlSection csql = null;
-
-                string sql = string.Empty;
-                ShopCategory parent = null;
-                if (string.IsNullOrEmpty(item.ParentID))
-                {
-                    if (item.RecordStatus == Sharp.Common.StatusType.add)
-                    {
-                        item.ClassCode = item.ID;
-                        item.Depth = 1;
-                        item.OrderNo = Dal.Count<ShopCategory>(ShopCategory._.ParentID.IsNullOrEmpty(), ShopCategory._.ID, false);
-                    }
-                    else
-                    {
-                        if (item.ID != item.ClassCode)
-                        {
-                            //说明是从非根级调整到根级节点 
-                            int oldDepth = item.Depth;
-                            item.Depth = 1;
-                            int seriesChaZhi = oldDepth - item.Depth;//级数调整前后的差值
-
-                            item.OrderNo = Dal.Count<ShopCategory>(ShopCategory._.ParentID.IsNullOrEmpty(), ShopCategory._.ID, false);
-
-                            string oldParentClassCode = item.ClassCode.Substring(0, item.ClassCode.IndexOf(item.ID) + 1);
-
-                            sql = "update ShopCategory set ClassCode=Replace(ClassCode,@classcode,''),Depth=Depth-@Depth where ClassCode like '@oldClassCode%'";
-                            tr = Dal.BeginTransaction(out dal);
-                            csql = dal.FromCustomSql(sql, tr).AddInputParameter("classcode", oldParentClassCode)
-                                 .AddInputParameter("Depth", seriesChaZhi)
-                                 .AddInputParameter("oldClassCode", item.ClassCode)
-                                  ;
-                        }
-                    }
-                }
-                else
-                {
-
-                    parent = Dal.Find<ShopCategory>(item.ParentID);
-
-                    if (item.RecordStatus == Sharp.Common.StatusType.add)
-                    {
-
-                        item.ClassCode = parent.ClassCode + ";" + item.ID;
-                        item.Depth = item.ClassCode.Count(p => p == ';') + 1;
-                        item.OrderNo = Dal.Count<ShopCategory>(ShopCategory._.ParentID == item.ParentID, ShopCategory._.ID, false);
-                    }
-                    else
-                    {
-                        if (!item.ClassCode.EndsWith(item.ParentID + ";" + item.ID))
-                        {
-                            //调整父编码了
-                            item.OrderNo = Dal.Count<ShopCategory>(ShopCategory._.ParentID == item.ParentID, ShopCategory._.ID, false);
-                            string oldClassCode = item.ClassCode;
-                            int oldDepth = item.Depth;
-                            item.ClassCode = parent.ClassCode + ";" + item.ID;
-                            item.Depth = item.ClassCode.Count(p => p == ';') + 1;
-                            int seriesChaZhi = item.Depth - oldDepth;//级数调整前后的差值
-                            string oldParentClassCode = item.ClassCode.Substring(0, item.ClassCode.IndexOf(item.ID) + 1);
-                            //更新子级的 级数 和分级编号 
-
-                            sql = "update ShopCategory set ClassCode=Replace(ClassCode,@classcode,'@newParentClassCOde'),Depth=Depth+@Depth where ClassCode like '@oldClassCode%'";
-                            tr = Dal.BeginTransaction(out dal);
-                            csql = dal.FromCustomSql(sql, tr).AddInputParameter("classcode", oldParentClassCode)
-                                .AddInputParameter("newParentClassCOde", parent.ClassCode)
-                                .AddInputParameter("Depth", seriesChaZhi)
-                                .AddInputParameter("oldClassCode", oldClassCode)
-                                 ;
-                        }
-                    }
-                }
-                if (dal == null)
-                {
-                    tr = Dal.BeginTransaction(out dal);
-                }
-                dal.SubmitNew(ref dal, item);
-                if (csql != null)
-                {
-                    csql.ExecuteNonQuery();
-                }
-                dal.CommitTransaction(tr);
-                return 1;
-
-            }
-            catch (Exception)
-            {
-                dal.RollbackTransaction(tr);
-                throw;
-            }
+            return CommonDal.UpdatePath<ShopCategory>(Dal, item, ShopCategory._.ID, ShopCategory._.ParentID, ShopCategory._.ClassCode, ShopCategory._.OrderNo, ShopCategory._.Depth, ShopCategory._.IsMx);
 
         }
-
+     
         public DataTable GetList(bool IsForSelected = false)
         {
             if (IsForSelected)
@@ -218,7 +122,7 @@ namespace EasyCms.Dal
 
 
 
-        public DataTable GetAppEntity(string id,string host)
+        public DataTable GetAppEntity(string id, string host)
         {
             WhereClip where = new WhereClip();
             if (string.IsNullOrWhiteSpace(id))
@@ -230,8 +134,8 @@ namespace EasyCms.Dal
                 where = ShopCategory._.ParentID == id;
             }
             DataTable dt = Dal.From<ShopCategory>()
-                .Join<AttachFile>(ShopCategory._.SmallLogo==AttachFile._.RefID, JoinType.leftJoin )
-                .Where(where).Select(ShopCategory._.ID, ShopCategory._.Code, ShopCategory._.Name, ShopCategory._.ClassCode, AttachFile.GetFilePath(host, "SmallLogo") )
+                .Join<AttachFile>(ShopCategory._.SmallLogo == AttachFile._.RefID, JoinType.leftJoin)
+                .Where(where).Select(ShopCategory._.ID, ShopCategory._.Code, ShopCategory._.Name, ShopCategory._.ClassCode, AttachFile.GetFilePath(host, "SmallLogo"))
                 .OrderBy(ShopCategory._.OrderNo).ToDataTable();
             return dt;
         }

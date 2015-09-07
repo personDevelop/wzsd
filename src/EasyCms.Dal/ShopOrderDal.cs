@@ -227,10 +227,10 @@ namespace EasyCms.Dal
                         CusomerAndCoupon upcoupon = new CusomerAndCoupon() { RecordStatus = StatusType.update, Where = CusomerAndCoupon._.ID == promot.ID };
                         ExpressionClip HaveCount = new ExpressionClip("HaveCount-@HaveCount");
                         HaveCount.Parameters.Add("HaveCount", promot.UsingCount);
-                        upcoupon.SetModifiedProperties(CusomerAndCoupon._.HaveCount, HaveCount); 
+                        upcoupon.SetModifiedProperty(CusomerAndCoupon._.HaveCount, HaveCount); 
                         ExpressionClip UsedCount = new ExpressionClip("UsedCount+@UsedCount");
                         HaveCount.Parameters.Add("UsedCount", promot.UsingCount);
-                        upcoupon.SetModifiedProperties(CusomerAndCoupon._.UsedCount, UsedCount);
+                        upcoupon.SetModifiedProperty(CusomerAndCoupon._.UsedCount, UsedCount);
                         Orderlist.Add(upcoupon);
                     }
                 }

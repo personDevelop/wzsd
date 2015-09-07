@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="AdministrativeRegionsDal.cs" />
     <Compile Include="AttachFileDal.cs" />
+    <Compile Include="CommonDal.cs" />
     <Compile Include="CouponRuleDal.cs" />
     <Compile Include="FunctionInfoDal.cs" />
     <Compile Include="ManagerUserInfoDal.cs" />
