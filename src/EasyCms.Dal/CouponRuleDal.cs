@@ -111,7 +111,7 @@ namespace EasyCms.Dal
                 .Select(CusomerAndCoupon._.ID, CouponRule._.Name, CusomerAndCoupon._.CardValue, CusomerAndCoupon._.HaveCount,
                CouponRule._.MinPrice,CouponRule._.IsCanCombie,
                 CouponRule._.ProductId, CouponRule._.ProductSku, CouponRule._.CategoryId)
-                .OrderBy(ShopPromotion._.StartDate)
+                .OrderBy(CouponRule._.StartDate)
                 .List<CouponAccount>();
             foreach (CouponAccount item in list)
             {
