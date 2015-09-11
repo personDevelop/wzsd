@@ -46,5 +46,15 @@ namespace EasyCms.Business
         {
             return Dal.Submit(order, accuont, out err);
         }
+
+        public List<ShopOrder> GetMyOrder(ManagerUserInfo user, int queryPage, int queryStatus, string other, out string err)
+        {
+            return Dal.GetMyOrder(user, queryPage, queryStatus, other, out err);
+        }
+
+        public ShopOrder GetOrder(string id, string userid, out string err)
+        {
+            return Dal.GetOrder(id, userid, out   err);
+        }
     }
 }

@@ -31,7 +31,7 @@ namespace EasyCms.Model
         /// <summary>
         /// 订单邮寄地址，提交订单时传递
         /// </summary>
-        public int AddressID { get; set; }
+        public string AddressID { get; set; }
 
         /// <summary>
         /// 是否使用发票

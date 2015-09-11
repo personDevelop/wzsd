@@ -11,8 +11,8 @@
             <div class="l-list">
                 <ul class="icon-list">
                     <li><a class="add" href="@Url.Action("Edit")"><i></i><span>新增</span></a></li>
-                    <li><a class="add" href="javascript:;" onclick="Edit();"><i></i><span>编辑</span></a></li>
-                    <li><a class="del" href="javascript:;" onclick="Del( );"><i></i><span>删除</span></a></li>
+                    <li><a class="add" href="javascript:;" onclick="EditGrid('jqxgrid', '@Url.Action("Edit")');"><i></i><span>编辑</span></a></li>
+                    <li><a class="del" href="javascript:;" onclick="DelGrid('jqxgrid', '@Url.Action("Delete")');"><i></i><span>删除</span></a></li>
                 </ul>
             </div>
         </div>
@@ -30,120 +30,36 @@
     <script type="text/javascript">
         $(document).ready(function () {
             var url = "@Url.Action("GetList")";
-            // prepare the data
-            var source =
-            {
-                datatype: "json",
-                cache: false,
-                datafields: [
+           
+            var datafields = [{ name: 'ID' }, { name: 'RuleName' }, { name: 'BuyCategoryName' }, { name: 'BuyProductName' },
 
-		{ name: 'ID', type: 'string' },
+		{ name: 'BuyCount' }, { name: 'CouponName' }, { name: 'MinPrice' }, { name: 'StartDate' },
 
-		{ name: 'RuleName', type: 'string' },
+		{ name: 'EndDate' }, { name: 'ActiveStatus' }, { name: 'CreateUser' }, { name: 'CreateDate' }];
+            var columns = [
+{ text: '促销规则', dataField: 'RuleName', cellsalign: "left", width: 150 },
+  { text: '开始时间', dataField: 'StartDate', width: 130 },
 
-		{ name: 'BuyCategoryName', type: 'string' },
-		{ name: 'BuyProductName', type: 'string' },
+  { text: '结束时间', dataField: 'EndDate', width: 130 },
 
-		{ name: 'BuyCount', type: 'string' },
+  { text: '商品分类名称', dataField: 'BuyCategoryName', cellsalign: "left", width: 100 },
 
-		{ name: 'CouponName', type: 'string' },
+  { text: '商品名称', dataField: 'BuyProductName', cellsalign: "left", width: 200 },
 
+  { text: '购买数量', dataField: 'BuyCount', cellsalign: "right", cellsalign: "right", width: 80 },
 
-		{ name: 'MinPrice', type: 'string' },
+  { text: '赠送优惠券', dataField: 'CouponName', cellsalign: "left", width: 100 },
+  { text: '最低金额', dataField: 'MinPrice', cellsalign: "right", width: 80 },
 
+  { text: '创建人', dataField: 'CreateUser', width: 100 },
 
-
-		{ name: 'StartDate', type: 'string' },
-
-		{ name: 'EndDate', type: 'string' },
-
-		{ name: 'ActiveStatus', type: 'string' },
-
-		{ name: 'CreateUser', type: 'string' },
-
-		{ name: 'CreateDate', type: 'string' },
-
-                ],
-                beforeprocessing: function (data) {
-                    source.totalrecords = data.total;
-                },
-                root: 'Rows',
-                id: 'id',
-                url: url,
-            };
-            var dataAdapter = new $.jqx.dataAdapter(source);
-
-            $("#jqxgrid").jqxGrid(
-            {
-                width: "95%",
-                autoheight: true,
-                source: dataAdapter,
-                columnsresize: true,
-                virtualmode: true,
-                rendergridrows: function (params) {
-                    return params.data;
-                },
-                pagerrenderer: pagerrenderer,
-                pageSize: 20,
-                pageable: true,
-                columns: [
-  { text: '促销规则', dataField: 'RuleName', align: "center", type: 'string', width: 150 },
-  { text: '开始时间', dataField: 'StartDate', align: "center", cellsalign: "center", type: 'string', width: 130 },
-
-  { text: '结束时间', dataField: 'EndDate', align: "center", cellsalign: "center", type: 'string', width: 130 },
-
-  { text: '商品分类名称', dataField: 'BuyCategoryName', align: "center", type: 'string', width: 100 },
-
-  { text: '商品名称', dataField: 'BuyProductName', align: "center", type: 'string', width: 200 },
-
-  { text: '购买数量', dataField: 'BuyCount', align: "center", cellsalign: "right", type: 'string', width: 80 },
-
-  { text: '赠送优惠券', dataField: 'CouponName', align: "center", type: 'string', width: 100 },
-  { text: '最低金额', dataField: 'MinPrice', align: "center", cellsalign: "right", type: 'string', width: 80 },
-   
-  { text: '创建人', dataField: 'CreateUser', align: "center", cellsalign: "center", type: 'string', width: 100 },
-
-  { text: '创建时间', dataField: 'CreateDate', align: "center", cellsalign: "center", type: 'string', width: 130 }
-
-                ]
-            });
+  { text: '创建时间', dataField: 'CreateDate', width: 130 }];
+            CreateGrid("jqxgrid", url, datafields, columns );
+            
 
 
         });
     </script>
-    <script type="text/javascript">
-        function Edit() {
-            var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindex');
-            if (rowindex == -1) {
-                ErrorMsg("请选择一条数据");
-            } else {
-                var data = $('#jqxgrid').jqxGrid('getrowdata', rowindex);
-
-                if (data) {
-
-                    href = "@Url.Action("Edit", new  { area="admin" })";
-                    location.href = href + "/" + data.ID;
-                } else { ErrorMsg("请选择一条数据"); }
-            }
-
-
-        }
-
-        function Del() {
-            var rowindexes = $('#jqxgrid').jqxGrid('getselectedrowindexes');
-
-
-            if (rowindexes.length == 1) {
-                var data = $('#jqxgrid').jqxGrid('getrowdata', rowindexes[0]);
-                href = "@Url.Action("Delete", new { area = "admin" })";
-                $.post(href, { ID: data.ID }, function (d) {
-                    ErrorMsg(d);
-                    if (d.indexOf("成功") > -1) {
-                        $("#jqxgrid").jqxGrid('deleteRow', rowindexes[0]);
-                    }
-                });
-            } else { ErrorMsg("请选择一条数据"); }
-        }
-    </script>
+    
 
 }

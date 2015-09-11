@@ -109,5 +109,96 @@ namespace EasyCms.Web.API
             }
         }
 
+
+        /// <summary>
+        /// 获取我的订单，排序 按照订单时间倒排 
+        /// </summary>
+        /// <param name="id">页数</param>
+        /// <param name="pageIndex">订单状态（-1 查所有状态）</param>
+        /// <param name="other">其他where 条件</param>
+        /// <returns></returns> 
+        public HttpResponseMessage GetOrders(int id = 1, string pageIndex = "", string other = "")
+        {
+            int queryPage = id;
+
+            if (queryPage == 0)
+            {
+                queryPage = 1;
+            }
+
+            int queryStatus = -1;
+            if (!string.IsNullOrWhiteSpace(pageIndex))
+            {
+                if (int.TryParse(pageIndex, out queryStatus))
+                {
+                    queryStatus = -1;
+                }
+            }
+
+            string err = string.Empty;
+
+            try
+            {
+                ManagerUserInfo user = Request.GetAccount();
+
+                List<ShopOrder> list = new ShopOrderBll().GetMyOrder(user, queryPage, queryStatus, other, out err);
+                if (!string.IsNullOrWhiteSpace(err))
+                {
+                    return err.FormatError();
+
+                }
+                else
+                {
+                    return list.FormatObj();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return ex.Format();
+            }
+
+        }
+
+        /// <summary>
+        /// 获取我的订单，排序 按照订单时间倒排 
+        /// </summary>
+        /// <param name="id">页数</param>
+        /// <param name="pageIndex">订单状态（-1 查所有状态）</param>
+        /// <param name="other">其他where 条件</param>
+        /// <returns></returns> 
+        public HttpResponseMessage GetOrder(string id)
+        {
+
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return "订单编号不能为空".FormatError();
+            }
+
+
+
+            try
+            {
+                ManagerUserInfo user = Request.GetAccount();
+                string err = null;
+                ShopOrder order = new ShopOrderBll().GetOrder(id, Request.GetAccount().ID, out   err);
+                if (!string.IsNullOrWhiteSpace(err))
+                {
+                    return err.FormatError();
+
+                }
+                else
+                {
+                    return order.FormatObj();
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                return ex.Format();
+            }
+
+        }
     }
 }

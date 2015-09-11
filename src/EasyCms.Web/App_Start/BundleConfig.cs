@@ -65,6 +65,10 @@ namespace EasyCms.Web
             bundles.Add(new ScriptBundle("~/bundles/uploadJs").Include(
                 "~/Content/ueditor/third-party/webuploader/webuploader.js"));
 
+
+            bundles.Add(new ScriptBundle("~/bundles/eshopJS").Include(
+              "~/Scripts/EshopAdminControl.js"));
+
             #endregion
 
 

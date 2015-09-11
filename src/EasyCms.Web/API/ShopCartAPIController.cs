@@ -51,7 +51,7 @@ namespace EasyCms.Web.API
 
         }
 
-        
+
         // POST api/shopcart
         [HttpPost]
         public HttpResponseMessage CardInfo([FromBody] CardInfo card)
@@ -78,7 +78,7 @@ namespace EasyCms.Web.API
                     }
                     if (spidandSku.Length == 2)
                     {
-                        
+
                         //开启规格的商品
                         string skuid = spidandSku[1];
                         if (!string.IsNullOrWhiteSpace(skuid))
@@ -88,7 +88,24 @@ namespace EasyCms.Web.API
                     }
                 }
                 DataTable dt = new ShopShoppingCartsBll().GetCardInfo(productIDS, SKUIDS, host);
-                return dt.Format();
+                DataTable dtReturn = dt.Clone();
+                foreach (string item in cardShops)
+                {
+                    string[] spidandSku = item.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                    string spid = spidandSku[0];
+                    string skuid = spidandSku.Length == 2 ? spidandSku[1] : null;
+                    string where = string.Format("ID='{0}'", spid);
+                    if (string.IsNullOrEmpty(skuid))
+                    {
+                        where += " AND SKUID is null ";
+                    }
+                    else
+                    { where += string.Format(" AND SKUID ='{0}' ", skuid); }
+                    DataRow dr = dt.Select(where).FirstOrDefault();
+                    dtReturn.ImportRow(dr);
+
+                }
+                return dtReturn.Format();
 
 
             }

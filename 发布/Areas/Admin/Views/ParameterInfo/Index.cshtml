@@ -11,8 +11,8 @@
             <div class="l-list">
                 <ul class="icon-list">
                     <li><a class="add" href="@Url.Action("Edit")"><i></i><span>新增</span></a></li>
-                    <li><a class="add" href="javascript:;" onclick="Edit();"><i></i><span>编辑</span></a></li>
-                    <li><a class="del" href="javascript:;" onclick="Del( );"><i></i><span>删除</span></a></li>
+                    <li><a class="add" href="javascript:;" onclick="EditTree('treeGrid', '@Url.Action("Edit")');"><i></i><span>编辑</span></a></li>
+                    <li><a class="del" href="javascript:;" onclick="DelTree('treeGrid', '@Url.Action("Delete")');"><i></i><span>删除</span></a></li>
                 </ul>
             </div>
         </div>
@@ -28,100 +28,23 @@
 @section  scripts{
 
     <script type="text/javascript">
-        $(document).ready(function () {
+    $(document).ready(function () {
+        var url = "@Url.Action("GetList")";
+        var datafields = [{ name: 'ID' }, { name: 'ParentID' }, { name: 'Code' }, { name: 'Name' },
 
-            var source =
-             {
-                 dataType: "json",
-                 dataFields: [
+{ name: 'ClassCode' }, { name: 'IsDetails' }, { name: 'Series' }, { name: 'IsSystem' }, { name: 'IsEdit' },
 
-    { name: 'ID', type: 'string' },
+{ name: 'IsDelete' }, { name: 'IsEnable' }, { name: 'Note' }, { name: 'OrderNo' }];
+        var columns = [
+{ text: '编码', dataField: 'Code', width: 200, cellsalign: "left" },
+         { text: '名称', dataField: 'Name', width: 200, cellsalign: "left" },
+         { text: '系统参数', dataField: 'IsSystem', width: 80 },
+         { text: '可编辑', dataField: 'IsEdit', width: 50 },
+         { text: '可删除', dataField: 'IsDelete', width: 50 },
+         { text: '可用', dataField: 'IsEnable', width: 50 },
+         { text: '备注', dataField: 'Note', cellsalign: "left" }];
+        CreateTree("treeGrid", url, datafields, columns);
 
-    { name: 'ParentID', type: 'string' },
-
-    { name: 'Code', type: 'string' },
-
-    { name: 'Name', type: 'string' },
-
-    { name: 'ClassCode', type: 'string' },
-
-    { name: 'IsDetails', type: 'string' },
-
-    { name: 'Series', type: 'string' },
-
-    { name: 'IsSystem', type: 'string' },
-
-    { name: 'IsEdit', type: 'string' },
-
-    { name: 'IsDelete', type: 'string' },
-
-    { name: 'IsEnable', type: 'string' },
-
-    { name: 'Note', type: 'string' },
-
-    { name: 'OrderNo', type: 'string' }
-
-                 ],
-                 timeout: 10000,
-                 hierarchy:
-                 {
-                     keyDataField: { name: 'ID' },
-                     parentDataField: { name: 'ParentID' }
-                 },
-                 id: 'ID',
-                 root: 'Rows',
-                 url: " @Url.Action("GetList", "ParameterInfo", new { area = "Admin" })"
-             };
-            var dataAdapter = new $.jqx.dataAdapter(source);
-            var totalHeight = $(window).outerHeight();
-            if (totalHeight == 0) {
-                totalHeight = $(window).clientHeight();
-            }
-            var topHight = 50;
-
-            var middleHeight = totalHeight - topHight;
-
-            $("#treeGrid").jqxTreeGrid(
-                       {
-                           width: "95%",
-                           height: middleHeight,
-                           source: dataAdapter,
-                           columns: [
-             { text: '编码', dataField: 'Code', type: 'string', width: 200 },
-             { text: '名称', dataField: 'Name', type: 'string', width: 200 },
-             { text: '系统参数', dataField: 'IsSystem', type: 'string', width: 80 },
-             { text: '可编辑', dataField: 'IsEdit', type: 'string', width: 50 },
-             { text: '可删除', dataField: 'IsDelete', type: 'string', width: 50 },
-             { text: '可用', dataField: 'IsEnable', type: 'string', width: 50 },
-             { text: '备注', dataField: 'Note', type: 'string' }
-                           ]
-                       });
-        });
-    </script>
-    <script type="text/javascript">
-        function Edit() {
-            var data = $("#treeGrid").jqxTreeGrid('getSelection');
-            if (data.length == 1) {
-
-                href = "@Url.Action("Edit", new  { area="admin" })";
-                location.href = href + "/" + data[0].ID;
-            } else { ErrorMsg("请选择一条数据"); }
-
-
-        }
-
-        function Del() {
-            var data = $("#treeGrid").jqxTreeGrid('getSelection');
-            if (data.length == 1) {
-
-                href = "@Url.Action("Delete", new { area = "admin" })";
-                $.post(href, { ID: data[0].ID }, function (d) {
-                    ErrorMsg(d);
-                    if (d.indexOf("成功") > -1) {
-                        $("#treeGrid").jqxTreeGrid('deleteRow', data[0].ID);
-                    }
-                });
-            } else { ErrorMsg("请选择一条数据"); }
-        }
+    });
     </script>
 }

@@ -11,8 +11,8 @@
             <div class="l-list">
                 <ul class="icon-list">
                     <li><a class="add" href="@Url.Action("Edit")"><i></i><span>新增</span></a></li>
-                    <li><a class="add" href="javascript:;" onclick="Edit();"><i></i><span>编辑</span></a></li>
-                    <li><a class="del" href="javascript:;" onclick="Del( );"><i></i><span>删除</span></a></li>
+                    <li><a class="add" href="javascript:;" onclick="EditGrid('jqxgrid', '@Url.Action("Edit")');"><i></i><span>编辑</span></a></li>
+                    <li><a class="del" href="javascript:;" onclick="DelGrid('jqxgrid', '@Url.Action("Delete", new { area = "admin" })');"><i></i><span>删除</span></a></li>
                 </ul>
             </div>
         </div>
@@ -30,156 +30,45 @@
     <script type="text/javascript">
         $(document).ready(function () {
             var url = "@Url.Action("GetList")";
-            // prepare the data
-            var source =
-            {
-                datatype: "json",
-                cache: false,
-                datafields: [
+            var datafields = [{ name: 'ID' }, { name: 'Name' }, { name: 'CouponType' }, { name: 'ClassId' },
 
-		{ name: 'ID', type: 'string' },
+		{ name: 'SendCount' }, { name: 'PreName' }, { name: 'CpLength' }, { name: 'IsPwd' },
 
-		{ name: 'Name', type: 'string' },
+		{ name: 'JE' }, { name: 'NeedPoint' }, { name: 'QxLx' }, { name: 'IsCongZengSongKaiShi' },
 
-		{ name: 'CouponType', type: 'string' },
+		{ name: 'StartDate' }, { name: 'EndDate' }, { name: 'QXTS' }, { name: 'CategoryId' },
 
-		{ name: 'ClassId', type: 'string' },
+		{ name: 'ProductId' }, { name: 'ProductSku' }, { name: 'ImageUrl' }, { name: 'MinPrice' },
 
-		{ name: 'SendCount', type: 'string' },
+		{ name: 'MaxPrice' }, { name: 'IsEnable' }, { name: 'CreateDate' }, { name: 'Createor' },
 
-		{ name: 'PreName', type: 'string' },
+		{ name: 'SupplierId' }, { name: 'Status' }, { name: 'Note' }];
+            var columns = [
+  { text: '优惠券名称', dataField: 'Name', cellsalign: "left", width: 200 },
 
-		{ name: 'CpLength', type: 'string' },
+  { text: '优惠券类型', dataField: 'CouponType', width: 200 },
 
-		{ name: 'IsPwd', type: 'string' },
+  { text: '优惠券分类', dataField: 'ClassId', width: 200 },
 
-		{ name: 'JE', type: 'string' },
+  { text: '面值', dataField: 'JE', cellsalign: "right", width: 200 },
 
-		{ name: 'NeedPoint', type: 'string' },
+  { text: '需要积分', dataField: 'NeedPoint', align: "center", cellsalign: "right", width: 200 },
 
-		{ name: 'QxLx', type: 'string' },
+  { text: '期限类型', dataField: 'QxLx', width: 200 },
 
-		{ name: 'IsCongZengSongKaiShi', type: 'string' },
+  { text: '有效时间起', dataField: 'StartDate', width: 200 },
 
-		{ name: 'StartDate', type: 'string' },
+  { text: '有效时间止', dataField: 'EndDate', width: 200 },
 
-		{ name: 'EndDate', type: 'string' },
+  { text: '期限天数', dataField: 'QXTS', align: "center", cellsalign: "right", width: 200 },
+  { text: '启用', dataField: 'IsEnable', width: 200 },
 
-		{ name: 'QXTS', type: 'string' },
-
-		{ name: 'CategoryId', type: 'string' },
-
-		{ name: 'ProductId', type: 'string' },
-
-		{ name: 'ProductSku', type: 'string' },
-
-		{ name: 'ImageUrl', type: 'string' },
-
-		{ name: 'MinPrice', type: 'string' },
-
-		{ name: 'MaxPrice', type: 'string' },
-
-		{ name: 'IsEnable', type: 'string' },
-
-		{ name: 'CreateDate', type: 'string' },
-
-		{ name: 'Createor', type: 'string' },
-
-		{ name: 'SupplierId', type: 'string' },
-
-		{ name: 'Status', type: 'string' },
-
-		{ name: 'Note', type: 'string' },
-
-                ],
-                beforeprocessing: function (data) {
-                    source.totalrecords = data.total;
-                },
-                root: 'Rows',
-                id: 'ID',
-                url: url,
-            };
-            var dataAdapter = new $.jqx.dataAdapter(source);
-
-            $("#jqxgrid").jqxGrid(
-            {
-                width: "95%",
-                  autoheight: true,
-                source: dataAdapter,
-                columnsresize: true,
-                virtualmode: true,
-                rendergridrows: function (params) {
-                    return params.data;
-                },
-                pagerrenderer: pagerrenderer,
-                pageSize: 20,
-                pageable: true,
-                columns: [
-
- 
-
-  { text: '优惠券名称', dataField: 'Name',align: "center", cellsalign: "center", type: 'string', width: 200 },
-
-  { text: '优惠券类型', dataField: 'CouponType',align: "center", cellsalign: "center", type: 'string', width: 200 },
-
-  { text: '优惠券分类', dataField: 'ClassId',align: "center", cellsalign: "center", type: 'string', width: 200 },
-
-   
-
-  { text: '面值', dataField: 'JE',align: "center", cellsalign: "center", type: 'string', width: 200 },
-
-  { text: '需要积分', dataField: 'NeedPoint',align: "center", cellsalign: "center", type: 'string', width: 200 },
-
-  { text: '期限类型', dataField: 'QxLx',align: "center", cellsalign: "center", type: 'string', width: 200 }, 
-
-  { text: '有效时间起', dataField: 'StartDate',align: "center", cellsalign: "center", type: 'string', width: 200 },
-
-  { text: '有效时间止', dataField: 'EndDate',align: "center", cellsalign: "center", type: 'string', width: 200 },
-
-  { text: '期限天数', dataField: 'QXTS',align: "center", cellsalign: "center", type: 'string', width: 200 }, 
-  { text: '启用', dataField: 'IsEnable',align: "center", cellsalign: "center", type: 'string', width: 200 },
-
-  { text: '创建日期', dataField: 'CreateDate',align: "center", cellsalign: "center", type: 'string', width: 200 } 
-
-                ]
-            });
+  { text: '创建日期', dataField: 'CreateDate', width: 200 }];
+            CreateGrid("jqxgrid", url, datafields, columns);
 
 
         });
     </script>
-    <script type="text/javascript">
-        function Edit() {
-            var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindex');
-            if (rowindex == -1) {
-                ErrorMsg("请选择一条数据");
-            } else {
-                var data = $('#jqxgrid').jqxGrid('getrowdata', rowindex);
 
-                if (data) {
-
-                    href = "@Url.Action("Edit", new  { area="admin" })";
-                    location.href = href + "/" + data.ID;
-                } else { ErrorMsg("请选择一条数据"); }
-            }
-
-
-        }
-
-        function Del() {
-            var rowindexes = $('#jqxgrid').jqxGrid('getselectedrowindexes');
-
-
-            if (rowindexes.length == 1) {
-                var data = $('#jqxgrid').jqxGrid('getrowdata', rowindexes[0]);
-                href = "@Url.Action("Delete", new { area = "admin" })";
-                $.post(href, { ID: data.ID }, function (d) {
-                    ErrorMsg(d);
-                    if (d.indexOf("成功") > -1) {
-                        $("#jqxgrid").jqxGrid('deleteRow', rowindexes[0]);
-                    }
-                });
-            } else { ErrorMsg("请选择一条数据"); }
-        }
-    </script>
 
 }

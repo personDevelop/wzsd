@@ -1636,6 +1636,10 @@ namespace EasyCms.Model
         #endregion
     }
 
-  
 
+    public partial class ShopOrder
+    {
+        [NotDbCol]
+        public List<ShopOrderItem> OrderItems { get; set; }
+    }
 }

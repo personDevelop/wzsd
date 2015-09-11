@@ -11,8 +11,8 @@
             <div class="l-list">
                 <ul class="icon-list">
                     <li><a class="add" href="@Url.Action("Edit")"><i></i><span>新增</span></a></li>
-                    <li><a class="add" href="javascript:;" onclick="Edit();"><i></i><span>编辑</span></a></li>
-                    <li><a class="del" href="javascript:;" onclick="Del( );"><i></i><span>删除</span></a></li>
+                    <li><a class="add" href="javascript:;" onclick="EditTree('treeGrid', '@Url.Action("Edit")');"><i></i><span>编辑</span></a></li>
+                    <li><a class="del" href="javascript:;" onclick="DelTree('treeGrid', '@Url.Action("Delete")');"><i></i><span>删除</span></a></li>
                 </ul>
             </div>
         </div>
@@ -28,142 +28,38 @@
 @section  scripts{
 
     <script type="text/javascript">
+
         $(document).ready(function () {
+            var url = "@Url.Action("GetList")";
+            var datafields = [{ name: 'ID' }, { name: 'Code' }, { name: 'Name' }, { name: 'FuncType' },
 
-            var source =
-             {
-                 dataType: "json",
-                 dataFields: [
+    { name: 'Image' }, { name: 'AccessType' }, { name: 'URL' }, { name: 'CallArea' },
 
-		{ name: 'ID', type: 'string' },
+    { name: 'CallControler' }, { name: 'CallAction' }, { name: 'Enable' },
 
-		{ name: 'Code', type: 'string' },
+    { name: 'Visible' }, { name: 'MultilInstance' }, { name: 'ShowText' },
 
-		{ name: 'Name', type: 'string' },
+    { name: 'ParentID' }, { name: 'ClassCode' }, { name: 'OrderNo' },
 
-		{ name: 'FuncType', type: 'string' },
+    { name: 'IsMustNot' }, { name: 'IsMust' }, { name: 'Description' }];
+            var columns = [
+   { text: '编码', dataField: 'Code', cellsalign: "left", width: 300 },
+{ text: '名称', dataField: 'Name', cellsalign: "left", width: 200 },
+{ text: '显示名称', dataField: 'ShowText', cellsalign: "left", width: 200 },
+{ text: '功能类型', dataField: 'FuncType', width: 50 },
+{ text: '访问类型', dataField: 'AccessType', width: 50 },
+{ text: '网址', dataField: 'URL', cellsalign: "left", width: 200 },
+{ text: '域', dataField: 'CallArea', cellsalign: "left", width: 50 },
+{ text: '控制器', dataField: 'CallControler', cellsalign: "left", width: 50 },
+{ text: '动作', dataField: 'CallAction', cellsalign: "left", width: 50 },
+{ text: '启用', dataField: 'Enable', width: 50 },
+{ text: '可见', dataField: 'Visible', width: 50 },
+{ text: '多开', dataField: 'MultilInstance', width: 50 },
+{ text: '顺序', dataField: 'OrderNo', cellsalign: "right", width: 50 }];
+            CreateTree("treeGrid", url, datafields, columns);
 
-		{ name: 'Image', type: 'string' },
-
-		{ name: 'AccessType', type: 'string' },
-
-		{ name: 'URL', type: 'string' },
-
-		{ name: 'CallArea', type: 'string' },
-
-		{ name: 'CallControler', type: 'string' },
-
-		{ name: 'CallAction', type: 'string' },
-
-		{ name: 'Enable', type: 'string' },
-
-		{ name: 'Visible', type: 'string' },
-
-		{ name: 'MultilInstance', type: 'string' },
-
-		{ name: 'ShowText', type: 'string' },
-
-		{ name: 'ParentID', type: 'string' },
-
-		{ name: 'ClassCode', type: 'string' },
-
-		{ name: 'OrderNo', type: 'string' },
-
-		{ name: 'IsMustNot', type: 'string' },
-
-		{ name: 'IsMust', type: 'string' },
-
-		{ name: 'Description', type: 'string' },
-
-
-                 ],
-                 timeout: 10000,
-                 hierarchy:
-                 {
-                     keyDataField: { name: 'ID' },
-                     parentDataField: { name: 'ParentID' }
-                 },
-                 id: 'ID',
-                 root: 'Rows',
-                 url: " @Url.Action("GetList", "FunctionInfo", new { area = "Admin" })"
-             };
-            var dataAdapter = new $.jqx.dataAdapter(source);
-         
-            var totalHeight = $(window).outerHeight();
-            if (totalHeight == 0) {
-                totalHeight = $(window).clientHeight();
-            }
-            var topHight = 50;
-
-            var middleHeight = totalHeight - topHight;
-
-            $("#treeGrid").jqxTreeGrid(
-                       {
-                           width: "95%",
-
-                           source: dataAdapter,
-                           columns: [
-
-  
-  { text: '编码', dataField: 'Code', align: "center", cellsalign: "left", type: 'string', width: 300 },
-
-  { text: '名称', dataField: 'Name', align: "center", cellsalign: "center",type: 'string', width: 200 },
-
-  { text: '显示名称', dataField: 'ShowText', align: "center", cellsalign: "center", type: 'string', width: 200 },
-  { text: '功能类型', dataField: 'FuncType', align: "center", cellsalign: "center",type: 'string', width:50 },
-
-  
-
-  { text: '访问类型', dataField: 'AccessType', align: "center", cellsalign: "center",type: 'string', width: 50 },
-
-  { text: '网址', dataField: 'URL', align: "center", cellsalign: "center",type: 'string', width: 200 },
-
-  { text: '域', dataField: 'CallArea', align: "center", cellsalign: "center",type: 'string', width: 50 },
-
-  { text: '控制器', dataField: 'CallControler', align: "center", cellsalign: "center",type: 'string', width:50 },
-
-  { text: '动作', dataField: 'CallAction', align: "center", cellsalign: "center",type: 'string', width: 50 },
-
-  { text: '启用', dataField: 'Enable', align: "center", cellsalign: "center",type: 'string', width: 50 },
-
-  { text: '可见', dataField: 'Visible', align: "center", cellsalign: "center",type: 'string', width: 50 },
-
-  { text: '多开', dataField: 'MultilInstance', align: "center", cellsalign: "center",type: 'string', width: 50 },
-
-
-   
-  { text: '顺序', dataField: 'OrderNo', align: "center", cellsalign: "center",type: 'string', width: 50 } 
-
-   
-
-                           ]
-                       });
         });
-    </script>
-    <script type="text/javascript">
-        function Edit() {
-            var data = $("#treeGrid").jqxTreeGrid('getSelection');
-            if (data.length == 1) {
-
-                href = "@Url.Action("Edit", new  { area="admin" })";
-                location.href = href + "/" + data[0].ID;
-            } else { ErrorMsg("请选择一条数据"); }
 
 
-        }
-
-        function Del() {
-            var data = $("#treeGrid").jqxTreeGrid('getSelection');
-            if (data.length == 1) {
-
-                href = "@Url.Action("Delete", new { area = "admin" })";
-                $.post(href, { ID: data[0].ID }, function (d) {
-                    ErrorMsg(d);
-                    if (d.indexOf("成功") > -1) {
-                        $("#treeGrid").jqxTreeGrid('deleteRow', data[0].ID);
-                    }
-                });
-            } else { ErrorMsg("请选择一条数据"); }
-        }
     </script>
 }

@@ -73,9 +73,10 @@ namespace EasyCms.Dal
                 .Select(ShopPaymentTypes._.ID, ShopPaymentTypes._.AllowRecharge, ShopPaymentTypes._.Charge, ShopPaymentTypes._.Name).ToDataTable();
         }
 
-        internal string GetPayTypeName(string p1, bool p2)
+        internal string GetPayTypeName(string payTypeID, bool isCashOnDelivery)
         {
-            throw new NotImplementedException();
+            return Dal.From<ShopPaymentTypes>().Where(ShopPaymentTypes._.ID == payTypeID).Select(ShopPaymentTypes._.Name)
+                .ToScalar() as string;
         }
     }
 

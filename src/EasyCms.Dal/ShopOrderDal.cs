@@ -227,7 +227,7 @@ namespace EasyCms.Dal
                         CusomerAndCoupon upcoupon = new CusomerAndCoupon() { RecordStatus = StatusType.update, Where = CusomerAndCoupon._.ID == promot.ID };
                         ExpressionClip HaveCount = new ExpressionClip("HaveCount-@HaveCount");
                         HaveCount.Parameters.Add("HaveCount", promot.UsingCount);
-                        upcoupon.SetModifiedProperty(CusomerAndCoupon._.HaveCount, HaveCount); 
+                        upcoupon.SetModifiedProperty(CusomerAndCoupon._.HaveCount, HaveCount);
                         ExpressionClip UsedCount = new ExpressionClip("UsedCount+@UsedCount");
                         HaveCount.Parameters.Add("UsedCount", promot.UsingCount);
                         upcoupon.SetModifiedProperty(CusomerAndCoupon._.UsedCount, UsedCount);
@@ -336,7 +336,7 @@ namespace EasyCms.Dal
                     MemberName = accuont.Name,
                     MemberEmail = accuont.Email,
                     MemberCallPhone = accuont.ContactPhone,
-                    RegionID = order.AddressID,
+                    //RegionID = order.AddressID,//根据地址id 获取地区id
                     PayTypeID = order.PayTypeID,
                     PayTypeName = new ShopPaymentTypesDal().GetPayTypeName(order.PayTypeID, order.CashOnDelivery),
                     IsFreeShiping = order.Freight == 0,
@@ -678,6 +678,97 @@ namespace EasyCms.Dal
                 }
             }
             return IsFirst;
+        }
+
+        public List<ShopOrder> GetMyOrder(ManagerUserInfo user, int queryPage, int queryStatus, string otherWhere, out string err)
+        {
+            err = string.Empty;
+            WhereClip where = ShopOrder._.MemberID == user.ID;
+            if (queryStatus > -1)
+            {
+                where = where && ShopOrder._.OrderStatus == queryStatus;
+            }
+            if (!string.IsNullOrWhiteSpace(otherWhere))
+            {
+                where = where && new WhereClip(otherWhere);
+            }
+            int recordcount = 0;
+            int pageCount = 0;
+            List<ShopOrder> list = Dal.From<ShopOrder>().Where(where)
+                .Select(ShopOrder._.ID, ShopOrder._.ParentID, ShopOrder._.OrderType,
+                ShopOrder._.OrderResId,
+                ShopOrder._.PayTypeName,
+                ShopOrder._.ExpressCompanyName,
+                ShopOrder._.ShipOrderNum,
+                ShopOrder._.FreightActual,
+                ShopOrder._.ShipStatus,
+                ShopOrder._.PayStatus,
+                ShopOrder._.OrderStatus,
+                ShopOrder._.CommentStatus,
+                ShopOrder._.TotalPrice, ShopOrder._.CreateDate)
+                .OrderBy(ShopOrder._.CreateDate.Desc).ToDataTable(20, queryPage, ref pageCount, ref recordcount).ToList<ShopOrder>();
+            if (list.Count > 0)
+            {
+                List<string> orderIDS = list.Select(p => p.ID).ToList();
+                List<ShopOrderItem> orderItems = Dal.From<ShopOrderItem>()
+                    .Where(ShopOrderItem._.OrderID.In(list))
+                    .Select(ShopOrderItem._.ID, ShopOrderItem._.OrderID, ShopOrderItem._.BrandName,
+                    ShopOrderItem._.Count, ShopOrderItem._.HandselCount, ShopOrderItem._.IsHandsel,
+                    ShopOrderItem._.IsVirtualProduct, ShopOrderItem._.MarketPrice,
+                    ShopOrderItem._.Price, ShopOrderItem._.Preferential,
+                    ShopOrderItem._.ProductID, ShopOrderItem._.ProductCode, ShopOrderItem._.ProductSKU,
+                    ShopOrderItem._.ProductName, ShopOrderItem._.ProductThumb, ShopOrderItem._.TotalPrice,
+                    ShopOrderItem._.Sequence).List<ShopOrderItem>();
+                foreach (ShopOrder item in list)
+                {
+                    item.OrderItems = orderItems.Where(p => p.OrderID == item.ID).OrderBy(p => p.Sequence).ToList();
+                }
+            }
+            return list;
+        }
+
+        public ShopOrder GetOrder(string id, string userid, out string err)
+        {
+            err = string.Empty;
+            WhereClip where = ShopOrder._.ID == id; 
+            ShopOrder order = Dal.From<ShopOrder>().Where(where)
+                .Select(ShopOrder._.ID, ShopOrder._.ParentID, ShopOrder._.OrderType,
+                ShopOrder._.OrderResId,
+                ShopOrder._.PayTypeName,
+                ShopOrder._.ExpressCompanyName,
+                ShopOrder._.ShipOrderNum,
+                ShopOrder._.FreightActual,
+                ShopOrder._.ShipStatus,
+                ShopOrder._.PayStatus,
+                ShopOrder._.OrderStatus,
+                ShopOrder._.CommentStatus,
+                ShopOrder._.TotalPrice, ShopOrder._.CreateDate)
+                .ToFirst<ShopOrder>();
+            if (order == null)
+            {
+                err = "订单不存在";
+            }
+            else if (order.MemberID != userid)
+            {
+                err = "不是您的订单，您不能查看";
+            }
+            else
+            {
+
+                List<ShopOrderItem> orderItems = Dal.From<ShopOrderItem>()
+                    .Where(ShopOrderItem._.OrderID == id)
+                    .Select(ShopOrderItem._.ID, ShopOrderItem._.OrderID, ShopOrderItem._.BrandName,
+                    ShopOrderItem._.Count, ShopOrderItem._.HandselCount, ShopOrderItem._.IsHandsel,
+                    ShopOrderItem._.IsVirtualProduct, ShopOrderItem._.MarketPrice,
+                    ShopOrderItem._.Price, ShopOrderItem._.Preferential,
+                    ShopOrderItem._.ProductID, ShopOrderItem._.ProductCode, ShopOrderItem._.ProductSKU,
+                    ShopOrderItem._.ProductName, ShopOrderItem._.ProductThumb, ShopOrderItem._.TotalPrice,
+                    ShopOrderItem._.Sequence).List<ShopOrderItem>();
+
+                order.OrderItems = orderItems;
+
+            }
+            return order;
         }
     }
 

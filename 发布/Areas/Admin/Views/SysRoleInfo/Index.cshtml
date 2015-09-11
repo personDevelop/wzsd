@@ -11,8 +11,8 @@
             <div class="l-list">
                 <ul class="icon-list">
                     <li><a class="add" href="@Url.Action("Edit")"><i></i><span>新增</span></a></li>
-                    <li><a class="add" href="javascript:;" onclick="Edit();"><i></i><span>编辑</span></a></li>
-                    <li><a class="del" href="javascript:;" onclick="Del( );"><i></i><span>删除</span></a></li>
+                    <li><a class="add" href="javascript:;" onclick="EditGrid('jqxgrid', '@Url.Action("Edit")');"><i></i><span>编辑</span></a></li>
+                    <li><a class="del" href="javascript:;" onclick="DelGrid('jqxgrid', '@Url.Action("Delete")');"><i></i><span>删除</span></a></li>
                 </ul>
             </div>
         </div>
@@ -30,96 +30,23 @@
     <script type="text/javascript">
         $(document).ready(function () {
             var url = "@Url.Action("GetList")";
-            // prepare the data
-            var source =
-            {
-                datatype: "json",
-                cache: false,
-                datafields: [
+            var url = "@Url.Action("GetList")";
+           
+            var datafields = [{ name: 'ID' }, { name: 'Code' }, { name: 'Name' },
 
-		{ name: 'ID', type: 'string' },
+		{ name: 'Enable' }, { name: 'Note' }, { name: 'RoleClass' }];
+            var columns = [
+{ text: '编号', dataField: 'Code', type: 'string', width: 200 },
 
-		{ name: 'Code', type: 'string' },
+  { text: '名称', dataField: 'Name', cellsalign: "left", type: 'string', width: 200 },
 
-		{ name: 'Name', type: 'string' },
+  { text: '可用', dataField: 'Enable', type: 'string', width: 200 },
 
-		{ name: 'Enable', type: 'string' },
-
-		{ name: 'Note', type: 'string' },
-
-		{ name: 'RoleClass', type: 'string' },
-
-                ],
-                beforeprocessing: function (data) {
-                    source.totalrecords = data.total;
-                },
-                root: 'Rows',
-                id: 'id',
-                url: url,
-            };
-            var dataAdapter = new $.jqx.dataAdapter(source);
-
-            $("#jqxgrid").jqxGrid(
-            {
-                width: "95%",
-                autoheight: true,
-                source: dataAdapter,
-                columnsresize: true,
-                virtualmode: true,
-                rendergridrows: function (params) {
-                    return params.data;
-                },
-                pagerrenderer: pagerrenderer,
-                pageSize: 20,
-                pageable: true,
-                columns: [ 
-
-  { text: '编号', dataField: 'Code', align: "center", cellsalign: "center", type: 'string', width: 200 },
-
-  { text: '名称', dataField: 'Name', align: "center", cellsalign: "center", type: 'string', width: 200 },
-
-  { text: '可用', dataField: 'Enable', align: "center", cellsalign: "center", type: 'string', width: 200 },
-
-  { text: '角色分类', dataField: 'RoleClass', align: "center", cellsalign: "center", type: 'string', width: 200 } 
-                ]
-            });
-
-
+  { text: '角色分类', dataField: 'RoleClass', type: 'string', width: 200 }];
+            CreateGrid("jqxgrid", url, datafields, columns );
+             
         });
     </script>
-    <script type="text/javascript">
-        function Edit() {
-            var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindex');
-            if (rowindex == -1) {
-                ErrorMsg("请选择一条数据");
-            } else {
-                var data = $('#jqxgrid').jqxGrid('getrowdata', rowindex);
-
-                if (data) {
-
-                    href = "@Url.Action("Edit", new  { area="admin" })";
-                    location.href = href + "/" + data.ID;
-                } else { ErrorMsg("请选择一条数据"); }
-            }
-
-
-        }
-
-        function Del() {
-            var rowindexes = $('#jqxgrid').jqxGrid('getselectedrowindexes');
-
-
-            if (rowindexes.length == 1) {
-                var data = $('#jqxgrid').jqxGrid('getrowdata', rowindexes[0]);
-                href = "@Url.Action("Delete", new { area = "admin" })";
-                $.post(href, { ID: data.ID }, function (d) {
-                    ErrorMsg(d);
-                    if (d.indexOf("成功") > -1) {
-                        $("#jqxgrid").jqxGrid('deleteRow', rowindexes[0]);
-                    }
-                });
-            } else { ErrorMsg("请选择一条数据"); }
-        }
-    </script>
+   
 
 }
