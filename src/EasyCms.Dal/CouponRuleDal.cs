@@ -14,16 +14,10 @@ namespace EasyCms.Dal
     {
         public string Delete(string id)
         {
+            string error = "";
+            Dal.Delete("CouponRule", "ID", id, out error);
+            return error;
 
-            int i = Dal.Delete<CouponRule>(id);
-            if (i == 0)
-            {
-                return "删除失败";
-            }
-            else
-            {
-                return "成功删除优惠券";
-            }
         }
 
         public int Save(CouponRule item)
@@ -85,31 +79,31 @@ namespace EasyCms.Dal
                 where = CouponRule._.IsEnable == true;
             }
             return Dal.From<CouponRule>().Join<AttachFile>(CouponRule._.ImageUrl == AttachFile._.RefID, JoinType.leftJoin)
-                .Join<ParameterInfo>(CouponRule._.ClassId == ParameterInfo._.ID, JoinType.leftJoin)
+
                 .Select(CouponRule._.ID, CouponRule._.Name, CouponRule._.JE,
                 new ExpressionClip("case when QxLx=0 then '时间范围'  else   '固定天数' end ").Alias("QxLx")
                 , CouponRule._.StartDate, CouponRule._.EndDate, CouponRule._.QXTS,
-                new ExpressionClip("case when CouponType=0 then '普通优惠券' when CouponType=1 then '兑换优惠券' else '赠送优惠券' end ").Alias("CouponTypeName"),
-                CouponRule._.CouponType, CouponRule._.ClassId, ParameterInfo._.Name.Alias("ClassName"), AttachFile.GetFilePath(host))
+                new ExpressionClip("case when CouponType=0 then '普通优惠券' when CouponType=1 then '积分兑换优惠券' else '系统派发优惠券' end ").Alias("CouponTypeName"),
+                CouponRule._.CouponType, AttachFile.GetFilePath(host))
                 .Where(where)
                 .ToDataTable();
 
 
         }
 
-        internal List<CouponAccount> GetValidCouponList(List<OrderItem> orderItemlist)
+        internal List<CouponAccount> GetValidCouponList(List<OrderItem> orderItemlist, string accountID)
         {
             List<CouponAccount> result = new List<CouponAccount>();
             UpdateCoupon();
             List<string> productIdList = orderItemlist.Select(p => p.ProductID).ToList();
-            //获取当前时间所有可用的优惠券
+            //获取当前时间内该会员所有可用的优惠券
             List<CouponAccount> list = Dal.From<CusomerAndCoupon>()
 
                 .Join<CouponRule>(CusomerAndCoupon._.CouponID == CouponRule._.ID)
 
-                .Where(CouponRule._.IsEnable == true && CusomerAndCoupon._.IsOutDate == false && CusomerAndCoupon._.HaveCount > 0)
+                .Where(CusomerAndCoupon._.CustomerID == accountID && CouponRule._.IsEnable == true && CusomerAndCoupon._.IsOutDate == false && CusomerAndCoupon._.HaveCount > 0)
                 .Select(CusomerAndCoupon._.ID, CouponRule._.Name, CusomerAndCoupon._.CardValue, CusomerAndCoupon._.HaveCount,
-               CouponRule._.MinPrice,CouponRule._.IsCanCombie,
+               CouponRule._.MinPrice, CouponRule._.IsCanCombie,
                 CouponRule._.ProductId, CouponRule._.ProductSku, CouponRule._.CategoryId)
                 .OrderBy(CouponRule._.StartDate)
                 .List<CouponAccount>();
@@ -128,8 +122,15 @@ namespace EasyCms.Dal
 
                             }
                             else
-                            { //满足
-                                order.AddCoupon(item);
+                            {
+                                //满足 
+                                //然后检测当前订单内是否存在不满足的SKU
+                                if (!orderItemlist.Exists(p => p.Sku != item.ProductSku))
+                                {
+                                    result.Add(item);
+                                }
+
+
                             }
 
                         }
@@ -153,7 +154,11 @@ namespace EasyCms.Dal
 
                                 }
                                 else
-                                    order.AddCoupon(item);
+                                    //然后检测当前订单内是否存在不满足的商品ID
+                                    if (!orderItemlist.Exists(p => p.ProductID != item.ProductId))
+                                    {
+                                        result.Add(item);
+                                    }
 
                             }
                         }
@@ -177,7 +182,11 @@ namespace EasyCms.Dal
 
                                     }
                                     else
-                                        order.AddCoupon(item);
+                                        //然后检测当前订单内是否存在不满足的商品ID
+                                        if (!orderItemlist.Exists(p => !products.Contains(p.ProductID)))
+                                        {
+                                            result.Add(item);
+                                        }
 
                                 }
                             }
@@ -191,17 +200,13 @@ namespace EasyCms.Dal
                             //适合所有商品的优惠券,这个算在总订单里
                             //包含该种商品
                             //计算总个数 和总金额
-                            decimal totalPrice = orderItemlist.Sum(p => p.SalePrice);
-
-
-
-
+                            decimal totalPrice = orderItemlist.Sum(p => p.SalePrice); 
                             if (totalPrice < item.MinPrice && item.MinPrice > 0)
                             {
 
                             }
                             else
-                                result.Add(item); 
+                                result.Add(item);
                         }
 
             }
@@ -221,7 +226,7 @@ namespace EasyCms.Dal
         internal bool CheckValid(List<string> listCoupon)
         {
             UpdateCoupon();
-            if (Dal.Exists<CusomerAndCoupon>(CusomerAndCoupon._.ID.In(listCoupon) && CusomerAndCoupon._.IsOutDate==true))
+            if (Dal.Exists<CusomerAndCoupon>(CusomerAndCoupon._.ID.In(listCoupon) && CusomerAndCoupon._.IsOutDate == true))
             {
                 return false;
             }

@@ -346,13 +346,12 @@ $.fn.ruleMultiCheckbox = function () {
             $(newObj).click(function () {
                 if ($(this).hasClass("selected")) {
                     $(this).removeClass("selected");
-                    //parentObj.find(':checkbox').eq(indexNum).prop("checked",false);
+
                 } else {
                     $(this).addClass("selected");
-                    //parentObj.find(':checkbox').eq(indexNum).prop("checked",true);
                 }
                 parentObj.find(':checkbox').eq(indexNum).trigger("click"); //触发对应的checkbox的click事件
-                //alert(parentObj.find(':checkbox').eq(indexNum).prop("checked"));
+
             });
         });
     };

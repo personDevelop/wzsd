@@ -72,6 +72,7 @@
     <Compile Include="ShopPromotionDal.cs" />
     <Compile Include="ShopShippingAddressDal.cs" />
     <Compile Include="ShopShoppingCartsDal.cs" />
+    <Compile Include="SysDeleteCasCheckDal.cs" />
     <Compile Include="SysRoleInfoDal.cs" />
   </ItemGroup>
   <ItemGroup>

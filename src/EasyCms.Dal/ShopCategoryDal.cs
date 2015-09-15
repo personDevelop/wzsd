@@ -14,36 +14,9 @@ namespace EasyCms.Dal
     {
         public string Delete(string id)
         {
-            return "";
-            //if (string.IsNullOrWhiteSpace(id))
-            //{
-            //    return "要删除的参数值不能为空";
-            //}
-            //int state = (int)Dal.From<ShopCategory>().Select(ShopCategory._.State).ToScalar();
-            //if (state == (int)CategoryState.审核通过)
-            //{
-            //    return "当前新闻分类已审核通过,不能删除";
-            //}
-            ////判断是否已被新闻引用过
-            //bool Eixt = Dal.Exists<NewsInfo>(NewsInfo._.ClassID == id);
-            //if (Eixt)
-            //{
-            //    return "当前新闻分类已被使用,不能删除";
-            //}
-            //Eixt = Dal.Exists<ShopCategory>(ShopCategory._.ParentID == id);
-            //if (Eixt)
-            //{
-            //    return "当前新闻分类下含有子分类 ,不能删除";
-            //}
-            //int i = Dal.Delete<ShopCategory>(id);
-            //if (i == 0)
-            //{
-            //    return "删除失败";
-            //}
-            //else
-            //{
-            //    return "成功删除分类";
-            //}
+            string error = "";
+            Dal.Delete("ShopCategory", "ID", id, out error);
+            return error;
         }
 
         public int Save(ShopCategory item)

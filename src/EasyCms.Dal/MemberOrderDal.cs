@@ -13,8 +13,10 @@ namespace EasyCms.Dal
     public class MemberOrderDal : Sharp.Data.BaseManager
     {
         public string Delete(string id)
-        { 
-                return "删除失败"; 
+        {
+            string error = "";
+            Dal.Delete("MemberOrder", "ID", id, out error);
+            return error;
         }
 
         public int Save(MemberOrder item)

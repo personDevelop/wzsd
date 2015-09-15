@@ -16,7 +16,7 @@
 </div>
 <div class="tab-content">
 
-    @Html.HiddenFor(model => model.ID)
+    @Html.HiddenFor(model => model.ID) 
     @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())
     
     @Html.ValidationSummary()

@@ -30,14 +30,12 @@
 
     @HelperExtend.TextBox("Name", "优惠券名称", defaultval: Model.Name, hint: "")
 
-    @HelperExtend.RadioGroup("CouponType", "优惠券类型", "0,1,2", "普通优惠券,兑换优惠券,赠送优惠券", defaultval: Model.CouponType, hint: "")
-    @HelperExtend.DropDownList("ClassId", "获取方式", defaultval: Model.ClassId, downInfo: new DropDownListInfo()
-{
-    Url = Url.Action("GetIdAndNameByParentId", "ParameterInfo", new { area = "Admin", id = StaticValue.CouponType })
-})
-    @HelperExtend.RadioGroup("UseType", "使用方式", "0,1", "一次性,多次使用", defaultval: Model.UseType, hint: "一次性使用：多余的金额的不找零，目前系统暂不支持多次使用")
-    @HelperExtend.RadioGroup("IsCanCombie", "可合并使用", "true,false", "合并使用,单独使用", defaultval: Model.UseType, hint: "合并使用：可和其他优惠券一并使用，单独使用：不能和其他优惠券一并使用")
+    @HelperExtend.RadioGroup("CouponType", "优惠券类型", "0,1,2", "普通优惠券,积分兑换优惠券,系统派发优惠券", defaultval: Model.CouponType, hint: "")
+
+    @HelperExtend.RadioGroup("CanMutilUse", "可以使用多张", "false,true", "同一订单限制使用一张优惠券,不限制", defaultval: Model.CanMutilUse, hint: "一次购物，优惠券是否可以使用多张")
+    @HelperExtend.RadioGroup("IsCanCombie", "可合并使用", "true,false", "合并使用,单独使用", defaultval: Model.IsCanCombie, hint: "合并使用：可和其他优惠券一并使用，单独使用：不能和其他优惠券一并使用")
     @HelperExtend.TextBox("JE", "面值", defaultval: Model.JE, hint: "")
+
     @HelperExtend.TextBox("NeedPoint", "需要积分", defaultval: Model.NeedPoint, hint: "如果使用积分兑换的方式获取，需要多少积分")
     @HelperExtend.RadioGroup("QxLx", "期限类型", "0,1", "期限范围,固定天数", defaultval: Model.QxLx, hint: "")
 
@@ -60,7 +58,7 @@
 </div>
 
 <div class="tab-content" style="display:none">
-    @HelperExtend.TextBox("SendCount", "生成数量", defaultval: Model.SendCount, hint: "")
+    @HelperExtend.Number("MaxCount", "最大生成数量", defaultval: Model.MaxCount, hint: "当前优惠券最多生成数量，早到早得，如果为0则不限制")
 
     @HelperExtend.TextBox("PreName", "优惠券前缀", defaultval: Model.PreName, hint: "不超过5个字符")
 
@@ -68,12 +66,12 @@
 
     @HelperExtend.RadioGroup("IsPwd", "需要密码", "false,true", "否,是", defaultval: Model.IsPwd)
 
-    @HelperExtend.HelpEdit("CategoryId", "ShopCategoryName", "商品分类",defaultVal:Model.CategoryId, defaultText: Model.ShopCategoryName, hint: "不选择商品分类，就适合全部商品", dialogTitle: "选择商品分类", InnitFunc: "InnitFunc", DataControlID: "treeGrid", IsTree: true, onOk: "onOk")
+    @HelperExtend.HelpEdit("CategoryId", "ShopCategoryName", "商品分类", defaultVal: Model.CategoryId, defaultText: Model.ShopCategoryName, hint: "不选择商品分类，就适合全部商品", dialogTitle: "选择商品分类", InnitFunc: "InnitFunc", DataControlID: "treeGrid", IsTree: true, onOk: "onOk")
 
-    @HelperExtend.HelpEdit("ProductId", "ShopName", "商品", defaultVal:Model.ProductId,defaultText: Model.ShopName, hint: "不选择商品，就适合当前分类下所有商品", dialogTitle: "选择商品", InnitFunc: "InnitShopFunc", DataControlID: "shopGrid", onOk: "onSpOk", OnBefore: "OnBeforeSp")
+    @HelperExtend.HelpEdit("ProductId", "ShopName", "商品", defaultVal: Model.ProductId, defaultText: Model.ShopName, hint: "不选择商品，就适合当前分类下所有商品", dialogTitle: "选择商品", InnitFunc: "InnitShopFunc", DataControlID: "shopGrid", onOk: "onSpOk", OnBefore: "OnBeforeSp")
 
 
-    @HelperExtend.HelpEdit("ProductSku", "ShopSkuCode", "商品SKU", defaultVal:Model.ProductSku,defaultText: Model.ShopSkuCode, hint: "不选择SKU,就适合当前商品下所有规格类型商品", dialogTitle: "选择商品SKU", InnitFunc: "InnitSKUFunc",  DataControlID: "SKUGrid",onOk: "onSkuOk", OnBefore: "OnBeforeSku")
+    @HelperExtend.HelpEdit("ProductSku", "ShopSkuCode", "商品SKU", defaultVal: Model.ProductSku, defaultText: Model.ShopSkuCode, hint: "不选择SKU,就适合当前商品下所有规格类型商品", dialogTitle: "选择商品SKU", InnitFunc: "InnitSKUFunc", DataControlID: "SKUGrid", onOk: "onSkuOk", OnBefore: "OnBeforeSku")
 
 
 
@@ -102,7 +100,7 @@
                         remote: {
                             url: '@Url.Action("CheckRepeat")',
                             data: {
-                                ID: function () { return $("#ID").val(); }, 
+                                ID: function () { return $("#ID").val(); },
                                 RecordStatus: function () { return $("#RecordStatus").val(); },
                                 val: function () { return $("#Name").val(); },
                                 IsCode: false
@@ -120,15 +118,7 @@
                         remote: "名称重复"
                     }
                 },
-                errorPlacement: function (error, element) {
-
-                    if (element.is(":radio"))
-                        error.insertAfter($(element).parent());
-                    else if (element.is(":checkbox"))
-                        error.insertAfter($(element).parent());
-                    else
-                        error.insertAfter(element);
-                }
+                errorPlacement: errorPlace
 
             });
         })
@@ -138,8 +128,8 @@
 
         function isShow(element) {
             var val;
-            if (!element  ) {
-                val =0;
+            if (!element) {
+                val = 0;
             } else {
                 val = $(element).val();
             }
@@ -170,7 +160,7 @@
         });
     </script>
 
-    @Html.Partial("_Paging" )
+    @Html.Partial("_Paging")
     <script type="text/javascript">
         function OnBeforeSp() {
             var categorid = $("#CategoryId").val();

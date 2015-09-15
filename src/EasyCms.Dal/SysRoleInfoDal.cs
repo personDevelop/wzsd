@@ -14,12 +14,9 @@ namespace EasyCms.Dal
     {
         public string Delete(string id)
         {
-            if (string.IsNullOrWhiteSpace(id))
-            {
-                return "要删除的参数值不能为空";
-            }
-
-            return "删除失败";
+            string error = "";
+            Dal.Delete("SysRoleInfo", "ID", id, out error);
+            return error;
 
         }
 

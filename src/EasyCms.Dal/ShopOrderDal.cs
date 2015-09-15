@@ -163,11 +163,15 @@ namespace EasyCms.Dal
                 }
             }
 
-            //获取可用促销活动
 
-            order.Promotion = new ShopPromotionDal().GetValidPromotionList(list, accuontID);
-            //获取可用优惠券
-            order.Coupon = new CouponRuleDal().GetValidCouponList(list);
+            if (list.Exists(p => p.OrderType != 0))//只有普通购物才有促销和优惠券，团购、秒杀无优惠券和促销活动
+            {
+                //获取可用促销活动
+                order.Promotion = new ShopPromotionDal().GetValidPromotionList(list, accuontID);
+                //获取可用优惠券
+                order.Coupon = new CouponRuleDal().GetValidCouponList(list, accuontID);
+            }
+
             return order;
 
         }
@@ -187,7 +191,8 @@ namespace EasyCms.Dal
             //先检测商品对不对
             err = string.Empty;
             List<OrderItem> list = order.OrderItems;
-            List<BaseEntity> Orderlist = new List<BaseEntity>();
+            List<BaseEntity> Savelist = new List<BaseEntity>();
+            List<ShopOrder> Orderlist = new List<ShopOrder>();
             if (list == null || list.Count == 0)
             {
                 err = "请选择要购买的商品";
@@ -207,33 +212,35 @@ namespace EasyCms.Dal
                 {
                     activeID.Add(item.OrderResId, item.OrderType);
                 }
-                if (item.Coupon != null)
-                {
-                    foreach (var promot in item.Coupon)
-                    {
-                        //检测促销活动是否过期
+                #region 废弃
+                //if (item.Coupon != null)
+                //{
+                //    foreach (var promot in item.Coupon)
+                //    {
+                //        //检测促销活动是否过期
 
-                        if (!listCoupon.Contains(promot.ID))
-                        {
-                            listCoupon.Add(promot.ID);
-                        }
-                        decimal value = promot.CardValue * promot.UsingCount;
-                        //检测是否有超过使用比例,由于表结构没有支持该功能，暂时不实现了
-                        //if (true)
-                        //{
+                //        if (!listCoupon.Contains(promot.ID))
+                //        {
+                //            listCoupon.Add(promot.ID);
+                //        }
+                //        decimal value = promot.CardValue * promot.UsingCount;
+                //        //检测是否有超过使用比例,由于表结构没有支持该功能，暂时不实现了
+                //        //if (true)
+                //        //{
 
-                        //}
-                        CouponPrice += value;
-                        CusomerAndCoupon upcoupon = new CusomerAndCoupon() { RecordStatus = StatusType.update, Where = CusomerAndCoupon._.ID == promot.ID };
-                        ExpressionClip HaveCount = new ExpressionClip("HaveCount-@HaveCount");
-                        HaveCount.Parameters.Add("HaveCount", promot.UsingCount);
-                        upcoupon.SetModifiedProperty(CusomerAndCoupon._.HaveCount, HaveCount);
-                        ExpressionClip UsedCount = new ExpressionClip("UsedCount+@UsedCount");
-                        HaveCount.Parameters.Add("UsedCount", promot.UsingCount);
-                        upcoupon.SetModifiedProperty(CusomerAndCoupon._.UsedCount, UsedCount);
-                        Orderlist.Add(upcoupon);
-                    }
-                }
+                //        //}
+                //        CouponPrice += value;
+                //        CusomerAndCoupon upcoupon = new CusomerAndCoupon() { RecordStatus = StatusType.update, Where = CusomerAndCoupon._.ID == promot.ID };
+                //        ExpressionClip HaveCount = new ExpressionClip("HaveCount-@HaveCount");
+                //        HaveCount.Parameters.Add("HaveCount", promot.UsingCount);
+                //        upcoupon.SetModifiedProperty(CusomerAndCoupon._.HaveCount, HaveCount);
+                //        ExpressionClip UsedCount = new ExpressionClip("UsedCount+@UsedCount");
+                //        HaveCount.Parameters.Add("UsedCount", promot.UsingCount);
+                //        upcoupon.SetModifiedProperty(CusomerAndCoupon._.UsedCount, UsedCount);
+                //        Orderlist.Add(upcoupon);
+                //    }
+                //} 
+                #endregion
                 if (item.Promotion != null)
                 {
 
@@ -282,6 +289,14 @@ namespace EasyCms.Dal
                     {
                         listCoupon.Add(promot.ID);
                     }
+                    CusomerAndCoupon upcoupon = new CusomerAndCoupon() { RecordStatus = StatusType.update, Where = CusomerAndCoupon._.ID == promot.ID };
+                    ExpressionClip HaveCount = new ExpressionClip("HaveCount-@HaveCount");
+                    HaveCount.Parameters.Add("HaveCount", promot.UsingCount);
+                    upcoupon.SetModifiedProperty(CusomerAndCoupon._.HaveCount, HaveCount);
+                    ExpressionClip UsedCount = new ExpressionClip("UsedCount+@UsedCount");
+                    HaveCount.Parameters.Add("UsedCount", promot.UsingCount);
+                    upcoupon.SetModifiedProperty(CusomerAndCoupon._.UsedCount, UsedCount);
+                    Savelist.Add(upcoupon);
                     decimal value = promot.CardValue * promot.UsingCount;
                     //检测是否有超过使用比例,由于表结构没有支持该功能，暂时不实现了
                     //if (true)
@@ -303,13 +318,33 @@ namespace EasyCms.Dal
             #endregion
 
             //开始计算订单总额  总额计算方式是，商品总额-优惠券总额+运费
-            decimal totalPrice = productPrice + order.Freight - CouponPrice;
+            decimal totalPrice = productPrice - CouponPrice;
             if (totalPrice != order.TotalPrice)
             {
                 err = "订单的金额和实际的金额不符,请重新选择本次购物要使用的优惠券";
                 return null;
             }
+            //判断当前订单的优惠券金额是否超过系统设定的比例
+            if (CouponPrice > 0)
+            {
+                decimal Allowpercent = new ParameterInfoDal().GetDecimalValue(StaticValue.CouponPercent);
+                decimal percent = (CouponPrice * 100) / (productPrice + order.Freight);
+                if (percent >= 100)
+                {
+                    if (Allowpercent < 100)
+                    {
+                        err = "您使用的优惠券超过系统允许的比例" + Allowpercent + "%，请重新选择使用的优惠券";
+                        return null;
+                    }
+                }
+                else if (percent > Allowpercent)
+                {
+                    err = "您使用的优惠券超过系统允许的比例" + Allowpercent + "%，请重新选择使用的优惠券";
+                    return null;
+                }
 
+
+            }
             string orderNum = GetMaxNo("HQ");
             DateTime now = DateTime.Now;
             //开始判断是否拆单
@@ -321,10 +356,23 @@ namespace EasyCms.Dal
                      .Join<ShopProductType>(View_ProductInfoBySkuid._.TypeId == ShopProductType._.ID)
                      .Join<AttachFile>(View_ProductInfoBySkuid._.ID == AttachFile._.RefID, JoinType.leftJoin)
                  .Select(View_ProductInfoBySkuid._.ID.All, ShopBrandInfo._.Name.Alias("BrandName"), ShopProductType._.Name.Alias("ProductTypeName"),
-                 AttachFile.GetFilePath("")).Where(where
+                 AttachFile.GetFilePath("")).Where(where  //此处附件路径信息只是存储到数据库，所有不需要host
                  ).List<View_ProductInfoBySkuid>();
-            //拆分成多个订单( 不用管是否是虚拟产品，这个再前台判断) 
+            //拆分成多个订单( 不用管是否是虚拟产品，这个在前台判断) 
             bool? IsFirst = null;
+            if (string.IsNullOrWhiteSpace(order.AddressID))
+            {
+                err = "请选择收件地址";
+                return null;
+            }
+            ShopShippingAddress address = Dal.Find<ShopShippingAddress>(order.AddressID);
+            if (address == null)
+            {
+                err = "您选择的收件地址不存在，请重新设置收件地址";
+                return null;
+            }
+            string ShipRegion = Dal.From<AdministrativeRegions>().Where(AdministrativeRegions._.ID == address.RegionId).Select(AdministrativeRegions.PathName).ToScalar() as string;
+            ShopOrder firstOrder = null;
             foreach (var item in activeID)
             {
                 ShopOrder realOrder = new ShopOrder()
@@ -336,7 +384,6 @@ namespace EasyCms.Dal
                     MemberName = accuont.Name,
                     MemberEmail = accuont.Email,
                     MemberCallPhone = accuont.ContactPhone,
-                    //RegionID = order.AddressID,//根据地址id 获取地区id
                     PayTypeID = order.PayTypeID,
                     PayTypeName = new ShopPaymentTypesDal().GetPayTypeName(order.PayTypeID, order.CashOnDelivery),
                     IsFreeShiping = order.Freight == 0,
@@ -351,6 +398,14 @@ namespace EasyCms.Dal
                     ClientType = accuont.ClientType,
                     InvoiceNote = order.InvoiceNote
                 };
+
+                realOrder.RegionID = address.RegionId;
+                realOrder.ShipName = address.ShipName;
+                realOrder.ShipAddress = address.Address;
+                realOrder.ShipZip = address.Zipcode;
+                realOrder.ShipEmail = address.EmailAddress;
+                realOrder.ShipTel = address.CelPhone;
+                realOrder.ShipRegion = ShipRegion;
                 if (IsCf)
                 {
                     realOrder.ID = orderNum + realOrder.ID;
@@ -377,8 +432,9 @@ namespace EasyCms.Dal
                 //计算商品明细
                 List<OrderItem> OrderResList = list.Where(p => p.OrderResId == item.Key).ToList<OrderItem>();
                 int orderItemNum = 1;
-                decimal totalCostPrice = 0, totalmarketPrice = 0, totalsalePrice = 0, totalyhqPrice = 0;
+                decimal totalCostPrice = 0, totalmarketPrice = 0, totalsalePrice = 0;
                 List<ShopOrderItem> handsales = new List<ShopOrderItem>();
+              
                 foreach (var productVar in OrderResList)
                 {
                     View_ProductInfoBySkuid productItem = productList.FirstOrDefault(p => p.ID == productVar.ProductID && p.SKUID == productVar.Sku);
@@ -409,11 +465,7 @@ namespace EasyCms.Dal
                         Point = productItem.Points
 
                     };
-                    if (productVar.Coupon != null)
-                    {
-                        product.Preferential = productVar.Coupon.Sum(p => p.CardValue * p.UsingCount);
 
-                    }
                     if (product.Point > 0)
                     {
                         JFHistory jh = new JFHistory()
@@ -429,47 +481,82 @@ namespace EasyCms.Dal
                             JFSouceSubID = product.ID,
                             JFState = (int)JFStatus.在途
                         };
-                        Orderlist.Add(jh);
+                        Savelist.Add(jh);
                     }
 
-                    IsFirst = CoumputeRule(accuont.ID, Orderlist, now, IsFirst, realOrder, handsales, productVar.Promotion, product.ID);
+                    IsFirst = CoumputeRule(accuont.ID, Savelist, now, IsFirst, realOrder, handsales, productVar.Promotion, product.ID);
                     product.CostPrice = productItem.CostPrice;
                     product.MarketPrice = productItem.MarketPrice;
                     product.Price = productItem.SalePrice;
                     totalCostPrice += productItem.CostPrice * product.Count;
                     totalmarketPrice += productItem.MarketPrice * product.Count;
                     totalsalePrice += productItem.SalePrice * product.Count;
-                    totalyhqPrice += product.Preferential;
-                    product.TotalPrice = product.Price * product.Count - product.Preferential;
+
+                    product.TotalPrice = product.Price * product.Count;
                     product.Sequence = orderItemNum;
-                    Orderlist.Add(product);
+                    Savelist.Add(product);
                     orderItemNum++;
                 }
                 //计算订单促销规则
-                IsFirst = CoumputeRule(accuont.ID, Orderlist, now, IsFirst, realOrder, handsales, order.Promotion);
+                IsFirst = CoumputeRule(accuont.ID, Savelist, now, IsFirst, realOrder, handsales, order.Promotion);
                 foreach (var handItem in handsales)
                 {
                     handItem.Sequence = orderItemNum++;
-                    Orderlist.Add(handItem);
+                    Savelist.Add(handItem);
                 }
                 realOrder.CostPrice = totalCostPrice; //拆分时另算 
-                realOrder.Discount = totalyhqPrice;//拆分时另算 
-                realOrder.TotalPrice = totalPrice + order.Freight;//拆分时另算 
-                realOrder.PayMoney = totalPrice + order.Freight;//拆分时另算 
+                realOrder.TotalPrice = totalPrice;//拆分时另算
+
+
+
                 if (IsCf)
                 {
-                    realOrder.OrderPoint = 0;//根据规则计算 
+
+                    if (OrderCount !=1)// 将其他订单的运费设为0 
+                    {
+                        realOrder.FreightActual = 0;//拆分时另算 
+                    }
+                    if (CouponPrice > 0)
+                    {
+                        if (realOrder.TotalPrice > CouponPrice)
+                        {
+                            realOrder.Discount = CouponPrice;
+                            CouponPrice = 0;
+                        }
+                        else
+                        {
+                            realOrder.Discount = realOrder.TotalPrice;
+                            CouponPrice -= realOrder.TotalPrice;
+                        }
+                    }
+                    else
+                        realOrder.Discount = 0;
 
                 }
-                else
+
+                realOrder.PayMoney = totalPrice + order.Freight;
+
+                if (firstOrder == null)
                 {
-                    realOrder.OrderPoint = 0;//根据规则计算 
-
+                    firstOrder = realOrder;
                 }
+                Savelist.Add(realOrder);
                 Orderlist.Add(realOrder);
                 OrderCount++;
             }
+            if (IsCf)
+            {
+                //创建主订单
+                ShopOrder mainOrder = firstOrder.Clone<ShopOrder>();
+                mainOrder.ID = orderNum;
+                mainOrder.Discount = Orderlist.Sum(p => p.Discount);
+                mainOrder.TotalPrice = Orderlist.Sum(p => p.TotalPrice);
+                mainOrder.CostPrice = Orderlist.Sum(p => p.CostPrice);
+                mainOrder.FreightActual = Orderlist.Sum(p => p.FreightActual);
+                mainOrder.PayMoney = Orderlist.Sum(p => p.PayMoney); 
+                Savelist.Add(mainOrder);
 
+            }
             return result;
         }
 
@@ -504,6 +591,8 @@ namespace EasyCms.Dal
                                 ActivityID = pro.ID
                             };
                             Orderlist.Add(jh);
+                            pro.HandsaleCount += pro.HandsaleCount;
+                            Orderlist.Add(pro);
 
                             break;
                         case RuleType.满额送积分:
@@ -521,6 +610,8 @@ namespace EasyCms.Dal
                                 JFState = (int)JFStatus.在途,
                                 ActivityID = pro.ID
                             };
+                            pro.HandsaleCount += pro.HandsaleCount;
+                            Orderlist.Add(pro);
                             Orderlist.Add(jh);
                             break;
                         case RuleType.满额送赠品:
@@ -556,6 +647,8 @@ namespace EasyCms.Dal
                                     IsVirtualProduct = handproduct.IsVirtualProduct
                                 };
                                 handsales.Add(handSaile);
+                                pro.HandsaleCount += pro.HandsaleCount;
+                                Orderlist.Add(pro);
                             }
                             break;
                         case RuleType.满额免运费:
@@ -586,6 +679,8 @@ namespace EasyCms.Dal
                                     ActivityID = pro.ID
                                 };
                                 Orderlist.Add(jh);
+                                pro.HandsaleCount += pro.HandsaleCount;
+                                Orderlist.Add(pro);
                             }
                             break;
                         case RuleType.首单送积分:
@@ -611,6 +706,8 @@ namespace EasyCms.Dal
                                     ActivityID = pro.ID
                                 };
                                 Orderlist.Add(jh);
+                                pro.HandsaleCount += pro.HandsaleCount;
+                                Orderlist.Add(pro);
                             }
                             break;
                         case RuleType.首单送赠品:
@@ -651,7 +748,11 @@ namespace EasyCms.Dal
                                         Weight = handproduct.Weight,
                                         IsVirtualProduct = handproduct.IsVirtualProduct
                                     };
+
+
                                     handsales.Add(handSaile);
+                                    pro.HandsaleCount += pro.HandsaleCount;
+                                    Orderlist.Add(pro);
                                 }
                             }
                             break;
@@ -730,7 +831,7 @@ namespace EasyCms.Dal
         public ShopOrder GetOrder(string id, string userid, out string err)
         {
             err = string.Empty;
-            WhereClip where = ShopOrder._.ID == id; 
+            WhereClip where = ShopOrder._.ID == id;
             ShopOrder order = Dal.From<ShopOrder>().Where(where)
                 .Select(ShopOrder._.ID, ShopOrder._.ParentID, ShopOrder._.OrderType,
                 ShopOrder._.OrderResId,

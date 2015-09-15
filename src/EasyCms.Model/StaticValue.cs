@@ -36,6 +36,12 @@ namespace EasyCms.Model
         /// </summary>
         public const string CouponType = "482d62aa-5302-4773-b719-ae39acf012a5";
 
+
+        /// <summary>
+        /// 优惠券占总金额总比例
+        /// </summary>
+        public const string CouponPercent = "0e8dc049-3503-498a-9512-1176ef8da7ac";
+
     }
 
 

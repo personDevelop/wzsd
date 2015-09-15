@@ -70,6 +70,8 @@ namespace EasyCms.Model
 
         private int _ActionStatus;
 
+        private decimal _HasSendCount;
+
         #endregion
 
         #region 属性
@@ -117,7 +119,7 @@ namespace EasyCms.Model
         ///  促销商品分类,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "BuyCategoryId", DbTypeString = "char", ColumnIsNull = true, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "BuyCategoryId", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = true, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string BuyCategoryId
         {
@@ -155,7 +157,7 @@ namespace EasyCms.Model
         ///  促销商品ID,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "BuyProductId", DbTypeString = "char", ColumnIsNull = true, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "BuyProductId", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string BuyProductId
         {
@@ -193,7 +195,7 @@ namespace EasyCms.Model
         ///  促销商品SKUid,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "BuySKUID", DbTypeString = "char", ColumnIsNull = true, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "BuySKUID", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string BuySKUID
         {
@@ -231,7 +233,7 @@ namespace EasyCms.Model
         ///  赠送商品ID,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "HandsaleProductId", DbTypeString = "char", ColumnIsNull = true, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "HandsaleProductId", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string HandsaleProductId
         {
@@ -250,7 +252,7 @@ namespace EasyCms.Model
         ///  赠送商品SKUID,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "HandsaleProductSKUID", DbTypeString = "char", ColumnIsNull = true, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "HandsaleProductSKUID", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string HandsaleProductSKUID
         {
@@ -269,7 +271,7 @@ namespace EasyCms.Model
         ///  赠送优惠券ID,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "CouponID", DbTypeString = "char", ColumnIsNull = true, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "CouponID", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string CouponID
         {
@@ -440,7 +442,7 @@ namespace EasyCms.Model
         ///  创建人,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "CreateUser", DbTypeString = "char", ColumnIsNull = false, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "CreateUser", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string CreateUser
         {
@@ -512,6 +514,25 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  已赠送数量,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "HasSendCount", DbTypeString = "decimal", ColumnIsNull = false, IsUnique = false, ColumnLength = 15, ColumnJingDu = 2, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public decimal HasSendCount
+        {
+            get
+            {
+                return this._HasSendCount;
+            }
+            set
+            {
+                this.OnPropertyChanged("HasSendCount", this._HasSendCount, value);
+                this._HasSendCount = value;
+            }
+        }
+
         #endregion
 
         #region 列定义
@@ -565,6 +586,8 @@ namespace EasyCms.Model
                 Note = new PropertyItem("Note", tableName);
 
                 ActionStatus = new PropertyItem("ActionStatus", tableName);
+
+                HasSendCount = new PropertyItem("HasSendCount", tableName);
 
 
             }
@@ -660,6 +683,10 @@ namespace EasyCms.Model
             /// 活动状态,0有效，1无效
             /// </summary> 
             public PropertyItem ActionStatus = null;
+            /// <summary>
+            /// 已赠送数量,
+            /// </summary> 
+            public PropertyItem HasSendCount = null;
         }
         #endregion
     }

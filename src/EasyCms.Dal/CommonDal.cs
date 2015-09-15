@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace EasyCms.Dal
 {
-    public class CommonDal
+    public static class CommonDal
     {
-        public static int UpdatePath<T>(SessionFactory Dal, T entity, PropertyItem IdName, PropertyItem parentIdName, PropertyItem classCodeName, PropertyItem OrderNumName,
+        public static int UpdatePath<T>(this SessionFactory Dal, T entity, PropertyItem IdName, PropertyItem parentIdName, PropertyItem classCodeName, PropertyItem OrderNumName,
             PropertyItem depthName, PropertyItem isMxName) where T : BaseEntity, new()
         {
             //分级码 级数     顺序
@@ -216,6 +216,111 @@ namespace EasyCms.Dal
             }
 
         }
+
+        public static int Delete(this SessionFactory Dal, string taleName, string keyField, string id, out string err, StringBuilder sb = null)
+        {
+            err = string.Empty;
+
+            List<SysDeleteCasCheck> list = Dal.From<SysDeleteCasCheck>().Where(SysDeleteCasCheck._.CheckTableName == taleName && SysDeleteCasCheck._.IsEnable == true).List<SysDeleteCasCheck>();
+
+            #region 检测是否存在，禁止删除
+            if (list.Exists(p => p.IsCascadeDelete == false))
+            {
+                List<SysDeleteCasCheck> HasEistlist = list.Where(p => p.IsCascadeDelete == false).ToList();
+                foreach (SysDeleteCasCheck item in HasEistlist)
+                {
+                    if (!string.IsNullOrWhiteSpace(item.CheckExistSql))
+                    {
+                        string sql = string.Format(item.CheckExistSql, id);
+                        List<string> reftableidList = Dal.FromCustomSql(sql).ToStringList();
+                        if (reftableidList.Count > 0)
+                        {
+                            err = item.ErrorMsg;
+                            return 0;
+                        }
+                    }
+                }
+            }
+            #endregion
+
+            #region 允许删除，检测级联删除
+            if (sb == null)
+            {
+                sb = new StringBuilder();
+            }
+            if (list.Exists(p => p.IsCascadeDelete == true))
+            {
+                List<SysDeleteCasCheck> HasEistlist = list.Where(p => p.IsCascadeDelete == true).ToList();
+                foreach (SysDeleteCasCheck item in HasEistlist)
+                {
+                    if (!string.IsNullOrWhiteSpace(item.CheckExistSql) && !string.IsNullOrWhiteSpace(item.CascadeDeleteSql))
+                    {
+                        string sql = string.Format(item.CheckExistSql, id);
+                        List<string> reftableidList = Dal.FromCustomSql(sql).ToStringList();
+                        foreach (string reftableid in reftableidList)
+                        {
+                            if (item.CascadeTableName == taleName && item.CascadeTableRefKey == keyField && reftableid == id)
+                            {
+
+                            }
+                            else
+                            {
+                                Dal.Delete(item.CascadeTableName, item.CascadeTableRefKey, reftableid, out err, sb);
+                                if (!string.IsNullOrWhiteSpace(err))
+                                {
+                                    sb.Clear();
+                                    return 0;
+                                }
+                            }
+
+                        }
+                        if (item.ISTree)
+                        {
+                            sql = string.Format("select {0} from {1} where {2}='{3}'", item.TreeFjmField, item.CheckTableName, keyField, id);
+                            string fjm = Dal.FromCustomSql(sql).ToScalar() as string;
+                            if (!string.IsNullOrWhiteSpace(fjm))
+                            {
+                                sb.Append(string.Format(item.CascadeDeleteSql, fjm) + ";");
+                            }
+                        }
+                        else
+                        {
+                            sb.Append(string.Format(item.CascadeDeleteSql, id) + ";");
+                        } 
+
+                    }
+                }
+            }
+            #endregion
+            SessionFactory dal;
+            IDbTransaction tr = Dal.BeginTransaction(out dal);
+            int i = 0;
+            try
+            {
+                if (sb.Length > 0)
+                {
+                    i += dal.FromCustomSql(sb.ToString(), tr).ExecuteNonQuery();
+
+                }
+                if (!string.IsNullOrWhiteSpace(keyField))
+                {
+                    i += dal.FromCustomSql(string.Format("delete from {0} where {1}='{2}'", taleName, keyField, id), tr).ExecuteNonQuery();
+                }
+
+                dal.CommitTransaction(tr);
+                err = "删除成功" + i + "条数据";
+            }
+            catch (Exception)
+            {
+                dal.RollbackTransaction(tr);
+                throw;
+            }
+            return 0;
+        }
+
+
+
+       
 
     }
 }

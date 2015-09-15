@@ -14,34 +14,37 @@ namespace EasyCms.Dal
     {
         public string Delete(string id)
         {
-            if (string.IsNullOrWhiteSpace(id))
-            {
-                return "要删除的参数值不能为空";
-            }
-            ParameterInfo p = GetEntity(id);
-            if (p.IsSystem)
-            {
-                return "系统参数不能删除";
-            }
-            else if (!p.IsDelete)
-            {
-                return "当前参数不允许删除";
-            }
-            int i = Dal.Delete<ParameterInfo>(ParameterInfo._.ClassCode.StartsWith(p.ClassCode));
-            if (i == 0)
-            {
-                return "删除失败";
-            }
-            else
-            {
-                return "成功删除" + i + "个参数";
-            }
+            string error = "";
+            Dal.Delete("ParameterInfo", "ID", id, out error);
+            return error;
+            //if (string.IsNullOrWhiteSpace(id))
+            //{
+            //    return "要删除的参数值不能为空";
+            //}
+            //ParameterInfo p = GetEntity(id);
+            //if (p.IsSystem)
+            //{
+            //    return "系统参数不能删除";
+            //}
+            //else if (!p.IsDelete)
+            //{
+            //    return "当前参数不允许删除";
+            //}
+            //int i = Dal.Delete<ParameterInfo>(ParameterInfo._.ClassCode.StartsWith(p.ClassCode));
+            //if (i == 0)
+            //{
+            //    return "删除失败";
+            //}
+            //else
+            //{
+            //    return "成功删除" + i + "个参数";
+            //}
         }
 
         public int Save(ParameterInfo item)
         {
             return CommonDal.UpdatePath<ParameterInfo>(Dal, item, ParameterInfo._.ID, ParameterInfo._.ParentID, ParameterInfo._.ClassCode, ParameterInfo._.OrderNo, ParameterInfo._.Series, ParameterInfo._.IsDetails);
-            
+
 
         }
 
@@ -114,6 +117,23 @@ namespace EasyCms.Dal
             return Dal.From<ParameterInfo>().Where(ParameterInfo._.ParentID == parentID && ParameterInfo._.IsEnable == true)
                 .Select(ParameterInfo._.ID, ParameterInfo._.Name).ToDataTable();
 
+        }
+
+        public Decimal GetDecimalValue(string id)
+        {
+            Decimal result = 0;
+            string val = Dal.From<ParameterInfo>().Where(ParameterInfo._.ID == id && ParameterInfo._.IsEnable == true)
+                   .Select(ParameterInfo._.Value).ToScalar() as string;
+            if (!string.IsNullOrWhiteSpace(val))
+            {
+                if (decimal.TryParse(val, out result))
+                {
+
+                }
+
+            }
+
+            return result;
         }
     }
 }

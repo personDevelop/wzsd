@@ -1,5 +1,5 @@
 ﻿function CreateGrid(gridid, url, datafields, columns, isMutilSelect, opts, dataOpts) {
-    gridID = '#' + gridID;
+    gridid = '#' + gridid;
     for (var i = 0; i < datafields.length; i++) {
         if (!datafields[i].type) {
             datafields[i].align = "string";
@@ -48,7 +48,7 @@
     var topHight = 50;
 
     var middleHeight = totalHeight - topHight;
-    $(gridID).jqxGrid(
+    $(gridid).jqxGrid(
      $.extend({
          width: "95%",
          height: middleHeight,
@@ -67,14 +67,14 @@
      }, opts));
 }
 
-function EditGrid(gridID, url) {
-    gridID = '#' + gridID;
-    var rowindex = $(gridID).jqxGrid('getselectedrowindexes');
+function EditGrid(gridid, url) {
+    gridid = '#' + gridid;
+    var rowindex = $(gridid).jqxGrid('getselectedrowindexes');
 
     if (rowindex.length != 1) {
         ErrorMsg("请选择一条数据");
     } else {
-        var data = $(gridID).jqxGrid('getrowdata', rowindex[0]);
+        var data = $(gridid).jqxGrid('getrowdata', rowindex[0]);
 
         if (data) {
             location.href = url + "/" + data.ID;
@@ -82,19 +82,19 @@ function EditGrid(gridID, url) {
     }
 }
 
-function DelGrid(gridID, url) {
-    gridID = '#' + gridID;
-    var rowindexes = $(gridID).jqxGrid('getselectedrowindexes');
+function DelGrid(gridid, url) {
+    gridid = '#' + gridid;
+    var rowindexes = $(gridid).jqxGrid('getselectedrowindexes');
 
 
     if (rowindexes.length == 1) {
-        var data = $(gridID).jqxGrid('getrowdata', rowindexes[0]);
+        var data = $(gridid).jqxGrid('getrowdata', rowindexes[0]);
 
         $.post(url, { ID: data.ID }, function (d) {
             ErrorMsg(d);
             if (d.indexOf("成功") > -1) {
 
-                $(gridID).jqxGrid('deleteRow', rowindexes[0]);
+                $(gridid).jqxGrid('deleteRow', rowindexes[0]);
             }
         });
     } else { ErrorMsg("请选择一条数据"); }
@@ -159,32 +159,42 @@ function CreateTree(treeid, url, datafields, columns, isMutilSelect, opts) {
     $(treeid).jqxTreeGrid($.extend({
         width: "95%",
         height: middleHeight,
-        source: dataAdapter,
-        altrows: true,
+        source: dataAdapter, 
         columns: columns
     }, opts));
 }
 
 function EditTree(treeid, url) {
-    treeid = '#' + treeid;
-    var data = $(treeid).jqxGrid('getSelection');
-
+    treeid = '#' + treeid; 
+    var data = $(treeid).jqxTreeGrid('getSelection');
     if (data.length == 1) {
+
         location.href = url + "/" + data[0].ID;
     } else { ErrorMsg("请选择一条数据"); }
 
+
 }
 
-function DelTree(treeid, url) {
-    treeid = '#' + treeid;
-    var data = $(treeid).jqxGrid('getselectedrowindexes');
-    var data = $("#treeGrid").jqxTreeGrid('getSelection');
+function DelTree(treeid, url) { 
+    treeid = '#' + treeid; 
+    var data = $(treeid).jqxTreeGrid('getSelection');
     if (data.length == 1) {
         $.post(url, { ID: data[0].ID }, function (d) {
             ErrorMsg(d);
             if (d.indexOf("成功") > -1) {
-                $(treeid).jqxGrid('deleteRow', data[0].ID);
+                $(treeid).jqxTreeGrid('deleteRow', data[0].ID);
             }
         });
     } else { ErrorMsg("请选择一条数据"); }
 }
+
+function errorPlace(error, element) {
+
+    if (element.is(":radio"))
+        error.insertAfter($(element).parent());
+    else if (element.is(":checkbox"))
+        error.insertAfter($(element).parent());
+    else
+        error.insertAfter(element);
+}
+

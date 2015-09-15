@@ -15,15 +15,9 @@ namespace EasyCms.Dal
         public string Delete(string id)
         {
 
-            int i = Dal.Delete<ShopPaymentTypes>(id);
-            if (i == 0)
-            {
-                return "删除失败";
-            }
-            else
-            {
-                return "成功删除分类";
-            }
+            string error = "";
+            Dal.Delete("ShopPaymentTypes", "ID", id, out error);
+            return error;
         }
 
         public int Save(ShopPaymentTypes item)
@@ -75,6 +69,10 @@ namespace EasyCms.Dal
 
         internal string GetPayTypeName(string payTypeID, bool isCashOnDelivery)
         {
+            if (isCashOnDelivery)
+            {
+                return "货到付款";
+            }
             return Dal.From<ShopPaymentTypes>().Where(ShopPaymentTypes._.ID == payTypeID).Select(ShopPaymentTypes._.Name)
                 .ToScalar() as string;
         }

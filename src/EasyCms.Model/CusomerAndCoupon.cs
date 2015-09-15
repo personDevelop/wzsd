@@ -357,6 +357,11 @@ namespace EasyCms.Model
         /// </summary>
         public decimal CardValue { get; set; }
 
+        /// <summary>
+        /// 可以使用多张
+        /// </summary>
+        public bool CanMutilUse { get; set; }
+      
        /// <summary>
        /// 可合并使用
        /// </summary>

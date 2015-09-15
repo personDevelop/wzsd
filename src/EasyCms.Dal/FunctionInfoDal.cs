@@ -15,7 +15,9 @@ namespace EasyCms.Dal
         public string Delete(string id)
         {
 
-            return "删除失败";
+            string error = "";
+            Dal.Delete("FunctionInfo", "ID", id, out error);
+            return error;
 
         }
 

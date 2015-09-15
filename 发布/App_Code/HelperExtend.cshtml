@@ -32,7 +32,21 @@
         </dd>
     </dl>
 }
+@helper Number(string code, string name, object defaultval = null, string hint = "", string otherClass = "", int width = 200)
+{
+    <dl>
+        <dt>
+            @MVCExtention.ExtendHtmlInput.MvcHelper.Label(code, name)
+        </dt>
+        <dd>
 
+
+            @MVCExtention.ExtendHtmlInput.MvcHelper.TextBox(code, defaultval as string, new { @class = "input normal " + otherClass, width = width })
+
+            <span>@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(hint)</span>
+        </dd>
+    </dl>
+}
 @helper DropDownList(string code, string name, object defaultval = null, string hint = "", string otherClass = "", int width = 200, EasyCms.Web.DropDownListInfo downInfo = null)
 {
     if (downInfo == null)
@@ -240,11 +254,11 @@
                                 }
                                 bool valb = false;
                                 bool.TryParse(val.ToString(), out valb);
-                <input type="checkbox" name="@item" checked="@val" />
+                                <input type="checkbox" name="@item" checked="@val" />
                             }
-                <label for="@item">
-                    @nameArr[i]
-                </label>
+                            <label for="@item">
+                                @nameArr[i]
+                            </label>
                             i++;
                         }
                     }
@@ -281,8 +295,8 @@
 
                             radioId += i.ToString();
 
-                    <input id="@radioId" name="@code" type="radio" @IsSelected value="@item" />
-                    <label for="@radioId">@nameArr[i]</label>
+                            <input id="@radioId" name="@code" type="radio" @IsSelected value="@item" />
+                            <label for="@radioId">@nameArr[i]</label>
                             i++;
                         }
 
@@ -316,7 +330,7 @@
     <dl>
         <dt>
             @MVCExtention.ExtendHtmlInput.MvcHelper.Label(code, name)
-            @MVCExtention.ExtendHtmlInput.MvcHelper.Hidden(id,defaultVal)
+            @MVCExtention.ExtendHtmlInput.MvcHelper.Hidden(id, defaultVal)
 
 
         </dt>
@@ -327,15 +341,15 @@
             {
 
 
-            <span class="input-group-btn">
+                <span class="input-group-btn">
 
-                <button class="btn blue btnHelp" id="@selectButtonID">
-                    选择
-                </button>
-                <button class="btn yellow btnHelp" onclick="javascript: $('#@id').val(''); $('#@code').val('');return false;">
-                    清除选择
-                </button>
-            </span>
+                    <button class="btn blue btnHelp" id="@selectButtonID">
+                        选择
+                    </button>
+                    <button class="btn yellow btnHelp" onclick="javascript: $('#@id').val(''); $('#@code').val('');return false;">
+                        清除选择
+                    </button>
+                </span>
             }
             <span>@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(hint)</span>
 
@@ -715,22 +729,22 @@
                             //创建其子类
                             //同时生成dropdownlist
                             //$.getJSON(url, { id: categroy }, function () {
-                                var guid = "dropdown" + categroy;
-                                $(event.currentTarget).parent().append("<div style='float: left;' id='" + guid + "'> </div>");
-                                source. url= url + "/" + categroy;
-                                var dataAdapter1 = new $.jqx.dataAdapter(source);
-                                $("#" + guid).jqxDropDownList({ source: dataAdapter1, displayMember: "Name", valueMember: "ID",  width: 'auto',height: '25px' });
+                            var guid = "dropdown" + categroy;
+                            $(event.currentTarget).parent().append("<div style='float: left;' id='" + guid + "'> </div>");
+                            source. url= url + "/" + categroy;
+                            var dataAdapter1 = new $.jqx.dataAdapter(source);
+                            $("#" + guid).jqxDropDownList({ source: dataAdapter1, displayMember: "Name", valueMember: "ID",  width: 'auto',height: '25px' });
 
-                                $("#"+guid).on('select', function (event) {
-                                    onSelectChange(event);
-                                });
-                                $("#"+guid).on('bindingComplete', function (event) {
+                            $("#"+guid).on('select', function (event) {
+                                onSelectChange(event);
+                            });
+                            $("#"+guid).on('bindingComplete', function (event) {
 
-                                    if ( $("#"+guid).jqxDropDownList('getItems').length==0) {
-                                        $(event.currentTarget) .remove();
-                                    }
+                                if ( $("#"+guid).jqxDropDownList('getItems').length==0) {
+                                    $(event.currentTarget) .remove();
+                                }
 
-                                });
+                            });
 
                             //});
                         }

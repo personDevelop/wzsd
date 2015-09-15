@@ -14,7 +14,9 @@ namespace EasyCms.Dal
     {
         public string Delete(string id)
         {
-            return "";
+            string error = "";
+            Dal.Delete("ShopProductInfo", "ID", id, out error);
+            return error;
         }
 
         public int Save(ShopProductInfo item, List<BaseEntity> list, List<ShopProductAttributes> spas, List<ShopProductSKU> listSku, List<ShopProductSKUInfo> listSkuInfo)

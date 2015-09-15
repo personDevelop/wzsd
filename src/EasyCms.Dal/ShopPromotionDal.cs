@@ -15,15 +15,9 @@ namespace EasyCms.Dal
         public string Delete(string id)
         {
 
-            int i = Dal.Delete<ShopPromotion>(id);
-            if (i == 0)
-            {
-                return "删除失败";
-            }
-            else
-            {
-                return "成功删除促销活动";
-            }
+            string error = "";
+            Dal.Delete("ShopPromotion", "ID", id, out error);
+            return error;
         }
 
         public int Save(ShopPromotion item)
@@ -81,6 +75,15 @@ namespace EasyCms.Dal
             bool? IsFirst = null;
             foreach (ShopPromotion item in list)
             {
+                if (item.HandsaleMaxCount > 0)
+                {
+                    if ((item.HandsaleMaxCount - item.HasSendCount) > item.HandsaleCount)
+                    {
+                        item.ActionStatus = (int)ValidEnum.无效;
+                        Dal.Submit(item);
+                        continue;
+                    }
+                }
                 if (item.RuleTypeName.StartsWith("注册"))
                 {
                     continue;
@@ -204,6 +207,22 @@ namespace EasyCms.Dal
             ShopPromotion updatePromotion = new ShopPromotion() { RecordStatus = StatusType.update, ActionStatus = (int)ValidEnum.无效 };
             updatePromotion.Where = ShopPromotion._.EndDate < DateTime.Now;
             Dal.Submit(updatePromotion);
+            List<ShopPromotion> list = Dal.From<ShopPromotion>()
+                .Select(ShopPromotion._.ID, ShopPromotion._.HandsaleCount, ShopPromotion._.HandsaleMaxCount, ShopPromotion._.HasSendCount
+                 )
+                .Where(ShopPromotion._.ActionStatus == (int)ValidEnum.有效
+                && ShopPromotion._.HandsaleMaxCount > 0
+
+                ).List<ShopPromotion>();
+            foreach (ShopPromotion item in list)
+            {
+                if ((item.HandsaleMaxCount - item.HasSendCount) <= item.HandsaleCount)
+                {
+                    item.ActionStatus = (int)ValidEnum.无效;
+                }
+
+            }
+            Dal.Submit(list);
         }
 
         internal bool CheckValid(List<string> listPromot)

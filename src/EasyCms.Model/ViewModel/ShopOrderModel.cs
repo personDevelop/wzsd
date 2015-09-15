@@ -46,19 +46,16 @@ namespace EasyCms.Model
         /// </summary>
         public string InvoiceNote { get; set; }
 
-
-
-
-
-        /// <summary>
-        /// 总价格
-        /// </summary>
-        public decimal TotalPrice { get; set; }
-
         /// <summary>
         /// 运费
         /// </summary>
         public decimal Freight { get; set; }
+
+
+        /// <summary>
+        /// 总价格   (商品总价格-优惠券金额) 不包含运费
+        /// </summary>
+        public decimal TotalPrice { get; set; }
 
         public List<OrderItem> OrderItems { get; set; }
 
@@ -71,6 +68,8 @@ namespace EasyCms.Model
 
         /// <summary>
         /// 会员本次购买可使用的优惠券
+        /// 生成订单时返回所有可用的优惠券
+        /// 提交订单时 提供当前订单使用的优惠券
         /// </summary>
         public List<CouponAccount> Coupon { get; set; }
 
@@ -148,15 +147,11 @@ namespace EasyCms.Model
         /// </summary>
         public bool IsVirtualProduct { get; set; }
 
-        public List<ShopPromotionSimpal> Promotion { get; set; }
-
         /// <summary>
-        /// 赠送优惠券
+        /// 促销活动
         /// </summary>
-        public List<CouponAccount> Coupon { get; set; }
+        public List<ShopPromotionSimpal> Promotion { get; set; }
         #endregion
-
-
 
 
         public void AddPromotion(ShopPromotion item)
@@ -166,16 +161,6 @@ namespace EasyCms.Model
                 Promotion = new List<ShopPromotionSimpal>();
             }
             Promotion.Add(new ShopPromotionSimpal() { ID = item.ID, Name = item.RuleName, HandsaleProductName = item.HandProductName, HandsaleCouponName = item.CouponName });
-        }
-
-        public void AddCoupon(CouponAccount item)
-        {
-            if (Coupon == null)
-            {
-                Coupon = new List<CouponAccount>();
-            }
-            Coupon.Add(item);
-
         }
     }
 }

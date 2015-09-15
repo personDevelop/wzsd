@@ -45,11 +45,8 @@
 
     @HelperExtend.HelpEdit("CouponID", "CouponName", "赠送优惠券", defaultVal: Model.CouponID, defaultText: Model.CouponName, hint: "", dialogTitle: "选择赠送优惠券", InnitFunc: "InnitCouponFunc", DataControlID: "CouponGrid", onOk: "onCouponOk")
 
-
-    @HelperExtend.TextBox("HandsaleMaxCount", "最多赠送数量", defaultval: Model.HandsaleMaxCount, hint: "")
-
     @HelperExtend.TextBox("HandsaleCount", "赠送数量", defaultval: Model.HandsaleCount, hint: "")
-
+    @HelperExtend.TextBox("HandsaleMaxCount", "最多赠送数量", defaultval: Model.HandsaleMaxCount, hint: "送完为止") 
     @HelperExtend.TextBox("MinPrice", "限制最低金额", defaultval: Model.MinPrice, hint: "")
 
     @HelperExtend.TextBox("MaxPrice", "限制最高金额", defaultval: Model.MaxPrice, hint: "")

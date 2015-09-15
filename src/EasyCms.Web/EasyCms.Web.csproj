@@ -238,6 +238,7 @@
     <Compile Include="Areas\Admin\Controllers\ShopProductStationModeController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopProductTypeController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopPromotionController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SysDeleteCasCheckController.cs" />
     <Compile Include="Areas\Admin\Controllers\SysRoleInfoController.cs" />
     <Compile Include="Common\CmsSession.cs" />
     <Compile Include="App_Start\AuthConfig.cs" />
@@ -735,6 +736,8 @@
     <Content Include="Areas\Admin\Views\CouponRule\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ShopOrder\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ShopOrder\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\SysDeleteCasCheck\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\SysDeleteCasCheck\Index.cshtml" />
     <None Include="Properties\PublishProfiles\publish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\EshopAdminControl.js" />

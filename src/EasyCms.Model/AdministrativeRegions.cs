@@ -369,8 +369,15 @@ namespace EasyCms.Model
     }
     public partial class AdministrativeRegions
     {
-        
+
         [NotDbCol]
         public string ParentName { get; set; }
+        [NotDbCol]
+        public static ExpressionClip PathName
+        {
+
+            get { return AdministrativeRegions._.Path.Replace("/", "").Alias("PathName"); }
+
+        }
     }
 }

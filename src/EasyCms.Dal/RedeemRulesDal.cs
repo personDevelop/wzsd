@@ -14,21 +14,9 @@ namespace EasyCms.Dal
     {
         public string Delete(string id)
         {
-            if (string.IsNullOrWhiteSpace(id))
-            {
-                return "要删除的参数值不能为空";
-            }
-
-
-            int i = Dal.Delete<RedeemRules>(id);
-            if (i == 0)
-            {
-                return "删除失败";
-            }
-            else
-            {
-                return "成功删除分类";
-            }
+            string error = "";
+            Dal.Delete("RedeemRules", "ID", id, out error);
+            return error;
         }
 
         public int Save(RedeemRules item)

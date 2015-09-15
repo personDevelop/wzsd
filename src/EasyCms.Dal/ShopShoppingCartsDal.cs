@@ -15,15 +15,9 @@ namespace EasyCms.Dal
         public string Delete(string id)
         {
 
-            int i = Dal.Delete<ShopShoppingCarts>(id);
-            if (i == 0)
-            {
-                return "删除失败";
-            }
-            else
-            {
-                return "成功删除分类";
-            }
+            string error = "";
+            Dal.Delete("ShopShoppingCarts", "ID", id, out error);
+            return error;
         }
 
         public int Save(ShopShoppingCarts item)

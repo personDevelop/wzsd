@@ -30,11 +30,13 @@ namespace EasyCms.Model
 
         private int _CouponType;
 
-        private string _ClassId;
+        private bool _CanMutilUse;
 
-        private int _UseType;
+        private bool _IsCanCombie;
 
         private int _SendCount;
+
+        private int _MaxCount;
 
         private string _PreName;
 
@@ -80,8 +82,6 @@ namespace EasyCms.Model
 
         private string _Note;
 
-        private bool _IsCanCombie;
-
         #endregion
 
         #region 属性
@@ -126,7 +126,7 @@ namespace EasyCms.Model
         }
 
         /// <summary>
-        ///  优惠券类型,0普通优惠券，1兑换优惠券，2赠送优惠券
+        ///  优惠券类型,0普通优惠券，1积分兑换优惠券，2系统派发优惠券
         /// </summary>
 
         [DbProperty(MapingColumnName = "CouponType", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
@@ -145,40 +145,40 @@ namespace EasyCms.Model
         }
 
         /// <summary>
-        ///  优惠券分类,
+        ///  可以使用多张,一次购物，优惠券可以使用多张
         /// </summary>
 
-        [DbProperty(MapingColumnName = "ClassId", DbTypeString = "char", ColumnIsNull = false, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "CanMutilUse", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public string ClassId
+        public bool CanMutilUse
         {
             get
             {
-                return this._ClassId;
+                return this._CanMutilUse;
             }
             set
             {
-                this.OnPropertyChanged("ClassId", this._ClassId, value);
-                this._ClassId = value;
+                this.OnPropertyChanged("CanMutilUse", this._CanMutilUse, value);
+                this._CanMutilUse = value;
             }
         }
 
         /// <summary>
-        ///  使用方式,0使用一次，1可分次使用
+        ///  可合并使用,如果是，则可以和其他优惠券合并使用
         /// </summary>
 
-        [DbProperty(MapingColumnName = "UseType", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "IsCanCombie", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public int UseType
+        public bool IsCanCombie
         {
             get
             {
-                return this._UseType;
+                return this._IsCanCombie;
             }
             set
             {
-                this.OnPropertyChanged("UseType", this._UseType, value);
-                this._UseType = value;
+                this.OnPropertyChanged("IsCanCombie", this._IsCanCombie, value);
+                this._IsCanCombie = value;
             }
         }
 
@@ -198,6 +198,25 @@ namespace EasyCms.Model
             {
                 this.OnPropertyChanged("SendCount", this._SendCount, value);
                 this._SendCount = value;
+            }
+        }
+
+        /// <summary>
+        ///  最大生成数量,早到早得
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "MaxCount", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public int MaxCount
+        {
+            get
+            {
+                return this._MaxCount;
+            }
+            set
+            {
+                this.OnPropertyChanged("MaxCount", this._MaxCount, value);
+                this._MaxCount = value;
             }
         }
 
@@ -395,7 +414,7 @@ namespace EasyCms.Model
         ///  商品分类,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "CategoryId", DbTypeString = "char", ColumnIsNull = true, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "CategoryId", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string CategoryId
         {
@@ -414,7 +433,7 @@ namespace EasyCms.Model
         ///  商品ID,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "ProductId", DbTypeString = "char", ColumnIsNull = true, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ProductId", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string ProductId
         {
@@ -433,7 +452,7 @@ namespace EasyCms.Model
         ///  商品SKUID,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "ProductSku", DbTypeString = "char", ColumnIsNull = true, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ProductSku", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string ProductSku
         {
@@ -452,7 +471,7 @@ namespace EasyCms.Model
         ///  图片,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "ImageUrl", DbTypeString = "char", ColumnIsNull = true, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ImageUrl", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string ImageUrl
         {
@@ -547,7 +566,7 @@ namespace EasyCms.Model
         ///  创建人,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "Createor", DbTypeString = "char", ColumnIsNull = false, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "Createor", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string Createor
         {
@@ -619,25 +638,6 @@ namespace EasyCms.Model
             }
         }
 
-        /// <summary>
-        ///  可合并使用,如果是，则可以和其他优惠券合并使用
-        /// </summary>
-
-        [DbProperty(MapingColumnName = "IsCanCombie", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
-
-        public bool IsCanCombie
-        {
-            get
-            {
-                return this._IsCanCombie;
-            }
-            set
-            {
-                this.OnPropertyChanged("IsCanCombie", this._IsCanCombie, value);
-                this._IsCanCombie = value;
-            }
-        }
-
         #endregion
 
         #region 列定义
@@ -652,11 +652,13 @@ namespace EasyCms.Model
 
                 CouponType = new PropertyItem("CouponType", tableName);
 
-                ClassId = new PropertyItem("ClassId", tableName);
+                CanMutilUse = new PropertyItem("CanMutilUse", tableName);
 
-                UseType = new PropertyItem("UseType", tableName);
+                IsCanCombie = new PropertyItem("IsCanCombie", tableName);
 
                 SendCount = new PropertyItem("SendCount", tableName);
+
+                MaxCount = new PropertyItem("MaxCount", tableName);
 
                 PreName = new PropertyItem("PreName", tableName);
 
@@ -702,8 +704,6 @@ namespace EasyCms.Model
 
                 Note = new PropertyItem("Note", tableName);
 
-                IsCanCombie = new PropertyItem("IsCanCombie", tableName);
-
 
             }
             /// <summary>
@@ -715,21 +715,25 @@ namespace EasyCms.Model
             /// </summary> 
             public PropertyItem Name = null;
             /// <summary>
-            /// 优惠券类型,0普通优惠券，1兑换优惠券，2赠送优惠券
+            /// 优惠券类型,0普通优惠券，1积分兑换优惠券，2系统派发优惠券
             /// </summary> 
             public PropertyItem CouponType = null;
             /// <summary>
-            /// 优惠券分类,
+            /// 可以使用多张,一次购物，优惠券可以使用多张
             /// </summary> 
-            public PropertyItem ClassId = null;
+            public PropertyItem CanMutilUse = null;
             /// <summary>
-            /// 使用方式,0使用一次，1可分次使用
+            /// 可合并使用,如果是，则可以和其他优惠券合并使用
             /// </summary> 
-            public PropertyItem UseType = null;
+            public PropertyItem IsCanCombie = null;
             /// <summary>
             /// 生成数量,
             /// </summary> 
             public PropertyItem SendCount = null;
+            /// <summary>
+            /// 最大生成数量,早到早得
+            /// </summary> 
+            public PropertyItem MaxCount = null;
             /// <summary>
             /// 优惠券前缀,
             /// </summary> 
@@ -818,10 +822,6 @@ namespace EasyCms.Model
             /// 备注,
             /// </summary> 
             public PropertyItem Note = null;
-            /// <summary>
-            /// 可合并使用,如果是，则可以和其他优惠券合并使用
-            /// </summary> 
-            public PropertyItem IsCanCombie = null;
         }
         #endregion
     }
@@ -831,13 +831,12 @@ namespace EasyCms.Model
         protected override void OnCreate()
         {
             IsEnable = true;
-            SendCount = 10000;
+            MaxCount = 10000;
             CpLength = 10;
-            IsCongZengSongKaiShi = true;
+            CanMutilUse = IsCongZengSongKaiShi = true;
             CreateDate = DateTime.Now;
             StartDate = DateTime.Now;
             EndDate = DateTime.Now.AddMonths(3);
-
             JE = 100;
         }
         [NotDbCol]
@@ -851,5 +850,5 @@ namespace EasyCms.Model
     }
 
 
-   
+
 }

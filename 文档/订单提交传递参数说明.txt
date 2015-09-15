@@ -32,13 +32,8 @@ ShopOrderModel order
                 SalePrice    销售价  
         针对当前商品的促销信息集合        Promotion （纯展示，仅仅返回那些有设置到具体商品促销信息，且满足促销活动的条件的促销活动集合,）
                每条包含的属性
-                ID                     促销活动id 
-      
-         针对当前商品的可用优惠券集合  Coupon     （返回那些有设置到具体商品的优惠券，且满足使用条件的优惠券，可供会员使用）
-     		每条包含的属性
-                ID                     此ID不是优惠券的id,是当前会员拥有的优惠券的id  (会员表和优惠券表的关联表对应的主键id)
-		CardValue              优惠券面值 
-		UsingCount 使用该优惠券的个数  
+                ID                     促销活动id   
+         
 
 返回信息   
        IsSuccess = true, 

@@ -20,16 +20,10 @@ namespace EasyCms.Dal
         }
         public string Delete(string id)
         {
+            string error = "";
+            Dal.Delete("NewsInfo", "ID", id, out error);
+            return error;
 
-            int i = Dal.Delete<NewsInfo>(id);
-            if (i == 0)
-            {
-                return "删除失败";
-            }
-            else
-            {
-                return "成功删除";
-            }
         }
 
         public int Save(NewsInfo item)
@@ -56,12 +50,12 @@ namespace EasyCms.Dal
         public NewsInfo GetEntity(string id, string host)
         {
             NewsInfo news = Dal.Find<NewsInfo>(id);
-            if (news!=null)
+            if (news != null)
             {
                 if (!string.IsNullOrWhiteSpace(news.ImageUrl))
                 {
                     AttachFile f = Dal.Find<AttachFile>(AttachFile._.RefID == news.ImageUrl);
-                    if (f!=null && !string.IsNullOrWhiteSpace(f.FilePath))
+                    if (f != null && !string.IsNullOrWhiteSpace(f.FilePath))
                     {
                         news.ImageUrl = host + f.FilePath.Replace("~", "");
                     }
@@ -71,9 +65,9 @@ namespace EasyCms.Dal
             return news;
         }
 
-        public NewsInfo GetEntity(string id )
+        public NewsInfo GetEntity(string id)
         {
-             
+
             return Dal.Find<NewsInfo>(id);
         }
 
@@ -83,7 +77,7 @@ namespace EasyCms.Dal
         { //新闻id，定标题，简介，缩略图，新闻url 
             int pagecount = 0;
             return Dal.From<NewsInfo>().Join<AttachFile>(NewsInfo._.ImageUrl == AttachFile._.RefID, JoinType.leftJoin)
-                .Select(NewsInfo._.ID, NewsInfo._.NewsTitle, NewsInfo._.Summary,AttachFile.GetFilePath(host) , new ExpressionClip("'" + host + "/api/app/getNew/'+ NewsInfo.id as Url"))
+                .Select(NewsInfo._.ID, NewsInfo._.NewsTitle, NewsInfo._.Summary, AttachFile.GetFilePath(host), new ExpressionClip("'" + host + "/api/app/getNew/'+ NewsInfo.id as Url"))
                 .OrderBy(NewsInfo._.LastEditDate.Desc).ToDataTable(20, page, ref pagecount, ref pagecount);
         }
     }
