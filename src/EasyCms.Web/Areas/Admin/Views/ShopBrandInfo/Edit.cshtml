@@ -63,7 +63,8 @@
 
 
     @HelperExtend.ImageUpLoad("Logo", "缩略图", Model.RecordStatus == Sharp.Common.StatusType.add, defaultval: Model.Logo, maxLength: 1)
-    @HelperExtend.TextBox("OrderNo", "显示顺序", defaultval: Model.OrderNo)
+    
+    @HelperExtend.Number("OrderNo", "显示顺序", defaultval: Model.OrderNo )
 </div>
 
 <div class="tab-content" style="display:none">

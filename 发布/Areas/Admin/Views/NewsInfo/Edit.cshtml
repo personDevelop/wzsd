@@ -41,8 +41,9 @@
     @HelperExtend.TextBox("SubTitle", "副标题", defaultval: Model.SubTitle)
     @HelperExtend.RadioGroup("State", "显示状态 ", "0,1,2", "正常,待审核,不显示", defaultval: Model.State)
     @HelperExtend.CheckBoxList("推荐设置", "AllowPl,IsTop,IsRecomend,IsHot,IsColor", "允许评论,置顶,推荐,热门,醒目", defaultval: new object[] { Model.AllowPl, Model.IsTop, Model.IsRecomend, Model.IsHot, Model.IsColor })
-    @HelperExtend.TextBox("Sequence", "顺序", defaultval: Model.Sequence)
-    @HelperExtend.TextBox("PvCount", "浏览次数", defaultval: Model.PvCount)
+    @HelperExtend.Number("Sequence", "顺序", defaultval: Model.Sequence, max: 100000 )
+    
+    @HelperExtend.Number("PvCount", "浏览次数", defaultval: Model.PvCount, max: 10000000, disabled: true)
     @HelperExtend.DateTime("LastEditDate", "最后修改时间", defaultval: Model.LastEditDate) 
     @HelperExtend.ImageUpLoad("ImageUrl", "封面图片", Model.RecordStatus == Sharp.Common.StatusType.add, defaultval: Model.ImageUrl, maxLength: 1)
     @HelperExtend.TextArea("Note", "备注", defaultval: Model.Note)

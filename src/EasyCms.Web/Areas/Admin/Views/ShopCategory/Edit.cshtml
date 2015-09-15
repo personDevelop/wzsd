@@ -42,7 +42,7 @@
     @HelperExtend.ImageUpLoad("BigLogo", "大图标", Model.RecordStatus == Sharp.Common.StatusType.add, defaultval: Model.BigLogo, maxLength: 1)
 
     @HelperExtend.RadioGroup("IsEnable", "启用", "false,true", "否,是", defaultval: Model.IsEnable)
-    @HelperExtend.TextBox("OrderNo", "显示顺序", defaultval: Model.OrderNo)
+    @HelperExtend.Number("OrderNo", "显示顺序", defaultval: Model.OrderNo )
     @HelperExtend.TextArea("Note", "备注", defaultval: Model.Note)
 </div>
 <div class="tab-content" style="display:none">

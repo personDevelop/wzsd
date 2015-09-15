@@ -47,7 +47,7 @@
     @HelperExtend.CheckBoxList("频道设置", "AllowAddContent,AllowSubclass", "允许增加内容,允许增加子类", defaultval: new object[] { Model.AllowSubclass, Model.AllowSubclass }) 
     @HelperExtend.UEditor("Description", "栏目描述", defaultval: Model.Description )
  
-     @HelperExtend.TextBox("OrderNo", "显示顺序", defaultval: Model.OrderNo)
+     @HelperExtend.Number("OrderNo", "显示顺序", defaultval: Model.OrderNo, max: 100000)
     @HelperExtend.TextArea("Note", "备注", defaultval: Model.Note)
 </div>
  

@@ -36,8 +36,8 @@
 })
 
 
-
-    @HelperExtend.TextBox("BuyCount", "购买指定数量", defaultval: Model.BuyCount, hint: "")
+    
+    @HelperExtend.Number("BuyCount", "购买指定数量", defaultval: Model.BuyCount, hint: "")
     @HelperExtend.HelpEdit("HandsaleProductId", "HandProductName", "赠送商品", defaultVal: Model.HandsaleProductId, defaultText: Model.HandProductName, hint: "", dialogTitle: "选择商品", InnitFunc: "InnitHandShopFunc", DataControlID: "HandshopGrid", onOk: "onHandSpOk")
 
 
@@ -45,11 +45,11 @@
 
     @HelperExtend.HelpEdit("CouponID", "CouponName", "赠送优惠券", defaultVal: Model.CouponID, defaultText: Model.CouponName, hint: "", dialogTitle: "选择赠送优惠券", InnitFunc: "InnitCouponFunc", DataControlID: "CouponGrid", onOk: "onCouponOk")
 
-    @HelperExtend.TextBox("HandsaleCount", "赠送数量", defaultval: Model.HandsaleCount, hint: "")
-    @HelperExtend.TextBox("HandsaleMaxCount", "最多赠送数量", defaultval: Model.HandsaleMaxCount, hint: "送完为止") 
-    @HelperExtend.TextBox("MinPrice", "限制最低金额", defaultval: Model.MinPrice, hint: "")
+    @HelperExtend.Number("HandsaleCount", "赠送数量", defaultval: Model.HandsaleCount, hint: "")
+    @HelperExtend.Number("HandsaleMaxCount", "最多赠送数量", defaultval: Model.HandsaleMaxCount, hint: "送完为止",max:int.MaxValue) 
+    @HelperExtend.Number("MinPrice", "限制最低金额", defaultval: Model.MinPrice, decimalDigits: 2, hint: "")
 
-    @HelperExtend.TextBox("MaxPrice", "限制最高金额", defaultval: Model.MaxPrice, hint: "")
+    @HelperExtend.Number("MaxPrice", "限制最高金额", defaultval: Model.MaxPrice, hint: "",decimalDigits:2, max: int.MaxValue)
 
     @HelperExtend.DateTime("StartDate", "活动开始时间", defaultval: Model.StartDate, hint: "")
 

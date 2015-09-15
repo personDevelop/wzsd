@@ -32,7 +32,7 @@
         </dd>
     </dl>
 }
-@helper Number(string code, string name, object defaultval = null, string hint = "", string otherClass = "", int width = 200)
+@helper Number(string code, string name, object defaultval = null, string hint = "", string otherClass = "", int width = 200, int min = 0, int max = 1000, int decimalDigits = 0, bool disabled = false)
 {
     <dl>
         <dt>
@@ -40,10 +40,28 @@
         </dt>
         <dd>
 
-
-            @MVCExtention.ExtendHtmlInput.MvcHelper.TextBox(code, defaultval as string, new { @class = "input normal " + otherClass, width = width })
-
+            <div id="@code" name="@code" class="input normal @otherClass"></div>
             <span>@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(hint)</span>
+            <script type="text/javascript">
+                $(function(){
+                    @{
+                        string widthstr = width + "px";
+                        bool spinButtons = true;
+                        if (disabled)
+                        {
+                            spinButtons = false;
+                        }
+
+                    }
+                    $("#@code").jqxNumberInput({ width: '@widthstr',inputMode :'simple', height: '25px', min: @min, max: @max,
+                        decimalDigits:@decimalDigits,disabled:@disabled.ToString().ToLower(),  spinButtons: @spinButtons.ToString().ToLower(),decimal:@defaultval  });
+                });
+
+
+            </script>
+
+
+
         </dd>
     </dl>
 }

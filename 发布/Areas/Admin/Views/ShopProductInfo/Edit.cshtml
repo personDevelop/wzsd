@@ -95,38 +95,35 @@
     @HelperExtend.TextBox("RegionId", "所在地", defaultval: Model.RegionId, hint: "")
 
     @HelperExtend.TextBox("Unit", "计量单位", defaultval: Model.Unit, hint: "")
-    @HelperExtend.TextBox("Weight", "重量", defaultval: Model.Weight, hint: "")
+    @HelperExtend.Number("Weight", "重量(KG)", defaultval: Model.Weight, hint: "", max: 1000000)
     @HelperExtend.RadioGroup("SalesType", "销售类型 ", "0,1", "赠品,正常", defaultval: Model.SalesType)
 
     @HelperExtend.RadioGroup("SaleStatus", "商品状态 ", "0,1", "下架,上架,审批中,审批退回", defaultval: Model.SaleStatus)
+     
+    @HelperExtend.Number("MarketPrice", "市场价", defaultval: Model.MarketPrice, hint: "", max: 10000000)
 
+    @HelperExtend.Number("SalePrice", "销售价", defaultval: Model.SalePrice, hint: "", max: 10000000)
 
-    @HelperExtend.TextBox("VistiCounts", "访问次数", defaultval: Model.VistiCounts, hint: "")
+    @HelperExtend.Number("CostPrice", "成本价", defaultval: Model.CostPrice, hint: "", max: 10000000)
 
-    @HelperExtend.TextBox("SaleCounts", "销售个数", defaultval: Model.SaleCounts, hint: "")
+    @HelperExtend.Number("Points", "可得积分", defaultval: Model.Points, hint: "", max: 10000000)
 
-    @HelperExtend.TextBox("SaleNum", "销售次数", defaultval: Model.SaleNum, hint: "")
-    @HelperExtend.TextBox("DisplaySequence", "显示顺序", defaultval: Model.DisplaySequence, hint: "")
+    @HelperExtend.Number("Stock", "库存", defaultval: Model.Stock, hint: "库存等于最小的负整数时， 表示不控制库存",min:int.MinValue)
 
+    @HelperExtend.Number("MaxQuantity", "警戒最高库存", defaultval: Model.MaxQuantity, hint: "", max: 10000000)
 
-    @HelperExtend.TextBox("MarketPrice", "市场价", defaultval: Model.MarketPrice, hint: "")
-
-    @HelperExtend.TextBox("SalePrice", "销售价", defaultval: Model.SalePrice, hint: "")
-
-    @HelperExtend.TextBox("CostPrice", "成本价", defaultval: Model.CostPrice, hint: "")
-
-    @HelperExtend.TextBox("Points", "可得积分", defaultval: Model.Points, hint: "")
-
-    @HelperExtend.TextBox("Stock", "库存", defaultval: Model.Stock, hint: "库存等于最小的负整数时， 表示不控制库存")
-
-    @HelperExtend.TextBox("MaxQuantity", "警戒最高库存", defaultval: Model.MaxQuantity, hint: "")
-
-    @HelperExtend.TextBox("MinQuantity", "警戒最低库存", defaultval: Model.MinQuantity, hint: "")
+    @HelperExtend.Number("MinQuantity", "警戒最低库存", defaultval: Model.MinQuantity, hint: "", max: 10000000)
 
     @HelperExtend.RadioGroup("IsVirtualProduct", "虚拟产品", "false,true", "否,是", defaultval: Model.IsVirtualProduct)
     @HelperExtend.DateTime("ManufactureDate", "生产日期", defaultval: Model.ManufactureDate, hint: "")
     @HelperExtend.DateTime("LaunchDate", "上市日期", defaultval: Model.LaunchDate, hint: "")
     @HelperExtend.DateTime("SaleDate", "上架日期", defaultval: Model.SaleDate, hint: "")
+    @HelperExtend.Number("VistiCounts", "访问次数", defaultval: Model.VistiCounts, hint: "", disabled: true, max: 10000000)
+
+    @HelperExtend.Number("SaleCounts", "销售个数", defaultval: Model.SaleCounts, hint: "", disabled: true, max: 10000000)
+
+    @HelperExtend.Number("SaleNum", "销售次数", defaultval: Model.SaleNum, hint: "", disabled: true, max: 10000000)
+    @HelperExtend.Number("DisplaySequence", "显示顺序", defaultval: Model.DisplaySequence, hint: "", disabled: true, max: 10000000)
     @HelperExtend.DateTime("AddedDate", "添加日期", defaultval: Model.AddedDate, hint: "")
 </div>
 

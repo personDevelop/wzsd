@@ -34,9 +34,10 @@
 
     @HelperExtend.RadioGroup("CanMutilUse", "可以使用多张", "false,true", "同一订单限制使用一张优惠券,不限制", defaultval: Model.CanMutilUse, hint: "一次购物，优惠券是否可以使用多张")
     @HelperExtend.RadioGroup("IsCanCombie", "可合并使用", "true,false", "合并使用,单独使用", defaultval: Model.IsCanCombie, hint: "合并使用：可和其他优惠券一并使用，单独使用：不能和其他优惠券一并使用")
-    @HelperExtend.TextBox("JE", "面值", defaultval: Model.JE, hint: "")
-
-    @HelperExtend.TextBox("NeedPoint", "需要积分", defaultval: Model.NeedPoint, hint: "如果使用积分兑换的方式获取，需要多少积分")
+    @HelperExtend.Number("JE", "面值", defaultval: Model.JE, hint: "",max:1000000,decimalDigits:2)
+    
+    @HelperExtend.Number("NeedPoint", "需要积分", defaultval: Model.NeedPoint, hint: "如果使用积分兑换的方式获取，需要多少积分", max: 1000000 )
+     
     @HelperExtend.RadioGroup("QxLx", "期限类型", "0,1", "期限范围,固定天数", defaultval: Model.QxLx, hint: "")
 
 
@@ -46,8 +47,8 @@
 
     @HelperExtend.DateTime("EndDate", "有效时间止", defaultval: Model.EndDate, hint: "")
 
-    @HelperExtend.TextBox("QXTS", "期限天数", defaultval: Model.QXTS, hint: "")
-
+    @HelperExtend.Number("QXTS", "期限天数", defaultval: Model.QXTS, hint: "", max: 1000000)
+    
 
     @HelperExtend.TextBox("MinPrice", "最低消费金额", defaultval: Model.MinPrice, hint: "")
 

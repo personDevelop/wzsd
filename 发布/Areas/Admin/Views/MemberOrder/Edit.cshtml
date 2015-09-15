@@ -35,10 +35,10 @@
     @HelperExtend.TextBox("Name", "等级名称", defaultval: Model.Name, hint: "")
 
     @HelperExtend.ImageUpLoad("Img", "等级图标", Model.RecordStatus== Sharp.Common.StatusType.add, defaultval: Model.Img, maxLength: 1)
+    
+    @HelperExtend.Number("MinVal", "等级值下限(包括)", defaultval: Model.MinVal, hint: "",max:100000)
 
-    @HelperExtend.TextBox("MinVal", "等级值下限(包括)", defaultval: Model.MinVal, hint: "")
-
-    @HelperExtend.TextBox("MaxVal", "等级值上限(不包括)", defaultval: Model.MaxVal, hint: "")
+    @HelperExtend.Number("MaxVal", "等级值上限(不包括)", defaultval: Model.MaxVal, hint: "", max: 100000)
 
     @HelperExtend.TextBox("IsEnable", "可用", defaultval: Model.IsEnable, hint: "") 
     @HelperExtend.TextBox("Note", "等级描述", defaultval: Model.Note, hint: "")

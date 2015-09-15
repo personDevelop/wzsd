@@ -58,9 +58,9 @@
     @HelperExtend.RadioGroup("IsMust", "基本必备功能", "false,true", "否,是", defaultval: Model.IsMust)
 
     @HelperExtend.RadioGroup("IsMustNot", "不在权限中展示", "false,true", "否,是", defaultval: Model.IsMustNot)
+   
 
-
-    @HelperExtend.TextBox("OrderNo", "顺序", defaultval: Model.OrderNo, hint: "")
+    @HelperExtend.Number("OrderNo", "顺序", defaultval: Model.OrderNo, hint: "",disabled:true)
     @HelperExtend.TextArea("Description", "功能模块描述", defaultval: Model.Description, hint: "")
 
 </div>

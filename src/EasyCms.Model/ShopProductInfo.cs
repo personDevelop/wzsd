@@ -44,7 +44,7 @@ namespace EasyCms.Model
 
         private string _Unit;
 
-        private string _Weight;
+        private decimal _Weight;
 
         private string _Description;
 
@@ -293,9 +293,9 @@ namespace EasyCms.Model
         ///  重量,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "Weight", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "Weight", DbTypeString = "decimal", ColumnIsNull = false, IsUnique = false, ColumnLength = 15, ColumnJingDu = 2, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public string Weight
+        public decimal Weight
         {
             get
             {
