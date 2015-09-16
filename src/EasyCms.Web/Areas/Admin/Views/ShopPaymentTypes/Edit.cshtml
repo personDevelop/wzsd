@@ -67,12 +67,12 @@
 
 
 
-    @HelperExtend.TextBox("Charge", "手续费", defaultval: Model.Charge, hint: "<BR/>设置顾客选择此支付方式时需要额外支付的手续费，<BR/>如果选中百分比，则表示支付手续费的金额根据订单金额<BR/>按照设置的百分比收取， 如果不需要顾客支付手续费，则设为0")
+    @HelperExtend.Number("Charge", "手续费", defaultval: Model.Charge, hint: "<BR/>设置顾客选择此支付方式时需要额外支付的手续费，<BR/>如果选中百分比，则表示支付手续费的金额根据订单金额<BR/>按照设置的百分比收取， 如果不需要顾客支付手续费，则设为0")
 
     @HelperExtend.RadioGroup("IsPercent", "是否按百分比收费", "false,true", "否,是", defaultval: Model.IsPercent)
     @HelperExtend.RadioGroup("IsEnable", "启用", "false,true", "禁用,启用", defaultval: Model.IsEnable)
 
-    @HelperExtend.TextBox("DisplaySequence", "显示顺序", defaultval: Model.DisplaySequence, hint: "<BR/>设置顾客下订单选择支付方式时，此支付方式显示的位置")
+    @HelperExtend.Number("DisplaySequence", "显示顺序", defaultval: Model.DisplaySequence, hint: "<BR/>设置顾客下订单选择支付方式时，此支付方式显示的位置")
     @HelperExtend.TextArea("Description", "详细介绍", defaultval: Model.Description)
 
 

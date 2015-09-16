@@ -3,8 +3,14 @@
     ViewBag.Title = "订单管理";
 }
 <style type="text/css">
-
+    .borderkuang td {
+        color: rgb(102, 102, 102);
+        line-height: 25px;
+        padding-left: 10px;
+        background-color: rgb(255, 255, 255);
+    }
 </style>
+
 <!--工具栏-->
 <div id="floatHead" class="toolbar-wrap">
     <div class="toolbar">
@@ -20,30 +26,83 @@
             </div>
         </div>
     </div>
-    <table>
-        <tr>
-            <td>订单号：</td>
-            <td><input /></td>
-            <td>收件人：</td>
-            <td><input /></td>
-            <td>用户名：</td>
-            <td><input /></td>
-            <td>订单日期：</td>
-            <td><input />~<input /></td>
-        </tr>
-        <tr>
-            <td>付款状态：</td>
-            <td><input /></td>
-            <td> 订单状态：</td>
-            <td><input /></td>
-            <td>分页展示：</td>
-            <td><input type="checkbox" /></td>
-            <td> </td>
-            <td><input type="button" value="搜索" /></td>
-            <td> </td>
-            <td> </td>
-        </tr>
-    </table>
+    <dl>
+        <dt>
+
+        </dt>
+        <dd>
+            <table width="100%" class="borderkuang" border="0" cellspacing="0" cellpadding="0">
+                <tbody>
+                    <tr>
+                        <td>
+                            @HelperExtend.img("icon-1.gif","width:19px,height:19px")搜索：
+                        </td>
+                        <td>
+                            订单编号：
+                        </td>
+                        <td>
+                            <input type="text" id="OrderNo">
+                        </td>
+                        <td>
+                            收货姓名：
+                        </td>
+                        <td>
+                            <input type="text" id="ShrMc">
+                        </td>
+                        <td>
+                            会员账号：
+                        </td>
+                        <td>
+                            <input type="text" id="AccountName">
+                        </td>
+                        <td>
+                            下单日期：
+                        </td>
+
+                        <td>
+
+                            <div id='StartOrderDate'>  </div>
+
+                        </td>
+                        <td width="10">
+                            -
+
+                        </td>
+                        <td>
+
+                            <div id='EndOrderDate'>  </div>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>付款状态：</td>
+                        <td height="35">
+
+                            <div style='float: left;' id='PayStatus'> </div>
+
+                        </td>
+                        <td> 发货状态：</td>
+                        <td>
+                            <div style='float: left;' id='ShipStatus'> </div>
+
+                        </td>
+                        <td>订单状态：</td>
+                        <td>
+                            <div style='float: left;' id='OrderStatus'> </div>
+
+                        </td>
+                        <td>
+                            <input id="btnQry" type="button" value="搜索">
+                        </td>
+                        <td colspan="3"></td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </dd>
+    </dl>
+
     <div class="content-tab">
         <div class="content-tab-ul-wrap">
             <ul>
@@ -67,6 +126,24 @@
 <!--/列表-->
 @section  scripts{
 
+    <script type="text/javascript">
+
+        $(function () {
+
+            $("#OrderNo").jqxInput({ height: '25px' });
+            $("#ShrMc").jqxInput({ height: '25px' });
+            $("#AccountName").jqxInput({ height: '25px' });
+
+            $("#StartOrderDate").jqxDateTimeInput({ formatString: "yyyy-MM-dd", width: 100, height: '25px', showCalendarButton: true });
+            $("#EndOrderDate").jqxDateTimeInput({ formatString: "yyyy-MM-dd", width: 100, height: '25px', showCalendarButton: true });
+
+
+
+            $("#btnQry").jqxButton({ width: '150', template: 'success' });
+        });
+
+
+    </script>
     <script type="text/javascript">
 
         $(document).ready(function () {
@@ -101,28 +178,28 @@
 
 		{ name: 'InvoiceNote' }];
             var columns = [
-  { text: '订单号', dataField: 'ID',  width: 150 },
-     { text: '收件人', dataField: 'ShipName',  width: 100 },
-  { text: '收件电话', dataField: 'ShipTel',  width: 100 },
+  { text: '订单号', dataField: 'ID', width: 150 },
+     { text: '收件人', dataField: 'ShipName', width: 100 },
+  { text: '收件电话', dataField: 'ShipTel', width: 100 },
 
-  { text: '会员姓名', dataField: 'MemberName',  width: 100 },
+  { text: '会员姓名', dataField: 'MemberName', width: 100 },
 
-  { text: '会员电话', dataField: 'MemberCallPhone',  width: 100 },
+  { text: '会员电话', dataField: 'MemberCallPhone', width: 100 },
 
-  { text: '地区', dataField: 'ShipRegion',  width: 100 },
-  { text: '付款方式', dataField: 'PayTypeName',  width: 100 },
+  { text: '地区', dataField: 'ShipRegion', width: 100 },
+  { text: '付款方式', dataField: 'PayTypeName', width: 100 },
 
-  { text: '快递公司', dataField: 'ExpressCompanyName',  width: 100 },
+  { text: '快递公司', dataField: 'ExpressCompanyName', width: 100 },
 
-  { text: '运单号', dataField: 'ShipOrderNum',  width: 100 },
+  { text: '运单号', dataField: 'ShipOrderNum', width: 100 },
 
   { text: '总价格', dataField: 'TotalPrice', cellsalign: "right", width: 100 },
-  { text: '付款状态', dataField: 'PayStatus',  width: 100 },
-  { text: '订单状态', dataField: 'OrderStatus',  width: 100 },
+  { text: '付款状态', dataField: 'PayStatus', width: 100 },
+  { text: '订单状态', dataField: 'OrderStatus', width: 100 },
   { text: '导出次数', dataField: 'ExportCount', cellsalign: "right", width: 100 },
-  { text: '创建日期', dataField: 'CreateDate',  width: 100 },
-    { text: '发票抬头', dataField: 'InvoiceInfo',  width: 200 },
-      { text: '发票说明', dataField: 'InvoiceNote',  width: 200 }];
+  { text: '创建日期', dataField: 'CreateDate', width: 100 },
+    { text: '发票抬头', dataField: 'InvoiceInfo', width: 200 },
+      { text: '发票说明', dataField: 'InvoiceNote', width: 200 }];
             CreateGrid("jqxgrid", url, datafields, columns, true);
 
         });

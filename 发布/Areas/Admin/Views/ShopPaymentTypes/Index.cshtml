@@ -25,7 +25,7 @@
 </div>
 <!--/列表-->
 @section  scripts{
-    @Html.Partial("_Paging")
+     
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -45,22 +45,8 @@
 { text: '方式名称', dataField: 'Name', cellsalign: "left", width: 150 },
   { text: '商户号', dataField: 'MerchantCode', cellsalign: "left", width: 150 },
     { text: '接口类型', dataField: 'GatewayName', },
-   { text: '顺序', dataField: 'DisplaySequence', cellsalign: "right", width: 50 },
-
-   {
-       text: '操作', datafield: 'ID', width: 200, cellsrenderer: function (row, column, value) {
-
-           var html = "  <div style='text-align: center; overflow: hidden; padding-bottom: 2px; margin-top: 4px; text-overflow: ellipsis;'>";
-
-           html += "<a  href='javascript:;' onclick='AddValue(" + row + ",true);'   >添加</a>&nbsp;&nbsp;&nbsp;" +
-                "<a href='javascript:;' onclick='EditExtendInfo(" + row + ",true);'  >编辑</a> &nbsp;&nbsp;&nbsp;" +
-           "<a  href='javascript:;' onclick='deleteExtendInfo(" + row + ",true);'  >删除</a>";
-
-           html += "</div>";
-           return html;
-
-       }
-   }];
+   { text: '顺序', dataField: 'DisplaySequence', cellsalign: "right", width: 50 } 
+  ];
             CreateGrid("jqxgrid", url, datafields, columns);
              
         });

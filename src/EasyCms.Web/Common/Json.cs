@@ -42,7 +42,7 @@ namespace EasyCms.Web.Common
                     output = sw.ToString();
                 }
             }
-            return output.Replace(": null", ":\"\"");  
+            return output ;  
         }
 
         public static object Deserialize(string jsonText, Type valueType)

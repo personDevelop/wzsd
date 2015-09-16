@@ -304,6 +304,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Images\help.png" />
+    <Content Include="Content\Images\icon-1.gif" />
     <Content Include="Content\jquery\jquery-1.11.2.min.js" />
     <Content Include="Content\jquery\jquery.form.min.js" />
     <Content Include="Content\jquery\jquery.jcrop.min.js" />
@@ -700,7 +701,6 @@
     <Content Include="Areas\Admin\Views\NewsInfo\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\ShopBrandInfo\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\ShopBrandInfo\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\Shared\_Paging.cshtml" />
     <Content Include="Areas\Admin\Views\ShopCategory\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\ShopCategory\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ShopProductType\Edit.cshtml" />
