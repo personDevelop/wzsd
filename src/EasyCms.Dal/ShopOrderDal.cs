@@ -187,7 +187,7 @@ namespace EasyCms.Dal
         /// <returns></returns>
         public string Submit(ShopOrderModel order, ManagerUserInfo accuont, out string err)
         {
-            string result = null;
+            
             //先检测商品对不对
             err = string.Empty;
             List<OrderItem> list = order.OrderItems;
@@ -589,7 +589,7 @@ namespace EasyCms.Dal
                 Savelist.Add(mainOrder);
 
             }
-            return result;
+            return orderNum;
         }
 
         private bool? CoumputeRule(string accuontID, List<BaseEntity> Orderlist, DateTime now, bool? IsFirst, ShopOrder realOrder, List<ShopOrderItem> handsales, List<ShopPromotionSimpal> PromotionList, string jFSouceSubID = null)
