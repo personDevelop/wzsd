@@ -198,7 +198,9 @@ namespace EasyCms.Dal
                 err = "请选择要购买的商品";
                 return null;
             }
+
             Dictionary<string, int> activeID = new Dictionary<string, int>();//活动字典，拆分订单使用
+            List<string> ListactiveID = new List<string>();//活动字典，拆分订单使用,只所以加这个，是因为Dictionary 不支持null
             List<string> listPromot = new List<string>();//活动规则ID集合
             List<string> listCoupon = new List<string>();//优惠券ID集合
             decimal productPrice = 0;
@@ -208,10 +210,18 @@ namespace EasyCms.Dal
             foreach (OrderItem item in list)
             {
                 productPrice += item.SalePrice * item.BuyCount;
-                if (!activeID.ContainsKey(item.OrderResId))
+                if (string.IsNullOrWhiteSpace(item.OrderResId))
                 {
-                    activeID.Add(item.OrderResId, item.OrderType);
+                    if (!ListactiveID.Contains(item.OrderResId))
+                    {
+                        ListactiveID.Add(item.OrderResId);
+                    }
                 }
+                else
+                    if (!activeID.ContainsKey(item.OrderResId))
+                    {
+                        activeID.Add(item.OrderResId, item.OrderType);
+                    }
                 #region 废弃
                 //if (item.Coupon != null)
                 //{
@@ -277,6 +287,21 @@ namespace EasyCms.Dal
             }
             #endregion
 
+            //判断是否满足货到付款
+            if (order.CashOnDelivery)
+            {
+                if (activeID.Count > 0)
+                {
+                    err = "促销类（团购、秒杀等）不支持货到付款";
+                    return null;
+                }
+
+                if (order.OrderItems.Exists(p => p.IsVirtualProduct))
+                {
+                    err = "当前订单含有虚拟商品，不支持货到付款";
+                    return null;
+                }
+            }
 
             #region 检测优惠券是否过期 并计算优惠券总额
 
@@ -348,7 +373,7 @@ namespace EasyCms.Dal
             string orderNum = GetMaxNo("HQ");
             DateTime now = DateTime.Now;
             //开始判断是否拆单
-            bool IsCf = activeID.Count > 1;
+            bool IsCf = ListactiveID.Count > 1;
             int OrderCount = 1;
             //先获取所有商品
             WhereClip where = View_ProductInfoBySkuid._.ID.In(list.Select(p => p.ProductID).ToArray());
@@ -373,13 +398,20 @@ namespace EasyCms.Dal
             }
             string ShipRegion = Dal.From<AdministrativeRegions>().Where(AdministrativeRegions._.ID == address.RegionId).Select(AdministrativeRegions.PathName).ToScalar() as string;
             ShopOrder firstOrder = null;
-            foreach (var item in activeID)
+            foreach (var item in ListactiveID)
             {
+
+                int val = 0;
+                if (!string.IsNullOrWhiteSpace(item))
+                {
+                    val = activeID[item];
+
+                }
                 ShopOrder realOrder = new ShopOrder()
                 {
                     ID = (OrderCount.ToString()).PadLeft(2, '0'),
-                    OrderType = item.Value,
-                    OrderResId = item.Key,
+                    OrderType = val,
+                    OrderResId = item,
                     MemberID = accuont.ID,
                     MemberName = accuont.Name,
                     MemberEmail = accuont.Email,
@@ -430,11 +462,11 @@ namespace EasyCms.Dal
                     realOrder.OrderStatus = (int)OrderStatus.等待付款;
                 }
                 //计算商品明细
-                List<OrderItem> OrderResList = list.Where(p => p.OrderResId == item.Key).ToList<OrderItem>();
+                List<OrderItem> OrderResList = list.Where(p => p.OrderResId == item).ToList<OrderItem>();
                 int orderItemNum = 1;
                 decimal totalCostPrice = 0, totalmarketPrice = 0, totalsalePrice = 0;
                 List<ShopOrderItem> handsales = new List<ShopOrderItem>();
-              
+
                 foreach (var productVar in OrderResList)
                 {
                     View_ProductInfoBySkuid productItem = productList.FirstOrDefault(p => p.ID == productVar.ProductID && p.SKUID == productVar.Sku);
@@ -512,7 +544,7 @@ namespace EasyCms.Dal
                 if (IsCf)
                 {
 
-                    if (OrderCount !=1)// 将其他订单的运费设为0 
+                    if (OrderCount != 1)// 将其他订单的运费设为0 
                     {
                         realOrder.FreightActual = 0;//拆分时另算 
                     }
@@ -553,7 +585,7 @@ namespace EasyCms.Dal
                 mainOrder.TotalPrice = Orderlist.Sum(p => p.TotalPrice);
                 mainOrder.CostPrice = Orderlist.Sum(p => p.CostPrice);
                 mainOrder.FreightActual = Orderlist.Sum(p => p.FreightActual);
-                mainOrder.PayMoney = Orderlist.Sum(p => p.PayMoney); 
+                mainOrder.PayMoney = Orderlist.Sum(p => p.PayMoney);
                 Savelist.Add(mainOrder);
 
             }

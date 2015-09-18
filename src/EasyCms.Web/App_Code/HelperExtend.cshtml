@@ -156,6 +156,61 @@
 
     </script>
 }
+@helper DropDownListEnum(string code, object defaultval = null, Type enumType = null, bool isContainAll = true, bool isMutilCheck = true, string otherClass = "", int width = 100)
+{
+    <div id='@code'>
+    </div>
+    <script type="text/javascript">
+        $(function(){
+
+            @{
+    string jsonStr=string.Empty;
+    if (isContainAll)
+    {
+        jsonStr = "{ID:\"\",Name:\"全部\"},";
+    }
+    string[] names=    Enum.GetNames(enumType);
+            Array ids = Enum.GetValues(enumType);
+            for (int i = 0; i < ids.Length; i++)
+            {
+                if (i>0)
+                {
+                    jsonStr += ",";
+                }
+
+                  jsonStr+=string.Format("{{ID:{0},Name:\"{1}\"}}",((int)ids.GetValue(i)),names[i]);
+
+            }
+            }
+            var enumData=[ @MVCExtention.ExtendHtmlInput.MvcHelper.Raw( jsonStr)];
+            var source =
+                   {
+                       localdata: enumData,
+                       datatype: "json",
+                       datafields: [
+                           { name: 'ID' },
+                           { name: 'Name' }
+                       ],
+                       async: false
+                   };
+            var dataAdapter = new $.jqx.dataAdapter(source);
+            // Create a jqxDropDownList
+            $("#@code").jqxDropDownList({
+                source: dataAdapter, displayMember: "Name", valueMember: "ID", width: @width.ToString(),checkboxes:@isMutilCheck.ToString().ToLower(), height: 25 });
+            @if (defaultval!=null  ) {
+
+                string val = defaultval.ToString();
+                if (!string.IsNullOrWhiteSpace(val))
+                {
+                    @MVCExtention.ExtendHtmlInput.MvcHelper.Raw("var item =$(\"#" + code + "\").jqxDropDownList('getItemByValue', '" + val + "');$(\"#" + code + "\").jqxDropDownList('selectItem', item ); ");
+                }
+            }
+
+        });
+
+
+    </script>
+}
 @helper DateTime(string code, string name, DateTime? defaultval, string hint = "", string otherClass = "", int width = 200)
 {
     <dl>

@@ -97,7 +97,24 @@ namespace EasyCms.Model
         退款完成 = 13,
         申请取消订单 = 14,
         取消订单 = 15,
-        完成,
+        完成 = 16,
+    }
+    public enum QryOrderStatus
+    {
+        等待付款 = 0,
+        等待商家确认 = 1,
+        等待商家发货 = 2,
+        已发货 = 3,
+        已收货 = 4,
+        拒收 = 5,
+        作废 = 6,
+        完成 = 16,
+    }
+    public enum ShipStatus
+    {
+        等待商家发货 = 2,
+        已发货 = 3,
+        完成 = 16
     }
 
     public enum PayStatus

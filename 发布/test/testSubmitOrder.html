@@ -21,9 +21,37 @@
             data.OrderItems[2].Sku = $("#OrderItems2Sku").val();
             data.OrderItems[2].BuyCount = $("#OrderItems2BuyCount").val();
             data.OrderItems[2].UsingCouponsID = $("#OrderItems2UsingCouponsID").val();
-
+            data = {
+                "CashOnDelivery": "1",
+                "AddressID": "2ee34b55-b3cb-444d-a3c0-6c32c0c74ec7",
+                "Promotion": null,
+                "OrderItems": [{
+                    "Point": 0,
+                    "Sku": "e2ad3e15-b26f-4f98-96d3-a750d4054e7b",
+                    "Promotion": null,
+                    "BuyCount": 1,
+                    "IsVirtualProduct": false,
+                    "ProductName": "金立 超强续航 (M5) 白色 16G 移动联通电信4G手机 双卡双待  阿萨德:黑色  尺寸:大  as:郁金香",
+                    "MarketPrice": 0,
+                    "IsGifts": false,
+                    "ProductID": "2c9ecb7b-48a2-4801-9478-ed2e82fe3b76",
+                    "OrderResId": null,
+                    "ProductCode": "ds-0",
+                    "ImgPath": "http:\/\/192.168.22.106\/\/Upload\/image\/20150911\/0514e58d-ca2f-48af-97ff-a7a3d9eea452.jpg",
+                    "SalePrice": 1800,
+                    "OrderType": 0
+                }],
+                "TotalPrice": "1800",
+                "InvoiceInfo": null,
+                "IsInvoice": false,
+                Coupon: "null",
+                "Remark": null,
+                "InvoiceNote": null,
+                "Freight": 0,
+                "PayTypeID": null
+            };
             $.ajax({
-                url: "http://localhost:7161/api/ShopOrderApi/CreateOrder",
+                url: "http://localhost:7161/api/ShopOrderApi/PostOrder",
                 type: "POST",
                 data: data,
                 dataType: "json",
@@ -31,7 +59,7 @@
             });
         }
 
-     
+
         function sumitJson1() {
 
             var data = [];

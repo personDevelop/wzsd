@@ -78,19 +78,20 @@
                         <td></td>
                         <td>付款状态：</td>
                         <td height="35">
-
-                            <div style='float: left;' id='PayStatus'> </div>
+                            @HelperExtend.DropDownListEnum("PayStatus",  enumType:typeof(EasyCms.Model.PayStatus) )
+                           
 
                         </td>
                         <td> 发货状态：</td>
                         <td>
-                            <div style='float: left;' id='ShipStatus'> </div>
+                            @HelperExtend.DropDownListEnum("ShipStatus",  enumType:typeof(EasyCms.Model.ShipStatus) )
+
 
                         </td>
                         <td>订单状态：</td>
                         <td>
-                            <div style='float: left;' id='OrderStatus'> </div>
-
+                             
+                            @HelperExtend.DropDownListEnum("OrderStatus",  enumType:typeof(EasyCms.Model.QryOrderStatus) )
                         </td>
                         <td>
                             <input id="btnQry" type="button" value="搜索">

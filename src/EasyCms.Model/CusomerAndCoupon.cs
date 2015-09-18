@@ -340,9 +340,9 @@ namespace EasyCms.Model
         #endregion
     }
 
-
-    public class CouponAccount : BaseEntity
-    {
+     [Newtonsoft.Json.JsonObject]
+    public class CouponAccount 
+    { 
         /// <summary>
         /// 优惠券会员关系表ID
         /// </summary>

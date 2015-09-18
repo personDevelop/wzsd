@@ -105,8 +105,8 @@ namespace EasyCms.Dal
                 .Select(CusomerAndCoupon._.ID, CouponRule._.Name, CusomerAndCoupon._.CardValue, CusomerAndCoupon._.HaveCount,
                CouponRule._.MinPrice, CouponRule._.IsCanCombie,
                 CouponRule._.ProductId, CouponRule._.ProductSku, CouponRule._.CategoryId)
-                .OrderBy(CouponRule._.StartDate)
-                .List<CouponAccount>();
+                .OrderBy(CouponRule._.StartDate).ToDataTable()
+                .ToList<CouponAccount>();
             foreach (CouponAccount item in list)
             {
                 if (!string.IsNullOrWhiteSpace(item.ProductSku))

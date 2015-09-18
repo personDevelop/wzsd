@@ -719,7 +719,7 @@ namespace EasyCms.Model
 
     }
 
-
+ [Newtonsoft.Json.JsonObject]
     public class ShopPromotionSimpal
     {
         /// <summary>

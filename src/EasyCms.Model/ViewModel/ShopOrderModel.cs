@@ -17,6 +17,7 @@ namespace EasyCms.Model
     /// 第三步 （只有需要支付的才会有）
     ///        调用相应的支付接口后，根据支付结果，通知服务端支付结果
     /// </summary>
+    [Newtonsoft.Json.JsonObject]
     public class ShopOrderModel
     {
         /// <summary>
@@ -64,14 +65,39 @@ namespace EasyCms.Model
         /// </summary>
         public ShopShippingAddress ShopAddress { get; set; }
 
-        public List<ShopPromotionSimpal> Promotion { get; set; }
+        List<ShopPromotionSimpal> _Promotion;
+        public List<ShopPromotionSimpal> Promotion
+        {
+            get { return _Promotion; }
+            set
+            {
+                if (value != null && value.Count == 1 && string.IsNullOrWhiteSpace(value[0].ID))
+                {
+                    return;
+                }
 
+                _Promotion = value;
+            }
+        }
+        public List<CouponAccount> _Coupon;
         /// <summary>
         /// 会员本次购买可使用的优惠券
         /// 生成订单时返回所有可用的优惠券
         /// 提交订单时 提供当前订单使用的优惠券
         /// </summary>
-        public List<CouponAccount> Coupon { get; set; }
+        public List<CouponAccount> Coupon
+        {
+            get { return _Coupon; }
+            set
+            {
+                if (value != null && value.Count == 1 && string.IsNullOrWhiteSpace(value[0].ID))
+                {
+                    return;
+                }
+
+                _Coupon = value;
+            }
+        }
 
 
         /// <summary>
@@ -79,7 +105,7 @@ namespace EasyCms.Model
         /// </summary>
         public string Remark { get; set; }
     }
-
+    [Newtonsoft.Json.JsonObject]
     public class OrderItem
     {
         #region 生成订单时需要传递的参数
@@ -147,10 +173,24 @@ namespace EasyCms.Model
         /// </summary>
         public bool IsVirtualProduct { get; set; }
 
+       
+        List<ShopPromotionSimpal> _Promotion;
         /// <summary>
         /// 促销活动
         /// </summary>
-        public List<ShopPromotionSimpal> Promotion { get; set; }
+        public List<ShopPromotionSimpal> Promotion
+        {
+            get { return _Promotion; }
+            set
+            {
+                if (value != null && value.Count == 1 && string.IsNullOrWhiteSpace(value[0].ID))
+                {
+                    return;
+                }
+
+                _Promotion = value;
+            }
+        }
         #endregion
 
 
