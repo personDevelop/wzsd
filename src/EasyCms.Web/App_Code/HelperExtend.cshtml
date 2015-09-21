@@ -178,7 +178,7 @@
                     jsonStr += ",";
                 }
 
-                  jsonStr+=string.Format("{{ID:{0},Name:\"{1}\"}}",((int)ids.GetValue(i)),names[i]);
+                  jsonStr+=string.Format("{{ID:{0},Name:\"{1}\"}}",Convert.ToInt32(((int)ids.GetValue(i))),names[i]);
 
             }
             }

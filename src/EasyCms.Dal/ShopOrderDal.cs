@@ -166,7 +166,10 @@ namespace EasyCms.Dal
 
             if (list.Exists(p => p.OrderType != 0))//只有普通购物才有促销和优惠券，团购、秒杀无优惠券和促销活动
             {
-                //获取可用促销活动
+
+            }
+            else
+            {  //获取可用促销活动
                 order.Promotion = new ShopPromotionDal().GetValidPromotionList(list, accuontID);
                 //获取可用优惠券
                 order.Coupon = new CouponRuleDal().GetValidCouponList(list, accuontID);
@@ -187,7 +190,7 @@ namespace EasyCms.Dal
         /// <returns></returns>
         public string Submit(ShopOrderModel order, ManagerUserInfo accuont, out string err)
         {
-            
+
             //先检测商品对不对
             err = string.Empty;
             List<OrderItem> list = order.OrderItems;
