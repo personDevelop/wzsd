@@ -50,7 +50,20 @@ namespace EasyCms.Web.API
                         //获取配送信息  //先不获取了
                         if (string.IsNullOrWhiteSpace(err))
                         {
-                            return order.FormatObj();
+                            return order.FormatObj(true, "ShopOrderModel.Freight",
+                                "ShopOrderModel.TotalPrice", ShopShippingAddress._.ID.FullName,
+                                ShopShippingAddress._.Address.FullName,
+                                 ShopShippingAddress._.CelPhone.FullName,
+        ShopShippingAddress._.IsDefault.FullName,
+       ShopShippingAddress._.RegionId.FullName,
+        ShopShippingAddress._.Remark.FullName,
+       ShopShippingAddress._.ShipName.FullName,
+       ShopShippingAddress._.UserId.FullName,
+       ShopShippingAddress._.Zipcode.FullName,
+                                "ShopPromotionSimpal.ID", "ShopPromotionSimpal.Name", "ShopPromotionSimpal.HandsaleProductName", "ShopPromotionSimpal.HandsaleCouponName", "CouponAccount.ID"
+                                , "CouponAccount.Name", "CouponAccount.CardValue", "CouponAccount.CanMutilUse", "CouponAccount.IsCanCombie", "CouponAccount.MinPrice"
+                                , "CouponAccount.HaveCount", "CouponAccount.UsingCount", "CouponAccount.CategoryId", "CouponAccount.ProductId", "CouponAccount.ProductSku"
+                                );
                         }
                         else
                         {
