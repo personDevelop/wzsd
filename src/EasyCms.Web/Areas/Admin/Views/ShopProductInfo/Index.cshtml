@@ -67,7 +67,8 @@
   { text: '库存', dataField: 'Stock', width: 80, cellsalign: "right" },
   { text: '上架日期', dataField: 'SaleDate', width: 80 },
   { text: '添加日期', dataField: 'AddedDate', width: 80 }];
-            CreateGrid("jqxgrid", url, datafields, columns, true);
+            CreateGrid("jqxgrid", url, datafields, columns, { isMutilSelect: true });
+          
         });
     </script>
     <script type="text/javascript">

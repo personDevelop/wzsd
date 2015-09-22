@@ -129,7 +129,7 @@ namespace EasyCms.Web.API
             int queryStatus = -1;
             if (!string.IsNullOrWhiteSpace(pageIndex))
             {
-                if (int.TryParse(pageIndex, out queryStatus))
+                if (!int.TryParse(pageIndex, out queryStatus))
                 {
                     queryStatus = -1;
                 }

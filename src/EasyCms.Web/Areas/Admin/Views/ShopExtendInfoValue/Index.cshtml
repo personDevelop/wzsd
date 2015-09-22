@@ -55,7 +55,8 @@
              return html;
          }
      }];
-            CreateGrid("jqxgrid", url, datafields, columns, true, null, { data: { attriID: "@ViewData["attriID"]" } });
+            CreateGrid("jqxgrid", url, datafields, columns, { isMutilSelect: true, data: { attriID: "@ViewData["attriID"]" } });
+           
 
 
         });

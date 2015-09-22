@@ -1,4 +1,19 @@
-﻿function CreateGrid(gridid, url, datafields, columns, isMutilSelect, opts, dataOpts) {
+﻿function CreateGrid(gridid, url, datafields, columns, opts) {
+    if (!opts) {
+        opts = {};
+    }
+    if (!opts.isMutilSelect) {
+        opts.isMutilSelect =false;
+    }
+    if (!opts.data) {
+        opts.data = {};
+    }
+    if (!opts.adapter) {
+        opts.adapter = {};
+    }
+    if (!opts.grid) {
+        opts.grid = {};
+    }
     gridid = '#' + gridid;
     for (var i = 0; i < datafields.length; i++) {
         if (!datafields[i].type) {
@@ -18,9 +33,9 @@
                   url: url,
               };
 
-    var dataAdapter = new $.jqx.dataAdapter($.extend(source, dataOpts));
+    var dataAdapter = new $.jqx.dataAdapter($.extend(source, opts.data), opts.adapter);
     selectionmode = "checkbox";
-    if (!isMutilSelect) {
+    if (!opts.isMutilSelect) {
         selectionmode = "singlerow";
     }
     for (var i = 0; i < columns.length; i++) {
@@ -45,7 +60,7 @@
     if (totalHeight == 0) {
         totalHeight = $(window).clientHeight();
     }
-    var topHight = 50;
+    var topHight = 250;
 
     var middleHeight = totalHeight - topHight;
     $(gridid).jqxGrid(
@@ -56,6 +71,7 @@
          columnsresize: true,
          virtualmode: true,
          selectionmode: selectionmode,
+         serverProcessing: true,
          altrows: true,
          rendergridrows: function (params) {
              return params.data;
@@ -64,7 +80,7 @@
          pageSize: 20,
          pageable: true,
          columns: columns
-     }, opts));
+     }, opts.grid));
 }
 
 function EditGrid(gridid, url) {

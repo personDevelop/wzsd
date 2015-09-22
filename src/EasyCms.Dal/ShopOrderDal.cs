@@ -592,6 +592,19 @@ namespace EasyCms.Dal
                 Savelist.Add(mainOrder);
 
             }
+            SessionFactory dal;
+            IDbTransaction tr = Dal.BeginTransaction(out dal);
+            try
+            {
+                dal.SubmitNew(tr, ref dal, Savelist);
+                dal.CommitTransaction(tr);
+            }
+            catch (Exception)
+            {
+                dal.RollbackTransaction(tr);
+                throw;
+            }
+
             return orderNum;
         }
 

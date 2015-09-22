@@ -25,7 +25,7 @@
 </div>
 <!--/列表-->
 @section  scripts{
-     
+
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -48,10 +48,12 @@
   { text: '启用', dataField: 'IsEnable', width: 200 },
 
   { text: '备注', dataField: 'Remark', cellsalign: "left", width: 200 }];
-            CreateGrid("jqxgrid", url, datafields, columns, true, {
-                virtualmode: true,
-                groupable: true,
-                groups: ['RuleTypeName']
+            CreateGrid("jqxgrid", url, datafields, columns, {
+                isMutilSelect: true, grid: {
+                    virtualmode: true,
+                    groupable: true,
+                    groups: ['RuleTypeName']
+                }
             });
         });
     </script>

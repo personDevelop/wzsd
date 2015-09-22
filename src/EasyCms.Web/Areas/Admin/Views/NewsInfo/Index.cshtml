@@ -71,7 +71,7 @@
     { text: '评论次数', dataField: 'TotalComment', cellsalign: "right", width: 80 },
 
     { text: '允许评论', dataField: 'AllowPl', width: 80 }];
-            CreateGrid("jqxgrid", url, datafields, columns, true);
+            CreateGrid("jqxgrid", url, datafields, columns, {isMutilSelect:true});
              
         });
     </script>

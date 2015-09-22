@@ -35,7 +35,7 @@
                 <tbody>
                     <tr>
                         <td>
-                            @HelperExtend.img("icon-1.gif","width:19px,height:19px")搜索：
+                            @HelperExtend.img("icon-1.gif", "width:19px,height:19px")搜索：
                         </td>
                         <td>
                             订单编号：
@@ -78,20 +78,20 @@
                         <td></td>
                         <td>付款状态：</td>
                         <td height="35">
-                            @HelperExtend.DropDownListEnum("PayStatus",  enumType:typeof(EasyCms.Model.PayStatus) )
-                           
+                            @HelperExtend.DropDownListEnum("PayStatus", enumType: typeof(EasyCms.Model.PayStatus))
+
 
                         </td>
                         <td> 发货状态：</td>
                         <td>
-                            @HelperExtend.DropDownListEnum("ShipStatus",  enumType:typeof(EasyCms.Model.ShipStatus) )
+                            @HelperExtend.DropDownListEnum("ShipStatus", enumType: typeof(EasyCms.Model.ShipStatus))
 
 
                         </td>
                         <td>订单状态：</td>
                         <td>
-                             
-                            @HelperExtend.DropDownListEnum("OrderStatus",  enumType:typeof(EasyCms.Model.QryOrderStatus) )
+
+                            @HelperExtend.DropDownListEnum("OrderStatus", enumType: typeof(EasyCms.Model.QryOrderStatus))
                         </td>
                         <td>
                             <input id="btnQry" type="button" value="搜索">
@@ -201,7 +201,8 @@
   { text: '创建日期', dataField: 'CreateDate', width: 100 },
     { text: '发票抬头', dataField: 'InvoiceInfo', width: 200 },
       { text: '发票说明', dataField: 'InvoiceNote', width: 200 }];
-            CreateGrid("jqxgrid", url, datafields, columns, true);
+
+            CreateGrid("jqxgrid", url, datafields, columns, {isMutilSelect:true});
 
         });
     </script>
