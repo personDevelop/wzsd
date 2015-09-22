@@ -860,7 +860,7 @@ namespace EasyCms.Dal
             {
                 List<string> orderIDS = list.Select(p => p.ID).ToList();
                 List<ShopOrderItem> orderItems = Dal.From<ShopOrderItem>()
-                    .Where(ShopOrderItem._.OrderID.In(list))
+                    .Where(ShopOrderItem._.OrderID.In(orderIDS))
                     .Select(ShopOrderItem._.ID, ShopOrderItem._.OrderID, ShopOrderItem._.BrandName,
                     ShopOrderItem._.Count, ShopOrderItem._.HandselCount, ShopOrderItem._.IsHandsel,
                     ShopOrderItem._.IsVirtualProduct, ShopOrderItem._.MarketPrice,
