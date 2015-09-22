@@ -214,7 +214,7 @@ namespace EasyCms.Web.API
 
                 sm.ID = Guid.NewGuid().ToString();
                 sm.StationModeName = ((StationMode)sm.StationMode).ToString();
-                
+
                 int dt = new ShopProductInfoBll().SaveStation(sm);
                 string result = JsonWithDataTable.Serialize(sm);
                 return result.FormatSuccess();
@@ -316,7 +316,7 @@ namespace EasyCms.Web.API
             {
 
                 return GatawayConfig.GetAllGataway().FormatObj();
-                
+
             }
             catch (Exception ex)
             {

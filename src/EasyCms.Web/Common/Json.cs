@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -6,12 +7,16 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Script.Serialization;
+using Sharp.Common;
+using Newtonsoft.Json.Converters;
+
 
 namespace EasyCms.Web.Common
 {
     public class JsonWithDataTable
     {
-        public static string Serialize(object value)
+
+        public static string Serialize(object value, bool conatin = false, params string[] props)
         {
             Type type = value.GetType();
 
@@ -20,21 +25,33 @@ namespace EasyCms.Web.Common
             json.ObjectCreationHandling = ObjectCreationHandling.Replace;
             json.MissingMemberHandling = MissingMemberHandling.Ignore;
             json.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-        
+
+            List<string> otherProp = new List<string>();
+            if (props != null && props.Length > 0)
+            {
+                foreach (var item in props)
+                {
+                    otherProp.Add(item);
+                }
+            }
+            json.ContractResolver = new LimitPropsContractResolver(otherProp, conatin);
             if (type == typeof(DataRow))
                 json.Converters.Add(new DataRowConverter());
             else if (type == typeof(DataTable))
                 json.Converters.Add(new DataTableConverter());
             else if (type == typeof(DataSet))
                 json.Converters.Add(new DataSetConverter());
+
+            json.Converters.Add(new DateTimeConverter());
+
             string output = string.Empty;
             using (StringWriter sw = new StringWriter())
             {
                 using (JsonTextWriter writer = new JsonTextWriter(sw))
                 {
-                    writer.Formatting = Formatting.Indented; 
+                    writer.Formatting = Formatting.Indented;
                     writer.QuoteChar = '"';
-                    if (value==null)
+                    if (value == null)
                     {
                         value = string.Empty;
                     }
@@ -42,7 +59,7 @@ namespace EasyCms.Web.Common
                     output = sw.ToString();
                 }
             }
-            return output ;  
+            return output;
         }
 
         public static object Deserialize(string jsonText, Type valueType)
@@ -105,16 +122,28 @@ namespace EasyCms.Web.Common
             return typeof(DataRow).IsAssignableFrom(valueType);
         }
 
-       
+
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             throw new NotImplementedException();
         }
- 
+
     }
 
-   
+    public class DateTimeConverter : DateTimeConverterBase
+    {
+        private static IsoDateTimeConverter dtConverter = new IsoDateTimeConverter { DateTimeFormat = "yyyy-MM-dd" };
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            return dtConverter.ReadJson(reader, objectType, existingValue, serializer);
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            dtConverter.WriteJson(writer, value, serializer);
+        }
+    }
     /// <summary>
     /// Converts a DataTable to JSON. Note no support for deserialization
     /// </summary>
@@ -156,7 +185,7 @@ namespace EasyCms.Web.Common
             return typeof(DataTable).IsAssignableFrom(valueType);
         }
 
-        
+
 
 
 
@@ -208,11 +237,77 @@ namespace EasyCms.Web.Common
             return typeof(DataSet).IsAssignableFrom(valueType);
         }
 
-      
+
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             throw new NotImplementedException();
+        }
+    }
+
+
+
+    public class LimitPropsContractResolver : DefaultContractResolver
+    {
+        static Type BaseType = typeof(BaseEntity);
+        static List<string> BaseReturnOprops = new List<string>(new string[] { "IsSuccess", "Msg", "data", "PageIndex", "RecordCount", "TotalPageCount" ,
+        "TotalRecourdCount","Data" });
+
+        List<string> props = null;
+
+        bool retain;
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="props">传入的属性数组</param>
+        /// <param name="retain">true:表示props是需要保留的字段  false：表示props是要排除的字段</param>
+        public LimitPropsContractResolver(List<string> props, bool retain = false)
+        {
+            //指定要序列化属性的清单
+            this.props = props;
+
+            this.retain = retain;
+        }
+
+        protected override IList<JsonProperty> CreateProperties(Type type,
+
+        MemberSerialization memberSerialization)
+        {
+            IList<JsonProperty> list =
+            base.CreateProperties(type, memberSerialization);
+            //只保留清单有列出的属性
+            return list.Where(p =>
+            {
+                if (p.DeclaringType == BaseType)
+                {
+                    return false;
+                }
+
+                else
+                    if (p.PropertyType.IsClass && p.PropertyType != typeof(string))
+                    {
+                        return true;
+                    }
+                    else
+                        if (BaseReturnOprops.Contains(p.PropertyName))
+                        {
+                            return true;
+
+                        }
+                        else
+                        {
+                            if (retain)
+                            {
+                                return props.Contains(p.DeclaringType.Name + "." + p.PropertyName);
+
+                            }
+                            else
+                            {
+                                return !props.Contains(p.DeclaringType.Name + "." + p.PropertyName);
+                            }
+                        }
+            }).ToList();
         }
     }
 

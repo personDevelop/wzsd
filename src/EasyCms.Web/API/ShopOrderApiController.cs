@@ -149,7 +149,23 @@ namespace EasyCms.Web.API
                 }
                 else
                 {
-                    return list.FormatObj();
+                    return list.FormatObjProp(true, ShopOrder._.ID, ShopOrder._.ParentID, ShopOrder._.OrderType,
+                ShopOrder._.OrderResId,
+                ShopOrder._.PayTypeName,
+                ShopOrder._.ExpressCompanyName,
+                ShopOrder._.ShipOrderNum,
+                ShopOrder._.FreightActual,
+                ShopOrder._.ShipStatus,
+                ShopOrder._.PayStatus,
+                ShopOrder._.OrderStatus,
+                ShopOrder._.CommentStatus,
+                ShopOrder._.TotalPrice, ShopOrder._.CreateDate, ShopOrderItem._.ID, ShopOrderItem._.OrderID, ShopOrderItem._.BrandName,
+                    ShopOrderItem._.Count, ShopOrderItem._.HandselCount, ShopOrderItem._.IsHandsel,
+                    ShopOrderItem._.IsVirtualProduct, ShopOrderItem._.MarketPrice,
+                    ShopOrderItem._.Price, ShopOrderItem._.Preferential,
+                    ShopOrderItem._.ProductID, ShopOrderItem._.ProductCode, ShopOrderItem._.ProductSKU,
+                    ShopOrderItem._.ProductName, ShopOrderItem._.ProductThumb, ShopOrderItem._.TotalPrice,
+                    ShopOrderItem._.Sequence);
                 }
             }
             catch (Exception ex)

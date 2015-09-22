@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sharp.Common;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -43,10 +44,24 @@ namespace EasyCms.Web.Common
             return resp;
         }
 
-        public static HttpResponseMessage FormatObj(this object obj)
+        public static HttpResponseMessage FormatObjProp(this object obj, bool conatin = false, params PropertyItem[] props)
+        {
+            List<string> otherProp = new List<string>();
+            if (props != null && props.Length > 0)
+            {
+                foreach (var item in props)
+                {
+                    otherProp.Add(item.TableName + "." + item.ColumnName);
+                }
+            }
+            return FormatObj(obj, conatin, otherProp.ToArray());
+
+        }
+
+        public static HttpResponseMessage FormatObj(this object obj, bool conatin = false, params string[] props)
         {
             var resp = new HttpResponseMessage(HttpStatusCode.OK);
-            string result = JsonWithDataTable.Serialize(new { IsSuccess = true, Msg = "操作成功", data = obj });
+            string result = JsonWithDataTable.Serialize(new { IsSuccess = true, Msg = "操作成功", data = obj }, conatin, props);
             resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
             return resp;
         }

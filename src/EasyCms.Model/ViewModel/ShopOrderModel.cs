@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -64,7 +65,7 @@ namespace EasyCms.Model
         /// 收货地址，生成订单时，返回给前台
         /// </summary>
         public ShopShippingAddress ShopAddress { get; set; }
-
+         [JsonIgnore]
         List<ShopPromotionSimpal> _Promotion;
         public List<ShopPromotionSimpal> Promotion
         {
@@ -79,6 +80,7 @@ namespace EasyCms.Model
                 _Promotion = value;
             }
         }
+         [JsonIgnore]
         public List<CouponAccount> _Coupon;
         /// <summary>
         /// 会员本次购买可使用的优惠券
@@ -173,7 +175,7 @@ namespace EasyCms.Model
         /// </summary>
         public bool IsVirtualProduct { get; set; }
 
-       
+        [JsonIgnore]
         List<ShopPromotionSimpal> _Promotion;
         /// <summary>
         /// 促销活动
