@@ -54,6 +54,19 @@ namespace EasyCms.Web.API
                                 "ShopOrderModel.TotalPrice", ShopShippingAddress._.ID.FullName,
                                 ShopShippingAddress._.Address.FullName,
                                  ShopShippingAddress._.CelPhone.FullName,
+                                "OrderItem.ProductID",
+                                 "OrderItem.Sku",
+                                  "OrderItem.BuyCount",
+                                   "OrderItem.IsGifts",
+                                    "OrderItem.OrderType",
+                                     "OrderItem.OrderResId",
+                                      "OrderItem.ProductCode",
+                                        "OrderItem.ProductName",
+                                          "OrderItem.ImgPath",
+                                            "OrderItem.MarketPrice",
+                                              "OrderItem.SalePrice",
+                                                "OrderItem.Point",
+                                                  "OrderItem.IsVirtualProduct",
         ShopShippingAddress._.IsDefault.FullName,
        ShopShippingAddress._.RegionId.FullName,
         ShopShippingAddress._.Remark.FullName,
@@ -63,6 +76,9 @@ namespace EasyCms.Web.API
                                 "ShopPromotionSimpal.ID", "ShopPromotionSimpal.Name", "ShopPromotionSimpal.HandsaleProductName", "ShopPromotionSimpal.HandsaleCouponName", "CouponAccount.ID"
                                 , "CouponAccount.Name", "CouponAccount.CardValue", "CouponAccount.CanMutilUse", "CouponAccount.IsCanCombie", "CouponAccount.MinPrice"
                                 , "CouponAccount.HaveCount", "CouponAccount.UsingCount", "CouponAccount.CategoryId", "CouponAccount.ProductId", "CouponAccount.ProductSku"
+
+
+
                                 );
                         }
                         else

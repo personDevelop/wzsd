@@ -60,6 +60,7 @@
     <Compile Include="RedeemRulesBll.cs" />
     <Compile Include="ShopBrandInfoBll.cs" />
     <Compile Include="ShopCategoryBll.cs" />
+    <Compile Include="ShopExpressBll.cs" />
     <Compile Include="ShopOrderBll.cs" />
     <Compile Include="ShopPaymentTypesBll.cs" />
     <Compile Include="ShopProductInfoBll.cs" />

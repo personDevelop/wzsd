@@ -39,8 +39,8 @@
     @HelperExtend.Number("MinVal", "等级值下限(包括)", defaultval: Model.MinVal, hint: "",max:100000)
 
     @HelperExtend.Number("MaxVal", "等级值上限(不包括)", defaultval: Model.MaxVal, hint: "", max: 100000)
-
-    @HelperExtend.TextBox("IsEnable", "可用", defaultval: Model.IsEnable, hint: "") 
+    @HelperExtend.RadioGroup("IsEnable", "启用", "false,true", "否,是", defaultval: Model.IsEnable)
+   
     @HelperExtend.TextBox("Note", "等级描述", defaultval: Model.Note, hint: "")
 
      

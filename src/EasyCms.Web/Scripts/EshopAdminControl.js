@@ -3,7 +3,7 @@
         opts = {};
     }
     if (!opts.isMutilSelect) {
-        opts.isMutilSelect =false;
+        opts.isMutilSelect = false;
     }
     if (!opts.data) {
         opts.data = {};
@@ -71,7 +71,6 @@
          columnsresize: true,
          virtualmode: true,
          selectionmode: selectionmode,
-         serverProcessing: true,
          altrows: true,
          rendergridrows: function (params) {
              return params.data;
@@ -110,7 +109,7 @@ function DelGrid(gridid, url) {
             ErrorMsg(d);
             if (d.indexOf("成功") > -1) {
 
-                $(gridid).jqxGrid('deleteRow', rowindexes[0]);
+                $(gridid).jqxGrid('updatebounddata');
             }
         });
     } else { ErrorMsg("请选择一条数据"); }
@@ -275,3 +274,5 @@ var pagerrenderer = function (gridid) {
 
     return pageelement;
 }
+
+ 

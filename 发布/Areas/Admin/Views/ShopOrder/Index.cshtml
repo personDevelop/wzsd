@@ -2,6 +2,14 @@
 @{
     ViewBag.Title = "订单管理";
 }
+<style>
+    html, body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+</style>
+
 <style type="text/css">
     .borderkuang td {
         color: rgb(102, 102, 102);
@@ -12,6 +20,7 @@
 </style>
 
 <!--工具栏-->
+@*<div id="mainSplitter">*@
 <div id="floatHead" class="toolbar-wrap">
     <div class="toolbar">
         <div class="box-wrap">
@@ -19,103 +28,111 @@
             <div class="l-list">
                 <ul class="icon-list">
                     <li><a class="add" href="javascript:;" onclick="viewOrder();"><i></i><span>查看</span></a></li>
-                    <li><a class="edit" href="javascript:;" onclick="EditOrder();"><i></i><span>修改状态</span></a></li>
+                    <li><a class="edit" href="javascript:;" onclick="Publish();"><i></i><span>发货</span></a></li>
                     <li><a class="expandable" href="javascript:;" onclick="exportOrder();"><i></i><span>导出</span></a></li>
-                    <li><a class="del" href="javascript:;" onclick="DelGrid('jqxgrid', '@Url.Action("Delete")');"><i></i><span>删除</span></a></li>
+                    <li>
+                        <a class="del" href="javascript:;" onclick="DelGrid('jqxgrid', '@Url.Action("Delete")');">
+                            <i></i>
+                            <span>删除</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
+
+
     </div>
-    <dl>
-        <dt>
 
-        </dt>
-        <dd>
-            <table width="100%" class="borderkuang" border="0" cellspacing="0" cellpadding="0">
-                <tbody>
-                    <tr>
-                        <td>
-                            @HelperExtend.img("icon-1.gif", "width:19px,height:19px")搜索：
-                        </td>
-                        <td>
-                            订单编号：
-                        </td>
-                        <td>
-                            <input type="text" id="OrderNo">
-                        </td>
-                        <td>
-                            收货姓名：
-                        </td>
-                        <td>
-                            <input type="text" id="ShrMc">
-                        </td>
-                        <td>
-                            会员账号：
-                        </td>
-                        <td>
-                            <input type="text" id="AccountName">
-                        </td>
-                        <td>
-                            下单日期：
-                        </td>
+</div>
+<dl>
+    <dt>
 
-                        <td>
+    </dt>
+    <dd>
+        <table width="100%" class="borderkuang" border="0" cellspacing="0" cellpadding="0">
+            <tbody>
+                <tr>
+                    <td>
+                        @HelperExtend.img("icon-1.gif", "width:19px,height:19px")搜索：
+                    </td>
+                    <td>
+                        订单编号：
+                    </td>
+                    <td>
+                        <input type="text" id="OrderNo">
+                    </td>
+                    <td>
+                        收货姓名：
+                    </td>
+                    <td>
+                        <input type="text" id="ShrMc">
+                    </td>
+                    <td>
+                        会员账号：
+                    </td>
+                    <td>
+                        <input type="text" id="AccountName">
+                    </td>
+                    <td>
+                        下单日期：
+                    </td>
 
-                            <div id='StartOrderDate'>  </div>
+                    <td  >
 
-                        </td>
-                        <td width="10">
-                            -
+                        <div id='StartOrderDate'>  </div>
 
-                        </td>
-                        <td>
+                    </td>
+                    <td width="10">
+                        -
 
-                            <div id='EndOrderDate'>  </div>
+                    </td>
+                    <td  >
 
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td>付款状态：</td>
-                        <td height="35">
-                            @HelperExtend.DropDownListEnum("PayStatus", enumType: typeof(EasyCms.Model.PayStatus))
+                        <div id='EndOrderDate'>  </div>
 
-
-                        </td>
-                        <td> 发货状态：</td>
-                        <td>
-                            @HelperExtend.DropDownListEnum("ShipStatus", enumType: typeof(EasyCms.Model.ShipStatus))
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>付款状态：</td>
+                    <td height="35">
+                        @HelperExtend.DropDownListEnum("PayStatus", enumType: typeof(EasyCms.Model.PayStatus))
 
 
-                        </td>
-                        <td>订单状态：</td>
-                        <td>
+                    </td>
+                    <td> 发货状态：</td>
+                    <td>
+                        @HelperExtend.DropDownListEnum("ShipStatus", enumType: typeof(EasyCms.Model.ShipStatus))
 
-                            @HelperExtend.DropDownListEnum("OrderStatus", enumType: typeof(EasyCms.Model.QryOrderStatus))
-                        </td>
-                        <td>
-                            <input id="btnQry" type="button" value="搜索">
-                        </td>
-                        <td colspan="3"></td>
-                    </tr>
 
-                </tbody>
-            </table>
-        </dd>
-    </dl>
+                    </td>
+                    <td>订单状态：</td>
+                    <td>
 
-    <div class="content-tab">
-        <div class="content-tab-ul-wrap">
-            <ul>
-                <li><a class="selected" href="javascript:;">近三个月订单</a></li>
-                <li><a href="javascript:;">等待付款</a></li>
-                <li><a href="javascript:;">等待付款确认</a></li>
-                <li><a href="javascript:;">等待处理</a></li>
-                <li><a href="javascript:;">已发货</a></li>
-                <li><a href="javascript:;">取消订单</a></li>
-                <li><a href="javascript:;">已完成</a></li>
-            </ul>
-        </div>
+                        @HelperExtend.DropDownListEnum("OrderStatus", enumType: typeof(EasyCms.Model.QryOrderStatus))
+                    </td>
+                    <td  colspan="3">
+                        <input id="btnQry" type="button" value="搜索">
+                    </td>
+                    <td></td>
+                </tr>
+
+            </tbody>
+        </table>
+    </dd>
+</dl>
+
+<div class="content-tab">
+    <div class="content-tab-ul-wrap">
+        <ul>
+            <li><a class="selected" href="javascript:;">近三个月订单</a></li>
+            <li><a href="javascript:;">等待付款</a></li>
+            <li><a href="javascript:;">等待付款确认</a></li>
+            <li><a href="javascript:;">等待处理</a></li>
+            <li><a href="javascript:;">已发货</a></li>
+            <li><a href="javascript:;">取消订单</a></li>
+            <li><a href="javascript:;">已完成</a></li>
+        </ul>
     </div>
 </div>
 <!--/工具栏-->
@@ -125,12 +142,84 @@
     </div>
 </div>
 <!--/列表-->
+@*</div>*@
 @section  scripts{
-
     <script type="text/javascript">
+        $(function () { 
+            Dialog.create("fh", "发货", "@Url.Content("~/Content/Images/movie.png")");
+        });
+        function Publish() {
+            Dialog.open("@Url.Action("PublishToWl")", { width: 800, height: 800 });
 
+        }
+    </script>
+    <script type="text/javascript">
+        function get3MonthBefor() {
+            var resultDate, year, month, date, hms;
+            var currDate = new Date();
+            year = currDate.getFullYear();
+            month = currDate.getMonth();
+            date = currDate.getDate();
+            /*hms = currDate.getHours() + ':' + currDate.getMinutes() + ':' + (currDate.getSeconds() < 10 ? '0' + currDate.getSeconds() : currDate.getSeconds());*/
+            switch (month) {
+                case 0:
+                case 1:
+                case 2:
+                    month += 8;
+                    year--;
+                    break;
+                default:
+                    month -= 3;
+                    break;
+            }
+            month = (month < 10) ? ('0' + month) : month;
+
+            resultDate = new Date(year, month, date);
+            return resultDate;
+        }
         $(function () {
+            $(".content-tab-ul-wrap ul li").click(function () {
+                $("#PayStatus").jqxDropDownList('uncheckAll');
+                $("#ShipStatus").jqxDropDownList('uncheckAll');
+                $("#OrderStatus").jqxDropDownList('uncheckAll');
+                $("#OrderNo").val("");
+                $("#ShrMc").val("");
+                $("#AccountName").val("");
+                $("#StartOrderDate").val("");
+                $("#EndOrderDate").val("");
+                var selectType = $(this).index();
+                switch (selectType) {
+                    case 0://近三个月订单
+                        $('#EndOrderDate').jqxDateTimeInput('setDate', new Date());
+                        $('#StartOrderDate').jqxDateTimeInput('setDate', get3MonthBefor());
+                        break;
+                    case 1://等待付款
 
+                        $("#PayStatus").jqxDropDownList('checkIndex', 1);
+                        $("#OrderStatus").jqxDropDownList('checkIndex', 1);
+                        break;
+                    case 2://等待付款确认
+                        $("#OrderStatus").jqxDropDownList('checkIndex', 2);
+                        break;
+                    case 3://等待处理
+                        $("#OrderStatus").jqxDropDownList('checkIndex', 3);
+                        $("#OrderStatus").jqxDropDownList('checkIndex', 2);
+                        $("#ShipStatus").jqxDropDownList('checkIndex', 1);
+                        break;
+                    case 4://已发货
+                        $("#OrderStatus").jqxDropDownList('checkIndex', 4);
+                        $("#ShipStatus").jqxDropDownList('checkIndex', 2);
+                        break;
+                    case 5://取消订单
+                        $("#OrderStatus").jqxDropDownList('checkIndex', 7);
+
+                        break;
+                    case 6://已完成
+                        $("#OrderStatus").jqxDropDownList('checkIndex', 8);
+                        break;
+                }
+                $('#jqxgrid').jqxGrid('updatebounddata');
+            });
             $("#OrderNo").jqxInput({ height: '25px' });
             $("#ShrMc").jqxInput({ height: '25px' });
             $("#AccountName").jqxInput({ height: '25px' });
@@ -141,10 +230,15 @@
 
 
             $("#btnQry").jqxButton({ width: '150', template: 'success' });
+
+
+            $("#btnQry").on("click", function () { $('#jqxgrid').jqxGrid('updatebounddata'); });
+
         });
 
 
     </script>
+
     <script type="text/javascript">
 
         $(document).ready(function () {
@@ -202,7 +296,30 @@
     { text: '发票抬头', dataField: 'InvoiceInfo', width: 200 },
       { text: '发票说明', dataField: 'InvoiceNote', width: 200 }];
 
-            CreateGrid("jqxgrid", url, datafields, columns, {isMutilSelect:true});
+            CreateGrid("jqxgrid", url, datafields, columns, {
+                isMutilSelect: true, adapter: {
+                    formatData: function (data) {
+
+
+                        data.OrderNo = $("#OrderNo").val();
+
+                        data.ShrMc = $("#ShrMc").val();
+
+                        data.AccountName = $("#AccountName").val();
+
+                        data.StartOrderDate = $("#StartOrderDate").val();
+
+                        data.EndOrderDate = $("#EndOrderDate").val();
+
+                        data.PayStatus = $("#PayStatus").val();
+
+                        data.ShipStatus = $("#ShipStatus").val();
+
+                        data.OrderStatus = $("#OrderStatus").val();
+                    }
+
+                }
+            });
 
         });
     </script>

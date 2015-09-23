@@ -20,26 +20,76 @@ namespace EasyCms.Web.Areas.Admin.Controllers
 
             return View();
         }
-      
-        public string GetList(int pagenum, int pagesize)
+
+        public string GetList(int pagenum, int pagesize, string orderNo, string ShrMc, string AccountName, string StartOrderDate,
+            string EndOrderDate, string PayStatus, string ShipStatus, string OrderStatus)
         {
             int recordCount = 0;
-            System.Data.DataTable dt = bll.GetList(pagenum + 1, pagesize, ref   recordCount);
+            WhereClip where = new WhereClip();
+            if (!string.IsNullOrWhiteSpace(orderNo))
+            {
+                where = ShopOrder._.ID.StartsWith(orderNo);
+            }
+            if (!string.IsNullOrWhiteSpace(ShrMc))
+            {
+                where = where && ShopOrder._.ShipName.StartsWith(ShrMc);
+            }
+            if (!string.IsNullOrWhiteSpace(AccountName))
+            {
+                where = where && ShopOrder._.MemberName.StartsWith(AccountName);
+            }
+            DateTime start = DateTime.Now;
+            if (StartOrderDate.TryPhrase("yyyy-MM-dd", out start))
+            {
+                where = where && ShopOrder._.CreateDate >= start;
+            }
+            if (EndOrderDate.TryPhrase("yyyy-MM-dd", out start))
+            {
+                where = where && ShopOrder._.CreateDate < start.AddDays(1);
+            }
+            if (!string.IsNullOrWhiteSpace(PayStatus))
+            {
+                string[] ps = PayStatus.Split(',');
+                if (!ps.Contains(""))
+                {
+                    where = where && ShopOrder._.PayStatus.In(ps);
+                }
+
+            }
+            if (!string.IsNullOrWhiteSpace(ShipStatus))
+            {
+                string[] ps = ShipStatus.Split(',');
+                if (!ps.Contains(""))
+                {
+                    where = where && ShopOrder._.ShipStatus.In(ps);
+                }
+
+            }
+            if (!string.IsNullOrWhiteSpace(PayStatus))
+            {
+                string[] ps = PayStatus.Split(',');
+                if (!ps.Contains(""))
+                {
+                    where = where && ShopOrder._.PayStatus.In(ps);
+                }
+
+            } if (!string.IsNullOrWhiteSpace(OrderStatus))
+            {
+                string[] ps = OrderStatus.Split(',');
+                if (!ps.Contains(""))
+                {
+                    where = where && ShopOrder._.OrderStatus.In(ps);
+                }
+
+            }
+            System.Data.DataTable dt = bll.GetList(pagenum + 1, pagesize, where, ref   recordCount);
 
             string result = JsonWithDataTable.Serialize(dt);
             result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
             return result;
 
         }
-        public string GetListForSelecte(int pagenum, int pagesize)
-        {
-            int recordCount = 0;
-            System.Data.DataTable dt = bll.GetList(pagenum, pagesize, ref   recordCount, true);
-            string result = JsonWithDataTable.Serialize(dt);
-            result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
-            return result;
-        }
-       
+
         //
         // POST: /Admin/ShopOrder/Create
         [HttpPost]
@@ -68,16 +118,24 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                     {
                         p.ID = Guid.NewGuid().ToString();
                     }
-                   
+
                 }
                 bll.Save(p);
-                TempData.Add("IsSuccess", "保存成功");
+                if (TempData.ContainsKey("IsSuccess"))
+                {
+                    TempData["IsSuccess"] = "保存成功";
+
+                }
+                else
+                {
+                    TempData.Add("IsSuccess", "保存成功");
+                }
                 ModelState.Clear();
                 if (collection["IsContinueAdd"] == "1")
                 {
                     p = new ShopOrder();
 
-                } 
+                }
 
 
             }
@@ -110,6 +168,22 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         public string Delete(string id)
         {
             return bll.Delete(id);
+        }
+
+
+        //
+        // GET: /Admin/ShopOrder/Edit/5
+        public ActionResult PublishToWl(string ids)
+        {
+            return View("PublishToWl");
+        }
+
+        [HttpPost]
+        //
+        // GET: /Admin/ShopOrder/Edit/5
+        public ActionResult Publish(string wlgs, List<string> order)
+        {
+            return new JsonResult() {  Data="成功" };
         }
     }
 }

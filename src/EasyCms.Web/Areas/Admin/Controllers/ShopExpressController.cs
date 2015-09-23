@@ -10,52 +10,60 @@ using EasyCms.Web.Common;
 
 namespace EasyCms.Web.Areas.Admin.Controllers
 {
-    public class ParameterInfoController : BaseControler
+    public class ShopExpressController : Controller
     {
-        ParameterInfoBll bll = new ParameterInfoBll();
+        ShopExpressBll bll = new ShopExpressBll();
         //
-        // GET: /Admin/ParameterInfo/
+        // GET: /Admin/ShopExpress/
         public ActionResult Index()
         {
 
             return View();
         }
-        public string GetList()
+
+        public string GetList(int pagenum, int pagesize)
         {
-            System.Data.DataTable dt = bll.GetList();
-            return JsonWithDataTable.Serialize(dt);
-            ;
+            int recordCount = 0;
+            System.Data.DataTable dt = bll.GetList(pagenum + 1, pagesize, ref   recordCount);
+
+            string result = JsonWithDataTable.Serialize(dt);
+            result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
+            return result;
 
         }
         public string GetListForSelecte()
         {
+
             System.Data.DataTable dt = bll.GetList(true);
-            return JsonWithDataTable.Serialize(dt);
+            string result = JsonWithDataTable.Serialize(dt);
+
+            return result;
         }
-        public string CheckRepeat(string ID, string ParentID, string RecordStatus, string val, bool IsCode)
+        public string CheckRepeat(string ID, string RecordStatus, string val, bool IsCode)
         {
-            return bll.Exit(ID, ParentID, RecordStatus, val, IsCode).ToString().ToLower();
+            return bll.Exit(ID, RecordStatus, val, IsCode).ToString().ToLower();
 
         }
         //
-        // POST: /Admin/ParameterInfo/Create
+        // POST: /Admin/ShopExpress/Create
         [HttpPost]
         [ValidateInput(false)]
         public ActionResult Save(FormCollection collection)
         {
-            ParameterInfo p = null; ;
+
+            ShopExpress p = null;
 
             try
             {
                 if (collection["RecordStatus"] != "add")
                 {
                     p = bll.GetEntity(collection["ID"]);
-                    p.BindForm<ParameterInfo>(collection);
+                    p.BindForm<ShopExpress>(collection);
                 }
                 else
                 {
                     // TODO: Add insert logic here
-                    p = collection.Bind<ParameterInfo>();
+                    p = collection.Bind<ShopExpress>();
 
                 }
 
@@ -80,10 +88,9 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                 ModelState.Clear();
                 if (collection["IsContinueAdd"] == "1")
                 {
-                    p = new ParameterInfo();
+                    p = new ShopExpress();
 
-                } 
-
+                }
 
             }
             catch (Exception ex)
@@ -94,16 +101,15 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             return View("Edit", p);
         }
 
-
         //
-        // GET: /Admin/ParameterInfo/Edit/5
+        // GET: /Admin/ShopExpress/Edit/5
         public ActionResult Edit(string id)
         {
 
-            ParameterInfo p = null;
+            ShopExpress p = null;
             if (string.IsNullOrWhiteSpace(id))
             {
-                p = new ParameterInfo();
+                p = new ShopExpress();
             }
             else
                 p = bll.GetEntity(id);
@@ -112,20 +118,11 @@ namespace EasyCms.Web.Areas.Admin.Controllers
 
         [HttpPost]
         //
-        // GET: /Admin/ParameterInfo/Delete/5
+        // GET: /Admin/ShopExpress/Delete/5
         public string Delete(string id)
         {
+
             return bll.Delete(id);
-        }
-
-
-
-        public string GetIdAndNameByParentId(string id)
-        {
-            System.Data.DataTable dt = bll.GetIdAndNameByParentId(id);
-            return JsonWithDataTable.Serialize(dt);
-            ;
-
         }
     }
 }

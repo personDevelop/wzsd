@@ -19,11 +19,11 @@ $(function () {
         setTimeout(function () {
             $("#floatHead").children("div").width($("#floatHead").width());
             $(".toolbar").ruleLayoutToolbar();
-            $("#floatHead").height($("#floatHead").children("div").outerHeight());
+           $("#floatHead").height($("#floatHead").children("div").outerHeight());
             $(".imglist").ruleLayoutImgList();
             $(".content-tab").ruleLayoutTab();
             $(".tab-content").ruleLayoutContent();
-            //$(".table-container").ruleLayoutTable();
+            $(".table-container").ruleLayoutTable();
             $(".page-footer").ruleLayoutFooter();
         }, 200);
     });

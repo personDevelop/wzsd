@@ -28,7 +28,7 @@ namespace EasyCms.Web
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-1.10.2.js" ,
                         "~/Content/jquery/jquery.nicescroll.js",
-            "~/Content/artdialog/dialog-plus-min.js",   
+            //"~/Content/artdialog/dialog-plus-min.js",   
             "~/Content/js/layindex.js",
                "~/Content/js/common.js",
                "~/Content/js/laymain.js"
@@ -67,7 +67,11 @@ namespace EasyCms.Web
 
 
             bundles.Add(new ScriptBundle("~/bundles/eshopJS").Include(
-              "~/Scripts/EshopAdminControl.js"));
+              "~/Scripts/EshopAdminControl.js",
+              "~/Scripts/WindowDialog.js"));
+
+
+             
 
             #endregion
 

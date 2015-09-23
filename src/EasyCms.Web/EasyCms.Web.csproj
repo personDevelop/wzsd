@@ -231,6 +231,7 @@
     <Compile Include="Areas\Admin\Controllers\RegionsController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopBrandInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopCategoryController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ShopExpressController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopExtendInfoValueController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopOrderController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopPaymentTypesController.cs" />
@@ -305,6 +306,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Images\help.png" />
     <Content Include="Content\Images\icon-1.gif" />
+    <Content Include="Content\Images\movie.png" />
     <Content Include="Content\jquery\jquery-1.11.2.min.js" />
     <Content Include="Content\jquery\jquery.form.min.js" />
     <Content Include="Content\jquery\jquery.jcrop.min.js" />
@@ -738,6 +740,9 @@
     <Content Include="Areas\Admin\Views\ShopOrder\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\SysDeleteCasCheck\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\SysDeleteCasCheck\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopOrder\PublishToWl.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopExpress\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopExpress\Index.cshtml" />
     <None Include="Properties\PublishProfiles\publish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\EshopAdminControl.js" />
@@ -1147,7 +1152,9 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\WindowDialog.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="test\testOpenWindow.html" />
     <Content Include="test\testSubmitOrder.html" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

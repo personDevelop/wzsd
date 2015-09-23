@@ -24,9 +24,9 @@ namespace EasyCms.Business
             return Dal.Save(item);
         }
 
-        public DataTable GetList(int pagenum, int pagesize, ref int recordCount, bool IsForSelected = false)
+        public DataTable GetList(int pagenum, int pagesize,WhereClip where, ref int recordCount, bool IsForSelected = false)
         {
-            return Dal.GetList(pagenum, pagesize, ref   recordCount, IsForSelected);
+            return Dal.GetList(pagenum, pagesize, where, ref   recordCount, IsForSelected);
         }
 
         public ShopOrder GetEntity(string id)

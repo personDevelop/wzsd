@@ -264,7 +264,15 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                 int i = bll.Save(p, list, listAttri, listSku, listSkuInfo);
                 if (i > -1)
                 {
-                    TempData.Add("IsSuccess", "保存成功");
+                    if (TempData.ContainsKey("IsSuccess"))
+                    {
+                        TempData["IsSuccess"] = "保存成功";
+
+                    }
+                    else
+                    {
+                        TempData.Add("IsSuccess", "保存成功");
+                    }
                     if (collection["IsContinueAdd"] == "1")
                     {
                         p = new ShopProductInfo();

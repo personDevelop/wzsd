@@ -96,14 +96,14 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                     }
                 }
                 bll.Save(p, brandList);
-                if (TempData.ContainsKey(""))
+                if (TempData.ContainsKey("IsSuccess"))
                 {
-                    TempData.Add("IsSuccess", "保存成功");
+                    TempData["IsSuccess"] = "保存成功";
 
                 }
                 else
                 {
-                    TempData["IsSuccess"] = "保存成功";
+                    TempData.Add("IsSuccess", "保存成功");
                 }
 
                 ModelState.Clear();

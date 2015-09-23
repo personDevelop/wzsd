@@ -38,11 +38,11 @@ namespace EasyCms.Dal
 
 
 
-        public DataTable GetList(int pagenum, int pagesize, ref int recordCount, bool IsForSelected = false)
+        public DataTable GetList(int pagenum, int pagesize, WhereClip where, ref int recordCount, bool IsForSelected = false)
         {
             int pageCount = 0;
 
-            return Dal.From<ShopOrder>().OrderBy(ShopOrder._.CreateDate.Desc)
+            return Dal.From<ShopOrder>().Where(where).OrderBy(ShopOrder._.CreateDate.Desc)
 
                 .ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
         }

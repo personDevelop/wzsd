@@ -55,7 +55,15 @@ namespace EasyCms.Web.Areas.Admin.Controllers
 
                 }
                 bll.SaveAttrVal(p);
-                TempData.Add("IsSuccess", "保存成功");
+                if (TempData.ContainsKey("IsSuccess"))
+                {
+                    TempData["IsSuccess"] = "保存成功";
+
+                }
+                else
+                {
+                    TempData.Add("IsSuccess", "保存成功");
+                }
                 ModelState.Clear();
                 if (collection["IsContinueAdd"] == "1")
                 {
