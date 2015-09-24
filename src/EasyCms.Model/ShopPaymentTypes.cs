@@ -26,6 +26,8 @@ namespace EasyCms.Model
 
         private string _ID;
 
+        private string _ShortName;
+
         private string _Name;
 
         private string _DrivePath;
@@ -79,6 +81,25 @@ namespace EasyCms.Model
             {
                 this.OnPropertyChanged("ID", this._ID, value);
                 this._ID = value;
+            }
+        }
+
+        /// <summary>
+        ///  简称,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "ShortName", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string ShortName
+        {
+            get
+            {
+                return this._ShortName;
+            }
+            set
+            {
+                this.OnPropertyChanged("ShortName", this._ShortName, value);
+                this._ShortName = value;
             }
         }
 
@@ -396,6 +417,8 @@ namespace EasyCms.Model
 
                 ID = new PropertyItem("ID", tableName);
 
+                ShortName = new PropertyItem("ShortName", tableName);
+
                 Name = new PropertyItem("Name", tableName);
 
                 DrivePath = new PropertyItem("DrivePath", tableName);
@@ -434,6 +457,10 @@ namespace EasyCms.Model
             /// 主键ID,
             /// </summary> 
             public PropertyItem ID = null;
+            /// <summary>
+            /// 简称,
+            /// </summary> 
+            public PropertyItem ShortName = null;
             /// <summary>
             /// 名称,
             /// </summary> 
@@ -501,6 +528,7 @@ namespace EasyCms.Model
         }
         #endregion
     }
+
 
     public partial class ShopPaymentTypes
     {

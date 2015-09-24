@@ -64,7 +64,9 @@ namespace EasyCms.Dal
         {
             return Dal.From<ShopPaymentTypes>().Where(ShopPaymentTypes._.IsEnable == true && ShopPaymentTypes._.DrivePath.Contains("1"))
                 .OrderBy(ShopPaymentTypes._.DisplaySequence)
-                .Select(ShopPaymentTypes._.ID, ShopPaymentTypes._.AllowRecharge, ShopPaymentTypes._.Charge, ShopPaymentTypes._.Name).ToDataTable();
+                .Select(ShopPaymentTypes._.ID, ShopPaymentTypes._.Gateway, ShopPaymentTypes._.MerchantCode,
+               ShopPaymentTypes._.SecretKey, ShopPaymentTypes._.Partner, 
+                ShopPaymentTypes._.ShortName).ToDataTable();
         }
 
         internal string GetPayTypeName(string payTypeID, bool isCashOnDelivery)
