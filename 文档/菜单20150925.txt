@@ -1,0 +1,187 @@
+delete from FunctionInfo
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('01d41db0-d04b-46d7-bcb4-d3907d2edaac', 'SysDeleteCasCheck', '数据删除检测', 0, NULL, 2, '', 'Admin', 'SysDeleteCasCheck', '', 1, 1, 0, '数据删除检测', '263a98cb-c749-43f4-8349-51bd4575e1fb', '3174ccff-b856-4feb-b3eb-f832bcdf1ac0;a4f31c07-5de1-4957-a5cd-e7039abfd44f;dee59f07-ff44-4d56-a072-e93df0aed418;263a98cb-c749-43f4-8349-51bd4575e1fb;01d41db0-d04b-46d7-bcb4-d3907d2edaac', 4, 0, 0, '', 5)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('0aca87b5-cf25-4514-8bf5-bbb48dabebe2', '会员设置', '会员设置', 0, NULL, 1, '', '', '', '', 1, 1, 0, '会员设置', '932ef051-e037-48b5-aa11-7f567c9b328e', '996006a1-f179-4799-aa2c-48ef36988091;932ef051-e037-48b5-aa11-7f567c9b328e;0aca87b5-cf25-4514-8bf5-bbb48dabebe2', 2, 0, 0, '', 3)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('136b2cff-bb11-40df-ac0e-9d5852c84a88', 'OrderSet', '订单设置 ', 0, NULL, 1, '', '', '', '', 1, 1, 0, '订单设置 ', '2d7b69ad-9f65-42d6-a59e-b456c8d46d18', '75cf5fbb-8398-4b39-8f70-1b2956f8b18b;2d7b69ad-9f65-42d6-a59e-b456c8d46d18;136b2cff-bb11-40df-ac0e-9d5852c84a88', 1, 0, 0, '', 3)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('15b5b106-cc44-4324-b81f-aafae31ef87e', 'BrandInfo', '品牌管理', 0, NULL, 2, '', 'admin', 'ShopBrandInfo', '', 1, 1, 0, '品牌管理', '2d5ffa47-8639-4bfa-bc89-40063bd280dd', '9ed644c4-743d-4ee3-9f13-cee95e6aeaa8;daf681f0-5160-4c81-8286-ae8230384117;2d5ffa47-8639-4bfa-bc89-40063bd280dd;15b5b106-cc44-4324-b81f-aafae31ef87e', 1, 0, 0, '', 4)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('1e207e56-83b9-4d44-9f96-649d446e97e1', 'Role', '角色管理', 0, NULL, 2, '', '', '', '', 1, 1, 0, '角色管理', 'f696e2ff-22a0-4432-9bb4-4463ac422c03', '3174ccff-b856-4feb-b3eb-f832bcdf1ac0;a4f31c07-5de1-4957-a5cd-e7039abfd44f;dee59f07-ff44-4d56-a072-e93df0aed418;f696e2ff-22a0-4432-9bb4-4463ac422c03;1e207e56-83b9-4d44-9f96-649d446e97e1', 1, 0, 0, '', 5)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('23258056-cd6b-4a18-a1ef-cc8004bce9c9', 'RedeemRules', '积分规则', 0, NULL, 2, '', 'admin', 'RedeemRules', '', 1, 1, 0, '积分规则', '45bb1151-b150-4d1c-afb0-6f1e02e0492e', '7c79b55d-4634-4456-bb89-56db03890675;a0d08689-d0dd-428d-ba6f-17d45106fc49;45bb1151-b150-4d1c-afb0-6f1e02e0492e;23258056-cd6b-4a18-a1ef-cc8004bce9c9', 0, 0, 0, '', 4)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('263a98cb-c749-43f4-8349-51bd4575e1fb', 'SystemSet', '系统设置 ', 0, NULL, 1, '', '', '', '', 1, 1, 0, '系统设置 ', 'dee59f07-ff44-4d56-a072-e93df0aed418', '3174ccff-b856-4feb-b3eb-f832bcdf1ac0;a4f31c07-5de1-4957-a5cd-e7039abfd44f;dee59f07-ff44-4d56-a072-e93df0aed418;263a98cb-c749-43f4-8349-51bd4575e1fb', 0, 0, 1, '', 4)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('2d5ffa47-8639-4bfa-bc89-40063bd280dd', 'ShopProduct', '商品管理', 0, NULL, 1, '', '', '', '', 1, 1, 0, '商品管理', 'daf681f0-5160-4c81-8286-ae8230384117', '9ed644c4-743d-4ee3-9f13-cee95e6aeaa8;daf681f0-5160-4c81-8286-ae8230384117;2d5ffa47-8639-4bfa-bc89-40063bd280dd', 0, 0, 0, '', 3)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('2d7b69ad-9f65-42d6-a59e-b456c8d46d18', 'OrderManager', '订单管理', 0, NULL, 1, '', '', '', '', 1, 1, 0, '订单管理', '75cf5fbb-8398-4b39-8f70-1b2956f8b18b', '75cf5fbb-8398-4b39-8f70-1b2956f8b18b;2d7b69ad-9f65-42d6-a59e-b456c8d46d18', 0, 0, 0, '', 2)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('3174ccff-b856-4feb-b3eb-f832bcdf1ac0', 'WebSiteSet', '站点', 0, NULL, 0, '', '', '', '', 1, 1, 0, '站点', '', '3174ccff-b856-4feb-b3eb-f832bcdf1ac0', 0, 0, 1, '', 1)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('3ae400a2-f5f9-4cdf-b687-d55835315bd3', 'ShopExpress', '物流公司', 0, NULL, 2, '', 'admin', 'ShopExpress', '', 1, 1, 0, '物流公司设置', '136b2cff-bb11-40df-ac0e-9d5852c84a88', '75cf5fbb-8398-4b39-8f70-1b2956f8b18b;2d7b69ad-9f65-42d6-a59e-b456c8d46d18;136b2cff-bb11-40df-ac0e-9d5852c84a88;3ae400a2-f5f9-4cdf-b687-d55835315bd3', 2, 0, 0, '', 4)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('457eb3d7-4a1a-4fbb-97c5-89c70767afbc', 'OrderManager', '订单管理', 0, NULL, 1, '', '', '', '', 1, 1, 0, '订单管理', '2d7b69ad-9f65-42d6-a59e-b456c8d46d18', '75cf5fbb-8398-4b39-8f70-1b2956f8b18b;2d7b69ad-9f65-42d6-a59e-b456c8d46d18;457eb3d7-4a1a-4fbb-97c5-89c70767afbc', 0, 0, 0, '', 3)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('45bb1151-b150-4d1c-afb0-6f1e02e0492e', 'BasicSet', '基础设置', 0, NULL, 1, '', '', '', '', 1, 1, 0, '基础设置', 'a0d08689-d0dd-428d-ba6f-17d45106fc49', '7c79b55d-4634-4456-bb89-56db03890675;a0d08689-d0dd-428d-ba6f-17d45106fc49;45bb1151-b150-4d1c-afb0-6f1e02e0492e', 0, 0, 0, '', 3)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('59b848a1-0f89-4cf5-a822-c01cb84cd343', 'ShopProductStationMode', '商品推荐', 0, NULL, 2, '', 'admin', 'ShopProductStationMode', '', 1, 1, 0, '商品推荐', '2d5ffa47-8639-4bfa-bc89-40063bd280dd', '9ed644c4-743d-4ee3-9f13-cee95e6aeaa8;daf681f0-5160-4c81-8286-ae8230384117;2d5ffa47-8639-4bfa-bc89-40063bd280dd;59b848a1-0f89-4cf5-a822-c01cb84cd343', 4, 0, 0, '', 4)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('602d81ca-742b-4c48-a61c-6f98746d8071', 'NewsManager', '新闻管理', 0, NULL, 1, '', '', '', '', 1, 1, 0, '新闻管理', 'a25e81b9-11a6-4fd9-bcb7-9b262f515744', 'a25e81b9-11a6-4fd9-bcb7-9b262f515744;602d81ca-742b-4c48-a61c-6f98746d8071', 0, 0, 0, '', 2)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('708271ef-2961-4037-ae8d-9990e7419bff', 'OprLog', '操作日志', 0, NULL, 2, '', '', '', '', 1, 1, 0, '操作日志', 'f696e2ff-22a0-4432-9bb4-4463ac422c03', '3174ccff-b856-4feb-b3eb-f832bcdf1ac0;a4f31c07-5de1-4957-a5cd-e7039abfd44f;dee59f07-ff44-4d56-a072-e93df0aed418;f696e2ff-22a0-4432-9bb4-4463ac422c03;708271ef-2961-4037-ae8d-9990e7419bff', 3, 0, 0, '', 5)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('708ab1ee-bc31-4b52-b5a9-435dc0095c94', '会员管理', '会员管理', 0, NULL, 1, '', '', '', '', 1, 1, 0, '会员管理', '932ef051-e037-48b5-aa11-7f567c9b328e', '996006a1-f179-4799-aa2c-48ef36988091;932ef051-e037-48b5-aa11-7f567c9b328e;708ab1ee-bc31-4b52-b5a9-435dc0095c94', 0, 0, 0, '', 3)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('75cf5fbb-8398-4b39-8f70-1b2956f8b18b', 'Order', '订单', 0, NULL, 0, '', '', '', '', 1, 1, 0, '订单', '', '75cf5fbb-8398-4b39-8f70-1b2956f8b18b', 3, 0, 1, '', 1)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('7c79b55d-4634-4456-bb89-56db03890675', 'Sail', '营销', 0, NULL, 0, '', '', '', '', 1, 1, 0, '营销', '', '7c79b55d-4634-4456-bb89-56db03890675', 4, 0, 1, '', 1)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('81711aa4-f511-4f29-8e63-e9b96d945df5', 'NewsManager', '新闻管理 ', 0, NULL, 1, '', '', '', '', 1, 1, 0, '新闻管理 ', '602d81ca-742b-4c48-a61c-6f98746d8071', 'a25e81b9-11a6-4fd9-bcb7-9b262f515744;602d81ca-742b-4c48-a61c-6f98746d8071;81711aa4-f511-4f29-8e63-e9b96d945df5', 0, 0, 0, '', 3)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('858a5567-37d9-43ad-9efa-359f835c5c30', 'ShopPorductType', '商品类型', 0, NULL, 2, '', 'admin', 'ShopProductType', '', 1, 1, 0, '商品类型', '2d5ffa47-8639-4bfa-bc89-40063bd280dd', '9ed644c4-743d-4ee3-9f13-cee95e6aeaa8;daf681f0-5160-4c81-8286-ae8230384117;2d5ffa47-8639-4bfa-bc89-40063bd280dd;858a5567-37d9-43ad-9efa-359f835c5c30', 2, 0, 0, '', 4)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('86240fd2-653d-4e7d-a6b8-11cee301338b', 'Regions', '行政区域', 0, NULL, 2, '', 'admin', 'Regions', '', 1, 1, 0, '行政区域', '263a98cb-c749-43f4-8349-51bd4575e1fb', '3174ccff-b856-4feb-b3eb-f832bcdf1ac0;a4f31c07-5de1-4957-a5cd-e7039abfd44f;dee59f07-ff44-4d56-a072-e93df0aed418;263a98cb-c749-43f4-8349-51bd4575e1fb;86240fd2-653d-4e7d-a6b8-11cee301338b', 1, 0, 0, '', 5)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('87527639-cf7e-44bd-be04-ed86f49d69c0', 'NewsCategory', '新闻分类定义', 0, NULL, 2, '', 'admin', 'NewsCategory', '', 1, 1, 0, '新闻分类', '81711aa4-f511-4f29-8e63-e9b96d945df5', 'a25e81b9-11a6-4fd9-bcb7-9b262f515744;602d81ca-742b-4c48-a61c-6f98746d8071;81711aa4-f511-4f29-8e63-e9b96d945df5;87527639-cf7e-44bd-be04-ed86f49d69c0', 0, 0, 0, '', 4)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('88cd9499-a1f0-4326-9b4c-9c1a443a6cad', 'ShopCategory', '商品分类', 0, NULL, 2, '', 'admin', 'ShopCategory', '', 1, 1, 0, '商品分类', '2d5ffa47-8639-4bfa-bc89-40063bd280dd', '9ed644c4-743d-4ee3-9f13-cee95e6aeaa8;daf681f0-5160-4c81-8286-ae8230384117;2d5ffa47-8639-4bfa-bc89-40063bd280dd;88cd9499-a1f0-4326-9b4c-9c1a443a6cad', 0, 0, 0, '', 4)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('932ef051-e037-48b5-aa11-7f567c9b328e', 'ManagerInfo', '会员管理', 0, NULL, 1, '', '', '', '', 1, 1, 0, '会员管理', '996006a1-f179-4799-aa2c-48ef36988091', '996006a1-f179-4799-aa2c-48ef36988091;932ef051-e037-48b5-aa11-7f567c9b328e', 0, 0, 0, '', 2)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('996006a1-f179-4799-aa2c-48ef36988091', 'MemberInfo', '会员', 0, NULL, 0, '', '', '', '', 1, 1, 0, '会员', '', '996006a1-f179-4799-aa2c-48ef36988091', 5, 0, 1, '', 1)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('9ed644c4-743d-4ee3-9f13-cee95e6aeaa8', 'Shop', '商城', 0, NULL, 0, '', '', '', '', 1, 1, 0, '商城', '', '9ed644c4-743d-4ee3-9f13-cee95e6aeaa8', 2, 0, 1, '', 1)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('9f0fa643-c6c0-41dc-b671-379325c3b60b', '会员日志 ', '会员日志 ', 0, NULL, 1, '', '', '', '', 1, 1, 0, '会员日志 ', '932ef051-e037-48b5-aa11-7f567c9b328e', '996006a1-f179-4799-aa2c-48ef36988091;932ef051-e037-48b5-aa11-7f567c9b328e;9f0fa643-c6c0-41dc-b671-379325c3b60b', 1, 0, 0, '', 3)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('a0d08689-d0dd-428d-ba6f-17d45106fc49', 'SaileManager', '营销管理', 0, NULL, 1, '', '', '', '', 1, 1, 0, '营销管理', '7c79b55d-4634-4456-bb89-56db03890675', '7c79b55d-4634-4456-bb89-56db03890675;a0d08689-d0dd-428d-ba6f-17d45106fc49', 0, 0, 0, '', 2)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('a13c7ef0-912e-45eb-891c-5ba63427eea8', 'cxhd', '促销活动', 0, NULL, 2, '', 'Admin', 'ShopPromotion', '', 1, 1, 0, '促销活动', 'da44f2c6-4f11-4dc2-aed5-5d83e3fb5655', '7c79b55d-4634-4456-bb89-56db03890675;a0d08689-d0dd-428d-ba6f-17d45106fc49;da44f2c6-4f11-4dc2-aed5-5d83e3fb5655;a13c7ef0-912e-45eb-891c-5ba63427eea8', 0, 0, 0, '', 4)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('a25e81b9-11a6-4fd9-bcb7-9b262f515744', 'NewsMangaer', '新闻管理', 0, NULL, 0, '', '', '', '', 1, 1, 0, '新闻管理', '', 'a25e81b9-11a6-4fd9-bcb7-9b262f515744', 1, 0, 0, '', 1)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('a4f31c07-5de1-4957-a5cd-e7039abfd44f', 'SitManager', '站点管理', 0, NULL, 1, '', '', '', '', 1, 1, 0, '站点管理', '3174ccff-b856-4feb-b3eb-f832bcdf1ac0', '3174ccff-b856-4feb-b3eb-f832bcdf1ac0;a4f31c07-5de1-4957-a5cd-e7039abfd44f', 0, 0, 1, '', 2)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('a7733e34-c94b-486e-b03c-37e5d2cec1fb', 'FunctionInfo', '功能管理', 0, NULL, 2, '', 'admin', 'FunctionInfo', '', 1, 1, 0, '功能管理', '263a98cb-c749-43f4-8349-51bd4575e1fb', '3174ccff-b856-4feb-b3eb-f832bcdf1ac0;a4f31c07-5de1-4957-a5cd-e7039abfd44f;dee59f07-ff44-4d56-a072-e93df0aed418;263a98cb-c749-43f4-8349-51bd4575e1fb;a7733e34-c94b-486e-b03c-37e5d2cec1fb', 2, 0, 0, '', 5)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('ac844826-2534-429b-8ccb-80605a67a6e5', 'ConfirmOrder', '待确认订单', 0, NULL, 2, '', 'Admin', 'ShopOrder', '', 1, 1, 0, '待确认订单', '457eb3d7-4a1a-4fbb-97c5-89c70767afbc', '75cf5fbb-8398-4b39-8f70-1b2956f8b18b;2d7b69ad-9f65-42d6-a59e-b456c8d46d18;457eb3d7-4a1a-4fbb-97c5-89c70767afbc;ac844826-2534-429b-8ccb-80605a67a6e5', 0, 0, 0, '', 4)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('af4ec15d-e0fc-4708-905a-83949e551cd0', 'SystemParaSet', '系统参数设置', 0, NULL, 2, '', 'admin', 'ParameterInfo', '', 1, 1, 0, '系统参数设置', '263a98cb-c749-43f4-8349-51bd4575e1fb', '3174ccff-b856-4feb-b3eb-f832bcdf1ac0;a4f31c07-5de1-4957-a5cd-e7039abfd44f;dee59f07-ff44-4d56-a072-e93df0aed418;263a98cb-c749-43f4-8349-51bd4575e1fb;af4ec15d-e0fc-4708-905a-83949e551cd0', 0, 0, 0, '', 5)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('c3e23c63-229d-4391-be5d-77e7e69984a2', 'AllOrder', '全部订单', 0, NULL, 2, '', 'admin', 'ShopOrder', '', 1, 1, 0, '全部订单', '457eb3d7-4a1a-4fbb-97c5-89c70767afbc', '75cf5fbb-8398-4b39-8f70-1b2956f8b18b;2d7b69ad-9f65-42d6-a59e-b456c8d46d18;457eb3d7-4a1a-4fbb-97c5-89c70767afbc;c3e23c63-229d-4391-be5d-77e7e69984a2', 1, 0, 0, '', 4)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('d81eb0fa-165f-4cda-8679-c3e5506224c2', 'NewsEdit', '新闻管理', 0, NULL, 2, '', 'admin', 'NewsInfo', '', 1, 1, 0, '新闻管理', '81711aa4-f511-4f29-8e63-e9b96d945df5', 'a25e81b9-11a6-4fd9-bcb7-9b262f515744;602d81ca-742b-4c48-a61c-6f98746d8071;81711aa4-f511-4f29-8e63-e9b96d945df5;d81eb0fa-165f-4cda-8679-c3e5506224c2', 1, 0, 0, '', 4)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('da44f2c6-4f11-4dc2-aed5-5d83e3fb5655', 'CXGL', '促销管理', 0, NULL, 1, '', '', '', '', 1, 1, 0, '促销管理', 'a0d08689-d0dd-428d-ba6f-17d45106fc49', '7c79b55d-4634-4456-bb89-56db03890675;a0d08689-d0dd-428d-ba6f-17d45106fc49;da44f2c6-4f11-4dc2-aed5-5d83e3fb5655', 1, 0, 0, '', 3)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('daf681f0-5160-4c81-8286-ae8230384117', 'ShopManager', '商城管理', 0, NULL, 1, '', '', '', '', 1, 1, 0, '商城管理', '9ed644c4-743d-4ee3-9f13-cee95e6aeaa8', '9ed644c4-743d-4ee3-9f13-cee95e6aeaa8;daf681f0-5160-4c81-8286-ae8230384117', 0, 0, 0, '', 2)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('dee59f07-ff44-4d56-a072-e93df0aed418', 'DeafultSite', '默认站点 ', 0, NULL, 1, '', '', '', '', 1, 1, 0, '默认站点 ', 'a4f31c07-5de1-4957-a5cd-e7039abfd44f', '3174ccff-b856-4feb-b3eb-f832bcdf1ac0;a4f31c07-5de1-4957-a5cd-e7039abfd44f;dee59f07-ff44-4d56-a072-e93df0aed418', 0, 0, 1, '', 3)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('df157095-7bf9-44d4-bc44-ee5edba2775b', 'manager', '管理员管理', 0, NULL, 2, '', '', '', '', 1, 1, 0, '管理员管理', 'f696e2ff-22a0-4432-9bb4-4463ac422c03', '3174ccff-b856-4feb-b3eb-f832bcdf1ac0;a4f31c07-5de1-4957-a5cd-e7039abfd44f;dee59f07-ff44-4d56-a072-e93df0aed418;f696e2ff-22a0-4432-9bb4-4463ac422c03;df157095-7bf9-44d4-bc44-ee5edba2775b', 0, 0, 0, '', 5)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('eae32f0b-ca8c-4bfa-90bb-937431555b66', 'ShopPaymentTypes', '支付方式', 0, NULL, 2, '', 'admin', 'ShopPaymentTypes', '', 1, 1, 0, '支付方式', '136b2cff-bb11-40df-ac0e-9d5852c84a88', '75cf5fbb-8398-4b39-8f70-1b2956f8b18b;2d7b69ad-9f65-42d6-a59e-b456c8d46d18;136b2cff-bb11-40df-ac0e-9d5852c84a88;eae32f0b-ca8c-4bfa-90bb-937431555b66', 0, 0, 0, '', 4)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('f178f88b-5c20-499a-82bb-c3386dc9b306', 'YHQ', '优惠券', 0, NULL, 2, '', 'Admin', 'CouponRule', '', 1, 1, 0, '优惠券管理', '45bb1151-b150-4d1c-afb0-6f1e02e0492e', '7c79b55d-4634-4456-bb89-56db03890675;a0d08689-d0dd-428d-ba6f-17d45106fc49;45bb1151-b150-4d1c-afb0-6f1e02e0492e;f178f88b-5c20-499a-82bb-c3386dc9b306', 1, 0, 0, '', 4)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('f696e2ff-22a0-4432-9bb4-4463ac422c03', 'SystemUser', '系统用户 ', 0, NULL, 1, '', '', '', '', 1, 1, 0, '系统用户 ', 'dee59f07-ff44-4d56-a072-e93df0aed418', '3174ccff-b856-4feb-b3eb-f832bcdf1ac0;a4f31c07-5de1-4957-a5cd-e7039abfd44f;dee59f07-ff44-4d56-a072-e93df0aed418;f696e2ff-22a0-4432-9bb4-4463ac422c03', 1, 0, 0, '', 4)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('f83be2b6-cfbb-485f-a095-746966ba0ead', 'ShopProduct', '商品维护', 0, NULL, 2, '', 'admin', 'ShopProductInfo', '', 1, 1, 0, '商品维护', '2d5ffa47-8639-4bfa-bc89-40063bd280dd', '9ed644c4-743d-4ee3-9f13-cee95e6aeaa8;daf681f0-5160-4c81-8286-ae8230384117;2d5ffa47-8639-4bfa-bc89-40063bd280dd;f83be2b6-cfbb-485f-a095-746966ba0ead', 3, 0, 0, '', 4)
+GO
+
+INSERT INTO dbo.FunctionInfo (ID, Code, Name, FuncType, [Image], AccessType, URL, CallArea, CallControler, CallAction, [Enable], Visible, MultilInstance, ShowText, ParentID, ClassCode, OrderNo, IsMustNot, IsMust, Description, Js)
+VALUES ('f95979ca-0026-435e-8caf-dc6887095a1a', 'RoleRight', '角色授权', 0, NULL, 2, '', '', '', '', 1, 1, 0, '角色授权', 'f696e2ff-22a0-4432-9bb4-4463ac422c03', '3174ccff-b856-4feb-b3eb-f832bcdf1ac0;a4f31c07-5de1-4957-a5cd-e7039abfd44f;dee59f07-ff44-4d56-a072-e93df0aed418;f696e2ff-22a0-4432-9bb4-4463ac422c03;f95979ca-0026-435e-8caf-dc6887095a1a', 2, 0, 0, '', 5)
+GO
+
