@@ -29,14 +29,14 @@ namespace EasyCms.Web.API
                 { 
                     //测试token  获取所有token
                     string token = Request.GetToken();
-                    //string msg = "当前的token值是【{0}】；系统里包含的token值是【{1}】";
-                    //string oldToken = string.Empty;
-                    //foreach (var item in Class1.list)
-                    //{
-                    //    oldToken += item + " ";
-                    //}
-                    //msg = string.Format(msg, token, oldToken);
-                    return ("无效令牌").FormatError();
+                    string msg = "当前的token值是【{0}】；系统里包含的token值是【{1}】";
+                    string oldToken = string.Empty;
+                    foreach (var item in Class1.list)
+                    {
+                        oldToken += item + " ";
+                    }
+                    msg = string.Format(msg, token, oldToken);
+                    return ("无效令牌" + msg).FormatError();
 
                 }
                 else
