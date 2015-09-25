@@ -62,11 +62,11 @@ namespace EasyCms.Model
             string source = this.Account + "|" + this.Pwd + "|" + this.TimeStamp + "|" + this.DeviceID;
             string token = source.EncryptSHA1();
             token = System.Web.HttpUtility.UrlEncode(token, Encoding.UTF8);
-            Class1.list.Add(token);
+            //Class1.list.Add(token);
             return token;
 
         }
-
+       
         public static bool ValidToken(string token, string userno, string deviceID)
         {
             return CacheContainer.GetCache(userno + deviceID) as string == token;
@@ -92,8 +92,8 @@ namespace EasyCms.Model
         }
     }
 
-    public class Class1
-    {
-        public static List<String> list = new List<string>();
-    }
+    //public class Class1
+    //{
+    //    public static List<String> list = new List<string>();
+    //}
 }
