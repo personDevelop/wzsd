@@ -81,6 +81,7 @@ namespace EasyCms.Dal
                     ShopShippingAddress._.ShipName,
                     ShopShippingAddress._.CelPhone,
                         ShopShippingAddress._.IsDefault,
+                        AdministrativeRegions._.FullPath,
                      new ExpressionClip("replace (path,'/','') + Address").Alias("Address"))
                     .Where(ShopShippingAddress._.UserId == userID && ShopShippingAddress._.IsDefault == IsDefault).ToDataTable(1);
             }
@@ -92,6 +93,7 @@ namespace EasyCms.Dal
                     ShopShippingAddress._.ShipName,
                     ShopShippingAddress._.CelPhone,
                         ShopShippingAddress._.IsDefault,
+                          AdministrativeRegions._.FullPath,
                      new ExpressionClip("replace (path,'/','') + Address").Alias("Address"))
                     .Where(ShopShippingAddress._.UserId == userID).ToDataTable();
 

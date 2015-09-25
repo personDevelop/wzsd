@@ -393,4 +393,14 @@ namespace EasyCms.Model
         }
         #endregion
     }
+
+
+    public partial class ShopShippingAddress
+    {
+        /// <summary>
+        /// 地址路径的父子id  格式 父ID|子ID
+        /// </summary>
+        [NotDbCol]
+        public string FullPath { get; set; }
+    }
 }
