@@ -25,30 +25,30 @@
 </div>
 <!--/列表-->
 @section  scripts{
-     
+
 
     <script type="text/javascript">
         $(document).ready(function () {
             var url = "@Url.Action("GetList")";
-            var datafields = [{ name: 'ID' }, { name: 'Code' }, { name: 'Name' }, { name: 'Img' },
+            var datafields = [{ name: 'ID' }, { name: 'RankLevel' }, { name: 'Name' }, { name: 'Img' },
 
 		{ name: 'MinVal' }, { name: 'MaxVal' }, { name: 'IsEnable' },
 
 		{ name: 'Note' }];
             var columns = [
-   { text: '等级', dataField: 'Code', width: 200 },
+   { text: '等级', dataField: 'RankLevel', width: 80 },
 
-  { text: '等级名称', dataField: 'Name', width: 200 },
+  { text: '等级名称', dataField: 'Name', width: 100 },
 
-  { text: '等级值下限(包括)', dataField: 'MinVal', cellsalign: "right", width: 200 },
+  { text: '值下限(包括)', dataField: 'MinVal', cellsalign: "right", width: 120 },
 
-  { text: '等级值上限(不包括)', dataField: 'MaxVal', cellsalign: "right", width: 200 },
+  { text: '值上限(不包括)', dataField: 'MaxVal', cellsalign: "right", width:150 },
 
-  { text: '可用', dataField: 'IsEnable', width: 200 },
+  { text: '可用', dataField: 'IsEnable', width:80, valObj: [{ key: true, val: '启用' }, { key: false, val: '停用' }] },
 
-  { text: '等级描述', dataField: 'Note', cellsalign: "left", width: 200 }];
+  { text: '等级描述', dataField: 'Note', cellsalign: "left"  }];
             CreateGrid("jqxgrid", url, datafields, columns);
-             
+
         });
     </script>
 

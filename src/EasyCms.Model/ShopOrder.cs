@@ -142,6 +142,8 @@ namespace EasyCms.Model
 
         private string _InvoiceNote;
 
+        private DateTime? _PublishDateTime;
+
         #endregion
 
         #region 属性
@@ -208,7 +210,7 @@ namespace EasyCms.Model
         ///  主订单ID,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "ParentID", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = true, ColumnLength = 100, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ParentID", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = true, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string ParentID
         {
@@ -246,7 +248,7 @@ namespace EasyCms.Model
         ///  会员ID,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "MemberID", DbTypeString = "char", ColumnIsNull = false, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "MemberID", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string MemberID
         {
@@ -265,7 +267,7 @@ namespace EasyCms.Model
         ///  会员姓名,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "MemberName", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "MemberName", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string MemberName
         {
@@ -284,7 +286,7 @@ namespace EasyCms.Model
         ///  会员Email,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "MemberEmail", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "MemberEmail", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string MemberEmail
         {
@@ -455,7 +457,7 @@ namespace EasyCms.Model
         ///  配送方式ID,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "ShipModeID", DbTypeString = "char", ColumnIsNull = true, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ShipModeID", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string ShipModeID
         {
@@ -493,7 +495,7 @@ namespace EasyCms.Model
         ///  付款方式ID,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "PayTypeID", DbTypeString = "char", ColumnIsNull = false, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "PayTypeID", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string PayTypeID
         {
@@ -550,7 +552,7 @@ namespace EasyCms.Model
         ///  快递公司ID,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "ExpressCompanyID", DbTypeString = "char", ColumnIsNull = true, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ExpressCompanyID", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string ExpressCompanyID
         {
@@ -1268,6 +1270,25 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  发货时间,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "PublishDateTime", DbTypeString = "datetime", ColumnIsNull = true, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public DateTime? PublishDateTime
+        {
+            get
+            {
+                return this._PublishDateTime;
+            }
+            set
+            {
+                this.OnPropertyChanged("PublishDateTime", this._PublishDateTime, value);
+                this._PublishDateTime = value;
+            }
+        }
+
         #endregion
 
         #region 列定义
@@ -1393,6 +1414,8 @@ namespace EasyCms.Model
                 ClientType = new PropertyItem("ClientType", tableName);
 
                 InvoiceNote = new PropertyItem("InvoiceNote", tableName);
+
+                PublishDateTime = new PropertyItem("PublishDateTime", tableName);
 
 
             }
@@ -1632,6 +1655,10 @@ namespace EasyCms.Model
             /// 发票说明,
             /// </summary> 
             public PropertyItem InvoiceNote = null;
+            /// <summary>
+            /// 发货时间,
+            /// </summary> 
+            public PropertyItem PublishDateTime = null;
         }
         #endregion
     }

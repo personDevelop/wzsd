@@ -26,10 +26,28 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             return JsonWithDataTable.Serialize(dt);
 
         }
-        public string GetList(int pagenum, int pagesize)
+        public string GetListForAccount(int pagenum, int pagesize, string UserCode, string UserName, string UserStatus)
         {
             int recordCount = 0;
-            System.Data.DataTable dt = bll.GetList(pagenum + 1, pagesize, ref   recordCount);
+            WhereClip where = new WhereClip();
+            if (!string.IsNullOrWhiteSpace(UserCode))
+            {
+                where = ManagerUserInfo._.Code.StartsWith(UserCode);
+            }
+            if (!string.IsNullOrWhiteSpace(UserName))
+            {
+                where = where && ManagerUserInfo._.Name.StartsWith(UserName);
+            }
+            if (!string.IsNullOrWhiteSpace(UserStatus))
+            {
+                string[] ps = UserStatus.Split(',');
+                if (!ps.Contains(""))
+                {
+                    where = where && ManagerUserInfo._.Status.In(ps);
+                }
+
+            }
+            System.Data.DataTable dt = bll.GetListForAccount(pagenum + 1, pagesize,where, ref   recordCount);
 
             string result = JsonWithDataTable.Serialize(dt);
             result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
@@ -77,7 +95,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                     {
                         p.ID = Guid.NewGuid().ToString();
                     }
-                  
+
                 }
                 bll.Save(p);
                 if (TempData.ContainsKey("IsSuccess"))
@@ -94,7 +112,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                 {
                     p = new ManagerUserInfo();
 
-                } 
+                }
 
             }
             catch (Exception ex)
@@ -123,9 +141,9 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         [HttpPost]
         //
         // GET: /Admin/ManagerUserInfo/Delete/5
-        public string Delete(string id)
+        public string ChangeStatus(string id, int status)
         {
-            return bll.Delete(id);
+            return bll.ChangeStatus(id, status);
         }
     }
 }

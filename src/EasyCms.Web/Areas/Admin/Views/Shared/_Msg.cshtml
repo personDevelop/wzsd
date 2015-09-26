@@ -3,70 +3,20 @@
         <div id="msgDiv"></div>
     </div>
 </div>
-<script type="text/javascript">
 
-    $(function () {
-        $("#messageNotification").jqxNotification({
-            width: 250, position: "top-right"
-        });
-    })
-    function SucessMsg(msg, append) {
-        $("#msgDiv").text(msg);
-        $("#messageNotification").jqxNotification({
-            template: "success", appendContainer: append
-        });
-        $("#messageNotification").jqxNotification("open");
-    }
-    function ErrorMsg(msg, append) {
-        $("#msgDiv").text(msg);
-        $("#messageNotification").jqxNotification({
-            template: "error", appendContainer: append
-        });
-        $("#messageNotification").jqxNotification("open");
 
-    }
-    function InfoMsg(msg, append) {
-        $("#msgDiv").text(msg);
-        $("#messageNotification").jqxNotification({
-            template: "info", appendContainer: append
-        });
-        $("#messageNotification").jqxNotification("open");
-    }
-    function WarningMsg(msg, append) {
-        $("#msgDiv").text(msg);
-        $("#messageNotification").jqxNotification({
-            template: "warning", appendContainer: append
-        });
-        $("#messageNotification").jqxNotification("open");
-    }
-
-    function Query(msg, onOk) {
-        $('#eventWindow').jqxWindow({
-            maxHeight: 150, maxWidth: 280, minHeight: 30, minWidth: 250, height: 145, width: 270,
-            resizable: false, isModal: true, modalOpacity: 0.3,
-            okButton: $('#ok'), cancelButton: $('#cancel'),
-            initContent: function () {
-                $('#ok').jqxButton({ width: '65px' });
-                $('#ok').on('click', onOk); 
-                $('#cancel').jqxButton({ width: '65px' });
-                $('#ok').focus();
-            }
-        }); 
-    };
-
-</script>
-
-<div id="eventWindow"  style="display:none">
+<div id="eventWindow" style="display:none">
     <div>
-        <img width="14" height="14" src="../../images/help.png" alt="" />
-        确认
+        @HelperExtend.img("help.png", "width:16px;height:16px")
+        @*<img width="14" height="14" src=" alt="" />*@
+        <span id="eventWindowTitle">确认</span>
     </div>
     <div>
-        <div>
+        <div id="eventWindowContent">
             确定要删除吗？
         </div>
-        <div>
-            <div style="float: right; margin-top: 15px;">
+        <div style="float: right;   position:relative;right:10px;bottom:-40px">
+            <div>
                 <input type="button" id="ok" value="确定" style="margin-right: 10px" />
                 <input type="button" id="cancel" value="取消" />
             </div>

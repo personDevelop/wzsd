@@ -26,6 +26,8 @@ namespace EasyCms.Model
 
         private string _ID;
 
+        private string _Code;
+
         private string _CustomerID;
 
         private string _CouponID;
@@ -42,7 +44,7 @@ namespace EasyCms.Model
 
         private string _CardPwd;
 
-        private DateTime _EndDate;
+        private DateTime? _EndDate;
 
         private string _Remark;
 
@@ -67,6 +69,25 @@ namespace EasyCms.Model
             {
                 this.OnPropertyChanged("ID", this._ID, value);
                 this._ID = value;
+            }
+        }
+
+        /// <summary>
+        ///  券编号,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "Code", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string Code
+        {
+            get
+            {
+                return this._Code;
+            }
+            set
+            {
+                this.OnPropertyChanged("Code", this._Code, value);
+                this._Code = value;
             }
         }
 
@@ -226,9 +247,9 @@ namespace EasyCms.Model
         ///  过期时间,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "EndDate", DbTypeString = "datetime", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "EndDate", DbTypeString = "datetime", ColumnIsNull = true, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public DateTime EndDate
+        public DateTime? EndDate
         {
             get
             {
@@ -270,6 +291,8 @@ namespace EasyCms.Model
 
                 ID = new PropertyItem("ID", tableName);
 
+                Code = new PropertyItem("Code", tableName);
+
                 CustomerID = new PropertyItem("CustomerID", tableName);
 
                 CouponID = new PropertyItem("CouponID", tableName);
@@ -296,6 +319,10 @@ namespace EasyCms.Model
             /// ID,
             /// </summary> 
             public PropertyItem ID = null;
+            /// <summary>
+            /// 券编号,
+            /// </summary> 
+            public PropertyItem Code = null;
             /// <summary>
             /// 会员ID,
             /// </summary> 

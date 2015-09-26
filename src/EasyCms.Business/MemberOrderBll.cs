@@ -10,16 +10,16 @@ using Sharp.Common;
 
 namespace EasyCms.Business
 {
-    public class MemberOrderBll
+    public class RangeDictBll
     {
-        MemberOrderDal Dal = new MemberOrderDal();
+        RangeDictDal Dal = new RangeDictDal();
         public string Delete(string id)
         {
 
             return Dal.Delete(id);
         }
 
-        public int Save(MemberOrder item)
+        public int Save(RangeDict item)
         {
             return Dal.Save(item);
         }
@@ -35,7 +35,7 @@ namespace EasyCms.Business
 
         }
  
-        public MemberOrder GetEntity(string id)
+        public RangeDict GetEntity(string id)
         {
             return Dal.GetEntity(id);
         }

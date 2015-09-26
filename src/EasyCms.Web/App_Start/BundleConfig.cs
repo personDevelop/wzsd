@@ -54,7 +54,9 @@ namespace EasyCms.Web
                       "~/Scripts/jGui/jGuiToolBar.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqx").Include(
-                    "~/Scripts/jqwidgets/jqx-all.js"));
+                    "~/Scripts/jqwidgets/jqx-all.js",
+                     "~/Scripts/jqwidgets/globalization/globalize.js",
+             "~/Scripts/jqwidgets/globalization/globalize.culture.zh-Hans.js")); 
 
             bundles.Add(new ScriptBundle("~/bundles/ueditor").Include(
                  "~/Content/ueditor/ueditor.config.js",

@@ -10,16 +10,16 @@ using System.Threading.Tasks;
 
 namespace EasyCms.Dal
 {
-    public class MemberOrderDal : Sharp.Data.BaseManager
+    public class RangeDictDal : Sharp.Data.BaseManager
     {
         public string Delete(string id)
         {
             string error = "";
-            Dal.Delete("MemberOrder", "ID", id, out error);
+            Dal.Delete("RangeDict", "ID", id, out error);
             return error;
         }
 
-        public int Save(MemberOrder item)
+        public int Save(RangeDict item)
         {
             return Dal.Submit(item);
 
@@ -29,10 +29,10 @@ namespace EasyCms.Dal
         {
             if (IsForSelected)
             {
-                return Dal.From<MemberOrder>().Select(MemberOrder._.ID, MemberOrder._.Code, MemberOrder._.Name).OrderBy(MemberOrder._.Code).ToDataTable();
+                return Dal.From<RangeDict>().Select(RangeDict._.ID, RangeDict._.RankLevel, RangeDict._.Name).OrderBy(RangeDict._.RankLevel).ToDataTable();
             }
             else
-                return Dal.From<MemberOrder>().OrderBy(MemberOrder._.Code).ToDataTable();
+                return Dal.From<RangeDict>().OrderBy(RangeDict._.RankLevel).ToDataTable();
         }
         public bool Exit(string ID,  string RecordStatus, string val, bool IsCode)
         {
@@ -40,24 +40,24 @@ namespace EasyCms.Dal
 
             if (IsCode)
             {
-                where = MemberOrder._.Code == val;
+                where = RangeDict._.RankLevel == val;
             }
             else
             {
-                where = MemberOrder._.Name == val;
+                where = RangeDict._.Name == val;
             }
             if (RecordStatus == StatusType.update.ToString())
             {
-                where = where && MemberOrder._.ID != ID;
+                where = where && RangeDict._.ID != ID;
 
             }
-            return !Dal.Exists<MemberOrder>(where);
+            return !Dal.Exists<RangeDict>(where);
         }
      
        
-        public MemberOrder GetEntity(string id)
+        public RangeDict GetEntity(string id)
         {
-            return Dal.Find<MemberOrder>(id);
+            return Dal.Find<RangeDict>(id);
         }
 
 

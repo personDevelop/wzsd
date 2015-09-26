@@ -225,7 +225,7 @@
     <Compile Include="Areas\Admin\Controllers\CouponRuleController.cs" />
     <Compile Include="Areas\Admin\Controllers\FunctionInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\ManagerUserInfoController.cs" />
-    <Compile Include="Areas\Admin\Controllers\MemberOrderController.cs" />
+    <Compile Include="Areas\Admin\Controllers\RangeDictController.cs" />
     <Compile Include="Areas\Admin\Controllers\NewsInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\RedeemRulesController.cs" />
     <Compile Include="Areas\Admin\Controllers\RegionsController.cs" />
@@ -721,8 +721,8 @@
     <Content Include="Areas\Admin\Views\ManagerUserInfo\Index.cshtml" />
     <Content Include="Areas\Admin\Views\SysRoleInfo\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\SysRoleInfo\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\MemberOrder\Edit.cshtml" />
-    <Content Include="Areas\Admin\Views\MemberOrder\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\RangeDict\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\RangeDict\Index.cshtml" />
     <Content Include="Areas\Admin\Views\FunctionInfo\Index.cshtml" />
     <Content Include="Areas\Admin\Views\FunctionInfo\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\ShopProductStationMode\Index.cshtml" />
@@ -1177,6 +1177,7 @@
     <Content Include="Upload\文件路径规则.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Scripts\jqwidgets\globalization\globalize.culture.zh-Hans.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1198,6 +1199,10 @@
     <ProjectReference Include="..\EasyCms.Model\EasyCms.Model.csproj">
       <Project>{5bf70ea8-ae93-4ed9-be80-a1be82b795fa}</Project>
       <Name>EasyCms.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EasyCms.Session\EasyCms.Session.csproj">
+      <Project>{44ce33d0-d419-4958-ba98-986a7a249ba0}</Project>
+      <Name>EasyCms.Session</Name>
     </ProjectReference>
     <ProjectReference Include="..\MVCExtention\MVCExtention.csproj">
       <Project>{54f64b71-63b7-4ee7-9b62-3330dd440ab0}</Project>

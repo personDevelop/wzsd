@@ -1,0 +1,172 @@
+﻿@model RangeDict
+@{
+    ViewBag.Title = "编辑会员等级";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEdit.cshtml";
+}
+
+@Styles.Render("~/bundles/upimgcss")
+@Scripts.Render("~/bundles/ueditor")
+@Scripts.Render("~/bundles/uploadJs")
+
+@using EasyCms.Model
+<!--内容-->
+<div id="floatHead" class="content-tab-wrap">
+    <div class="content-tab">
+        <div class="content-tab-ul-wrap">
+            <ul>
+                <li><a class="selected" href="javascript:;">基本信息</a></li>
+
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="tab-content">
+
+
+    @HelperExtend.HiddenFor("ID", Model.ID)
+    @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())
+
+    @Html.ValidationSummary()
+
+
+
+    @HelperExtend.TextBox("RankLevel", "等级", defaultval: Model.RankLevel, hint: "")
+
+    @HelperExtend.TextBox("Name", "等级名称", defaultval: Model.Name, hint: "")
+
+    @HelperExtend.ImageUpLoad("Img", "等级图标", Model.RecordStatus == Sharp.Common.StatusType.add, defaultval: Model.Img, maxLength: 1)
+
+    @HelperExtend.Number("MinVal", "等级值下限(包括)", defaultval: Model.MinVal, hint: "", max: 100000)
+
+    @HelperExtend.Number("MaxVal", "等级值上限(不包括)", defaultval: Model.MaxVal, hint: "", max: 100000)
+    @HelperExtend.Number("LevelYear", "期限（年）", defaultval: Model.LevelYear, hint: "过期限后，系统自动调整会员等级", max: 1000)
+    @HelperExtend.Number("ReduceValue", "超期期限后减少成长值", defaultval: Model.ReduceValue, hint: "过期限后，系统自动减少会员的成长值，并重新计算会员等级", max: 100000)
+    @{
+        //获取所有可用服务
+        List<ParameterInfo> ptList = new EasyCms.Business.ParameterInfoBll().GetListEntityByParentId("f339c10e-0106-47b1-b16f-95eb9702d6a5");
+        if (ptList.Count > 0)
+        {
+            string codes = string.Empty;
+            string names = string.Empty;
+            bool[] vals = new bool[ptList.Count];
+            int i = 0;
+            foreach (ParameterInfo item in ptList)
+            {
+                if (!string.IsNullOrEmpty(codes))
+                {
+                    codes += ",";
+                    names += ",";
+                }
+                codes += "hasService" + item.ID;
+                names += item.Name;
+                if (string.IsNullOrWhiteSpace(Model.HasService))
+                {
+                    vals[i++] = false;
+                }
+                else if (Model.HasService.Contains(item.ID))
+                {
+                    vals[i++] = true;
+
+                }
+                else
+                {
+                    vals[i++] = false;
+                }
+
+            }
+
+            @HelperExtend.CheckBoxList("享有的服务", codes, names, defaultval: vals)
+        }
+    }
+    @HelperExtend.RadioGroup("IsEnable", "启用", "false,true", "否,是", defaultval: Model.IsEnable)
+
+    @HelperExtend.TextBox("Note", "等级描述", defaultval: Model.Note, hint: "")
+
+
+</div>
+
+
+@section  scripts{
+
+
+    <script type="text/javascript">
+
+        $(function () {
+
+
+            //初始化表单验证
+            $("form").validate({
+                ignore: "",
+                rules: {
+                    "Code": {
+                        required: true,
+                        maxlength: 50,
+                        remote: {
+                            url: '@Url.Action("CheckRepeat")',
+                            data: {
+                                ID: function () { return $("#ID").val(); },
+
+                                RecordStatus: function () { return $("#RecordStatus").val(); },
+                                val: function () { return $("#Code").val(); },
+                                IsCode: true
+                            }
+                        }
+                    },
+                    Name: {
+                        required: true,
+                        maxlength: 100,
+                        remote: {
+                            url: '@Url.Action("CheckRepeat")',
+                            data: {
+                                ID: function () { return $("#ID").val(); },
+
+                                RecordStatus: function () { return $("#RecordStatus").val(); },
+                                val: function () { return $("#Name").val(); },
+                                IsCode: false
+                            }
+                        }
+                    },
+                    ClassTypeID: { required: true },
+                    Note: {
+                        maxlength: 500
+                    }
+                },
+                messages: {
+                    Code: {
+                        required: "请输入编号",
+                        maxlength: $.validator.format("编号长度不能大于{0}个字符"),
+                        remote: "等级重复"
+                    },
+                    Name: {
+                        required: "请输入名称",
+                        maxlength: $.validator.format("名称长度不能大于{0}个字符"),
+                        remote: "等级名称"
+                    }
+                },
+                errorPlacement: function (error, element) {
+
+                    if (element.is(":radio"))
+                        error.insertAfter($(element).parent());
+                    else if (element.is(":checkbox"))
+                        error.insertAfter($(element).parent());
+                    else
+                        error.insertAfter(element);
+                }
+
+            });
+        })
+    </script>
+
+    <script type="text/javascript">
+
+      
+        $(function () {
+
+            if ("@TempData.ContainsKey("IsSuccess").ToString().ToLower()" == "true") {
+                SucessMsg("@TempData["IsSuccess"]");
+            }
+
+
+        });
+    </script>
+}

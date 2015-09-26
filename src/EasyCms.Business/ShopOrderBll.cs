@@ -56,5 +56,20 @@ namespace EasyCms.Business
         {
             return Dal.GetOrder(id, userid, out   err);
         }
+
+        public Dictionary<string, string> ExeAction(ActionEnum actionID, string wlgs, List<string> orderIDs, out string err)
+        {
+            return Dal.ExeAction(  actionID,wlgs, orderIDs, out   err);
+        }
+
+        public DataTable GetList(WhereClip where)
+        {
+            return Dal.GetList(where);
+        }
+
+        public DataTable GetOrderStatus(string id, string accountID, out string err)
+        {
+            return Dal.GetOrderStatus(  id,   accountID, out   err);
+        }
     }
 }

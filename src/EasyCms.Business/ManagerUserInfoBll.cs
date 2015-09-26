@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Sharp.Common;
+using EasyCms.Model.ViewModel;
 
 namespace EasyCms.Business
 {
@@ -45,8 +46,25 @@ namespace EasyCms.Business
             else if (item.Status != 1)
             {
 
-                error = "账号不允许登陆！";
+                error = "账号状态异常，不允许登陆！";
                 item = null;
+            }
+            if (item != null)
+            {
+                item.LastModifyDate = DateTime.Now;
+                Dal.Save(item);
+                //同时更新其等级 和成长值
+                //获取注册获得的成长值
+                ParameterInfo valPara = new ParameterInfoDal().GetEntity(StaticValue.GrowthValueLogin);
+                if (valPara != null)
+                {
+                    int grothvalue = 0;
+                    if (int.TryParse(valPara.Value, out grothvalue))
+                    {
+                        Dal.ChangeOrder(item.ID, grothvalue);
+                    }
+
+                }
             }
             return item;
         }
@@ -77,10 +95,25 @@ namespace EasyCms.Business
 
         public string Regist(RegistModel registModel)
         {
-           return Dal.Regist(  registModel);
+            return Dal.Regist(registModel);
         }
 
 
-      
+
+
+        public DataTable GetListForAccount(int pagenum, int pagesize, WhereClip where, ref int recordCount)
+        {
+            return Dal.GetListForAccount(pagenum, pagesize,   where, ref   recordCount);
+        }
+
+        public string ChangeStatus(string id, int status)
+        {
+            return Dal.ChangeStatus(id, status);
+        }
+
+        public AccountModel GetMySelf(string userid, string host, out string err)
+        {
+          return Dal.GetMySelf(  userid,   host,out   err);
+        }
     }
 }

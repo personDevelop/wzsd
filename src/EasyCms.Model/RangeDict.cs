@@ -8,16 +8,16 @@ using Newtonsoft.Json;
 namespace EasyCms.Model
 {
     /// <summary>
-    /// 会员等级
+    /// 会员等级字典
     /// </summary>  
     [JsonObject]
-    public partial class MemberOrder : BaseEntity
+    public partial class RangeDict : BaseEntity
     {
-        public static Column _ = new Column("MemberOrder");
+        public static Column _ = new Column("RangeDict");
 
-        public MemberOrder()
+        public RangeDict()
         {
-            this.TableName = "MemberOrder";
+            this.TableName = "RangeDict";
             OnCreate();
         }
 
@@ -26,7 +26,7 @@ namespace EasyCms.Model
 
         private string _ID;
 
-        private string _Code;
+        private string _RankLevel;
 
         private string _Name;
 
@@ -39,6 +39,12 @@ namespace EasyCms.Model
         private bool _IsEnable;
 
         private string _Note;
+
+        private int _LevelYear;
+
+        private int _ReduceValue;
+
+        private string _HasService;
 
         #endregion
 
@@ -68,18 +74,18 @@ namespace EasyCms.Model
         ///  等级,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "Code", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = true, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "RankLevel", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = true, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public string Code
+        public string RankLevel
         {
             get
             {
-                return this._Code;
+                return this._RankLevel;
             }
             set
             {
-                this.OnPropertyChanged("Code", this._Code, value);
-                this._Code = value;
+                this.OnPropertyChanged("RankLevel", this._RankLevel, value);
+                this._RankLevel = value;
             }
         }
 
@@ -197,6 +203,63 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  期限（年）,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "LevelYear", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public int LevelYear
+        {
+            get
+            {
+                return this._LevelYear;
+            }
+            set
+            {
+                this.OnPropertyChanged("LevelYear", this._LevelYear, value);
+                this._LevelYear = value;
+            }
+        }
+
+        /// <summary>
+        ///  超期期限后减少成长值,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "ReduceValue", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public int ReduceValue
+        {
+            get
+            {
+                return this._ReduceValue;
+            }
+            set
+            {
+                this.OnPropertyChanged("ReduceValue", this._ReduceValue, value);
+                this._ReduceValue = value;
+            }
+        }
+
+        /// <summary>
+        ///  享有的服务,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "HasService", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 500, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string HasService
+        {
+            get
+            {
+                return this._HasService;
+            }
+            set
+            {
+                this.OnPropertyChanged("HasService", this._HasService, value);
+                this._HasService = value;
+            }
+        }
+
         #endregion
 
         #region 列定义
@@ -207,7 +270,7 @@ namespace EasyCms.Model
 
                 ID = new PropertyItem("ID", tableName);
 
-                Code = new PropertyItem("Code", tableName);
+                RankLevel = new PropertyItem("RankLevel", tableName);
 
                 Name = new PropertyItem("Name", tableName);
 
@@ -221,6 +284,12 @@ namespace EasyCms.Model
 
                 Note = new PropertyItem("Note", tableName);
 
+                LevelYear = new PropertyItem("LevelYear", tableName);
+
+                ReduceValue = new PropertyItem("ReduceValue", tableName);
+
+                HasService = new PropertyItem("HasService", tableName);
+
 
             }
             /// <summary>
@@ -230,7 +299,7 @@ namespace EasyCms.Model
             /// <summary>
             /// 等级,
             /// </summary> 
-            public PropertyItem Code = null;
+            public PropertyItem RankLevel = null;
             /// <summary>
             /// 等级名称,
             /// </summary> 
@@ -255,7 +324,20 @@ namespace EasyCms.Model
             /// 等级描述,
             /// </summary> 
             public PropertyItem Note = null;
+            /// <summary>
+            /// 期限（年）,
+            /// </summary> 
+            public PropertyItem LevelYear = null;
+            /// <summary>
+            /// 超期期限后减少成长值,
+            /// </summary> 
+            public PropertyItem ReduceValue = null;
+            /// <summary>
+            /// 享有的服务,
+            /// </summary> 
+            public PropertyItem HasService = null;
         }
         #endregion
     }
+
 }

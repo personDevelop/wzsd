@@ -245,5 +245,38 @@ namespace EasyCms.Web.API
             }
 
         }
+
+
+        public HttpResponseMessage GetOrderStatus(string id)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return "订单编号不能为空".FormatError();
+            }
+
+
+
+            try
+            {
+                ManagerUserInfo user = Request.GetAccount();
+                string err = null;
+                DataTable dt = new ShopOrderBll().GetOrderStatus(id, Request.GetAccount().ID, out   err);
+                if (!string.IsNullOrWhiteSpace(err))
+                {
+                    return err.FormatError();
+
+                }
+                else
+                {
+                    return dt.Format();
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                return ex.Format();
+            }
+        }
     }
 }

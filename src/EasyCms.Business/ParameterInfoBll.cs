@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using Sharp.Common;
 
 namespace EasyCms.Business
 {
@@ -12,7 +13,7 @@ namespace EasyCms.Business
         ParameterInfoDal Dal = new ParameterInfoDal();
         public string Delete(string id)
         {
-           
+
             return Dal.Delete(id);
         }
 
@@ -35,6 +36,11 @@ namespace EasyCms.Business
         public DataTable GetListByParentId(string parentId)
         {
             return Dal.GetListByParentId(parentId);
+
+        }
+        public List<ParameterInfo> GetListEntityByParentId(string parentId)
+        {
+            return GetListByParentId(parentId).ToList<ParameterInfo>();
 
         }
         public ParameterInfo GetEntity(string id)
@@ -98,13 +104,13 @@ namespace EasyCms.Business
 
         public string GetRegistAgreement()
         {
-          return  Dal.GetRegistAgreement();
+            return Dal.GetRegistAgreement();
         }
 
 
         public DataTable GetIdAndNameByParentId(string parentID)
         {
-            return Dal.GetIdAndNameByParentId(  parentID);
+            return Dal.GetIdAndNameByParentId(parentID);
         }
     }
 }

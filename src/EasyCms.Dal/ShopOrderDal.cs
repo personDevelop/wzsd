@@ -445,12 +445,32 @@ namespace EasyCms.Dal
                 {
                     realOrder.ID = orderNum + realOrder.ID;
                     realOrder.ParentID = orderNum;
+                    ShopOrderAction orderAction = new ShopOrderAction()
+                    {
+
+                        ID = Guid.NewGuid().ToString(),
+                        ActionCode = ((int)ActionEnum.创建订单).ToString(),
+                        ActionName = ActionEnum.创建订单.ToString(),
+                        OrderId = realOrder.ID,
+                        ActionDate = now
+                    };
+                    Savelist.Add(orderAction);
 
                 }
                 else
                 {
                     realOrder.ID = orderNum;
                     realOrder.ParentID = null;
+                    ShopOrderAction orderAction = new ShopOrderAction()
+                    {
+
+                        ID = Guid.NewGuid().ToString(),
+                        ActionCode = ((int)ActionEnum.创建订单).ToString(),
+                        ActionName = ActionEnum.创建订单.ToString(),
+                        OrderId = realOrder.ID,
+                        ActionDate = now
+                    };
+                    Savelist.Add(orderAction);
                 }
                 if (order.CashOnDelivery)
                 {
@@ -590,6 +610,17 @@ namespace EasyCms.Dal
                 mainOrder.FreightActual = Orderlist.Sum(p => p.FreightActual);
                 mainOrder.PayMoney = Orderlist.Sum(p => p.PayMoney);
                 Savelist.Add(mainOrder);
+
+                ShopOrderAction orderAction = new ShopOrderAction()
+                {
+
+                    ID = Guid.NewGuid().ToString(),
+                    ActionCode = ((int)ActionEnum.创建订单).ToString(),
+                    ActionName = ActionEnum.创建订单.ToString(),
+                    OrderId = orderNum,
+                    ActionDate = now
+                };
+                Savelist.Add(orderAction);
 
             }
             SessionFactory dal;
@@ -918,6 +949,386 @@ namespace EasyCms.Dal
 
             }
             return order;
+        }
+
+        public Dictionary<string, string> ExeAction(ActionEnum actionID, string wlgs, List<string> orderIDs, out string err)
+        {
+            err = string.Empty;
+            Dictionary<string, string> result = new Dictionary<string, string>();
+            if (orderIDs.Count == 0)
+            {
+                err = "请选择要" + actionID + "的订单";
+            }
+            else if (string.IsNullOrWhiteSpace(wlgs) && actionID == ActionEnum.发货)
+            {
+                err = "请选择物流公司";
+            }
+            else
+            {
+
+                //把当前的订单状态，发货状态、付款状态。付款方式查询出来
+                Dictionary<string, ShopOrder> PublishIDS = new Dictionary<string, ShopOrder>();
+                List<ShopOrder> orderList = Dal.From<ShopOrder>().Where(ShopOrder._.ID.In(orderIDs)).Select(ShopOrder._.ID, ShopOrder._.MemberID, ShopOrder._.PayTypeID,
+                       ShopOrder._.PayStatus, ShopOrder._.ShipStatus, ShopOrder._.OrderStatus, ShopOrder._.PayMoney).List<ShopOrder>();
+                OrderStatus changetToStatus = OrderStatus.等待付款;
+                switch (actionID)
+                {
+
+                    case ActionEnum.发货:
+                        changetToStatus = OrderStatus.已发货;
+                        break;
+                    case ActionEnum.签收:
+                        changetToStatus = OrderStatus.完成;
+                        break;
+                    case ActionEnum.申请退货:
+                        break;
+                    case ActionEnum.不同意退货:
+                        break;
+                    case ActionEnum.同意退货:
+                        break;
+                    case ActionEnum.完成退货:
+                        break;
+                    case ActionEnum.完成退款:
+                        break;
+                    case ActionEnum.申请取消订单:
+                        break;
+                    case ActionEnum.取消订单:
+                        break;
+                    case ActionEnum.快递中转:
+                        break;
+                    case ActionEnum.导出订单:
+                        break;
+                    case ActionEnum.拒收:
+                        changetToStatus = OrderStatus.拒收;
+                        break;
+                    case ActionEnum.作废:
+                        changetToStatus = OrderStatus.作废;
+                        break;
+                    default:
+                        break;
+                }
+                foreach (var item in orderIDs)
+                {
+                    string msg = string.Empty;
+
+                    ShopOrder order = orderList.Find(p => p.ID == item);
+                    switch (actionID)
+                    {
+                        case ActionEnum.创建订单:
+                            break;
+                        case ActionEnum.付款:
+                            break;
+                        case ActionEnum.发货:
+                            int[] CanPublistStatus = new int[] { (int)OrderStatus.等待商家发货, (int)OrderStatus.等待商家确认 };
+                            if (!string.IsNullOrWhiteSpace(order.PayTypeID))
+                            {
+                                if (order.PayStatus == (int)PayStatus.未付款)
+                                {
+                                    msg = "还没有付款，不能发货";
+                                }
+                            }
+                            if (string.IsNullOrWhiteSpace(msg))
+                            {
+
+
+                                if (order.ShipStatus != (int)ShipStatus.等待商家发货)
+                                {
+                                    msg = "订单已发货，不能重复发货";
+                                }
+                                else if (!CanPublistStatus.Contains(order.OrderStatus))
+                                {
+                                    msg = "订单状态为【" + (OrderStatus)(order.OrderStatus) + "】,不能发货";
+                                }
+
+
+                            }
+                            if (string.IsNullOrWhiteSpace(msg))
+                            {
+                                msg = "发货成功";
+                                PublishIDS.Add(item, order);
+
+                            }
+
+
+                            break;
+                        case ActionEnum.签收:
+                            int[] NotCanQSStatus = new int[] { (int)OrderStatus.完成, (int)OrderStatus.发起退货申请,
+                                (int)OrderStatus.等待商家退货确认, (int)OrderStatus.拒收, (int)OrderStatus.取消订单, (int)OrderStatus.商家同意退换
+                            , (int)OrderStatus.商家同意退换, (int)OrderStatus.商家已收货等待退款, (int)OrderStatus.申请取消订单, (int)OrderStatus.退货完成, (int)OrderStatus.退款完成, (int)OrderStatus.已收货, (int)OrderStatus.作废};
+
+
+                            if (NotCanQSStatus.Contains(order.OrderStatus))
+                            {
+                                msg = "订单状态为【" + (OrderStatus)(order.OrderStatus) + "】,不能签收";
+                            }
+                            if (string.IsNullOrWhiteSpace(msg))
+                            {
+                                msg = "签收成功";
+                                PublishIDS.Add(item, order);
+                            }
+
+                            break;
+                        case ActionEnum.申请退货:
+                            break;
+                        case ActionEnum.不同意退货:
+                            break;
+                        case ActionEnum.同意退货:
+                            break;
+                        case ActionEnum.完成退货:
+                            break;
+                        case ActionEnum.完成退款:
+                            break;
+                        case ActionEnum.申请取消订单:
+                            break;
+                        case ActionEnum.取消订单:
+                            break;
+                        case ActionEnum.快递中转:
+                            break;
+                        case ActionEnum.导出订单:
+                            break;
+                        case ActionEnum.拒收:
+                            int[] CanJSStatus = new int[] {  
+                                (int)OrderStatus.等待商家发货, (int)OrderStatus.已发货 };
+
+
+                            if (!CanJSStatus.Contains(order.OrderStatus))
+                            {
+                                msg = "订单状态为【" + (OrderStatus)(order.OrderStatus) + "】,不能拒收";
+                            }
+                            if (string.IsNullOrWhiteSpace(msg))
+                            {
+                                msg = "拒收成功";
+                                PublishIDS.Add(item, order);
+                            }
+
+                            break;
+                        case ActionEnum.作废:
+                            int[] CanzfStatus = new int[] {  
+                                (int)OrderStatus.拒收, (int)OrderStatus.取消订单 , (int)OrderStatus.退货完成, (int)OrderStatus.退款完成, (int)OrderStatus.已发货};
+
+
+                            if (!CanzfStatus.Contains(order.OrderStatus))
+                            {
+                                msg = "订单状态为【" + (OrderStatus)(order.OrderStatus) + "】,不能作废";
+                            }
+                            if (string.IsNullOrWhiteSpace(msg))
+                            {
+                                msg = "作废成功";
+                                PublishIDS.Add(item, order);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                    result.Add(item, msg);
+                }
+                DateTime now = DateTime.Now;
+                if (PublishIDS.Count > 0)
+                {
+                    List<BaseEntity> list = new List<BaseEntity>();
+                    string express = Dal.From<ShopExpress>().Where(ShopExpress._.ID == wlgs).Select(ShopExpress._.Name).ToScalar() as string;
+                    ShopOrder update = new ShopOrder() { RecordStatus = StatusType.update, Where = ShopOrder._.ID.In(PublishIDS) };
+                    update.OrderStatus = (int)changetToStatus;
+                    if (actionID == ActionEnum.发货)
+                    {
+                        update.ShipStatus = (int)ShipStatus.已发货;
+                        update.ExpressCompanyID = wlgs;
+                        update.ExpressCompanyName = express;
+                        update.PublishDateTime = now;
+                    }
+
+                    list.Add(update);
+                    //创建订单动作表
+                    foreach (var item in PublishIDS.Keys)
+                    {
+                        ShopOrderAction orderAction = new ShopOrderAction()
+                        {
+
+                            ID = Guid.NewGuid().ToString(),
+                            ActionCode = ((int)actionID).ToString(),
+                            ActionName = actionID.ToString(),
+                            OrderId = item,
+                            UserId = EasyCms.Session.CmsSession.GetUserID(),
+                            Username = EasyCms.Session.CmsSession.GetUserName(),
+                            ActionDate = now
+                        };
+                        if (actionID == ActionEnum.签收)
+                        {
+                            //兑现促销活动  主要是优惠券和积分
+
+                            ParameterInfo buyGrowth = new ParameterInfoDal().GetEntity(StaticValue.GrowthValueBuy);
+                            decimal val = decimal.Parse(buyGrowth.Value), val2 = decimal.Parse(buyGrowth.Value2);
+                            int Gowthval = (int)(PublishIDS[item].PayMoney * (val2 / val));
+                            new ManagerUserInfoDal().ChangeOrder(PublishIDS[item].MemberID, Gowthval);
+                            List<JFHistory> listHistory = Dal.From<JFHistory>().Where(JFHistory._.JFSouceMainID == item).List<JFHistory>();
+                            AccountRange accountRage = Dal.From<AccountRange>().Where(AccountRange._.ID == PublishIDS[item].MemberID).ToFirst<AccountRange>();
+                            foreach (var jf in listHistory)
+                            {
+                                if (jf.JFState == 0)
+                                {
+                                    switch (jf.JFType)
+                                    {
+                                        case 0: //积分,只会增加积分，不会减少
+
+                                            if (accountRage != null)
+                                            {
+                                                if (jf.FX == 0)
+                                                {
+                                                    accountRage.JF += jf.JFCount;
+                                                }
+                                                else
+                                                {
+                                                    accountRage.JF -= jf.JFCount;
+                                                }
+                                            }
+                                            jf.JFState = 1;
+                                            break;
+                                        case 1: //优惠券
+                                            if (jf.FX == 0)
+                                            {
+                                                //获取优惠券 并生成会员优惠券关系
+
+                                                if (!string.IsNullOrWhiteSpace(jf.CouponID))
+                                                {
+                                                    CouponRule cr = Dal.Find<CouponRule>(jf.CouponID);
+                                                    int sendCount = 0;
+                                                    if (cr.MaxCount > 0 && cr.SendCount > cr.MaxCount)
+                                                    {
+                                                        jf.Remark = "优惠券已送完，不在赠送";
+
+                                                    }
+                                                    else
+                                                    {
+                                                        int sycount = cr.MaxCount - cr.SendCount;//剩余数量
+                                                        if ((int)jf.JFCount > sycount)
+                                                        {
+                                                            sendCount = sycount;
+                                                            cr.SendCount += sycount;
+                                                            jf.Remark = "优惠券只剩余" + sycount;
+                                                        }
+                                                        else
+                                                        {
+                                                            sendCount = (int)jf.JFCount;
+                                                            cr.SendCount += sendCount;
+                                                        }
+
+                                                    }
+                                                    list.Add(cr);
+
+                                                    CusomerAndCoupon cc = new CusomerAndCoupon()
+                                                    {
+
+                                                        ID = Guid.NewGuid().ToString(),
+                                                        CardValue = cr.JE,
+                                                        CustomerID = PublishIDS[item].MemberID,
+                                                        CouponID = cr.ID,
+                                                        HaveCount = sendCount,
+                                                        HasDate = now,
+                                                        Code = GetMaxNo(cr.PreName ?? "Q"),
+                                                    };
+                                                    if (cr.IsPwd)
+                                                    {
+                                                        cc.CardPwd = "123456";
+                                                    }
+                                                    if (cr.QxLx == 0)
+                                                    {
+                                                        //固定期限
+
+                                                        cc.EndDate = cr.EndDate;
+
+
+                                                    }
+                                                    else
+                                                    {
+                                                        if (cr.IsCongZengSongKaiShi)
+                                                        {
+                                                            cr.EndDate = now.AddDays(cr.QXTS);
+                                                        }
+                                                        else { cc.EndDate = cr.EndDate; }
+
+                                                    }
+                                                    list.Add(cc);
+
+                                                }
+
+                                            }
+                                            else
+                                            {
+                                                //使用优惠券，减少会员优惠券关系个数及状态
+                                                if (accountRage != null)
+                                                {
+
+
+                                                    accountRage.JF -= jf.JFCount;
+                                                }
+                                            }
+
+
+                                            break;
+                                        default:
+                                            break;
+                                    }
+
+                                }
+                                if (accountRage != null)
+                                {
+
+                                    list.Add(accountRage);
+                                }
+                                list.Add(jf);
+                            }
+
+
+                        }
+                        list.Add(orderAction);
+                    }
+                    SessionFactory dal;
+                    IDbTransaction tr = Dal.BeginTransaction(out dal);
+                    try
+                    {
+                        dal.SubmitNew(tr, ref dal, list);
+                        dal.CommitTransaction(tr);
+                    }
+                    catch (Exception)
+                    {
+                        dal.RollbackTransaction(tr);
+                        throw;
+                    }
+                }
+
+
+            }
+
+
+
+            return result;
+        }
+
+        public DataTable GetList(WhereClip where)
+        {
+
+
+            return Dal.From<ShopOrder>().Where(where).OrderBy(ShopOrder._.CreateDate.Desc)
+
+                .ToDataTable();
+        }
+
+        public DataTable GetOrderStatus(string id, string accountID, out string err)
+        {
+            err = string.Empty;
+            string orderAccount = Dal.From<ShopOrder>().Where(ShopOrder._.ID == id).Select(ShopOrder._.MemberID).ToScalar() as string;
+            if (accountID.Equals(orderAccount))
+            {
+                return Dal.From<ShopOrderAction>().Where(ShopOrderAction._.OrderId == id).OrderBy(ShopOrderAction._.ActionDate)
+                       .Select(ShopOrderAction._.ActionDate, ShopOrderAction._.ActionName, ShopOrderAction._.Remark, ShopOrderAction._.Username)
+                       .ToDataTable();
+            }
+            else
+            {
+                err = "当前订单不是您的订单，不能查看订单状态";
+
+                return null;
+            }
         }
     }
 

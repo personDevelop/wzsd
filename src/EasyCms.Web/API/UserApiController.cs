@@ -1,5 +1,6 @@
 ﻿using EasyCms.Business;
 using EasyCms.Model;
+using EasyCms.Model.ViewModel;
 using EasyCms.Web.Common;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ using System.Web.Http;
 
 namespace EasyCms.Web.API
 {
-    public class UserApiController : ApiController
+    public class UserApiController : BaseAPIControl
     {
         [HttpPost]
         public HttpResponseMessage GetValiCode([FromBody] ValiCodeModel valiCodeModel)
@@ -142,5 +143,20 @@ namespace EasyCms.Web.API
         }
 
 
+        public HttpResponseMessage GetMySelf()
+        {
+            string userid = Request.GetAccountID();
+            string err;
+            AccountModel user = new ManagerUserInfoBll().GetMySelf(userid, host, out   err);
+            if (!string.IsNullOrWhiteSpace(err))
+            {
+                return err.FormatError();
+
+            }
+            else
+            {
+                return user.FormatObj();
+            }
+        }
     }
 }

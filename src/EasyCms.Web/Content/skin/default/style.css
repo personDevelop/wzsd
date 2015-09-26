@@ -3198,3 +3198,10 @@ textarea {
     text-overflow: ellipsis;
     overflow: hidden;
 }
+ .borderkuang td {
+        color: rgb(102, 102, 102);
+        line-height: 25px;
+        padding-left: 10px;
+        background-color: rgb(255, 255, 255);
+         font-size:12px;
+    }

@@ -10,11 +10,11 @@ using EasyCms.Web.Common;
 
 namespace EasyCms.Web.Areas.Admin.Controllers
 {
-    public class MemberOrderController : Controller
+    public class RangeDictController : Controller
     {
-        MemberOrderBll bll = new MemberOrderBll();
+        RangeDictBll bll = new RangeDictBll();
         //
-        // GET: /Admin/MemberOrder/
+        // GET: /Admin/RangeDict/
         public ActionResult Index()
         {
 
@@ -26,13 +26,13 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             return JsonWithDataTable.Serialize(dt);
 
         }
-        
+
         public string GetListForSelecte()
         {
-         
+
             System.Data.DataTable dt = bll.GetList(true);
             string result = JsonWithDataTable.Serialize(dt);
-            
+
             return result;
         }
         public string CheckRepeat(string ID, string RecordStatus, string val, bool IsCode)
@@ -41,24 +41,24 @@ namespace EasyCms.Web.Areas.Admin.Controllers
 
         }
         //
-        // POST: /Admin/MemberOrder/Create
+        // POST: /Admin/RangeDict/Create
         [HttpPost]
         [ValidateInput(false)]
         public ActionResult Save(FormCollection collection)
         {
-            MemberOrder p = null; ;
+            RangeDict p = null; ;
 
             try
             {
                 if (collection["RecordStatus"] != "add")
                 {
                     p = bll.GetEntity(collection["ID"]);
-                    p.BindForm<MemberOrder>(collection);
+                    p.BindForm<RangeDict>(collection);
                 }
                 else
                 {
                     // TODO: Add insert logic here
-                    p = collection.Bind<MemberOrder>();
+                    p = collection.Bind<RangeDict>();
 
                 }
 
@@ -70,6 +70,27 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                     }
 
                 }
+                //获取商品类型
+                p.HasService = string.Empty; 
+                string key = "hasService";
+                foreach (string item in collection.Keys)
+                {
+                    if (item.StartsWith(key))
+                    {
+                        string ptID = item.Substring(key.Length);
+                        if (!string.IsNullOrWhiteSpace(ptID))
+                        {
+                            if (!string.IsNullOrWhiteSpace(p.HasService))
+                            {
+                                p.HasService += ",";
+                            }
+                            p.HasService += ptID;
+                            
+                        }
+
+                    }
+                }
+
                 bll.Save(p);
                 if (TempData.ContainsKey("IsSuccess"))
                 {
@@ -83,9 +104,9 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                 ModelState.Clear();
                 if (collection["IsContinueAdd"] == "1")
                 {
-                    p = new MemberOrder();
+                    p = new RangeDict();
 
-                } 
+                }
 
 
             }
@@ -98,14 +119,14 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         }
 
         //
-        // GET: /Admin/MemberOrder/Edit/5
+        // GET: /Admin/RangeDict/Edit/5
         public ActionResult Edit(string id)
         {
 
-            MemberOrder p = null;
+            RangeDict p = null;
             if (string.IsNullOrWhiteSpace(id))
             {
-                p = new MemberOrder();
+                p = new RangeDict();
             }
             else
                 p = bll.GetEntity(id);
@@ -114,7 +135,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
 
         [HttpPost]
         //
-        // GET: /Admin/MemberOrder/Delete/5
+        // GET: /Admin/RangeDict/Delete/5
         public string Delete(string id)
         {
             return bll.Delete(id);

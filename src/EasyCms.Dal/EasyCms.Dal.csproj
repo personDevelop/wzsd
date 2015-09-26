@@ -81,6 +81,10 @@
       <Project>{5bf70ea8-ae93-4ed9-be80-a1be82b795fa}</Project>
       <Name>EasyCms.Model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\EasyCms.Session\EasyCms.Session.csproj">
+      <Project>{44ce33d0-d419-4958-ba98-986a7a249ba0}</Project>
+      <Name>EasyCms.Session</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

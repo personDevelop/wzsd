@@ -134,7 +134,7 @@ namespace EasyCms.Dal
                     updateChild.SetModifiedProperty(classCodeName, classCodeExpress);
                     if (!WhereClip.IsNullOrEmpty(depthName) && seriesChaZhi != 0)
                     {
-                        ExpressionClip DepthExpress = new ExpressionClip("Depth+@Depth");
+                        ExpressionClip DepthExpress = new ExpressionClip(depthName.ColumnName + "+@Depth");
                         DepthExpress.Parameters.Add("Depth", seriesChaZhi);
                         updateChild.SetModifiedProperty(depthName, DepthExpress);
                     }
@@ -154,13 +154,13 @@ namespace EasyCms.Dal
                         {
                             //说明向上调整了  比如原来是8 现在是5  则 把原来>=5 且<8 的各加1
                             whereOrder = OrderNumName >= OrderNum && OrderNumName < oldOrder;
-                            orderNumExpress = new ExpressionClip(" OrderNo+1");
+                            orderNumExpress = new ExpressionClip(OrderNumName.ColumnName + " +1");
                         }
                         else if (oldOrder < OrderNum)
                         {
                             //向下调整了   比如原来是5 现在是8  则 把原来>=5 且<8 的各-1
                             whereOrder = OrderNumName > oldOrder && OrderNumName <= OrderNum;
-                            orderNumExpress = new ExpressionClip(" OrderNo-1");
+                            orderNumExpress = new ExpressionClip(OrderNumName.ColumnName + "-1");
                         }
                         whereOrder = whereOrder && parentIdName == parentID;
                         whereOrderEntity = new T();
@@ -286,7 +286,7 @@ namespace EasyCms.Dal
                         else
                         {
                             sb.Append(string.Format(item.CascadeDeleteSql, id) + ";");
-                        } 
+                        }
 
                     }
                 }
@@ -320,7 +320,7 @@ namespace EasyCms.Dal
 
 
 
-       
+
 
     }
 }

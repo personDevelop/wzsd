@@ -90,6 +90,22 @@ namespace EasyCms.Web.Areas.Admin.Controllers
 
         }
 
+        public string GetForPublishList(string orderNos)
+        {
+
+            WhereClip where = new WhereClip();
+
+            where = ShopOrder._.ID.In(orderNos.Split(',').ToArray());
+
+
+            System.Data.DataTable dt = bll.GetList(where);
+
+            string result = JsonWithDataTable.Serialize(dt);
+            result = "{\"total\":\"" + dt.Rows.Count.ToString() + "\",\"data\":" + result + "}";
+            return result;
+
+        }
+
         //
         // POST: /Admin/ShopOrder/Create
         [HttpPost]
@@ -173,17 +189,68 @@ namespace EasyCms.Web.Areas.Admin.Controllers
 
         //
         // GET: /Admin/ShopOrder/Edit/5
-        public ActionResult PublishToWl(string ids)
+        public ActionResult PublishToWl(ActionEnum id, string other)
         {
-            return View("PublishToWl");
+            ViewResult v = View("PublishToWl");
+
+            switch (id)
+            {
+                case ActionEnum.创建订单:
+                    break;
+                case ActionEnum.付款:
+                    break;
+                case ActionEnum.发货:
+                    ViewBag.Title = "发货到物流";
+                    break;
+                case ActionEnum.签收:
+                    ViewBag.Title = "客户已签收订单";
+                    break;
+                case ActionEnum.申请退货:
+                    break;
+                case ActionEnum.不同意退货:
+                    break;
+                case ActionEnum.同意退货:
+                    break;
+                case ActionEnum.完成退货:
+                    break;
+                case ActionEnum.完成退款:
+                    break;
+                case ActionEnum.申请取消订单:
+                    break;
+                case ActionEnum.取消订单:
+                    break;
+                case ActionEnum.快递中转:
+                    break;
+                case ActionEnum.导出订单:
+                    break;
+                case ActionEnum.拒收:
+                    ViewBag.Title = "客户已拒收订单";
+                    break;
+                case ActionEnum.作废:
+                    ViewBag.Title = "作废订单";
+                    break;
+                default:
+                    break;
+            }
+            v.ViewBag.Action = id;
+            v.ViewBag.OrderIDS = other;
+            return v;
         }
 
         [HttpPost]
         //
         // GET: /Admin/ShopOrder/Edit/5
-        public ActionResult Publish(string wlgs, List<string> order)
+        public ActionResult ExeAction(ActionEnum actionID,string wlgs, List<string> orderIDs)
         {
-            return new JsonResult() {  Data="成功" };
+            string err;
+            Dictionary<string, string> result = bll.ExeAction(  actionID,wlgs, orderIDs, out err);
+            if (string.IsNullOrWhiteSpace(err))
+            {
+                return result.FormatJsonResult();
+
+            }
+            else
+                return err.FormatErrorJsonResult();
         }
     }
 }

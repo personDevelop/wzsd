@@ -29,7 +29,7 @@
                       source.totalrecords = data.total;
                   },
                   root: 'Rows',
-                  id: 'id',
+                  id: 'ID',
                   url: url,
               };
 
@@ -47,12 +47,26 @@
         }
         if (columns[i].valObj) {
             columns[i].cellsrenderer = function (row, columnfield, value, defaulthtml, columnproperties) {
-                for (var k = 0; k < columns[i].valObj.length; k++) {
-                    var val = columns[i].valObj[k];
-                    if (val.key == value) {
-                        return val.val;
+                for (var j = 0; j < columns.length; j++) {
+
+                    if (columns[j].dataField == columnfield) {
+                        for (var k = 0; k < columns[j].valObj.length; k++) {
+                            var val = columns[j].valObj[k];
+                            if (val.key == value) {
+                                return '<div style="text-align: ' + columns[j].cellsalign + '; overflow: hidden; padding-bottom: 2px; margin-top: 4px; text-overflow: ellipsis;">' + val.val + '</div>';
+
+                            }
+                        }
+
+                        return "未知";
+
+                        break;
+
                     }
+
+
                 }
+
             };
         }
     }
@@ -275,4 +289,58 @@ var pagerrenderer = function (gridid) {
     return pageelement;
 }
 
- 
+$(function () {
+    $("#messageNotification").jqxNotification({
+        width: 250, position: "top-right"
+    });
+})
+function SucessMsg(msg, append) {
+    $("#msgDiv").text(msg);
+    $("#messageNotification").jqxNotification({
+        template: "success", appendContainer: append
+    });
+    $("#messageNotification").jqxNotification("open");
+}
+function ErrorMsg(msg, append) {
+    $("#msgDiv").text(msg);
+    $("#messageNotification").jqxNotification({
+        template: "error", appendContainer: append
+    });
+    $("#messageNotification").jqxNotification("open");
+
+}
+function InfoMsg(msg, append) {
+    $("#msgDiv").text(msg);
+    $("#messageNotification").jqxNotification({
+        template: "info", appendContainer: append
+    });
+    $("#messageNotification").jqxNotification("open");
+}
+function WarningMsg(msg, append) {
+    $("#msgDiv").text(msg);
+    $("#messageNotification").jqxNotification({
+        template: "warning", appendContainer: append
+    });
+    $("#messageNotification").jqxNotification("open");
+}
+
+function Query(msg, onOk, title) {
+    if (!title) {
+        title = "确认";
+    }
+    $('#eventWindow').jqxWindow({
+        maxHeight: 150, maxWidth: 280, minHeight: 30, minWidth: 250, height: 145, width: 270,
+        resizable: false, isModal: true, modalOpacity: 0.3, autoOpen: false,
+        okButton: $('#ok'), cancelButton: $('#cancel'),
+        initContent: function () {
+          
+            $('#ok').jqxButton({ width: '65px' }); 
+            $('#cancel').jqxButton({ width: '65px' });
+            $('#ok').focus(); 
+        }
+    });
+    $('#eventWindowContent').html(msg);
+    $('#eventWindowTitle').html(title);
+    $('#ok').one('click', onOk);
+    $('#eventWindow').jqxWindow('open');
+};

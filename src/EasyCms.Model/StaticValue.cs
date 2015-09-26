@@ -42,6 +42,23 @@ namespace EasyCms.Model
         /// </summary>
         public const string CouponPercent = "0e8dc049-3503-498a-9512-1176ef8da7ac";
 
+        /// <summary>
+        /// 购物成长值兑换规则
+        /// </summary>
+
+        public const string GrowthValueBuy = "12c70a2b-1252-4b8f-a8f9-d0408165f380";
+
+        /// <summary>
+        /// 注册成长值兑换规则
+        /// </summary>
+
+        public const string GrowthValueRegist = "d6070e00-f3b1-47ad-a55a-673fb3cec6c5";
+
+        /// <summary>
+        /// 登陆成长值兑换规则
+        /// </summary>
+
+        public const string GrowthValueLogin = "4f2bc1e9-cd6d-4ad8-bfb2-a16df43b36f3";
     }
 
 
@@ -153,6 +170,35 @@ namespace EasyCms.Model
         注册送积分,
         包邮
 
+
+    }
+
+    public enum ActionEnum
+    {
+        创建订单 = 0,
+        付款 = 1,
+        发货 = 2,
+        签收 = 3,
+        申请退货 = 4,
+        不同意退货 = 5,
+        同意退货 = 6,
+        完成退货 = 7,
+        完成退款 = 8,
+        申请取消订单 = 9,
+        取消订单 = 10,
+        快递中转 = 11,
+        导出订单 = 12,
+        拒收 = 13,
+        作废 = 99,
+
+    }
+
+    public enum UserStatus
+    {
+        未激活,
+        正常,
+        锁定,
+        注销
 
     }
 }

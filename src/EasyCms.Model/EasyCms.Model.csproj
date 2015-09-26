@@ -45,6 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountRange.cs" />
+    <Compile Include="AccuountRangeChange.cs" />
     <Compile Include="AdministrativeRegions.cs" />
     <Compile Include="AttachFile.cs" />
     <Compile Include="CouponRule.cs" />
@@ -53,7 +55,7 @@
     <Compile Include="Gataway.cs" />
     <Compile Include="JFHistory.cs" />
     <Compile Include="ManagerUserInfo.cs" />
-    <Compile Include="MemberOrder.cs" />
+    <Compile Include="RangeDict.cs" />
     <Compile Include="NewsCategory.cs" />
     <Compile Include="NewsComment.cs" />
     <Compile Include="NewsInfo.cs" />
@@ -70,6 +72,7 @@
     <Compile Include="ShopOrder.cs" />
     <Compile Include="ShopOrderAction.cs" />
     <Compile Include="ShopOrderItem.cs" />
+    <Compile Include="ViewModel\AccountModel.cs" />
     <Compile Include="ViewModel\PublishToLogistic.cs" />
     <Compile Include="ViewModel\ShopOrderModel.cs" />
     <Compile Include="ShopPaymentTypes.cs" />

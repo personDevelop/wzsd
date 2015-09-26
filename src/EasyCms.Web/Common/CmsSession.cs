@@ -1,4 +1,5 @@
 ﻿using EasyCms.Model;
+using EasyCms.Session;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,22 +9,20 @@ using System.Web;
 
 namespace EasyCms
 {
-    public static class CmsSession
+   
+
+    public static class CmsSessionExtend
     {
-        public const string UserID = "UserID";
-        public const string UserInfo = "UserInfo";
-        public const string RoleID = "RoleID";
-        public const string RoleInfo = "RoleInfo";
-        public const string test = "s";
+
 
         public static string GetUserID(this HttpSessionStateBase session)
         {
-            string userid = session[UserID] as string;
+            string userid = session[CmsSession.UserID] as string;
             return userid ?? "root";
         }
         public static string GetRoleID(this HttpSessionStateBase session)
         {
-            return session[RoleID] as string;
+            return session[CmsSession.RoleID] as string;
         }
         public static string MapPathCms(this HttpServerUtility server, string path)
         {

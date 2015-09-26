@@ -1,6 +1,7 @@
 ﻿@{
     Layout = null;
-    ViewBag.Title = "发货到物流";
+
+
 }
 <!DOCTYPE html>
 <html>
@@ -19,6 +20,8 @@
 
 <body class="mainbody">
 
+    <input type="hidden" id="ActionID" value="@ViewBag.Action" />
+    <input type="hidden" id="orderID" value="@ViewBag.OrderIDS" />
     <!--导航栏-->
     <div class="location">
         <i class="home"></i>
@@ -37,16 +40,43 @@
     </div>
     <div class="tab-content">
 
-        @HelperExtend.DropDownList("LogistID", "物流公司", hint: "*必填, 请选择要发送的物流公司", downInfo: new DropDownListInfo() { Url = Url.Action("GetListForSelecte", "ShopExpress") })
+
+        @HelperExtend.DropDownList("LogistID", "物流公司", hint: "*必填, 请选择要发送的物流公司", downInfo: new DropDownListInfo() { Url = Url.Action("GetListForSelecte", "ShopExpress") });
+
         <div class="table-container">
             <div id="jqxgrid">
             </div>
             <table>
                 <tr>
                     <td>
-                        <input id="btnFH" type="button" value="发货">
-                        <input id="btnPrintExpress" type="button" value="打印快递单">
-                        <input id="btnPrintInvoice" type="button" value="打印发票">
+                        <input id="btnFH" type="button" value="@ViewBag.Action">
+                        @if (ViewBag.Action == EasyCms.Model.ActionEnum.发货)
+                        {
+                            <input id="btnPrintExpress" type="button" value="打印快递单">
+                            <input id="btnPrintInvoice" type="button" value="打印发票">
+                            <script type="text/javascript">
+
+                                $(function () {
+
+
+                                    $("#btnPrintExpress").jqxButton({ width: '150', template: 'success' });
+                                    $("#btnPrintInvoice").jqxButton({ width: '150', template: 'success' });
+                                });
+                            </script>
+
+                        }
+                        else
+                        {
+                            <script type="text/javascript">
+
+                                $(function () {
+                                    $("#LogistID").closest("dl").hide();
+
+                                });
+                            </script>
+                        }
+
+
                     </td>
                 </tr>
 
@@ -54,7 +84,7 @@
 
         </div>
     </div>
-
+    @Html.Partial("_Msg")
 
     <script type="text/javascript">
 
@@ -64,24 +94,41 @@
             $("#btnFH").jqxButton({ width: '150', template: 'success' });
             $("#btnFH").on('click', function () {
                 var rowindexes = $('#jqxgrid').jqxGrid('getselectedrowindexes');
-                var data = {wlgs:"",order:[]};
-                for (var i in rowindexes) {
-                    var d = $('#jqxgrid').jqxGrid('getrowdata', i);
-                    data.order.push(d.ID);
-                }
-                $.ajax({
-                    type: "POST",
-                    type: "json",
-                    url: "@Url.Action("Publish")",
-                    data: data,
-                    success: function (msg) {
-                        alert("Data Saved: " + msg);
-                    }
-                });
 
+                var data = { actionID:@((int)ViewBag.Action), wlgs: $("#LogistID").val(), orderIDs: [] };
+                for (var i in rowindexes) {
+
+                    var d = $('#jqxgrid').jqxGrid('getrowdata', i);
+                    data.orderIDs.push(d.ID);
+                }
+                if (!data.wlgs && $("#LogistID").closest("dl").attr("style")!='display: none;') {
+                    ErrorMsg("请选择要发送的物流公司");
+                } else
+                    if (data.orderIDs.length > 0) {
+
+
+                        $.ajax({
+                            type: "POST",
+                            dataType: "json",
+                            url: "@Url.Action("ExeAction")",
+                            data: data,
+                            success: function (result) {
+                                if (result.IsSuccess) {
+                                    for (var i in result.data) {
+
+                                        $("#jqxgrid").jqxGrid('setcellvaluebyid', i, "PublishInfo", result.data[i]);
+
+                                    }
+                                } else {
+                                    ErrorMsg(result.Msg);
+                                }
+                            }
+                        });
+                    } else {
+
+                        ErrorMsg("请选择要操作的订单");
+                    }
             });
-            $("#btnPrintExpress").jqxButton({ width: '150', template: 'success' });
-            $("#btnPrintInvoice").jqxButton({ width: '150', template: 'success' });
 
 
 
@@ -107,7 +154,7 @@
 
         $(document).ready(function () {
 
-            var url = "@Url.Action("GetList")";
+            var url = "@Url.Action("GetForPublishList")";
             var datafields = [{ name: 'ID' },
 		{ name: 'OrderType' }, { name: 'OrderResId' }, { name: 'ParentID' }, { name: 'HasChildren' }, { name: 'MemberID' }, { name: 'MemberName' }, { name: 'MemberEmail' }, { name: 'MemberCallPhone' }, { name: 'RegionID' }, { name: 'ShipRegion' },
 
@@ -137,6 +184,7 @@
 
 		{ name: 'InvoiceNote' }];
             var columns = [
+                 { text: '发送信息', dataField: 'PublishInfo', width: 150 },
   { text: '订单号', dataField: 'ID', width: 150 },
      { text: '收件人', dataField: 'ShipName', width: 100 },
   { text: '收件电话', dataField: 'ShipTel', width: 100 },
@@ -152,26 +200,10 @@
             CreateGrid("jqxgrid", url, datafields, columns, {
                 isMutilSelect: true, adapter: {
                     formatData: function (data) {
-
-
-                        data.OrderNo = $("#OrderNo").val();
-
-                        data.ShrMc = $("#ShrMc").val();
-
-                        data.AccountName = $("#AccountName").val();
-
-                        data.StartOrderDate = $("#StartOrderDate").val();
-
-                        data.EndOrderDate = $("#EndOrderDate").val();
-
-                        data.PayStatus = $("#PayStatus").val();
-
-                        data.ShipStatus = $("#ShipStatus").val();
-
-                        data.OrderStatus = $("#OrderStatus").val();
+                        data.orderNos = $("#orderID").val();
                     }
 
-                }
+                }, grid: { pageable: false, rendergridrows: null, virtualmode: false, pagerrenderer: null }
             });
             $("#jqxgrid").on("bindingcomplete", function (event) {
                 var rows = $('#jqxgrid').jqxGrid('getrows');

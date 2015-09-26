@@ -51,6 +51,8 @@ namespace EasyCms.Model
 
         private string _ActivityID;
 
+        private string _Remark;
+
         #endregion
 
         #region 属性
@@ -303,6 +305,25 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  说明,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "Remark", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 200, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string Remark
+        {
+            get
+            {
+                return this._Remark;
+            }
+            set
+            {
+                this.OnPropertyChanged("Remark", this._Remark, value);
+                this._Remark = value;
+            }
+        }
+
         #endregion
 
         #region 列定义
@@ -336,6 +357,8 @@ namespace EasyCms.Model
                 UserCouponID = new PropertyItem("UserCouponID", tableName);
 
                 ActivityID = new PropertyItem("ActivityID", tableName);
+
+                Remark = new PropertyItem("Remark", tableName);
 
 
             }
@@ -391,8 +414,13 @@ namespace EasyCms.Model
             /// 活动ID,
             /// </summary> 
             public PropertyItem ActivityID = null;
+            /// <summary>
+            /// 说明,
+            /// </summary> 
+            public PropertyItem Remark = null;
         }
         #endregion
     }
+
 
 }

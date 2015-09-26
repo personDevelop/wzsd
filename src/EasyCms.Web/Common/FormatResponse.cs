@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Web;
+using System.Web.Mvc;
 
 namespace EasyCms.Web.Common
 {
@@ -64,6 +65,20 @@ namespace EasyCms.Web.Common
             string result = JsonWithDataTable.Serialize(new { IsSuccess = true, Msg = "操作成功", data = obj }, conatin, props);
             resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
             return resp;
+        }
+
+
+        public static JsonResult FormatErrorJsonResult(this string error)
+        {
+
+            return new JsonResult() { Data = new { IsSuccess = false, Msg = error } };
+
+        }
+        public static JsonResult FormatJsonResult(this object obj)
+        {
+
+            return new JsonResult() { Data = new { IsSuccess = true, Msg = "操作成功", data = obj } };
+
         }
     }
 }

@@ -17,10 +17,11 @@ namespace EasyCms.Web.Areas.Admin
 
             context.MapRoute(
                 "Admin_default",
-                "Admin/{controller}/{action}/{id}",
-                new { controller = "Index", action = "Index", id = UrlParameter.Optional }
+                "Admin/{controller}/{action}/{id}/{other}",
+                new { controller = "Index", action = "Index", id = UrlParameter.Optional , other = UrlParameter.Optional}
                  , namespaces: new string[] { "EasyCms.Web.Areas.Admin.Controllers" }
             );
+             
         }
     }
 }

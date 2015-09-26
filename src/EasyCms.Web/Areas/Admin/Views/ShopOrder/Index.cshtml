@@ -9,18 +9,10 @@
         overflow: hidden;
     }
 </style>
-
-<style type="text/css">
-    .borderkuang td {
-        color: rgb(102, 102, 102);
-        line-height: 25px;
-        padding-left: 10px;
-        background-color: rgb(255, 255, 255);
-    }
-</style>
+ 
 
 <!--工具栏-->
-@*<div id="mainSplitter">*@
+ 
 <div id="floatHead" class="toolbar-wrap">
     <div class="toolbar">
         <div class="box-wrap">
@@ -28,14 +20,12 @@
             <div class="l-list">
                 <ul class="icon-list">
                     <li><a class="add" href="javascript:;" onclick="viewOrder();"><i></i><span>查看</span></a></li>
-                    <li><a class="edit" href="javascript:;" onclick="Publish();"><i></i><span>发货</span></a></li>
+                    <li><a class="edit" href="javascript:;" onclick="Publish(2,'发货');"><i></i><span>发货</span></a></li>
+                    <li><a class="edit" href="javascript:;" onclick="Publish(3, '签收');"><i></i><span>签收</span></a></li>
+                    <li><a class="edit" href="javascript:;" onclick="Publish(13, '拒收');"><i></i><span>拒收</span></a></li>
+                    <li><a class="del" href="javascript:;" onclick="Publish(99, '作废');"><i></i><span>作废</span></a></li>
                     <li><a class="expandable" href="javascript:;" onclick="exportOrder();"><i></i><span>导出</span></a></li>
-                    <li>
-                        <a class="del" href="javascript:;" onclick="DelGrid('jqxgrid', '@Url.Action("Delete")');">
-                            <i></i>
-                            <span>删除</span>
-                        </a>
-                    </li>
+                 
                 </ul>
             </div>
         </div>
@@ -77,7 +67,7 @@
                         下单日期：
                     </td>
 
-                    <td  >
+                    <td>
 
                         <div id='StartOrderDate'>  </div>
 
@@ -86,7 +76,7 @@
                         -
 
                     </td>
-                    <td  >
+                    <td>
 
                         <div id='EndOrderDate'>  </div>
 
@@ -111,7 +101,7 @@
 
                         @HelperExtend.DropDownListEnum("OrderStatus", enumType: typeof(EasyCms.Model.QryOrderStatus))
                     </td>
-                    <td  colspan="3">
+                    <td colspan="3">
                         <input id="btnQry" type="button" value="搜索">
                     </td>
                     <td></td>
@@ -142,14 +132,33 @@
     </div>
 </div>
 <!--/列表-->
-@*</div>*@
+ 
 @section  scripts{
     <script type="text/javascript">
-        $(function () { 
+        $(function () {
+
             Dialog.create("fh", "发货", "@Url.Content("~/Content/Images/movie.png")");
         });
-        function Publish() {
-            Dialog.open("@Url.Action("PublishToWl")", { width: 800, height: 800 });
+        function Publish(action,title) {
+            var rowindexes = $('#jqxgrid').jqxGrid('getselectedrowindexes');
+
+            if (rowindexes.length == 0) {
+                ErrorMsg("请选择要操作的订单");
+                return;
+            }
+            var id = "";
+            var i = 0;
+            for (var i in rowindexes) {
+
+                var d = $('#jqxgrid').jqxGrid('getrowdata', i);
+                if (i > 0) {
+                    id += ",";
+                }
+                id += d.ID;
+                i++;
+            }
+
+            Dialog.open("@Url.Action("PublishToWl")/" + action + "/" + id, { width: 800, height: 800 }, title);
 
         }
     </script>
@@ -178,6 +187,7 @@
             return resultDate;
         }
         $(function () {
+
             $(".content-tab-ul-wrap ul li").click(function () {
                 $("#PayStatus").jqxDropDownList('uncheckAll');
                 $("#ShipStatus").jqxDropDownList('uncheckAll');
@@ -228,7 +238,8 @@
             $("#EndOrderDate").jqxDateTimeInput({ formatString: "yyyy-MM-dd", width: 100, height: '25px', showCalendarButton: true });
 
 
-
+            $('#EndOrderDate').jqxDateTimeInput('setDate', new Date());
+            $('#StartOrderDate').jqxDateTimeInput('setDate', get3MonthBefor());
             $("#btnQry").jqxButton({ width: '150', template: 'success' });
 
 
