@@ -846,7 +846,7 @@
        result += string.Format("{{ key: {0}, val: '{1}' }}", Convert.ToInt32(ids.GetValue(i)), ids.GetValue(i).ToString());
     }
     result += "]";
-    <text>@result</text>
+    <text>@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(result)</text>
 }
 
 

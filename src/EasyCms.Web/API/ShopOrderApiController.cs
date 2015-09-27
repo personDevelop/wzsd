@@ -226,7 +226,7 @@ namespace EasyCms.Web.API
             {
                 ManagerUserInfo user = Request.GetAccount();
                 string err = null;
-                ShopOrder order = new ShopOrderBll().GetOrder(id, Request.GetAccount().ID, out   err);
+                ShopOrder order = new ShopOrderBll().GetOrder(id, Request.GetAccountID(), out   err);
                 if (!string.IsNullOrWhiteSpace(err))
                 {
                     return err.FormatError();

@@ -930,7 +930,7 @@ namespace EasyCms.Dal
             }
             else if (order.MemberID != userid)
             {
-                err = "不是您的订单，您不能查看";
+                err = "不是您的订单，您不能查看" + order.MemberID+"   "+ userid;
             }
             else
             {
