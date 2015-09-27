@@ -833,6 +833,21 @@
 {
     <img src="~/Content/Images/@imgName" alt="" style="@otherStyle" />
 }
+@helper ParseEnum(Type enumType)
+{
+    string result = "valObj: [";
+    Array ids = Enum.GetValues(enumType);
+    for (int i = 0; i < ids.Length; i++)
+    {
+        if (i > 0)
+        {
+            result += ",";
+        }
+       result += string.Format("{{ key: {0}, val: '{1}' }}", Convert.ToInt32(ids.GetValue(i)), ids.GetValue(i).ToString());
+    }
+    result += "]";
+    <text>@result</text>
+}
 
 
 

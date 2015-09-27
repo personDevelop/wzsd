@@ -252,9 +252,9 @@
 
     <script type="text/javascript">
 
-        $(document).ready(function () {
+    $(document).ready(function () {
 
-            var url = "@Url.Action("GetList")";
+        var url = "@Url.Action("GetList")";
             var datafields = [{ name: 'ID' },
 		{ name: 'OrderType' }, { name: 'OrderResId' }, { name: 'ParentID' }, { name: 'HasChildren' }, { name: 'MemberID' }, { name: 'MemberName' }, { name: 'MemberEmail' }, { name: 'MemberCallPhone' }, { name: 'RegionID' }, { name: 'ShipRegion' },
 
@@ -268,7 +268,7 @@
 
 		{ name: 'PayMoney' }, { name: 'Remark' }, { name: 'OrderPoint' }, { name: 'ShipStatus' },
 
-		{ name: 'PayStatus' }, { name: 'OrderStatus' }, { name: 'HasReturn' }, { name: 'ReturnMoney' },
+		{ name: 'PayStatus'}, { name: 'OrderStatus'}, { name: 'HasReturn' }, { name: 'ReturnMoney' },
 
 		{ name: 'RefundStatus' }, { name: 'IsInvoice' }, { name: 'InvoiceInfo' },
 
@@ -300,8 +300,8 @@
   { text: '运单号', dataField: 'ShipOrderNum', width: 100 },
 
   { text: '总价格', dataField: 'TotalPrice', cellsalign: "right", width: 100 },
-  { text: '付款状态', dataField: 'PayStatus', width: 100 },
-  { text: '订单状态', dataField: 'OrderStatus', width: 100 },
+  { text: '付款状态', dataField: 'PayStatus', width: 100,@HelperExtend.ParseEnum(typeof(EasyCms.Model.PayStatus))  },
+  { text: '订单状态', dataField: 'OrderStatus', width: 100 ,@HelperExtend.ParseEnum(typeof(EasyCms.Model.OrderStatus))},
   { text: '导出次数', dataField: 'ExportCount', cellsalign: "right", width: 100 },
   { text: '创建日期', dataField: 'CreateDate', width: 100 },
     { text: '发票抬头', dataField: 'InvoiceInfo', width: 200 },

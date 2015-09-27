@@ -191,8 +191,8 @@
   { text: '地区', dataField: 'ShipRegion', width: 100 },
   { text: '付款方式', dataField: 'PayTypeName', width: 100 },
   { text: '总价格', dataField: 'TotalPrice', cellsalign: "right", width: 100 },
-  { text: '付款状态', dataField: 'PayStatus', width: 100 },
-  { text: '订单状态', dataField: 'OrderStatus', width: 100 },
+  { text: '付款状态', dataField: 'PayStatus', width: 100,@HelperExtend.ParseEnum(typeof(EasyCms.Model.PayStatus))  },
+  { text: '订单状态', dataField: 'OrderStatus', width: 100 ,@HelperExtend.ParseEnum(typeof(EasyCms.Model.OrderStatus))},
     { text: '发票抬头', dataField: 'InvoiceInfo', width: 200 },
       { text: '发票说明', dataField: 'InvoiceNote', width: 200 },
       { text: '创建日期', dataField: 'CreateDate', width: 100 }];

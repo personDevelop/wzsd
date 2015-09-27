@@ -1127,7 +1127,7 @@ namespace EasyCms.Dal
                 {
                     List<BaseEntity> list = new List<BaseEntity>();
                     string express = Dal.From<ShopExpress>().Where(ShopExpress._.ID == wlgs).Select(ShopExpress._.Name).ToScalar() as string;
-                    ShopOrder update = new ShopOrder() { RecordStatus = StatusType.update, Where = ShopOrder._.ID.In(PublishIDS) };
+                    ShopOrder update = new ShopOrder() { RecordStatus = StatusType.update, Where = ShopOrder._.ID.In(PublishIDS.Keys.ToList()) };
                     update.OrderStatus = (int)changetToStatus;
                     if (actionID == ActionEnum.发货)
                     {
