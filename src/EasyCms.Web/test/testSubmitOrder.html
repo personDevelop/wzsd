@@ -64,11 +64,13 @@
 
             var data = [];
             data["Remark"] = $("#Remark").val();
-
+            data["Promotion[0].ID"] =  "01f82ec6-785d-4ef6-9933-6a1b4c7fd1f1" ;
+            data["Promotion[1].ID"] =  "3bb67717-41b7-468f-ada4-53f474761800" ;
+            data["Promotion[2].ID"] = "bf178bd9-afab-4a38-a37d-10cae8f95e64" ;
             data["OrderItems[0].Sku"] = $("#OrderItems0Sku").val();
             data["OrderItems[0].BuyCount"] = $("#OrderItems0BuyCount").val();
             data["OrderItems[0].UsingCouponsID"] = $("#OrderItems0UsingCouponsID").val();
-
+    
             data["OrderItems[1].Sku"] = $("#OrderItems1Sku").val();
             data["OrderItems[1].BuyCount"] = $("#OrderItems1BuyCount").val();
             data["OrderItems[1].UsingCouponsID"] = $("#OrderItems1UsingCouponsID").val();
@@ -78,10 +80,10 @@
             data["OrderItems[2].UsingCouponsID"] = $("#OrderItems2UsingCouponsID").val();
 
             $.ajax({
-                url: "http://localhost:7161/api/ShopOrderApi/CreateOrder",
+                url: "http://localhost:7161/api/ShopOrderApi/PostOrder",
                 type: "POST",
                 data: data,
-                dataType: "json",
+                //dataType: "json",
                 success: function () { alert("成功"); }
             });
         }
@@ -112,7 +114,7 @@
     </script>
 </head>
 <body>
-    <form action="http://localhost:7161/api/ShopOrderApi/CreateOrder" method="post">
+    <form action="http://localhost:7161/api/ShopOrderApi/PostOrder" method="post">
 
         订单主表<br /><br /><br />
         备注  <input type="text" id="Remark" name="Remark" value="备注" />
@@ -133,6 +135,11 @@
                 <td><input id="OrderItems2Sku" name="OrderItems[2].Sku" type="text" value="Sku3" /> </td>
                 <td><input id="OrderItems2BuyCount" name="OrderItems[2].BuyCount" type="text" value="6" /></td>
                 <td><input id="OrderItems2UsingCouponsID" name="OrderItems[2].UsingCouponsID" type="text" value="优惠券id3" /></td>
+            </tr>
+            <tr>
+                <td><input id="Promotion0" name="Promotion[0].ID" type="text" value="01f82ec6-785d-4ef6-9933-6a1b4c7fd1f1" /> </td>
+                <td><input id="Promotion1" name="Promotion[1].ID" type="text" value="3bb67717-41b7-468f-ada4-53f474761800" /></td>
+                <td><input id="Promotion2" name="Promotion[2].ID" type="text" value="bf178bd9-afab-4a38-a37d-10cae8f95e64" /></td>
             </tr>
         </table>
         <input id="Submit1" type="submit" value="提交" />

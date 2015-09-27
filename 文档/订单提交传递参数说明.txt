@@ -3,7 +3,7 @@ ShopOrderModel order
 传递参数 ：
   包括如下信息
 1.主表信息
-          RegionID   地址ID
+          AddressID   地址ID
           CashOnDelivery 是否货到付款
  	  PayTypeID   付款方式（货到付款传递空）
 	  PayTypeName  付款方式名称（货到付款传递空）

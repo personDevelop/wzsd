@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.button1 = new System.Windows.Forms.Button();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.txtUrl = new System.Windows.Forms.TextBox();
@@ -38,6 +39,8 @@
             this.txtBody = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.txtResponse = new System.Windows.Forms.TextBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // button1
@@ -113,7 +116,7 @@
             this.txtBody.Name = "txtBody";
             this.txtBody.Size = new System.Drawing.Size(468, 121);
             this.txtBody.TabIndex = 6;
-            this.txtBody.Text = "Account=admin&Pwd=123456";
+            this.txtBody.Text = "Account=138&Pwd=aaaaaa";
             // 
             // label4
             // 
@@ -131,14 +134,34 @@
             this.txtResponse.Location = new System.Drawing.Point(54, 362);
             this.txtResponse.Multiline = true;
             this.txtResponse.Name = "txtResponse";
-            this.txtResponse.Size = new System.Drawing.Size(468, 121);
+            this.txtResponse.Size = new System.Drawing.Size(751, 121);
             this.txtResponse.TabIndex = 8;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(528, 192);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(267, 108);
+            this.textBox1.TabIndex = 10;
+            this.textBox1.Text = resources.GetString("textBox1.Text");
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(539, 171);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(89, 12);
+            this.label5.TabIndex = 11;
+            this.label5.Text = "临时存储数据用";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(560, 495);
+            this.ClientSize = new System.Drawing.Size(843, 495);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.txtResponse);
             this.Controls.Add(this.label3);
@@ -168,6 +191,8 @@
         private System.Windows.Forms.TextBox txtBody;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox txtResponse;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label label5;
     }
 }
 

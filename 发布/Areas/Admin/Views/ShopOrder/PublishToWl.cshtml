@@ -178,24 +178,27 @@
 
 		{ name: 'OrderIP' }, { name: 'CommentStatus' }, { name: 'DeliveryTime' },
 
-		{ name: 'SpecifiedDate' }, { name: 'ExportCount' }, { name: 'CreateDate' },
+		{ name: 'SpecifiedDate' }, { name: 'ExportCount' }, { name: 'CreateDate', type: "date" },
 
-		{ name: 'UpdateDate' }, { name: 'HasDelete' }, { name: 'ClientType' },
+		{ name: 'UpdateDate', type: "date" }, { name: 'HasDelete' }, { name: 'ClientType' },
 
 		{ name: 'InvoiceNote' }];
             var columns = [
                  { text: '返回信息', dataField: 'PublishInfo', width: 150 },
   { text: '订单号', dataField: 'ID', width: 150 },
-     { text: '收件人', dataField: 'ShipName', width: 100 },
+ 
+  { text: '付款方式', dataField: 'PayTypeName', width: 80 },
+     {   text: '付款状态', dataField: 'PayStatus', width: 100,@HelperExtend.ParseEnum(typeof(EasyCms.Model.PayStatus))  },
+  { text: '订单状态', dataField: 'OrderStatus', width: 100 ,@HelperExtend.ParseEnum(typeof(EasyCms.Model.OrderStatus))},
+  { text: '总价格', dataField: 'TotalPrice', cellsalign: "right", width:80 },
+              { text: '收件人', dataField: 'ShipName', width: 80 },
   { text: '收件电话', dataField: 'ShipTel', width: 100 },
   { text: '地区', dataField: 'ShipRegion', width: 100 },
-  { text: '付款方式', dataField: 'PayTypeName', width: 100 },
-  { text: '总价格', dataField: 'TotalPrice', cellsalign: "right", width: 100 },
-  { text: '付款状态', dataField: 'PayStatus', width: 100,@HelperExtend.ParseEnum(typeof(EasyCms.Model.PayStatus))  },
-  { text: '订单状态', dataField: 'OrderStatus', width: 100 ,@HelperExtend.ParseEnum(typeof(EasyCms.Model.OrderStatus))},
+  
+   
     { text: '发票抬头', dataField: 'InvoiceInfo', width: 200 },
       { text: '发票说明', dataField: 'InvoiceNote', width: 200 },
-      { text: '创建日期', dataField: 'CreateDate', width: 100 }];
+      { text: '创建日期', dataField: 'CreateDate', width: 100, cellsformat: "yyyy-MM-dd HH:mm"  }];
 
             CreateGrid("jqxgrid", url, datafields, columns, {
                 isMutilSelect: true, adapter: {
