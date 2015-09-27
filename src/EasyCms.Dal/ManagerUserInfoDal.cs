@@ -236,6 +236,23 @@ namespace EasyCms.Dal
             return user;
 
         }
+
+        public string ChangePwd(string userid, ChangePwdModel changePwd)
+        {
+            ManagerUserInfo user = Dal.From<ManagerUserInfo>().Where(ManagerUserInfo._.ID == userid).Select(ManagerUserInfo._.ID, ManagerUserInfo._.Pwd).ToFirst<ManagerUserInfo>();
+
+            if (user.Pwd.EncryptSHA1() != changePwd.OldPwd.EncryptSHA1())
+            {
+                return "旧密码不正确";
+            }
+            else
+            {
+                user.Pwd = changePwd.NewPwd.EncryptSHA1();
+                Dal.Submit(user);
+                return string.Empty;
+            }
+
+        }
     }
 
 

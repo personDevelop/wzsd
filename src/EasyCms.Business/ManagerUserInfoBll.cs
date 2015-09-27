@@ -103,7 +103,7 @@ namespace EasyCms.Business
 
         public DataTable GetListForAccount(int pagenum, int pagesize, WhereClip where, ref int recordCount)
         {
-            return Dal.GetListForAccount(pagenum, pagesize,   where, ref   recordCount);
+            return Dal.GetListForAccount(pagenum, pagesize, where, ref   recordCount);
         }
 
         public string ChangeStatus(string id, int status)
@@ -113,7 +113,12 @@ namespace EasyCms.Business
 
         public AccountModel GetMySelf(string userid, string host, out string err)
         {
-          return Dal.GetMySelf(  userid,   host,out   err);
+            return Dal.GetMySelf(userid, host, out   err);
+        }
+
+        public string ChangePwd(string userid, ChangePwdModel changePwd)
+        {
+            return Dal.ChangePwd(userid, changePwd);
         }
     }
 }

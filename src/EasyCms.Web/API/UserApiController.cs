@@ -158,5 +158,55 @@ namespace EasyCms.Web.API
                 return user.FormatObj();
             }
         }
+
+        public HttpResponseMessage ChangePwd([FromBody]ChangePwdModel changePwd)
+        {//检验验证码是否正确，
+            string msg = string.Empty;
+            if (string.IsNullOrWhiteSpace(changePwd.ValidCode))
+            {
+                msg = "手机验证码不能为空";
+            }
+            else
+            {
+
+                string tel = Request.GetAccount().ContactPhone;
+                if (string.IsNullOrWhiteSpace(tel))
+                {
+                    msg = "您还没有维护您的手机号码";
+                }
+                else
+                {
+                    if (!Sharp.Common.CacheContainer.Contains(tel))
+                    {
+                        msg = "请先获取手机验证码";
+                    }
+                    else
+                        if (!Sharp.Common.CacheContainer.GetCache(tel).Equals(changePwd.ValidCode))
+                        {
+                            msg = "验证码不正确";
+                        }
+                        else
+                        {
+                            msg = new ManagerUserInfoBll().ChangePwd(Request.GetAccountID(), changePwd);
+                        }
+
+                }
+
+            }
+            if (string.IsNullOrWhiteSpace(msg))
+            {
+                //清空token
+                LoginModel.RemoveToken(Request.GetToken(), Request.GetAccount());
+
+                return "修改成功，请重新用新密码登录".FormatSuccess();
+            }
+            else
+            {
+
+                return msg.FormatError();
+            }
+
+
+        }
     }
 }

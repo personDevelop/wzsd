@@ -73,6 +73,7 @@
     <Compile Include="ShopOrderAction.cs" />
     <Compile Include="ShopOrderItem.cs" />
     <Compile Include="ViewModel\AccountModel.cs" />
+    <Compile Include="ViewModel\ChangePwdModel.cs" />
     <Compile Include="ViewModel\PublishToLogistic.cs" />
     <Compile Include="ViewModel\ShopOrderModel.cs" />
     <Compile Include="ShopPaymentTypes.cs" />

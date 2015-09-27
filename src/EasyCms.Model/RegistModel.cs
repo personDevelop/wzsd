@@ -66,7 +66,7 @@ namespace EasyCms.Model
             return token;
 
         }
-       
+
         public static bool ValidToken(string token, string userno, string deviceID)
         {
             return CacheContainer.GetCache(userno + deviceID) as string == token;
@@ -80,6 +80,14 @@ namespace EasyCms.Model
 
         }
 
+
+        public static void RemoveToken(string token, ManagerUserInfo userInfo)
+        {
+
+            CacheContainer.RemoveCache(userInfo.Code + userInfo.DeviceID);
+            CacheContainer.RemoveCache(token);
+
+        }
         public static ManagerUserInfo GetCachUserInfo(string token)
         {
             ManagerUserInfo o = CacheContainer.GetCache(token) as ManagerUserInfo;
