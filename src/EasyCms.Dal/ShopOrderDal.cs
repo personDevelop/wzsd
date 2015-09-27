@@ -921,7 +921,7 @@ namespace EasyCms.Dal
                 ShopOrder._.ShipStatus,
                 ShopOrder._.PayStatus,
                 ShopOrder._.OrderStatus,
-                ShopOrder._.CommentStatus,
+                ShopOrder._.CommentStatus, ShopOrder._.MemberID,
                 ShopOrder._.TotalPrice, ShopOrder._.CreateDate)
                 .ToFirst<ShopOrder>();
             if (order == null)
@@ -930,7 +930,7 @@ namespace EasyCms.Dal
             }
             else if (order.MemberID != userid)
             {
-                err = "不是您的订单，您不能查看" + order.MemberID+"   "+ userid;
+                err = "不是您的订单，您不能查看"  ;
             }
             else
             {
