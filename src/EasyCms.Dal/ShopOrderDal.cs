@@ -349,7 +349,7 @@ namespace EasyCms.Dal
             decimal totalPrice = productPrice - CouponPrice;
             if (totalPrice != order.TotalPrice)
             {
-                err = "订单的金额和实际的金额不符,请重新选择本次购物要使用的优惠券";
+                err = "订单的金额[" + order.TotalPrice + "]和实际的金额(商品总额-优惠券总额+运费)[" + totalPrice + "]不符,请重新选择本次购物要使用的优惠券";
                 return null;
             }
             //判断当前订单的优惠券金额是否超过系统设定的比例
