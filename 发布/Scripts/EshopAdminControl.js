@@ -192,7 +192,114 @@ function CreateTree(treeid, url, datafields, columns, isMutilSelect, opts) {
         columns: columns
     }, opts));
 }
+function CreateAjaxLoadTree(treeid, url, datafields, columns, isMutilSelect, opts) {
+    treeid = '#' + treeid;
+    for (var i = 0; i < datafields.length; i++) {
+        if (!datafields[i].type) {
+            datafields[i].align = "string";
+        }
+    }
+    var source =
+              {
+                  datatype: "json",
+                  datafields: datafields,
+                  timeout: 10000,
+                  hierarchy:
+                  {
+                      keyDataField: { name: 'ID' },
+                      parentDataField: { name: 'ParentID' }
+                  },
+                  id: 'ID',
+                  root: 'Rows',
+                  url: url
+              };
+    
+    var totalHeight = $(window).outerHeight();
+    if (totalHeight == 0) {
+        totalHeight = $(window).clientHeight();
+    }
+    var topHight = 50;
 
+    var middleHeight = totalHeight - topHight;
+    selectionmode = "checkbox";
+    if (!isMutilSelect) {
+        selectionmode = "singlerow";
+    }
+
+    for (var i = 0; i < columns.length; i++) {
+
+
+        if (!columns[i].align) {
+            columns[i].align = "center";
+        }
+        if (!columns[i].cellsalign) {
+            columns[i].cellsalign = "center";
+        }
+        if (columns[i].valObj) {
+            columns[i].cellsrenderer = function (row, columnfield, value, defaulthtml, columnproperties) {
+                for (var k = 0; k < columns[i].valObj.length; k++) {
+                    var val = columns[i].valObj[k];
+                    if (val.key == value) {
+                        return val.val;
+                    }
+                }
+            };
+        }
+    }
+    $(treeid).data("source", source);
+    $(treeid).jqxTreeGrid($.extend({
+        width: "95%",
+        height: middleHeight, 
+        columns: columns,
+        virtualModeRecordCreating: function (record) {
+
+            // record is creating.
+
+        },
+        virtualModeCreateRecords: function (expandedRecord, done) {
+
+            var dataAdapter = new $.jqx.dataAdapter(source,
+
+                {  formatData: function (data) {
+
+                        if (expandedRecord == null) {
+
+                            data.parentID = 0;
+
+                        }
+
+                        else {
+
+                            data.parentID = expandedRecord.ID;
+
+                        }
+
+                        return data;
+
+                    },
+
+                    loadComplete: function () {
+
+                        done(dataAdapter.records);
+
+                    },
+
+                    loadError: function (xhr, status, error) {
+
+                        done(false);
+
+                        throw new Error("http://services.odata.org: " + error.toString());
+
+                    } 
+                }
+
+            );
+
+            dataAdapter.dataBind();
+
+        }, 
+    }, opts));
+}
 function EditTree(treeid, url) {
     treeid = '#' + treeid;
     var data = $(treeid).jqxTreeGrid('getSelection');

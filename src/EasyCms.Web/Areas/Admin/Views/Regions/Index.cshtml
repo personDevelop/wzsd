@@ -45,31 +45,7 @@
   { text: '简称', dataField: 'ShotName', width: 100 },
 
   { text: '路径', dataField: 'Path', cellsalign: "left" }];
-            CreateTree("treeGrid", url, datafields, columns, false, {
-                virtualModeCreateRecords: function (expandedRecord, done) {
-                    var dataAdapter = new $.jqx.dataAdapter(source,
-                        {
-                            formatData: function (data) {
-                                if (expandedRecord == null) {
-                                    data.parentID = 0;
-                                }
-                                else {
-                                    data.parentID = expandedRecord.ID;
-                                }
-                                return data;
-                            },
-                            loadComplete: function () {
-                                done(dataAdapter.records);
-                            },
-                            loadError: function (xhr, status, error) {
-                                done(false);
-                                throw new Error("http://services.odata.org: " + error.toString());
-                            }
-                        }
-                    );
-                    dataAdapter.dataBind();
-                }
-            });
+            CreateAjaxLoadTree("treeGrid", url, datafields, columns);
 
         });
     </script>
