@@ -5,6 +5,7 @@
     AllWaysNew: true,
     opts: {},
     Url: "",
+    onClose: null,
     create: function (diaID, title, imgUrl, allWaysNew) {
         this.dialogID = diaID;
         if (allWaysNew) {
@@ -12,7 +13,7 @@
         }
 
 
-        var html = '<div id="' + this.dialogID + '">';
+        var html = '<div id="' + this.dialogID + '" style="display:none">';
         html += '<div id="windowHeader' + this.dialogID + '">';
         html += ' <span><img src="' + imgUrl + '" alt="" style="margin-right: 15px" /> <span id="windowTitle' + this.dialogID + '">' + title;
         html += '</span></span></div>';
@@ -42,22 +43,32 @@
                         iframe.attr("src", url);
                     }
                 }
-            })
+            });
+            $("#" + this.dialogID).on('close', function (event) {
+                var onClose = $(event.target).data("dialog").onClose;
+                if (!onClose) { } else {
+                    onClose($(event.target));
+                }
+            });
         }
 
     },
-    open: function (url, opts,title) {
+    open: function (url, opts, title, onClose) {
         if (opts) {
             this.opts = opts;
         }
+        $("#" + this.dialogID).data("dialog", url);
         $("#" + this.dialogID).data("Url", url);
+        if (!onClose) {
+
+        } else { this.onClose = onClose; }
 
         this.innit();
         if (title) {
-            $("#windowTitle" + this.dialogID).text(  title);
+            $("#windowTitle" + this.dialogID).text(title);
         }
-        
 
+        $("#" + this.dialogID).data("dialog", this);
         $("#" + this.dialogID).jqxWindow('open');
 
 

@@ -40,11 +40,11 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         }
 
         public string GetAttrList(string ptypeid, bool isGg)
-        { 
+        {
             System.Data.DataTable dt = bll.GetAttrList(ptypeid, isGg);
             return JsonWithDataTable.Serialize(dt);
         }
-      
+
         public string CheckRepeat(string ID, string RecordStatus, string val, bool IsCode)
         {
             return bll.Exit(ID, RecordStatus, val, IsCode).ToString().ToLower();
@@ -111,7 +111,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                 {
                     p = new ShopProductType();
 
-                } 
+                }
 
 
             }
@@ -132,6 +132,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             if (string.IsNullOrWhiteSpace(id))
             {
                 p = new ShopProductType();
+                p.ID = Guid.NewGuid().ToString();
             }
             else
                 p = bll.GetEntity(id);
@@ -146,7 +147,44 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             return bll.Delete(id);
         }
 
+        public ActionResult EditExtend(int id, string other)
+        {
+            ShopExtendInfo extend = null;
+            if (!string.IsNullOrWhiteSpace(other))
+            {
+                string[] ptandextendid = other.Split(',');
+                if (ptandextendid.Length == 1)
+                {
 
+                }
+                else
+                {
+                    extend = bll.GetShopExtendInfo(ptandextendid[1]);
+                }
+
+
+
+                if (extend == null)
+                {
+                    extend = new ShopExtendInfo();
+                    extend.ProductTypeID = ptandextendid[0];
+                }
+                if (id == 1)
+                {
+                    extend.UsageMode = 2;
+                    //规格
+                    return View("EditGg", extend);
+
+                }
+                else
+                {
+                    extend.UsageMode = 0;
+                    //扩展属性
+                    return View("EditExtend", extend);
+                }
+            }
+            return new ContentResult() { Content = "没有商品类型" };
+        }
 
         //
         // POST: /Admin/ShopProductType/Create
@@ -178,8 +216,13 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                     }
 
                 }
-
+                if (string.IsNullOrWhiteSpace(p.ProductTypeID))
+                {
+                    return Json(new { result = false, msg = "请先保存商品类型" });
+                }
                 bll.SaveShopExtendInfo(p);
+                AddVals(p.ID, p.Vals);
+
                 return Json(new { result = true, msg = string.Empty, id = p.ID, RecordStatus = p.RecordStatus.ToString() });
 
             }
@@ -197,23 +240,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         {
             try
             {
-                string[] vals = Vals.Split(new char[] { ',', ';', '，', '；', '/', '\\', '、', '、' }, StringSplitOptions.RemoveEmptyEntries);
-                List<ShopExtendInfoValue> list = new List<ShopExtendInfoValue>();
-                foreach (var item in vals)
-                {
-                    ShopExtendInfoValue s = new ShopExtendInfoValue()
-                    {
-                        ID=Guid.NewGuid().ToString(),
-                        ValueStr = item,
-                        AttributeId = AttributeId
-                    };
-                    list.Add(s);
-
-                }
-
-
-
-                int i = bll.Save(list);
+                AddVals(AttributeId, Vals);
                 return Json(new { result = true, msg = string.Empty });
             }
             catch (Exception ex)
@@ -222,13 +249,37 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                 return Json(new { result = false, msg = ex.Message });
             }
         }
+
+        private void AddVals(string AttributeId, string Vals)
+        {
+            if (!string.IsNullOrWhiteSpace(Vals))
+            {
+
+
+
+                string[] vals = Vals.Split(new char[] { ',', ';', '，', '；', '/', '\\', '、', '、' }, StringSplitOptions.RemoveEmptyEntries);
+                List<ShopExtendInfoValue> list = new List<ShopExtendInfoValue>();
+                foreach (var item in vals)
+                {
+                    ShopExtendInfoValue s = new ShopExtendInfoValue()
+                    {
+                        ID = Guid.NewGuid().ToString(),
+                        ValueStr = item,
+                        AttributeId = AttributeId
+                    };
+                    list.Add(s);
+
+                }
+                int i = bll.Save(list);
+            }
+        }
         public ActionResult AddExtendImgVal(string AttributeId, string ImageID, string Note)
         {
             try
             {
                 ShopExtendInfoValue s = new ShopExtendInfoValue()
                 {
-                    ID=Guid.NewGuid().ToString(),
+                    ID = Guid.NewGuid().ToString(),
                     ImageID = ImageID,
                     AttributeId = AttributeId,
                     ValueStr = Note,

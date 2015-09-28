@@ -288,6 +288,20 @@ namespace EasyCms.Model
         }
         #endregion
     }
+
+    public partial class ShopExtendInfo
+    {
+
+        /// <summary>
+        ///  新增时传递规格值用
+        /// </summary> 
+        [NotDbCol]
+        public string Vals
+        {
+            get;
+            set;
+        }
+    }
     [JsonObject]
     public class ShopExtendWithValue
     {
@@ -324,5 +338,8 @@ namespace EasyCms.Model
         {
             return base.GetHashCode();
         }
+
+
+
     }
 }

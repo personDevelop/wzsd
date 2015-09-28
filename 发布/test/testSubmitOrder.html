@@ -3,6 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title></title>
+    <t>084ea2d031c271c172dffbc084f870203e76c375</t>
     <script src="http://localhost:7161/Scripts/jquery-1.10.2.js"></script>
     <script type="text/javascript">
         function sumitJson() {
@@ -50,6 +51,60 @@
                 "Freight": 0,
                 "PayTypeID": null
             };
+            data = {
+                "Coupon": [],
+                "InvoiceInfo": "",
+                "CashOnDelivery": true,
+                "ShopAddress": {
+                    "UserId": null,
+                    "ShipName": "大黄鱼",
+                    "Remark": null,
+                    "Address": "中国北京市市辖区东城区盛大的",
+                    "RegionId": 381,
+                    "CelPhone": "18660155006",
+                    "Zipcode": null,
+                    "ID": "f6840189-07e7-49f7-b792-2a9b16ed7222",
+                    "IsDefault": true
+                },
+                "IsInvoice": true,
+                "OrderItems": [{
+                    "Point": 0,
+                    "Sku": "e2ad3e15-b26f-4f98-96d3-a750d4054e7b",
+                    "Promotion": null,
+                    "BuyCount": 1,
+                    "IsVirtualProduct": false,
+                    "ProductName": "金立 超强续航 (M5) 白色 16G 移动联通电信4G手机 双卡双待  阿萨德:黑色  尺寸:大  as:郁金香",
+                    "MarketPrice": 0,
+                    "IsGifts": false,
+                    "ProductID": "2c9ecb7b-48a2-4801-9478-ed2e82fe3b76",
+                    "OrderResId": null,
+                    "ProductCode": "ds-0",
+                    "ImgPath": "http:\/\/192.168.22.106\/\/Upload\/image\/20150911\/0514e58d-ca2f-48af-97ff-a7a3d9eea452.jpg",
+                    "SalePrice": 1800,
+                    "OrderType": 0
+                }],
+                "Promotion": [{
+                    "ID": "01f82ec6-785d-4ef6-9933-6a1b4c7fd1f1",
+                    "Name": "满100赠送1000积分",
+                    "HandsaleProductName": null,
+                    "HandsaleCouponName": ""
+                }, {
+                    "ID": "3bb67717-41b7-468f-ada4-53f474761800",
+                    "Name": "满100赠送价值100元优惠券",
+                    "HandsaleProductName": null,
+                    "HandsaleCouponName": "面值100元优惠券"
+                }, {
+                    "ID": "bf178bd9-afab-4a38-a37d-10cae8f95e64",
+                    "Name": "首单送100积分",
+                    "HandsaleProductName": null,
+                    "HandsaleCouponName": ""
+                }],
+                "InvoiceNote": "",
+                "TotalPrice": "1800",
+                "AddressID": "f6840189-07e7-49f7-b792-2a9b16ed7222",
+                "Freight": 0
+            }
+
             $.ajax({
                 url: "http://localhost:7161/api/ShopOrderApi/PostOrder",
                 type: "POST",
@@ -64,13 +119,13 @@
 
             var data = [];
             data["Remark"] = $("#Remark").val();
-            data["Promotion[0].ID"] =  "01f82ec6-785d-4ef6-9933-6a1b4c7fd1f1" ;
-            data["Promotion[1].ID"] =  "3bb67717-41b7-468f-ada4-53f474761800" ;
-            data["Promotion[2].ID"] = "bf178bd9-afab-4a38-a37d-10cae8f95e64" ;
+            data["Promotion[0].ID"] = "01f82ec6-785d-4ef6-9933-6a1b4c7fd1f1";
+            data["Promotion[1].ID"] = "3bb67717-41b7-468f-ada4-53f474761800";
+            data["Promotion[2].ID"] = "bf178bd9-afab-4a38-a37d-10cae8f95e64";
             data["OrderItems[0].Sku"] = $("#OrderItems0Sku").val();
             data["OrderItems[0].BuyCount"] = $("#OrderItems0BuyCount").val();
             data["OrderItems[0].UsingCouponsID"] = $("#OrderItems0UsingCouponsID").val();
-    
+
             data["OrderItems[1].Sku"] = $("#OrderItems1Sku").val();
             data["OrderItems[1].BuyCount"] = $("#OrderItems1BuyCount").val();
             data["OrderItems[1].UsingCouponsID"] = $("#OrderItems1UsingCouponsID").val();

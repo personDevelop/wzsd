@@ -338,9 +338,9 @@ var theme = "";
 
 var pagerrenderer = function (gridid) {
     var pageelement;
-    if (!gridid) {
-        gridid = "#jqxgrid";
-    }
+     
+    var    gridid = "#"+this.wrapper.prevObject[0].id;
+   
     var datainfo = $(gridid).jqxGrid('getdatainformation');
     var paginginfo = datainfo.paginginformation;
 

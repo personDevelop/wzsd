@@ -743,6 +743,10 @@
     <Content Include="Areas\Admin\Views\ShopOrder\PublishToWl.cshtml" />
     <Content Include="Areas\Admin\Views\ShopExpress\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\ShopExpress\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopProductType\EditExtend.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopProductType\EditGg.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopProductType\Edit - 复制.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_LayoutEditDialog.cshtml" />
     <None Include="Properties\PublishProfiles\publish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\EshopAdminControl.js" />

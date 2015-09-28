@@ -18,7 +18,12 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         public ActionResult Index(string ID)
         {
             ViewData.Add("attriID", ID);
-            ViewData.Add("ShopExtendInfoEntity", bll.GetShopExtendInfo(ID));
+            if (string.IsNullOrEmpty(ID))
+            {
+                ViewData.Add("ShopExtendInfoEntity", null);
+            }
+            else
+                ViewData.Add("ShopExtendInfoEntity", bll.GetShopExtendInfo(ID));
             return View();
         }
 
@@ -69,7 +74,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                 {
                     p = new ShopExtendInfoValue();
 
-                } 
+                }
 
 
             }

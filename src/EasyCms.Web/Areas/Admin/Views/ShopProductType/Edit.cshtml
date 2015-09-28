@@ -1,87 +1,99 @@
 ﻿@model ShopProductType
 @{
     ViewBag.Title = "编辑商品类型";
-    Layout = null;
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEdit.cshtml";
 }
+
+@Styles.Render("~/bundles/upimgcss")
+@Scripts.Render("~/bundles/ueditor")
+@Scripts.Render("~/bundles/uploadJs")
+
 @using EasyCms.Model
-<!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,initial-scale=1.0,user-scalable=no" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <title>@ViewBag.Title</title>
-    @Styles.Render("~/bundles/css")
-    @Styles.Render("~/bundles/jqxcss")
-    @Styles.Render("~/bundles/upimgcss")
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/jqueryval")
-    @Scripts.Render("~/bundles/jqx")
-    @Scripts.Render("~/bundles/uploadJs")
-    @Scripts.Render("~/bundles/jqueryAjax")
+<!--内容-->
+<div id="floatHead" class="content-tab-wrap">
+    <div class="content-tab">
+        <div class="content-tab-ul-wrap">
+            <ul>
+                <li><a class="selected" href="javascript:;">基本信息</a></li>
+                <li><a href="javascript:;">规格</a></li>
+                <li><a href="javascript:;">扩展属性</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="tab-content">
 
-</head>
-<body class="mainbody">
-    @Html.Partial("_Location")
+    @HelperExtend.HiddenFor("ID", Model.ID)
+    @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())
 
-    <!--内容-->
-    <div id="floatHead" class="content-tab-wrap">
-        <div class="content-tab">
-            <div class="content-tab-ul-wrap">
-                <ul>
-                    <li><a class="selected" href="javascript:;">基本信息</a></li>
-                    <li><a href="javascript:;">规格</a></li>
-                    <li><a href="javascript:;">扩展属性</a></li>
+    @Html.ValidationSummary()
 
+    @HelperExtend.TextBox("Code", "商品类型编号", defaultval: Model.Code, hint: "*编号不能重复")
+    @HelperExtend.TextBox("Name", "商品类型名称", defaultval: Model.Name, hint: "*名称不能重复.")
+
+
+    @{//获取所有商品类型
+         string codes = string.Empty;
+    string names = string.Empty;
+    bool[] vals = null;
+    List<ShopBrandInfo>
+    ptList = new EasyCms.Business.ShopProductTypeBll().GetListWithProductType(Model.ID, Model.RecordStatus);
+    if (ptList.Count > 0)
+    {
+
+      vals = new bool[ptList.Count];
+    int i = 0;
+    foreach (ShopBrandInfo item in ptList)
+    {
+    if (!string.IsNullOrEmpty(codes))
+    {
+    codes += ",";
+    names += ",";
+    }
+    codes += "sbd" + item.ID;
+    names += item.Name;
+    vals[i++] = item.IsSelected;
+    }
+}
+       HelperExtend.CheckBoxList("关联商品品牌", codes, names, defaultval: vals);
+    }
+    @HelperExtend.TextArea("Note", "备注", defaultval: Model.Note)
+</div>
+<div class="tab-content" style="display:none">
+    <h1>添加新规格</h1>
+    添加供客户可选的规格,如服装类型商品的颜色、尺码。
+
+    <div class="toolbar">
+        <div class="box-wrap">
+            <a class="menu-btn"></a>
+            <div class="l-list">
+                <ul class="icon-list">
+                    <li><a class="add" href="javascript:;" onclick="javascript: AddExtend(1, '添加新的规格');  "><i></i><span>添加新规格</span></a></li>
                 </ul>
             </div>
         </div>
     </div>
-    <div class="tab-content">
-        @using (Html.BeginForm("Save", null, FormMethod.Post, new { id = "form1" }))
-        {
-            @HelperExtend.HiddenFor("ID", Model.ID)
-            @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())
+    <div id="jqxGg"></div>
 
-            @Html.ValidationSummary()
-
-            @HelperExtend.TextBox("Code", "商品类型编号", defaultval: Model.Code, hint: "*编号不能重复")
-            @HelperExtend.TextBox("Name", "商品类型名称", defaultval: Model.Name, hint: "*名称不能重复.")
-
-            //获取所有商品类型
-            List<ShopBrandInfo> ptList = new EasyCms.Business.ShopProductTypeBll().GetListWithProductType(Model.ID, Model.RecordStatus);
-            if (ptList.Count > 0)
-            {
-                string codes = string.Empty;
-                string names = string.Empty;
-                bool[] vals = new bool[ptList.Count];
-                int i = 0;
-                foreach (ShopBrandInfo item in ptList)
-                {
-                    if (!string.IsNullOrEmpty(codes))
-                    {
-                        codes += ",";
-                        names += ",";
-                    }
-                    codes += "sbd" + item.ID;
-                    names += item.Name;
-                    vals[i++] = item.IsSelected;
-                }
-                @HelperExtend.CheckBoxList("关联商品品牌", codes, names, defaultval: vals)
-            }
-            @HelperExtend.TextArea("Note", "备注", defaultval: Model.Note)
-
-        <!--工具栏-->
-            <div class="page-footer">
-                <div class="btn-wrap">
-                    <input type="submit" value="提交保存" class="btn" />
-                    <input name="btnReturn" type="button" value="返回上一页" class="btn yellow" onclick="javascript:history.back(-1);" />
-                </div>
+</div>
+<div class="tab-content" style="display:none">
+    <h1>添加扩展属性</h1>
+    商品类型是一系列属性的组合，可以用来向客户展示某些商品具有的特有的属性。
+    <div class="toolbar">
+        <div class="box-wrap">
+            <a class="menu-btn"></a>
+            <div class="l-list">
+                <ul class="icon-list">
+                    <li><a class="add" href="javascript:;" onclick="javascript: AddExtend(0, '添加扩展属性');  "><i></i><span>添加扩展属性</span></a></li>
+                </ul>
             </div>
-        <!--/工具栏-->
-            @Html.Partial("_Msg")
-        }
+        </div>
     </div>
+    <div id="jqxKzsx"></div>
+</div>
+@section  scripts{
+
+
     <script type="text/javascript">
 
         $(function () {
@@ -145,565 +157,118 @@
                 }
 
             });
-        })
-    </script>
-
-    <script type="text/javascript">
-
-        $(function () {
-
             if ("@TempData.ContainsKey("IsSuccess").ToString().ToLower()" == "true") {
                 SucessMsg("@TempData["IsSuccess"]");
             }
-
-
-        });
-
-    </script>
-
-    <div class="tab-content" style="display:none">
-        <h1>添加新规格</h1>
-        添加供客户可选的规格,如服装类型商品的颜色、尺码。
-      
-        <div class="toolbar">
-            <div class="box-wrap">
-                <a class="menu-btn"></a>
-                <div class="l-list">
-                    <ul class="icon-list">
-                        <li><a class="add" href="javascript:;" onclick="javascript: SetEdit('#formGg');  "><i></i><span>添加新规格</span></a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div id="jqxGg"></div>
-    </div>
-    <div class="tab-content" style="display:none">
-        <h1>添加扩展属性</h1>
-        商品类型是一系列属性的组合，可以用来向客户展示某些商品具有的特有的属性。 
-        <div class="toolbar">
-            <div class="box-wrap">
-                <a class="menu-btn"></a>
-                <div class="l-list">
-                    <ul class="icon-list">
-                        <li><a class="add" href="javascript:;" onclick="javascript: SetEdit('#formKzsx');"><i></i><span>添加扩展属性</span></a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div id="jqxKzsx"></div>
-    </div>
-
-    <script type="text/javascript">
-        $(document).ready(function () {
-            var url = "@Url.Action("GetAttrList")";
-            // prepare the data
-            var source =
-            {
-                datatype: "json",
-                cache: false,
-                datafields: [
-
-                  { name: 'ID', type: 'string' },
-                  { name: 'Name', type: 'string' },
-                  { name: 'ShowType', type: 'string' },
-                 { name: 'UnitText', type: 'string' },
-                  { name: 'DisplayOrder', type: 'string' },
-                  { name: 'ProductTypeID', type: 'string' },
-                  { name: 'UseAttrImg', type: 'string' },
-                  { name: 'UseDefineImg', type: 'string' },
-                  { name: 'UsageMode', type: 'string' },
-                    { name: 'Vals', type: 'string' }
-
-                ],
-                data: {
-                    ptypeid: $("#ID").val(),
-                    isGg: true
-                },
-                root: 'Rows',
-                id: 'id',
-                url: url,
-            };
-            var dataAdapter = new $.jqx.dataAdapter(source);
-
-            $("#jqxGg").jqxGrid(
-            {
-                width: "95%",
-                autoheight: true,
-                source: dataAdapter,
-                columnsresize: true,
-                columns: [
-                 {
-                     text: '规格类型', align: "center", cellsalign: "center", dataField: 'UseAttrImg', type: 'string', width: 100, cellsrenderer: function (row, column, value) {
-                         var html = "  <div style='text-align: center; overflow: hidden; padding-bottom: 2px; margin-top: 4px; text-overflow: ellipsis;'>";
-                         if (value) {
-                             html += "【图片】";
-                         } else html += "【文字】";
-                         html += "</div>";
-                         return html;
-                     }
-                 },
-  { text: '规格名称', dataField: 'Name', align: "center", cellsalign: "center", type: 'string', width: 150 },
-  { text: '规格值', dataField: 'Vals', align: "center", cellsalign: "center", type: 'string' },
-
-  { text: '顺序', dataField: 'DisplayOrder', align: "center", cellsalign: "center", type: 'string', width: 80 },
-
-                   {
-                       text: '操作', datafield: 'ID', align: "center", cellsalign: "center", width: 200, cellsrenderer: function (row, column, value) {
-
-                           var html = "  <div style='text-align: center; overflow: hidden; padding-bottom: 2px; margin-top: 4px; text-overflow: ellipsis;'>";
-
-                           html += "<a  href='javascript:;' onclick='AddValue(" + row + ",true);'   >添加规格值</a>&nbsp;&nbsp;&nbsp;" +
-                                "<a href='javascript:;' onclick='EditExtendInfo(" + row + ",true);'  >编辑</a> &nbsp;&nbsp;&nbsp;" +
-                           "<a  href='javascript:;' onclick='deleteExtendInfo(" + row + ",true);'  >删除</a>";
-
-                           html += "</div>";
-                           return html;
-                          
-                       }
-                   }
-
-                ]
-            });
-
-
-        });
-    </script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            var url = "@Url.Action("GetAttrList")";
-            // prepare the data
-            var source =
-            {
-                datatype: "json",
-                cache: false,
-                datafields: [
-
-	 { name: 'ID', type: 'string' },
-
-	 { name: 'Name', type: 'string' },
-
-		{ name: 'ShowType', type: 'string' },
-
-		{ name: 'DisplayOrder', type: 'string' },
-        	{ name: 'UnitText', type: 'string' },
-
-		{ name: 'ProductTypeID', type: 'string' },
-
-		{ name: 'UseAttrImg', type: 'string' },
-
-		{ name: 'UseDefineImg', type: 'string' },
-
-		{ name: 'UsageMode', type: 'string' },
-                    { name: 'Vals', type: 'string' }
-                ],
-
-                data: {
-                    ptypeid: $("#ID").val(),
-                    isGg: false
-                },
-                root: 'Rows',
-                id: 'id',
-                url: url
-            };
-            var dataAdapter = new $.jqx.dataAdapter(source);
-
-            $("#jqxKzsx").jqxGrid(
-            {
-                width: "95%",
-                autoheight: true,
-                source: dataAdapter,
-                columnsresize: true,
-                columns: [
-                    { text: '属性名称', dataField: 'Name', align: "center", cellsalign: "center", type: 'string', width: 200 },
-                     { text: '单位', dataField: 'UnitText', align: "center", cellsalign: "center", type: 'string', width: 200 },
-    { text: '展示方式', dataField: 'ShowType', type: 'string', align: "center", cellsalign: "center", width: 200 },
-         { text: '属性值', dataField: 'Vals', align: "center", cellsalign: "center", type: 'string' },
-        { text: '顺序', dataField: 'DisplayOrder', align: "center", cellsalign: "center", type: 'string', width: 80 },
-
-                   {
-                       text: '操作', datafield: 'ID', align: "center", cellsalign: "center", width: 200, cellsrenderer: function (row, column, value) {
-
-                           var html = "  <div style='text-align: center; overflow: hidden; padding-bottom: 2px; margin-top: 4px; text-overflow: ellipsis;'>";
-
-                           html += "<a  href='javascript:;' onclick='AddValue(" + row + ",false);'   >添加属性值</a>&nbsp;&nbsp;&nbsp;" +
-                                "<a href='javascript:;' onclick='EditExtendInfo(" + row + ",false);'  >编辑</a> &nbsp;&nbsp;&nbsp;" +
-                           "<a  href='javascript:;' onclick='deleteExtendInfo(" + row + ",false);'  >删除</a>";
-
-                           html += "</div>";
-                           return html;
-                           return
-                       }
-                   }
-
-                ]
-            });
-
-        });
-    </script>
-
-
-    <div id="addge" style="display:none; padding:0px;" class="tab-content">
-        <div>
-            <span>
-                添加新的规格
-            </span>
-        </div>
-        <div>
-            @using (Ajax.BeginForm("SaveExtend", null, new AjaxOptions() { OnBegin = "return  $('#formGg').validate();", AllowCache = false, OnSuccess = "OnGgSuccess", OnFailure = "OnGgFail" }, new { id = "formGg" }))
-            {
-                <div>
-                    @HelperExtend.HiddenFor("ID", "")
-                    @HelperExtend.HiddenFor("RecordStatus", "add")
-                    @HelperExtend.HiddenFor("ProductTypeID", Model.ID)
-                    @HelperExtend.HiddenFor("UsageMode", "2")
-                    @HelperExtend.HiddenFor("UnitText", "")
-                    @HelperExtend.HiddenFor("ShowType", "0")
-                    @HelperExtend.TextBox("Name", "规格名称", defaultval: "", hint: "*名称不能重复.")
-                    @HelperExtend.RadioGroup("UseAttrImg", "显示类型", "false,true", "文本,图片", defaultval: false)
-                    @HelperExtend.RadioGroup("UseDefineImg", "自定义图标", "false,true", "否,是", defaultval: true)
-                    @HelperExtend.TextBox("DisplayOrder", "显示顺序", defaultval: 0)
-                    @HelperExtend.TextArea("Vals", "属性值", hint: "扩展属性的值，多个属性值可用“，”号隔开，每个值最多15个字符！")
-                </div>
-            <!--工具栏-->
-                <div class="page-footer">
-                    <div class="btn-wrap">
-                        <input type="submit" value="提交保存" class="btn" />
-                        <input name="btnReturn" type="button" value="关闭" class="btn yellow" onclick="javascript: $('#addge').jqxWindow('close');" />
-                    </div>
-                </div>
-            <!--/工具栏-->
-            }
-            <script type="text/javascript">
-
-                function OnGgSuccess(data) {
-                    if (data.result) {
-                        $("#formGg").find("#ID").val(data.id);
-                        $("#formGg").find("#RecordStatus").val(data.RecordStatus);
-                        SucessMsg("保存成功");
-                        $('#jqxGg').jqxGrid('updatebounddata');
-                    } else {
-                        ErrorMsg("保存失败" + data.msg);
-                    }
-                }
-                function OnGgFail(res, error, errorText) {
-                    ErrorMsg("保存失败" + errorText);
-                }
-            </script>
-
-        </div>
-    </div>
-    <div id="addKzsx" style="display:none; padding:0px;" class="tab-content">
-        <div>
-            <span>
-                添加新的扩展属性
-            </span>
-        </div>
-        <div>
-            @using (Ajax.BeginForm("SaveExtend", null, new AjaxOptions() { OnBegin = "return  $('#formKzsx').validate();", AllowCache = false, OnSuccess = "OnKzsxSuccess", OnFailure = "OnKzsxFail" }, new { id = "formKzsx" }))
-            {
-                <div>
-                    @HelperExtend.HiddenFor("ID", "")
-                    @HelperExtend.HiddenFor("RecordStatus", "add")
-                    @HelperExtend.HiddenFor("ProductTypeID", Model.ID)
-                    @HelperExtend.HiddenFor("UsageMode", "2")
-                    @HelperExtend.HiddenFor("UseAttrImg", "false")
-                    @HelperExtend.HiddenFor("UseDefineImg", "false")
-                    @HelperExtend.TextBox("Name", "属性名称", defaultval: "", hint: "*名称不能重复.")
-                    @HelperExtend.TextBox("UnitText", "属性单位", defaultval: "", hint: "属性的计量单位.")
-                    @HelperExtend.RadioGroup("ShowType", "展示方式 ", "0,1,2", "单选,多选,文本", defaultval: 0)
-                    @HelperExtend.TextBox("DisplayOrder", "显示顺序", defaultval: 0)
-                    @HelperExtend.TextArea("Vals", "属性值", hint: "扩展属性的值，多个属性值可用“，”号隔开，每个值最多15个字符！")
-                </div>
-            <!--工具栏-->
-                <div class="page-footer">
-                    <div class="btn-wrap">
-                        <input type="submit" value="提交保存" class="btn" />
-                        <input name="btnReturn" type="button" value="关闭" class="btn yellow" onclick="javascript: $('#addKzsx').jqxWindow('close');" />
-                    </div>
-                </div>
-            <!--/工具栏-->
-            }
-            <script type="text/javascript">
-
-                function OnGgSuccess(data) {
-                    if (data.result) {
-                        $("#formGg").find("#ID").val(data.id);
-                        $("#formGg").find("#RecordStatus").val(data.RecordStatus);
-                        SucessMsg("保存成功");
-                        $('#jqxGg').jqxGrid('updatebounddata');
-                    } else {
-                        ErrorMsg("保存失败" + data.msg);
-                    }
-                }
-                function OnGgFail(res, error, errorText) {
-                    ErrorMsg("保存失败" + errorText);
-                }
-                function OnKzsxSuccess(data) {
-                    if (data.result) {
-                        $("#formKzsx").find("#ID").val(data.id);
-                        $("#formKzsx").find("#RecordStatus").val(data.RecordStatus);
-                        SucessMsg("保存成功");
-                        $('#jqxKzsx').jqxGrid('updatebounddata');
-                    } else {
-                        ErrorMsg("保存失败" + data.msg);
-                    }
-                }
-                function OnKzsxFail(res, error, errorText) {
-                    ErrorMsg("保存失败" + errorText);
-                }
-            </script>
-
-        </div>
-    </div>
-
-
-    <script type="text/javascript">
-        $(function () {
-
-
-            //初始化表单验证
-            $("#formGg").validate({
-                ignore: "",
-                rules: {
-                    Name: {
-                        required: true,
-                        maxlength: 100
-                    }
-                },
-                messages: {
-
-                    Name: {
-                        required: "请输入名称",
-                        maxlength: $.validator.format("名称长度不能大于{0}个字符")
-
-                    }
-                },
-                errorPlacement: function (error, element) {
-
-                    if (element.is(":radio"))
-                        error.insertAfter($(element).parent());
-                    else if (element.is(":checkbox"))
-                        error.insertAfter($(element).parent());
-                    else
-                        error.insertAfter(element);
-                }
-
-            });
-            //初始化表单验证
-            $("#formKzsx").validate({
-                ignore: "",
-                rules: {
-                    Name: {
-                        required: true,
-                        maxlength: 100
-                    }
-                },
-                messages: {
-
-                    Name: {
-                        required: "请输入名称",
-                        maxlength: $.validator.format("名称长度不能大于{0}个字符")
-
-                    }
-                },
-                errorPlacement: function (error, element) {
-
-                    if (element.is(":radio"))
-                        error.insertAfter($(element).parent());
-                    else if (element.is(":checkbox"))
-                        error.insertAfter($(element).parent());
-                    else
-                        error.insertAfter(element);
-                }
-
-            });
         })
+    </script>
+
+    <script type="text/javascript">
+        /*加载扩展属性和规格*/
         $(function () {
-            $('#addge').jqxWindow({
-                autoOpen: false, resizable: true, isModal: true,
-                showCollapseButton: false, maxHeight: 900, maxWidth: 1000, minHeight: 100, minWidth: 200, width: 600, height: 400
+            /*加载规格*/
+            var url = "@Url.Action("GetAttrList")";
+            var datafields = [{ name: 'ID' }, { name: 'Name' }, { name: 'ShowType' }, { name: 'UnitText' }, { name: 'DisplayOrder' },
+        { name: 'ProductTypeID', type: 'UseAttrImg' }, { name: 'UseDefineImg' }, { name: 'UsageMode' }, { name: 'Vals' }];
+            var columns = [
+    {
+        text: '规格类型', dataField: 'UseAttrImg', width: 100, cellsalign: "left", cellsrenderer: function (row, column, value) {
+            var html = "  <div style='text-align: center; overflow: hidden; padding-bottom: 2px; margin-top: 4px; text-overflow: ellipsis;'>";
+            if (value) {
+                html += "【图片】";
+            } else html += "【文字】";
+            html += "</div>";
+            return html;
+        }
+    },
+    { text: '规格名称', dataField: 'Name', cellsalign: "left" },
+    { text: '规格值', dataField: 'Vals' },
+    { text: '顺序', dataField: 'DisplayOrder', width: 80 },
+      {
+          text: '操作', datafield: 'ID', align: "center", cellsalign: "center", width: 200, cellsrenderer: function (row, column, value) {
+
+              var html = "  <div style='text-align: center; overflow: hidden; padding-bottom: 2px; margin-top: 4px; text-overflow: ellipsis;'>";
+
+              html += "<a  href='javascript:;' onclick='AddValue(" + row + ",true);'   >添加规格值</a>&nbsp;&nbsp;&nbsp;" +
+                   "<a href='javascript:;' onclick='EditExtendInfo(" + row + ",true);'  >编辑</a> &nbsp;&nbsp;&nbsp;" +
+              "<a  href='javascript:;' onclick='deleteExtendInfo(" + row + ",true);'  >删除</a>";
+
+              html += "</div>";
+              return html;
+
+          }
+      }];
+            CreateGrid("jqxGg", url, datafields, columns, {
+                isMutilSelect: false, data: {
+                    data: {
+                        ptypeid: $("#ID").val(),
+                        isGg: true
+                    }
+                }, grid: { autoheight: true }
             });
 
-            $('#addKzsx').jqxWindow({
-                autoOpen: false, resizable: true, isModal: true,
-                showCollapseButton: false, maxHeight: 900, maxWidth: 1000, minHeight: 100, minWidth: 200, width: 600, height: 400
+
+            /*加载扩展属性*/
+
+            /*加载规格*/
+            var urlattr = "@Url.Action("GetAttrList")";
+
+            var columnsattr = [
+
+    { text: '属性名称', dataField: 'Name', cellsalign: "left" },
+    { text: '单位', dataField: 'UnitText' },
+            { text: '展示方式', dataField: 'ShowType' },
+            { text: '属性值', dataField: 'Vals' },
+
+    { text: '顺序', dataField: 'DisplayOrder', width: 80 },
+       {
+           text: '操作', datafield: 'ID', align: "center", cellsalign: "center", width: 200, cellsrenderer: function (row, column, value) {
+
+               var html = "  <div style='text-align: center; overflow: hidden; padding-bottom: 2px; margin-top: 4px; text-overflow: ellipsis;'>";
+
+               html += "<a  href='javascript:;' onclick='AddValue(" + row + ",false);'   >添加属性值</a>&nbsp;&nbsp;&nbsp;" +
+                    "<a href='javascript:;' onclick='EditExtendInfo(" + row + ",false);'  >编辑</a> &nbsp;&nbsp;&nbsp;" +
+               "<a  href='javascript:;' onclick='deleteExtendInfo(" + row + ",false);'  >删除</a>";
+
+               html += "</div>";
+               return html;
+               return
+           }
+       }];
+            CreateGrid("jqxKzsx", urlattr, datafields, columnsattr, {
+                isMutilSelect: false, data: {
+                    data: {
+                        ptypeid: $("#ID").val(),
+                        isGg: false
+                    }
+                }, grid: { autoheight: true }
             });
-            $('#addKzsxVal').jqxWindow({
-                autoOpen: false, resizable: true, isModal: true,
-                showCollapseButton: false, maxHeight: 900, maxWidth: 1000, minHeight: 100, minWidth: 200, width: 470, height: 260
-            });
-            $('#addKzsxImg').jqxWindow({
-                autoOpen: false, resizable: true, isModal: true,
-                showCollapseButton: false, maxHeight: 900, maxWidth: 1000, minHeight: 100, minWidth: 200, width: 470, height: 330
-            });
-           
+
+
         });
 
-
-
     </script>
 
     <script type="text/javascript">
-        function SetEdit(formid) {
-            var data = { RecordStatus: "add", UsageMode: "0", Name: "", UnitText: "", ShowType: 0, UseAttrImg: false, UseDefineImg: false, DisplayOrder: 0 };
-            var dialogid = "#addKzsx";
-            if (formid == "#formGg") {
-                data.UsageMode = "2";
-                dialogid = "#addge";
-            }
-            $(formid).find("#ID").val(data.ID);
-            $(formid).find("#RecordStatus").val(data.RecordStatus);
-            $(formid).find("#Name").val(data.Name);
-            $(formid).find("#UnitText").val(data.UnitText);
-            setRadioGroupVal('ShowType', data.ShowType, formid);
-            setRadioGroupVal('UseAttrImg', data.UseAttrImg, formid);
-            setRadioGroupVal('UseDefineImg', data.UseDefineImg, formid);
-            $(formid).find("#DisplayOrder").val(data.DisplayOrder);
-            $(formid).find("#UsageMode").val(data.UsageMode);
-            $(formid).find("#Vals").val("");
-            $(dialogid).jqxWindow('open');
+        $(function () {
+            Dialog.create("addGg", "添加规格", "@Url.Content("~/Content/Images/movie.png")");
+
+        });
+
+        function AddExtend(action, title) {
+            Dialog.open("@Url.Action("EditExtend")/" + action+"/"+$("#ID").val(), { width: 700, height: 500 }, title, function (grid) {
+                var content = grid[0].textContent;
+                if (content == "  添加扩展属性") {
+
+                    $('#jqxKzsx').jqxGrid('updatebounddata');
+                }else
+                {
+                    $('#jqxGg').jqxGrid('updatebounddata');
+                }
+               
+            });
         }
 
     </script>
+}
 
-
-    <script type="text/javascript">
-        function AddValue(rowindex, isgg) {
-            var gridid = "#jqxKzsx";
-
-            if (isgg) {
-                gridid = "#jqxGg";
-            }
-            var data = $(gridid).jqxGrid('getrowdata', rowindex);
-            if (isgg) {
-
-                if (data.UseAttrImg) {
-                    $("#KzsxValImg").text("添加【" + data.Name + "】新的规格值");
-                    $('#addKzsxImg').jqxWindow("open");
-                    $('#addKzsxImg').find("#AttributeId").val(data.ID);
-                    $('#addKzsxImg').find("#Note").val("");
-                    var files = window.imgupload.ImageIDdivConatiner.getFiles();
-                    for (var i = 0; i < files.length; i++) {
-                        window.imgupload.ImageIDdivConatiner.removeFile(files[i]);
-                    }
-                    $("#ImageIDdivConatiner").find(".fileList").children().remove();
-                  
-                    
-                } else {
-                    $("#KzsxValTitle").text("添加【" + data.Name + "】新的规格值");
-                    $('#addKzsxVal').jqxWindow("open");
-                    $('#addKzsxVal').find("#AttributeId").val(data.ID);
-                    $('#addKzsxVal').find("#Vals").val("");
-                }
-            } else {
-                $("#KzsxValTitle").text("添加【" + data.Name + "】新的属性值");
-                $('#addKzsxVal').jqxWindow("open");
-                $('#addKzsxVal').find("#AttributeId").val(data.ID);
-                $('#addKzsxVal').find("#Vals").val("");
-            }
-        }
-        function EditExtendInfo(rowindex, isgg) {
-            var gridid = "#jqxKzsx";
-
-            if (isgg) {
-                gridid = "#jqxGg";
-            }
-            var data = $(gridid).jqxGrid('getrowdata', rowindex);
-
-            window.location.href = "@Url.Action("index", "ShopExtendInfoValue")/index/" + data.ID;
-        }
-        function deleteExtendInfo(rowindex, isgg) {
-
-        }
-    </script>
-    <div id="addKzsxVal" style="display:none; padding:0px;" class="tab-content">
-        <div>
-            <span id="KzsxValTitle">
-                添加新的属性值
-            </span>
-        </div>
-        <div>
-            @using (Ajax.BeginForm("AddExtendVal", null, new AjaxOptions() { OnBegin = "return  $('#formKzsxVal').validate();", AllowCache = false, OnSuccess = "OnKzsxValSuccess", OnFailure = "OnKzsxValFail" }, new { id = "formKzsxVal" }))
-            {
-                <div>
-
-                    @HelperExtend.HiddenFor("AttributeId", "")
-                    @HelperExtend.TextArea("Vals", "属性值", hint: "扩展属性的值，多个属性值可用“，”号隔开，每个值最多15个字符！")
-                </div>
-            <!--工具栏-->
-                <div class="page-footer">
-                    <div class="btn-wrap">
-                        <input type="submit" value="提交保存" class="btn" />
-                        <input name="btnReturn" type="button" value="关闭" class="btn yellow" onclick="javascript: $('#addKzsxVal').jqxWindow('close');" />
-                    </div>
-                </div>
-            <!--/工具栏-->
-            }
-            <script type="text/javascript">
-
-                function OnKzsxValSuccess(data) {
-                    if (data.result) {
-                        $("#formGg").find("#ID").val(data.id);
-                        $("#formGg").find("#RecordStatus").val(data.RecordStatus);
-                        SucessMsg("保存成功");
-                        $('#jqxGg').jqxGrid('updatebounddata');
-                    } else {
-                        ErrorMsg("保存失败" + data.msg);
-                    }
-                }
-                function OnKzsxValFail(res, error, errorText) {
-                    ErrorMsg("保存失败" + errorText);
-                }
-
-            </script>
-
-        </div>
-    </div>
-    <div id="addKzsxImg" style="display:none; padding:0px;" class="tab-content">
-        <div>
-            <span id="KzsxValImg">
-                添加新的属性值
-            </span>
-        </div>
-        <div>
-            @using (Ajax.BeginForm("AddExtendImgVal", null, new AjaxOptions() { OnBegin = "return  $('#formKzsxValImg').validate();", AllowCache = false, OnSuccess = "OnKzsxValImgSuccess", OnFailure = "OnKzsxValImgFail" }, new { id = "formKzsxValImg" }))
-            {
-                <div>
-
-                    @HelperExtend.HiddenFor("AttributeId", "")
-
-                    @HelperExtend.ImageUpLoad("ImageID", "选择图片", true, defaultval: "", maxLength: 1 )
-                    @HelperExtend.TextArea("Note", "图片描述 ", hint: "请将描述控制在1到20个字符之间！")
-                </div>
-            <!--工具栏-->
-                <div class="page-footer">
-                    <div class="btn-wrap">
-                        <input type="submit" value="提交保存" class="btn" />
-                        <input name="btnReturn" type="button" value="关闭" class="btn yellow" onclick="javascript: $('#addKzsxImg').jqxWindow('close');" />
-                    </div>
-                </div>
-            <!--/工具栏-->
-            }
-            <script type="text/javascript">
-
-                function OnKzsxValImgSuccess(data) {
-                    if (data.result) {
-                        $("#formGg").find("#ID").val(data.id);
-                        $("#formGg").find("#RecordStatus").val(data.RecordStatus);
-                        SucessMsg("保存成功");
-                        $('#jqxGg').jqxGrid('updatebounddata');
-                    } else {
-                        ErrorMsg("保存失败" + data.msg);
-                    }
-                }
-                function OnKzsxValImgFail(res, error, errorText) {
-                    ErrorMsg("保存失败" + errorText);
-                }
-                
-
-            </script>
-
-        </div>
-    </div>
-</body>
-</html>
