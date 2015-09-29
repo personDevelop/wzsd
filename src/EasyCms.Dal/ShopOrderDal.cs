@@ -117,15 +117,16 @@ namespace EasyCms.Dal
                 }
                 if (v.IsEnableSku)
                 {
-                    if (v.SaleStatus != (int)ShopSaleStatus.上架)
+                    if (!v.IsSale)
                     {
                         err = string.Format("您购买的第{0}条商品{1}已下架,不能再购买了", i, v.Name);
                         break;
                     }
+                   
                 }
                 else
                 {
-                    if (!v.IsSale)
+                    if (v.SaleStatus != (int)ShopSaleStatus.上架)
                     {
                         err = string.Format("您购买的第{0}条商品{1}已下架,不能再购买了", i, v.Name);
                         break;
