@@ -97,12 +97,16 @@ namespace EasyCms.Web.API
                     string where = string.Format("ID='{0}'", spid);
                     if (string.IsNullOrEmpty(skuid))
                     {
-                        where += " AND SKUID is null ";
+                        where += " AND (SKUID='' or SKUID is null )";
                     }
                     else
                     { where += string.Format(" AND SKUID ='{0}' ", skuid); }
                     DataRow dr = dt.Select(where).FirstOrDefault();
-                    dtReturn.ImportRow(dr);
+                    if (dr!=null)
+                    {
+                        dtReturn.ImportRow(dr);
+                    }
+                  
 
                 }
                 return dtReturn.Format();
