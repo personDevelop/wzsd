@@ -60,6 +60,10 @@ namespace EasyCms.Model
 
         private string _Description;
 
+        private string _NotifyUrl;
+
+        private string _PublicKey;
+
         #endregion
 
         #region 属性
@@ -407,6 +411,44 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  通知Url,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "NotifyUrl", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 200, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string NotifyUrl
+        {
+            get
+            {
+                return this._NotifyUrl;
+            }
+            set
+            {
+                this.OnPropertyChanged("NotifyUrl", this._NotifyUrl, value);
+                this._NotifyUrl = value;
+            }
+        }
+
+        /// <summary>
+        ///  公钥,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "PublicKey", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 4000, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string PublicKey
+        {
+            get
+            {
+                return this._PublicKey;
+            }
+            set
+            {
+                this.OnPropertyChanged("PublicKey", this._PublicKey, value);
+                this._PublicKey = value;
+            }
+        }
+
         #endregion
 
         #region 列定义
@@ -450,6 +492,10 @@ namespace EasyCms.Model
                 Logo = new PropertyItem("Logo", tableName);
 
                 Description = new PropertyItem("Description", tableName);
+
+                NotifyUrl = new PropertyItem("NotifyUrl", tableName);
+
+                PublicKey = new PropertyItem("PublicKey", tableName);
 
 
             }
@@ -525,10 +571,17 @@ namespace EasyCms.Model
             /// 描述,
             /// </summary> 
             public PropertyItem Description = null;
+            /// <summary>
+            /// 通知Url,
+            /// </summary> 
+            public PropertyItem NotifyUrl = null;
+            /// <summary>
+            /// 公钥,
+            /// </summary> 
+            public PropertyItem PublicKey = null;
         }
         #endregion
     }
-
 
     public partial class ShopPaymentTypes
     {

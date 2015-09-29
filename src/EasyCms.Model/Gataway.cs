@@ -45,11 +45,11 @@ namespace EasyCms.Model
                         {
                             bool d = false;
                             bool.TryParse(s, out d);
-                            item.SetValue(g, d);
+                            item.SetValue(g, d,null);
                         }
                         else
                         {
-                            item.SetValue(g, s);
+                            item.SetValue(g, s, null);
                         }
                     }
                     catch (Exception)

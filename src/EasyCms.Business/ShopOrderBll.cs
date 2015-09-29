@@ -24,7 +24,7 @@ namespace EasyCms.Business
             return Dal.Save(item);
         }
 
-        public DataTable GetList(int pagenum, int pagesize,WhereClip where, ref int recordCount, bool IsForSelected = false)
+        public DataTable GetList(int pagenum, int pagesize, WhereClip where, ref int recordCount, bool IsForSelected = false)
         {
             return Dal.GetList(pagenum, pagesize, where, ref   recordCount, IsForSelected);
         }
@@ -42,9 +42,9 @@ namespace EasyCms.Business
             return Dal.CreateOrder(order, host, accuontID, out err);
         }
 
-        public string Submit(ShopOrderModel order, ManagerUserInfo accuont, out string err)
+        public string Submit(ShopOrderModel order, ManagerUserInfo accuont, out bool mustGenerSign, out string err)
         {
-            return Dal.Submit(order, accuont, out err);
+            return Dal.Submit(order, accuont, out   mustGenerSign, out err);
         }
 
         public List<ShopOrder> GetMyOrder(ManagerUserInfo user, int queryPage, int queryStatus, string other, out string err)
@@ -59,7 +59,7 @@ namespace EasyCms.Business
 
         public Dictionary<string, string> ExeAction(ActionEnum actionID, string wlgs, List<string> orderIDs, out string err)
         {
-            return Dal.ExeAction(  actionID,wlgs, orderIDs, out   err);
+            return Dal.ExeAction(actionID, wlgs, orderIDs, out   err);
         }
 
         public DataTable GetList(WhereClip where)
@@ -69,7 +69,12 @@ namespace EasyCms.Business
 
         public DataTable GetOrderStatus(string id, string accountID, out string err)
         {
-            return Dal.GetOrderStatus(  id,   accountID, out   err);
+            return Dal.GetOrderStatus(id, accountID, out   err);
+        }
+
+        public void PaySuccess(string orderID, string payJe)
+        {
+            Dal.PaySuccess(orderID, payJe);
         }
     }
 }

@@ -189,9 +189,9 @@ namespace EasyCms.Dal
         /// <param name="accuontID"></param>
         /// <param name="err"></param>
         /// <returns></returns>
-        public string Submit(ShopOrderModel order, ManagerUserInfo accuont, out string err)
+        public string Submit(ShopOrderModel order, ManagerUserInfo accuont, out bool mustGenerSign, out string err)
         {
-
+            mustGenerSign = false;
             //先检测商品对不对
             err = string.Empty;
             List<OrderItem> list = order.OrderItems;
@@ -448,6 +448,10 @@ namespace EasyCms.Dal
                     return null;
 
                 }
+                if (!order.CashOnDelivery && !string.IsNullOrWhiteSpace(order.PayTypeID))
+                {
+                    mustGenerSign = true;
+                }
                 realOrder.RegionID = address.RegionId;
                 realOrder.ShipName = address.ShipName;
                 realOrder.ShipAddress = address.Address;
@@ -648,6 +652,7 @@ namespace EasyCms.Dal
             {
                 dal.SubmitNew(tr, ref dal, Savelist);
                 dal.CommitTransaction(tr);
+
             }
             catch (Exception)
             {
@@ -1411,6 +1416,64 @@ namespace EasyCms.Dal
 
                 return null;
             }
+        }
+
+        public ShopOrder GetPayTypeEntity(string orderID)
+        {
+            return Dal.From<ShopOrder>().Select(ShopOrder._.PayTypeID).Where(ShopOrder._.ID == orderID).ToFirst<ShopOrder>();
+        }
+
+        public void PaySuccess(string orderID, string payJe)
+        {
+
+            ShopOrder order = Dal.From<ShopOrder>().Where(ShopOrder._.ID == orderID).Select(ShopOrder._.ID, ShopOrder._.PayStatus, ShopOrder._.PayMoney,
+                ShopOrder._.OrderStatus).ToFirst<ShopOrder>();
+            order.PayStatus = (int)PayStatus.已付款;
+            OrderStatus oldOrderStatus = EnumPhrase.Phrase<OrderStatus>(order.OrderStatus);
+            switch (oldOrderStatus)
+            {
+                case OrderStatus.等待付款:
+                    order.OrderStatus = (int)OrderStatus.等待商家确认;
+                    break;
+                case OrderStatus.等待商家确认:
+                case OrderStatus.等待商家发货:
+                case OrderStatus.已发货:
+                case OrderStatus.已收货:
+                case OrderStatus.拒收:
+                case OrderStatus.作废:
+                case OrderStatus.发起退货申请:
+                case OrderStatus.等待商家退货确认:
+                case OrderStatus.商家不同意退换:
+                case OrderStatus.商家同意退换:
+                case OrderStatus.退货完成:
+                case OrderStatus.商家已收货等待退款:
+                case OrderStatus.退款完成:
+                case OrderStatus.申请取消订单:
+                case OrderStatus.取消订单:
+                case OrderStatus.完成:
+                    break;
+                default:
+                    break;
+            }
+
+            decimal payMoney = 0;
+            if (decimal.TryParse(payJe, out payMoney))
+            {
+                order.PayMoney = payMoney;
+            }
+            Dal.Submit(order);
+            //生成订单动作日志
+            ShopOrderAction orderAction = new ShopOrderAction()
+            {
+
+                ID = Guid.NewGuid().ToString(),
+                ActionCode = ((int)ActionEnum.付款).ToString(),
+                ActionName = ActionEnum.付款.ToString(),
+                Username = "支付宝",
+                OrderId = orderID,
+                ActionDate = DateTime.Now
+            };
+            Dal.Submit(orderAction);
         }
     }
 

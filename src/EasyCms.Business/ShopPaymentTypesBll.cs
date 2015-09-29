@@ -28,13 +28,13 @@ namespace EasyCms.Business
         {
             return Dal.GetList(IsForSelected);
         }
-       
+
         public bool Exit(string ID, string ParentID, string RecordStatus, string val, bool IsCode)
         {
             return Dal.Exit(ID, ParentID, RecordStatus, val, IsCode);
 
         }
- 
+
         public ShopPaymentTypes GetEntity(string id)
         {
             return Dal.GetEntity(id);
@@ -46,7 +46,14 @@ namespace EasyCms.Business
 
         public DataTable GetPayType()
         {
-            return Dal.GetPayType( );
+            return Dal.GetPayType();
+        }
+
+
+        public bool GenerPayPara(string orderID, out string error)
+        {
+
+            return Dal.GenerPayPara(orderID, out   error);
         }
     }
 }

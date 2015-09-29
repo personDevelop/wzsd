@@ -119,7 +119,8 @@ namespace EasyCms.Web.API
                 {
                     ManagerUserInfo user = Request.GetAccount();
 
-                    string orderID = new ShopOrderBll().Submit(order, user, out err);
+                    bool mustGenerSign;
+                    string orderID = new ShopOrderBll().Submit(order, user, out   mustGenerSign, out err);
                     if (!string.IsNullOrWhiteSpace(err))
                     {
                         return err.FormatError();
@@ -127,7 +128,18 @@ namespace EasyCms.Web.API
                     }
                     else
                     {
-                        return orderID.FormatObj();
+                        if (mustGenerSign)
+                        {
+                            bool isSucess = new ShopPaymentTypesBll().GenerPayPara(orderID, out err);
+                            return new { OrderID = orderID, hasSign = isSucess, Sign = err }.FormatObj();
+                        }
+                        else
+                        {
+                            return new { OrderID = orderID, hasSign = false, Sign = string.Empty }.FormatObj();
+                        }
+
+
+
                     }
                 }
                 catch (Exception ex)
