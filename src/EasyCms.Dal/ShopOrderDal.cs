@@ -122,7 +122,7 @@ namespace EasyCms.Dal
                         err = string.Format("您购买的第{0}条商品{1}已下架,不能再购买了", i, v.Name);
                         break;
                     }
-                   
+
                 }
                 else
                 {
@@ -507,10 +507,10 @@ namespace EasyCms.Dal
                 foreach (var productVar in OrderResList)
                 {
                     i++;
-                    View_ProductInfoBySkuid productItem = productList.FirstOrDefault(p => p.ID == productVar.ProductID && p.SKUID == productVar.Sku);
+                    View_ProductInfoBySkuid productItem = productList.FirstOrDefault(p => p.ID == productVar.ProductID && (p.SKUID == productVar.Sku || p.SKUID == null || p.SKUID == string.Empty));
                     if (productItem == null)
                     {
-                        err = "您订购的第" + i + "条商品已下架";
+                        err = "您订购的第" + i + "条商品没有找到，或者已下架";
                         return null;
                     }
                     ShopOrderItem product = new ShopOrderItem()
