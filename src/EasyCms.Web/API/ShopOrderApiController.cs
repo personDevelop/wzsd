@@ -1,5 +1,6 @@
 ﻿using EasyCms.Business;
 using EasyCms.Model;
+using EasyCms.Model.Ali;
 using EasyCms.Web.Common;
 using System;
 using System.Collections.Generic;
@@ -150,7 +151,25 @@ namespace EasyCms.Web.API
             }
         }
 
+        [HttpPost]
+        public HttpResponseMessage PayOrder([FromBody] PayPara payPara)
+        {
 
+            string err = string.Empty;
+            bool isSucess = new ShopPaymentTypesBll().GenerPayPara(payPara, out err);
+            if (isSucess)
+            {
+                return new { OrderID = payPara.OrderNo, hasSign = isSucess, Sign = err }.FormatObj();
+            }
+            else
+            {
+                return err.FormatError();
+
+            }
+
+
+
+        }
         /// <summary>
         /// 获取我的订单，排序 按照订单时间倒排 
         /// </summary>

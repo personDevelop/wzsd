@@ -52,6 +52,7 @@
     <Compile Include="Ali\Alipay.cs" />
     <Compile Include="Ali\AsynchNotifyLog.cs" />
     <Compile Include="Ali\Core.cs" />
+    <Compile Include="Ali\PayPara.cs" />
     <Compile Include="Ali\RSAFromPkcs8.cs" />
     <Compile Include="AttachFile.cs" />
     <Compile Include="CouponRule.cs" />

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Sharp.Common;
+using EasyCms.Model.Ali;
 
 namespace EasyCms.Business
 {
@@ -54,6 +55,12 @@ namespace EasyCms.Business
         {
 
             return Dal.GenerPayPara(orderID, out   error);
+        }
+
+        public bool GenerPayPara(PayPara payPara, out string error)
+        {
+
+            return Dal.GenerPayPara(payPara, out   error);
         }
     }
 }
