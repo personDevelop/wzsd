@@ -34,11 +34,11 @@
     @HelperExtend.TextBox("EmailAddress", "商户邮件", defaultval: Model.EmailAddress, hint: "")
 
     @HelperExtend.TextArea("SecretKey", "商户密钥", defaultval: Model.SecretKey, hint: "<BR/>为了保证支付的安全性和真实性，很多支付公司都为商家提供了一个密钥<BR/>并要求使用此密钥验证支付信息，  也有的支付公司称之为校验码或验证码 ")
-
-    @HelperExtend.TextBox("SecondKey", "第二密钥", defaultval: Model.SecondKey, hint: "")
+    @HelperExtend.TextArea("SecondKey", "第二商户密钥", defaultval: Model.SecondKey, hint: "")
+    @HelperExtend.TextArea("PublicKey", "商户公钥", defaultval: Model.PublicKey, hint: "<BR/>商户公钥 ")
 
     @HelperExtend.TextBox("Password", "密码", defaultval: Model.Password, hint: "")
-
+    @HelperExtend.TextBox("NotifyUrl", "异步通知Url", defaultval: Model.NotifyUrl, hint: "<BR/>异步通知Url ")
    
 
 
