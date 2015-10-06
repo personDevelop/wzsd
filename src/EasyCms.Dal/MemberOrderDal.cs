@@ -34,7 +34,7 @@ namespace EasyCms.Dal
             else
                 return Dal.From<RangeDict>().OrderBy(RangeDict._.RankLevel).ToDataTable();
         }
-        public bool Exit(string ID,  string RecordStatus, string val, bool IsCode)
+        public bool Exit(string ID, string RecordStatus, string val, bool IsCode)
         {
             WhereClip where = null;
 
@@ -53,8 +53,8 @@ namespace EasyCms.Dal
             }
             return !Dal.Exists<RangeDict>(where);
         }
-     
-       
+
+
         public RangeDict GetEntity(string id)
         {
             return Dal.Find<RangeDict>(id);
@@ -64,6 +64,12 @@ namespace EasyCms.Dal
 
 
 
+
+        public RangeDict GetAccountRange(string accountID)
+        {
+            return Dal.From<RangeDict>().Join<AccountRange>(RangeDict._.ID == AccountRange._.RangeID && AccountRange._.AccountID == accountID).Select(RangeDict._.ID.All).ToFirst<RangeDict>();
+
+        }
     }
- 
+
 }

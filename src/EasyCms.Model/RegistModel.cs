@@ -62,7 +62,7 @@ namespace EasyCms.Model
             string source = this.Account + "|" + this.Pwd + "|" + this.TimeStamp + "|" + this.DeviceID;
             string token = source.EncryptSHA1();
             token = System.Web.HttpUtility.UrlEncode(token, Encoding.UTF8);
-            //Class1.list.Add(token);
+             Class1.list.Add(token);
             return token;
 
         }
@@ -88,10 +88,10 @@ namespace EasyCms.Model
             CacheContainer.RemoveCache(token);
 
         }
-        public static ManagerUserInfo GetCachUserInfo(string token)
+        public static ManagerUserInfo GetCachUserInfo(string token,bool IsResetCach=true)
         {
             ManagerUserInfo o = CacheContainer.GetCache(token) as ManagerUserInfo;
-            if (o != null)
+            if (o != null && IsResetCach)
             {
                 CacheContainer.AddCache(token, o, cachTime);
                 CacheContainer.AddCache(o.ContactPhone + o.DeviceID, token, cachTime);
@@ -100,8 +100,8 @@ namespace EasyCms.Model
         }
     }
 
-    //public class Class1
-    //{
-    //    public static List<String> list = new List<string>();
-    //}
+    public class Class1
+    {
+        public static List<String> list = new List<string>();
+    }
 }

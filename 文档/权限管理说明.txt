@@ -1,0 +1,42 @@
+权限控制 是这样
+分mvc模式和asp.net模式
+asp.net模式
+这种暂时只有支付宝通知接口用到，暂时不处理，如果后续需要控制，通过写基类的方式实现
+
+mvc模式如下
+
+1.找不到，api的action找不到的不处理，其他都处理下
+2.能找到，但没有权限的
+  a.后台管理功能
+    根据角色来判断，当前角色是否有该功能
+    
+  b.前台api功能
+    根据会员等级来判断，当前会员是否有该接口的权限，其中还有匿名权限，如果是匿名权限，则代表该功能不需要处理
+3.日志信息 
+  分两大类，操作类 和异常类
+
+
+角色ID 会员等级ID   如果是会员管理
+
+如果功能是可匿名的，则不判断，否则则判断是否有权限
+
+ MVC 模式
+根据 ((System.Web.Mvc.ControllerContext)(filterContext)).RouteData 获取域
+根据(filterContext.ActionDescriptor).ActionName  获取action
+根据((filterContext.ActionDescriptor).ControllerDescriptor).ControllerName  获取控制器
+
+OnAuthorization
+
+AuthorizeCore
+
+HandleUnauthorizedRequest
+
+API模式
+((actionContext.ControllerContext.RouteData).Route).RouteTemplate 获取域 （api/{controller}/{action}/{id}/{pageIndex}/{other}）
+actionContext.ControllerContext.ControllerDescriptor.ControllerName 获取控制器
+(actionContext.ActionDescriptor).ActionName  获取action
+OnAuthorization
+
+IsAuthorized
+
+HandleUnauthorizedRequest

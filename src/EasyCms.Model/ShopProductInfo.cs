@@ -999,7 +999,7 @@ namespace EasyCms.Model
         {
             AddedDate = DateTime.Now;
             SaleDate = AddedDate;
-            Stock = int.MinValue;
+            Stock = int.MaxValue;
             SalesType = 1;
             SaleStatus = 1;
         }

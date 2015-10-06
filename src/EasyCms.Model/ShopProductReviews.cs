@@ -28,13 +28,11 @@ namespace EasyCms.Model
 
         private string _ProductId;
 
+        private string _SKUID;
+
         private string _UserId;
 
         private string _ReviewText;
-
-        private string _UserName;
-
-        private string _UserEmail;
 
         private DateTime _CreatedDate;
 
@@ -43,10 +41,6 @@ namespace EasyCms.Model
         private int _Status;
 
         private string _OrderId;
-
-        private string _SKU;
-
-        private string _Attribute;
 
         private string _ImagesID;
 
@@ -78,7 +72,7 @@ namespace EasyCms.Model
         ///  商品ID,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "ProductId", DbTypeString = "char", ColumnIsNull = false, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ProductId", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string ProductId
         {
@@ -90,6 +84,25 @@ namespace EasyCms.Model
             {
                 this.OnPropertyChanged("ProductId", this._ProductId, value);
                 this._ProductId = value;
+            }
+        }
+
+        /// <summary>
+        ///  SKU码,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "SKUID", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string SKUID
+        {
+            get
+            {
+                return this._SKUID;
+            }
+            set
+            {
+                this.OnPropertyChanged("SKUID", this._SKUID, value);
+                this._SKUID = value;
             }
         }
 
@@ -128,44 +141,6 @@ namespace EasyCms.Model
             {
                 this.OnPropertyChanged("ReviewText", this._ReviewText, value);
                 this._ReviewText = value;
-            }
-        }
-
-        /// <summary>
-        ///  会员姓名,
-        /// </summary>
-
-        [DbProperty(MapingColumnName = "UserName", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 400, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
-
-        public string UserName
-        {
-            get
-            {
-                return this._UserName;
-            }
-            set
-            {
-                this.OnPropertyChanged("UserName", this._UserName, value);
-                this._UserName = value;
-            }
-        }
-
-        /// <summary>
-        ///  会员邮箱,
-        /// </summary>
-
-        [DbProperty(MapingColumnName = "UserEmail", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 100, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
-
-        public string UserEmail
-        {
-            get
-            {
-                return this._UserEmail;
-            }
-            set
-            {
-                this.OnPropertyChanged("UserEmail", this._UserEmail, value);
-                this._UserEmail = value;
             }
         }
 
@@ -246,44 +221,6 @@ namespace EasyCms.Model
         }
 
         /// <summary>
-        ///  SKU码,
-        /// </summary>
-
-        [DbProperty(MapingColumnName = "SKU", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 400, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
-
-        public string SKU
-        {
-            get
-            {
-                return this._SKU;
-            }
-            set
-            {
-                this.OnPropertyChanged("SKU", this._SKU, value);
-                this._SKU = value;
-            }
-        }
-
-        /// <summary>
-        ///  商品规格值,
-        /// </summary>
-
-        [DbProperty(MapingColumnName = "Attribute", DbTypeString = "text", ColumnIsNull = true, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
-
-        public string Attribute
-        {
-            get
-            {
-                return this._Attribute;
-            }
-            set
-            {
-                this.OnPropertyChanged("Attribute", this._Attribute, value);
-                this._Attribute = value;
-            }
-        }
-
-        /// <summary>
         ///  晒图图片,
         /// </summary>
 
@@ -314,13 +251,11 @@ namespace EasyCms.Model
 
                 ProductId = new PropertyItem("ProductId", tableName);
 
+                SKUID = new PropertyItem("SKUID", tableName);
+
                 UserId = new PropertyItem("UserId", tableName);
 
                 ReviewText = new PropertyItem("ReviewText", tableName);
-
-                UserName = new PropertyItem("UserName", tableName);
-
-                UserEmail = new PropertyItem("UserEmail", tableName);
 
                 CreatedDate = new PropertyItem("CreatedDate", tableName);
 
@@ -329,10 +264,6 @@ namespace EasyCms.Model
                 Status = new PropertyItem("Status", tableName);
 
                 OrderId = new PropertyItem("OrderId", tableName);
-
-                SKU = new PropertyItem("SKU", tableName);
-
-                Attribute = new PropertyItem("Attribute", tableName);
 
                 ImagesID = new PropertyItem("ImagesID", tableName);
 
@@ -347,6 +278,10 @@ namespace EasyCms.Model
             /// </summary> 
             public PropertyItem ProductId = null;
             /// <summary>
+            /// SKU码,
+            /// </summary> 
+            public PropertyItem SKUID = null;
+            /// <summary>
             /// 会员ID,
             /// </summary> 
             public PropertyItem UserId = null;
@@ -354,14 +289,6 @@ namespace EasyCms.Model
             /// 评论内容,
             /// </summary> 
             public PropertyItem ReviewText = null;
-            /// <summary>
-            /// 会员姓名,
-            /// </summary> 
-            public PropertyItem UserName = null;
-            /// <summary>
-            /// 会员邮箱,
-            /// </summary> 
-            public PropertyItem UserEmail = null;
             /// <summary>
             /// 评论日期,
             /// </summary> 
@@ -379,18 +306,11 @@ namespace EasyCms.Model
             /// </summary> 
             public PropertyItem OrderId = null;
             /// <summary>
-            /// SKU码,
-            /// </summary> 
-            public PropertyItem SKU = null;
-            /// <summary>
-            /// 商品规格值,
-            /// </summary> 
-            public PropertyItem Attribute = null;
-            /// <summary>
             /// 晒图图片,
             /// </summary> 
             public PropertyItem ImagesID = null;
         }
         #endregion
     }
+
 }

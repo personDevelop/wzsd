@@ -58,6 +58,9 @@
     <Compile Include="CommonDal.cs" />
     <Compile Include="CouponRuleDal.cs" />
     <Compile Include="FunctionInfoDal.cs" />
+    <Compile Include="FunctionRightDal.cs" />
+    <Compile Include="HttpPost.cs" />
+    <Compile Include="LogDal.cs" />
     <Compile Include="ManagerUserInfoDal.cs" />
     <Compile Include="MemberOrderDal.cs" />
     <Compile Include="NewsCategoryDal.cs" />
@@ -71,12 +74,15 @@
     <Compile Include="ShopOrderDal.cs" />
     <Compile Include="ShopPaymentTypesDal.cs" />
     <Compile Include="ShopProductInfoDal.cs" />
+    <Compile Include="ShopProductReviewsDal.cs" />
     <Compile Include="ShopProductTypeDal.cs" />
     <Compile Include="ShopPromotionDal.cs" />
     <Compile Include="ShopShippingAddressDal.cs" />
     <Compile Include="ShopShoppingCartsDal.cs" />
     <Compile Include="SysDeleteCasCheckDal.cs" />
+    <Compile Include="SysRoleAndUserRalationDal.cs" />
     <Compile Include="SysRoleInfoDal.cs" />
+    <Compile Include="T_LogDal.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EasyCms.Model\EasyCms.Model.csproj">

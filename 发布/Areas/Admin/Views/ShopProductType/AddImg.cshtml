@@ -1,0 +1,91 @@
+﻿@model ShopExtendInfo
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEditDialog.cshtml";
+
+}
+
+@Styles.Render("~/bundles/upimgcss")
+@Scripts.Render("~/bundles/uploadJs")
+@Scripts.Render("~/bundles/jqueryAjax")
+@using EasyCms.Model
+<!--内容-->
+
+<div class="tab-content">
+    @using (Ajax.BeginForm("SaveImgValue", null, new AjaxOptions() { OnBegin = "valildKzsx", AllowCache = false, OnSuccess = "OnKzsxValSuccess", OnFailure = "OnKzsxValFail" }, new { id = "formKzsxVal" }))
+    {
+        <div>
+            @Html.Partial("_Msg")
+
+            @HelperExtend.HiddenFor("AttributeId", ViewBag.AttriId)
+
+            @HelperExtend.ImageUpLoad("ImageID", "选择图片", true, defaultval: "", maxLength: 1)
+            @HelperExtend.TextArea("Note", "图片描述 ", hint: "请将描述控制在1到20个字符之间！")
+        </div>
+            <!--工具栏-->
+        <div class="page-footer">
+            <div class="btn-wrap">
+                <input type="submit" value="提交保存" class="btn" />
+                <input name="btnReturn" type="button" value="关闭" class="btn yellow" onclick="javascript: CloseDialog();" />
+            </div>
+        </div>
+            <!--/工具栏-->
+    }
+
+</div>
+
+@section  scripts{
+    <script type="text/javascript">
+        function valildKzsx()
+        { return $('#formKzsxVal').validate(); }
+        function OnKzsxValSuccess(data) {
+            if (data.result) {
+                SucessMsg("保存成功");
+
+            } else {
+                ErrorMsg("保存失败" + data.msg);
+            }
+        }
+        function OnKzsxValFail(res, error, errorText) {
+            ErrorMsg("保存失败" + errorText);
+        }
+
+    </script>
+
+
+    <script type="text/javascript">
+
+        $(function () {
+
+
+            //初始化表单验证
+            $("formGg").validate({
+                ignore: "",
+                rules: {
+                    Vals: {
+                        required: true
+                    }
+                },
+                messages: {
+
+                    Vals: {
+                        required: "请输入值"
+                    }
+                },
+                errorPlacement: function (error, element) {
+
+                    if (element.is(":radio"))
+                        error.insertAfter($(element).parent());
+                    else if (element.is(":checkbox"))
+                        error.insertAfter($(element).parent());
+                    else
+                        error.insertAfter(element);
+                }
+
+            });
+
+
+        })
+    </script>
+
+
+}

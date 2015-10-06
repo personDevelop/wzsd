@@ -343,5 +343,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             DataSet dt = bll.GetGgWithProdcutVal(ptypeid, productID);
             return JsonWithDataTable.Serialize(dt);
         }
+
+       
     }
 }

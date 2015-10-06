@@ -48,16 +48,15 @@
 
         ];
         var columns = [
-{ text: '检测表名', dataField: 'CheckTableName', cellsalign: "left", width: 100 },
+{ text: '检测表名', dataField: 'CheckTableName', cellsalign: "left", width: 150 },
 { text: '提示信息', dataField: 'ErrorMsg', cellsalign: "left", width: 200 },
-{ text: '是否级联删除', dataField: 'IsCascadeDelete', width:100 },
-{ text: '级联表', dataField: 'CascadeTableName', cellsalign: "left", width: 100 },
+{ text: '级联删除', dataField: 'IsCascadeDelete', width:100,@HelperExtend.Parsebool() },
+{ text: '级联表', dataField: 'CascadeTableName', cellsalign: "left", width: 150 },
 { text: '主键字段', dataField: 'CascadeTableKey', cellsalign: "left", width:100 },
 { text: '外键字段', dataField: 'CascadeTableRefKey', cellsalign: "left", width: 100 },
-{ text: '级联更新', dataField: 'IsCascadeUpdate', width: 100 },
+{ text: '级联更新', dataField: 'IsCascadeUpdate', width: 100,@HelperExtend.Parsebool() },
 { text: '提示信息提示信息', dataField: 'UpdateMsg', cellsalign: "left" },
-        { text: '启用', dataField: 'IsEnable', width: 80 }
-
+        { text: '启用', dataField: 'IsEnable', width: 80,@HelperExtend.ParseEnable() } 
         ];
         CreateGrid("jqxgrid", url, datafields, columns);
 

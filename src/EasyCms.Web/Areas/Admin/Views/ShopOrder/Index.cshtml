@@ -9,10 +9,10 @@
         overflow: hidden;
     }
 </style>
- 
+
 
 <!--工具栏-->
- 
+
 <div id="floatHead" class="toolbar-wrap">
     <div class="toolbar">
         <div class="box-wrap">
@@ -25,7 +25,7 @@
                     <li><a class="edit" href="javascript:;" onclick="Publish(13, '拒收');"><i></i><span>拒收</span></a></li>
                     <li><a class="del" href="javascript:;" onclick="Publish(99, '作废');"><i></i><span>作废</span></a></li>
                     <li><a class="expandable" href="javascript:;" onclick="exportOrder();"><i></i><span>导出</span></a></li>
-                 
+
                 </ul>
             </div>
         </div>
@@ -132,14 +132,13 @@
     </div>
 </div>
 <!--/列表-->
- 
 @section  scripts{
     <script type="text/javascript">
         $(function () {
 
-            Dialog.create("fh", "发货", "@Url.Content("~/Content/Images/movie.png")");
+            Dialog.create("@Url.Content("~/Content/Images/movie.png")");
         });
-        function Publish(action,title) {
+        function Publish(action, title) {
             var rowindexes = $('#jqxgrid').jqxGrid('getselectedrowindexes');
 
             if (rowindexes.length == 0) {
@@ -158,7 +157,7 @@
                 i++;
             }
 
-            Dialog.open("@Url.Action("PublishToWl")/" + action + "/" + id, { width: 800, height: 800 }, title);
+            Dialog.open("@Url.Action("PublishToWl")/" + action + "/" + id, title, { onClose: function () { $('#jqxgrid').jqxGrid('updatebounddata'); } }, { width: 800, height: 800 });
 
         }
     </script>
@@ -252,9 +251,9 @@
 
     <script type="text/javascript">
 
-    $(document).ready(function () {
+        $(document).ready(function () {
 
-        var url = "@Url.Action("GetList")";
+            var url = "@Url.Action("GetList")";
             var datafields = [{ name: 'ID' },
 		{ name: 'OrderType' }, { name: 'OrderResId' }, { name: 'ParentID' }, { name: 'HasChildren' }, { name: 'MemberID' }, { name: 'MemberName' }, { name: 'MemberEmail' }, { name: 'MemberCallPhone' }, { name: 'RegionID' }, { name: 'ShipRegion' },
 
@@ -268,7 +267,7 @@
 
 		{ name: 'PayMoney' }, { name: 'Remark' }, { name: 'OrderPoint' }, { name: 'ShipStatus' },
 
-		{ name: 'PayStatus'}, { name: 'OrderStatus'}, { name: 'HasReturn' }, { name: 'ReturnMoney' },
+		{ name: 'PayStatus' }, { name: 'OrderStatus' }, { name: 'HasReturn' }, { name: 'ReturnMoney' },
 
 		{ name: 'RefundStatus' }, { name: 'IsInvoice' }, { name: 'InvoiceInfo' },
 
@@ -278,7 +277,7 @@
 
 		{ name: 'OrderIP' }, { name: 'CommentStatus' }, { name: 'DeliveryTime' },
 
-		{ name: 'SpecifiedDate' }, { name: 'ExportCount' }, { name: 'CreateDate', type: 'date'  },
+		{ name: 'SpecifiedDate' }, { name: 'ExportCount' }, { name: 'CreateDate', type: 'date' },
 
 		{ name: 'UpdateDate', type: "date" }, { name: 'HasDelete' }, { name: 'ClientType' },
 
@@ -288,9 +287,9 @@
      { text: '收件人', dataField: 'ShipName', width: 100 },
   { text: '收件电话', dataField: 'ShipTel', width: 100 },
     { text: '总价格', dataField: 'TotalPrice', cellsalign: "right", width: 100 },
-  { text: '付款状态', dataField: 'PayStatus', width: 100,@HelperExtend.ParseEnum(typeof(EasyCms.Model.PayStatus))  },
-  { text: '订单状态', dataField: 'OrderStatus', width: 100 ,@HelperExtend.ParseEnum(typeof(EasyCms.Model.OrderStatus))},
- 
+  { text: '付款状态', dataField: 'PayStatus', width: 100,@HelperExtend.ParseEnum(typeof(EasyCms.Model.PayStatus)) },
+  { text: '订单状态', dataField: 'OrderStatus', width: 100,@HelperExtend.ParseEnum(typeof(EasyCms.Model.OrderStatus)) },
+
 
   { text: '地区', dataField: 'ShipRegion', width: 100 },
   { text: '付款方式', dataField: 'PayTypeName', width: 100 },
@@ -299,7 +298,7 @@
 
   { text: '运单号', dataField: 'ShipOrderNum', width: 100 },
 
-  
+
   { text: '导出次数', dataField: 'ExportCount', cellsalign: "right", width: 100 },
   { text: '创建日期', dataField: 'CreateDate', width: 120, cellsformat: "yyyy-MM-dd HH:mm" },
     { text: '发票抬头', dataField: 'InvoiceInfo', width: 200 },
@@ -335,5 +334,4 @@
 
         });
     </script>
-
 }

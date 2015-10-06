@@ -20,10 +20,47 @@ namespace EasyCms.Web.Areas.Admin.Controllers
 
             return View();
         }
+        //
+        // GET: /Admin/ManagerUserInfo/
+        public ActionResult ManagerIndex()
+        {
+
+            return View();
+        }
         public string GetList()
         {
             System.Data.DataTable dt = bll.GetList();
             return JsonWithDataTable.Serialize(dt);
+
+        }
+
+        public string GetListForManager(int pagenum, int pagesize, string UserCode, string UserName, string UserStatus)
+        {
+            int recordCount = 0;
+            WhereClip where = new WhereClip();
+            if (!string.IsNullOrWhiteSpace(UserCode))
+            {
+                where = ManagerUserInfo._.Code.StartsWith(UserCode);
+            }
+            if (!string.IsNullOrWhiteSpace(UserName))
+            {
+                where = where && ManagerUserInfo._.Name.StartsWith(UserName);
+            }
+            if (!string.IsNullOrWhiteSpace(UserStatus))
+            {
+                string[] ps = UserStatus.Split(',');
+                if (!ps.Contains(""))
+                {
+                    where = where && ManagerUserInfo._.Status.In(ps);
+                }
+
+            }
+            where = where && ManagerUserInfo._.IsManager == true;
+            System.Data.DataTable dt = bll.GetListForAccount(pagenum + 1, pagesize, where, ref   recordCount);
+
+            string result = JsonWithDataTable.Serialize(dt);
+            result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
+            return result;
 
         }
         public string GetListForAccount(int pagenum, int pagesize, string UserCode, string UserName, string UserStatus)
@@ -47,7 +84,8 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                 }
 
             }
-            System.Data.DataTable dt = bll.GetListForAccount(pagenum + 1, pagesize,where, ref   recordCount);
+            where = where && ManagerUserInfo._.IsManager == false;
+            System.Data.DataTable dt = bll.GetListForAccount(pagenum + 1, pagesize, where, ref   recordCount);
 
             string result = JsonWithDataTable.Serialize(dt);
             result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
@@ -94,7 +132,9 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                     if (string.IsNullOrWhiteSpace(p.ID))
                     {
                         p.ID = Guid.NewGuid().ToString();
+                       
                     }
+                    p.Pwd = "123456".EncryptSHA1();
 
                 }
                 bll.Save(p);

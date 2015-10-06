@@ -58,6 +58,7 @@
     <Compile Include="CouponRule.cs" />
     <Compile Include="CusomerAndCoupon.cs" />
     <Compile Include="FunctionInfo.cs" />
+    <Compile Include="FunctionRight.cs" />
     <Compile Include="Gataway.cs" />
     <Compile Include="JFHistory.cs" />
     <Compile Include="ManagerUserInfo.cs" />
@@ -78,9 +79,12 @@
     <Compile Include="ShopOrder.cs" />
     <Compile Include="ShopOrderAction.cs" />
     <Compile Include="ShopOrderItem.cs" />
+    <Compile Include="SysRoleAndUserRalation.cs" />
     <Compile Include="ViewModel\AccountModel.cs" />
+    <Compile Include="ViewModel\AppException.cs" />
     <Compile Include="ViewModel\ChangePwdModel.cs" />
     <Compile Include="ViewModel\PublishToLogistic.cs" />
+    <Compile Include="ViewModel\SaveModel.cs" />
     <Compile Include="ViewModel\ShopOrderModel.cs" />
     <Compile Include="ShopPaymentTypes.cs" />
     <Compile Include="ShopProductAttributes.cs" />

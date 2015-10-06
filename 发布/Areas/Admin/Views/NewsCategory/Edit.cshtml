@@ -28,12 +28,7 @@
 
     
     @HelperExtend.HiddenFor("DescriptionText", Model.DescriptionText)
-    @if (string.IsNullOrWhiteSpace(Model.ImageUrl))
-    {
-        Model.ImageUrl = Guid.NewGuid().ToString();
-
-    }
-    @HelperExtend.HiddenFor("ImageUrl", Model.ImageUrl)
+    
     @Html.ValidationSummary()
 
     @HelperExtend.HelpEdit("ParentID", "ParentName", "上级分类", defaultText: Model.ParentName, hint: "空为一级分类", dialogTitle: "选择上级分类", InnitFunc: "InnitFunc", onOk: "onOk", IsTree: true, DataControlID: "treeGrid")
@@ -188,13 +183,6 @@
 
             } else { ErrorMsg("请选择一条数据"); }
         }
-        $(function () {
-
-            if ("@TempData.ContainsKey("IsSuccess").ToString().ToLower()" == "true") {
-                SucessMsg("@TempData["IsSuccess"]");
-            }
-
-
-        });
+        
     </script>
 }

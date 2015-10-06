@@ -42,6 +42,11 @@ namespace EasyCms.Business
 
 
 
-         
+
+ 
+        public RangeDict GetAccountRange(string accountID)
+        {
+            return Dal.GetAccountRange(accountID);
+        }
     }
 }

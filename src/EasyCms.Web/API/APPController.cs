@@ -13,6 +13,7 @@ using EasyCms.Web.Common;
 
 
 using System.Web.Hosting;
+using EasyCms.Model.ViewModel;
 namespace EasyCms.Web.API
 {
     public class APPController : BaseAPIControl
@@ -20,48 +21,36 @@ namespace EasyCms.Web.API
 
         public HttpResponseMessage GetNews(int id = 1)
         {
-            try
-            {
-                //获取page  
-                int page = id;
-                //新闻id，定标题，简介，缩略图，新闻url 
-                DataTable dt = new NewsInfoBll().GetAppNews(page, host);
-                return dt.Format();
 
-            }
-            catch (Exception ex)
-            {
-                return ex.Format();
+            //获取page  
+            int page = id;
+            //新闻id，定标题，简介，缩略图，新闻url 
+            DataTable dt = new NewsInfoBll().GetAppNews(page, host);
+            return dt.Format();
 
-            }
+
 
         }
 
         public HttpResponseMessage GetNew(string id = "")
         {
-            try
-            {
-                if (string.IsNullOrEmpty(id))
-                {
-                    return "此新闻已被删除或屏蔽".FormatError();
-                }
-                else
-                {
-                    NewsInfo news = new NewsInfoBll().GetEntity(id);
-                    if (news.Description == null)
-                    {
-                        news.Description = string.Empty;
-                    }
-                    string result = JsonWithDataTable.Serialize(news);
-                    return result.FormatSuccess();
-                }
 
-            }
-            catch (Exception ex)
+            if (string.IsNullOrEmpty(id))
             {
-
-                return ex.Format();
+                return "此新闻已被删除或屏蔽".FormatError();
             }
+            else
+            {
+                NewsInfo news = new NewsInfoBll().GetEntity(id);
+                if (news.Description == null)
+                {
+                    news.Description = string.Empty;
+                }
+                string result = JsonWithDataTable.Serialize(news);
+                return result.FormatSuccess();
+            }
+
+
 
 
         }
@@ -73,17 +62,11 @@ namespace EasyCms.Web.API
         /// <returns></returns>
         public HttpResponseMessage GetChildCategory(string id = "")
         {
-            try
-            {
 
-                DataTable dt = new ShopCategoryBll().GetAppEntity(id, host);
-                return dt.Format();
-            }
-            catch (Exception ex)
-            {
 
-                return ex.Format();
-            }
+            DataTable dt = new ShopCategoryBll().GetAppEntity(id, host);
+            return dt.Format();
+
 
         }
         public HttpResponseMessage GetProduct(string id = "")
@@ -91,238 +74,182 @@ namespace EasyCms.Web.API
             var resp = new HttpResponseMessage(HttpStatusCode.OK);
 
 
-            try
+
+            if (string.IsNullOrEmpty(id))
             {
-                if (string.IsNullOrEmpty(id))
+                return "传递的参数不能为空".FormatError();
+            }
+            else
+            {
+                ShopSaleProductInfo p = new ShopProductInfoBll().GetSaleEntity(id, host);
+                if (p == null)
                 {
-                    return "传递的参数不能为空".FormatError();
+                    return "此商品已下架".FormatError();
+
                 }
                 else
                 {
-                    ShopSaleProductInfo p = new ShopProductInfoBll().GetSaleEntity(id, host);
-                    if (p == null)
-                    {
-                        return "此商品已下架".FormatError();
-
-                    }
-                    else
-                    {
 
 
 
-                        return p.FormatObj();
-                    }
+                    return p.FormatObj();
                 }
             }
-            catch (Exception ex)
-            {
 
-                return ex.Format();
-            }
 
         }
         public HttpResponseMessage GetProductsByCategory(string id = "", int pageIndex = 1, string other = "")
         {
-            try
+
+            var resp = new HttpResponseMessage(HttpStatusCode.OK);
+
+            if (pageIndex == 0)
             {
-                var resp = new HttpResponseMessage(HttpStatusCode.OK);
-
-                if (pageIndex == 0)
-                {
-                    pageIndex = 1;
-                }
-                if (string.IsNullOrEmpty(id))
-                {
-                    return "商品类型不能为空".FormatError();
-
-                }
-                else
-                {
-                    int pagecount = 0, recordCount = 0;
-                    DataTable dt = new ShopProductInfoBll().GetProductsByCategory(id, pageIndex, other, host, ref pagecount, ref recordCount);
-
-                    return new { PageIndex = pageIndex, RecordCount = dt.Rows.Count, TotalPageCount = pagecount, TotalRecourdCount = recordCount, Data = dt }.FormatObj();
-
-                }
+                pageIndex = 1;
             }
-            catch (Exception ex)
+            if (string.IsNullOrEmpty(id))
             {
-                return ex.Format();
+                return "商品类型不能为空".FormatError();
 
             }
+            else
+            {
+                int pagecount = 0, recordCount = 0;
+                DataTable dt = new ShopProductInfoBll().GetProductsByCategory(id, pageIndex, other, host, ref pagecount, ref recordCount);
+
+                return new { PageIndex = pageIndex, RecordCount = dt.Rows.Count, TotalPageCount = pagecount, TotalRecourdCount = recordCount, Data = dt }.FormatObj();
+
+            }
+
 
         }
 
         public HttpResponseMessage GetProductsByWhere()
         {
-            try
+
+
+            string categoryID = Request.GetQueryValue("categoryID");
+            string productName = Request.GetQueryValue("ProductName");
+            string pageNumStr = Request.GetQueryValue("pagenum");
+            string stationMode = Request.GetQueryValue("stationMode");
+            int pageNum = 1;
+
+            if (int.TryParse(pageNumStr, out pageNum))
             {
 
-                string categoryID = Request.GetQueryValue("categoryID");
-                string productName = Request.GetQueryValue("ProductName");
-                string pageNumStr = Request.GetQueryValue("pagenum");
-                string stationMode = Request.GetQueryValue("stationMode");
-                int pageNum = 1;
-
-                if (int.TryParse(pageNumStr, out pageNum))
-                {
-
-                }
-                else pageNum = 1;
-                WhereClip where = new WhereClip();
-                if (!string.IsNullOrWhiteSpace(categoryID))
-                {
-                    string ClassCode = new ShopCategoryBll().GetClassCode(categoryID);
-                    string[] classcode = ClassCode.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-
-
-                    where = ShopProductCategory._.CategoryID.In(classcode);
-
-
-                }
-                if (string.IsNullOrWhiteSpace(productName))
-                {
-                    where = where && ShopProductInfo._.Name.Contains(productName);
-                }
-                where = where && new WhereClip(" not EXISTS (select 1 from ShopProductStationMode where StationMode=" + stationMode + "  and ShopProductInfo.ID=ProductID)");
-                int pagecount = 0, recordCount = 0;
-
-                System.Data.DataTable dt = new ShopProductInfoBll().GetProductByWhere(where, pageNum, host, ref pagecount, ref   recordCount);
-                return new
-                {
-                    PageIndex = pageNum,
-                    RecordCount = dt.Rows.Count,
-                    TotalPageCount = pagecount,
-                    TotalRecourdCount = recordCount,
-                    Data = dt
-                }.FormatObj();
-
             }
-            catch (Exception ex)
+            else pageNum = 1;
+            WhereClip where = new WhereClip();
+            if (!string.IsNullOrWhiteSpace(categoryID))
             {
+                string ClassCode = new ShopCategoryBll().GetClassCode(categoryID);
+                string[] classcode = ClassCode.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
 
-                return ex.Format();
+
+                where = ShopProductCategory._.CategoryID.In(classcode);
+
+
             }
+            if (string.IsNullOrWhiteSpace(productName))
+            {
+                where = where && ShopProductInfo._.Name.Contains(productName);
+            }
+            where = where && new WhereClip(" not EXISTS (select 1 from ShopProductStationMode where StationMode=" + stationMode + "  and ShopProductInfo.ID=ProductID)");
+            int pagecount = 0, recordCount = 0;
+
+            System.Data.DataTable dt = new ShopProductInfoBll().GetProductByWhere(where, pageNum, host, ref pagecount, ref   recordCount);
+            return new
+            {
+                PageIndex = pageNum,
+                RecordCount = dt.Rows.Count,
+                TotalPageCount = pagecount,
+                TotalRecourdCount = recordCount,
+                Data = dt
+            }.FormatObj();
+
+
         }
 
         public HttpResponseMessage PostTj([FromBody] ShopProductStationMode sm)
         {
 
 
-            try
-            {
 
-                sm.ID = Guid.NewGuid().ToString();
-                sm.StationModeName = ((StationMode)sm.StationMode).ToString();
 
-                int dt = new ShopProductInfoBll().SaveStation(sm);
-                string result = JsonWithDataTable.Serialize(sm);
-                return result.FormatSuccess();
+            sm.ID = Guid.NewGuid().ToString();
+            sm.StationModeName = ((StationMode)sm.StationMode).ToString();
 
-            }
-            catch (Exception ex)
-            {
-                return ex.Format();
+            int dt = new ShopProductInfoBll().SaveStation(sm);
+            string result = JsonWithDataTable.Serialize(sm);
+            return result.FormatSuccess();
 
-            }
+
         }
         [HttpGet]
         public HttpResponseMessage DeleteTj(string id)
         {
 
 
-            try
-            {
 
-                int dt = new ShopProductInfoBll().DeleteStation(id);
-                return "成功".FormatSuccess();
+            int dt = new ShopProductInfoBll().DeleteStation(id);
+            return "成功".FormatSuccess();
 
-            }
-            catch (Exception ex)
-            {
-                return ex.Format();
 
-            }
         }
 
         public HttpResponseMessage GetProductsByStation()
         {
-            try
+
+
+            int id = 0, pageIndex = 1, pagesize = 20;
+            string StationModestr = Request.GetQueryValue("StationMode");
+            int.TryParse(StationModestr, out id);
+            string pagenumstr = Request.GetQueryValue("pagenum");
+            string pagesizestr = Request.GetQueryValue("pagesize");
+            if (!int.TryParse(pagenumstr, out pageIndex))
             {
-
-                int id = 0, pageIndex = 1, pagesize = 20;
-                string StationModestr = Request.GetQueryValue("StationMode");
-                int.TryParse(StationModestr, out id);
-                string pagenumstr = Request.GetQueryValue("pagenum");
-                string pagesizestr = Request.GetQueryValue("pagesize");
-                if (!int.TryParse(pagenumstr, out pageIndex))
-                {
-                    pageIndex = 1;
-                }
-                if (!int.TryParse(pagesizestr, out pagesize))
-                {
-                    pagesize = 20;
-                }
-                int pagecount = 0, recordCount = 0;
-                DataTable dt = new ShopProductInfoBll().GetProductsByStation(id, pageIndex, pagesize, host, ref pagecount, ref recordCount);
-
-                return new { PageIndex = pageIndex, RecordCount = dt.Rows.Count, TotalPageCount = pagecount, TotalRecourdCount = recordCount, Data = dt }.FormatObj();
+                pageIndex = 1;
             }
-            catch (Exception ex)
+            if (!int.TryParse(pagesizestr, out pagesize))
             {
-                return ex.Format();
-
+                pagesize = 20;
             }
+            int pagecount = 0, recordCount = 0;
+            DataTable dt = new ShopProductInfoBll().GetProductsByStation(id, pageIndex, pagesize, host, ref pagecount, ref recordCount);
+
+            return new { PageIndex = pageIndex, RecordCount = dt.Rows.Count, TotalPageCount = pagecount, TotalRecourdCount = recordCount, Data = dt }.FormatObj();
+
         }
 
         public HttpResponseMessage GetProductsByMutilStation(string id, int pageIndex = 5)
         {
-            try
-            {
-                string error = string.Empty;
-                DataSet ds = new ShopProductInfoBll().GetProductsByMutilStation(id, pageIndex, host, out   error);
-                if (ds == null) return error.FormatError();
-                return ds.FormatObj();
-            }
-            catch (Exception ex)
-            {
-                return ex.Format();
+            string error = string.Empty;
+            DataSet ds = new ShopProductInfoBll().GetProductsByMutilStation(id, pageIndex, host, out   error);
+            if (ds == null) return error.FormatError();
+            return ds.FormatObj();
 
-            }
         }
 
         public HttpResponseMessage GetProductsByCategoryStation(string id, int pageIndex = 1, int other = 5)
         {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(id))
-                {
-                    return "分类不能为空".FormatError();
-                }
-                int pagecount = 0, recordCount = 0;
-                DataTable dt = new ShopProductInfoBll().GetProductsByStation(id, pageIndex, other, host, ref pagecount, ref recordCount);
 
-                return new { PageIndex = pageIndex, RecordCount = dt.Rows.Count, TotalPageCount = pagecount, TotalRecourdCount = recordCount, Data = dt }.FormatObj();
-            }
-            catch (Exception ex)
+            if (string.IsNullOrWhiteSpace(id))
             {
-                return ex.Format();
-
+                return "分类不能为空".FormatError();
             }
+            int pagecount = 0, recordCount = 0;
+            DataTable dt = new ShopProductInfoBll().GetProductsByStation(id, pageIndex, other, host, ref pagecount, ref recordCount);
+
+            return new { PageIndex = pageIndex, RecordCount = dt.Rows.Count, TotalPageCount = pagecount, TotalRecourdCount = recordCount, Data = dt }.FormatObj();
+
         }
         public HttpResponseMessage GetGateway()
         {
-            try
-            {
 
-                return GatawayConfig.GetAllGataway().FormatObj();
 
-            }
-            catch (Exception ex)
-            {
-                return ex.Format();
+            return GatawayConfig.GetAllGataway().FormatObj();
 
-            }
+
 
         }
 
@@ -348,6 +275,23 @@ namespace EasyCms.Web.API
         {
             string RA = new ParameterInfoBll().GetRegistAgreement();
             return RA.FormatSuccess();
+        }
+
+        [HttpPost]
+        public HttpResponseMessage CatchException([FromBody] AppException exception)
+        {
+            string userid = "";
+            if (!string.IsNullOrWhiteSpace(exception.Token))
+            {
+                ManagerUserInfo user = LoginModel.GetCachUserInfo(exception.Token);
+                if (user != null)
+                {
+                    userid = user.ID;
+                }
+
+            }
+            new LogBll().WriteException(exception, userid);
+            return "操作成功".FormatSuccess();
         }
     }
 }

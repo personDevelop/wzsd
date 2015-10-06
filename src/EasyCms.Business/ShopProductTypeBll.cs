@@ -19,6 +19,14 @@ namespace EasyCms.Business
             return Dal.Delete(id);
         }
 
+        public string DeleteExtend(string id)
+        {
+            return Dal.DeleteExtend(id);
+        }
+        public string DeleteExtendValue(string id)
+        {
+            return Dal.DeleteExtendValue(id);
+        }
         public int Save(ShopProductType item, List<string> brandList)
         {
             return Dal.Save(item, brandList);
@@ -52,9 +60,9 @@ namespace EasyCms.Business
             return Dal.GetListWithProductType(ptid, statusType);
         }
 
-        public DataTable GetAttrList(  string ptypeid, bool isGg )
+        public DataTable GetAttrList(string host,string ptypeid, bool isGg)
         {
-            return Dal.GetAttrList(  ptypeid, isGg );
+            return Dal.GetAttrList(host, ptypeid, isGg);
         }
 
         public ShopExtendInfo GetShopExtendInfo(string id)
@@ -67,9 +75,9 @@ namespace EasyCms.Business
             return Dal.SaveShopExtendInfo(p);
         }
 
-        public DataTable GetValList(string attriID, int page, int pagesize, ref int recordCount)
+        public DataTable GetValList(string host, string attriID)
         {
-            return Dal.GetValList(attriID, page, pagesize, ref   recordCount);
+            return Dal.GetValList(  host, attriID);
         }
 
         public ShopExtendInfoValue GetAttrVal(string p)
@@ -87,14 +95,20 @@ namespace EasyCms.Business
             return Dal.GetAttrEntity(id);
         }
 
-        public int DeleteAttrVal(string id)
+        public int DeleteAttrVal(string id, out string eroor)
         {
-            return Dal.DeleteAttrVal(id);
+            return Dal.DeleteAttrVal(id, out   eroor);
         }
 
         public int Save(List<ShopExtendInfoValue> list)
         {
             return Dal.Save(list);
         }
+
+        public bool Exit(string ID, string AttributeId, string RecordStatus, string val)
+        {
+            return Dal.Exit(ID, AttributeId, RecordStatus, val);
+        }
+
     }
 }

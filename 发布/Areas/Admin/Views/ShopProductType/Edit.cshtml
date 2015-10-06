@@ -5,8 +5,9 @@
 }
 
 @Styles.Render("~/bundles/upimgcss")
-@Scripts.Render("~/bundles/ueditor")
 @Scripts.Render("~/bundles/uploadJs")
+@Scripts.Render("~/bundles/jqueryAjax")
+
 
 @using EasyCms.Model
 <!--内容-->
@@ -33,29 +34,29 @@
 
 
     @{//获取所有商品类型
-         string codes = string.Empty;
-    string names = string.Empty;
-    bool[] vals = null;
-    List<ShopBrandInfo>
-    ptList = new EasyCms.Business.ShopProductTypeBll().GetListWithProductType(Model.ID, Model.RecordStatus);
-    if (ptList.Count > 0)
-    {
+        string codes = string.Empty;
+        string names = string.Empty;
+        bool[] vals = null;
+        List<ShopBrandInfo>
+        ptList = new EasyCms.Business.ShopProductTypeBll().GetListWithProductType(Model.ID, Model.RecordStatus);
+        if (ptList.Count > 0)
+        {
 
-      vals = new bool[ptList.Count];
-    int i = 0;
-    foreach (ShopBrandInfo item in ptList)
-    {
-    if (!string.IsNullOrEmpty(codes))
-    {
-    codes += ",";
-    names += ",";
-    }
-    codes += "sbd" + item.ID;
-    names += item.Name;
-    vals[i++] = item.IsSelected;
-    }
-}
-       HelperExtend.CheckBoxList("关联商品品牌", codes, names, defaultval: vals);
+            vals = new bool[ptList.Count];
+            int i = 0;
+            foreach (ShopBrandInfo item in ptList)
+            {
+                if (!string.IsNullOrEmpty(codes))
+                {
+                    codes += ",";
+                    names += ",";
+                }
+                codes += "sbd" + item.ID;
+                names += item.Name;
+                vals[i++] = item.IsSelected;
+            }
+        }
+        HelperExtend.CheckBoxList("关联商品品牌", codes, names, defaultval: vals);
     }
     @HelperExtend.TextArea("Note", "备注", defaultval: Model.Note)
 </div>
@@ -91,14 +92,18 @@
     </div>
     <div id="jqxKzsx"></div>
 </div>
+
+
+
+
 @section  scripts{
 
 
     <script type="text/javascript">
-
+       
         $(function () {
 
-
+            Dialog.create("@Url.Content("~/Content/Images/movie.png")");
             //初始化表单验证
             $("#form1").validate({
                 ignore: "",
@@ -157,9 +162,7 @@
                 }
 
             });
-            if ("@TempData.ContainsKey("IsSuccess").ToString().ToLower()" == "true") {
-                SucessMsg("@TempData["IsSuccess"]");
-            }
+           
         })
     </script>
 
@@ -169,19 +172,19 @@
             /*加载规格*/
             var url = "@Url.Action("GetAttrList")";
             var datafields = [{ name: 'ID' }, { name: 'Name' }, { name: 'ShowType' }, { name: 'UnitText' }, { name: 'DisplayOrder' },
-        { name: 'ProductTypeID', type: 'UseAttrImg' }, { name: 'UseDefineImg' }, { name: 'UsageMode' }, { name: 'Vals' }];
+            { name: 'ProductTypeID' }, { name: 'UseAttrImg' }, { name: 'UseDefineImg' }, { name: 'UsageMode' }, { name: 'Vals' }];
             var columns = [
-    {
-        text: '规格类型', dataField: 'UseAttrImg', width: 100, cellsalign: "left", cellsrenderer: function (row, column, value) {
-            var html = "  <div style='text-align: center; overflow: hidden; padding-bottom: 2px; margin-top: 4px; text-overflow: ellipsis;'>";
-            if (value) {
-                html += "【图片】";
-            } else html += "【文字】";
-            html += "</div>";
-            return html;
-        }
-    },
-    { text: '规格名称', dataField: 'Name', cellsalign: "left" },
+            {
+                text: '规格类型', dataField: 'UseAttrImg', width: 100, cellsrenderer: function (row, column, value) {
+                    var html = "  <div style='text-align: center; overflow: hidden; padding-bottom: 2px; margin-top: 4px; text-overflow: ellipsis;'>";
+                    if (value) {
+                        html += "【图片】";
+                    } else html += "【文字】";
+                    html += "</div>";
+                    return html;
+                }
+            },
+    { text: '规格名称', dataField: 'Name', cellsalign: "left", width: 120 },
     { text: '规格值', dataField: 'Vals' },
     { text: '顺序', dataField: 'DisplayOrder', width: 80 },
       {
@@ -190,8 +193,8 @@
               var html = "  <div style='text-align: center; overflow: hidden; padding-bottom: 2px; margin-top: 4px; text-overflow: ellipsis;'>";
 
               html += "<a  href='javascript:;' onclick='AddValue(" + row + ",true);'   >添加规格值</a>&nbsp;&nbsp;&nbsp;" +
-                   "<a href='javascript:;' onclick='EditExtendInfo(" + row + ",true);'  >编辑</a> &nbsp;&nbsp;&nbsp;" +
-              "<a  href='javascript:;' onclick='deleteExtendInfo(" + row + ",true);'  >删除</a>";
+                   "<a href='javascript:;' onclick='EditExtendInfo(" + row + ",true);'  >编辑规格值</a> &nbsp;&nbsp;&nbsp;" +
+              "<a  href='javascript:;' onclick='deleteExtendInfo(" + row + ",true);'  >删除规格</a>";
 
               html += "</div>";
               return html;
@@ -215,9 +218,9 @@
 
             var columnsattr = [
 
-    { text: '属性名称', dataField: 'Name', cellsalign: "left" },
-    { text: '单位', dataField: 'UnitText' },
-            { text: '展示方式', dataField: 'ShowType' },
+    { text: '属性名称', dataField: 'Name', cellsalign: "left",width: 120 },
+    { text: '单位', dataField: 'UnitText', width: 80 },
+            { text: '展示方式', dataField: 'ShowType', width: 80 },
             { text: '属性值', dataField: 'Vals' },
 
     { text: '顺序', dataField: 'DisplayOrder', width: 80 },
@@ -226,9 +229,9 @@
 
                var html = "  <div style='text-align: center; overflow: hidden; padding-bottom: 2px; margin-top: 4px; text-overflow: ellipsis;'>";
 
-               html += "<a  href='javascript:;' onclick='AddValue(" + row + ",false);'   >添加属性值</a>&nbsp;&nbsp;&nbsp;" +
-                    "<a href='javascript:;' onclick='EditExtendInfo(" + row + ",false);'  >编辑</a> &nbsp;&nbsp;&nbsp;" +
-               "<a  href='javascript:;' onclick='deleteExtendInfo(" + row + ",false);'  >删除</a>";
+               html += "<a  href='javascript:;' onclick='AddValue(" + row + " ,false);'   >添加属性值</a>&nbsp;&nbsp;&nbsp;" +
+                    "<a href='javascript:;' onclick='EditExtendInfo(" + row + ",false);'  >编辑属性值</a> &nbsp;&nbsp;&nbsp;" +
+               "<a  href='javascript:;' onclick='deleteExtendInfo(" + row + ",false);'  >删除属性</a>";
 
                html += "</div>";
                return html;
@@ -250,25 +253,67 @@
     </script>
 
     <script type="text/javascript">
-        $(function () {
-            Dialog.create("addGg", "添加规格", "@Url.Content("~/Content/Images/movie.png")");
-
-        });
 
         function AddExtend(action, title) {
-            Dialog.open("@Url.Action("EditExtend")/" + action+"/"+$("#ID").val(), { width: 700, height: 500 }, title, function (grid) {
-                var content = grid[0].textContent;
-                if (content == "  添加扩展属性") {
+            Dialog.open("@Url.Action("AddExtend")/" + action + "/" + $("#ID").val(), title, {
+                AllWayInit:true, 
+                onClose: function (grid) {
+                    var content = grid[0].textContent;
+                    if (content == "  添加扩展属性") {
 
-                    $('#jqxKzsx').jqxGrid('updatebounddata');
-                }else
-                {
-                    $('#jqxGg').jqxGrid('updatebounddata');
+                        $('#jqxKzsx').jqxGrid('updatebounddata');
+                    } else if (content == "  添加规格") {
+                        $('#jqxGg').jqxGrid('updatebounddata');
+                    }
                 }
-               
-            });
+            }, { width: 700, height: 500 });
+        }
+
+        function AddValue(rowindex, isgg) {
+            var title = "添加扩展属性值";
+            var gridid = "#jqxKzsx";
+            if (isgg) {
+                gridid = "#jqxGg";
+                var title = "添加规格值";
+            }
+            var data = $(gridid).jqxGrid('getrowdata', rowindex);
+            Dialog.open("@Url.Action("AddValue")/" + data.ID, title, {
+                AllWayInit: true,
+                onClose: function (grid) {
+                    var content = grid[0].textContent;
+                    if (content == "  添加扩展属性值") {
+
+                        $('#jqxKzsx').jqxGrid('updatebounddata');
+                    } else if (content == "  添加规格值") {
+                        $('#jqxGg').jqxGrid('updatebounddata');
+                    }
+                }
+            }, { width: 400, height: 450 });
+
         }
 
     </script>
-}
 
+    <script type="text/javascript">
+
+        function EditExtendInfo(rowindex, isgg) {
+            var gridid = "#jqxKzsx";
+
+            if (isgg) {
+                gridid = "#jqxGg";
+            }
+            var data = $(gridid).jqxGrid('getrowdata', rowindex);
+
+            window.location.href = "@Url.Action("index", "ShopExtendInfoValue")/" + data.ID;
+        }
+        function deleteExtendInfo(rowindex, isgg) {
+          
+            var gridid = "jqxKzsx";
+
+            if (isgg) {
+                gridid = "jqxGg";
+            }
+            DelGrid(gridid, '@Url.Action("DeleteExtend")');
+        }
+    </script>
+} 

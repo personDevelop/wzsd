@@ -27,13 +27,7 @@
     @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())
 
    
-    @if (string.IsNullOrWhiteSpace(Model.SmallLogo))
-    {
-        Model.SmallLogo = Guid.NewGuid().ToString();
-        Model.BigLogo = Guid.NewGuid().ToString();
-    }
-    @HelperExtend.HiddenFor("SmallLogo", Model.SmallLogo)
-    @HelperExtend.HiddenFor("BigLogo", Model.BigLogo)
+    
     @Html.ValidationSummary()
     @HelperExtend.HelpEdit("ParentID", "ParentName", "上级分类", defaultText: Model.ParentName, hint: "空为一级分类", dialogTitle: "选择上级分类", InnitFunc: "InnitFunc", onOk: "onOk", IsTree: true, DataControlID: "treeGrid")
     @HelperExtend.TextBox("Code", "编号", defaultval: Model.Code, hint: "*编号不能重复")
@@ -172,13 +166,6 @@
 
             } else { ErrorMsg("请选择一条数据"); }
         }
-        $(function () {
-
-            if ("@TempData.ContainsKey("IsSuccess").ToString().ToLower()" == "true") {
-                SucessMsg("@TempData["IsSuccess"]");
-            }
-
-
-        });
+        
     </script>
 }

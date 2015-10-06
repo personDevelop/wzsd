@@ -1,77 +1,88 @@
 ﻿Dialog = {
-    imageUrl: "",
-    dialogID: "创建时赋值",
     hasInit: false,
-    AllWaysNew: true,
+    WindowOpts: {},
     opts: {},
-    Url: "",
-    onClose: null,
-    create: function (diaID, title, imgUrl, allWaysNew) {
-        this.dialogID = diaID;
-        if (allWaysNew) {
-            this.AllWaysNew = allWaysNew;
-        }
-
-
-        var html = '<div id="' + this.dialogID + '" style="display:none">';
-        html += '<div id="windowHeader' + this.dialogID + '">';
-        html += ' <span><img src="' + imgUrl + '" alt="" style="margin-right: 15px" /> <span id="windowTitle' + this.dialogID + '">' + title;
+    lastUrl: "",
+    create: function (imgUrl) {
+        var html = '<div id="modalDialog" style="display:none">';
+        html += '<div id="windowHeadermodalDialog">';
+        html += ' <span><img src="' + imgUrl + '" alt="" style="margin-right: 15px" /> <span id="windowTitlemodalDialog">模态窗口';
         html += '</span></span></div>';
-        html += '<div style="overflow: hidden;" id="windowContent' + this.dialogID + '">';
-        html += '<iframe id="iframe' + this.dialogID + '" height="100%" width="100%" style="margin:0px; padding:0px"></iframe>';
+        html += '<div style="overflow: hidden;" id="windowContentmodalDialog">';
+        html += '<iframe id="iframemodalDialog" height="100%" width="100%" style="margin:0px; padding:0px"></iframe>';
         html += '</div></div>';
         $("body").append(html);
     },
     innit: function () {
         if (!this.hasInit) {
-
-            $("#" + this.dialogID).jqxWindow($.extend({
+            $("#modalDialog").jqxWindow($.extend({
                 showCollapseButton: true, autoOpen: false,
                 height: 300, width: 500
-
-            }, this.opts));
+            }, this.WindowOpts));
             this.hasInit = true;
-            $("#" + this.dialogID).data("AllWaysNew", this.AllWaysNew);
-            $("#" + this.dialogID).on('open', function (event) {
+            $("#modalDialog").on('open', function (event) {
                 var iframe = $(event.target).find("iframe");
-                var url = $(event.target).data("Url");
-                if (!iframe.attr("src")) {
-                    iframe.attr("src", url);
+                var dialog = $(event.target).data("dialog");
+                var currentUrl = iframe.attr("src");
+                if (dialog.lastUrl != currentUrl) {
+                    iframe.attr("src", dialog.lastUrl);
                 } else {
-                    var AllWaysNew = $(event.target).data("AllWaysNew");
-                    if (AllWaysNew) {
-                        iframe.attr("src", url);
+                    if (dialog.opts.AllWaysNew) {
+                        iframe.attr("src", dialog.lastUrl);
                     }
                 }
+
+                if (dialog.opts.onopen) {
+                    dialog.opts.onopen($(event.target));
+                }
             });
-            $("#" + this.dialogID).on('close', function (event) {
-                var onClose = $(event.target).data("dialog").onClose;
-                if (!onClose) { } else {
-                    onClose($(event.target));
+            $("#modalDialog").on('close', function (event) {
+                var dialog = $(event.target).data("dialog");
+                if (dialog.opts.onClose) {
+                    dialog.opts.onClose($(event.target));
                 }
             });
         }
 
     },
-    open: function (url, opts, title, onClose) {
+    /*窗口url,窗口标题，额外的属性（目前只包含打开事件，和关闭事件，如果一个网页里只有一个模态窗口，也可以用windowOpts传递），windowOpts 针对jqxwindow的一些属性*/
+    open: function (url, title, opts, windowOpts) {
         if (opts) {
             this.opts = opts;
         }
-        $("#" + this.dialogID).data("dialog", url);
-        $("#" + this.dialogID).data("Url", url);
-        if (!onClose) {
-
-        } else { this.onClose = onClose; }
-
+        this.lastUrl = url;
+        if (windowOpts) {
+            this.WindowOpts = windowOpts;
+        }
+       
         this.innit();
         if (title) {
-            $("#windowTitle" + this.dialogID).text(title);
+            $("#windowTitlemodalDialog").text(title);
         }
 
-        $("#" + this.dialogID).data("dialog", this);
-        $("#" + this.dialogID).jqxWindow('open');
+        $("#modalDialog").data("dialog", this);
+        $("#modalDialog").jqxWindow('open');
 
+        if (opts.AllWayInit) {
 
+            /*重新设置宽度和高度*/
+            if (windowOpts.width) {
+                $("#modalDialog").jqxWindow("width", windowOpts.width);
+            }
+
+            if (windowOpts.height) {
+                $("#modalDialog").jqxWindow("height", windowOpts.height);
+            }
+        }
     }
 
 };
+function CloseThisDialog() {
+
+    $("#modalDialog").jqxWindow("close");
+
+}
+
+ 
+
+ 

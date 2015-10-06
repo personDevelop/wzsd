@@ -30,6 +30,14 @@ namespace EasyCms.Business
 
         public ManagerUserInfo Login(string code, string pwd, out string error)
         {
+            return LoginBase(code, pwd, false, out error);
+        }
+        public ManagerUserInfo LoginManager(string code, string pwd, out string error)
+        {
+            return LoginBase(code, pwd, true, out error);
+        }
+        private ManagerUserInfo LoginBase(string code, string pwd, bool isManager, out string error)
+        {
             error = string.Empty;
             ManagerUserInfo item = Dal.GetEntityByCode(code);
             if (item == null)
@@ -49,21 +57,33 @@ namespace EasyCms.Business
                 error = "账号状态异常，不允许登陆！";
                 item = null;
             }
+            else if (isManager && !item.IsManager)
+            {
+                error = "会员账号不允许登陆后台管理系统！";
+                item = null;
+            }
             if (item != null)
             {
                 item.LastModifyDate = DateTime.Now;
                 Dal.Save(item);
-                //同时更新其等级 和成长值
-                //获取注册获得的成长值
-                ParameterInfo valPara = new ParameterInfoDal().GetEntity(StaticValue.GrowthValueLogin);
-                if (valPara != null)
+                if (isManager)
                 {
-                    int grothvalue = 0;
-                    if (int.TryParse(valPara.Value, out grothvalue))
-                    {
-                        Dal.ChangeOrder(item.ID, grothvalue);
-                    }
 
+                }
+                else
+                {
+                    //同时更新其等级 和成长值
+                    //获取注册获得的成长值
+                    ParameterInfo valPara = new ParameterInfoDal().GetEntity(StaticValue.GrowthValueLogin);
+                    if (valPara != null)
+                    {
+                        int grothvalue = 0;
+                        if (int.TryParse(valPara.Value, out grothvalue))
+                        {
+                            Dal.ChangeOrder(item.ID, grothvalue);
+                        }
+
+                    }
                 }
             }
             return item;
@@ -117,6 +137,24 @@ namespace EasyCms.Business
         }
 
         public string ChangePwd(string userid, ChangePwdModel changePwd)
+        {
+            return Dal.ChangePwd(userid, changePwd);
+        }
+
+        public SysRoleInfo GetRole(string userid)
+        {
+            return Dal.GetRole(userid);
+        }
+        public ManagerUserInfo GeUserWithCodeOrTelOrEmail(string usercodeOrTelOrEmail)
+        {
+            return Dal.GeUserWithCodeOrTelOrEmail(usercodeOrTelOrEmail);
+        }
+        public bool ResetPwd(ResetPwdModel changePwd, bool isManager, out string value)
+        {
+            return Dal.ResetPwd(changePwd, isManager, out   value);
+        }
+
+        public string ChangePwd(string userid, ResetPwdPostModel changePwd)
         {
             return Dal.ChangePwd(userid, changePwd);
         }

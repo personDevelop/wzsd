@@ -414,7 +414,7 @@ namespace EasyCms.Model
             /// </summary> 
             public PropertyItem ID = null;
             /// <summary>
-            /// 类型,0无，1 普通购物，2，赠品,3.套餐，4，团购，5 秒杀
+            /// 类型,0 普通购物，1，赠品,2.套餐，3，团购，4 秒杀
             /// </summary> 
             public PropertyItem ItemType = null;
             /// <summary>
@@ -477,9 +477,5 @@ namespace EasyCms.Model
         #endregion
     }
 
-
-    public enum CartItemType
-    {
-        无, 普通购物, 赠品, 套餐, 团购, 秒杀
-    }
+     
 }

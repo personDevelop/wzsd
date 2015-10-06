@@ -592,6 +592,8 @@ namespace EasyCms.Model
 
         [NotDbCol]
         public string DeviceID { get; set; }
+        [NotDbCol]
+        public RangeDict RangeDict { get; set; }
     }
 
     public enum ClientEnum

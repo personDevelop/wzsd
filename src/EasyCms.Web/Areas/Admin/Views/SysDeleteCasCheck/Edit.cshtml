@@ -32,7 +32,7 @@
     @HelperExtend.TextBox("CascadeTableKey", "级联表的主键字段", defaultval: Model.CascadeTableKey, hint: "")
 
     @HelperExtend.TextBox("CascadeTableRefKey", "级联表的外键字段", defaultval: Model.CascadeTableRefKey, hint: "")
-    @HelperExtend.TextArea("CheckExistSql", "检测是否存在Sql", defaultval: Model.CheckExistSql, hint: "select  级联表的主键字段, 0  （0是可删除，1是不可删） from 检测表 where 级联表的外键字段=value")
+    @HelperExtend.TextArea("CheckExistSql", "检测是否存在Sql", defaultval: Model.CheckExistSql, hint: "select  级联表的主键字段  from 检测表 where 级联表的外键字段=value")
     @HelperExtend.TextBox("TreeFjmField", "树级分级码字段", defaultval: Model.TreeFjmField, hint: "")
 
 
@@ -83,15 +83,5 @@
         })
     </script>
 
-    <script type="text/javascript">
-
-        $(function () {
-
-            if ("@TempData.ContainsKey("IsSuccess").ToString().ToLower()" == "true") {
-                SucessMsg("@TempData["IsSuccess"]");
-            }
-
-
-        });
-    </script>
+    
 }

@@ -70,11 +70,8 @@
 </div>
 <div class="tab-content">
 
-    @if (string.IsNullOrWhiteSpace(Model.ID))
-    {
-        Model.ID = Guid.NewGuid().ToString();
-    }
-    @HelperExtend.HiddenFor("ID", Model.ID)
+   
+     
     @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())
 
     @Html.ValidationSummary()
@@ -108,7 +105,7 @@
 
     @HelperExtend.Number("Points", "可得积分", defaultval: Model.Points, hint: "", max: 10000000)
 
-    @HelperExtend.Number("Stock", "库存", defaultval: Model.Stock, hint: "库存等于最小的负整数时， 表示不控制库存",min:int.MinValue)
+    @HelperExtend.Number("Stock", "库存", defaultval: Model.Stock, hint: "库存默认一个超大数， 表示不控制库存",min:int.MinValue)
 
     @HelperExtend.Number("MaxQuantity", "警戒最高库存", defaultval: Model.MaxQuantity, hint: "", max: 10000000)
 
@@ -622,13 +619,6 @@
 
             } else { ErrorMsg("请至少选择一条数据"); }
         }
-        $(function () {
-
-            if ("@TempData.ContainsKey("IsSuccess").ToString().ToLower()" == "true") {
-                SucessMsg("@TempData["IsSuccess"]");
-            }
-
-
-        });
+        
     </script>
 }

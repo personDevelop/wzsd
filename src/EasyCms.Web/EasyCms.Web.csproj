@@ -215,15 +215,19 @@
     <Compile Include="API\CouponApiController.cs" />
     <Compile Include="API\RegionController.cs" />
     <Compile Include="API\ShippingAddressAPIController.cs" />
-    <Compile Include="API\ShopController.cs" />
     <Compile Include="API\ShopCartAPIController.cs" />
+    <Compile Include="API\ShopCommentApiController.cs" />
     <Compile Include="API\ShopOrderApiController.cs" />
     <Compile Include="API\ShopPayTypeApiController.cs" />
     <Compile Include="API\ShopProductApiController.cs" />
     <Compile Include="API\UserApiController.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\Controllers\CouponRuleController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ErrorController.cs" />
     <Compile Include="Areas\Admin\Controllers\FunctionInfoController.cs" />
+    <Compile Include="Areas\Admin\Controllers\FunctionRightController.cs" />
+    <Compile Include="Areas\Admin\Controllers\LoginController.cs" />
+    <Compile Include="Areas\Admin\Controllers\LogOperController.cs" />
     <Compile Include="Areas\Admin\Controllers\ManagerUserInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\RangeDictController.cs" />
     <Compile Include="Areas\Admin\Controllers\NewsInfoController.cs" />
@@ -240,7 +244,9 @@
     <Compile Include="Areas\Admin\Controllers\ShopProductTypeController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopPromotionController.cs" />
     <Compile Include="Areas\Admin\Controllers\SysDeleteCasCheckController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SysRoleAndUserRalationController.cs" />
     <Compile Include="Areas\Admin\Controllers\SysRoleInfoController.cs" />
+    <Compile Include="Areas\Admin\Models\LoginModel.cs" />
     <Compile Include="Common\CmsSession.cs" />
     <Compile Include="App_Start\AuthConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -289,6 +295,13 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="test\WebForm1.aspx.cs">
+      <DependentUpon>WebForm1.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="test\WebForm1.aspx.designer.cs">
+      <DependentUpon>WebForm1.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="API\controller.ashx" />
@@ -743,10 +756,19 @@
     <Content Include="Areas\Admin\Views\ShopOrder\PublishToWl.cshtml" />
     <Content Include="Areas\Admin\Views\ShopExpress\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\ShopExpress\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\ShopProductType\EditExtend.cshtml" />
-    <Content Include="Areas\Admin\Views\ShopProductType\EditGg.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopProductType\AddExtend.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopProductType\AddGg.cshtml" />
     <Content Include="Areas\Admin\Views\ShopProductType\Edit - 复制.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_LayoutEditDialog.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopProductType\AddValue.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopProductType\AddImg.cshtml" />
+    <Content Include="Areas\Admin\Views\FunctionRight\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\Error.cshtml" />
+    <Content Include="Areas\Admin\Views\Login\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ManagerUserInfo\ManagerIndex.cshtml" />
+    <Content Include="Areas\Admin\Views\SysRoleAndUserRalation\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\SysRoleAndUserRalation\AddRolePerson.cshtml" />
+    <Content Include="Areas\Admin\Views\LogOper\Index.cshtml" />
     <None Include="Properties\PublishProfiles\publish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\EshopAdminControl.js" />
@@ -1156,10 +1178,12 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\WindowDialog - 复制.js" />
     <Content Include="Scripts\WindowDialog.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="test\testOpenWindow.html" />
     <Content Include="test\testSubmitOrder.html" />
+    <Content Include="test\WebForm1.aspx" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -1185,6 +1209,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\Admin\Views\Error\" />
     <Folder Include="Content\css\" />
     <Folder Include="Scripts\jGui\" />
   </ItemGroup>

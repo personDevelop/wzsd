@@ -31,68 +31,61 @@ namespace EasyCms.Web.API
             {
                 string err = string.Empty;
 
-                try
+                string userid = Request.GetAccountID();
+                order = new ShopOrderBll().CreateOrder(order, host, userid, out err);
+                if (!string.IsNullOrWhiteSpace(err))
                 {
-                    string userid = Request.GetAccountID();
-                    order = new ShopOrderBll().CreateOrder(order, host, userid, out err);
-                    if (!string.IsNullOrWhiteSpace(err))
-                    {
-                        return err.FormatError();
+                    return err.FormatError();
 
+                }
+                else
+                {
+                    //获取默认地址
+                    order.ShopAddress = new ShopShippingAddressBll().GetDefaultShopAddressForShow(userid);
+                    //获取促销信息
+                    //获取运费,先固定0
+                    order.Freight = 0;
+
+                    //获取配送信息  //先不获取了
+                    if (string.IsNullOrWhiteSpace(err))
+                    {
+                        return order.FormatObj(true, "ShopOrderModel.Freight",
+                            "ShopOrderModel.TotalPrice", ShopShippingAddress._.ID.FullName,
+                            ShopShippingAddress._.Address.FullName,
+                             ShopShippingAddress._.CelPhone.FullName,
+                            "OrderItem.ProductID",
+                             "OrderItem.Sku",
+                              "OrderItem.BuyCount",
+                               "OrderItem.IsGifts",
+                                "OrderItem.OrderType",
+                                 "OrderItem.OrderResId",
+                                  "OrderItem.ProductCode",
+                                    "OrderItem.ProductName",
+                                      "OrderItem.ImgPath",
+                                        "OrderItem.MarketPrice",
+                                          "OrderItem.SalePrice",
+                                            "OrderItem.Point",
+                                              "OrderItem.IsVirtualProduct",
+    ShopShippingAddress._.IsDefault.FullName,
+   ShopShippingAddress._.RegionId.FullName,
+    ShopShippingAddress._.Remark.FullName,
+   ShopShippingAddress._.ShipName.FullName,
+   ShopShippingAddress._.UserId.FullName,
+   ShopShippingAddress._.Zipcode.FullName,
+                            "ShopPromotionSimpal.ID", "ShopPromotionSimpal.Name", "ShopPromotionSimpal.HandsaleProductName", "ShopPromotionSimpal.HandsaleCouponName", "CouponAccount.ID"
+                            , "CouponAccount.Name", "CouponAccount.CardValue", "CouponAccount.CanMutilUse", "CouponAccount.IsCanCombie", "CouponAccount.MinPrice"
+                            , "CouponAccount.HaveCount", "CouponAccount.UsingCount", "CouponAccount.CategoryId", "CouponAccount.ProductId", "CouponAccount.ProductSku"
+
+
+
+                            );
                     }
                     else
                     {
-                        //获取默认地址
-                        order.ShopAddress = new ShopShippingAddressBll().GetDefaultShopAddressForShow(userid);
-                        //获取促销信息
-                        //获取运费,先固定0
-                        order.Freight = 0;
-
-                        //获取配送信息  //先不获取了
-                        if (string.IsNullOrWhiteSpace(err))
-                        {
-                            return order.FormatObj(true, "ShopOrderModel.Freight",
-                                "ShopOrderModel.TotalPrice", ShopShippingAddress._.ID.FullName,
-                                ShopShippingAddress._.Address.FullName,
-                                 ShopShippingAddress._.CelPhone.FullName,
-                                "OrderItem.ProductID",
-                                 "OrderItem.Sku",
-                                  "OrderItem.BuyCount",
-                                   "OrderItem.IsGifts",
-                                    "OrderItem.OrderType",
-                                     "OrderItem.OrderResId",
-                                      "OrderItem.ProductCode",
-                                        "OrderItem.ProductName",
-                                          "OrderItem.ImgPath",
-                                            "OrderItem.MarketPrice",
-                                              "OrderItem.SalePrice",
-                                                "OrderItem.Point",
-                                                  "OrderItem.IsVirtualProduct",
-        ShopShippingAddress._.IsDefault.FullName,
-       ShopShippingAddress._.RegionId.FullName,
-        ShopShippingAddress._.Remark.FullName,
-       ShopShippingAddress._.ShipName.FullName,
-       ShopShippingAddress._.UserId.FullName,
-       ShopShippingAddress._.Zipcode.FullName,
-                                "ShopPromotionSimpal.ID", "ShopPromotionSimpal.Name", "ShopPromotionSimpal.HandsaleProductName", "ShopPromotionSimpal.HandsaleCouponName", "CouponAccount.ID"
-                                , "CouponAccount.Name", "CouponAccount.CardValue", "CouponAccount.CanMutilUse", "CouponAccount.IsCanCombie", "CouponAccount.MinPrice"
-                                , "CouponAccount.HaveCount", "CouponAccount.UsingCount", "CouponAccount.CategoryId", "CouponAccount.ProductId", "CouponAccount.ProductSku"
-
-
-
-                                );
-                        }
-                        else
-                        {
-                            return err.FormatError();
-                        }
+                        return err.FormatError();
                     }
                 }
-                catch (Exception ex)
-                {
 
-                    return ex.Format();
-                }
             }
 
 
@@ -116,38 +109,32 @@ namespace EasyCms.Web.API
             {
                 string err = string.Empty;
 
-                try
+
+                ManagerUserInfo user = Request.GetAccount();
+
+                bool mustGenerSign;
+                string orderID = new ShopOrderBll().Submit(order, user, out   mustGenerSign, out err);
+                if (!string.IsNullOrWhiteSpace(err))
                 {
-                    ManagerUserInfo user = Request.GetAccount();
+                    return err.FormatError();
 
-                    bool mustGenerSign;
-                    string orderID = new ShopOrderBll().Submit(order, user, out   mustGenerSign, out err);
-                    if (!string.IsNullOrWhiteSpace(err))
+                }
+                else
+                {
+                    if (mustGenerSign)
                     {
-                        return err.FormatError();
-
+                        bool isSucess = new ShopPaymentTypesBll().GenerPayPara(orderID, out err);
+                        return new { OrderID = orderID, hasSign = isSucess, Sign = err }.FormatObj();
                     }
                     else
                     {
-                        if (mustGenerSign)
-                        {
-                            bool isSucess = new ShopPaymentTypesBll().GenerPayPara(orderID, out err);
-                            return new { OrderID = orderID, hasSign = isSucess, Sign = err }.FormatObj();
-                        }
-                        else
-                        {
-                            return new { OrderID = orderID, hasSign = false, Sign = string.Empty }.FormatObj();
-                        }
-
-
-
+                        return new { OrderID = orderID, hasSign = false, Sign = string.Empty }.FormatObj();
                     }
-                }
-                catch (Exception ex)
-                {
 
-                    return ex.Format();
+
+
                 }
+
             }
         }
 
@@ -197,42 +184,40 @@ namespace EasyCms.Web.API
 
             string err = string.Empty;
 
-            try
+
+            ManagerUserInfo user = Request.GetAccount();
+
+            List<ShopOrder> list = new ShopOrderBll().GetMyOrder(host, user, queryPage, queryStatus, other, out err);
+            if (!string.IsNullOrWhiteSpace(err))
             {
-                ManagerUserInfo user = Request.GetAccount();
+                return err.FormatError();
 
-                List<ShopOrder> list = new ShopOrderBll().GetMyOrder(user, queryPage, queryStatus, other, out err);
-                if (!string.IsNullOrWhiteSpace(err))
-                {
-                    return err.FormatError();
-
-                }
-                else
-                {
-                    return list.FormatObjProp(true, ShopOrder._.ID, ShopOrder._.ParentID, ShopOrder._.OrderType,
-                ShopOrder._.OrderResId,
-                ShopOrder._.PayTypeName,
-                ShopOrder._.ExpressCompanyName,
-                ShopOrder._.ShipOrderNum,
-                ShopOrder._.FreightActual,
-                ShopOrder._.ShipStatus,
-                ShopOrder._.PayStatus,
-                ShopOrder._.OrderStatus,
-                ShopOrder._.CommentStatus,
-                ShopOrder._.TotalPrice, ShopOrder._.CreateDate, ShopOrderItem._.ID, ShopOrderItem._.OrderID, ShopOrderItem._.BrandName,
-                    ShopOrderItem._.Count, ShopOrderItem._.HandselCount, ShopOrderItem._.IsHandsel,
-                    ShopOrderItem._.IsVirtualProduct, ShopOrderItem._.MarketPrice,
-                    ShopOrderItem._.Price, ShopOrderItem._.Preferential,
-                    ShopOrderItem._.ProductID, ShopOrderItem._.ProductCode, ShopOrderItem._.ProductSKU,
-                    ShopOrderItem._.ProductName, ShopOrderItem._.ProductThumb, ShopOrderItem._.TotalPrice,
-                    ShopOrderItem._.Sequence);
-                }
             }
-            catch (Exception ex)
+            else
             {
-
-                return ex.Format();
+                return list.FormatObj(true, ShopOrder._.ID.FullName, ShopOrder._.ParentID.FullName, ShopOrder._.OrderType.FullName,
+            ShopOrder._.OrderResId.FullName,
+            ShopOrder._.PayTypeName.FullName,
+            ShopOrder._.ExpressCompanyName.FullName,
+            ShopOrder._.ShipOrderNum.FullName,
+            ShopOrder._.FreightActual.FullName,
+            "ShopOrder.ShipStatusStr",
+            ShopOrder._.ShipStatus.FullName,
+              "ShopOrder.PayStatusStr",
+            ShopOrder._.PayStatus.FullName,
+                 "ShopOrder.OrderStatusStr",
+            ShopOrder._.OrderStatus.FullName,
+                "ShopOrder.CommentStatusStr",
+            ShopOrder._.CommentStatus.FullName,
+            ShopOrder._.TotalPrice.FullName, ShopOrder._.CreateDate.FullName, ShopOrderItem._.ID.FullName, ShopOrderItem._.OrderID.FullName, ShopOrderItem._.BrandName.FullName,
+                ShopOrderItem._.Count.FullName, ShopOrderItem._.HandselCount.FullName, ShopOrderItem._.IsHandsel.FullName,
+                ShopOrderItem._.IsVirtualProduct.FullName, ShopOrderItem._.MarketPrice.FullName,
+                ShopOrderItem._.Price.FullName, ShopOrderItem._.Preferential.FullName,
+                ShopOrderItem._.ProductID.FullName, ShopOrderItem._.ProductCode.FullName, ShopOrderItem._.ProductSKU.FullName,
+                ShopOrderItem._.ProductName.FullName, ShopOrderItem._.ProductThumb.FullName, ShopOrderItem._.TotalPrice.FullName,
+                ShopOrderItem._.Sequence.FullName);
             }
+
 
         }
 
@@ -253,27 +238,34 @@ namespace EasyCms.Web.API
 
 
 
-            try
-            {
-                ManagerUserInfo user = Request.GetAccount();
-                string err = null;
-                ShopOrder order = new ShopOrderBll().GetOrder(id, Request.GetAccountID(), out   err);
-                if (!string.IsNullOrWhiteSpace(err))
-                {
-                    return err.FormatError();
 
-                }
-                else
-                {
-                    return order.FormatObj();
-                }
+            ManagerUserInfo user = Request.GetAccount();
+            string err = null;
+            ShopOrder order = new ShopOrderBll().GetOrder(host, id, Request.GetAccountID(false), out   err);
+            if (!string.IsNullOrWhiteSpace(err))
+            {
+                return err.FormatError();
 
             }
-            catch (Exception ex)
+            else
             {
-
-                return ex.Format();
+                return order.FormatObj(false, ShopOrder._.ParentID.FullName, ShopOrder._.HasChildren.FullName, ShopOrder._.MemberID
+                    .FullName, ShopOrder._.MemberName.FullName, ShopOrder._.MemberEmail.FullName, ShopOrder._.MemberCallPhone.FullName, ShopOrder._.RegionID.FullName, ShopOrder._.ShipZip.FullName,
+                    ShopOrder._.ShipEmail.FullName, ShopOrder._.ShipModeID
+                    .FullName, ShopOrder._.ShipModeName.FullName, ShopOrder._.PayTypeGateWay.FullName, ShopOrder._.PayTypeID.FullName, ShopOrder._.ExpressCompanyID.FullName, ShopOrder._.FreightAdjust.FullName,
+                    ShopOrder._.FreightActual.FullName, ShopOrder._.Weight
+                    .FullName, ShopOrder._.CostPrice.FullName, ShopOrder._.Discount.FullName, ShopOrder._.PayMoney.FullName, ShopOrder._.OrderPoint.FullName, ShopOrder._.ReturnMoney.FullName,
+                    ShopOrder._.SellerID.FullName, ShopOrder._.SellerName.FullName, ShopOrder._.SellerEmail.FullName, ShopOrder._.SellerPhone.FullName, ShopOrder._.SupplierID
+                    .FullName, ShopOrder._.SupplierName.FullName, ShopOrder._.OrderIP
+                     .FullName, ShopOrder._.SpecifiedDate.FullName, ShopOrder._.ExportCount.FullName, ShopOrder._.CreateDate.FullName,
+                     ShopOrder._.HasDelete.FullName, ShopOrder._.ClientType.FullName, ShopOrder._.PublishDateTime.FullName
+                      , ShopOrderItem._.ReturnCount.FullName, ShopOrderItem._.UseJf.FullName, ShopOrderItem._.CostPrice.FullName,
+                      ShopOrderItem._.ReturnMoney.FullName,
+                      ShopOrderItem._.Point.FullName
+                       , ShopOrderItem._.Preferential.FullName, ShopOrderItem._.Remark.FullName);
             }
+
+
 
         }
 
@@ -287,27 +279,21 @@ namespace EasyCms.Web.API
 
 
 
-            try
-            {
-                ManagerUserInfo user = Request.GetAccount();
-                string err = null;
-                DataTable dt = new ShopOrderBll().GetOrderStatus(id, Request.GetAccount().ID, out   err);
-                if (!string.IsNullOrWhiteSpace(err))
-                {
-                    return err.FormatError();
 
-                }
-                else
-                {
-                    return dt.Format();
-                }
+            ManagerUserInfo user = Request.GetAccount();
+            string err = null;
+            DataTable dt = new ShopOrderBll().GetOrderStatus(id, Request.GetAccount(false).ID, out   err);
+            if (!string.IsNullOrWhiteSpace(err))
+            {
+                return err.FormatError();
 
             }
-            catch (Exception ex)
+            else
             {
-
-                return ex.Format();
+                return dt.Format();
             }
+
+
         }
     }
 }

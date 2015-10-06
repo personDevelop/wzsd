@@ -121,7 +121,7 @@ namespace EasyCms.Dal
         public DataTable GetListForAccount(int pagenum, int pagesize, WhereClip where, ref int recordCount)
         {
             int pageCount = 0;
-            return Dal.From<ManagerUserInfo>().Where(ManagerUserInfo._.IsManager == false && where).OrderBy(ManagerUserInfo._.Code)
+            return Dal.From<ManagerUserInfo>().Where(where).OrderBy(ManagerUserInfo._.Code)
                 .Select(ManagerUserInfo._.ID, ManagerUserInfo._.Code, ManagerUserInfo._.Name, ManagerUserInfo._.NickyName, ManagerUserInfo._.Birthday, ManagerUserInfo._.Sex,
         ManagerUserInfo._.ContactPhone, ManagerUserInfo._.CreateDate, ManagerUserInfo._.LastModifyDate,
           ManagerUserInfo._.Status)
@@ -241,7 +241,7 @@ namespace EasyCms.Dal
         {
             ManagerUserInfo user = Dal.From<ManagerUserInfo>().Where(ManagerUserInfo._.ID == userid).Select(ManagerUserInfo._.ID, ManagerUserInfo._.Pwd).ToFirst<ManagerUserInfo>();
 
-            if (user.Pwd.EncryptSHA1() != changePwd.OldPwd.EncryptSHA1())
+            if (user.Pwd != changePwd.OldPwd.EncryptSHA1())
             {
                 return "旧密码不正确";
             }
@@ -252,6 +252,223 @@ namespace EasyCms.Dal
                 return string.Empty;
             }
 
+        }
+
+        public SysRoleInfo GetRole(string userid)
+        {
+            return Dal.From<SysRoleInfo>().Join<SysRoleAndUserRalation>(SysRoleAndUserRalation._.RoleId == SysRoleInfo._.ID && SysRoleAndUserRalation._.UserId == userid
+                ).Select(SysRoleInfo._.ID.All).ToFirst<SysRoleInfo>();
+        }
+
+        public bool ResetPwd(ResetPwdModel changePwd, bool isManager, out string value)
+        {
+            value = string.Empty;
+            ManagerUserInfo user = Dal.From<ManagerUserInfo>().Where(ManagerUserInfo._.IsManager == isManager
+                && (ManagerUserInfo._.Code == changePwd.Account || ManagerUserInfo._.ContactPhone == changePwd.Account || ManagerUserInfo._.Email == changePwd.Account)
+                ).ToFirst<ManagerUserInfo>();
+            if (user == null)
+            {
+                value = "您的账户不存在";
+                return false;
+            }
+            else
+            {
+                switch (changePwd.VaryType)
+                {
+                    case ValidType.手机短信:
+                        if (string.IsNullOrWhiteSpace(user.ContactPhone))
+                        {
+                            value = "您的账户没有设置手机号，不能通过该方式找回密码";
+                            return false;
+                        }
+                        else
+                        {
+
+                            if (user.ContactPhone.Length != 11)
+                            {
+                                value = "*******" + user.ContactPhone.Substring(7);
+                            }
+                            else
+                            {
+
+                                value = "您的账户手机号不正确，不能通过该方式找回密码";
+                                return false;
+                            }
+                        }
+                        break;
+                    case ValidType.邮箱:
+                        if (string.IsNullOrWhiteSpace(user.Email))
+                        {
+                            value = "您的账户没有设置邮箱，不能通过该方式找回密码";
+                            return false;
+                        }
+                        else
+                        {
+
+                            if (user.Email.Contains("@"))
+                            {
+                                string pri = user.Email.Substring(0, user.Email.IndexOf("@"));
+                                switch (pri.Length)
+                                {
+                                    case 1:
+                                        value = user.Email;
+                                        break;
+                                    case 2:
+                                        value = pri[0] + "*";
+                                        break;
+                                    case 3:
+                                        value = pri[0] + "*" + pri[2];
+                                        break;
+                                    case 4:
+                                        value = pri[0] + "**" + pri[3];
+                                        break;
+                                    case 5:
+                                        value = pri[0] + "***" + pri[4];
+                                        break;
+                                    default:
+                                        value = "****" + pri.Substring(4);
+                                        break;
+
+                                }
+                                value += user.Email.Substring(user.Email.IndexOf("@"));
+                            }
+                            else
+                            {
+
+                                value = "您的邮箱格式不正确，不能通过该方式找回密码";
+                                return false;
+                            }
+                        }
+                        break;
+                    case ValidType.手机和邮箱:
+                    default:
+                        value = "不支持通过该方式找回密码";
+                        return false;
+                        break;
+
+                }
+                return true;
+
+            }
+        }
+
+
+        public bool ResetPwdPost(ResetPwdPostModel changePwd, bool isManager, out string value)
+        {
+            value = string.Empty;
+            ManagerUserInfo user = Dal.From<ManagerUserInfo>().Where(ManagerUserInfo._.IsManager == isManager
+                && (ManagerUserInfo._.Code == changePwd.Account || ManagerUserInfo._.ContactPhone == changePwd.Account || ManagerUserInfo._.Email == changePwd.Account)
+                ).ToFirst<ManagerUserInfo>();
+            if (user == null)
+            {
+                value = "您的账户不存在";
+                return false;
+            }
+            else
+            {
+                switch (changePwd.VaryType)
+                {
+                    case ValidType.手机短信:
+                        if (string.IsNullOrWhiteSpace(user.ContactPhone))
+                        {
+                            value = "您的账户没有设置手机号，不能通过该方式找回密码";
+                            return false;
+                        }
+                        else
+                        {
+
+                            if (user.ContactPhone.Length != 11)
+                            {
+                                value = "*******" + user.ContactPhone.Substring(7);
+                            }
+                            else
+                            {
+
+                                value = "您的账户手机号不正确，不能通过该方式找回密码";
+                                return false;
+                            }
+                        }
+                        break;
+                    case ValidType.邮箱:
+                        if (string.IsNullOrWhiteSpace(user.Email))
+                        {
+                            value = "您的账户没有设置邮箱，不能通过该方式找回密码";
+                            return false;
+                        }
+                        else
+                        {
+
+                            if (user.Email.Contains("@"))
+                            {
+                                string pri = user.Email.Substring(0, user.Email.IndexOf("@"));
+                                switch (pri.Length)
+                                {
+                                    case 1:
+                                        value = user.Email;
+                                        break;
+                                    case 2:
+                                        value = pri[0] + "*";
+                                        break;
+                                    case 3:
+                                        value = pri[0] + "*" + pri[2];
+                                        break;
+                                    case 4:
+                                        value = pri[0] + "**" + pri[3];
+                                        break;
+                                    case 5:
+                                        value = pri[0] + "***" + pri[4];
+                                        break;
+                                    default:
+                                        value = "****" + pri.Substring(4);
+                                        break;
+
+                                }
+                                value += user.Email.Substring(user.Email.IndexOf("@"));
+                            }
+                            else
+                            {
+
+                                value = "您的邮箱格式不正确，不能通过该方式找回密码";
+                                return false;
+                            }
+                        }
+                        break;
+                    case ValidType.手机和邮箱:
+                    default:
+                        value = "不支持通过该方式找回密码";
+                        return false;
+                        break;
+
+                }
+                return true;
+
+            }
+        }
+
+        public ManagerUserInfo GeUserWithCodeOrTelOrEmail(string usercodeOrTelOrEmail)
+        {
+            ManagerUserInfo user = Dal.From<ManagerUserInfo>().Where((ManagerUserInfo._.Code == usercodeOrTelOrEmail ||
+                ManagerUserInfo._.ContactPhone == usercodeOrTelOrEmail || ManagerUserInfo._.Email == usercodeOrTelOrEmail)
+                ).ToFirst<ManagerUserInfo>();
+            return user;
+        }
+
+        public string ChangePwd(string userid, ResetPwdPostModel changePwd)
+        {
+
+            if (changePwd.NewPwd != changePwd.ConfirmNewPwd)
+            {
+                return "两次输入的密码不一致";
+            }
+            else
+            {
+                ManagerUserInfo user = new ManagerUserInfo();
+                user.RecordStatus = StatusType.update;
+                user.Where = ManagerUserInfo._.ID == userid;
+                user.Pwd = changePwd.NewPwd.EncryptSHA1();
+                Dal.Submit(user);
+                return string.Empty;
+            }
         }
     }
 

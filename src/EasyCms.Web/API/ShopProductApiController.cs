@@ -50,8 +50,7 @@ namespace EasyCms.Web.API
         [HttpGet]
         public HttpResponseMessage Search(string id, int pageIndex = 1, string other = "")
         {
-            try
-            {
+           
                 var resp = new HttpResponseMessage(HttpStatusCode.OK);
 
                 if (pageIndex == 0)
@@ -71,12 +70,7 @@ namespace EasyCms.Web.API
                     return new { PageIndex = pageIndex, RecordCount = dt.Rows.Count, TotalPageCount = pagecount, TotalRecourdCount = recordCount, Data = dt }.FormatObj();
 
                 }
-            }
-            catch (Exception ex)
-            {
-                return ex.Format();
-
-            }
+            
         }
     }
 }

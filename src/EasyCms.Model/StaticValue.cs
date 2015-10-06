@@ -59,6 +59,23 @@ namespace EasyCms.Model
         /// </summary>
 
         public const string GrowthValueLogin = "4f2bc1e9-cd6d-4ad8-bfb2-a16df43b36f3";
+
+
+        /// <summary>
+        /// 是否记录操作日志
+        /// </summary>
+
+        public const string IsRecordOper = "8b433294-8ef0-4479-a8e6-7d0ffb39f3fa";
+
+        /// <summary>
+        /// 没有找到对应功能时是否记录日志 1记录 0不记录
+        /// </summary>
+        public const string IsRecordNotFundFunc = "1e1b4608-94a9-41b8-9488-1d3f0a84e073";
+        public const string FunctionCachKey = "FunctionCachKey";
+        public const string FunctionRightCachKey = "FunctionRightCachKey";
+
+
+
     }
 
 
@@ -137,7 +154,8 @@ namespace EasyCms.Model
     public enum PayStatus
     {
         未付款,
-        已付款
+        已付款,
+        待商家确认
     }
 
     public enum JFStatus
@@ -199,6 +217,60 @@ namespace EasyCms.Model
         正常,
         锁定,
         注销
+
+    }
+
+    public enum FunctionType
+    {
+        后台菜单,
+        商城导航,
+        API,
+        其它
+    }
+
+    public enum AccessType
+    {
+        层级模块,
+        普通模块,
+        MVC功能,
+        API功能,
+        URL功能,
+        其它
+    }
+
+
+
+    public enum QryLogType
+    {
+        操作日志,
+        异常信息 = 4
+    }
+
+
+    public enum ValidType
+    {
+        手机短信,
+        邮箱,
+        手机和邮箱
+    }
+
+    public enum ValidCode
+    {
+        无,//主要是起到验证是否有传递这个值的作用
+        注册,
+        修改密码,
+        忘记密码
+
+    }
+    /// <summary>
+    /// 单据状态
+    /// </summary>
+    public enum DjStatus
+    {
+        草稿,
+        生效,
+        审批退回,
+        删除
 
     }
 }

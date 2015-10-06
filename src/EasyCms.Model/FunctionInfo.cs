@@ -66,6 +66,10 @@ namespace EasyCms.Model
 
         private int _Js;
 
+        private bool _IsAnony;
+
+        private bool _IsRecord;
+
         #endregion
 
         #region 属性
@@ -129,7 +133,7 @@ namespace EasyCms.Model
         }
 
         /// <summary>
-        ///  功能类型,后台菜单、网站导航、其它
+        ///  功能类型,后台菜单、网站导航、API、其它
         /// </summary>
 
         [DbProperty(MapingColumnName = "FuncType", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
@@ -167,7 +171,7 @@ namespace EasyCms.Model
         }
 
         /// <summary>
-        ///  功能访问类型,0层级模块,1普通模块,2MVC功能,3URL功能,4其它
+        ///  功能访问类型,0层级模块,1普通模块,2MVC功能,3API、4URL功能,5其它
         /// </summary>
 
         [DbProperty(MapingColumnName = "AccessType", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
@@ -414,7 +418,7 @@ namespace EasyCms.Model
         }
 
         /// <summary>
-        ///  基本必备功能,不用设置权限也会使用的基本功能
+        ///  基本必备功能,不用设置权限也会使用的基本功能,或者表示可匿名方法
         /// </summary>
 
         [DbProperty(MapingColumnName = "IsMust", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "((0))")]
@@ -470,6 +474,44 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  允许匿名登录,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "IsAnony", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public bool IsAnony
+        {
+            get
+            {
+                return this._IsAnony;
+            }
+            set
+            {
+                this.OnPropertyChanged("IsAnony", this._IsAnony, value);
+                this._IsAnony = value;
+            }
+        }
+
+        /// <summary>
+        ///  记录操作日志,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "IsRecord", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public bool IsRecord
+        {
+            get
+            {
+                return this._IsRecord;
+            }
+            set
+            {
+                this.OnPropertyChanged("IsRecord", this._IsRecord, value);
+                this._IsRecord = value;
+            }
+        }
+
         #endregion
 
         #region 列定义
@@ -520,6 +562,10 @@ namespace EasyCms.Model
 
                 Js = new PropertyItem("Js", tableName);
 
+                IsAnony = new PropertyItem("IsAnony", tableName);
+
+                IsRecord = new PropertyItem("IsRecord", tableName);
+
 
             }
             /// <summary>
@@ -535,7 +581,7 @@ namespace EasyCms.Model
             /// </summary> 
             public PropertyItem Name = null;
             /// <summary>
-            /// 功能类型,后台菜单、网站导航、其它
+            /// 功能类型,后台菜单、网站导航、API、其它
             /// </summary> 
             public PropertyItem FuncType = null;
             /// <summary>
@@ -543,7 +589,7 @@ namespace EasyCms.Model
             /// </summary> 
             public PropertyItem Image = null;
             /// <summary>
-            /// 功能访问类型,0层级模块,1普通模块,2MVC功能,3URL功能,4其它
+            /// 功能访问类型,0层级模块,1普通模块,2MVC功能,3API、4URL功能,5其它
             /// </summary> 
             public PropertyItem AccessType = null;
             /// <summary>
@@ -595,7 +641,7 @@ namespace EasyCms.Model
             /// </summary> 
             public PropertyItem IsMustNot = null;
             /// <summary>
-            /// 基本必备功能,不用设置权限也会使用的基本功能
+            /// 基本必备功能,不用设置权限也会使用的基本功能,或者表示可匿名方法
             /// </summary> 
             public PropertyItem IsMust = null;
             /// <summary>
@@ -606,6 +652,14 @@ namespace EasyCms.Model
             /// 级数,
             /// </summary> 
             public PropertyItem Js = null;
+            /// <summary>
+            /// 允许匿名登录,
+            /// </summary> 
+            public PropertyItem IsAnony = null;
+            /// <summary>
+            /// 记录操作日志,
+            /// </summary> 
+            public PropertyItem IsRecord = null;
         }
         #endregion
     }
@@ -615,7 +669,7 @@ namespace EasyCms.Model
     {
         protected override void OnCreate()
         {
-            Enable = Visible =   true;
+            Enable = Visible = IsRecord = true;
         }
         [NotDbCol]
         public string ParentName { get; set; }

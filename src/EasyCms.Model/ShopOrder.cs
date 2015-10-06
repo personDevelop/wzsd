@@ -1668,5 +1668,63 @@ namespace EasyCms.Model
     {
         [NotDbCol]
         public List<ShopOrderItem> OrderItems { get; set; }
+
+
+        [NotDbCol]
+        public string PayStatusStr
+        {
+            get
+            {
+
+                PayStatus ps = (PayStatus)PayStatus;
+                return ps.ToString();
+            }
+
+
+        }
+
+
+        [NotDbCol]
+        public string ShipStatusStr
+        {
+            get
+            {
+
+                ShipStatus Ss =  (ShipStatus)ShipStatus; 
+                return Ss.ToString();
+            }
+        }
+
+        
+
+        [NotDbCol]
+        public string OrderStatusStr
+        {
+            get
+            {
+
+                OrderStatus os = (OrderStatus)OrderStatus;
+                return os.ToString();
+            }
+        }
+         [NotDbCol]
+        public string CommentStatusStr
+        {
+            get
+            {
+
+                if (CommentStatus)
+                {
+                    return "已评论";
+                }
+                else
+                {
+                    return "待评论";
+
+                }
+
+            }
+        }
+
     }
 }

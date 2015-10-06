@@ -17,7 +17,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         // GET: /Admin/FunctionInfo/
         public ActionResult Index()
         {
-
+          
             return View();
         }
         public string GetList()
@@ -58,8 +58,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         {
             FunctionInfo p = null; ;
 
-            try
-            {
+           
                 if (collection["RecordStatus"] != "add")
                 {
                     p = bll.GetEntity(collection["ID"]);
@@ -97,13 +96,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
 
                 } 
 
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("error", ex.Message);
-
-            }
-           
+             
             return View("Edit", p);
         }
 

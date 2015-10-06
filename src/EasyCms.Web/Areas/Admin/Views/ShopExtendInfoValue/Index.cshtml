@@ -16,8 +16,8 @@
             <a class="menu-btn"></a>
             <div class="l-list">
                 <ul class="icon-list">
-                    <li><a class="add" href="@Url.Action("Edit")"><i></i><span>新增</span></a></li>
-                    <li><a class="add" href="javascript:;" onclick="EditGrid('jqxgrid', '@Url.Action("Edit")');"><i></i><span>编辑</span></a></li>
+                    <li><a class="add" href="@Url.Action("Edit", new { id = "new", other = Se.ID })"><i></i><span>新增</span></a></li>
+                    <li><a class="add" href="javascript:;" onclick="EditGrid('jqxgrid', '@Url.Action("Edit")',null,'@Se.ID');"><i></i><span>编辑</span></a></li>
                     <li><a class="del" href="javascript:;" onclick="DelGrid('jqxgrid', '@Url.Action("Delete")');"><i></i><span>删除</span></a></li>
                 </ul>
             </div>
@@ -29,38 +29,42 @@
 <div class="table-container">
     <div id="jqxgrid"></div>
 </div>
+<input name="btnReturn" type="button" value="返回上一页" class="btn yellow" onclick="javascript:history.back(-1);" />
 <!--/列表-->
 @section  scripts{
-     
+
 
     <script type="text/javascript">
         $(document).ready(function () {
             var url = "@Url.Action("GetList")";
-
+            var editUrl = "@Url.Action("Edit")";
+            var deleteUrl = "@Url.Action("Delete")";
             var datafields = [{ name: 'ID' }, { name: 'AttributeId' }, { name: 'DisplaySequence' },
 
 		{ name: 'ValueStr' }, { name: 'ImageID' }, { name: 'Note' }];
             var columns = [
       { text: '<text>@typeName</text>值', dataField: 'ValueStr', width: 200 },
 
-  { text: '显示顺序', dataField: 'DisplaySequence', cellsalign: "right", width: 200 },
-     {
-         text: '操作', datafield: 'ID', width: 200, cellsrenderer: function (row, column, value) {
+{ text: '显示顺序', dataField: 'DisplaySequence', cellsalign: "right", width: 200 },
+ {
+     text: '操作', datafield: 'ID', width: 200, cellsrenderer: function (row, column, value) {
 
-             var html = "  <div style='text-align: center; overflow: hidden; padding-bottom: 2px; margin-top: 4px; text-overflow: ellipsis;'>";
-             html +=
-                  "<a href='javascript:;' onclick='EditExtendInfo(" + row + ",false);'  >修改</a> &nbsp;&nbsp;&nbsp;" +
-             "<a  href='javascript:;' onclick='deleteExtendInfo(" + row + ",false);'  >删除</a>";
-             html += "</div>";
-             return html;
-         }
-     }];
-            CreateGrid("jqxgrid", url, datafields, columns, { isMutilSelect: true, data: { attriID: "@ViewData["attriID"]" } });
-           
+         var html = "  <div style='text-align: center; overflow: hidden; padding-bottom: 2px; margin-top: 4px; text-overflow: ellipsis;'>";
+         html +=
+              "<a href='javascript:;' onclick='EditGrid(\"jqxgrid\",\"" + editUrl + "\",\"" + value + "\",\"@Se.ID\");'  >修改</a> &nbsp;&nbsp;&nbsp;" +
+         "<a  href='javascript:;' onclick='DelGrid(\"jqxgrid\",\"" + deleteUrl + "\",\"" + value + "\");'  >删除</a>";
+         html += "</div>";
+         return html;
+     }
+ }];
 
-
+            CreateGrid("jqxgrid", url, datafields, columns, {
+                adapter: {
+                    formatData: function (data) {
+                        data.attriID = "@Se.ID";
+                    }
+                }, grid: { pageable: false }
+            });
         });
     </script>
-   
-
 }

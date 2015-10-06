@@ -8,21 +8,17 @@ namespace EasyCms
 {
     public class BaseControler : Controller
     {
-        
-       
-        /// <summary>
-        /// 通用权限控制
-        /// </summary>
-        /// <param name="filterContext"></param>
-        protected override void OnAuthorization(AuthorizationContext filterContext)
-        {
-            //filterContext.Result = new HttpNotFoundResult(); 
 
-            base.OnAuthorization(filterContext);
-        }
-        protected override void HandleUnknownAction(string actionName)
+        public string host
         {
-            Response.Redirect("~/error.htm", true);
+            get
+            {
+                string url = HttpContext.Request.Url.Authority + HttpContext.Request.ApplicationPath;
+                if (!url.StartsWith("http://")) url = "http://" + url;
+                return url;
+             
+            }
         }
+         
     }
 }

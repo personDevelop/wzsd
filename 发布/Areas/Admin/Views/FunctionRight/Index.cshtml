@@ -1,0 +1,279 @@
+﻿@{
+    ViewBag.Title = "功能授权";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+@using EasyCms.Model
+
+<!--内容-->
+<div id="floatHead" class="content-tab-wrap">
+    <div class="content-tab">
+        <div class="content-tab-ul-wrap">
+            <ul>
+                <li><a class="selected" href="javascript:;">后台角色授权</a></li>
+                <li><a href="javascript:;">API会员等级授权</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="tab-content">
+    <dl>
+        <dt>
+
+        </dt>
+        <dd>
+            <input class="input" id="isAll" type="checkbox" /><span id="bq">所有角色（授权时，如果勾选，不会针对所选角色，而是所有角色授权）</span>一般系统初始化时使用
+            <input type="button" value="保存授权" id='btnSavue' />
+        </dd>
+    </dl>
+</div>
+<div class="tab-content" style=" padding:0px">
+
+    <script type="text/javascript">
+        function rebindTree() { $("#treeGrid").jqxTreeGrid('updateBoundData'); }
+        var selectType = 0;
+        $(function () {
+            $(".content-tab-ul-wrap ul li").click(function () {
+                selectType = $(this).index();
+                $(".tab-content").show();
+                if (selectType == 0) {
+                    $(".leftPanel").find("h1").text("管理角色");
+                    $("#bq").text("所有角色（授权时，如果勾选，不会针对所选角色，而是所有角色授权）");
+
+                } else {
+                    $("#bq").text("所有会员等级（授权时，如果勾选，不会针对所选会员等级，而是所有会员等级授权）");
+                    $(".leftPanel").find("h1").text("会员等级");
+                }
+                $("#jqxgrid").jqxGrid('updateBoundData');
+
+            });
+
+            $('.TjSy').jqxSplitter({ width: '100%', height: 480, panels: [{ size: '20%' }] });
+            $(".jqxExpander").jqxExpander({ width: '100%', height: 480, showArrow: false });
+            $("#btnSavue").jqxButton({ width: '100', template: "success" });
+            $('#btnSavue').on('click', function () {
+                //保存授权
+                var postdata = {};
+                postdata.Sqtype = selectType;
+                var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindex');
+                postdata.RoleID = $("#RoleID").val();
+                postdata.IsAll = $("#isAll").prop("checked");
+                var arraydata = new Array();
+                var source = $("#treeGrid").jqxTreeGrid("source");
+                var record = source.hierarchy;
+                findSelectData(arraydata, record);
+                postdata.RightData = arraydata;
+                $.ajax({
+                    url: "@Url.Action("SaveRight")",
+                    type: "POST",
+                    data: postdata,
+                    dataType: "json",
+                    success: function (d) {
+                        if (d.IsSuccess) {
+                            SucessMsg(d.Msg);
+                        } else {
+                            ErrorMsg(d.Msg);
+                        }
+                    }
+                });
+            });
+        });
+
+        $(function () {
+            var url = "@Url.Action("GetRoleOrMemberOrderList")";
+            var datafields = [{ name: 'ID' }, { name: 'Code' }, { name: 'Name' }];
+            var columns = [
+{ text: '编号', dataField: 'Code', cellsalign: "left" },
+
+  {
+      text: '名称', dataField: 'Name', cellsalign: "left"
+
+  }];
+            CreateGrid("jqxgrid", url, datafields, columns, {
+                adapter: {
+                    formatData: function (data) {
+                        data.id = selectType;
+                    }
+
+                }
+            });
+
+
+
+            var url = "@Url.Action("GetRightList")";
+            var datafields = [{ name: 'ID' }, { name: 'Code' }, { name: 'Name' }, { name: 'FuncType' }, { name: 'ParentID' }, { name: 'ClassCode' },
+    { name: 'IsVisble', type: "bool" }, { name: 'IsEnable', type: "bool" }];
+            var columns = [
+   { text: '编码', dataField: 'Code', cellsalign: "left", width: 300, editable: false },
+{ text: '名称', dataField: 'Name', cellsalign: "left", width: 120, editable: false },
+{ text: '功能类型', dataField: 'FuncType', width: 80, editable: false,@HelperExtend.ParseEnum(typeof(EasyCms.Model.FunctionType)) },
+{
+    text: '启用', dataField: 'IsEnable', width: 50, editable: true, cellsRenderer: function (row, column, value, rowData) {
+        var valuestr = "checked='checked'";
+
+        if (!value) {
+            valuestr = "";
+            value = false;
+        }
+        return "<input  onchange='changeVal(\"" + row + "\",\"" + rowData.ClassCode + "\",\"" + column + "\"," + rowData.JS + ")'   type='checkbox' " + valuestr + "  />";
+    }
+
+
+},
+{
+    text: '可见', dataField: 'IsVisble', width: 50, editable: true,
+    cellsRenderer: function (row, column, value, rowData) {
+        var valuestr = "checked='checked'";
+
+        if (!value) {
+            valuestr = "";
+            value = false;
+        }
+        return "<input  onchange='changeVal(\"" + row + "\",\"" + rowData.ClassCode + "\",\"" + column + "\"," + rowData.JS + ")'   type='checkbox' " + valuestr + "  />";
+    }
+}];
+            CreateTree("treeGrid", url, datafields, columns, {
+                adapter: {
+                    formatData: function (data) {
+
+                        data.roleID = $("#RoleID").val();
+                        data.isAll = $("#isAll").prop("checked");
+                        data.sqtype = selectType;
+                    }
+                }, tree: {
+                    editable: true,
+                    editSettings: { saveOnPageChange: true, saveOnBlur: true, saveOnSelectionChange: true, cancelOnEsc: true, saveOnEnter: true, editSingleCell: true, editOnDoubleClick: true, editOnF2: true }
+
+                }
+            });
+        });
+
+        function changeVal(rowid, classcode, column, js) {
+            var source = $("#treeGrid").jqxTreeGrid("source");
+            var record = source.hierarchy;
+            findSetRecord(rowid, classcode, column, null, js, record);
+            $("#treeGrid").jqxTreeGrid('endUpdate');
+        }
+        function findSetRecord(rowid, classcode, column, ischecked, js, record) {
+            for (var i = 0; i < record.length; i++) {
+                var data = record[i];
+                var classcodetem = data.ClassCode;
+                if (classcode.indexOf(classcodetem) > -1) {
+                    /*找到他的当前线了（从根级到末级）*/
+                    if (data.ID == rowid) {
+                        if (ischecked == null) {
+                            if (column == "IsEnable") {
+                                if (data.IsEnable == null) {
+                                    data.IsEnable = false;
+                                }
+                                ischecked = !data.IsEnable;
+
+                            } else {
+                                if (data.IsVisble == null) {
+                                    data.IsVisble = false;
+                                }
+                                ischecked = !data.IsVisble;
+                            }
+                        }
+                        if (column == "IsEnable") {
+                            data.IsEnable = ischecked;
+                            data.IsVisble = ischecked;
+                        } else {
+                            data.IsVisble = ischecked;
+                        }
+                        /*找到当前节点了，将改节点下的所有可用和可见设为和当前节点相同的*/
+                        loopSetRecord(rowid, classcode, column, ischecked, js, data.records);
+                        return;
+                    } else {
+                        findSetRecord(rowid, classcode, column, ischecked, js, data.records);
+                        return;
+                    }
+                    break;
+                }
+            }
+        }
+        function loopSetRecord(rowid, classcode, column, ischecked, js, record) {
+            if (!record) {
+                return;
+            }
+            for (var i = 0; i < record.length; i++) {
+                if (column == "IsEnable") {
+                    record[i].IsEnable = ischecked;
+                    record[i].IsVisble = ischecked;
+                } else {
+                    record[i].IsVisble = ischecked;
+                }
+                if (record[i].records) {
+                    loopSetRecord(rowid, classcode, column, ischecked, js, record[i].records);
+                }
+
+            }
+
+        }
+
+
+        function findSelectData(arraydata, record) {
+            if (record) {
+                for (var i = 0; i < record.length; i++) {
+                    var data = record[i];
+                    if (data.IsEnable || data.IsVisble) {
+                        arraydata.push({ ID: data.ID, IsEnable: data.IsEnable, IsVisble: data.IsVisble });
+                        findSelectData(arraydata, data.records);
+                    }
+                }
+            }
+        }
+
+    </script>
+    <script>
+        var isAutoSelect = true;
+        $(function () {
+            $('#jqxgrid').on('rowselect', function (event) {
+                $("#isAll").prop("checked", false)
+                var args = event.args;
+                var rowData = args.row;
+                $("#RoleID").val(rowData.ID);
+
+                rebindTree();
+            });
+            
+            $("#treeGrid").on("bindingComplete", function (event) {
+                if (isAutoSelect) {
+                    isAutoSelect = false;
+                    var rows = $('#jqxgrid').jqxGrid('getrows')
+                    if (rows.length > 0) {
+                        $('#jqxgrid').jqxGrid('selectrow', 0);
+
+                    }
+                } 
+            });
+        });
+
+
+    </script>
+    <div class="TjSy">
+        <div class="splitter-panel">
+            <div class='jqxExpander'>
+                <div class="leftPanel">
+                    <h1>角色</h1>
+                </div>
+                <div>
+                    <input type="hidden" id="RoleID" />
+                    <div style="margin-top: 1px;" id="jqxgrid"></div>
+
+                </div>
+            </div>
+        </div>
+        <div class="splitter-panel">
+            <div class='jqxExpander'>
+                <div class="rightPanel">
+                    <h1>功能</h1>
+                </div>
+                <div>
+                    <div style="margin-top: 1px;" id="treeGrid"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>

@@ -57,9 +57,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         {
             CouponRule p = null; ;
 
-            try
-            {
-                if (collection["RecordStatus"] != "add")
+           if (collection["RecordStatus"] != "add")
                 {
                     p = bll.GetEntity(collection["ID"]);
                     p.BindForm<CouponRule>(collection);
@@ -96,12 +94,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
 
                 } 
 
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("error", ex.Message);
-
-            }
+            
             return View("Edit", p);
         }
 

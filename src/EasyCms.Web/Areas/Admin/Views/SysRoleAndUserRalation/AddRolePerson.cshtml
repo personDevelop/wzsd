@@ -1,0 +1,122 @@
+﻿@{
+    ViewBag.Title = "添加人员";
+    Layout = null;
+
+
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,initial-scale=1.0,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/bundles/css")
+    @Styles.Render("~/bundles/jqxcss")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqx")
+    @Scripts.Render("~/bundles/eshopJS")
+</head>
+
+<body class="mainbody">
+
+    <input type="hidden" id="RoleID" value="@ViewBag.RoleID" />
+
+    <!--导航栏-->
+    <div class="location">
+        <i class="home"></i>
+        <span>@ViewBag.Title</span>
+    </div>
+    <!--/导航栏-->
+    <!--内容-->
+
+    <div class="tab-content">
+
+
+        <div class="table-container">
+            <div id="jqxgrid"> </div>
+            <table>
+                <tr>
+                    <td>
+                        <input id="btnAdd" type="button" value="添加">
+                        <input id="btnReturn" type="button" value="关闭">
+                        
+                    </td>
+                </tr>
+
+            </table>
+
+        </div>
+    </div>
+    @Html.Partial("_Msg")
+
+    <script type="text/javascript">
+
+        $(function () {
+
+
+            $("#btnAdd").jqxButton({ width: '150', template: 'success' });
+            $("#btnReturn").jqxButton({ width: '150', template: 'warning' });
+            $("#btnReturn").on('click', function () {
+                CloseDialog();
+        }); 
+            $("#btnAdd").on('click', function () {
+                var rowindexes = $('#jqxgrid').jqxGrid('getselectedrowindexes');
+
+                var data = { roleID: "@(ViewBag.RoleID)", personIDS: [] };
+                for (var i in rowindexes) {
+
+                    var d = $('#jqxgrid').jqxGrid('getrowdata', i);
+                    data.personIDS.push(d.ID);
+                }
+
+                if (data.personIDS.length > 0) { 
+                    $.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        url: "@Url.Action("AddPersonToRole")",
+                        data: data,
+                        success: function (result) {
+                            if (result.IsSuccess) {
+                                SucessMsg("添加成功");
+                            } else {
+                                ErrorMsg(result.Msg);
+                            }
+                        }
+                    });
+                } else {
+
+                    ErrorMsg("请选择要添加的人员");
+                }
+            }); 
+        })
+    </script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            var url = "@Url.Action("GetForAddPersonList")";
+            var datafields = [{ name: 'ID' }, { name: 'Code' }, { name: 'Name' } ];
+            var columns = [ 
+     { text: '管理员账号', dataField: 'Code', cellsalign: "left" },
+  { text: '管理员姓名', dataField: 'Name', cellsalign: "left" } ];
+
+            CreateGrid("jqxgrid", url, datafields, columns, {
+                isMutilSelect: true, adapter: {
+                    formatData: function (data) {
+                        data.RoleID = $("#RoleID").val();
+                    }
+
+                }, grid: { pageable: false, rendergridrows: null, virtualmode: false, pagerrenderer: null }
+            });
+            $("#jqxgrid").on("bindingcomplete", function (event) {
+                var rows = $('#jqxgrid').jqxGrid('getrows');
+                for (var i = 0; i < rows.length; i++) {
+                    $('#jqxgrid').jqxGrid('selectrow', i);
+                }
+            }); 
+        });
+    </script>
+</body>
+</html>

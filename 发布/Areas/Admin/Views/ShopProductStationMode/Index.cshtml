@@ -6,11 +6,11 @@
 @using EasyCms.Model
 <style type="text/css">
     .leftPanel h1 {
-        background: url(../images/icons.gif) no-repeat 0 -393px;
+        background: url(@HelperExtend.imgUrl("icons.gif")) no-repeat 0 -393px;
     }
 
     .rightPanel h1 {
-        background: url(../images/icons.gif) no-repeat 0 -25px;
+        background: url(@HelperExtend.imgUrl("icons.gif")) no-repeat 0 -25px;
     }
 </style>
 <!--内容-->
@@ -257,7 +257,7 @@
                         </dt>
                         <dd>
                             <input name="ProductName" width="200" class="input normal " id="ProductName" type="text" value="">
-                            <input type="button" value="Button" id='BtnqryCateTj' />
+                            <input type="button" value="搜索" id='BtnqryCateTj' />
                         </dd>
                     </dl>
                     <div style="margin-top: 5px;" id="dataTable"></div>

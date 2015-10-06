@@ -47,14 +47,14 @@ namespace EasyCms.Business
             return Dal.Submit(order, accuont, out   mustGenerSign, out err);
         }
 
-        public List<ShopOrder> GetMyOrder(ManagerUserInfo user, int queryPage, int queryStatus, string other, out string err)
+        public List<ShopOrder> GetMyOrder(string host,ManagerUserInfo user, int queryPage, int queryStatus, string other, out string err)
         {
-            return Dal.GetMyOrder(user, queryPage, queryStatus, other, out err);
+            return Dal.GetMyOrder(host,user, queryPage, queryStatus, other, out err);
         }
 
-        public ShopOrder GetOrder(string id, string userid, out string err)
+        public ShopOrder GetOrder(string host, string id, string userid, out string err)
         {
-            return Dal.GetOrder(id, userid, out   err);
+            return Dal.GetOrder(host,id, userid, out   err);
         }
 
         public Dictionary<string, string> ExeAction(ActionEnum actionID, string wlgs, List<string> orderIDs, out string err)

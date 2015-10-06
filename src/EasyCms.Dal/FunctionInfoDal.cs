@@ -23,8 +23,8 @@ namespace EasyCms.Dal
 
         public int Save(FunctionInfo item)
         {
-            return CommonDal.UpdatePath<FunctionInfo>(Dal, item, FunctionInfo._.ID, FunctionInfo._.ParentID, FunctionInfo._.ClassCode, FunctionInfo._.OrderNo, FunctionInfo._.Js,null);
-            
+            return CommonDal.UpdatePath<FunctionInfo>(Dal, item, FunctionInfo._.ID, FunctionInfo._.ParentID, FunctionInfo._.ClassCode, FunctionInfo._.OrderNo, FunctionInfo._.Js, null);
+
 
         }
 
@@ -102,13 +102,22 @@ namespace EasyCms.Dal
 
         public List<FunctionInfo> GetListWithUrl(int funcType)
         {
-            List<FunctionInfo> list=
+            List<FunctionInfo> list =
              Dal.From<FunctionInfo>().
                     Select(FunctionInfo._.ID, FunctionInfo._.ShowText, FunctionInfo._.ClassCode, FunctionInfo._.AccessType, FunctionInfo._.ParentID, FunctionInfo._.URL, FunctionInfo._.CallArea, FunctionInfo._.CallControler, FunctionInfo._.CallAction, FunctionInfo._.Description, FunctionInfo._.Js).
                     Where(FunctionInfo._.Enable == true && FunctionInfo._.FuncType == funcType)
-                    .OrderBy(FunctionInfo._.Js,FunctionInfo._.OrderNo).
-                     List<FunctionInfo>(); 
-            return list ;
+                    .OrderBy(FunctionInfo._.Js, FunctionInfo._.OrderNo).
+                     List<FunctionInfo>();
+            return list;
+        }
+
+        public List<FunctionInfo> GetAllFunction()
+        {
+            List<FunctionInfo> list =
+             Dal.From<FunctionInfo>().
+                    Select(FunctionInfo._.ID, FunctionInfo._.Name, FunctionInfo._.CallArea, FunctionInfo._.CallControler, FunctionInfo._.CallAction, FunctionInfo._.IsAnony, FunctionInfo._.IsRecord, FunctionInfo._.IsMust).
+                    Where(FunctionInfo._.Enable == true).List<FunctionInfo>();
+            return list;
         }
     }
 

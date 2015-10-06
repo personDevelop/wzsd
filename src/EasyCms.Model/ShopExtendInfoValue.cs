@@ -205,4 +205,11 @@ namespace EasyCms.Model
         #endregion
     }
 
+     public partial class ShopExtendInfoValue
+     {
+         [NotDbCol]
+         public ShopExtendInfo ShopExtendInfo { get; set; }
+
+
+     }
 }

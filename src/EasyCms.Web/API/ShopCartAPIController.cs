@@ -19,36 +19,21 @@ namespace EasyCms.Web.API
         // GET api/shopcart/5
         public HttpResponseMessage Get(string id)
         {
-            try
-            {
+           
 
                 DataTable dt = new ShopShoppingCartsBll().GetList(Request.GetAccountID());
                 return dt.Format();
-            }
-            catch (Exception ex)
-            {
-                return ex.Format();
-
-            }
+            
 
         }
 
         // POST api/shopcart
         public HttpResponseMessage Post([FromBody]ShopShoppingCarts shopCart)
         {
-            try
-            {
+            
                 shopCart.UserId = Request.GetAccountID();
                 new ShopShoppingCartsBll().Save(shopCart);
-                return "操作成功".FormatSuccess();
-
-            }
-            catch (Exception ex)
-            {
-                return ex.Format();
-
-            }
-
+                return "操作成功".FormatSuccess(); 
         }
 
 
@@ -56,8 +41,7 @@ namespace EasyCms.Web.API
         [HttpPost]
         public HttpResponseMessage CardInfo([FromBody] CardInfo card)
         {
-            try
-            {
+            
                 string cardInfo = card.SPXX;
                 if (string.IsNullOrWhiteSpace(cardInfo))
                 {
@@ -112,28 +96,17 @@ namespace EasyCms.Web.API
                 return dtReturn.Format();
 
 
-            }
-            catch (Exception ex)
-            {
-                return ex.Format();
-
-            }
+            
 
         }
 
         // DELETE api/shopcart/5
         public HttpResponseMessage Delete(string id)
         {
-            try
-            {
+            
                 return new ShopShoppingCartsBll().Delete(id).FormatError();
 
-            }
-            catch (Exception ex)
-            {
-                return ex.Format();
-
-            }
+            
         }
     }
 

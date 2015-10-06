@@ -21,22 +21,30 @@
     </div>
 </div>
 <div class="tab-content">
+     
 
-
-    @HelperExtend.HiddenFor("ID", Model.ID.ToString())
+    @HelperExtend.HiddenFor("ID", Model.ID)
     @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())
 
     @HelperExtend.HiddenFor("AttributeId", Model.AttributeId)
     @HelperExtend.HiddenFor("DisplaySequence", Model.DisplaySequence.ToString())
 
-    @HelperExtend.HiddenFor("ImageID", Model.ImageID)
+
     @Html.ValidationSummary()
 
+    @if (Model.ShopExtendInfo.UseAttrImg)
+    {
+        @HelperExtend.ImageUpLoad("ImageID", "对应图片", Model.RecordStatus == Sharp.Common.StatusType.add, defaultval: Model.ImageID, maxLength: 1)
 
-    @HelperExtend.TextBox("ValueStr", "属性值", defaultval: Model.ValueStr, hint: "*属性值不能为空")
+        @HelperExtend.TextArea("ValueStr", "备注", defaultval: Model.ValueStr)
+    }
+    else
+    {
+        @HelperExtend.TextBox("ValueStr", "属性值", defaultval: Model.ValueStr, hint: "*属性值不能为空")
+        @HelperExtend.TextArea("Note", "备注", defaultval: Model.Note)
 
-    @HelperExtend.ImageUpLoad("ImageID", "对应图片", Model.RecordStatus == Sharp.Common.StatusType.add, defaultval: Model.ImageID, maxLength: 1)
-    @HelperExtend.TextArea("Note", "备注", defaultval: Model.Note)
+    }
+
 </div>
 
 @section  scripts{
@@ -58,26 +66,19 @@
                             url: '@Url.Action("CheckRepeat")',
                             data: {
                                 ID: function () { return $("#ID").val(); },
-                                ParentID: function () { return $("#ParentID").val(); },
+                                AttributeId: function () { return $("#AttributeId").val(); },
                                 RecordStatus: function () { return $("#RecordStatus").val(); },
-                                val: function () { return $("#Code").val(); },
-                                IsCode: true
+                                val: function () { return $("#ValueStr").val(); } 
                             }
                         }
-                    },
-                    Note: {
-                        maxlength: 100.
-                    }
+                    } 
                 },
                 messages: {
                     ValueStr: {
                         required: "请输入值",
                         maxlength: $.validator.format("编号长度不能大于{0}个字符"),
                         remote: "已经存在该值"
-                    },
-                    Note: {
-                        maxlength: $.validator.format("名称长度不能大于{0}个字符")
-                    }
+                    } 
                 },
                 errorPlacement: function (error, element) {
 

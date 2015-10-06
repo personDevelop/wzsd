@@ -18,10 +18,13 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         public ActionResult Index()
         {
 
+        
             return View();
         }
+      
         public string GetList()
         {
+          
             System.Data.DataTable dt = bll.GetList();
             return JsonWithDataTable.Serialize(dt);
             ;

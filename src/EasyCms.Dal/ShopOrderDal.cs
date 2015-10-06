@@ -926,7 +926,7 @@ namespace EasyCms.Dal
             return IsFirst;
         }
 
-        public List<ShopOrder> GetMyOrder(ManagerUserInfo user, int queryPage, int queryStatus, string otherWhere, out string err)
+        public List<ShopOrder> GetMyOrder(string host, ManagerUserInfo user, int queryPage, int queryStatus, string otherWhere, out string err)
         {
             err = string.Empty;
             WhereClip where = ShopOrder._.MemberID == user.ID;
@@ -957,13 +957,14 @@ namespace EasyCms.Dal
             {
                 List<string> orderIDS = list.Select(p => p.ID).ToList();
                 List<ShopOrderItem> orderItems = Dal.From<ShopOrderItem>()
+                    .Join<AttachFile>(ShopOrderItem._.ProductThumb == AttachFile._.RefID && AttachFile._.OrderNo == 1, JoinType.leftJoin)
                     .Where(ShopOrderItem._.OrderID.In(orderIDS))
                     .Select(ShopOrderItem._.ID, ShopOrderItem._.OrderID, ShopOrderItem._.BrandName,
                     ShopOrderItem._.Count, ShopOrderItem._.HandselCount, ShopOrderItem._.IsHandsel,
                     ShopOrderItem._.IsVirtualProduct, ShopOrderItem._.MarketPrice,
                     ShopOrderItem._.Price, ShopOrderItem._.Preferential,
                     ShopOrderItem._.ProductID, ShopOrderItem._.ProductCode, ShopOrderItem._.ProductSKU,
-                    ShopOrderItem._.ProductName, ShopOrderItem._.ProductThumb, ShopOrderItem._.TotalPrice,
+                    ShopOrderItem._.ProductName, new ExpressionClip("'" + host + "'" + "+ProductThumb").Alias("ProductThumb"), ShopOrderItem._.TotalPrice,
                     ShopOrderItem._.Sequence).List<ShopOrderItem>();
                 foreach (ShopOrder item in list)
                 {
@@ -973,11 +974,13 @@ namespace EasyCms.Dal
             return list;
         }
 
-        public ShopOrder GetOrder(string id, string userid, out string err)
+        public ShopOrder GetOrder(string host, string id, string userid, out string err)
         {
             err = string.Empty;
             WhereClip where = ShopOrder._.ID == id;
-            ShopOrder order = Dal.From<ShopOrder>().Where(where)
+            ShopOrder order = Dal.From<ShopOrder>()
+
+                .Where(where)
                 .Select(ShopOrder._.ID, ShopOrder._.ParentID, ShopOrder._.OrderType,
                 ShopOrder._.OrderResId,
                 ShopOrder._.PayTypeName,
@@ -989,9 +992,7 @@ namespace EasyCms.Dal
                 ShopOrder._.OrderStatus,
                 ShopOrder._.CommentStatus, ShopOrder._.MemberID,
                 ShopOrder._.TotalPrice, ShopOrder._.CreateDate,
-                ShopOrder._.PayMoney
-
-
+                ShopOrder._.PayMoney, ShopOrder._.ShipRegion, ShopOrder._.ShipAddress
                 )
                 .ToFirst<ShopOrder>();
             if (order == null)
@@ -1006,13 +1007,14 @@ namespace EasyCms.Dal
             {
 
                 List<ShopOrderItem> orderItems = Dal.From<ShopOrderItem>()
+                       .Join<AttachFile>(ShopOrderItem._.ProductThumb == AttachFile._.RefID && AttachFile._.OrderNo == 1, JoinType.leftJoin)
                     .Where(ShopOrderItem._.OrderID == id)
                     .Select(ShopOrderItem._.ID, ShopOrderItem._.OrderID, ShopOrderItem._.BrandName,
                     ShopOrderItem._.Count, ShopOrderItem._.HandselCount, ShopOrderItem._.IsHandsel,
                     ShopOrderItem._.IsVirtualProduct, ShopOrderItem._.MarketPrice,
                     ShopOrderItem._.Price, ShopOrderItem._.Preferential,
                     ShopOrderItem._.ProductID, ShopOrderItem._.ProductCode, ShopOrderItem._.ProductSKU,
-                    ShopOrderItem._.ProductName, ShopOrderItem._.ProductThumb, ShopOrderItem._.TotalPrice,
+                    ShopOrderItem._.ProductName, new ExpressionClip("'" + host + "'" + "+ProductThumb").Alias("ProductThumb"), ShopOrderItem._.TotalPrice,
                     ShopOrderItem._.Sequence).List<ShopOrderItem>();
 
                 order.OrderItems = orderItems;
@@ -1023,6 +1025,7 @@ namespace EasyCms.Dal
 
         public Dictionary<string, string> ExeAction(ActionEnum actionID, string wlgs, List<string> orderIDs, out string err)
         {
+            List<BaseEntity> list = new List<BaseEntity>();
             err = string.Empty;
             Dictionary<string, string> result = new Dictionary<string, string>();
             if (orderIDs.Count == 0)
@@ -1136,7 +1139,54 @@ namespace EasyCms.Dal
                                 msg = "签收成功";
                                 PublishIDS.Add(item, order);
                             }
+                            //更改库存信息
+                            List<ShopOrderItem> listItem = Dal.From<ShopOrderItem>().Where(ShopOrderItem._.OrderID.In(orderIDs)).Select(ShopOrderItem._.ID,
+                                ShopOrderItem._.ProductID, ShopOrderItem._.ProductSKU, ShopOrderItem._.Count).List<ShopOrderItem>();
+                            Dictionary<string, decimal> producntCount = new Dictionary<string, decimal>();
+                            Dictionary<string, decimal> producntSkuCount = new Dictionary<string, decimal>();
+                            foreach (var orderItem in listItem)
+                            {
+                                if (string.IsNullOrWhiteSpace(orderItem.ProductSKU))
+                                {
+                                    if (producntCount.ContainsKey(orderItem.ProductID))
+                                    {
+                                        producntCount[orderItem.ProductID] += orderItem.Count;
+                                    }
+                                    else
+                                    {
+                                        producntCount.Add(orderItem.ProductID, orderItem.Count);
+                                    }
+                                }
+                                else
+                                {
+                                    if (producntSkuCount.ContainsKey(orderItem.ProductSKU))
+                                    {
+                                        producntSkuCount[orderItem.ProductSKU] += orderItem.Count;
+                                    }
+                                    else
+                                    {
+                                        producntSkuCount.Add(orderItem.ProductSKU, orderItem.Count);
+                                    }
+                                }
 
+                            }
+
+                            foreach (var pid in producntCount.Keys)
+                            {
+                                ShopProductInfo p = new ShopProductInfo() { RecordStatus= StatusType.update, Where= ShopProductInfo._.ID==pid };
+                                ExpressionClip StockExpress = new ExpressionClip(ShopProductInfo._.Stock.ColumnName + "-" + producntCount[pid]);
+                                p.SetModifiedProperty(ShopProductInfo._.Stock, StockExpress);
+                                list.Add(p);
+                                
+                            }
+                            foreach (var pid in producntSkuCount.Keys)
+                            {
+                                ShopProductSKUInfo p = new ShopProductSKUInfo() { RecordStatus = StatusType.update, Where = ShopProductSKUInfo._.SKURelationID == pid };
+                                ExpressionClip StockExpress = new ExpressionClip(ShopProductSKUInfo._.Stock.ColumnName + "-" + producntSkuCount[pid]);
+                                p.SetModifiedProperty(ShopProductSKUInfo._.Stock, StockExpress);
+                                list.Add(p);
+
+                            }
                             break;
                         case ActionEnum.申请退货:
                             break;
@@ -1195,7 +1245,7 @@ namespace EasyCms.Dal
                 DateTime now = DateTime.Now;
                 if (PublishIDS.Count > 0)
                 {
-                    List<BaseEntity> list = new List<BaseEntity>();
+                  
                     string express = Dal.From<ShopExpress>().Where(ShopExpress._.ID == wlgs).Select(ShopExpress._.Name).ToScalar() as string;
                     ShopOrder update = new ShopOrder() { RecordStatus = StatusType.update, Where = ShopOrder._.ID.In(PublishIDS.Keys.ToList()) };
                     update.OrderStatus = (int)changetToStatus;

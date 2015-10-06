@@ -116,7 +116,7 @@
             this.txtBody.Name = "txtBody";
             this.txtBody.Size = new System.Drawing.Size(468, 121);
             this.txtBody.TabIndex = 6;
-            this.txtBody.Text = "Account=138&Pwd=aaaaaa";
+            this.txtBody.Text = "Account=130&Pwd=aaaaaa&DeviceID=123456";
             // 
             // label4
             // 

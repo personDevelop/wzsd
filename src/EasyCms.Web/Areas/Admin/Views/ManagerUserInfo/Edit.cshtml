@@ -21,7 +21,7 @@
     </div>
 </div>
 <div class="tab-content">
-
+     
 
     @HelperExtend.HiddenFor("ID", Model.ID)
     @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())  
@@ -29,7 +29,7 @@
 
     @HelperExtend.TextBox("Code", "账号", defaultval: Model.Code, hint: "")
 
-    @HelperExtend.TextBox("Pwd", "密码", defaultval: Model.Pwd, hint: "")
+    
 
     @HelperExtend.TextBox("Name", "姓名", defaultval: Model.Name, hint: "")
 
@@ -37,7 +37,7 @@
 
     @HelperExtend.TextBox("QQ", "QQ", defaultval: Model.QQ, hint: "")
 
-    @HelperExtend.ImageUpLoad("Photo", "头像", defaultval: Model.Photo, hint: "")
+    @HelperExtend.ImageUpLoad("Photo", "头像", Model.RecordStatus == Sharp.Common.StatusType.add, defaultval: Model.Photo, maxLength: 1)
 
     @HelperExtend.TextBox("NickyName", "昵称", defaultval: Model.NickyName, hint: "")
 
@@ -125,16 +125,5 @@
         })
     </script>
 
-    <script type="text/javascript">
-
-      
-        $(function () {
-
-            if ("@TempData.ContainsKey("IsSuccess").ToString().ToLower()" == "true") {
-                SucessMsg("@TempData["IsSuccess"]");
-            }
-
-
-        });
-    </script>
+    
 }

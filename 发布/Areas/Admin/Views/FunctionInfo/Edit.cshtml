@@ -26,41 +26,31 @@
     @HelperExtend.HiddenFor("ID", Model.ID)
     @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())
 
-    
-    @if (string.IsNullOrWhiteSpace(Model.Image))
-    {
-        Model.Image = Guid.NewGuid().ToString();
 
-    }
+
 
     @Html.ValidationSummary()
 
 
-    @HelperExtend.HelpEdit("ParentID", "ParentName", "上级功能", defaultVal:Model.ParentID, defaultText: Model.ParentName, hint: "空为一级模块", dialogTitle: "选择上级功能", InnitFunc: "InnitFunc", onOk: "onOk", IsTree: true, DataControlID: "treeGrid")
+    @HelperExtend.HelpEdit("ParentID", "ParentName", "上级功能", defaultVal: Model.ParentID, defaultText: Model.ParentName, hint: "空为一级模块", dialogTitle: "选择上级功能", InnitFunc: "InnitFunc", onOk: "onOk", IsTree: true, DataControlID: "treeGrid")
 
 
     @HelperExtend.TextBox("Code", "编码", defaultval: Model.Code, hint: "")
 
     @HelperExtend.TextBox("Name", "名称", defaultval: Model.Name, hint: "")
     @HelperExtend.TextBox("ShowText", "窗口显示的名称", defaultval: Model.ShowText, hint: "")
-    @HelperExtend.RadioGroup("FuncType", "功能类型 ", "0,1,2,3", "后台菜单,商城导航,APP导航,其它", defaultval: Model.FuncType)
-
+    @HelperExtend.RadioGroup("FuncType", "功能类型 ", "0,1,2,3", "后台菜单,商城导航,API,其它", defaultval: Model.FuncType)
     @HelperExtend.ImageUpLoad("Image", "图标", Model.RecordStatus == Sharp.Common.StatusType.add, defaultval: Model.Image, maxLength: 1)
-    @HelperExtend.RadioGroup("AccessType", "功能类型 ", "0,1,2,3,4", "层级模块,普通模块,MVC功能,URL功能,其它", defaultval: Model.AccessType)
+    @HelperExtend.RadioGroup("AccessType", "功能类型 ", "0,1,2,3,4,5", "层级模块,普通模块,MVC功能,API功能,URL功能,其它", defaultval: Model.AccessType)
     @HelperExtend.TextBox("URL", "网址", defaultval: Model.URL, hint: "")
 
     @HelperExtend.TextBox("CallArea", "域", defaultval: Model.CallArea, hint: "")
     @HelperExtend.TextBox("CallControler", "控制器", defaultval: Model.CallControler, hint: "")
     @HelperExtend.TextBox("CallAction", "动作", defaultval: Model.CallAction, hint: "")
-    @HelperExtend.RadioGroup("Enable", "启用", "false,true", "否,是", defaultval: Model.Enable)
-    @HelperExtend.RadioGroup("Visible", "可见", "false,true", "否,是", defaultval: Model.Visible)
-    @HelperExtend.RadioGroup("MultilInstance", "是否多开", "false,true", "否,是", defaultval: Model.MultilInstance)
-    @HelperExtend.RadioGroup("IsMust", "基本必备功能", "false,true", "否,是", defaultval: Model.IsMust)
 
-    @HelperExtend.RadioGroup("IsMustNot", "不在权限中展示", "false,true", "否,是", defaultval: Model.IsMustNot)
-   
 
-    @HelperExtend.Number("OrderNo", "顺序", defaultval: Model.OrderNo, hint: "",disabled:true)
+    @HelperExtend.CheckBoxList("其他设置", "Enable,Visible,IsAnony,IsRecord,IsMust,IsMustNot,MultilInstance", "启用,可见,允许匿名,记录操作日志,必备功能,不在权限中展示,可多开", defaultval: new object[] { Model.Enable, Model.Visible, Model.IsAnony, Model.IsRecord, Model.IsMust, Model.IsMustNot, Model.MultilInstance }); 
+    @HelperExtend.Number("OrderNo", "顺序", defaultval: Model.OrderNo, hint: "")
     @HelperExtend.TextArea("Description", "功能模块描述", defaultval: Model.Description, hint: "")
 
 </div>
@@ -191,13 +181,59 @@
 
             } else { ErrorMsg("请选择一条数据"); }
         }
-        $(function () {
 
-            if ("@TempData.ContainsKey("IsSuccess").ToString().ToLower()" == "true") {
-                SucessMsg("@TempData["IsSuccess"]");
+    </script>
+
+    <script type="text/javascript">
+        function selectVal(selectType) {
+            $("#URL").closest("dl").show();
+            $("#CallArea").closest("dl").show();
+            $("#CallControler").closest("dl").show();
+            $("#CallAction").closest("dl").show();
+            /*"0,1,2,3,4,5", "层级模块,普通模块,MVC功能,API功能,URL功能,其它"*/
+            switch (selectType) {
+                case "0":
+                case "1":
+                case "5":
+                    $("#URL").closest("dl").hide();
+                    $("#CallArea").closest("dl").hide();
+                    $("#CallControler").closest("dl").hide();
+                    $("#CallAction").closest("dl").hide();
+                    break;
+                case "2":
+                case "3":
+                    if (!$("#CallArea").val()) {
+                        if (selectType=="2") {
+                            $("#CallArea").val("admin");
+                        } else {
+                            $("#CallArea").val("api");
+                        }
+                    }
+
+                    $("#URL").closest("dl").hide();
+                    break;
+                case "4":
+                    $("#CallArea").closest("dl").hide();
+                    $("#CallControler").closest("dl").hide();
+                    $("#CallAction").closest("dl").hide();
+                    break;
+                default:
+                    break;
+
             }
 
+        }
+        function ChangeAccessType() {
+            selectVal($("input[name='AccessType']:checked").val());
+        }
+        $(function () {
+            $("input[name='AccessType']").closest(".multi-radio").find("a").on("click", function (d) {
+                ChangeAccessType();
+
+            })
+            ChangeAccessType();
 
         });
+
     </script>
 }

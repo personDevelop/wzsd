@@ -467,6 +467,13 @@
     <dl style="margin-bottom:20px">
         <dt>
             @MVCExtention.ExtendHtmlInput.MvcHelper.Label(code, name)
+
+            @if (string.IsNullOrWhiteSpace(defaultval))
+            {
+                defaultval = Guid.NewGuid().ToString();
+            }
+            @HelperExtend.HiddenFor(code, defaultval)
+
         </dt>
         <dd>
             @{
@@ -833,6 +840,8 @@
 {
     <img src="~/Content/Images/@imgName" alt="" style="@otherStyle" />
 }
+@helper imgUrl(string imgName)
+{<text>http://@HttpContext.Current.Request.Url.Authority@HttpContext.Current.Request.ApplicationPath</text><text>Content/Images/@imgName</text>}
 @helper ParseEnum(Type enumType)
 {
     string result = "valObj: [";
@@ -843,13 +852,25 @@
         {
             result += ",";
         }
-       result += string.Format("{{ key: {0}, val: '{1}' }}", Convert.ToInt32(ids.GetValue(i)), ids.GetValue(i).ToString());
+        result += string.Format("{{ key: {0}, val: '{1}' }}", Convert.ToInt32(ids.GetValue(i)), ids.GetValue(i).ToString());
     }
     result += "]";
     <text>@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(result)</text>
 }
-
-
+@helper Parsebool()
+{
+    string result = "valObj: [";
+    result += "{key: true, val: '是' },{key: false, val: '否' }";
+    result += "]";
+    <text>@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(result)</text>
+}
+@helper ParseEnable()
+{
+    string result = "valObj: [";
+    result += "{key: true, val: '启用' },{key: false, val: '停用' }";
+    result += "]";
+    <text>@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(result)</text>
+}
 
 
 

@@ -13,6 +13,17 @@ namespace EasyCms.Web.Common
 {
     public static class FormatResponse
     {
+        public static HttpResponseMessage Format(this string str, bool isSuccess)
+        {
+            if (isSuccess)
+            {
+                return str.FormatSuccess();
+            }
+            else
+            {
+                return str.FormatError();
+            }
+        }
         public static HttpResponseMessage Format(this Exception ex)
         {
             var resp = new HttpResponseMessage(HttpStatusCode.OK);
@@ -71,13 +82,19 @@ namespace EasyCms.Web.Common
         public static JsonResult FormatErrorJsonResult(this string error)
         {
 
-            return new JsonResult() { Data = new { IsSuccess = false, Msg = error } };
+            return new JsonResult() { Data = new { IsSuccess = false, Msg = error }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
 
         }
         public static JsonResult FormatJsonResult(this object obj)
         {
 
-            return new JsonResult() { Data = new { IsSuccess = true, Msg = "操作成功", data = obj } };
+            return new JsonResult() { Data = new { IsSuccess = true, Msg = "操作成功", data = obj }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+
+        }
+        public static JsonResult FormatExceptionJsonResult(this Exception ex)
+        {
+
+            return new JsonResult() { Data = new { IsSuccess = false, Msg = ex.GetExceptionMsg() }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
 
         }
     }

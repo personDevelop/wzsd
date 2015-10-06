@@ -25,6 +25,22 @@
                   datatype: "json",
                   cache: false,
                   datafields: datafields,
+                  loadError: function (data) {
+                      var dataResult = $.parseJSON(data.responseText);
+                      if (dataResult && dataResult.Msg) {
+                          ErrorMsg(dataResult.Msg);
+                      }
+                      else {
+
+                          ErrorMsg(data.responseText);
+                      }
+                  },
+                  beforeLoadComplete: function () {
+                       
+                  },
+                  loadComplete: function () {
+                    
+                  },
                   beforeprocessing: function (data) {
                       source.totalrecords = data.total;
                   },
@@ -77,6 +93,12 @@
     var topHight = 250;
 
     var middleHeight = totalHeight - topHight;
+    if (opts.grid.pageable == undefined) {
+        opts.grid.pageable = true;
+    }
+    if (!opts.grid.pageable) {
+        opts.grid.rendergridrows = null, opts.grid.virtualmode = false, opts.grid.pagerrenderer = null;
+    }
     $(gridid).jqxGrid(
      $.extend({
          width: "95%",
@@ -96,41 +118,99 @@
      }, opts.grid));
 }
 
-function EditGrid(gridid, url) {
+function EditGrid(gridid, url, id, other) {
     gridid = '#' + gridid;
-    var rowindex = $(gridid).jqxGrid('getselectedrowindexes');
+    if (!id) {
 
-    if (rowindex.length != 1) {
-        ErrorMsg("请选择一条数据");
-    } else {
-        var data = $(gridid).jqxGrid('getrowdata', rowindex[0]);
 
-        if (data) {
-            location.href = url + "/" + data.ID;
-        } else { ErrorMsg("请选择一条数据"); }
+        var rowindex = $(gridid).jqxGrid('getselectedrowindexes');
+
+        if (rowindex.length != 1) {
+            ErrorMsg("请选择一条数据");
+        } else {
+            var data = $(gridid).jqxGrid('getrowdata', rowindex[0]);
+            if (data) {
+                id = data.ID;
+            } else { ErrorMsg("请选择一条数据"); }
+        }
     }
+    if (id) {
+        url += "/" + id;
+    }
+    if (other) {
+        url += "/" + other;
+    }
+    location.href = url;
+
 }
 
-function DelGrid(gridid, url) {
+function DelGrid(gridid, url, id, other) {
     gridid = '#' + gridid;
-    var rowindexes = $(gridid).jqxGrid('getselectedrowindexes');
+    if (!id) {
 
+        var rowindexes = $(gridid).jqxGrid('getselectedrowindexes');
+        var selectionmode = $(gridid).jqxGrid('selectionmode');
+        if (selectionmode == "checkbox") {
+            /*对选*/
+            if (rowindexes.length > 0) {
+                id = "";
+                for (var i = 0; i < rowindexes.length; i++) {
+                    if (i > 0) {
+                        id += ",";
+                    }
+                    var data = $(gridid).jqxGrid('getrowdata', rowindexes[i]);
+                    if (data) {
+                        id += data.ID;
+                    }
 
-    if (rowindexes.length == 1) {
-        var data = $(gridid).jqxGrid('getrowdata', rowindexes[0]);
+                }
+            } else { ErrorMsg("请选择一条数据"); }
 
-        $.post(url, { ID: data.ID }, function (d) {
+        } else {
+            if (rowindexes.length == 1) {
+                var data = $(gridid).jqxGrid('getrowdata', rowindexes[0]);
+                if (data) {
+                    id = data.ID;
+                } else { ErrorMsg("请选择一条数据"); }
+
+            } else { ErrorMsg("请选择一条数据"); }
+        }
+    }
+    if (id) {
+        var postdata = { ID: id }
+
+        if (other) {
+            postdata.other = other;
+        }
+        $.post(url, postdata, function (d) {
             ErrorMsg(d);
             if (d.indexOf("成功") > -1) {
 
                 $(gridid).jqxGrid('updatebounddata');
             }
         });
-    } else { ErrorMsg("请选择一条数据"); }
+    }
+
+
 }
 
 
-function CreateTree(treeid, url, datafields, columns, isMutilSelect, opts) {
+function CreateTree(treeid, url, datafields, columns, opts) {
+    if (!opts) {
+        opts = {};
+    }
+    if (!opts.isMutilSelect) {
+        opts.isMutilSelect = false;
+    }
+    if (!opts.data) {
+        opts.data = {};
+    }
+    if (!opts.adapter) {
+        opts.adapter = {};
+    }
+    if (!opts.tree) {
+        opts.tree = {};
+    }
     treeid = '#' + treeid;
     for (var i = 0; i < datafields.length; i++) {
         if (!datafields[i].type) {
@@ -142,6 +222,23 @@ function CreateTree(treeid, url, datafields, columns, isMutilSelect, opts) {
                   datatype: "json",
                   datafields: datafields,
                   timeout: 10000,
+                  loadError: function (data) {
+                      var dataResult = $.parseJSON(data.responseText);
+                      if (dataResult && dataResult.Msg) {
+                          ErrorMsg(dataResult.Msg);
+                      }
+                      else {
+
+                          ErrorMsg(data.responseText);
+                      }
+                      
+                  },
+                  beforeLoadComplete: function () {
+                    
+                  },
+                  loadComplete: function () {
+                     
+                  },
                   hierarchy:
                   {
                       keyDataField: { name: 'ID' },
@@ -151,22 +248,14 @@ function CreateTree(treeid, url, datafields, columns, isMutilSelect, opts) {
                   root: 'Rows',
                   url: url
               };
-    var dataAdapter = new $.jqx.dataAdapter(source);
-    var totalHeight = $(window).outerHeight();
-    if (totalHeight == 0) {
-        totalHeight = $(window).clientHeight();
-    }
-    var topHight = 50;
-
-    var middleHeight = totalHeight - topHight;
+    var dataAdapter = new $.jqx.dataAdapter($.extend(source, opts.data), opts.adapter);
     selectionmode = "checkbox";
-    if (!isMutilSelect) {
+    if (!opts.isMutilSelect) {
         selectionmode = "singlerow";
     }
 
+
     for (var i = 0; i < columns.length; i++) {
-
-
         if (!columns[i].align) {
             columns[i].align = "center";
         }
@@ -175,22 +264,42 @@ function CreateTree(treeid, url, datafields, columns, isMutilSelect, opts) {
         }
         if (columns[i].valObj) {
             columns[i].cellsrenderer = function (row, columnfield, value, defaulthtml, columnproperties) {
-                for (var k = 0; k < columns[i].valObj.length; k++) {
-                    var val = columns[i].valObj[k];
-                    if (val.key == value) {
-                        return val.val;
+                for (var j = 0; j < columns.length; j++) {
+
+                    if (columns[j].dataField == columnfield) {
+                        for (var k = 0; k < columns[j].valObj.length; k++) {
+                            var val = columns[j].valObj[k];
+                            if (val.key == value) {
+                                return '<div style="text-align: ' + columns[j].cellsalign + '; overflow: hidden; padding-bottom: 2px; margin-top: 4px; text-overflow: ellipsis;">' + val.val + '</div>';
+
+                            }
+                        }
+
+                        return "未知";
+
+                        break;
+
                     }
+
+
                 }
+
             };
         }
     }
+    var totalHeight = $(window).outerHeight();
+    if (totalHeight == 0) {
+        totalHeight = $(window).clientHeight();
+    }
+    var topHight = 50;
 
+    var middleHeight = totalHeight - topHight;
     $(treeid).jqxTreeGrid($.extend({
         width: "95%",
         height: middleHeight,
         source: dataAdapter,
         columns: columns
-    }, opts));
+    }, opts.tree));
 }
 function CreateAjaxLoadTree(treeid, url, datafields, columns, isMutilSelect, opts) {
     treeid = '#' + treeid;
@@ -213,7 +322,7 @@ function CreateAjaxLoadTree(treeid, url, datafields, columns, isMutilSelect, opt
                   root: 'Rows',
                   url: url
               };
-    
+
     var totalHeight = $(window).outerHeight();
     if (totalHeight == 0) {
         totalHeight = $(window).clientHeight();
@@ -249,7 +358,7 @@ function CreateAjaxLoadTree(treeid, url, datafields, columns, isMutilSelect, opt
     $(treeid).data("source", source);
     $(treeid).jqxTreeGrid($.extend({
         width: "95%",
-        height: middleHeight, 
+        height: middleHeight,
         columns: columns,
         virtualModeRecordCreating: function (record) {
 
@@ -260,7 +369,8 @@ function CreateAjaxLoadTree(treeid, url, datafields, columns, isMutilSelect, opt
 
             var dataAdapter = new $.jqx.dataAdapter(source,
 
-                {  formatData: function (data) {
+                {
+                    formatData: function (data) {
 
                         if (expandedRecord == null) {
 
@@ -290,14 +400,14 @@ function CreateAjaxLoadTree(treeid, url, datafields, columns, isMutilSelect, opt
 
                         throw new Error("http://services.odata.org: " + error.toString());
 
-                    } 
+                    }
                 }
 
             );
 
             dataAdapter.dataBind();
 
-        }, 
+        },
     }, opts));
 }
 function EditTree(treeid, url) {
@@ -338,9 +448,9 @@ var theme = "";
 
 var pagerrenderer = function (gridid) {
     var pageelement;
-     
-    var    gridid = "#"+this.wrapper.prevObject[0].id;
-   
+
+    var gridid = "#" + this.wrapper.prevObject[0].id;
+
     var datainfo = $(gridid).jqxGrid('getdatainformation');
     var paginginfo = datainfo.paginginformation;
 
@@ -440,10 +550,10 @@ function Query(msg, onOk, title) {
         resizable: false, isModal: true, modalOpacity: 0.3, autoOpen: false,
         okButton: $('#ok'), cancelButton: $('#cancel'),
         initContent: function () {
-          
-            $('#ok').jqxButton({ width: '65px' }); 
+
+            $('#ok').jqxButton({ width: '65px' });
             $('#cancel').jqxButton({ width: '65px' });
-            $('#ok').focus(); 
+            $('#ok').focus();
         }
     });
     $('#eventWindowContent').html(msg);
@@ -451,3 +561,14 @@ function Query(msg, onOk, title) {
     $('#ok').one('click', onOk);
     $('#eventWindow').jqxWindow('open');
 };
+
+
+function CloseDialog() {
+    if (!document.parentWindow) {
+        window.parent.CloseThisDialog();
+
+    } else {
+        document.parentWindow.parent.CloseThisDialog();
+    }
+
+}

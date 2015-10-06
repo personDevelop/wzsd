@@ -53,6 +53,8 @@
     <Compile Include="AttachFileBll.cs" />
     <Compile Include="CouponRuleBll.cs" />
     <Compile Include="FunctionInfoBll.cs" />
+    <Compile Include="FunctionRightBll.cs" />
+    <Compile Include="LogBll.cs" />
     <Compile Include="ManagerUserInfoBll.cs" />
     <Compile Include="MemberOrderBll.cs" />
     <Compile Include="NewsCategoryBll.cs" />
@@ -67,11 +69,13 @@
     <Compile Include="ShopOrderBll.cs" />
     <Compile Include="ShopPaymentTypesBll.cs" />
     <Compile Include="ShopProductInfoBll.cs" />
+    <Compile Include="ShopProductReviewsBll.cs" />
     <Compile Include="ShopProductTypeBll.cs" />
     <Compile Include="ShopPromotionBll.cs" />
     <Compile Include="ShopShippingAddressBll.cs" />
     <Compile Include="ShopShoppingCartsBll.cs" />
     <Compile Include="SysDeleteCasCheckBll.cs" />
+    <Compile Include="SysRoleAndUserRalationBll.cs" />
     <Compile Include="SysRoleInfoBll.cs" />
   </ItemGroup>
   <ItemGroup>

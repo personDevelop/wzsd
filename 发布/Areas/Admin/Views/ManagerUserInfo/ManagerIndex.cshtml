@@ -1,0 +1,147 @@
+﻿@using MVCExtention;
+@{
+    ViewBag.Title = "管理会员";
+}
+
+<!--工具栏-->
+<div id="floatHead" class="toolbar-wrap">
+    <div class="toolbar">
+        <div class="box-wrap">
+            <a class="menu-btn"></a>
+            <div class="l-list">
+                <ul class="icon-list">
+                    <li><a class="add" href="@Url.Action("Edit")"><i></i><span>新增</span></a></li>
+                    <li><a class="add" href="javascript:;" onclick="EditTree('treeGrid', '@Url.Action("Edit")');"><i></i><span>编辑</span></a></li>
+                    <li><a class="del" href="javascript:;" onclick="DelTree('treeGrid', '@Url.Action("Delete")');"><i></i><span>删除</span></a></li> 
+                    <li><a class="add" href="javascript:;" onclick="ChangeStatus(2 );"><i></i><span>锁定</span></a></li>
+                    <li><a class="del" href="javascript:;" onclick="ChangeStatus(1);"><i></i><span>解锁</span></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/工具栏-->
+<dl>
+    <dt>
+
+    </dt>
+    <dd>
+        <table width="80%" class="borderkuang" border="0" cellspacing="0" cellpadding="0">
+            <tbody>
+                <tr>
+                    <td>
+                        @HelperExtend.img("icon-1.gif", "width:19px,height:19px")搜索：
+                    </td>
+                    <td>
+                        会员账号：
+                    </td>
+                    <td>
+                        <input type="text" id="UserCode">
+                    </td>
+                    <td>
+                        会员姓名：
+                    </td>
+
+                    <td><input type="text" id="UserName"></td>
+                    <td>会员状态：</td>
+                    <td>
+                        @HelperExtend.DropDownListEnum("UserStatus", enumType: typeof(EasyCms.Model.UserStatus))
+                    </td>
+
+                    <td>
+                        <input id="btnQry" type="button" value="搜索">
+                    </td>
+
+                </tr>
+
+            </tbody>
+        </table>
+    </dd>
+</dl>
+<!--列表-->
+<div class="table-container">
+    <div id="jqxgrid"></div>
+</div>
+<!--/列表-->
+@section  scripts{
+
+
+    <script type="text/javascript">
+        $(function () {
+            $("#UserCode").jqxInput({ height: '25px' });
+            $("#UserName").jqxInput({ height: '25px' });
+            $("#btnQry").jqxButton({ width: '100', template: 'success' });
+            $("#btnQry").on("click", function () { $('#jqxgrid').jqxGrid('updatebounddata'); });
+
+        });
+        function ChangeStatus(status) {
+            var rowindex = $('#jqxgrid').jqxGrid('getselectedrowindex');
+            if (rowindex >= 0) {
+                var data = $('#jqxgrid').jqxGrid('getrowdata', rowindex);
+
+                var msg = "确定要锁定会员[" + data.Code + "]吗？";
+                if (status == 1) {
+                    msg = "确定要解除锁定会员[" + data.Code + "]吗？";
+                }
+                Query(msg, function () {
+
+                    $.post('@Url.Action("ChangeStatus")', { id: data.ID, status: status }, function (result) {
+
+                        if (result == "操作成功") {
+                            SucessMsg(result);
+                            $('#jqxgrid').jqxGrid('setcellvalue', rowindex, "Status", status);
+                        } else {
+                            ErrorMsg("操作失败");
+                        }
+                    })
+                });
+            } else {
+                WarningMsg("请选择要操作的会员");
+
+            }
+
+
+        }
+        $(document).ready(function () {
+            var url = "@Url.Action("GetListForManager")";
+            var datafields = [{ name: 'ID' }, { name: 'Code' }, { name: 'Name' }, { name: 'NickyName' }, { name: 'Birthday', type: "date" }, { name: 'Sex' },
+		{ name: 'ContactPhone' }, { name: 'CreateDate', type: "date" }, { name: 'LastModifyDate', type: "date" },
+		  { name: 'Status' }];
+            var columns = [
+    { text: '编号', dataField: 'Code', cellsalign: "left", width: 100 },
+
+  { text: '姓名', dataField: 'Name', cellsalign: "left", width: 100 },
+
+  { text: '昵称', dataField: 'NickyName', cellsalign: "left", width: 100 },
+
+  { text: '生日', dataField: 'Birthday', width: 100, cellsformat: "yyyy-MM-dd" },
+
+  { text: '性别', dataField: 'Sex', width: 60, valObj: [{ key: 0, val: '男' }, { key: 1, val: '女' }, { key: 2, val: '保密' }] },
+
+  { text: '联系手机', dataField: 'ContactPhone', width: 100 },
+
+
+
+  { text: '注册日期', dataField: 'CreateDate', width: 200, cellsformat: "yyyy-MM-dd HH:mm" },
+
+  { text: '最后登陆日期', dataField: 'LastModifyDate', width: 200, cellsformat: "yyyy-MM-dd HH:mm" },
+
+  { text: '状态', dataField: 'Status', width: 100, valObj: [{ key: 0, val: '未激活' }, { key: 1, val: '正常' }, { key: 2, val: '锁定' }, { key: 3, val: '注销' }] }];
+            CreateGrid("jqxgrid", url, datafields, columns, {
+                 adapter: {
+                    formatData: function (data) {
+
+
+                        data.UserCode = $("#UserCode").val();
+
+                        data.UserName = $("#UserName").val(); 
+                        data.UserStatus = $("#UserStatus").val(); 
+                    }
+
+                }
+            });
+
+
+        });
+    </script>
+}

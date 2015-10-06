@@ -10,14 +10,14 @@ using EasyCms.Web.Common;
 
 namespace EasyCms.Web.Areas.Admin.Controllers
 {
-    public class ShopExtendInfoValueController : Controller
+    public class ShopExtendInfoValueController : BaseControler
     {
         ShopProductTypeBll bll = new ShopProductTypeBll();
         //
         // GET: /Admin/ShopExtendInfoValue/
         public ActionResult Index(string ID)
         {
-            ViewData.Add("attriID", ID);
+
             if (string.IsNullOrEmpty(ID))
             {
                 ViewData.Add("ShopExtendInfoEntity", null);
@@ -27,13 +27,13 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             return View();
         }
 
-        public string GetList(int pagenum, int pagesize, string attriID)
+        public string GetList(string attriID)
         {
-            int recordCount = 0;
-            System.Data.DataTable dt = bll.GetValList(attriID, pagenum + 1, pagesize, ref   recordCount);
+          
+            System.Data.DataTable dt = bll.GetValList(host,attriID);
 
             string result = JsonWithDataTable.Serialize(dt);
-            result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
+            //result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
             return result;
 
         }
@@ -59,7 +59,10 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                     p = collection.Bind<ShopExtendInfoValue>();
 
                 }
+
+                p.ShopExtendInfo = bll.GetShopExtendInfo(collection["AttributeId"]);
                 bll.SaveAttrVal(p);
+                ModelState.Clear();
                 if (TempData.ContainsKey("IsSuccess"))
                 {
                     TempData["IsSuccess"] = "保存成功";
@@ -69,7 +72,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                 {
                     TempData.Add("IsSuccess", "保存成功");
                 }
-                ModelState.Clear();
+               
                 if (collection["IsContinueAdd"] == "1")
                 {
                     p = new ShopExtendInfoValue();
@@ -88,16 +91,24 @@ namespace EasyCms.Web.Areas.Admin.Controllers
 
         //
         // GET: /Admin/ShopExtendInfoValue/Edit/5
-        public ActionResult Edit(string id)
+        public ActionResult Edit(string id, string other)
         {
-
+            string attrid = other;
             ShopExtendInfoValue p = null;
-            if (string.IsNullOrWhiteSpace(id))
+         
+            if (string.IsNullOrWhiteSpace(id) || id == "new")
             {
                 p = new ShopExtendInfoValue();
+                p.AttributeId = other;
+
             }
             else
+            {
                 p = bll.GetAttrEntity(id);
+                attrid = p.AttributeId;
+            }
+            p .ShopExtendInfo= bll.GetShopExtendInfo(attrid);
+            ViewBag.indexid = attrid;
             return View("Edit", p);
         }
 
@@ -106,7 +117,16 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         // GET: /Admin/ShopExtendInfoValue/Delete/5
         public string Delete(string id)
         {
-            return bll.DeleteAttrVal(id).ToString();
+            string result = "";
+            bll.DeleteAttrVal(id, out result);
+            return result;
         }
+
+        public string CheckRepeat(string ID, string AttributeId, string RecordStatus, string val )
+        {
+            return bll.Exit(ID, AttributeId, RecordStatus, val ).ToString().ToLower();
+
+        }
+       
     }
 }

@@ -1,0 +1,181 @@
+﻿@using MVCExtention;
+@{
+    ViewBag.Title = "操作日志";
+}
+
+<!--工具栏-->
+<div id="floatHead" class="toolbar-wrap">
+    <div class="toolbar">
+        <div class="box-wrap">
+            <a class="menu-btn"></a>
+            <div class="l-list">
+                <ul class="icon-list">
+                    <li><a class="del" href="javascript:;" onclick="DelGrid('jqxgrid', '@Url.Action("Delete")');"><i></i><span>删除</span></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/工具栏-->
+<!--列表-->
+<dl>
+    <dt>
+
+    </dt>
+    <dd>
+        <table class="borderkuang" border="0" cellspacing="0" cellpadding="0">
+            <tbody>
+                <tr>
+                    <td width="80">
+                        @HelperExtend.img("icon-1.gif", "width:19px,height:19px")搜索：
+                    </td>
+
+                    <td width="80">
+                        发生日期：
+                    </td>
+
+                    <td>
+
+                        <div id='StartDate'>  </div>
+
+                    </td>
+                    <td width="10">
+                        -
+
+                    </td>
+                    <td>
+
+                        <div id='EndDate'>  </div>
+
+                    </td>
+                    <td width="80">日志分类：</td>
+                    <td height="35">
+                        @HelperExtend.DropDownListEnum("QryLogType", enumType: typeof(EasyCms.Model.QryLogType))
+                    </td>
+                    <td><input type="checkbox" id="OnlyApp" />只查看APP异常</td>
+                    <td>
+                        <input id="btnQry" type="button" value="搜索">
+                    </td>
+                    <td></td>
+                </tr>
+
+            </tbody>
+        </table>
+    </dd>
+</dl>
+<div class="table-container">
+    <div id="jqxgrid"></div>
+</div>
+<div id="window" style=" display:none">
+    <div id="windowHeader">
+        <span>
+            <img src="@Url.Content("~/Content/Images/movie.png")" alt="" style="margin-right: 15px" />详细信息
+        </span>
+    </div>
+    <div style="overflow: hidden;" id="windowContent">
+        <textarea id="detail" style="width:90%; height:90%"></textarea>
+    </div>
+</div>
+<!--/列表-->
+@section  scripts{
+
+    <script type="text/javascript">
+        function get3MonthBefor() {
+            var resultDate, year, month, date, hms;
+            var currDate = new Date();
+            year = currDate.getFullYear();
+            month = currDate.getMonth();
+            date = currDate.getDate();
+            /*hms = currDate.getHours() + ':' + currDate.getMinutes() + ':' + (currDate.getSeconds() < 10 ? '0' + currDate.getSeconds() : currDate.getSeconds());*/
+            switch (month) {
+                case 0:
+                case 1:
+                case 2:
+                    month += 8;
+                    year--;
+                    break;
+                default:
+                    month -= 3;
+                    break;
+            }
+            month = (month < 10) ? ('0' + month) : month;
+
+            resultDate = new Date(year, month, date);
+            return resultDate;
+        }
+        $(function () {
+            $("#StartDate").jqxDateTimeInput({ formatString: "yyyy-MM-dd", width: 100, height: '25px', showCalendarButton: true });
+            $("#EndDate").jqxDateTimeInput({ formatString: "yyyy-MM-dd", width: 100, height: '25px', showCalendarButton: true });
+            $("#QryLogType").jqxDropDownList('uncheckAll');
+            $('#EndDate').jqxDateTimeInput('setDate', new Date());
+            $('#StartDate').jqxDateTimeInput('setDate', get3MonthBefor());
+            $("#btnQry").jqxButton({ width: '150', template: 'success' });
+            $("#btnQry").on("click", function () { $('#jqxgrid').jqxGrid('updatebounddata'); });
+            $('#window').jqxWindow({
+                showCollapseButton: true, maxHeight: 400, maxWidth: 700, minHeight: 200, minWidth: 200, height: 300, width: 500
+            });
+
+        });
+
+
+    </script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            var url = "@Url.Action("GetList")";
+            var deleteUrl = "@Url.Action("Delete")";
+            var datafields = [{ name: 'ID' },
+		{ name: 'Info' }, { name: 'CrateDate' }, { name: 'msgOrder' }, { name: 'OrderName' }, { name: 'Createor' }, { name: 'CreateorName' }, { name: 'FunName' }, { name: 'ModleNameSource' }, { name: 'ContextInfo' }];
+            var columns = [
+  { text: '日志信息', dataField: 'Info', cellsalign: "left" },
+  { text: '日志类型', dataField: 'OrderName', width: 100 },
+     { text: '发生日期', dataField: 'CrateDate', width: 120, cellsformat: "yyyy-MM-dd HH:mm" },
+  { text: '对应功能', dataField: 'FunName', width: 100 },
+    { text: '是APP', dataField: 'ModleNameSource', width: 80 },
+    { text: '上下文信息', dataField: 'ContextInfo', width: 100 },
+    { text: '操作人', dataField: 'CreateorName', width: 100 },
+ {
+     text: '操作', datafield: 'ID', width: 200, cellsrenderer: function (row, column, value) {
+
+         var html = "  <div style='text-align: center; overflow: hidden; padding-bottom: 2px; margin-top: 4px; text-overflow: ellipsis;'>";
+         html +=
+              "<a href='javascript:;' onclick='VideDeatil(\"" + value + "\");'  >详细信息</a> &nbsp;&nbsp;&nbsp;" +
+          "<a  href='javascript:;' onclick='DelGrid(\"jqxgrid\",\"" + deleteUrl + "\",\"" + value + "\");'  >删除</a>";
+         html += "</div>";
+         return html;
+     }
+ }];
+            CreateGrid("jqxgrid", url, datafields, columns, {
+                isMutilSelect: true, adapter: {
+                    formatData: function (data) {
+                        data.StartDate = $("#StartDate").val();
+
+                        data.EndDate = $("#EndDate").val();
+
+                        data.QryLogType = $("#QryLogType").val();
+                        data.isApp = $("#OnlyApp").prop("checked");
+                    }
+
+                }, grid: { localization: "zh-Hans" }
+            });
+
+        });
+
+        function VideDeatil(rowid) {
+            var data = $('#jqxgrid').jqxGrid('getrowdatabyid', rowid);
+            var detail = "详细信息：" + data.Info;
+            if ( data.FunName) {
+                detail += data.FunName; 
+            }  
+            if (data.ContextInfo) {
+                detail += "\r\n\r\n上下文信息：" + data.ContextInfo;
+            }
+
+            $("#detail").val(detail);
+            $('#window').jqxWindow("open");
+        }
+    </script>
+}
+

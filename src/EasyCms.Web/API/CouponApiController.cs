@@ -13,17 +13,10 @@ namespace EasyCms.Web.API
     {
         public HttpResponseMessage GetCoupon()
         {
-            try
-            {
-
+           
                 DataTable dt = new CouponRuleBll().GetCoupon(host);
                 return dt.Format();
-            }
-            catch (Exception ex)
-            {
-
-                return ex.Format();
-            }
+           
         }
     }
 }

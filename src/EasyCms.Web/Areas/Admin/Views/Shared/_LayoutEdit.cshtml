@@ -14,7 +14,7 @@
 </head>
 
 <body class="mainbody">
-  
+
     @Html.Partial("_Location")
     @using (Html.BeginForm("Save", null))
     {
@@ -33,7 +33,15 @@
 
     }
 
+    <script type="text/javascript">
 
+      
+        $(function () { 
+            if ("@TempData.ContainsKey("IsSuccess").ToString().ToLower()" == "true") {
+                SucessMsg("@TempData["IsSuccess"]");
+            } 
+        });
+    </script>
     @RenderSection("scripts", required: false)
 
 </body>

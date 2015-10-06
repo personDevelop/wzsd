@@ -11,7 +11,7 @@ using System.Web.Helpers;
 
 namespace EasyCms.Web.Areas.Admin.Controllers
 {
-    public class ShopProductTypeController : Controller
+    public class ShopProductTypeController : BaseControler
     {
         ShopProductTypeBll bll = new ShopProductTypeBll();
         //
@@ -41,7 +41,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
 
         public string GetAttrList(string ptypeid, bool isGg)
         {
-            System.Data.DataTable dt = bll.GetAttrList(ptypeid, isGg);
+            System.Data.DataTable dt = bll.GetAttrList(host, ptypeid, isGg);
             return JsonWithDataTable.Serialize(dt);
         }
 
@@ -147,7 +147,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             return bll.Delete(id);
         }
 
-        public ActionResult EditExtend(int id, string other)
+        public ActionResult AddExtend(int id, string other)
         {
             ShopExtendInfo extend = null;
             if (!string.IsNullOrWhiteSpace(other))
@@ -173,14 +173,14 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                 {
                     extend.UsageMode = 2;
                     //规格
-                    return View("EditGg", extend);
+                    return View("AddGg", extend);
 
                 }
                 else
                 {
                     extend.UsageMode = 0;
                     //扩展属性
-                    return View("EditExtend", extend);
+                    return View(extend);
                 }
             }
             return new ContentResult() { Content = "没有商品类型" };
@@ -236,10 +236,40 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         }
 
 
-        public ActionResult AddExtendVal(string AttributeId, string Vals)
+        public ActionResult AddValue(string id)
+        {
+            ShopExtendInfo extend = bll.GetShopExtendInfo(id);
+            ViewBag.IsGg = false;
+            ViewBag.TypeName = "属性";
+            ViewBag.AttriId = id;
+            if (extend.UsageMode > 1)
+            {
+                //是规格
+                ViewBag.Title = "添加规格值";
+                ViewBag.IsGg = true;
+                ViewBag.TypeName = "规格";
+                ViewBag.Discribe = " <h1>添加【" + extend.Name + @"】的规格值</h1>添加供客户可选的规格,如服装类型商品的颜色、尺码。";
+            }
+            else
+            {
+                //是属性
+                ViewBag.Title = "添加属性值";
+                ViewBag.Discribe = " <h1>添加【" + extend.Name + @"】的属性值</h1>商品类型是一系列属性的组合，可以用来向客户展示某些商品具有的特有的属性。";
+            }
+            if (extend.UseAttrImg)
+            {
+                return View("AddImg");
+            }
+            else
+                return View();
+
+
+        }
+        public ActionResult SaveValue(string AttributeId, string Vals)
         {
             try
             {
+
                 AddVals(AttributeId, Vals);
                 return Json(new { result = true, msg = string.Empty });
             }
@@ -249,7 +279,6 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                 return Json(new { result = false, msg = ex.Message });
             }
         }
-
         private void AddVals(string AttributeId, string Vals)
         {
             if (!string.IsNullOrWhiteSpace(Vals))
@@ -273,7 +302,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                 int i = bll.Save(list);
             }
         }
-        public ActionResult AddExtendImgVal(string AttributeId, string ImageID, string Note)
+        public ActionResult SaveImgValue(string AttributeId, string ImageID, string Note)
         {
             try
             {
@@ -298,6 +327,22 @@ namespace EasyCms.Web.Areas.Admin.Controllers
 
         }
 
+
+        [HttpPost]
+        //
+        // GET: /Admin/ShopProductInfo/Delete/5
+        public string DeleteExtend(string id )
+        {
+            return bll.DeleteExtend(id );
+        }
+
+        [HttpPost]
+        //
+        // GET: /Admin/ShopProductInfo/Delete/5
+        public string DeleteExtendValue(string id)
+        {
+            return bll.DeleteExtendValue(id);
+        }
 
     }
 }
