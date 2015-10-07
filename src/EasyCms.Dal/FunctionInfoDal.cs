@@ -17,15 +17,23 @@ namespace EasyCms.Dal
 
             string error = "";
             Dal.Delete("FunctionInfo", "ID", id, out error);
+            //清空缓存
+            CacheContainer.RemoveCache(StaticValue.FunctionRightCachKey);
+            //清空缓存
+            CacheContainer.RemoveCache(StaticValue.FunctionCachKey);
             return error;
 
         }
 
         public int Save(FunctionInfo item)
         {
-            return CommonDal.UpdatePath<FunctionInfo>(Dal, item, FunctionInfo._.ID, FunctionInfo._.ParentID, FunctionInfo._.ClassCode, FunctionInfo._.OrderNo, FunctionInfo._.Js, null);
+            int i = CommonDal.UpdatePath<FunctionInfo>(Dal, item, FunctionInfo._.ID, FunctionInfo._.ParentID, FunctionInfo._.ClassCode, FunctionInfo._.OrderNo, FunctionInfo._.Js, null);
 
-
+            //清空缓存
+            CacheContainer.RemoveCache(StaticValue.FunctionRightCachKey);
+            //清空缓存
+            CacheContainer.RemoveCache(StaticValue.FunctionCachKey);
+            return i;
         }
 
 
@@ -100,13 +108,26 @@ namespace EasyCms.Dal
                     OrderBy(FunctionInfo._.OrderNo).ToDataTable();
         }
 
-        public List<FunctionInfo> GetListWithUrl(int funcType)
+        public List<FunctionInfo> GetListWithUrl(string roleid, int funcType)
         {
-            List<FunctionInfo> list =
-             Dal.From<FunctionInfo>().
+            if (roleid == "root")
+            {
+                return Dal.From<FunctionInfo>().
+
                     Select(FunctionInfo._.ID, FunctionInfo._.ShowText, FunctionInfo._.ClassCode, FunctionInfo._.AccessType, FunctionInfo._.ParentID, FunctionInfo._.URL, FunctionInfo._.CallArea, FunctionInfo._.CallControler, FunctionInfo._.CallAction, FunctionInfo._.Description, FunctionInfo._.Js).
                     Where(FunctionInfo._.Enable == true && FunctionInfo._.FuncType == funcType)
                     .OrderBy(FunctionInfo._.Js, FunctionInfo._.OrderNo).
+                     List<FunctionInfo>();
+
+            }
+            List<FunctionInfo> list =
+             Dal.From<FunctionInfo>().Join<FunctionRight>(FunctionInfo._.ID == FunctionRight._.FunID, JoinType.leftJoin).
+
+                    Select(FunctionInfo._.ID, FunctionInfo._.ShowText, FunctionInfo._.ClassCode, FunctionInfo._.AccessType, 
+                    FunctionInfo._.ParentID, FunctionInfo._.URL, FunctionInfo._.CallArea, FunctionInfo._.CallControler,
+                    FunctionInfo._.CallAction, FunctionInfo._.Description, FunctionInfo._.Js, FunctionInfo._.OrderNo).
+                    Where(FunctionInfo._.Enable == true && FunctionInfo._.FuncType == funcType && (FunctionRight._.RoleID == roleid || (FunctionInfo._.IsMust == true || FunctionInfo._.IsAnony == true)))
+                    .OrderBy(FunctionInfo._.Js, FunctionInfo._.OrderNo).Distinct().
                      List<FunctionInfo>();
             return list;
         }

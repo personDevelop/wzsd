@@ -30,15 +30,15 @@
     <div class="main-top">
         <a class="icon-menu"></a>
         <div id="main-nav" class="main-nav">
-            <a class="">站点</a><a>商品</a><a>会员</a><a class="selected">营销</a><a>订单</a>
+
 
         </div>
         <div class="nav-right">
             <div class="info">
                 <i></i>
                 <span>
-                    您好，@*<%=admin_info.user_name %>*@<br>
-                    @*<%=new DTcms.BLL.manager_role().GetTitle(admin_info.role_id) %>*@
+                    您好，@EasyCms.Session.CmsSession.GetUserName() (@EasyCms.Session.CmsSession.GetRoleName())
+                    <br />@DateTime.Now.ToString()
                 </span>
             </div>
             <div class="option">
@@ -56,7 +56,8 @@
                             <a href="manager/manager_pwd.aspx" onclick="linkMenuTree(false, '');" target="mainframe">修改密码</a>
                         </li>
                         <li>
-                            <asp:LinkButton ID="lbtnExit" runat="server" onclick="lbtnExit_Click">注销登录</asp:LinkButton>
+                            <a href="manager/manager_pwd.aspx" onclick="linkMenuTree(false, '');" target="mainframe">注销登录</a>
+                            
                         </li>
                     </ul>
                 </div>

@@ -6,16 +6,19 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Text;
+using EasyCms.Session;
 
 namespace EasyCms.Web.Areas.Admin.Controllers
 {
     public class IndexController : Controller
     {
+
         //
         // GET: /Admin/Index/
         public ActionResult Index()
         {
-            List<FunctionInfo> list = new FunctionInfoBll().GetListWithUrl(0);
+
+            List<FunctionInfo> list = new FunctionInfoBll().GetListWithUrl(CmsSession.GetRoleID(), 0);
             StringBuilder sb = new StringBuilder();
             foreach (var item in list.Where(p => p.Js == 1))
             {
@@ -26,7 +29,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                     <h1 title='{0}'><img src='{1}' /></h1>
                     <div class='list-wrap'>
                         <h2>{2}<i></i></h2>", item.ShowText, item.Image, first.ShowText);
-                    
+
                     GetChildList(list, first.ID, sb);
                     sb.AppendFormat("</div></div>");
 
@@ -65,8 +68,8 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                                 break;
                         }
                     }
-                    sb.AppendFormat(@"  <li> <a href='{1}' target='mainframe' > <span>{0}</span>  </a>",
-                        item.ShowText, url);
+                    sb.AppendFormat(@"  <li> <a href='{1}' navid='{2}' target='mainframe' > <span>{0}</span>  </a>",
+                        item.ShowText, url,item.ID);
 
                     GetChildList(list, item.ID, sb);
                     sb.Append(" </li>");
@@ -74,6 +77,6 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                 sb.Append(" </ul>");
             }
         }
-        
+
     }
 }

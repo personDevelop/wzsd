@@ -64,9 +64,9 @@ namespace EasyCms.Business
             return Dal.GetParentMoudle();
         }
 
-        public List<FunctionInfo> GetListWithUrl(int functype)
+        public List<FunctionInfo> GetListWithUrl(string roleid,int functype)
         {
-            return Dal.GetListWithUrl(functype);
+            return Dal.GetListWithUrl(roleid, functype);
         }
         private static List<FunctionInfo> GetAllFucntion()
         {

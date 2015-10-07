@@ -14,6 +14,7 @@ namespace EasyCms.Session
         public const string UserName = "UserName";
         public const string UserInfo = "UserInfo";
         public const string RoleID = "RoleID";
+        public const string RoleName = "RoleName";
         public const string RoleInfo = "RoleInfo";
 
         public static dynamic GetUser()
@@ -66,6 +67,14 @@ namespace EasyCms.Session
             return Session[RoleID] as string;
         }
 
+        public static string GetRoleName()
+        {
+            if (Session == null)
+            {
+                return null;
+            }
+            return Session[RoleName] as string ;
+        }
 
 
 
@@ -78,8 +87,10 @@ namespace EasyCms.Session
             Session[UserInfo] = user;
             Session[RoleInfo] = role;
             Session[UserID] = user.ID;
-            Session[RoleID] = role.ID;
+            Session[RoleID] = role.ID; 
             Session[UserName] = user.Name;
+            Session[RoleName] = role.Name;
+            
         }
     }
 }

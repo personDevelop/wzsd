@@ -311,6 +311,7 @@
     </Content>
     <Content Include="Config\System\DataBaseConnect.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Content\artdialog\dialog-min.js" />
     <Content Include="Content\artdialog\dialog-plus-min.js" />

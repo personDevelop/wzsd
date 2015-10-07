@@ -181,6 +181,8 @@ namespace EasyCms.Dal
                     {
                         dal.SubmitNew(tr, ref dal, list);
                         dal.CommitTransaction(tr);
+                        //清空缓存
+                        CacheContainer.RemoveCache(StaticValue.FunctionRightCachKey);
                     }
                     catch (Exception)
                     {
