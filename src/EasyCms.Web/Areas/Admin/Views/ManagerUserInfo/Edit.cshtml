@@ -21,15 +21,15 @@
     </div>
 </div>
 <div class="tab-content">
-     
+
 
     @HelperExtend.HiddenFor("ID", Model.ID)
-    @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())  
-    @Html.ValidationSummary() 
+    @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())
+    @Html.ValidationSummary()
 
     @HelperExtend.TextBox("Code", "账号", defaultval: Model.Code, hint: "")
 
-    
+
 
     @HelperExtend.TextBox("Name", "姓名", defaultval: Model.Name, hint: "")
 
@@ -47,11 +47,11 @@
 
     @HelperExtend.DateTime("Birthday", "生日", defaultval: Model.Birthday, hint: "")
 
-    @HelperExtend.RadioGroup("Sex", "性别", vals:"0,1,2",texts:"保密,男,女", defaultval: Model.Sex, hint: "")
+    @HelperExtend.RadioGroup("Sex", "性别", vals: "0,1,2", texts: "保密,男,女", defaultval: Model.Sex, hint: "")
 
     @HelperExtend.TextBox("ContactPhone", "联系手机", defaultval: Model.ContactPhone, hint: "")
     @HelperExtend.RadioGroup("IsManager", "后台管理员", vals: "false,true", texts: "否,是", defaultval: Model.IsManager, hint: "")
-   
+
 
     @HelperExtend.TextBox("CreateDate", "创建日期", defaultval: Model.CreateDate, hint: "")
 
@@ -61,10 +61,10 @@
 
     @HelperExtend.TextBox("Status", "状态", defaultval: Model.Status, hint: "")
 
-    @HelperExtend.TextBox("Note", "备注", defaultval: Model.Note, hint: "") 
-     
-</div> 
- 
+    @HelperExtend.TextBox("Note", "备注", defaultval: Model.Note, hint: "")
+
+</div>
+
 @section  scripts{
 
 
@@ -84,17 +84,29 @@
                             url: '@Url.Action("CheckRepeat")',
                             data: {
                                 ID: function () { return $("#ID").val(); },
-                                ParentID: function () { return $("#ParentID").val(); },
                                 RecordStatus: function () { return $("#RecordStatus").val(); },
-                                val: function () { return $("#Code").val(); }  
+                                val: function () { return $("#Code").val(); },
+                                IsCode: true
                             }
                         }
                     },
                     Name: {
                         required: true,
-                        maxlength: 100 
+                        maxlength: 100
                     },
-                    ClassTypeID: { required: true },
+
+                    Email: {
+                        required: true,
+                        remote: {
+                            url: '@Url.Action("CheckRepeat")',
+                            data: {
+                                ID: function () { return $("#ID").val(); },
+                                RecordStatus: function () { return $("#RecordStatus").val(); },
+                                val: function () { return $("#Email").val(); },
+                                IsCode: false
+                            }
+                        }
+                    },
                     Note: {
                         maxlength: 500
                     }
@@ -108,7 +120,12 @@
                     Name: {
                         required: "请输入名称",
                         maxlength: $.validator.format("名称长度不能大于{0}个字符"),
-                       
+
+                    },
+
+                    Email: {
+                        required: "邮箱不能为空",
+                        remote: "Email已被使用"
                     }
                 },
                 errorPlacement: function (error, element) {
@@ -124,6 +141,4 @@
             });
         })
     </script>
-
-    
 }

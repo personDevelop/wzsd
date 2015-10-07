@@ -349,6 +349,11 @@
     <Content Include="Content\skin\default\skin_icons.png" />
     <Content Include="Content\skin\default\style.css" />
     <Content Include="Content\skin\default\valid_icons.png" />
+    <Content Include="Content\skin\images\login.css" />
+    <Content Include="Content\skin\images\login_bg.jpg" />
+    <Content Include="Content\skin\images\login_box_bg.png" />
+    <Content Include="Content\skin\images\login_btn.png" />
+    <Content Include="Content\skin\images\master_logo2.png" />
     <Content Include="Content\skin\layout.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
@@ -770,6 +775,7 @@
     <Content Include="Areas\Admin\Views\SysRoleAndUserRalation\Index.cshtml" />
     <Content Include="Areas\Admin\Views\SysRoleAndUserRalation\AddRolePerson.cshtml" />
     <Content Include="Areas\Admin\Views\LogOper\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Login\Index - 复制.cshtml" />
     <None Include="Properties\PublishProfiles\publish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\EshopAdminControl.js" />

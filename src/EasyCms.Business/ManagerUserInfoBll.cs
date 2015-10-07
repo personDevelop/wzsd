@@ -97,9 +97,10 @@ namespace EasyCms.Business
         {
             return Dal.GetList(pagenum, pagesize, ref   recordCount, IsForSelected);
         }
-        public bool Exit(string ID, string ParentID, string RecordStatus, string val)
+        public bool Exit(string ID, string RecordStatus, string val, bool isCode)
         {
-            return Dal.Exit(ID, ParentID, RecordStatus, val);
+
+            return Dal.Exit(ID, RecordStatus, val, isCode);
 
         }
 

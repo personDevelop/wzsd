@@ -100,9 +100,9 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
             return result;
         }
-        public string CheckRepeat(string ID, string ParentID, string RecordStatus, string val, bool IsCode)
+        public string CheckRepeat(string ID, string RecordStatus, string val, bool IsCode)
         {
-            return bll.Exit(ID, ParentID, RecordStatus, val).ToString().ToLower();
+            return bll.Exit(ID, RecordStatus, val, IsCode).ToString().ToLower();
 
         }
         //
@@ -132,11 +132,12 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                     if (string.IsNullOrWhiteSpace(p.ID))
                     {
                         p.ID = Guid.NewGuid().ToString();
-                       
+
                     }
                     p.Pwd = "123456".EncryptSHA1();
 
                 }
+                p.IsManager = true;
                 bll.Save(p);
                 if (TempData.ContainsKey("IsSuccess"))
                 {
@@ -167,7 +168,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         // GET: /Admin/ManagerUserInfo/Edit/5
         public ActionResult Edit(string id)
         {
-
+            ViewBag.NewIndex = "ManagerIndex";
             ManagerUserInfo p = null;
             if (string.IsNullOrWhiteSpace(id))
             {

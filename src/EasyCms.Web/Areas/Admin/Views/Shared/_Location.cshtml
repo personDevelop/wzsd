@@ -1,6 +1,14 @@
 ﻿    <!--导航栏-->
 <div class="location">
-    <a href="@Url.Action("index", new { id = ViewBag.indexid==null ? "" : ViewBag.indexid })" class="back"><i></i><span>返回上一页</span></a>
+    @if (ViewBag.NewIndex != null)
+    {
+        <a href="@Url.Action(ViewBag.NewIndex, new { id = ViewBag.indexid == null ? "" : ViewBag.indexid })" class="back"><i></i><span>返回上一页</span></a>
+    }
+    else
+    {
+
+        <a href="@Url.Action("index", new { id = ViewBag.indexid==null ? "" : ViewBag.indexid })" class="back"><i></i><span>返回上一页</span></a>
+    }
     <a href="../center.aspx" class="home"><i></i><span>首页</span></a>
     <i class="arrow"></i>
     <span>@ViewBag.Title</span>

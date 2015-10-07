@@ -37,9 +37,15 @@ namespace EasyCms.Dal
             else
                 return Dal.From<ManagerUserInfo>().OrderBy(ManagerUserInfo._.Code).ToDataTable();
         }
-        public bool Exit(string ID, string parentID, string RecordStatus, string val)
+        public bool Exit(string ID,  string RecordStatus, string val, bool iscode)
         {
-            WhereClip where = ManagerUserInfo._.Name == val;
+            WhereClip where = new WhereClip();
+            if (iscode)
+            {
+                where = ManagerUserInfo._.Code == val;
+            }
+            else { where = ManagerUserInfo._.Email == val; }
+
 
             if (RecordStatus == StatusType.update.ToString())
             {

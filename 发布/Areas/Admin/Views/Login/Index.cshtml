@@ -5,60 +5,68 @@
 }
 
 <!DOCTYPE html>
-
 <html>
 <head>
+    <title>我在山东APP后台管理系统--登录</title>
     <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
+    <link href="@Url.Content("~/Content/skin/images/login.css")" rel="stylesheet" />
+
 </head>
-<body>
-    <h2>@ViewBag.Title。</h2>
-    <div class="row">
-        <div class="col-md-8">
-            <section id="loginForm">
-                @using (Html.BeginForm("Login", "Login", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-                {
-                    @Html.AntiForgeryToken()
-                    <h4>使用本地帐户登录。</h4>
-                    <hr />
-                    @Html.ValidationSummary( )
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.UserName, new { @class = "col-md-2 control-label" })
-                        <div class="col-md-10">
-                            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(m => m.UserName)
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
-                        <div class="col-md-10">
-                            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(m => m.Password)
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
-                            <div class="checkbox">
-                                @Html.CheckBoxFor(m => m.RememberMe)
-                                @Html.LabelFor(m => m.RememberMe)
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
-                            <input type="submit" value="登录" class="btn btn-default" />
-                        </div>
-                    </div>
-                    <p>
-                        @Html.ActionLink("注册", "Register") (如果你没有本地帐户)。
-                    </p>
-                }
-            </section>
+<body id=loginFrame>
+    <div id=header>
+        <div id=logo>
+            <a title="我在山东APP"></a>
         </div>
-       
     </div>
-    @section Scripts {
-        @Scripts.Render("~/bundles/jqueryval")
-    }
+    <div id=loginBox>
+        <div id=loginBoxHeader></div>
+        <div id=loginBoxBody>
+            @using (Html.BeginForm("Login", "Login", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <ul class=floatLeft>
+                    <li>
+                        <h4>请用您的管理账号登录</h4>
+                    </li>
+
+
+                    <li>
+                        <p>管理账号:</p>
+
+                        @Html.TextBoxFor(m => m.UserName)
+                        @Html.ValidationMessageFor(m => m.UserName)
+
+                    </li>
+                    <li>
+                        <p>密码:</p>
+                        @Html.PasswordFor(m => m.Password)
+                        @Html.ValidationMessageFor(m => m.Password)
+
+
+                    </li>
+                    <li class=highlight>
+                        <input type="submit" value="登录" class="btn btn-default" />
+                        @*<input id=loginBtn onclick=this.blur(); value=登录 type=submit>*@
+                        @*<a id=regBtn href="" target=_blank>注册新账号</a>*@
+                        <a class=highlight
+                           href="" target=_blank>忘记密码？</a>
+                    </li>
+                    <li>@Html.ValidationSummary()</li>
+
+                </ul>
+
+            }
+
+
+
+            <div class=floatRight>
+                欢迎使用我在山东APP 后台管理系统，在这里您可以发布最新的新闻资讯，同时还能够发布最新的商品信息,及管理会员的最新订单。</br>商城制造者-专注于B2C商城系统设计
+            </div><br clear=all>
+        </div>
+        <div id=loginBoxFooter></div>
+    </div>
+    <div id=footer>@@我在山东 copyRight2015</div>
+
 </body>
 </html>
