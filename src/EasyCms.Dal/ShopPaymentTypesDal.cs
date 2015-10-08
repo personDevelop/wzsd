@@ -94,7 +94,7 @@ namespace EasyCms.Dal
             }
             else
             {
-                ShopOrder order = Dal.From<ShopOrder>().Where(ShopOrderItem._.OrderID == orderID).Select(ShopOrder._.PayMoney).ToFirst<ShopOrder>();
+                ShopOrder order = Dal.From<ShopOrder>().Where(ShopOrder._.ID == orderID).Select(ShopOrder._.PayMoney).ToFirst<ShopOrder>();
                 List<ShopOrderItem> list = Dal.From<ShopOrderItem>().Select(ShopOrderItem._.ProductName).Where(ShopOrderItem._.OrderID == orderID).List<ShopOrderItem>();
                 string body = string.Empty;
                 foreach (var item in list)
