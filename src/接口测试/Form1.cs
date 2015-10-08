@@ -45,5 +45,10 @@ namespace 接口测试
                 MessageBox.Show(ex.Message);
             }
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            new frm签名测试().Show();
+        }
     }
 }

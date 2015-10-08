@@ -252,9 +252,12 @@ namespace EasyCms.Web.API
                 return order.FormatObj(false, ShopOrder._.ParentID.FullName, ShopOrder._.HasChildren.FullName, ShopOrder._.MemberID
                     .FullName, ShopOrder._.MemberName.FullName, ShopOrder._.MemberEmail.FullName, ShopOrder._.MemberCallPhone.FullName, ShopOrder._.RegionID.FullName, ShopOrder._.ShipZip.FullName,
                     ShopOrder._.ShipEmail.FullName, ShopOrder._.ShipModeID
-                    .FullName, ShopOrder._.ShipModeName.FullName, ShopOrder._.PayTypeGateWay.FullName, ShopOrder._.PayTypeID.FullName, ShopOrder._.ExpressCompanyID.FullName, ShopOrder._.FreightAdjust.FullName,
+                    .FullName, ShopOrder._.ShipModeName.FullName, ShopOrder._.PayTypeGateWay.FullName,
+                    ShopOrder._.PayTypeID.FullName, ShopOrder._.ExpressCompanyID.FullName,
+                    ShopOrder._.FreightAdjust.FullName,
                     ShopOrder._.FreightActual.FullName, ShopOrder._.Weight
-                    .FullName, ShopOrder._.CostPrice.FullName, ShopOrder._.Discount.FullName, ShopOrder._.PayMoney.FullName, ShopOrder._.OrderPoint.FullName, ShopOrder._.ReturnMoney.FullName,
+                    .FullName, ShopOrder._.CostPrice.FullName, ShopOrder._.Discount.FullName,
+                    ShopOrder._.PayMoney.FullName, ShopOrder._.OrderPoint.FullName, ShopOrder._.ReturnMoney.FullName,
                     ShopOrder._.SellerID.FullName, ShopOrder._.SellerName.FullName, ShopOrder._.SellerEmail.FullName, ShopOrder._.SellerPhone.FullName, ShopOrder._.SupplierID
                     .FullName, ShopOrder._.SupplierName.FullName, ShopOrder._.OrderIP
                      .FullName, ShopOrder._.SpecifiedDate.FullName, ShopOrder._.ExportCount.FullName, ShopOrder._.CreateDate.FullName,
@@ -262,7 +265,7 @@ namespace EasyCms.Web.API
                       , ShopOrderItem._.ReturnCount.FullName, ShopOrderItem._.UseJf.FullName, ShopOrderItem._.CostPrice.FullName,
                       ShopOrderItem._.ReturnMoney.FullName,
                       ShopOrderItem._.Point.FullName
-                       , ShopOrderItem._.Preferential.FullName, ShopOrderItem._.Remark.FullName);
+                       ,   ShopOrderItem._.Remark.FullName);
             }
 
 
