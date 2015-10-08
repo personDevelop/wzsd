@@ -992,7 +992,7 @@ namespace EasyCms.Dal
                 ShopOrder._.OrderStatus,
                 ShopOrder._.CommentStatus, ShopOrder._.MemberID,
                 ShopOrder._.TotalPrice, ShopOrder._.CreateDate,
-                ShopOrder._.PayMoney, ShopOrder._.ShipRegion, ShopOrder._.ShipAddress
+                ShopOrder._.PayMoney, ShopOrder._.ShipRegion, ShopOrder._.ShipAddress, ShopOrder._.ShipTel, ShopOrder._.ShipName
                 )
                 .ToFirst<ShopOrder>();
             if (order == null)
