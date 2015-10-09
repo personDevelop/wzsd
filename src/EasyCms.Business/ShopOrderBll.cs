@@ -47,14 +47,14 @@ namespace EasyCms.Business
             return Dal.Submit(order, accuont, out   mustGenerSign, out err);
         }
 
-        public List<ShopOrder> GetMyOrder(string host,ManagerUserInfo user, int queryPage, int queryStatus, string other, out string err)
+        public List<ShopOrder> GetMyOrder(string host, ManagerUserInfo user, int queryPage, int queryStatus, string other, out string err)
         {
-            return Dal.GetMyOrder(host,user, queryPage, queryStatus, other, out err);
+            return Dal.GetMyOrder(host, user, queryPage, queryStatus, other, out err);
         }
 
         public ShopOrder GetOrder(string host, string id, string userid, out string err)
         {
-            return Dal.GetOrder(host,id, userid, out   err);
+            return Dal.GetOrder(host, id, userid, out   err);
         }
 
         public Dictionary<string, string> ExeAction(ActionEnum actionID, string wlgs, List<string> orderIDs, out string err)
@@ -75,6 +75,11 @@ namespace EasyCms.Business
         public void PaySuccess(string orderID, string payJe)
         {
             Dal.PaySuccess(orderID, payJe);
+        }
+
+        public int CancleOrder(string accountid, string orderid, out string error)
+        {
+            return Dal.CancleOrder(accountid, orderid, out error);
         }
     }
 }

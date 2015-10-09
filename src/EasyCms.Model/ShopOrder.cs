@@ -144,6 +144,12 @@ namespace EasyCms.Model
 
         private DateTime? _PublishDateTime;
 
+        private bool _IsReqCancle;
+
+        private bool _HasReqCancled;
+
+        private int _ReqCancleOrderStatus;
+
         #endregion
 
         #region 属性
@@ -1289,6 +1295,63 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  取消订单申请,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "IsReqCancle", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public bool IsReqCancle
+        {
+            get
+            {
+                return this._IsReqCancle;
+            }
+            set
+            {
+                this.OnPropertyChanged("IsReqCancle", this._IsReqCancle, value);
+                this._IsReqCancle = value;
+            }
+        }
+
+        /// <summary>
+        ///  是否已处理取消订单申请,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "HasReqCancled", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public bool HasReqCancled
+        {
+            get
+            {
+                return this._HasReqCancled;
+            }
+            set
+            {
+                this.OnPropertyChanged("HasReqCancled", this._HasReqCancled, value);
+                this._HasReqCancled = value;
+            }
+        }
+
+        /// <summary>
+        ///  申请时订单状态,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "ReqCancleOrderStatus", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public int ReqCancleOrderStatus
+        {
+            get
+            {
+                return this._ReqCancleOrderStatus;
+            }
+            set
+            {
+                this.OnPropertyChanged("ReqCancleOrderStatus", this._ReqCancleOrderStatus, value);
+                this._ReqCancleOrderStatus = value;
+            }
+        }
+
         #endregion
 
         #region 列定义
@@ -1416,6 +1479,12 @@ namespace EasyCms.Model
                 InvoiceNote = new PropertyItem("InvoiceNote", tableName);
 
                 PublishDateTime = new PropertyItem("PublishDateTime", tableName);
+
+                IsReqCancle = new PropertyItem("IsReqCancle", tableName);
+
+                HasReqCancled = new PropertyItem("HasReqCancled", tableName);
+
+                ReqCancleOrderStatus = new PropertyItem("ReqCancleOrderStatus", tableName);
 
 
             }
@@ -1659,6 +1728,18 @@ namespace EasyCms.Model
             /// 发货时间,
             /// </summary> 
             public PropertyItem PublishDateTime = null;
+            /// <summary>
+            /// 取消订单申请,
+            /// </summary> 
+            public PropertyItem IsReqCancle = null;
+            /// <summary>
+            /// 是否已处理取消订单申请,
+            /// </summary> 
+            public PropertyItem HasReqCancled = null;
+            /// <summary>
+            /// 申请时订单状态,
+            /// </summary> 
+            public PropertyItem ReqCancleOrderStatus = null;
         }
         #endregion
     }

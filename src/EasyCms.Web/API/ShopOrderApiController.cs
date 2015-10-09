@@ -260,12 +260,12 @@ namespace EasyCms.Web.API
                     ShopOrder._.PayMoney.FullName, ShopOrder._.OrderPoint.FullName, ShopOrder._.ReturnMoney.FullName,
                     ShopOrder._.SellerID.FullName, ShopOrder._.SellerName.FullName, ShopOrder._.SellerEmail.FullName, ShopOrder._.SellerPhone.FullName, ShopOrder._.SupplierID
                     .FullName, ShopOrder._.SupplierName.FullName, ShopOrder._.OrderIP
-                     .FullName, ShopOrder._.SpecifiedDate.FullName, ShopOrder._.ExportCount.FullName,  
+                     .FullName, ShopOrder._.SpecifiedDate.FullName, ShopOrder._.ExportCount.FullName,
                      ShopOrder._.HasDelete.FullName, ShopOrder._.ClientType.FullName, ShopOrder._.PublishDateTime.FullName
                       , ShopOrderItem._.ReturnCount.FullName, ShopOrderItem._.UseJf.FullName, ShopOrderItem._.CostPrice.FullName,
                       ShopOrderItem._.ReturnMoney.FullName,
                       ShopOrderItem._.Point.FullName
-                       ,   ShopOrderItem._.Remark.FullName);
+                       , ShopOrderItem._.Remark.FullName);
             }
 
 
@@ -295,6 +295,34 @@ namespace EasyCms.Web.API
             {
                 return dt.Format();
             }
+
+
+        }
+
+
+        [HttpGet]
+        public HttpResponseMessage CancleOrder(string id)
+        {
+            string error;
+            string accountid = Request.GetAccountID();
+            int isSucess = new ShopOrderBll().CancleOrder(accountid, id, out error);
+            switch (isSucess)
+            {
+                case 0:
+                    return error.FormatError();
+                default:
+                    return new { Msg = error, Code = isSucess }.FormatObj(); 
+            }
+
+
+        }
+        [HttpGet]
+        public HttpResponseMessage Delete(string id)
+        {
+
+
+            string result = new ShopShippingAddressBll().Delete(id);
+            return result.FormatError();
 
 
         }

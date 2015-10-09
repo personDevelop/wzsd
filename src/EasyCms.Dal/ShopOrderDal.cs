@@ -1528,6 +1528,105 @@ namespace EasyCms.Dal
             };
             Dal.Submit(orderAction);
         }
+
+        public int CancleOrder(string accountid, string orderid, out string error)
+        {
+            int result = 1;
+            error = string.Empty;
+
+            ShopOrder order = Dal.From<ShopOrder>().Select(ShopOrder._.ID, ShopOrder._.PayStatus, ShopOrder._.ShipStatus,
+                ShopOrder._.RefundStatus, ShopOrder._.OrderStatus, ShopOrder._.IsReqCancle)
+                  .Where(ShopOrder._.ID == orderid).ToFirst<ShopOrder>();
+
+            if (order.MemberID != accountid)
+            {
+                error = "这不是您的订单，您不能取消";
+                result = 0;
+            }
+            else
+            {
+                ShipStatus ss = (ShipStatus)order.ShipStatus;
+                if (ss != ShipStatus.等待商家发货)
+                {
+                    error = "已提交客服人工处理,您也可以联系客服，给您带来不便敬请谅解";
+
+                    result = 2;
+                }
+                else
+                {
+                    OrderStatus os = (OrderStatus)order.OrderStatus;
+                    switch (os)
+                    {
+                        case OrderStatus.等待付款:
+                        case OrderStatus.等待商家发货:
+                        case OrderStatus.等待商家确认:
+                            break;
+                        case OrderStatus.已发货:
+                        case OrderStatus.已收货:
+                        case OrderStatus.拒收:
+                        case OrderStatus.作废:
+                        case OrderStatus.完成:
+                        case OrderStatus.发起退货申请:
+                        case OrderStatus.等待商家退货确认:
+                        case OrderStatus.商家不同意退换:
+                        case OrderStatus.商家同意退换:
+                        case OrderStatus.退货完成:
+                        case OrderStatus.商家已收货等待退款:
+                        case OrderStatus.退款完成:
+                        case OrderStatus.申请取消订单:
+                        case OrderStatus.取消订单:
+                        default:
+                            error = "已提交客服人工处理,您也可以联系客服，给您带来不便敬请谅解";
+                            result = 2;
+                            break;
+                    }
+                }
+            }
+            if (result == 1)
+            {
+                PayStatus ps = (PayStatus)order.PayStatus;
+                if (ps != PayStatus.未付款)
+                {
+                    error = "已提交客服人工处理,您也可以联系客服，给您带来不便敬请谅解";
+                    result = 2;
+                }
+            }
+            if (result == 1)
+            {
+                //直接取消
+                order.OrderStatus = (int)OrderStatus.取消订单;
+
+
+            }
+            else if (result == 2)
+            {
+                //人工干预
+                order.IsReqCancle = true;
+                order.ReqCancleOrderStatus = order.OrderStatus;
+                order.OrderStatus = (int)OrderStatus.申请取消订单;
+            }
+            if (result > 0)
+            {
+                ActionEnum ae = ActionEnum.取消订单;
+
+                if (result == 2)
+                {
+                    ae = ActionEnum.申请取消订单;
+                }
+                ShopOrderAction orderAction = new ShopOrderAction()
+              {
+
+                  ID = Guid.NewGuid().ToString(),
+                  ActionCode = ((int)ae).ToString(),
+                  ActionName = ae.ToString(),
+                  OrderId = orderid,
+                  ActionDate = DateTime.Now,
+                  Remark = error
+              };
+                Dal.Submit(orderAction, order);
+            }
+            return result;
+        }
     }
 
 
