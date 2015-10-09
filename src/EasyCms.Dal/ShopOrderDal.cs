@@ -990,6 +990,9 @@ namespace EasyCms.Dal
                 ShopOrder._.ShipStatus,
                 ShopOrder._.PayStatus,
                 ShopOrder._.OrderStatus,
+                  ShopOrder._.IsInvoice,
+                    ShopOrder._.InvoiceInfo,
+                      ShopOrder._.InvoiceNote,
                 ShopOrder._.CommentStatus, ShopOrder._.MemberID,
                 ShopOrder._.TotalPrice, ShopOrder._.CreateDate,
                 ShopOrder._.PayMoney, ShopOrder._.ShipRegion, ShopOrder._.ShipAddress, ShopOrder._.ShipTel, ShopOrder._.ShipName
@@ -1173,11 +1176,11 @@ namespace EasyCms.Dal
 
                             foreach (var pid in producntCount.Keys)
                             {
-                                ShopProductInfo p = new ShopProductInfo() { RecordStatus= StatusType.update, Where= ShopProductInfo._.ID==pid };
+                                ShopProductInfo p = new ShopProductInfo() { RecordStatus = StatusType.update, Where = ShopProductInfo._.ID == pid };
                                 ExpressionClip StockExpress = new ExpressionClip(ShopProductInfo._.Stock.ColumnName + "-" + producntCount[pid]);
                                 p.SetModifiedProperty(ShopProductInfo._.Stock, StockExpress);
                                 list.Add(p);
-                                
+
                             }
                             foreach (var pid in producntSkuCount.Keys)
                             {
@@ -1245,7 +1248,7 @@ namespace EasyCms.Dal
                 DateTime now = DateTime.Now;
                 if (PublishIDS.Count > 0)
                 {
-                  
+
                     string express = Dal.From<ShopExpress>().Where(ShopExpress._.ID == wlgs).Select(ShopExpress._.Name).ToScalar() as string;
                     ShopOrder update = new ShopOrder() { RecordStatus = StatusType.update, Where = ShopOrder._.ID.In(PublishIDS.Keys.ToList()) };
                     update.OrderStatus = (int)changetToStatus;
