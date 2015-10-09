@@ -133,7 +133,7 @@ namespace EasyCms.Web.Common
 
     public class DateTimeConverter : DateTimeConverterBase
     {
-        private static IsoDateTimeConverter dtConverter = new IsoDateTimeConverter { DateTimeFormat = "yyyy-MM-dd" };
+        private static IsoDateTimeConverter dtConverter = new IsoDateTimeConverter { DateTimeFormat = "yyyy-MM-dd HH:mm" };
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             return dtConverter.ReadJson(reader, objectType, existingValue, serializer);

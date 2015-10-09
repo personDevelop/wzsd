@@ -160,7 +160,7 @@ namespace EasyCms.Dal
                 {
                     bool isChangePayType = spay.ID != payTypeID;
 
-                    ShopOrder order = Dal.From<ShopOrder>().Where(ShopOrderItem._.OrderID == payPara.OrderNo).Select(ShopOrder._.PayMoney,
+                    ShopOrder order = Dal.From<ShopOrder>().Where(ShopOrder._.ID == payPara.OrderNo).Select(ShopOrder._.PayMoney,
                         ShopOrder._.ID, ShopOrder._.PayStatus, ShopOrder._.OrderStatus,
                         ShopOrder._.PayTypeID, ShopOrder._.PayTypeName).ToFirst<ShopOrder>();
                     if (order.PayStatus == (int)PayStatus.已付款)
