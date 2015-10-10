@@ -97,11 +97,11 @@
 
     @HelperExtend.RadioGroup("SaleStatus", "商品状态 ", "0,1", "下架,上架,审批中,审批退回", defaultval: Model.SaleStatus)
      
-    @HelperExtend.Number("MarketPrice", "市场价", defaultval: Model.MarketPrice, hint: "", max: 10000000)
+    @HelperExtend.Number("MarketPrice", "市场价", defaultval: Model.MarketPrice, hint: "",decimalDigits:2, max: 10000000)
 
-    @HelperExtend.Number("SalePrice", "销售价", defaultval: Model.SalePrice, hint: "", max: 10000000)
+    @HelperExtend.Number("SalePrice", "销售价", defaultval: Model.SalePrice, hint: "", decimalDigits: 2, max: 10000000)
 
-    @HelperExtend.Number("CostPrice", "成本价", defaultval: Model.CostPrice, hint: "", max: 10000000)
+    @HelperExtend.Number("CostPrice", "成本价", defaultval: Model.CostPrice, hint: "", decimalDigits: 2, max: 10000000)
 
     @HelperExtend.Number("Points", "可得积分", defaultval: Model.Points, hint: "", max: 10000000)
 
