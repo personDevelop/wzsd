@@ -84,6 +84,7 @@
     <Compile Include="ViewModel\AppException.cs" />
     <Compile Include="ViewModel\ChangePwdModel.cs" />
     <Compile Include="ViewModel\PublishToLogistic.cs" />
+    <Compile Include="ViewModel\ReplyComment.cs" />
     <Compile Include="ViewModel\SaveModel.cs" />
     <Compile Include="ViewModel\ShopOrderModel.cs" />
     <Compile Include="ShopPaymentTypes.cs" />

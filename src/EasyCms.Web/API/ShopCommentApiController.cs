@@ -22,16 +22,30 @@ namespace EasyCms.Web.API
 
         }
 
-        [HttpPost] 
+        [HttpPost]
         // POST api/<controller>
         public HttpResponseMessage Post([FromBody]ShopProductReviews comment)
         {
-            comment.ID = Guid.NewGuid().ToString();
-            comment.Status = 1;
-            comment.UserId = Request.GetAccountID();
-            comment.CreatedDate = DateTime.Now;
-            new ShopProductReviewsBll().Save(comment);
-            return "评论成功".FormatSuccess();
+            try
+            {
+                comment.ID = Guid.NewGuid().ToString();
+                string isAutoSX = new ParameterInfoBll().GetValue(StaticValue.IsCommentAuto);
+                if (isAutoSX == "1")
+                {
+                    comment.Status = (int)DjStatus.生效;
+                }
+                else
+                { comment.Status = (int)DjStatus.草稿; }
+                comment.UserId = Request.GetAccountID();
+                comment.CreatedDate = DateTime.Now;
+                new ShopProductReviewsBll().Save(comment);
+                return "评论成功".FormatSuccess();
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message, ex);
+            }
         }
 
     }

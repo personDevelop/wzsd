@@ -1,0 +1,189 @@
+﻿@using MVCExtention;
+@{
+    ViewBag.Title = "商品评论";
+}
+
+<!--工具栏-->
+<div id="floatHead" class="toolbar-wrap">
+    <div class="toolbar">
+        <div class="box-wrap">
+            <a class="menu-btn"></a>
+            <div class="l-list">
+                <ul class="icon-list">
+                    <li><a class="add" href="javascript:;" onclick="DelGrid('jqxgrid', '@Url.Action("ApprovalPass")');"><i></i><span>批量审核通过</span></a></li>
+                    <li><a class="edit" href="javascript:;" onclick="DelGrid('jqxgrid', '@Url.Action("ApprovalNotPass")');"><i></i><span>批量审核不通过</span></a></li>
+                    <li><a class="reply" href="javascript:;" onclick="VideDeatil();"><i></i><span>批量回复</span></a></li>
+                    <li><a class="del" href="javascript:;" onclick="DelGrid('jqxgrid', '@Url.Action("Delete")');"><i></i><span>批量删除</span></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/工具栏-->
+<!--列表-->
+<dl>
+    <dt>
+
+    </dt>
+    <dd>
+        <table class="borderkuang" border="0" cellspacing="0" cellpadding="0">
+            <tbody>
+                <tr>
+                    <td width="80" rowspan="2">
+                        @HelperExtend.img("icon-1.gif", "width:19px,height:19px")搜索：
+                    </td>
+                    <td width="80">
+                        评论商品：
+                    </td>
+                    <td>
+
+                        <input type="text" id="ShopProduct">
+
+                    </td>
+                    <td width="80">
+                        评论日期：
+                    </td>
+                    <td>
+
+                        <div id='StartDate'>  </div>
+
+                    </td>
+                    <td width="10">
+                        -
+
+                    </td>
+                    <td>
+
+                        <div id='EndDate'>  </div>
+
+                    </td>
+                    <td width="80">评论状态：</td>
+                    <td height="35">
+                        @HelperExtend.DropDownListEnum("QryDjStatus", enumType: typeof(EasyCms.Model.DjStatus))
+                    </td>
+                </tr>
+                <tr><td></td>
+            <td colspan="2"><input type="checkbox" id="OnlyWebUser" checked="checked" />只显示用户的留言</td>
+            <td>
+                <input id="btnQry" type="button" value="搜索">
+            </td>
+            <td></td>
+            </tr>
+
+            </tbody>
+        </table>
+    </dd>
+</dl>
+<div class="table-container">
+    <div id="jqxgrid"></div>
+</div>
+<div id="window" style=" display:none">
+    <div id="windowHeader">
+        <span>
+            <img src="@Url.Content("~/Content/Images/movie.png")" alt="" style="margin-right: 15px" />批量回复评论
+        </span>
+    </div>
+    <div style="overflow: hidden;" id="windowContent">
+        <div class="tab-content">
+
+            @HelperExtend.TextArea("ReviewText", "回复", "",
+                              hint: "<br /><input type='button' onclick='bathReplyToServer(); return false;' value='答复' class='btn'/>", col: 100)
+        </div>
+    </div>
+</div>
+<!--/列表-->
+@section  scripts{
+
+    <script type="text/javascript">
+        function bathReplyToServer() {
+
+            var replyText = $("#ReviewText").val();
+            if (!replyText) {
+                ErrorMsg("请输入回复内容！");
+            } else {
+                DelGrid("jqxgrid", "@Url.Action("BachReply")", null, replyText, function () { $('#window').jqxWindow("close"); });
+            }
+        }
+        $(function () {
+            $("#StartDate").jqxDateTimeInput({ formatString: "yyyy-MM-dd", width: 100, height: '25px', showCalendarButton: true });
+            $("#EndDate").jqxDateTimeInput({ formatString: "yyyy-MM-dd", width: 100, height: '25px', showCalendarButton: true });
+            $("#QryDjStatus").jqxDropDownList('uncheckAll');
+            $('#EndDate').jqxDateTimeInput('setDate', new Date());
+            $('#StartDate').jqxDateTimeInput('setDate', get3MonthBefor());
+            $("#btnQry").jqxButton({ width: '150', template: 'success' });
+            $("#btnQry").on("click", function () {
+                $('#jqxgrid').jqxGrid('updatebounddata');
+            });
+            $('#window').jqxWindow({
+                showCollapseButton: true, maxHeight: 400, maxWidth: 700, minHeight: 200, minWidth: 200, height: 200, width: 500
+            });
+
+        });
+
+
+    </script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            var url = "@Url.Action("GetList")";
+            var deleteUrl = "@Url.Action("Delete")";
+            var editUrl = "@Url.Action("Edit")";
+            var datafields = [
+      { name: 'ID' },
+    { name: 'ReviewText' },
+          { name: 'ProductId' },
+                { name: 'UserId' },
+            { name: 'Status' },
+            { name: 'OrderId' },
+            { name: 'ProductName' },
+            { name: 'Name' },
+              { name: 'hasReply' },
+            { name: 'CreatedDate' },
+      { name: 'IsManager' }];
+            var columns = [
+    { text: '评论内容', dataField: 'ReviewText', cellsalign: "left" },
+    { text: '商品', dataField: 'ProductName', cellsalign: "left", width: 200 },
+    { text: '评论人', dataField: 'Name', cellsalign: "left", width: 100 },
+     { text: '是管理员', dataField: 'IsManager', width: 100,@HelperExtend.Parsebool() },
+      { text: '已回复', dataField: 'hasReply', width: 100,@HelperExtend.Parsebool() },
+    { text: '评论时间', dataField: 'CreatedDate', width: 130, cellsformat: "yyyy-MM-dd HH:mm" },
+    { text: '状态', dataField: 'Status', cellsalign: "left", width: 100,@HelperExtend.ParseEnum(typeof(EasyCms.Model.DjStatus)) },
+     {
+         text: '操作', datafield: 'ID', width: 200, cellsrenderer: function (row, column, value) {
+
+             var html = "  <div style='text-align: center; overflow: hidden; padding-bottom: 2px; margin-top: 4px; text-overflow: ellipsis;'>";
+             html +=
+                  "<a href='javascript:;' onclick='EditGrid(\"jqxgrid\",\""+editUrl+"\",\""+value+"\");'  >详细信息</a> &nbsp;&nbsp;&nbsp;" +
+              "<a  href='javascript:;' onclick='DelGrid(\"jqxgrid\",\"" + deleteUrl + "\",\"" + value + "\");'  >删除</a>";
+             html += "</div>";
+
+             return html;
+         }
+     }];
+
+            CreateGrid("jqxgrid", url, datafields, columns, {
+                isMutilSelect: true,
+                adapter: {
+                    formatData: function (data) {
+                        data.StartDate = $("#StartDate").val();
+                        data.EndDate = $("#EndDate").val();
+                        data.ShopProduct = $("#ShopProduct").val();
+                        data.QryDjStatus = $("#QryDjStatus").val();
+                        data.OnlyWebUser = $("#OnlyWebUser").prop("checked");
+                    }
+
+                }, grid: { localization: "zh-Hans" }
+            });
+        });
+        function VideDeatil(rowid) {
+            var rowindexes = $("#jqxgrid").jqxGrid('getselectedrowindexes');
+            if (rowindexes.length == 0) {
+                ErrorMsg("请选择要批量回复的评论！");
+                return false;
+            }
+            $('#window').jqxWindow("open");
+        }
+    </script>
+}
+

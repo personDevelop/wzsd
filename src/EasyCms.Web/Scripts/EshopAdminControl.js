@@ -36,10 +36,10 @@
                       }
                   },
                   beforeLoadComplete: function () {
-                       
+
                   },
                   loadComplete: function () {
-                    
+
                   },
                   beforeprocessing: function (data) {
                       source.totalrecords = data.total;
@@ -144,14 +144,14 @@ function EditGrid(gridid, url, id, other) {
 
 }
 
-function DelGrid(gridid, url, id, other) {
+function DelGrid(gridid, url, id, other,success) {
     gridid = '#' + gridid;
     if (!id) {
 
         var rowindexes = $(gridid).jqxGrid('getselectedrowindexes');
         var selectionmode = $(gridid).jqxGrid('selectionmode');
         if (selectionmode == "checkbox") {
-            /*对选*/
+            /*多选*/
             if (rowindexes.length > 0) {
                 id = "";
                 for (var i = 0; i < rowindexes.length; i++) {
@@ -187,13 +187,15 @@ function DelGrid(gridid, url, id, other) {
             if (d.indexOf("成功") > -1) {
 
                 $(gridid).jqxGrid('updatebounddata');
+                if (success) {
+                    success();
+                }
             }
         });
     }
 
 
 }
-
 
 function CreateTree(treeid, url, datafields, columns, opts) {
     if (!opts) {
@@ -231,13 +233,13 @@ function CreateTree(treeid, url, datafields, columns, opts) {
 
                           ErrorMsg(data.responseText);
                       }
-                      
+
                   },
                   beforeLoadComplete: function () {
-                    
+
                   },
                   loadComplete: function () {
-                     
+
                   },
                   hierarchy:
                   {
@@ -301,7 +303,22 @@ function CreateTree(treeid, url, datafields, columns, opts) {
         columns: columns
     }, opts.tree));
 }
-function CreateAjaxLoadTree(treeid, url, datafields, columns, isMutilSelect, opts) {
+function CreateAjaxLoadTree(treeid, url, datafields, columns, opts) {
+    if (!opts) {
+        opts = {};
+    }
+    if (!opts.isMutilSelect) {
+        opts.isMutilSelect = false;
+    }
+    if (!opts.data) {
+        opts.data = {};
+    }
+    if (!opts.adapter) {
+        opts.adapter = {};
+    }
+    if (!opts.tree) {
+        opts.tree = {};
+    }
     treeid = '#' + treeid;
     for (var i = 0; i < datafields.length; i++) {
         if (!datafields[i].type) {
@@ -331,7 +348,7 @@ function CreateAjaxLoadTree(treeid, url, datafields, columns, isMutilSelect, opt
 
     var middleHeight = totalHeight - topHight;
     selectionmode = "checkbox";
-    if (!isMutilSelect) {
+    if (!opts.isMutilSelect) {
         selectionmode = "singlerow";
     }
 
@@ -366,9 +383,7 @@ function CreateAjaxLoadTree(treeid, url, datafields, columns, isMutilSelect, opt
 
         },
         virtualModeCreateRecords: function (expandedRecord, done) {
-
-            var dataAdapter = new $.jqx.dataAdapter(source,
-
+            var dataAdapter = new $.jqx.dataAdapter($.extend( $(treeid).data("source"), opts.data), $.extend(
                 {
                     formatData: function (data) {
 
@@ -401,14 +416,11 @@ function CreateAjaxLoadTree(treeid, url, datafields, columns, isMutilSelect, opt
                         throw new Error("http://services.odata.org: " + error.toString());
 
                     }
-                }
-
-            );
-
+                }, opts.adapter));
             dataAdapter.dataBind();
 
         },
-    }, opts));
+    }, opts.tree));
 }
 function EditTree(treeid, url) {
     treeid = '#' + treeid;
@@ -571,4 +583,28 @@ function CloseDialog() {
         document.parentWindow.parent.CloseThisDialog();
     }
 
+}
+
+function get3MonthBefor() {
+    var resultDate, year, month, date, hms;
+    var currDate = new Date();
+    year = currDate.getFullYear();
+    month = currDate.getMonth();
+    date = currDate.getDate();
+    /*hms = currDate.getHours() + ':' + currDate.getMinutes() + ':' + (currDate.getSeconds() < 10 ? '0' + currDate.getSeconds() : currDate.getSeconds());*/
+    switch (month) {
+        case 0:
+        case 1:
+        case 2:
+            month += 8;
+            year--;
+            break;
+        default:
+            month -= 3;
+            break;
+    }
+    month = (month < 10) ? ('0' + month) : month;
+
+    resultDate = new Date(year, month, date);
+    return resultDate;
 }

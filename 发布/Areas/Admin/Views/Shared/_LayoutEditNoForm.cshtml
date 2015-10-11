@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,initial-scale=1.0,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/bundles/css")
+    @Styles.Render("~/bundles/jqxcss")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqx")
+    @Scripts.Render("~/bundles/eshopJS")
+</head>
+
+<body class="mainbody">
+
+    @Html.Partial("_Location")
+    @Html.Partial("_Msg")
+    @RenderBody()
+   
+
+    <script type="text/javascript">
+
+      
+        $(function () { 
+            if ("@TempData.ContainsKey("IsSuccess").ToString().ToLower()" == "true") {
+                SucessMsg("@TempData["IsSuccess"]");
+            } 
+        });
+    </script>
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>

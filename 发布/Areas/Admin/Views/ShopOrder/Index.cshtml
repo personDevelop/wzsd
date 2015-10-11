@@ -162,29 +162,7 @@
         }
     </script>
     <script type="text/javascript">
-        function get3MonthBefor() {
-            var resultDate, year, month, date, hms;
-            var currDate = new Date();
-            year = currDate.getFullYear();
-            month = currDate.getMonth();
-            date = currDate.getDate();
-            /*hms = currDate.getHours() + ':' + currDate.getMinutes() + ':' + (currDate.getSeconds() < 10 ? '0' + currDate.getSeconds() : currDate.getSeconds());*/
-            switch (month) {
-                case 0:
-                case 1:
-                case 2:
-                    month += 8;
-                    year--;
-                    break;
-                default:
-                    month -= 3;
-                    break;
-            }
-            month = (month < 10) ? ('0' + month) : month;
-
-            resultDate = new Date(year, month, date);
-            return resultDate;
-        }
+     
         $(function () {
 
             $(".content-tab-ul-wrap ul li").click(function () {

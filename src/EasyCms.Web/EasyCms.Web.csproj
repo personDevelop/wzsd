@@ -235,6 +235,7 @@
     <Compile Include="Areas\Admin\Controllers\RegionsController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopBrandInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopCategoryController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ShopCommentController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopExpressController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopExtendInfoValueController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopOrderController.cs" />
@@ -776,6 +777,10 @@
     <Content Include="Areas\Admin\Views\SysRoleAndUserRalation\AddRolePerson.cshtml" />
     <Content Include="Areas\Admin\Views\LogOper\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Login\Index - 复制.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopComment\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopComment\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopComment\Edit - 复制.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_LayoutEditNoForm.cshtml" />
     <None Include="Properties\PublishProfiles\publish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\EshopAdminControl.js" />

@@ -1,0 +1,4031 @@
+﻿@model ShopProductReviews
+@{
+    ViewBag.Title = "评论详细信息";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEdit.cshtml";
+}
+
+@Styles.Render("~/bundles/upimgcss")
+@Scripts.Render("~/bundles/ueditor")
+@Scripts.Render("~/bundles/uploadJs")
+
+@using EasyCms.Model
+<!--内容-->
+<style>
+    /* 由 F12 开发人员工具生成。这可能不是原始源文件的准确表示形式。*/
+    :root .ui-checkbox {
+        font-size: 0px;
+        display: inline-block;
+        position: relative;
+    }
+
+    :root .ui-radio {
+        font-size: 0px;
+        display: inline-block;
+        position: relative;
+    }
+
+    :root .ui-checkbox label {
+        font-size: 12px;
+        vertical-align: middle;
+    }
+
+    :root .ui-radio label {
+        font-size: 12px;
+        vertical-align: middle;
+    }
+
+    :root .ui-checkbox input[type=checkbox] {
+        margin: 0px;
+        padding: 0px;
+        outline: 0px;
+        border: 0px currentColor;
+        left: 0px;
+        top: 0px;
+        width: 16px;
+        height: 16px;
+        overflow: hidden;
+        position: absolute;
+        opacity: 0;
+    }
+
+    :root .ui-radio input[type=radio] {
+        margin: 0px;
+        padding: 0px;
+        outline: 0px;
+        border: 0px currentColor;
+        left: 0px;
+        top: 0px;
+        width: 16px;
+        height: 16px;
+        overflow: hidden;
+        position: absolute;
+        opacity: 0;
+    }
+
+    :root .ui-checkbox input[type=checkbox] + label::before {
+        width: 16px;
+        height: 16px;
+        margin-right: 3px;
+        vertical-align: bottom;
+        display: inline-block;
+        content: "";
+    }
+
+    :root .ui-radio input[type=radio] + label::before {
+        width: 16px;
+        height: 16px;
+        margin-right: 3px;
+        vertical-align: bottom;
+        display: inline-block;
+        content: "";
+    }
+
+    .ui-checkbox input[type=checkbox] + label::before {
+        background-position: 0px 0px;
+        background-image: url("sprite/icenter-poster-comment.32-yog150413171555.png?max_age=19830212&d=20150428113841");
+        _background-image: url(sprite/icenter-poster-comment.ie6-yog150413171555.png?max_age=19830212&d=20150428113841);
+        _background-position: 0 0;
+    }
+
+    .ui-checkbox input[type=checkbox]:disabled:hover + label::before {
+        background-position: 0px 0px;
+        background-image: url("sprite/icenter-poster-comment.32-yog150413171555.png?max_age=19830212&d=20150428113841");
+        _background-image: url(sprite/icenter-poster-comment.ie6-yog150413171555.png?max_age=19830212&d=20150428113841);
+        _background-position: 0 0;
+    }
+
+    .ui-checkbox input[type=checkbox]:hover + label::before {
+        background-position: -17px 0px;
+        background-image: url("sprite/icenter-poster-comment.32-yog150413171555.png?max_age=19830212&d=20150428113841");
+        _background-image: url(sprite/icenter-poster-comment.ie6-yog150413171555.png?max_age=19830212&d=20150428113841);
+        _background-position: -17px 0;
+    }
+
+    .ui-checkbox input[type=checkbox]:checked + label::before {
+        background-position: -34px 0px;
+        background-image: url("sprite/icenter-poster-comment.32-yog150413171555.png?max_age=19830212&d=20150428113841");
+        _background-image: url(sprite/icenter-poster-comment.ie6-yog150413171555.png?max_age=19830212&d=20150428113841);
+        _background-position: -34px 0;
+    }
+
+    .ui-checkbox input[type=checkbox]:disabled + label::before {
+        opacity: 0.5;
+    }
+
+    .ui-radio input[type=radio] + label::before {
+        background-position: -51px 0px;
+        background-image: url("sprite/icenter-poster-comment.32-yog150413171555.png?max_age=19830212&d=20150428113841");
+        _background-image: url(sprite/icenter-poster-comment.ie6-yog150413171555.png?max_age=19830212&d=20150428113841);
+        _background-position: -51px 0;
+    }
+
+    .ui-radio input[type=radio]:disabled:hover + label::before {
+        background-position: -51px 0px;
+        background-image: url("sprite/icenter-poster-comment.32-yog150413171555.png?max_age=19830212&d=20150428113841");
+        _background-image: url(sprite/icenter-poster-comment.ie6-yog150413171555.png?max_age=19830212&d=20150428113841);
+        _background-position: -51px 0;
+    }
+
+    .ui-radio input[type=radio]:hover + label::before {
+        background-position: -68px 0px;
+        background-image: url("sprite/icenter-poster-comment.32-yog150413171555.png?max_age=19830212&d=20150428113841");
+        _background-image: url(sprite/icenter-poster-comment.ie6-yog150413171555.png?max_age=19830212&d=20150428113841);
+        _background-position: -68px 0;
+    }
+
+    .ui-radio input[type=radio]:checked + label::before {
+        background-position: -85px 0px;
+        background-image: url("sprite/icenter-poster-comment.32-yog150413171555.png?max_age=19830212&d=20150428113841");
+        _background-image: url(sprite/icenter-poster-comment.ie6-yog150413171555.png?max_age=19830212&d=20150428113841);
+        _background-position: -85px 0;
+    }
+
+    .ui-radio input[type=radio]:disabled + label::before {
+        opacity: 0.5;
+    }
+
+    .invisible {
+        visibility: hidden;
+    }
+
+    .qz-poster {
+        position: relative;
+        z-index: 25;
+    }
+
+    .qz-poster-inner {
+        position: relative;
+    }
+
+    .qz-poster-bd {
+        position: relative;
+        z-index: 3;
+    }
+
+    .qz-inputer {
+        padding: 0px 147px 0px 0px;
+    }
+
+    .qz-poster-bottom {
+        position: relative;
+        z-index: 1;
+    }
+
+    .qz-inputer div.textarea {
+        background: url("img/poster/textarea-shadow.32.png?max_age=19830212&d=20150428113841") repeat-x 0px 0px;
+        padding: 4px 8px;
+        border: 0px currentColor;
+        height: 65px;
+        line-height: 22px;
+        overflow: hidden;
+        font-size: 14px;
+        -ms-overflow-y: auto;
+        box-shadow: none;
+        _background: none;
+    }
+
+    .qz-inputer textarea {
+        background: url("img/poster/textarea-shadow.32.png?max_age=19830212&d=20150428113841") repeat-x 0px 0px;
+        padding: 4px 8px;
+        border: 0px currentColor;
+        height: 65px;
+        line-height: 22px;
+        overflow: hidden;
+        font-size: 14px;
+        -ms-overflow-y: auto;
+        box-shadow: none;
+        _background: none;
+    }
+
+    .qz-inputer textarea {
+        width: 353px;
+        vertical-align: top;
+        resize: none;
+    }
+
+    .app_mood .qz-inputer textarea {
+        width: 454px;
+    }
+
+    .qz-inputer textarea:focus {
+        border-color: transparent;
+        box-shadow: none;
+    }
+
+    .qz-poster-attach-side {
+        top: 1px;
+        height: 73px;
+        right: 1px;
+        position: absolute;
+        z-index: 11;
+        _width: 147px;
+    }
+
+    .mod_py .qz-inputer {
+        padding: 0px 98px 0px 0px;
+    }
+
+    .mod_py .qz-poster-attach-side {
+        _width: 98px;
+    }
+
+    .qz-poster-attach-side .attach::before {
+        display: table;
+        content: "";
+    }
+
+    .qz-poster-attach-side .attach::after {
+        display: table;
+        content: "";
+    }
+
+    .qz-poster-attach-side .attach::after {
+        clear: both;
+    }
+
+    .qz-poster-attach-side .attach {
+        _margin-right: -3px;
+    }
+
+    .qz-poster-attach-side .item {
+        border-width: 0px 0px 0px 1px !important;
+        width: 48px;
+        text-align: center;
+        float: left;
+        position: relative;
+    }
+
+        .qz-poster-attach-side .item a {
+            height: 73px;
+            display: block;
+            cursor: pointer;
+        }
+
+        .qz-poster-attach-side .item .icon {
+            width: 24px;
+            height: 24px;
+            overflow: hidden;
+            margin-top: 25px;
+            display: inline-block;
+        }
+
+    .qz-poster-wall .qz-poster-attach-side {
+        top: 5px;
+        right: 5px;
+    }
+
+    .qz-poster-attach {
+        left: 0px;
+        top: 12px;
+        font-size: 0px;
+        position: absolute;
+    }
+
+    .qz-poster .qz-poster-attach .icon {
+        width: 16px;
+        height: 16px;
+        overflow: hidden;
+        vertical-align: middle;
+        display: inline-block;
+        background-repeat: no-repeat;
+    }
+
+    .qz-poster .qz-poster-attach a {
+        height: 16px;
+        margin-right: 10px;
+        display: inline-block;
+        position: relative;
+        cursor: pointer;
+    }
+
+        .qz-poster .qz-poster-attach a:hover {
+            text-decoration: none;
+        }
+
+    .qz-poster .ico-red-dot {
+        display: none;
+    }
+
+    .qz-poster .icon-red-dot {
+        background-position: -102px 0px;
+        top: -3px;
+        width: 7px;
+        height: 7px;
+        right: -1px;
+        position: absolute;
+        background-image: url("sprite/icenter-poster-comment.32-yog150413171555.png?max_age=19830212&d=20150428113841");
+        _background-image: url(sprite/icenter-poster-comment.ie6-yog150413171555.png?max_age=19830212&d=20150428113841);
+        _background-position: -102px 0;
+    }
+
+    .qz-poster-attach .qzappwrap {
+        display: none;
+    }
+
+    .qz-poster-attach a .txt {
+        display: none;
+    }
+
+    .qz-poster-attach-side .item .txt {
+        display: none;
+    }
+
+    .qz-poster-attach-side .item .icon-mood {
+        width: 30px;
+        height: 30px;
+        font-size: 34px;
+        margin-top: -2px;
+    }
+
+    .qz-poster .icon:hover {
+        text-decoration: none;
+    }
+
+    .qz-poster .icon:visited {
+        text-decoration: none;
+    }
+
+    .qz-poster-attach-side .item a:hover {
+        text-decoration: none;
+    }
+
+    .qz-poster-attach-side .item a:visited {
+        text-decoration: none;
+    }
+
+    .qz-poster-sync .sync-nuts .icon {
+        width: 16px;
+        height: 16px;
+        overflow: hidden;
+        display: inline-block;
+    }
+
+    .qz-poster .qz-poster-ft .icon-loading {
+        background: url("img/qz_img/loading.gif?max_age=19830212&d=20150428113841") no-repeat 0px 0px;
+        width: 16px;
+        height: 16px;
+        vertical-align: -3px;
+        display: none;
+    }
+
+    .qz-poster-active a.pic .icon-pic {
+        color: inherit;
+    }
+
+    .qz-poster a.pic:hover .icon-pic {
+        color: inherit;
+    }
+
+    .qz-poster-active a.other .icon-other {
+        color: inherit;
+    }
+
+    .qz-poster a.other:hover .icon-other {
+        color: inherit;
+    }
+
+    .qz-poster-active a.mood .icon-mood {
+        color: inherit;
+    }
+
+    .qz-poster a.mood:hover .icon-mood {
+        color: inherit;
+    }
+
+    .qz-inputer .textarea input {
+        display: none;
+    }
+
+    .qz-inputer .textarea button {
+        display: none;
+    }
+
+    .qz-inputer .textarea img {
+        display: none;
+    }
+
+    .qz-inputer .textarea .emoticon {
+        line-height: 1.23em;
+        vertical-align: -6px;
+        display: inline-block;
+    }
+
+    .qz-inputer .textarea .atomText {
+        background: none;
+        padding: 0px;
+        border: 0px currentColor;
+        text-align: left;
+        overflow: visible;
+        font-size: 1em;
+        margin-right: 1px;
+        vertical-align: baseline;
+        display: inline-block;
+        cursor: text;
+    }
+
+    .qz-inputer .textarea .topic {
+        background: none;
+        padding: 0px;
+        border: 0px currentColor;
+        text-align: left;
+        overflow: visible;
+        font-size: 1em;
+        margin-right: 1px;
+        vertical-align: baseline;
+        display: inline-block;
+        cursor: text;
+    }
+
+    .qz-inputer .textarea .mention {
+        background: none;
+        padding: 0px;
+        border: 0px currentColor;
+        text-align: left;
+        overflow: visible;
+        font-size: 1em;
+        margin-right: 1px;
+        vertical-align: baseline;
+        display: inline-block;
+        cursor: text;
+    }
+
+    .qz-inputer .textarea .atomText {
+        text-align: left;
+    }
+
+    .qz-poster-ft {
+        height: 38px;
+        margin-bottom: 8px;
+        position: relative;
+        z-index: 2;
+    }
+
+        .qz-poster-ft .op {
+            top: 8px;
+            right: 0px;
+            font-size: 0px;
+            position: absolute;
+        }
+
+        .qz-poster-ft .btn-post {
+            border-radius: 2px;
+            width: 55px;
+            height: 28px;
+            line-height: 28px;
+            font-size: 14px;
+            vertical-align: middle;
+            position: relative;
+        }
+
+    .qz-composer-plugin-ft .btn-post {
+        border-radius: 2px;
+        width: 55px;
+        height: 28px;
+        line-height: 28px;
+        font-size: 14px;
+        vertical-align: middle;
+        position: relative;
+    }
+
+    .qz-poster-ft .btn-dismiss-post {
+        border-radius: 2px;
+        width: 55px;
+        height: 28px;
+        line-height: 28px;
+        font-size: 14px;
+        vertical-align: middle;
+        position: relative;
+    }
+
+    .qz-poster-ft .btn-dismiss-post {
+        padding: 0px 10px;
+        text-align: center;
+        margin-right: 10px;
+        display: inline-block;
+    }
+
+        .qz-poster-ft .btn-dismiss-post:hover {
+            text-decoration: none;
+        }
+
+    .qz-poster-ft .btn-post .icon-loading {
+        display: none;
+    }
+
+    .qz-poster-ft .btn-post-loading .icon-loading {
+        display: inline-block;
+        _margin-top: 3px;
+    }
+
+    .qz-poster-ft .btn-post-loading .txt {
+        display: none;
+    }
+
+    .qz-poster .qz-poster-ft .qz-poster-sync {
+        top: 11px;
+        right: 87px;
+        padding-top: 0px;
+        display: none;
+        position: absolute;
+        z-index: 2;
+    }
+
+    .qz-poster-ft .qz-poster-sync .sync-nuts {
+        width: 280px;
+        height: 16px;
+        text-align: right;
+        font-size: 0px;
+    }
+
+    .qz-poster-sync .sync-nuts a {
+        width: 16px;
+        height: 16px;
+        overflow: hidden;
+        text-decoration: none;
+        margin-right: 10px;
+        vertical-align: middle;
+        display: inline-block;
+        cursor: pointer;
+    }
+
+    .qz-poster-private-on .sync-nuts a {
+        cursor: default;
+    }
+
+    .qz-poster-sync .sync-nuts i.icon-private {
+        padding-top: 2px;
+        font-size: 16px;
+    }
+
+    .qz-poster-sync .sync-nuts i.icon-timing {
+        font-size: 20px;
+    }
+
+    .qz-poster-sync .sync-private-on i.icon {
+        color: rgb(163, 203, 230);
+    }
+
+    .qz-poster-sync .sync-timing-on i.icon {
+        color: rgb(163, 203, 230);
+    }
+
+    .qz-poster-sync span {
+        font-family: Microsoft Yahei;
+        font-size: 12px;
+        vertical-align: middle;
+    }
+
+    .qz-poster-sync .dividor {
+        margin: 0px 12px 0px 5px;
+        font-family: serif;
+    }
+
+    .set-audience {
+        display: inline-block;
+    }
+
+    .qz-poster-ft .qz-poster-sync .set-audience .audience {
+        width: auto;
+        padding-right: 2px;
+    }
+
+    .set-audience .audience .text-place {
+        width: 85px;
+        text-align: center;
+        margin-right: 5px;
+        display: inline-block;
+    }
+
+    .set-audience .audience .ui_trigbox_b {
+        top: -2px;
+        vertical-align: middle;
+    }
+
+        .set-audience .audience .ui_trigbox_b .ui_trig {
+            border-width: 4px;
+        }
+
+    .qz-poster .set-audience-drop li .on {
+        font-weight: bold;
+    }
+
+    .icon16 {
+        width: 16px;
+        height: 16px;
+        overflow: hidden;
+        vertical-align: middle;
+        display: inline-block;
+    }
+
+    .icon-txt {
+        vertical-align: middle;
+    }
+
+    .set-audience-drop .icon16 {
+        margin-right: 10px;
+    }
+
+    .b-test .qz-poster-attach {
+        display: none;
+    }
+
+    .b-test .qz-poster-ft {
+        display: none;
+    }
+
+    .qz-poster-active .qz-poster-attach {
+        display: block;
+    }
+
+    .qz-poster-active .qz-poster-ft {
+        display: block;
+    }
+
+        .qz-poster-active .qz-poster-ft .qz-poster-sync {
+            display: block;
+        }
+
+    .qz-poster-show-setter .qz-poster-ft .qz-poster-sync {
+        display: block;
+    }
+
+    .qz-poster .qzappitem_music .search_ass {
+        left: 80px;
+    }
+
+    .qz-poster .qzappitem_music .full-music-tip {
+        padding: 4px 25px 4px 6px;
+        border: 1px solid rgb(245, 225, 144);
+        color: rgb(100, 100, 100);
+        line-height: 1.6em;
+        margin-top: 10px;
+        position: relative;
+        background-color: rgb(255, 250, 226);
+        _zoom: 1;
+    }
+
+    .qz-poster-attach-side {
+    }
+
+        .qz-poster-attach-side .item-mood {
+            display: none;
+        }
+
+    .qz-poster .qz-poster-wall-con {
+        display: none;
+    }
+
+    .qz-poster .wall-tip {
+        display: none;
+    }
+
+    .qz-poster .arr {
+        display: none;
+    }
+
+    .qz-poster .pop-drop {
+        overflow: hidden;
+        box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.17);
+    }
+
+    .comment-insert-img .img-upload-drop {
+        overflow: hidden;
+        box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.17);
+    }
+
+    .qz-poster .pop-drop .hd {
+        padding: 8px 5px 0px 8px;
+    }
+
+    .qz-poster .pop-drop .list::before {
+        display: table;
+        content: "";
+    }
+
+    .qz-poster .pop-drop .list::after {
+        display: table;
+        content: "";
+    }
+
+    .comment-insert-img .img-upload-drop .pop-drop .list::before {
+        display: table;
+        content: "";
+    }
+
+    .comment-insert-img .img-upload-drop .pop-drop .list::after {
+        display: table;
+        content: "";
+    }
+
+    .qz-poster .pop-drop .list::after {
+        clear: both;
+    }
+
+    .comment-insert-img .img-upload-drop .pop-drop .list::after {
+        clear: both;
+    }
+
+    .qz-poster .pop-drop .list {
+        margin: 0px 0px 0px -1px;
+    }
+
+    .comment-insert-img .img-upload-drop .pop-drop .list {
+        margin: 0px 0px 0px -1px;
+    }
+
+    .qz-poster .pop-drop li {
+        border-width: 0px 0px 0px 1px;
+        width: 48px;
+        height: 70px;
+        float: left;
+    }
+
+    .comment-insert-img .img-upload-drop .pop-drop li {
+        border-width: 0px 0px 0px 1px;
+        width: 48px;
+        height: 70px;
+        float: left;
+    }
+
+    .qz-poster .pop-drop li a {
+        height: 100%;
+        text-align: center;
+        font-family: Microsoft Yahei;
+        display: block;
+        cursor: pointer;
+    }
+
+    .comment-insert-img .img-upload-drop .pop-drop li a {
+        height: 100%;
+        text-align: center;
+        font-family: Microsoft Yahei;
+        display: block;
+        cursor: pointer;
+    }
+
+    .qz-poster .pop-drop li a .txt {
+        display: block;
+    }
+
+    .comment-insert-img .img-upload-drop .pop-drop li a .txt {
+        display: block;
+    }
+
+    .qz-poster .pop-drop li.bor2 {
+        border-width: 1px 0px 0px;
+        border-style: dashed;
+        margin: 3px 0px 0px;
+        padding-top: 8px;
+    }
+
+    .qz-poster .pop-drop a:hover {
+        text-decoration: none;
+    }
+
+    .qz-poster .pop-drop li:hover .icon {
+        color: inherit;
+    }
+
+    .qz-poster .img-upload-drop {
+        top: 100%;
+        width: 197px;
+        right: -1px;
+        position: absolute;
+        z-index: 99;
+        _margin-top: 1px;
+        _right: -2px;
+    }
+
+    .qz-poster .other-attach-drop {
+        top: 100%;
+        width: 197px;
+        right: -1px;
+        position: absolute;
+        z-index: 99;
+        _margin-top: 1px;
+        _right: -2px;
+    }
+
+    .qz-poster .funny-img-drop {
+        top: 100%;
+        width: 197px;
+        right: -1px;
+        position: absolute;
+        z-index: 99;
+        _margin-top: 1px;
+        _right: -2px;
+    }
+
+    .qz-poster .cell-1 {
+        width: 50px;
+    }
+
+    .qz-poster .cell-2 {
+        width: 99px;
+    }
+
+    .qz-poster .cell-3 {
+        width: 148px;
+    }
+
+    .qz-poster .cell-5 {
+        width: 148px;
+    }
+
+    .qz-poster .cell-6 {
+        width: 148px;
+    }
+
+    .qz-poster .cell-9 {
+        width: 148px;
+    }
+
+    .qz-poster .cell-4 {
+        width: 197px;
+    }
+
+    .qz-poster .cell-7 {
+        width: 197px;
+    }
+
+    .qz-poster .cell-8 {
+        width: 197px;
+    }
+
+    .cell-3 .pop-drop .list {
+        margin: 0px -1px -1px 0px;
+        overflow: hidden;
+    }
+
+    .cell-5 .pop-drop .list {
+        margin: 0px -1px -1px 0px;
+        overflow: hidden;
+    }
+
+    .cell-6 .pop-drop .list {
+        margin: 0px -1px -1px 0px;
+        overflow: hidden;
+    }
+
+    .cell-7 .pop-drop .list {
+        margin: 0px -1px -1px 0px;
+        overflow: hidden;
+    }
+
+    .cell-8 .pop-drop .list {
+        margin: 0px -1px -1px 0px;
+        overflow: hidden;
+    }
+
+    .cell-9 .pop-drop .list {
+        margin: 0px -1px -1px 0px;
+        overflow: hidden;
+    }
+
+    .cell-3 .pop-drop li {
+        border-width: 0px 1px 1px 0px;
+    }
+
+    .cell-5 .pop-drop li {
+        border-width: 0px 1px 1px 0px;
+    }
+
+    .cell-6 .pop-drop li {
+        border-width: 0px 1px 1px 0px;
+    }
+
+    .cell-7 .pop-drop li {
+        border-width: 0px 1px 1px 0px;
+    }
+
+    .cell-8 .pop-drop li {
+        border-width: 0px 1px 1px 0px;
+    }
+
+    .cell-9 .pop-drop li {
+        border-width: 0px 1px 1px 0px;
+    }
+
+    .qz-poster .pop-drop .icon {
+        margin: 13px 0px 3px;
+        width: 24px;
+        height: 24px;
+        vertical-align: middle;
+        display: inline-block;
+        background-repeat: no-repeat;
+    }
+
+    .quick-add-img .icon {
+        margin: 13px 0px 3px;
+        width: 24px;
+        height: 24px;
+        vertical-align: middle;
+        display: inline-block;
+        background-repeat: no-repeat;
+    }
+
+    .qz-poster-ad {
+        height: 15px;
+        margin-bottom: 5px;
+    }
+
+    .icon-new-fun {
+        background-position: 0px 0px;
+        left: 29px;
+        top: 11px;
+        width: 17px;
+        height: 16px;
+        position: absolute;
+        background-image: url("sprite/icenter-poster-comment-yog150413171555.png?max_age=19830212&d=20150428113841");
+    }
+
+    .icon-vip-fun {
+        background-position: -18px 0px;
+        left: 30px;
+        top: 22px;
+        width: 13px;
+        height: 10px;
+        overflow: hidden;
+        position: absolute;
+        background-image: url("sprite/icenter-poster-comment-yog150413171555.png?max_age=19830212&d=20150428113841");
+    }
+
+    .qz-inputer .close-fest {
+        display: none;
+    }
+
+    .qz-inputer .fest-pop-entry {
+        display: none;
+    }
+
+    .fest-pop-entry {
+        left: 90px;
+        top: 82px;
+        font-family: Microsoft Yahei;
+        position: absolute;
+    }
+
+    .pr-has-1 {
+        padding-right: 49px !important;
+    }
+
+    .pr-has-2 {
+        padding-right: 98px !important;
+    }
+
+    .pr-has-3 {
+        padding-right: 147px !important;
+    }
+
+    .qz-poster .img-upload-drop {
+        _margin-top: 0;
+    }
+
+    .qz-poster .other-attach-drop {
+        _margin-top: 0;
+    }
+
+    .qz-poster .funny-img-drop {
+        _margin-top: 0;
+    }
+
+    .qz-poster .qz-inputer div.textarea {
+        background: none;
+        padding: 3px 8px 5px;
+        height: 60px;
+        line-height: 20px;
+        font-size: 14px;
+        box-shadow: inset 0px 2px 4px 0px rgba(0,0,0,0.04);
+    }
+
+    .qz-poster .qz-inputer textarea {
+        background: none;
+        padding: 3px 8px 5px;
+        height: 60px;
+        line-height: 20px;
+        font-size: 14px;
+        box-shadow: inset 0px 2px 4px 0px rgba(0,0,0,0.04);
+    }
+
+    .qz-poster .qz-inputer textarea {
+        width: 367px;
+    }
+
+    .qz-poster .qz-poster-attach-side {
+        height: 68px;
+    }
+
+        .qz-poster .qz-poster-attach-side .item a {
+            height: 68px;
+        }
+
+    .qz-poster .pop-drop li {
+        height: 68px;
+    }
+
+    .qz-poster .icon-vip-fun {
+        top: 19px;
+    }
+
+    .qz-poster .qz-poster-attach-side .item .icon {
+        margin-top: 22px;
+    }
+
+    .qz-poster {
+        background-color: transparent !important;
+    }
+
+        .qz-poster .qz-poster-ft {
+            border-width: 0px 1px 1px;
+            border-style: solid;
+        }
+
+            .qz-poster .qz-poster-ft .qz-poster-attach {
+                left: 10px;
+                top: 11px;
+            }
+
+        .qz-poster .qz-poster-ft {
+            margin-bottom: 0px;
+        }
+
+            .qz-poster .qz-poster-ft .op {
+                top: 4px;
+                right: 4px;
+            }
+
+    .qz-poster-status-holder .qz-poster-status {
+        border-top-width: 0px;
+    }
+
+    .qz-poster-bottom .frd-select-panel {
+        width: 532px;
+    }
+
+    .qz-composer-plugin .qz-composer-plugin-hd .dismiss-plugin {
+        background-position: -119px 0px;
+        width: 16px;
+        height: 16px;
+        overflow: hidden;
+        font-size: 0px !important;
+        display: inline-block;
+        background-image: url("sprite/icenter-poster-comment.32-yog150413171555.png?max_age=19830212&d=20150428113841");
+        _background-image: url(sprite/icenter-poster-comment.ie6-yog150413171555.png?max_age=19830212&d=20150428113841);
+        _background-position: -119px 0;
+    }
+
+    .qz-poster qzappitem .close {
+        background-position: -119px 0px;
+        width: 16px;
+        height: 16px;
+        overflow: hidden;
+        font-size: 0px !important;
+        display: inline-block;
+        background-image: url("sprite/icenter-poster-comment.32-yog150413171555.png?max_age=19830212&d=20150428113841");
+        _background-image: url(sprite/icenter-poster-comment.ie6-yog150413171555.png?max_age=19830212&d=20150428113841);
+        _background-position: -119px 0;
+    }
+
+    .qz-poster .poster-add-pop .btn-close-pop {
+        background-position: -119px 0px;
+        width: 16px;
+        height: 16px;
+        overflow: hidden;
+        font-size: 0px !important;
+        display: inline-block;
+        background-image: url("sprite/icenter-poster-comment.32-yog150413171555.png?max_age=19830212&d=20150428113841");
+        _background-image: url(sprite/icenter-poster-comment.ie6-yog150413171555.png?max_age=19830212&d=20150428113841);
+        _background-position: -119px 0;
+    }
+
+    .qz-composer-plugin .qz-composer-plugin-hd .dismiss-plugin:hover {
+        background-position: -136px 0px;
+        background-image: url("sprite/icenter-poster-comment.32-yog150413171555.png?max_age=19830212&d=20150428113841");
+        _background-image: url(sprite/icenter-poster-comment.ie6-yog150413171555.png?max_age=19830212&d=20150428113841);
+        _background-position: -136px 0;
+    }
+
+    .qz-poster qzappitem .close:hover {
+        background-position: -136px 0px;
+        background-image: url("sprite/icenter-poster-comment.32-yog150413171555.png?max_age=19830212&d=20150428113841");
+        _background-image: url(sprite/icenter-poster-comment.ie6-yog150413171555.png?max_age=19830212&d=20150428113841);
+        _background-position: -136px 0;
+    }
+
+    .poster-add-pop .btn-close-pop:hover {
+        background-position: -136px 0px;
+        background-image: url("sprite/icenter-poster-comment.32-yog150413171555.png?max_age=19830212&d=20150428113841");
+        _background-image: url(sprite/icenter-poster-comment.ie6-yog150413171555.png?max_age=19830212&d=20150428113841);
+        _background-position: -136px 0;
+    }
+
+    .qz-composer-plugin .qz-composer-plugin-bd .input-word .number-left {
+        right: 35px;
+    }
+
+    .app_mood .qz-composer-plugin .qz-composer-plugin-bd .input-word .number-left {
+        right: 70px;
+    }
+
+    .app_mood .edit-status .qz-composer-plugin .qz-composer-plugin-bd .input-word .number-left {
+        right: 20px;
+    }
+
+    .photo-tpl-wrap .tpl-item {
+        border-color: rgb(217, 217, 215);
+        margin-right: 10px !important;
+        background-color: rgb(255, 255, 255);
+    }
+
+    .attachbar-holder .qzappwrap .qzappitem_music .search_bar .textinput {
+        _width: 400px;
+        _line-height: 22px;
+    }
+
+    .qzappitem_video .addons_wrap .textinput_wrap .textinput {
+        _width: 490px;
+        _line-height: 22px;
+    }
+
+    .mod_feed_lst .feed .box .tpl-item .see-all {
+        width: 512px;
+    }
+
+    .set-audience .audience .ui_trigbox_b {
+        top: 0px;
+        width: 10px;
+        height: 10px;
+        overflow: hidden;
+        margin-top: 3px;
+        vertical-align: middle;
+        display: inline-block;
+    }
+
+        .set-audience .audience .ui_trigbox_b .ui_trig {
+            display: none;
+        }
+
+    .qz-poster-sync .dividor {
+        margin: 0px 15px 0px 8px;
+        width: 0px;
+        height: 15px;
+        overflow: hidden;
+        font-size: 0px;
+        display: inline-block;
+    }
+
+    .qz-poster .sync-timing-drop li .on {
+        font-weight: bold;
+    }
+
+    .mod-say-authority {
+        left: -1px;
+        top: 39px !important;
+    }
+
+        .mod-say-authority .frd-select-panel {
+            width: 532px;
+        }
+
+    .img-tpl-preview-on .tpl-item .img-item-list li {
+        transition: none;
+        -moz-transition: none;
+        -webkit-transition: none;
+        -o-transition: none;
+    }
+
+    .mod-photo-merge {
+        width: auto !important;
+    }
+
+    .qz-poster .qz-poster-status .labels {
+        padding: 14px 10px 0px;
+    }
+
+    .qz-poster .poster-add-pop {
+        margin-top: -1px;
+    }
+
+    .os-ios .qz-inputer {
+        padding: 0px 99px 0px 0px;
+    }
+
+        .os-ios .qz-inputer textarea {
+            width: 401px;
+        }
+
+    .os-ios .qz-poster-attach-side .item-funny {
+        display: none;
+    }
+
+    .os-ios .other-attach-drop .list li:last-child {
+        display: none;
+    }
+
+    .os-ios .qz_poster_btn_screen_capture {
+        display: none;
+    }
+
+    .os-ios .qz_poster_btn_meitu {
+        display: none;
+    }
+
+    .os-ios .qz-poster-attach .qzaddons a:nth-child(2) {
+        display: none;
+    }
+
+    .os-ios .qzappitem_video .addons_hd_tab li:last-child {
+        display: none;
+    }
+
+    .os-ios .img-tpl-preview .quick-add-img {
+        display: none;
+    }
+
+    .os-ios .qz-poster .other-attach-drop {
+        width: 99px;
+    }
+
+    .os-ios .qz-poster .img-upload-drop {
+        width: 99px;
+    }
+
+    .qz-composer-plugin .qz-composer-plugin-tips {
+        padding-left: 18px;
+    }
+
+    .qz-composer-plugin .qz-composer-plugin-bd {
+        margin-left: 11px;
+    }
+
+    .mod_comments {
+    }
+
+        .mod_comments .comments_list .comments_list_more {
+            top: -2px;
+            margin-bottom: 12px;
+            position: relative;
+        }
+
+            .mod_comments .comments_list .comments_list_more .ico_loading {
+                background: url("img/qz_img/loading.gif?max_age=19830212&d=20150428113841");
+                width: 16px;
+                height: 16px;
+                margin-right: 5px;
+                vertical-align: -3px;
+            }
+
+        .mod_comments .comments_list .comments_item {
+            list-style: none;
+            padding-top: 15px;
+        }
+
+        .mod_comments .comments_list .bor3 {
+            border-width: 1px 0px 0px;
+            border-style: dashed;
+            _border-width: 0 0 1px;
+        }
+
+        .mod_comments .comments_list .comments_item .comments_item_bd {
+            padding: 0px 0px 0px 40px;
+            position: relative;
+        }
+
+        .mod_comments .comments_list .ui_avatar {
+            left: 0px;
+            top: 0px;
+            position: absolute;
+        }
+
+            .mod_comments .comments_list .ui_avatar img {
+                border-radius: 2px;
+                width: 30px;
+                height: 30px;
+            }
+
+        .mod_comments .comments_list .nickname {
+            margin-right: 5px;
+            display: inline-block;
+        }
+
+        .mod_comments .comments_list .comments_content {
+            top: -4px;
+            line-height: 1.6;
+            margin-bottom: -4px;
+            position: relative;
+            min-height: 35px;
+            _height: 35px;
+        }
+
+            .mod_comments .comments_list .comments_content img {
+                vertical-align: text-bottom;
+            }
+
+            .mod_comments .comments_list .comments_content .emoticon {
+                height: 24px;
+            }
+
+        .mod_comments .comments_list .comments_op {
+            line-height: 18px;
+            margin-bottom: 12px;
+            position: relative;
+        }
+
+            .mod_comments .comments_list .comments_op span {
+                margin-right: 10px;
+            }
+
+            .mod_comments .comments_list .comments_op a {
+                margin-right: 5px;
+            }
+
+        .mod_comments .mod_comments_sub {
+            padding: 0px 0px 5px 40px;
+        }
+
+        .mod_comments .comments_item_bd .mod_comments_sub {
+            padding: 0px 0px 5px;
+        }
+
+        .mod_comments .mod_comments_sub .comments_item {
+            padding: 0px;
+            border: currentColor;
+        }
+
+        .mod_comments .mod_comments_sub .comments_op {
+            margin-bottom: 6px;
+        }
+
+        .mod_comments .comments_list :first-child.comments_item {
+            border: currentColor;
+            padding-top: 0px;
+            margin-top: 0px;
+        }
+
+        .mod_comments .mod_comments_sub :first-child.comments_item {
+            padding-top: 0px;
+        }
+
+        .mod_comments .comments_list ul {
+            _position: relative;
+            _zoom: 1;
+            _margin-bottom: -16px;
+            _top: -15px;
+        }
+
+        .mod_comments .mod_comments_sub ul {
+            _position: relative;
+            _margin-bottom: 0;
+            _top: 0;
+        }
+
+    .comments_list_tip {
+        padding: 5px 8px;
+        margin-bottom: 10px;
+    }
+
+    .mod_comments .mod_at .mod_at_list ul {
+        margin-bottom: 0px !important;
+    }
+
+    .mod_comments .mod_comment_page {
+        margin: 0px 0px 2px;
+        padding: 8px;
+        overflow: hidden;
+        _margin-top: 0;
+    }
+
+        .mod_comments .mod_comment_page p {
+            text-align: center;
+        }
+
+        .mod_comments .mod_comment_page input {
+            border-width: 1px;
+            border-style: solid;
+            margin: 0px 3px;
+            width: 34px;
+            text-align: center;
+            vertical-align: 1px;
+            _vertical-align: 0;
+        }
+
+        .mod_comments .mod_comment_page button {
+            margin-left: 5px;
+            _vertical-align: 1px;
+        }
+
+        .mod_comments .mod_comment_page a {
+            margin-right: 5px;
+        }
+
+        .mod_comments .mod_comment_page .mod_comment_page_more {
+            margin-right: 5px;
+        }
+
+        .mod_comments .mod_comment_page .mod_comment_page_count {
+            margin-right: -3px;
+        }
+
+            .mod_comments .mod_comment_page .mod_comment_page_count a {
+                margin-right: 9px;
+            }
+
+        .mod_comments .mod_comment_page .mod_comment_page_current {
+            margin-right: 9px;
+        }
+
+        .mod_comments .mod_comment_page .mod_comment_page_current {
+            font-weight: bold;
+        }
+
+        .mod_comments .mod_comment_page .mod_comment_page_to {
+            margin: 0px 3px 0px 1px;
+        }
+
+        .mod_comments .mod_comment_page .mod_comment_page_input {
+            line-height: 18px;
+            vertical-align: -2px;
+            _vertical-align: 0;
+        }
+
+    .mod_retweet .mod_pagenav a {
+        padding: 0px 4px;
+        height: 20px;
+        line-height: 20px;
+        vertical-align: top;
+        display: inline-block;
+        min-width: 10px;
+    }
+
+    .mod_retweet li {
+        border-width: 1px;
+    }
+
+    .comments_content .url {
+        -ms-word-break: break-all;
+    }
+
+    .comments_list .comments_thumbnails {
+        margin: 5px 0px 3px;
+        font-size: 0px;
+    }
+
+    .comments_list .cmt-figure {
+        margin: 5px 0px 3px;
+        font-size: 0px;
+    }
+
+    .comments_list .comments_thumbnails a {
+        width: 80px;
+        height: 80px;
+        overflow: hidden;
+        margin-right: 4px;
+        vertical-align: top;
+        display: inline-block;
+        background-color: rgb(233, 233, 233);
+    }
+
+    .comments_list .cmt-figure a {
+        width: 80px;
+        height: 80px;
+        overflow: hidden;
+        margin-right: 4px;
+        vertical-align: top;
+        display: inline-block;
+        background-color: rgb(233, 233, 233);
+    }
+
+    .mod_retweet .retweet_addons a i {
+        background: url("img/mood/mod_comments.png?max_age=19830212&d=20150428113841") no-repeat 0px -999px;
+        _background-image: url(img/mood/mod_comments_ie6.png?max_age=19830212&d=20150428113841);
+    }
+
+    .mod_commnets_poster .comments_poster_ft a i {
+        background: url("img/mood/mod_comments.png?max_age=19830212&d=20150428113841") no-repeat 0px -999px;
+        _background-image: url(img/mood/mod_comments_ie6.png?max_age=19830212&d=20150428113841);
+    }
+
+    .mod_retweet .retweet_addons .add_emoticon i {
+        background-position: -2px -2px;
+    }
+
+    .mod_commnets_poster .comments_poster_ft .add_emoticon i {
+        background-position: -2px -2px;
+    }
+
+    .mod_retweet .retweet_addons .add_emoticon:hover i {
+        background-position: -22px -2px;
+    }
+
+    .mod_commnets_poster .comments_poster_ft .add_emoticon:hover i {
+        background-position: -22px -2px;
+    }
+
+    .mod_retweet .retweet_addons .add_at i {
+        background-position: -2px -22px;
+    }
+
+    .mod_commnets_poster .comments_poster_ft .add_at i {
+        background-position: -2px -22px;
+    }
+
+    .mod_retweet .retweet_addons .add_at:hover i {
+        background-position: -22px -22px;
+    }
+
+    .mod_commnets_poster .comments_poster_ft .add_at:hover i {
+        background-position: -22px -22px;
+    }
+
+    .mod_retweet .retweet_addons .add_gift i {
+        background-position: -2px -42px;
+    }
+
+    .mod_commnets_poster .comments_poster_ft .add_gift i {
+        background-position: -2px -42px;
+    }
+
+    .mod_retweet .retweet_addons .add_gift:hover i {
+        background-position: -22px -42px;
+    }
+
+    .mod_commnets_poster .comments_poster_ft .add_gift:hover i {
+        background-position: -22px -42px;
+    }
+
+    .mod_commnets_poster {
+        position: relative;
+    }
+
+    .mod_commnets_poster_top {
+        margin-bottom: 2px;
+    }
+
+    .mod_commnets_poster .comments_poster_hd {
+        padding: 8px 0px 0px;
+    }
+
+    .mod_commnets_poster .comments_poster_bd {
+        padding: 0px 0px 0px 40px;
+        position: relative;
+        z-index: 1;
+        _height: 25px;
+    }
+
+        .mod_commnets_poster .comments_poster_bd .ui_avatar {
+            left: 0px;
+            top: 0px;
+            position: absolute;
+        }
+
+            .mod_commnets_poster .comments_poster_bd .ui_avatar img {
+                border-radius: 2px;
+                width: 30px;
+                height: 30px;
+            }
+
+        .mod_commnets_poster .comments_poster_bd .comments_box {
+            position: relative;
+            z-index: 1;
+        }
+
+        .mod_commnets_poster .comments_poster_bd .textinput {
+            padding: 2px 3px;
+            -ms-word-wrap: break-word;
+            min-height: 54px;
+            _height: 54px;
+        }
+
+        .mod_commnets_poster .comments_poster_bd .textarea {
+            padding: 2px 3px;
+            -ms-word-wrap: break-word;
+            min-height: 54px;
+            _height: 54px;
+        }
+
+    .mod_commnets_poster .has_char_count .textinput {
+        padding-bottom: 22px;
+        min-height: 34px;
+        _height: 34px;
+    }
+
+    .mod_commnets_poster .comments_box .textinput_default a {
+        text-decoration: none;
+        cursor: text;
+    }
+
+    .mod_commnets_poster .textinput img {
+        vertical-align: middle;
+    }
+
+    .mod_commnets_poster .textinput .mention {
+    }
+
+    .mod_commnets_poster .textinput img.mention {
+        vertical-align: text-bottom;
+    }
+
+    .mod_commnets_poster .comments_poster_bd .number_left {
+        font: 14px/20px Georgia, Tahoma, Arial;
+        width: 70px;
+        height: 20px;
+        text-align: right;
+        padding-right: 5px;
+        margin-top: -25px;
+        float: right;
+        position: relative;
+        z-index: 4;
+        font-size-adjust: none;
+        font-stretch: normal;
+    }
+
+    .mod_commnets_poster .comments_poster_ft {
+        padding: 5px 0px 0px 40px;
+        height: 24px;
+        -ms-zoom: 1;
+    }
+
+    .mod_commnets_poster .comments_poster_addons {
+        padding-top: 2px;
+    }
+
+    .mod_commnets_poster .comments_poster_op {
+        height: 24px;
+        float: right;
+    }
+
+    .mod_commnets_poster .comments_poster_addons .add_right {
+        margin-top: -2px;
+        float: right;
+        display: inline-block;
+    }
+
+        .mod_commnets_poster .comments_poster_addons .add_right label {
+            vertical-align: baseline;
+        }
+
+        .mod_commnets_poster .comments_poster_addons .add_right input {
+            margin: 0px 4px 0px 8px;
+            vertical-align: middle;
+            _margin: 0 1px 0 4px;
+        }
+
+    .mod_commnets_poster .comments_poster_addons a {
+        text-decoration: none;
+        margin-right: 8px;
+        cursor: pointer;
+        -ms-zoom: 1;
+    }
+
+    .mod_commnets_poster .comments_poster_ft a i {
+        padding: 0px;
+        width: 16px;
+        height: 16px;
+        line-height: 8;
+        overflow: hidden;
+        text-decoration: none;
+        vertical-align: bottom;
+        display: inline-block;
+        cursor: pointer;
+    }
+
+    .mod_commnets_poster .comments_poster_ft a i {
+        margin-right: 5px;
+        _margin-right: 2px;
+    }
+
+    .mod_commnets_poster input {
+        vertical-align: middle;
+    }
+
+    .mod_commnets_poster label {
+        vertical-align: middle;
+    }
+
+    .mod_commnets_poster .comments_poster_ft .gb_bt {
+        padding: 0px 0px 3px;
+        border-radius: 2px;
+        width: 54px;
+        height: 23px;
+        line-height: 20px;
+        font-size: 12px;
+        font-weight: normal;
+        margin-left: 6px;
+        display: inline-block;
+        _margin-left: 2px;
+    }
+
+    .f_single .comments_poster_ft .gb_bt {
+        width: 72px;
+        height: 28px;
+        line-height: 28px;
+        overflow: hidden;
+        padding-bottom: 4px;
+        font-size: 14px;
+        z-index: 1;
+        _line-height: 25px;
+    }
+
+    .f_single .comments_poster_ft {
+        height: 30px;
+    }
+
+    .f_single .comments_poster_op {
+        height: 30px;
+    }
+
+    .mod_comments_poster_noavatar .ui_avatar {
+        display: none;
+    }
+
+    .mod_comments_poster_noavatar div.comments_poster_bd {
+        padding-left: 0px;
+    }
+
+    .mod_comments_poster_noavatar div.comments_poster_ft {
+        padding-left: 0px;
+    }
+
+    .mod_commnets_poster div.comments_poster_default {
+        padding-left: 0px;
+    }
+
+        .mod_commnets_poster div.comments_poster_default .textinput {
+            line-height: 23px;
+            min-height: 24px;
+            _height: 24px;
+        }
+
+    .mod_comments .comments_item .mod_commnets_poster {
+        margin: 0px 0px 5px;
+    }
+
+    .mod_comments .comments_item .mod_comments_sub .mod_commnets_poster {
+        margin: 5px 0px;
+    }
+
+    .mod_comments .comments_list .comments_poster_bd .ui_avatar {
+        left: 0px;
+    }
+
+    .mod_comments .comments_item .comments_poster_bd {
+        padding-left: 40px;
+    }
+
+    .mod_comments .comments_item .comments_poster_ft {
+        padding-left: 40px;
+    }
+
+    .mod_comments .mod_comments_sub .comments_poster_bd {
+        padding-left: 0px;
+    }
+
+    .mod_comments .mod_comments_sub .comments_poster_ft {
+        padding-left: 0px;
+    }
+
+    .mod_commnets_poster .mod_at_wrap {
+        margin: 0px;
+        left: 0px;
+        width: 100%;
+    }
+
+    .mod_commnets_poster .mod_at_list li {
+        height: auto;
+        min-height: 30px;
+    }
+
+    .feeds_comment_v2 .mod_commnets_poster {
+        background: none;
+    }
+
+    .mod_comments .comments_item_bd .comments_poster_ft {
+        padding-left: 0px;
+    }
+
+    .mod_comments .comments_item_bd .comments_poster_bd {
+        padding-left: 0px;
+    }
+
+    .mod_commnets_poster .textinput .mention {
+        background: none;
+        margin: 0px 1px;
+        padding: 0px;
+        border: currentColor;
+        overflow: visible;
+        font-size: 1em;
+        vertical-align: baseline;
+        display: inline-block;
+        cursor: text;
+    }
+
+    .mod_commnets_poster .comments_poster_default .textinput {
+        padding-left: 5px;
+        box-shadow: none;
+    }
+
+    .mod_retweet {
+    }
+
+        .mod_retweet .retweet_hd {
+            line-height: 1.6;
+            margin-bottom: 5px;
+        }
+
+        .mod_retweet .retweet_bd {
+            position: relative;
+            z-index: 1;
+        }
+
+        .mod_retweet .retweet_bd_box {
+        }
+
+            .mod_retweet .retweet_bd_box .textinput {
+                padding: 2px 3px 22px;
+                min-height: 34px;
+                _height: 34px;
+            }
+
+            .mod_retweet .retweet_bd_box .textarea {
+                padding: 2px 3px 22px;
+                min-height: 34px;
+                _height: 34px;
+            }
+
+        .mod_retweet .retweet_bd .number_left {
+            font: 14px/20px Georgia, Tahoma, Arial;
+            width: 70px;
+            height: 20px;
+            text-align: right;
+            padding-right: 5px;
+            margin-top: -25px;
+            float: right;
+            position: relative;
+            z-index: 2;
+            font-size-adjust: none;
+            font-stretch: normal;
+        }
+
+        .mod_retweet .retweet_ft {
+            padding: 5px 0px 0px;
+            overflow: hidden;
+        }
+
+        .mod_retweet .retweet_list {
+            margin: 10px 0px 0px;
+            line-height: 1.6;
+        }
+
+            .mod_retweet .retweet_list ul.bor3 {
+            }
+
+            .mod_retweet .retweet_list li.bor3 {
+                border-style: dashed none none;
+                padding: 6px 0px 10px;
+            }
+
+        .mod_retweet .retweet_op {
+            float: right;
+        }
+
+            .mod_retweet .retweet_op .gb_bt {
+                padding: 0px 0px 3px;
+                border-radius: 2px;
+                width: 54px;
+                height: 23px;
+                line-height: 20px;
+                font-size: 12px;
+                font-weight: normal;
+                margin-left: 6px;
+                display: inline-block;
+                _margin-left: 2px;
+            }
+
+        .mod_retweet .retweet_addons {
+            padding-top: 2px;
+        }
+
+            .mod_retweet .retweet_addons .add_right {
+                margin-top: -1px;
+                float: right;
+                display: inline-block;
+            }
+
+                .mod_retweet .retweet_addons .add_right label {
+                    vertical-align: baseline;
+                }
+
+                .mod_retweet .retweet_addons .add_right input {
+                    margin: 0px 4px 0px 8px;
+                    vertical-align: middle;
+                    _margin: 0 2px 0 6px;
+                }
+
+                .mod_retweet .retweet_addons .add_right i {
+                    width: 20px;
+                    height: 20px;
+                    line-height: 8;
+                    overflow: hidden;
+                    vertical-align: bottom;
+                    display: block;
+                    cursor: pointer;
+                }
+
+            .mod_retweet .retweet_addons a {
+                text-decoration: none;
+                margin-right: 8px;
+                cursor: pointer;
+                -ms-zoom: 1;
+            }
+
+                .mod_retweet .retweet_addons a i {
+                    padding: 0px;
+                    width: 16px;
+                    height: 16px;
+                    line-height: 8;
+                    overflow: hidden;
+                    text-decoration: none;
+                    vertical-align: bottom;
+                    display: inline-block;
+                    cursor: pointer;
+                }
+
+                .mod_retweet .retweet_addons a i {
+                    margin-right: 5px;
+                    _margin-right: 2px;
+                }
+
+        .mod_retweet .qz_page_nav {
+            padding: 5px;
+            text-align: center;
+        }
+
+        .mod_retweet .textinput img {
+            vertical-align: middle;
+        }
+
+        .mod_retweet .textinput .mention {
+        }
+
+        .mod_retweet .textinput img.mention {
+            vertical-align: text-bottom;
+        }
+
+        .mod_retweet .mod_at_wrap {
+            margin: 0px;
+            left: 0px;
+            width: 100%;
+        }
+
+        .mod_retweet .mod_at_list li {
+            height: auto;
+            min-height: 30px;
+        }
+
+    .f_single .retweet_ft .gb_bt {
+        width: 72px;
+        height: 28px;
+        line-height: 25px;
+        overflow: hidden;
+        padding-bottom: 4px;
+        font-size: 14px;
+        z-index: 1;
+    }
+
+    .f_single .retweet_ft {
+        height: 30px;
+    }
+
+    .f_single .retweet_op {
+        height: 30px;
+    }
+
+    .mod_retweet textarea.textarea {
+        padding: 0px;
+        width: 99.4%;
+    }
+
+    .mod_retweet textarea.textinput {
+        padding: 0px;
+        width: 99.4%;
+    }
+
+    .mod_commnets_poster textarea.textarea {
+        padding: 0px;
+        width: 99.4%;
+    }
+
+    .mod_commnets_poster textarea.textinput {
+        padding: 0px;
+        width: 99.4%;
+    }
+
+    .comments_box .mod-quick-comment {
+        border-width: 0px 0px 0px 1px;
+        top: 1px;
+        width: 56px;
+        height: 28px;
+        text-align: center;
+        right: 1px;
+        position: absolute;
+    }
+
+    .comments_box .mod-insert-img {
+        border-width: 0px 0px 0px 1px;
+        top: 1px;
+        width: 56px;
+        height: 28px;
+        text-align: center;
+        right: 1px;
+        position: absolute;
+    }
+
+    .btn-quick-comment {
+        height: 28px;
+        line-height: 27px;
+        display: block;
+        cursor: pointer;
+    }
+
+    .btn-insert-img {
+        height: 28px;
+        line-height: 27px;
+        display: block;
+        cursor: pointer;
+    }
+
+    .btn-quick-comment:hover {
+        text-decoration: none;
+    }
+
+    .flash-text {
+        display: none;
+    }
+
+    .icon-flash {
+        width: 18px;
+        height: 14px;
+        margin-top: 6px;
+        display: inline-block;
+    }
+
+    .line-list {
+        border-width: 1px;
+        border-style: solid;
+        top: 100%;
+        width: 254px !important;
+        right: -1px;
+        overflow: hidden;
+        display: none;
+        position: absolute;
+        box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.17);
+        _right: -2px;
+    }
+
+    .hover .line-list {
+        display: block;
+    }
+
+    .quick-comment-list {
+        margin: 0px 0px -1px -1px;
+        width: auto !important;
+        overflow: hidden;
+        -ms-zoom: 1;
+    }
+
+        .quick-comment-list li {
+            border-width: 0px 0px 1px 1px;
+            border-style: solid;
+            width: 84px !important;
+            height: 42px;
+            font-size: 0px;
+            float: left;
+        }
+
+            .quick-comment-list li a {
+                height: 100%;
+                display: block;
+                cursor: pointer;
+            }
+
+    .icon-quick {
+        margin-top: 9px;
+    }
+
+    .bubble_quick_comment {
+        left: -55px;
+        top: 8px;
+        width: 110px;
+        position: absolute;
+    }
+
+        .bubble_quick_comment .ui_trigbox_t {
+            left: 75px !important;
+        }
+
+    .comments-poster-default .comments-box {
+        padding: 0px 0px 0px 40px;
+        position: relative;
+    }
+
+    .comments-poster-default .master-avatar {
+        left: 0px;
+        top: 0px;
+        width: 30px;
+        height: 30px;
+        position: absolute;
+    }
+
+        .comments-poster-default .master-avatar img {
+            border-radius: 2px;
+            width: 30px;
+            vertical-align: top;
+            display: block;
+        }
+
+    .comments_box .mod-insert-img {
+        right: 58px;
+    }
+
+    .icon-camera-16 {
+        width: 16px;
+        height: 16px;
+        margin-top: 6px;
+        display: inline-block;
+    }
+
+    .comment-box-wrap .qz-poster-editor-cont {
+        position: relative;
+    }
+
+    .comment-box-wrap .qz-poster .qz-poster-attach-side {
+        _width: 57px;
+    }
+
+    .comment-box-wrap .qz-poster-attach-side .item .icon {
+        margin: 0px;
+        width: 16px;
+        height: 16px;
+    }
+
+    .comment-box-wrap .img-tpl-preview-on::before {
+        display: table;
+        content: "";
+    }
+
+    .comment-box-wrap .img-tpl-preview-on::after {
+        display: table;
+        content: "";
+    }
+
+    .comment-box-wrap .img-tpl-preview-on::after {
+        clear: both;
+    }
+
+    .comment-box-wrap .img-tpl-preview-on {
+        overflow: hidden;
+        margin-right: -19px;
+    }
+
+        .comment-box-wrap .img-tpl-preview-on .tpl-item {
+            height: auto;
+            overflow: hidden;
+            font-size: 0px;
+            margin-right: 19px;
+            margin-bottom: 0px;
+            float: left;
+            min-height: 0px;
+        }
+
+        .comment-box-wrap .img-tpl-preview-on .img-item-list {
+            overflow: hidden;
+            margin-right: -19px;
+        }
+
+            .comment-box-wrap .img-tpl-preview-on .img-item-list .img-item {
+                width: 150px;
+                height: 112px;
+                text-align: center;
+                overflow: hidden;
+                font-size: 0px;
+                margin-bottom: 10px;
+                vertical-align: top;
+                display: inline-block;
+                position: relative;
+            }
+
+        .comment-box-wrap .img-tpl-preview-on .img-item {
+            margin-right: 19px;
+        }
+
+    .comment-box-wrap .qz-poster .qz-poster-status .img-tpl-preview-on .quick-add-img {
+        margin: 0px 0px 10px !important;
+        float: left;
+        display: block;
+    }
+
+    .comment-box-wrap .img-tpl-preview-on .img-item-list .img-item {
+        left: 0px;
+        top: 0px;
+    }
+
+    .comment-box-wrap .img-tpl-preview-on .icon-img-remove {
+        top: 0px;
+        right: 0px;
+    }
+
+    .comment-box-wrap .img-tpl-preview-on .quick-add-img .quick-add-entry a {
+        margin-top: 0px;
+    }
+
+    .comment-box-wrap .img-tpl-preview-on .quick-add-img .add-img-ways li {
+        height: 108px !important;
+    }
+
+        .comment-box-wrap .img-tpl-preview-on .quick-add-img .add-img-ways li a {
+            margin: 0px;
+            border: 0px currentColor;
+            height: 100%;
+        }
+
+    .comment-box-wrap .img-tpl-preview-on .quick-add-img li .icon {
+        margin: 34px 0px 0px;
+    }
+
+    .comment-box-wrap .img-tpl-preview-on .quick-add-img:hover .cross-line-h {
+        display: none !important;
+    }
+
+    .comment-box-wrap .img-tpl-preview-on .quick-add-img-hover .cross-line-h {
+        display: none !important;
+    }
+
+    .comment-box-wrap .img-tpl-preview-on .quick-add-img:hover .cross-line-v {
+        top: 28px;
+        height: 52px;
+    }
+
+    .comment-box-wrap .img-tpl-preview-on .quick-add-img-hover .cross-line-v {
+        top: 28px;
+        height: 52px;
+    }
+
+    .comment-box-wrap .qz-poster-status-holder .qz-poster-status {
+        border-top-width: 1px;
+    }
+
+    .comment-box-wrap .qz-poster .qz-poster-ft {
+        border: 0px currentColor;
+        background-color: transparent;
+    }
+
+        .comment-box-wrap .qz-poster .qz-poster-ft .qz-poster-attach {
+            left: 0px !important;
+        }
+
+        .comment-box-wrap .qz-poster .qz-poster-ft .op {
+            right: 0px;
+        }
+
+    .comment-box-wrap .qz-inputer {
+        padding-right: 57px;
+    }
+
+    .comment-box-wrap .qz-poster .cell-2 {
+        width: 115px;
+    }
+
+    .comment-insert-img .img-upload-drop {
+        width: 115px;
+    }
+
+    .comment-box-wrap .qz-poster-attach-side .item {
+        width: 56px;
+    }
+
+    .comment-box-wrap .qz-poster .pop-drop li {
+        width: 56px;
+    }
+
+    .comment-insert-img .img-upload-drop .pop-drop li {
+        width: 56px;
+    }
+
+    .comment-box-wrap .qz-poster-attach-side .item .icon {
+        width: 16px;
+        height: 16px;
+    }
+
+    .comment-box-wrap .qz-poster-attach-side .item .icon-pic {
+        margin: 27px 0px 0px;
+    }
+
+    .comment-box-wrap .qz-poster .pop-drop .icon {
+        width: 16px;
+        height: 16px;
+        margin-top: 18px;
+        display: inline-block;
+    }
+
+    .comment-insert-img .img-upload-drop .icon {
+        width: 16px;
+        height: 16px;
+        margin-top: 18px;
+        display: inline-block;
+    }
+
+    .comment-insert-img .img-upload-drop a:hover {
+        text-decoration: none;
+    }
+
+    .comment-insert-img .img-upload-drop .arr {
+        display: none;
+    }
+
+    .comment-insert-img {
+        position: absolute;
+    }
+
+        .comment-insert-img .img-upload-drop .pop-drop li {
+            height: 68px;
+        }
+
+    .comment-box-wrap .qz-poster-msg {
+        border: 0px currentColor;
+    }
+
+    .tmp-sync-list {
+        top: 12px;
+        right: 95px;
+        font-size: 0px;
+        position: absolute;
+    }
+
+        .tmp-sync-list .tmp-sync-item {
+            font-size: 12px;
+        }
+
+            .tmp-sync-list .tmp-sync-item input {
+                margin: 0px 4px 0px 8px;
+                vertical-align: -2px;
+                _margin: 0 1px 0 4px;
+            }
+
+            .tmp-sync-list .tmp-sync-item label {
+                vertical-align: baseline;
+            }
+
+    .comment-box-wrap .qz-poster-sync .dividor {
+        margin: 0px 15px 0px 5px;
+        _margin: 0 8px 0 0;
+    }
+
+    .private-comment input {
+        margin-right: 5px;
+        vertical-align: -2px;
+    }
+
+    .private-txt {
+        color: rgb(216, 97, 93);
+    }
+
+    .icon-diamond {
+        background-position: -153px 0px;
+        width: 16px;
+        height: 16px;
+        margin-left: 3px;
+        vertical-align: text-top;
+        background-image: url("sprite/icenter-poster-comment.32-yog150413171555.png?max_age=19830212&d=20150428113841");
+        _background-image: url(sprite/icenter-poster-comment.ie6-yog150413171555.png?max_age=19830212&d=20150428113841);
+        _background-position: -153px 0;
+    }
+
+    .mod_comments_sub .comment-box-wrap .qz-inputer {
+        padding-right: 0px;
+    }
+
+    .comment-box-wrap .qz-poster-ft .qz-poster-sync .sync-nuts {
+        width: 95px;
+    }
+
+    .hide-offscreen {
+        left: -10000px;
+        top: auto;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        position: absolute;
+    }
+
+    .hint {
+        padding: 5px 25px 2px 6px;
+        border: 1px solid rgb(245, 225, 144);
+        height: auto;
+        color: rgb(100, 100, 100);
+        line-height: 1.6em;
+        text-indent: 0px;
+        position: relative;
+        min-height: 16px;
+        background-color: rgb(255, 250, 226);
+        _zoom: 1;
+    }
+
+    .ui-mr5 {
+        margin-right: 5px;
+    }
+
+    .ui-mr10 {
+        margin-right: 10px;
+    }
+
+    .ui-ico {
+        overflow: hidden;
+        font-size: 0px;
+        display: inline-block;
+        background-repeat: no-repeat;
+        -webkit-text-size-adjust: none;
+    }
+
+    .ui-icon {
+        overflow: hidden;
+        font-size: 0px;
+        display: inline-block;
+        background-repeat: no-repeat;
+        -webkit-text-size-adjust: none;
+    }
+
+    .mod-comments .comments-list .comments-list-more {
+        margin-bottom: 14px;
+    }
+
+        .mod-comments .comments-list .comments-list-more .ico_loading {
+            background: url("img/qz_img/loading.gif?max_age=19830212&d=20150428113841");
+            width: 16px;
+            height: 16px;
+            margin-right: 5px;
+            vertical-align: -3px;
+        }
+
+    .mod-comments .comments-list .comments-item {
+        margin-bottom: 9px;
+    }
+
+    .mod-comments .comments-list .bor3 {
+        border-width: 0px;
+    }
+
+    .mod-comments .comments-list .comments-item .comments-item-bd {
+        padding: 0px 0px 0px 40px;
+        position: relative;
+    }
+
+    .mod-comments .comments-list .ui-avatar {
+        left: 0px;
+        top: 0px;
+        position: absolute;
+    }
+
+        .mod-comments .comments-list .ui-avatar img {
+            border-radius: 2px;
+            width: 30px;
+            height: 30px;
+        }
+
+    .mod-comments .comments-list .nickname {
+        display: inline-block;
+    }
+
+    .mod-comments .comments-list .comments-content {
+        top: -4px;
+        line-height: 1.5;
+        position: relative;
+    }
+
+        .mod-comments .comments-list .comments-content img {
+            vertical-align: text-bottom;
+        }
+
+    .mod-comments .comments-list .comments-op {
+        line-height: 18px;
+        position: relative;
+    }
+
+        .mod-comments .comments-list .comments-op span {
+            margin-right: 10px;
+        }
+
+        .mod-comments .comments-list .comments-op a {
+            margin-right: 5px;
+        }
+
+    .mod-comments .mod-comments-sub {
+        padding: 0px 0px 5px 40px;
+    }
+
+    .mod-comments .comments-item-bd .mod-comments-sub {
+        padding: 4px 0px 0px;
+    }
+
+    .mod-comments .mod-comments-sub .comments-item {
+        padding: 0px;
+        border: currentColor;
+        margin-bottom: 4px;
+    }
+
+    .mod-comments .mod-comments-sub .comments-op {
+    }
+
+    .mod-comments .comments-item-bd .mod-comments-sub .comments-list-more {
+        margin: -2px 0px 9px;
+    }
+
+    .mod-comments .comments-list :first-child.comments-item {
+        border: currentColor;
+        padding-top: 0px;
+        margin-top: 0px;
+    }
+
+    .mod-comments .mod-comments-sub :first-child.comments-item {
+        padding-top: 0px;
+    }
+
+    .comments-list-tip {
+        padding: 5px 8px;
+        margin-bottom: 10px;
+    }
+
+    .mod-comments .mod-at .mod-at-list ul {
+        margin-bottom: 0px !important;
+    }
+
+    .mod-comments .mod_comment_page {
+        margin: 0px 0px 2px;
+        padding: 8px;
+        overflow: hidden;
+        _margin-top: 0;
+    }
+
+        .mod-comments .mod_comment_page p {
+            text-align: center;
+        }
+
+        .mod-comments .mod_comment_page input {
+            border-width: 1px;
+            border-style: solid;
+            margin: 0px 3px;
+            width: 34px;
+            text-align: center;
+            vertical-align: 1px;
+            _vertical-align: 0;
+        }
+
+        .mod-comments .mod_comment_page button {
+            margin-left: 5px;
+            _vertical-align: 1px;
+        }
+
+        .mod-comments .mod_comment_page a {
+            margin-right: 5px;
+        }
+
+        .mod-comments .mod_comment_page .mod_comment_page_more {
+            margin-right: 5px;
+        }
+
+        .mod-comments .mod_comment_page .mod_comment_page_count {
+            margin-right: -3px;
+        }
+
+            .mod-comments .mod_comment_page .mod_comment_page_count a {
+                margin-right: 9px;
+            }
+
+        .mod-comments .mod_comment_page .mod_comment_page_current {
+            margin-right: 9px;
+        }
+
+        .mod-comments .mod_comment_page .mod_comment_page_current {
+            font-weight: bold;
+        }
+
+        .mod-comments .mod_comment_page .mod_comment_page_to {
+            margin: 0px 3px 0px 1px;
+        }
+
+        .mod-comments .mod_comment_page .mod_comment_page_input {
+            line-height: 18px;
+            vertical-align: -2px;
+            _vertical-align: 0;
+        }
+
+    .mod-retweet .mod_pagenav a {
+        padding: 0px 4px;
+        height: 20px;
+        line-height: 20px;
+        vertical-align: top;
+        display: inline-block;
+        min-width: 10px;
+    }
+
+    .mod-retweet li {
+        border-width: 1px;
+    }
+
+    .mod-comments .comments-op .act-reply {
+        width: 12px;
+        height: 12px;
+        vertical-align: middle;
+        display: inline-block;
+        background-repeat: no-repeat;
+    }
+
+        .mod-comments .comments-op .act-reply:hover {
+            background-position: -35px 0px;
+            background-image: url("sprite/icenter-poster-comment-yog150413171555.png?max_age=19830212&d=20150428113841");
+        }
+
+    .comments-content .url {
+        -ms-word-break: break-all;
+    }
+
+    .comments-list .comments-thumbnails {
+        margin: 5px 0px 3px;
+        font-size: 0px;
+    }
+
+    .comments-list .cmt-figure {
+        margin: 5px 0px 3px;
+        font-size: 0px;
+    }
+
+    .comments-list .comments-thumbnails a {
+        width: 80px;
+        height: 80px;
+        overflow: hidden;
+        margin-right: 4px;
+        vertical-align: top;
+        display: inline-block;
+        background-color: rgb(233, 233, 233);
+    }
+
+    .comments-list .cmt-figure a {
+        width: 80px;
+        height: 80px;
+        overflow: hidden;
+        margin-right: 4px;
+        vertical-align: top;
+        display: inline-block;
+        background-color: rgb(233, 233, 233);
+    }
+
+    .mod-retweet .retweet-addons a i {
+        background: url("img/mood/mod-comments.png?max_age=19830212&d=20150428113841") no-repeat 0px -999px;
+        _background-image: url(img/mood/mod-comments_ie6.png?max_age=19830212&d=20150428113841);
+    }
+
+    .mod-commnets-poster .comments-poster-ft a i {
+        background: url("img/mood/mod-comments.png?max_age=19830212&d=20150428113841") no-repeat 0px -999px;
+        _background-image: url(img/mood/mod-comments_ie6.png?max_age=19830212&d=20150428113841);
+    }
+
+    .mod-retweet .retweet-addons .add-emoticon i {
+        background-position: -2px -2px;
+    }
+
+    .mod-commnets-poster .comments-poster-ft .add-emoticon i {
+        background-position: -2px -2px;
+    }
+
+    .mod-retweet .retweet-addons .add-emoticon:hover i {
+        background-position: -22px -2px;
+    }
+
+    .mod-commnets-poster .comments-poster-ft .add-emoticon:hover i {
+        background-position: -22px -2px;
+    }
+
+    .mod-retweet .retweet-addons .add-at i {
+        background-position: -2px -22px;
+    }
+
+    .mod-commnets-poster .comments-poster-ft .add-at i {
+        background-position: -2px -22px;
+    }
+
+    .mod-retweet .retweet-addons .add-at:hover i {
+        background-position: -22px -22px;
+    }
+
+    .mod-commnets-poster .comments-poster-ft .add-at:hover i {
+        background-position: -22px -22px;
+    }
+
+    .mod-retweet .retweet-addons .add-gift i {
+        background-position: -2px -42px;
+    }
+
+    .mod-commnets-poster .comments-poster-ft .add-gift i {
+        background-position: -2px -42px;
+    }
+
+    .mod-retweet .retweet-addons .add-gift:hover i {
+        background-position: -22px -42px;
+    }
+
+    .mod-commnets-poster .comments-poster-ft .add-gift:hover i {
+        background-position: -22px -42px;
+    }
+
+    .mod-commnets-poster {
+        position: relative;
+    }
+
+    .mod-commnets-poster-top {
+        margin-bottom: 2px;
+    }
+
+    .mod-commnets-poster .comments_poster-hd {
+        padding: 8px 0px 0px;
+    }
+
+    .mod-commnets-poster .comments-poster-bd {
+        padding: 0px 0px 0px 40px;
+        position: relative;
+        z-index: 1;
+        _height: 25px;
+    }
+
+        .mod-commnets-poster .comments-poster-bd .ui-avatar {
+            left: 0px;
+            top: 0px;
+            position: absolute;
+        }
+
+            .mod-commnets-poster .comments-poster-bd .ui-avatar img {
+                border-radius: 2px;
+                width: 30px;
+                height: 30px;
+            }
+
+        .mod-commnets-poster .comments-poster-bd .comments-box {
+            position: relative;
+            z-index: 1;
+        }
+
+        .mod-commnets-poster .comments-poster-bd .textinput {
+            padding: 2px 3px;
+            -ms-word-wrap: break-word;
+            min-height: 54px;
+            _height: 54px;
+        }
+
+        .mod-commnets-poster .comments-poster-bd .textarea {
+            padding: 2px 3px;
+            -ms-word-wrap: break-word;
+            min-height: 54px;
+            _height: 54px;
+        }
+
+    .mod-commnets-poster .has-char-count .textinput {
+        padding-bottom: 22px;
+        min-height: 34px;
+        _height: 34px;
+    }
+
+    .mod-commnets-poster .comments-box .textinput-default a {
+        text-decoration: none;
+        cursor: text;
+    }
+
+    .mod-commnets-poster .textinput img {
+        vertical-align: middle;
+    }
+
+    .mod-commnets-poster .textinput .mention {
+    }
+
+    .mod-commnets-poster .textinput img.mention {
+        vertical-align: text-bottom;
+    }
+
+    .mod-commnets-poster .comments-poster-bd .number-left {
+        font: 14px/20px Georgia, Tahoma, Arial;
+        width: 70px;
+        height: 20px;
+        text-align: right;
+        padding-right: 5px;
+        margin-top: -25px;
+        float: right;
+        position: relative;
+        z-index: 4;
+        font-size-adjust: none;
+        font-stretch: normal;
+    }
+
+    .mod-commnets-poster .comments-poster-ft {
+        padding: 5px 0px 0px 40px;
+        height: 24px;
+        -ms-zoom: 1;
+    }
+
+    .mod-commnets-poster .comments-poster-addons {
+        padding-top: 2px;
+    }
+
+    .mod-commnets-poster .comments-poster-op {
+        height: 24px;
+        float: right;
+    }
+
+    .mod-commnets-poster .comments-poster-addons .add-right {
+        margin-top: -2px;
+        float: right;
+        display: inline-block;
+    }
+
+        .mod-commnets-poster .comments-poster-addons .add-right label {
+            vertical-align: baseline;
+        }
+
+        .mod-commnets-poster .comments-poster-addons .add-right input {
+            margin: 0px 4px 0px 8px;
+            vertical-align: middle;
+            _margin: 0 1px 0 4px;
+        }
+
+    .mod-commnets-poster .comments-poster-addons a {
+        text-decoration: none;
+        margin-right: 8px;
+        cursor: pointer;
+        -ms-zoom: 1;
+    }
+
+    .mod-commnets-poster .comments-poster-ft a i {
+        padding: 0px;
+        width: 16px;
+        height: 16px;
+        line-height: 8;
+        overflow: hidden;
+        text-decoration: none;
+        vertical-align: bottom;
+        display: inline-block;
+        cursor: pointer;
+    }
+
+    .mod-commnets-poster .comments-poster-ft a i {
+        margin-right: 5px;
+        _margin-right: 2px;
+    }
+
+    .mod-commnets-poster .comments-poster-ft .gb_bt {
+        padding: 0px 0px 3px;
+        border-radius: 2px;
+        width: 54px;
+        height: 23px;
+        line-height: 20px;
+        font-size: 12px;
+        font-weight: normal;
+        margin-left: 6px;
+        display: inline-block;
+        _margin-left: 2px;
+    }
+
+    .f-single .comments-poster-ft .gb_bt {
+        width: 72px;
+        height: 28px;
+        line-height: 28px;
+        overflow: hidden;
+        padding-bottom: 4px;
+        font-size: 14px;
+        z-index: 1;
+        _line-height: 25px;
+    }
+
+    .f-single .comments-poster-ft {
+        height: 30px;
+    }
+
+    .f-single .comments-poster-op {
+        height: 30px;
+    }
+
+    .mod-comments-poster-noavatar .ui-avatar {
+        display: none;
+    }
+
+    .mod-comments-poster-noavatar div.comments-poster-bd {
+        padding-left: 0px;
+    }
+
+    .mod-comments-poster-noavatar div.comments-poster-ft {
+        padding-left: 0px;
+    }
+
+    .mod-commnets-poster div.comments-poster-default {
+        padding-left: 0px;
+    }
+
+        .mod-commnets-poster div.comments-poster-default .textinput {
+            line-height: 23px;
+            min-height: 24px;
+            _height: 24px;
+        }
+
+    .mod-comments .comments-item .mod-commnets-poster {
+        margin: 0px 0px 5px;
+    }
+
+    .mod-comments .comments-item .mod-comments-sub .mod-commnets-poster {
+        margin: 5px 0px;
+    }
+
+    .mod-comments .comments-list .comments-poster-bd .ui-avatar {
+        left: 0px;
+    }
+
+    .mod-comments .comments-item .comments-poster-bd {
+        padding-left: 40px;
+    }
+
+    .mod-comments .comments-item .comments-poster-ft {
+        padding-left: 40px;
+    }
+
+    .mod-comments .mod-comments-sub .comments-poster-bd {
+        padding-left: 0px;
+    }
+
+    .mod-comments .mod-comments-sub .comments-poster-ft {
+        padding-left: 0px;
+    }
+
+    .mod-commnets-poster .mod-at-wrap {
+        margin: 0px;
+        left: 0px;
+        width: 100%;
+    }
+
+    .mod-commnets-poster .mod-at-list li {
+        height: auto;
+        min-height: 30px;
+    }
+
+    .feeds-comment-v2 .mod-commnets-poster {
+        background: none;
+    }
+
+    .mod-comments .comments-item-bd .comments-poster-ft {
+        padding-left: 0px;
+    }
+
+    .mod-comments .comments-item-bd .comments-poster-bd {
+        padding-left: 0px;
+    }
+
+    .mod-commnets-poster .textinput .mention {
+        background: none;
+        margin: 0px 1px;
+        padding: 0px;
+        border: currentColor;
+        overflow: visible;
+        font-size: 1em;
+        vertical-align: baseline;
+        display: inline-block;
+        cursor: text;
+    }
+
+    .mod-commnets-poster .comments-poster-default .textinput {
+        padding-left: 5px;
+        box-shadow: none;
+    }
+
+    .mod-retweet {
+    }
+
+        .mod-retweet .retweet-hd {
+            line-height: 1.6;
+            margin-bottom: 5px;
+        }
+
+        .mod-retweet .retweet-bd {
+            position: relative;
+            z-index: 1;
+        }
+
+        .mod-retweet .retweet-bd-box {
+        }
+
+            .mod-retweet .retweet-bd-box .textinput {
+                padding: 2px 3px 22px;
+                min-height: 34px;
+                _height: 34px;
+            }
+
+            .mod-retweet .retweet-bd-box .textarea {
+                padding: 2px 3px 22px;
+                min-height: 34px;
+                _height: 34px;
+            }
+
+        .mod-retweet .retweet-bd .number-left {
+            font: 14px/20px Georgia, Tahoma, Arial;
+            width: 70px;
+            height: 20px;
+            text-align: right;
+            padding-right: 5px;
+            margin-top: -25px;
+            float: right;
+            position: relative;
+            z-index: 2;
+            font-size-adjust: none;
+            font-stretch: normal;
+        }
+
+        .mod-retweet .retweet-ft {
+            padding: 5px 0px 0px;
+            overflow: hidden;
+        }
+
+        .mod-retweet .retweet-list {
+            margin: 10px 0px 0px;
+            line-height: 1.6;
+        }
+
+            .mod-retweet .retweet-list ul.bor3 {
+            }
+
+            .mod-retweet .retweet-list li.bor3 {
+                border-style: dashed none none;
+                padding: 6px 0px 10px;
+            }
+
+        .mod-retweet .retweet-op {
+            float: right;
+        }
+
+            .mod-retweet .retweet-op .gb_bt {
+                padding: 0px 0px 3px;
+                border-radius: 2px;
+                width: 54px;
+                height: 23px;
+                line-height: 20px;
+                font-size: 12px;
+                font-weight: normal;
+                margin-left: 6px;
+                display: inline-block;
+                _margin-left: 2px;
+            }
+
+        .mod-retweet .retweet-addons {
+            padding-top: 2px;
+        }
+
+            .mod-retweet .retweet-addons .add-right {
+                margin-top: -1px;
+                float: right;
+                display: inline-block;
+            }
+
+                .mod-retweet .retweet-addons .add-right label {
+                    vertical-align: baseline;
+                }
+
+                .mod-retweet .retweet-addons .add-right input {
+                    margin: 0px 4px 0px 8px;
+                    vertical-align: middle;
+                    _margin: 0 2px 0 6px;
+                }
+
+                .mod-retweet .retweet-addons .add-right i {
+                    width: 20px;
+                    height: 20px;
+                    line-height: 8;
+                    overflow: hidden;
+                    vertical-align: bottom;
+                    display: block;
+                    cursor: pointer;
+                }
+
+            .mod-retweet .retweet-addons a {
+                text-decoration: none;
+                margin-right: 8px;
+                cursor: pointer;
+                -ms-zoom: 1;
+            }
+
+                .mod-retweet .retweet-addons a i {
+                    padding: 0px;
+                    width: 16px;
+                    height: 16px;
+                    line-height: 8;
+                    overflow: hidden;
+                    text-decoration: none;
+                    vertical-align: bottom;
+                    display: inline-block;
+                    cursor: pointer;
+                }
+
+                .mod-retweet .retweet-addons a i {
+                    margin-right: 5px;
+                    _margin-right: 2px;
+                }
+
+        .mod-retweet .qz-page-nav {
+            padding: 5px;
+            text-align: center;
+        }
+
+        .mod-retweet .textinput img {
+            vertical-align: middle;
+        }
+
+        .mod-retweet .textinput .mention {
+        }
+
+        .mod-retweet .textinput img.mention {
+            vertical-align: text-bottom;
+        }
+
+        .mod-retweet .mod-at-wrap {
+            margin: 0px;
+            left: 0px;
+            width: 100%;
+        }
+
+        .mod-retweet .mod-at-list li {
+            height: auto;
+            min-height: 30px;
+        }
+
+    .f-single .retweet-ft .gb_bt {
+        width: 72px;
+        height: 28px;
+        line-height: 25px;
+        overflow: hidden;
+        padding-bottom: 4px;
+        font-size: 14px;
+        z-index: 1;
+    }
+
+    .f-single .retweet-ft {
+        height: 30px;
+    }
+
+    .f-single .retweet-op {
+        height: 30px;
+    }
+
+    .mod-retweet textarea.textarea {
+        padding: 0px;
+        width: 99.4%;
+    }
+
+    .mod-retweet textarea.textinput {
+        padding: 0px;
+        width: 99.4%;
+    }
+
+    .mod-commnets-poster textarea.textarea {
+        padding: 0px;
+        width: 99.4%;
+    }
+
+    .mod-commnets-poster textarea.textinput {
+        padding: 0px;
+        width: 99.4%;
+    }
+
+    .comments-box .mod-quick-comment {
+        border-width: 0px 0px 0px 1px;
+        top: 1px;
+        width: 56px;
+        height: 28px;
+        text-align: center;
+        right: 1px;
+        position: absolute;
+    }
+
+    .comments-box .mod-insert-img {
+        border-width: 0px 0px 0px 1px;
+        top: 1px;
+        width: 56px;
+        height: 28px;
+        text-align: center;
+        right: 1px;
+        position: absolute;
+    }
+
+    .btn-quick-comment {
+        height: 28px;
+        line-height: 27px;
+        display: block;
+        cursor: pointer;
+    }
+
+    .btn-insert-img {
+        height: 28px;
+        line-height: 27px;
+        display: block;
+        cursor: pointer;
+    }
+
+    .btn-quick-comment:hover {
+        text-decoration: none;
+    }
+
+    .flash-text {
+        display: none;
+    }
+
+    .icon-flash {
+        width: 18px;
+        height: 14px;
+        margin-top: 6px;
+        display: inline-block;
+    }
+
+    .line-list {
+        border-width: 1px;
+        border-style: solid;
+        top: 100%;
+        width: 254px !important;
+        right: -1px;
+        overflow: hidden;
+        display: none;
+        position: absolute;
+        box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.17);
+        _right: -2px;
+    }
+
+    .hover .line-list {
+        display: block;
+    }
+
+    .quick-comment-list {
+        margin: 0px 0px -1px -1px;
+        width: auto !important;
+        overflow: hidden;
+        -ms-zoom: 1;
+    }
+
+        .quick-comment-list li {
+            border-width: 0px 0px 1px 1px;
+            border-style: solid;
+            width: 78px;
+            height: 42px;
+            font-size: 0px;
+            float: left;
+        }
+
+            .quick-comment-list li a {
+                height: 100%;
+                display: block;
+                cursor: pointer;
+            }
+
+    .icon-quick {
+        margin-top: 9px;
+    }
+
+    .bubble_quick_comment {
+        left: -55px;
+        top: 8px;
+        width: 110px;
+        position: absolute;
+    }
+
+        .bubble_quick_comment .ui_trigbox_t {
+            left: 75px !important;
+        }
+
+    .comments-poster-default .comments-box {
+        padding: 0px 0px 0px 40px;
+        position: relative;
+    }
+
+    .comments-poster-default .master-avatar {
+        left: 0px;
+        top: 0px;
+        width: 30px;
+        height: 30px;
+        position: absolute;
+    }
+
+        .comments-poster-default .master-avatar img {
+            border-radius: 2px;
+            width: 30px;
+            vertical-align: top;
+            display: block;
+        }
+
+    .comments-box .mod-insert-img {
+        right: 58px;
+    }
+
+    .icon-camera-16 {
+        width: 16px;
+        height: 16px;
+        margin-top: 6px;
+        display: inline-block;
+    }
+
+    .comment-box-wrap .qz-poster-editor-cont {
+        position: relative;
+    }
+
+    .comment-box-wrap .qz-poster .qz-poster-attach-side {
+        _width: 57px;
+    }
+
+    .comment-box-wrap .qz-poster-attach-side .item .icon {
+        margin: 0px;
+        width: 16px;
+        height: 16px;
+    }
+
+    .comment-box-wrap .img-tpl-preview-on::before {
+        display: table;
+        content: "";
+    }
+
+    .comment-box-wrap .img-tpl-preview-on::after {
+        display: table;
+        content: "";
+    }
+
+    .comment-box-wrap .img-tpl-preview-on::after {
+        clear: both;
+    }
+
+    .comment-box-wrap .img-tpl-preview-on {
+        overflow: hidden;
+        margin-right: -19px;
+    }
+
+        .comment-box-wrap .img-tpl-preview-on .tpl-item {
+            height: auto;
+            overflow: hidden;
+            font-size: 0px;
+            margin-right: 19px;
+            margin-bottom: 0px;
+            float: left;
+            min-height: 0px;
+        }
+
+        .comment-box-wrap .img-tpl-preview-on .img-item-list {
+            overflow: hidden;
+            margin-right: -19px;
+        }
+
+            .comment-box-wrap .img-tpl-preview-on .img-item-list .img-item {
+                width: 150px;
+                height: 112px;
+                text-align: center;
+                overflow: hidden;
+                font-size: 0px;
+                margin-bottom: 10px;
+                vertical-align: top;
+                display: inline-block;
+                position: relative;
+            }
+
+        .comment-box-wrap .img-tpl-preview-on .img-item {
+            margin-right: 19px;
+        }
+
+    .comment-box-wrap .qz-poster .qz-poster-status .img-tpl-preview-on .quick-add-img {
+        margin: 0px 0px 10px !important;
+        float: left;
+        display: block;
+    }
+
+    .comment-box-wrap .img-tpl-preview-on .img-item-list .img-item {
+        left: 0px;
+        top: 0px;
+    }
+
+    .comment-box-wrap .img-tpl-preview-on .icon-img-remove {
+        top: 0px;
+        right: 0px;
+    }
+
+    .comment-box-wrap .img-tpl-preview-on .quick-add-img .quick-add-entry a {
+        margin-top: 0px;
+    }
+
+    .comment-box-wrap .img-tpl-preview-on .quick-add-img .add-img-ways li {
+        height: 108px !important;
+    }
+
+        .comment-box-wrap .img-tpl-preview-on .quick-add-img .add-img-ways li a {
+            margin: 0px;
+            border: 0px currentColor;
+            height: 100%;
+        }
+
+    .comment-box-wrap .img-tpl-preview-on .quick-add-img li .icon {
+        margin: 34px 0px 0px;
+    }
+
+    .comment-box-wrap .img-tpl-preview-on .quick-add-img:hover .cross-line-h {
+        display: none !important;
+    }
+
+    .comment-box-wrap .img-tpl-preview-on .quick-add-img-hover .cross-line-h {
+        display: none !important;
+    }
+
+    .comment-box-wrap .img-tpl-preview-on .quick-add-img:hover .cross-line-v {
+        top: 28px;
+        height: 52px;
+    }
+
+    .comment-box-wrap .img-tpl-preview-on .quick-add-img-hover .cross-line-v {
+        top: 28px;
+        height: 52px;
+    }
+
+    .comment-box-wrap .qz-poster-status-holder .qz-poster-status {
+        border-top-width: 1px;
+    }
+
+    .comment-box-wrap .qz-poster .qz-poster-ft {
+        border: 0px currentColor;
+        background-color: transparent;
+    }
+
+        .comment-box-wrap .qz-poster .qz-poster-ft .qz-poster-attach {
+            left: 0px !important;
+        }
+
+        .comment-box-wrap .qz-poster .qz-poster-ft .op {
+            right: 0px;
+        }
+
+    .comment-box-wrap .qz-inputer {
+        padding-right: 57px;
+    }
+
+    .comment-box-wrap .qz-poster .cell-2 {
+        width: 115px;
+    }
+
+    .comment-insert-img .img-upload-drop {
+        width: 115px;
+    }
+
+    .comment-box-wrap .qz-poster-attach-side .item {
+        width: 56px;
+    }
+
+    .comment-box-wrap .qz-poster .pop-drop li {
+        width: 56px;
+    }
+
+    .comment-insert-img .img-upload-drop .pop-drop li {
+        width: 56px;
+    }
+
+    .comment-box-wrap .qz-poster-attach-side .item .icon {
+        width: 16px;
+        height: 16px;
+    }
+
+    .comment-box-wrap .qz-poster-attach-side .item .icon-pic {
+        margin: 27px 0px 0px;
+    }
+
+    .comment-box-wrap .qz-poster .pop-drop .icon {
+        width: 16px;
+        height: 16px;
+        margin-top: 18px;
+        display: inline-block;
+    }
+
+    .comment-insert-img .img-upload-drop .icon {
+        width: 16px;
+        height: 16px;
+        margin-top: 18px;
+        display: inline-block;
+    }
+
+    .comment-insert-img .img-upload-drop a:hover {
+        text-decoration: none;
+    }
+
+    .comment-insert-img .img-upload-drop .arr {
+        display: none;
+    }
+
+    .comment-insert-img {
+        position: absolute;
+    }
+
+        .comment-insert-img .img-upload-drop .pop-drop li {
+            height: 68px;
+        }
+
+    .comment-box-wrap .qz-poster-msg {
+        border: 0px currentColor;
+    }
+
+    .tmp-sync-list {
+        top: 12px;
+        right: 95px;
+        font-size: 0px;
+        position: absolute;
+    }
+
+        .tmp-sync-list .tmp-sync-item {
+            font-size: 12px;
+        }
+
+            .tmp-sync-list .tmp-sync-item input {
+                margin: 0px 4px 0px 8px;
+                vertical-align: -2px;
+                _margin: 0 1px 0 4px;
+            }
+
+            .tmp-sync-list .tmp-sync-item label {
+                vertical-align: baseline;
+            }
+
+    .comment-box-wrap .qz-poster-sync .dividor {
+        margin: 0px 15px 0px 5px;
+        _margin: 0 8px 0 0;
+    }
+
+    .private-comment input {
+        margin-right: 5px;
+        vertical-align: -2px;
+    }
+
+    .private-txt {
+        color: rgb(216, 97, 93);
+    }
+
+    .icon-diamond {
+        background-position: -153px 0px;
+        width: 16px;
+        height: 16px;
+        margin-left: 3px;
+        vertical-align: text-top;
+        background-image: url("sprite/icenter-poster-comment.32-yog150413171555.png?max_age=19830212&d=20150428113841");
+        _background-image: url(sprite/icenter-poster-comment.ie6-yog150413171555.png?max_age=19830212&d=20150428113841);
+        _background-position: -153px 0;
+    }
+
+    .mod-comments-sub .comment-box-wrap .qz-inputer {
+        padding-right: 0px;
+    }
+
+    .comment-box-wrap .qz-poster-ft .qz-poster-sync .sync-nuts {
+        width: 95px;
+    }
+
+    .mod-at-wrap {
+        border-radius: 0px 0px 4px 4px;
+        width: 100%;
+        height: auto;
+        overflow: hidden;
+        position: absolute;
+        z-index: 100;
+        box-shadow: 0px 1px 5px rgba(0,0,0,0.1);
+    }
+
+        .mod-at-wrap .mod-at {
+            border-radius: 0px 0px 4px 4px;
+            border: 1px solid rgb(215, 215, 215);
+            color: rgb(102, 102, 102);
+            position: relative;
+            background-color: rgb(255, 255, 255);
+        }
+
+            .mod-at-wrap .mod-at .mod-at-tips {
+                margin: 0px;
+                padding: 4px 6px;
+                height: 25px;
+                color: rgb(102, 102, 102);
+                line-height: 25px;
+                background-color: rgb(243, 243, 243);
+            }
+
+            .mod-at-wrap .mod-at .mod-at-list {
+                padding: 0px;
+            }
+
+                .mod-at-wrap .mod-at .mod-at-list li {
+                    margin: 0px;
+                    padding: 5px 6px;
+                    white-space: nowrap;
+                    cursor: pointer;
+                }
+
+                    .mod-at-wrap .mod-at .mod-at-list li img {
+                        background: rgb(243, 243, 243);
+                        margin: -1px 4px -1px -2px;
+                        border-radius: 2px;
+                        width: 30px;
+                        height: 30px;
+                        vertical-align: middle;
+                        display: inline-block;
+                        box-shadow: 0px 1px 1px rgba(0,0,0,0.3);
+                    }
+
+                    .mod-at-wrap .mod-at .mod-at-list li b {
+                        font-weight: normal;
+                    }
+
+                    .mod-at-wrap .mod-at .mod-at-list li span {
+                        display: inline-block;
+                    }
+
+                .mod-at-wrap .mod-at .mod-at-list .reload {
+                    text-align: right;
+                }
+
+                .mod-at-wrap .mod-at .mod-at-list li.bg2 {
+                    background: rgb(243, 243, 243);
+                    color: rgb(11, 110, 164);
+                }
+
+    .textinput .mention {
+        background: none;
+        padding: 0px;
+        border: currentColor;
+        overflow: visible;
+    }
+
+    .gb_mod-at .mod-at-wrap {
+        _top: -2px;
+        _left: -2px;
+    }
+
+   
+    #CssGaga {
+        content: "150428113841,yog,333";
+    }
+
+</style>
+<div class="tab-content">
+
+    <div class="mod-comments">
+        <div class="comments-list ">
+            <ul>
+                <li class="comments-item bor3" data-uin="149056946" data-tid="1" data-type="commentroot"
+                    data-who="1" data-nick="绿茶红茶">
+                    <div class="comments-item-bd">
+                        <div class="ui-avatar">
+                            <a href="http://user.qzone.qq.com/149056946" target="_blank">
+                                <img class="q_namecard" alt="绿茶红茶" src="http://qlogo3.store.qq.com/qzone/149056946/149056946/30"
+                                     link="nameCard_149056946 des_149056946">
+                            </a>
+                        </div>
+                        <div class="comments-content">
+                            &nbsp;
+                            <a class="c_tx q_namecard" href="http://user.qzone.qq.com/149056946" target="_blank"
+                               link="nameCard_149056946">
+                                绿茶红茶
+                            </a>
+                            &nbsp; : 你也今天过生日？
+                            <div class="comments-op">
+                                <span class=" ui-mr10 state">
+                                    08:11
+                                </span>
+                                <a class="act-reply" href="javascript:;" data-version="6.2" data-cmd="qz_reply"
+                                   data-config="1|1|1|0|1,taotaoact.qzone.qq.com,@@InputReply|1,taotaoact.qzone.qq.com,@@ClickReply|1,taotaoact.qzone.qq.com,commentPresentClick"
+                                   data-tuin="" data-charset="utf-8" data-param="t1_source=&amp;t1_uin=383949359&amp;t1_tid=2f9ae216669f1956e1bf0d00&amp;t2_uin=149056946&amp;t2_tid=1&amp;subdotype=55802&amp;signin=0&amp;sceneid=100"
+                                   data-action="http://taotao.qq.com/cgi-bin/emotion_cgi_re_feeds">
+                                    <b class="hide-clip">
+                                        回复
+                                    </b>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="comments-list mod-comments-sub">
+                            <ul>
+                                <li class="comments-item bor3" data-uin="383949359" data-tid="1" data-type="replyroot"
+                                    data-who="1" data-nick="张忠霞">
+                                    <div class="comments-item-bd">
+                                        <div class="ui-avatar">
+                                            <a href="http://user.qzone.qq.com/383949359" target="_blank">
+                                                <img class="q_namecard" alt="张忠霞" src="http://qlogo4.store.qq.com/qzone/383949359/383949359/30"
+                                                     link="nameCard_383949359 des_383949359">
+                                            </a>
+                                        </div>
+                                        <div class="comments-content">
+                                            &nbsp;
+                                            <a class="c_tx q_namecard" href="http://user.qzone.qq.com/383949359" target="_blank"
+                                               link="nameCard_383949359">
+                                                张忠霞
+                                            </a>
+                                            &nbsp;回复&nbsp;
+                                            <a class="c_tx q_namecard" href="http://user.qzone.qq.com/149056946" target="_blank"
+                                               link="nameCard_149056946">
+                                                绿茶红茶
+                                            </a>
+                                            &nbsp; : 今天是阳历生日
+                                            <div class="comments-op">
+                                                <span class=" ui-mr10 state">
+                                                    08:12
+                                                </span>
+                                                <a class="act-reply" href="javascript:;" data-version="6.4" data-cmd="qz_reply"
+                                                   data-config="1|1|1|0|1,taotaoact.qzone.qq.com,@@InputReply|1,taotaoact.qzone.qq.com,@@ClickReply|1,taotaoact.qzone.qq.com,commentPresentClick"
+                                                   data-tuin="" data-charset="utf-8" data-param="t1_source=&amp;t1_uin=383949359&amp;t1_tid=2f9ae216669f1956e1bf0d00&amp;t2_uin=149056946&amp;t2_tid=1&amp;subdotype=55802&amp;signin=0&amp;sceneid=100"
+                                                   data-action="http://taotao.qq.com/cgi-bin/emotion_cgi_re_feeds">
+                                                    <b class="hide-clip">
+                                                        回复
+                                                    </b>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                <li class="comments-item bor3" data-uin="435651377" data-tid="2" data-type="commentroot"
+                    data-who="1" data-nick="流年">
+                    <div class="comments-item-bd">
+                        <div class="ui-avatar">
+                            <a href="http://user.qzone.qq.com/435651377" target="_blank">
+                                <img class="q_namecard" alt="流年" src="http://qlogo2.store.qq.com/qzone/435651377/435651377/30"
+                                     link="nameCard_435651377 des_435651377">
+                            </a>
+                        </div>
+                        <div class="comments-content">
+                            &nbsp;
+                            <a class="c_tx q_namecard" href="http://user.qzone.qq.com/435651377" target="_blank"
+                               link="nameCard_435651377">
+                                流年
+                            </a>
+                            &nbsp; :
+                            <img title="" src="http://qzonestyle.gtimg.cn/qzone/em/e168.png">
+                            <div class="comments-op">
+                                <span class=" ui-mr10 state">
+                                    08:12
+                                </span>
+                                <a class="act-reply" href="javascript:;" data-version="6.2" data-cmd="qz_reply"
+                                   data-config="1|1|1|0|1,taotaoact.qzone.qq.com,@@InputReply|1,taotaoact.qzone.qq.com,@@ClickReply|1,taotaoact.qzone.qq.com,commentPresentClick"
+                                   data-tuin="" data-charset="utf-8" data-param="t1_source=&amp;t1_uin=383949359&amp;t1_tid=2f9ae216669f1956e1bf0d00&amp;t2_uin=435651377&amp;t2_tid=2&amp;subdotype=55802&amp;signin=0&amp;sceneid=100"
+                                   data-action="http://taotao.qq.com/cgi-bin/emotion_cgi_re_feeds">
+                                    <b class="hide-clip">
+                                        回复
+                                    </b>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="comments-list mod-comments-sub">
+                            <ul>
+                                <li class="comments-item bor3" data-uin="383949359" data-tid="1" data-type="replyroot"
+                                    data-who="1" data-nick="张忠霞">
+                                    <div class="comments-item-bd">
+                                        <div class="ui-avatar">
+                                            <a href="http://user.qzone.qq.com/383949359" target="_blank">
+                                                <img class="q_namecard" alt="张忠霞" src="http://qlogo4.store.qq.com/qzone/383949359/383949359/30"
+                                                     link="nameCard_383949359 des_383949359">
+                                            </a>
+                                        </div>
+                                        <div class="comments-content">
+                                            &nbsp;
+                                            <a class="c_tx q_namecard" href="http://user.qzone.qq.com/383949359" target="_blank"
+                                               link="nameCard_383949359">
+                                                张忠霞
+                                            </a>
+                                            &nbsp;回复&nbsp;
+                                            <a class="c_tx q_namecard" href="http://user.qzone.qq.com/435651377" target="_blank"
+                                               link="nameCard_435651377">
+                                                流年
+                                            </a>
+                                            &nbsp; : 谢谢
+                                            <img title="" src="http://qzonestyle.gtimg.cn/qzone/em/e178.png">
+                                            <div class="comments-op">
+                                                <span class=" ui-mr10 state">
+                                                    08:15
+                                                </span>
+                                                <a class="act-reply" href="javascript:;" data-version="6.4" data-cmd="qz_reply"
+                                                   data-config="1|1|1|0|1,taotaoact.qzone.qq.com,@@InputReply|1,taotaoact.qzone.qq.com,@@ClickReply|1,taotaoact.qzone.qq.com,commentPresentClick"
+                                                   data-tuin="" data-charset="utf-8" data-param="t1_source=&amp;t1_uin=383949359&amp;t1_tid=2f9ae216669f1956e1bf0d00&amp;t2_uin=435651377&amp;t2_tid=2&amp;subdotype=55802&amp;signin=0&amp;sceneid=100"
+                                                   data-action="http://taotao.qq.com/cgi-bin/emotion_cgi_re_feeds">
+                                                    <b class="hide-clip">
+                                                        回复
+                                                    </b>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                <li class="comments-item bor3" data-uin="347892093" data-tid="3" data-type="commentroot"
+                    data-who="1" data-nick="面朝大海">
+                    <div class="comments-item-bd">
+                        <div class="ui-avatar">
+                            <a href="http://user.qzone.qq.com/347892093" target="_blank">
+                                <img class="q_namecard" alt="面朝大海" src="http://qlogo2.store.qq.com/qzone/347892093/347892093/30"
+                                     link="nameCard_347892093 des_347892093">
+                            </a>
+                        </div>
+                        <div class="comments-content">
+                            &nbsp;
+                            <a class="c_tx q_namecard" href="http://user.qzone.qq.com/347892093" target="_blank"
+                               link="nameCard_347892093">
+                                面朝大海
+                            </a>
+                            &nbsp; :
+                            <img title="" src="http://qzonestyle.gtimg.cn/qzone/em/e157.png">
+                            <div class="comments-op">
+                                <span class=" ui-mr10 state">
+                                    09:08
+                                </span>
+                                <a class="act-reply" href="javascript:;" data-version="6.2" data-cmd="qz_reply"
+                                   data-config="1|1|1|0|1,taotaoact.qzone.qq.com,@@InputReply|1,taotaoact.qzone.qq.com,@@ClickReply|1,taotaoact.qzone.qq.com,commentPresentClick"
+                                   data-tuin="" data-charset="utf-8" data-param="t1_source=&amp;t1_uin=383949359&amp;t1_tid=2f9ae216669f1956e1bf0d00&amp;t2_uin=347892093&amp;t2_tid=3&amp;subdotype=55802&amp;signin=0&amp;sceneid=100"
+                                   data-action="http://taotao.qq.com/cgi-bin/emotion_cgi_re_feeds">
+                                    <b class="hide-clip">
+                                        回复
+                                    </b>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="comments-list mod-comments-sub">
+                            <ul>
+                                <li class="comments-item bor3" data-uin="383949359" data-tid="1" data-type="replyroot"
+                                    data-who="1" data-nick="张忠霞">
+                                    <div class="comments-item-bd">
+                                        <div class="ui-avatar">
+                                            <a href="http://user.qzone.qq.com/383949359" target="_blank">
+                                                <img class="q_namecard" alt="张忠霞" src="http://qlogo4.store.qq.com/qzone/383949359/383949359/30"
+                                                     link="nameCard_383949359 des_383949359">
+                                            </a>
+                                        </div>
+                                        <div class="comments-content">
+                                            &nbsp;
+                                            <a class="c_tx q_namecard" href="http://user.qzone.qq.com/383949359" target="_blank"
+                                               link="nameCard_383949359">
+                                                张忠霞
+                                            </a>
+                                            &nbsp;回复&nbsp;
+                                            <a class="c_tx q_namecard" href="http://user.qzone.qq.com/347892093" target="_blank"
+                                               link="nameCard_347892093">
+                                                面朝大海
+                                            </a>
+                                            &nbsp; :
+                                            <img title="" src="http://qzonestyle.gtimg.cn/qzone/em/e178.png">
+                                            <div class="comments-op">
+                                                <span class=" ui-mr10 state">
+                                                    09:19
+                                                </span>
+                                                <a class="act-reply" href="javascript:;" data-version="6.4" data-cmd="qz_reply"
+                                                   data-config="1|1|1|0|1,taotaoact.qzone.qq.com,@@InputReply|1,taotaoact.qzone.qq.com,@@ClickReply|1,taotaoact.qzone.qq.com,commentPresentClick"
+                                                   data-tuin="" data-charset="utf-8" data-param="t1_source=&amp;t1_uin=383949359&amp;t1_tid=2f9ae216669f1956e1bf0d00&amp;t2_uin=347892093&amp;t2_tid=3&amp;subdotype=55802&amp;signin=0&amp;sceneid=100"
+                                                   data-action="http://taotao.qq.com/cgi-bin/emotion_cgi_re_feeds">
+                                                    <b class="hide-clip">
+                                                        回复
+                                                    </b>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="mod-commnets-poster feedClickCmd comment_default_inputentry"
+             data-version="6" data-cmd="qz_reply" data-config="1|1|1|1,b52,with_fwd,同时转发;0|1,taotaoact.qzone.qq.com,@@InputReply|1,taotaoact.qzone.qq.com,@@ClickReply|1,taotaoact.qzone.qq.com,commentPresentClick"
+             data-tid="" data-tuin="383949359" data-maxlength="" data-charset="utf-8"
+             data-param="t1_source=&amp;t1_uin=383949359&amp;t1_tid=2f9ae216669f1956e1bf0d00&amp;signin=0&amp;sceneid=100"
+             data-action="http://taotao.qq.com/cgi-bin/emotion_cgi_re_feeds">
+            <div class="comments-poster-bd comments-poster-default">
+                <div class="comments-box" data-clicklog="comment">
+                    <div class="textinput textinput-default bor2" placeholder="我也说一句" alt="replybtn">
+                        <a class="c_tx3" href="javascript:void(0);" alt="replybtn">
+                            我也说一句
+                        </a>
+                    </div>
+                    <div class="mod-insert-img bor2">
+                        <a class="btn-insert-img bg" href="javascript:;" data-cmd="qz_quick_upload_img">
+                            <i class="icon-camera-16">
+                            </i>
+                        </a>
+                    </div>
+                    <div class="mod-quick-comment bor2">
+                        <a class="btn-quick-comment bg" href="javascript:;" data-cmd="qz_quick_reply">
+                            <i class="icon-flash">
+                            </i>
+                            <span class="flash-text c_tx3">
+                                快评
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section  scripts{
+
+
+    <script type="text/javascript">
+
+        $(function () {
+
+
+            //初始化表单验证
+            $("form").validate({
+                ignore: "",
+                rules: {
+                    NewsTitle: {
+                        required: true,
+                        maxlength: 300
+                    },
+                    ClassName: {
+                        required: true
+                    }
+
+                },
+                messages: {
+                    NewsTitle: {
+                        required: "请输入标题",
+                        maxlength: $.validator.format("编号长度不能大于{0}个字符")
+
+                    },
+                    ClassName: {
+                        required: "请选择所属类别"
+                    }
+                },
+                errorPlacement: function (error, element) {
+
+                    if (element.is(":radio"))
+                        error.insertAfter($(element).parent());
+                    else if (element.is(":checkbox"))
+                        error.insertAfter($(element).parent());
+                    else
+                        error.insertAfter(element);
+                }
+
+            });
+        })
+    </script>
+
+    <script type="text/javascript">
+
+        function InnitFunc() {
+            var source =
+                        {
+                            dataType: "json",
+                            dataFields: [
+
+               { name: 'ID', type: 'string' },
+
+               { name: 'ParentID', type: 'string' },
+
+               { name: 'Code', type: 'string' },
+
+               { name: 'Name', type: 'string' },
+
+               { name: 'AllowSubclass', type: 'string' }
+                            ],
+                            timeout: 10000,
+                            hierarchy:
+                            {
+                                keyDataField: { name: 'ID' },
+                                parentDataField: { name: 'ParentID' }
+                            },
+                            id: 'ID',
+                            root: 'Rows',
+                            url: " @Url.Action("GetListForSelecte", "NewsCategory", new { area = "Admin" })"
+                        };
+            var dataAdapter = new $.jqx.dataAdapter(source);
+
+
+            $("#treeGrid").jqxTreeGrid(
+                       {
+                           width: "95%",
+                           height: "95%",
+                           source: dataAdapter,
+                           columns: [
+             { text: '编码', dataField: 'Code', type: 'string', width: 200 },
+             { text: '名称', dataField: 'Name', type: 'string', width: 200 }
+                           ]
+                       });
+        }
+        function onOk(data) {
+            if (data.length == 1) {
+
+                $("#ClassName").val(data[0].Name);
+                $("#ClassID").val(data[0].ID);
+
+            } else { ErrorMsg("请选择一条数据"); }
+        }
+
+    </script>
+}

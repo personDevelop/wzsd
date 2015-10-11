@@ -22,7 +22,7 @@ namespace EasyCms.Web
     {
         public static void Register(HttpConfiguration config)
         {
-            config.Filters.Add(new ExceptionFilter());
+           config.Filters.Add(new ExceptionFilter());
             config.Filters.Add(new FilterApiAuthorAttribute());
             config.Filters.Add(new ActionFilter());
             config.MapHttpAttributeRoutes();

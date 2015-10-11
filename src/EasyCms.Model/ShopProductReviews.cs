@@ -36,13 +36,17 @@ namespace EasyCms.Model
 
         private DateTime _CreatedDate;
 
-        private string _ParentId;
+        private string _ParentID;
 
         private int _Status;
 
         private string _OrderId;
 
         private string _ImagesID;
+
+        private string _ClassCode;
+
+        private bool _hasReply;
 
         #endregion
 
@@ -167,18 +171,18 @@ namespace EasyCms.Model
         ///  父ID,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "ParentId", DbTypeString = "char", ColumnIsNull = true, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ParentID", DbTypeString = "char", ColumnIsNull = true, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public string ParentId
+        public string ParentID
         {
             get
             {
-                return this._ParentId;
+                return this._ParentID;
             }
             set
             {
-                this.OnPropertyChanged("ParentId", this._ParentId, value);
-                this._ParentId = value;
+                this.OnPropertyChanged("ParentID", this._ParentID, value);
+                this._ParentID = value;
             }
         }
 
@@ -239,6 +243,44 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  分级码,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "ClassCode", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string ClassCode
+        {
+            get
+            {
+                return this._ClassCode;
+            }
+            set
+            {
+                this.OnPropertyChanged("ClassCode", this._ClassCode, value);
+                this._ClassCode = value;
+            }
+        }
+
+        /// <summary>
+        ///  已回复,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "hasReply", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public bool hasReply
+        {
+            get
+            {
+                return this._hasReply;
+            }
+            set
+            {
+                this.OnPropertyChanged("hasReply", this._hasReply, value);
+                this._hasReply = value;
+            }
+        }
+
         #endregion
 
         #region 列定义
@@ -259,13 +301,17 @@ namespace EasyCms.Model
 
                 CreatedDate = new PropertyItem("CreatedDate", tableName);
 
-                ParentId = new PropertyItem("ParentId", tableName);
+                ParentID = new PropertyItem("ParentID", tableName);
 
                 Status = new PropertyItem("Status", tableName);
 
                 OrderId = new PropertyItem("OrderId", tableName);
 
                 ImagesID = new PropertyItem("ImagesID", tableName);
+
+                ClassCode = new PropertyItem("ClassCode", tableName);
+
+                hasReply = new PropertyItem("hasReply", tableName);
 
 
             }
@@ -296,7 +342,7 @@ namespace EasyCms.Model
             /// <summary>
             /// 父ID,
             /// </summary> 
-            public PropertyItem ParentId = null;
+            public PropertyItem ParentID = null;
             /// <summary>
             /// 状态,0未审核，1已审核，2审核不通过
             /// </summary> 
@@ -309,8 +355,38 @@ namespace EasyCms.Model
             /// 晒图图片,
             /// </summary> 
             public PropertyItem ImagesID = null;
+            /// <summary>
+            /// 分级码,
+            /// </summary> 
+            public PropertyItem ClassCode = null;
+            /// <summary>
+            /// 已回复,
+            /// </summary> 
+            public PropertyItem hasReply = null;
         }
         #endregion
     }
-
+    public partial class ShopProductReviews
+    {
+        [NotDbCol]
+        public string ProductName { get; set; }
+          [NotDbCol]
+        public string ProductImg { get; set; }
+          [NotDbCol]
+        public string[] Images { get; set; }
+          [NotDbCol]
+        public string UserName { get; set; }
+          [NotDbCol]
+        public string StatusStr
+        {
+            get
+            {
+                return ((DjStatus)Status).ToString();
+            }
+        }
+          [NotDbCol]
+        public ShopProductReviews CurrentReply { get; set; }
+          [NotDbCol]
+        public string LastReply { get; set; }
+    }
 }

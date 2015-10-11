@@ -20,17 +20,17 @@ namespace EasyCms
 
         public static string GetUserID(this HttpSessionStateBase session)
         {
-            string userid = session[CmsSession.UserID] as string;
+            string userid = session[CmsSession.UserIDKey] as string;
             return userid ?? "root";
         }
         public static string GetUserID(this HttpSessionState session)
         {
-            string userid = session[CmsSession.UserID] as string;
+            string userid = session[CmsSession.UserIDKey] as string;
             return userid ?? "root";
         }
         public static string GetRoleID(this HttpSessionStateBase session)
         {
-            return session[CmsSession.RoleID] as string;
+            return session[CmsSession.RoleIDKey] as string;
         }
         public static string MapPathCms(this HttpServerUtility server, string path)
         {

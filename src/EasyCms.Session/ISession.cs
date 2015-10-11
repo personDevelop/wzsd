@@ -10,12 +10,12 @@ namespace EasyCms.Session
 {
     public class CmsSession
     {
-        public const string UserID = "UserID";
-        public const string UserName = "UserName";
-        public const string UserInfo = "UserInfo";
-        public const string RoleID = "RoleID";
-        public const string RoleName = "RoleName";
-        public const string RoleInfo = "RoleInfo";
+        public const string UserIDKey = "UserID";
+        public const string UserNameKey = "UserName";
+        public const string UserInfoKey = "UserInfo";
+        public const string RoleIDKey = "RoleID";
+        public const string RoleNameKey = "RoleName";
+        public const string RoleInfoKey = "RoleInfo";
 
         public static dynamic GetUser()
         {
@@ -24,7 +24,7 @@ namespace EasyCms.Session
             {
                 return null;
             }
-            return Session[UserInfo];
+            return Session[UserInfoKey];
         }
 
         public dynamic GeValue(string key)
@@ -45,7 +45,7 @@ namespace EasyCms.Session
             {
                 return null;
             }
-            string userid = Session[UserID] as string;
+            string userid = Session[UserIDKey] as string;
             return userid;
         }
         public static string GetUserName()
@@ -54,7 +54,7 @@ namespace EasyCms.Session
             {
                 return null;
             }
-            string userid = Session[UserName] as string;
+            string userid = Session[UserNameKey] as string;
             return userid;
 
         }
@@ -64,7 +64,7 @@ namespace EasyCms.Session
             {
                 return null;
             }
-            return Session[RoleID] as string;
+            return Session[RoleIDKey] as string;
         }
 
         public static string GetRoleName()
@@ -73,7 +73,7 @@ namespace EasyCms.Session
             {
                 return null;
             }
-            return Session[RoleName] as string ;
+            return Session[RoleNameKey] as string ;
         }
 
 
@@ -84,12 +84,12 @@ namespace EasyCms.Session
             {
                 return  ;
             }
-            Session[UserInfo] = user;
-            Session[RoleInfo] = role;
-            Session[UserID] = user.ID;
-            Session[RoleID] = role.ID; 
-            Session[UserName] = user.Name;
-            Session[RoleName] = role.Name;
+            Session[UserInfoKey] = user;
+            Session[RoleInfoKey] = role;
+            Session[UserIDKey] = user.ID;
+            Session[RoleIDKey] = role.ID; 
+            Session[UserNameKey] = user.Name;
+            Session[RoleNameKey] = role.Name;
             
         }
     }

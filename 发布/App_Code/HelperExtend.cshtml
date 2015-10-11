@@ -6,10 +6,11 @@
 {
     <input name="@code" id="@code" type="hidden" value="@value" />
 }
-@helper Lable(string text)
+@helper Lable(string text,string lable="")
 {
     <dl>
         <dt>
+            @lable
 
         </dt>
         <dd>
@@ -247,7 +248,7 @@
             @MVCExtention.ExtendHtmlInput.MvcHelper.Label(code, name)
         </dt>
         <dd>
-            @MVCExtention.ExtendHtmlInput.MvcHelper.TextArea(code, defaultval as string, row, col, new { @class = "input " + otherClass })
+            @MVCExtention.ExtendHtmlInput.MvcHelper.TextArea(code, defaultval as string, row, col, new { id=code, @class = "input " + otherClass })
             <span>@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(hint)</span>
         </dd>
     </dl>

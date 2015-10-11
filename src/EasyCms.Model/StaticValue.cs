@@ -67,6 +67,13 @@ namespace EasyCms.Model
 
         public const string IsRecordOper = "8b433294-8ef0-4479-a8e6-7d0ffb39f3fa";
 
+
+        /// <summary>
+        /// 用户商品评论是否自动生效
+        /// </summary>
+
+        public const string IsCommentAuto = "8a16a38e-bad6-4d6e-86d5-7376ff9ad0f5";
+
         /// <summary>
         /// 没有找到对应功能时是否记录日志 1记录 0不记录
         /// </summary>
