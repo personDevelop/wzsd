@@ -191,6 +191,8 @@ namespace EasyCms.Dal
         /// <returns></returns>
         public string Submit(ShopOrderModel order, ManagerUserInfo accuont, out bool mustGenerSign, out string err)
         {
+            #region MyRegion
+            //前台传过来的订单总价格 实际是实际支付金额，不是订单总金额
             mustGenerSign = false;
             //先检测商品对不对
             err = string.Empty;
@@ -209,6 +211,7 @@ namespace EasyCms.Dal
             List<string> listCoupon = new List<string>();//优惠券ID集合
             decimal productPrice = 0;
             decimal CouponPrice = 0;
+            #endregion
             #region 检测促销活动是否过期
 
             foreach (OrderItem item in list)
@@ -292,6 +295,7 @@ namespace EasyCms.Dal
             #endregion
 
             //判断是否满足货到付款
+            #region MyRegion
             if (order.CashOnDelivery)
             {
                 if (activeID.Count > 0)
@@ -313,17 +317,27 @@ namespace EasyCms.Dal
                 return null;
 
             }
+            #endregion
 
             #region 检测优惠券是否过期 并计算优惠券总额
 
             if (order.Coupon != null)
             {
+                order.Coupon = Dal.From<CusomerAndCoupon>().Where(CusomerAndCoupon._.ID == order.Coupon[0].ID)
+
+                    .Select(CusomerAndCoupon._.ID, CusomerAndCoupon._.CardValue).ToDataTable().ToList<CouponAccount>();
+
+
                 foreach (var promot in order.Coupon)
                 {
                     //检测促销活动是否过期
                     if (!listCoupon.Contains(promot.ID))
                     {
                         listCoupon.Add(promot.ID);
+                    }
+                    if (promot.UsingCount == 0)
+                    {
+                        promot.UsingCount = 1;
                     }
                     CusomerAndCoupon upcoupon = new CusomerAndCoupon() { RecordStatus = StatusType.update, Where = CusomerAndCoupon._.ID == promot.ID };
                     ExpressionClip HaveCount = new ExpressionClip("HaveCount-@HaveCount");
@@ -354,13 +368,14 @@ namespace EasyCms.Dal
             #endregion
 
             //开始计算订单总额  总额计算方式是，商品总额-优惠券总额+运费
-            decimal totalPrice = productPrice - CouponPrice;
+            decimal totalPrice = productPrice - CouponPrice + order.Freight;
             if (totalPrice != order.TotalPrice)
             {
                 err = "订单的金额[" + order.TotalPrice + "]和实际的金额(商品总额-优惠券总额+运费)[" + totalPrice + "]不符,请重新选择本次购物要使用的优惠券";
                 return null;
             }
             //判断当前订单的优惠券金额是否超过系统设定的比例
+            #region MyRegion
             if (CouponPrice > 0)
             {
                 decimal Allowpercent = new ParameterInfoDal().GetDecimalValue(StaticValue.CouponPercent);
@@ -381,6 +396,7 @@ namespace EasyCms.Dal
 
 
             }
+            #endregion
             string orderNum = GetMaxNo("HQ");
             DateTime now = DateTime.Now;
             //开始判断是否拆单
@@ -411,36 +427,38 @@ namespace EasyCms.Dal
             ShopOrder firstOrder = null;
             foreach (var item in ListactiveID)
             {
-
+                #region MyRegion
                 int val = 0;
                 if (!string.IsNullOrWhiteSpace(item))
                 {
                     val = activeID[item];
 
                 }
+
                 ShopOrder realOrder = new ShopOrder()
-                {
-                    ID = (OrderCount.ToString()).PadLeft(2, '0'),
-                    OrderType = val,
-                    OrderResId = item,
-                    MemberID = accuont.ID,
-                    MemberName = accuont.Name,
-                    MemberEmail = accuont.Email,
-                    MemberCallPhone = accuont.ContactPhone,
-                    PayTypeID = order.PayTypeID,
-                    PayTypeName = new ShopPaymentTypesDal().GetPayTypeName(order.PayTypeID, order.CashOnDelivery),
-                    IsFreeShiping = order.Freight == 0,
-                    Freight = order.Freight,
-                    FreightAdjust = 0,
-                    FreightActual = order.Freight,
-                    Remark = order.Remark,
-                    IsInvoice = order.IsInvoice,
-                    InvoiceInfo = order.InvoiceInfo,
-                    CreateDate = now,
-                    UpdateDate = now,
-                    ClientType = accuont.ClientType,
-                    InvoiceNote = order.InvoiceNote
-                };
+                      {
+                          ID = (OrderCount.ToString()).PadLeft(2, '0'),
+                          OrderType = val,
+                          OrderResId = item,
+                          MemberID = accuont.ID,
+                          MemberName = accuont.Name,
+                          MemberEmail = accuont.Email,
+                          MemberCallPhone = accuont.ContactPhone,
+                          PayTypeID = order.PayTypeID,
+                          PayTypeName = new ShopPaymentTypesDal().GetPayTypeName(order.PayTypeID, order.CashOnDelivery),
+                          IsFreeShiping = order.Freight == 0,
+                          Freight = order.Freight,
+                          FreightAdjust = 0,
+                          FreightActual = order.Freight,
+                          Remark = order.Remark,
+                          IsInvoice = order.IsInvoice,
+                          InvoiceInfo = order.InvoiceInfo,
+                          CreateDate = now,
+                          UpdateDate = now,
+                          ClientType = accuont.ClientType,
+                          InvoiceNote = order.InvoiceNote
+                      };
+
                 //判断是否满足货到付款
                 if (!order.CashOnDelivery && string.IsNullOrWhiteSpace(order.PayTypeID))
                 {
@@ -459,6 +477,8 @@ namespace EasyCms.Dal
                 realOrder.ShipEmail = address.EmailAddress;
                 realOrder.ShipTel = address.CelPhone;
                 realOrder.ShipRegion = ShipRegion;
+                #endregion
+                #region MyRegion
                 if (IsCf)
                 {
                     realOrder.ID = orderNum + realOrder.ID;
@@ -502,6 +522,7 @@ namespace EasyCms.Dal
                     realOrder.PayStatus = (int)PayStatus.未付款;
                     realOrder.OrderStatus = (int)OrderStatus.等待付款;
                 }
+                #endregion
                 //计算商品明细
                 List<OrderItem> OrderResList = list.Where(p => p.OrderResId == item).ToList<OrderItem>();
                 int orderItemNum = 1;
@@ -511,38 +532,40 @@ namespace EasyCms.Dal
                 foreach (var productVar in OrderResList)
                 {
                     i++;
+                    #region MyRegion
                     View_ProductInfoBySkuid productItem = productList.FirstOrDefault(p => p.ID == productVar.ProductID && (p.SKUID == productVar.Sku || p.SKUID == null || p.SKUID == string.Empty));
                     if (productItem == null)
                     {
                         err = "您订购的第" + i + "条商品没有找到，或者已下架";
                         return null;
                     }
-                    ShopOrderItem product = new ShopOrderItem()
-                    {
-                        ID = Guid.NewGuid().ToString(),
-                        OrderID = realOrder.ID,
-                        ProductID = productItem.ID,
-                        ProductSKU = productItem.SKUID,
-                        ProductType = productItem.TypeId,
-                        ProductCode = productItem.Code,
-                        ProductName = productItem.Name,
-                        AttributeVal = productItem.SKUName,
-                        ProductThumb = productItem.FilePath,
-                        Unit = productItem.Unit,
-                        Count = productVar.BuyCount,
-                        IsHandsel = false,
-                        HandselCount = 0,
-                        ReturnCount = 0,
-                        ReturnMoney = 0,
-                        UseJf = 0,
-                        ProductTypeName = productItem.ProductTypeName,
-                        BrandName = productItem.BrandName,
-                        ShortDescription = productItem.ShortDescription,
-                        Weight = productItem.Weight,
-                        IsVirtualProduct = productItem.IsVirtualProduct,
-                        Point = productItem.Points
 
-                    };
+                    ShopOrderItem product = new ShopOrderItem()
+                               {
+                                   ID = Guid.NewGuid().ToString(),
+                                   OrderID = realOrder.ID,
+                                   ProductID = productItem.ID,
+                                   ProductSKU = productItem.SKUID,
+                                   ProductType = productItem.TypeId,
+                                   ProductCode = productItem.Code,
+                                   ProductName = productItem.Name,
+                                   AttributeVal = productItem.SKUName,
+                                   ProductThumb = productItem.FilePath,
+                                   Unit = productItem.Unit,
+                                   Count = productVar.BuyCount,
+                                   IsHandsel = false,
+                                   HandselCount = 0,
+                                   ReturnCount = 0,
+                                   ReturnMoney = 0,
+                                   UseJf = 0,
+                                   ProductTypeName = productItem.ProductTypeName,
+                                   BrandName = productItem.BrandName,
+                                   ShortDescription = productItem.ShortDescription,
+                                   Weight = productItem.Weight,
+                                   IsVirtualProduct = productItem.IsVirtualProduct,
+                                   Point = productItem.Points
+
+                               };
 
                     if (product.Point > 0)
                     {
@@ -562,6 +585,7 @@ namespace EasyCms.Dal
                         Savelist.Add(jh);
                     }
 
+                    #endregion
                     IsFirst = CoumputeRule(accuont.ID, Savelist, now, IsFirst, realOrder, handsales, productVar.Promotion, product.ID);
                     product.CostPrice = productItem.CostPrice;
                     product.MarketPrice = productItem.MarketPrice;
@@ -569,7 +593,6 @@ namespace EasyCms.Dal
                     totalCostPrice += productItem.CostPrice * product.Count;
                     totalmarketPrice += productItem.MarketPrice * product.Count;
                     totalsalePrice += productItem.SalePrice * product.Count;
-
                     product.TotalPrice = product.Price * product.Count;
                     product.Sequence = orderItemNum;
                     Savelist.Add(product);
@@ -582,10 +605,9 @@ namespace EasyCms.Dal
                     handItem.Sequence = orderItemNum++;
                     Savelist.Add(handItem);
                 }
-                realOrder.CostPrice = totalCostPrice; //拆分时另算 
-                realOrder.TotalPrice = totalPrice;//拆分时另算
-
-
+                realOrder.CostPrice = totalCostPrice; //拆分时另算  
+                realOrder.Discount = CouponPrice;
+                realOrder.TotalPrice = totalsalePrice;//拆分时另算
 
                 if (IsCf)
                 {
@@ -611,8 +633,7 @@ namespace EasyCms.Dal
                         realOrder.Discount = 0;
 
                 }
-
-                realOrder.PayMoney = totalPrice + order.Freight;
+                realOrder.PayMoney = realOrder.TotalPrice + realOrder.Freight - realOrder.Discount;
 
                 if (firstOrder == null)
                 {
@@ -632,6 +653,18 @@ namespace EasyCms.Dal
                 mainOrder.CostPrice = Orderlist.Sum(p => p.CostPrice);
                 mainOrder.FreightActual = Orderlist.Sum(p => p.FreightActual);
                 mainOrder.PayMoney = Orderlist.Sum(p => p.PayMoney);
+                if (order.CashOnDelivery)
+                {
+                    mainOrder.ShipStatus = (int)OrderStatus.等待商家发货;
+                    mainOrder.PayStatus = (int)PayStatus.未付款;
+                    mainOrder.OrderStatus = (int)OrderStatus.等待商家发货;
+                }
+                else
+                {
+                    mainOrder.ShipStatus = (int)OrderStatus.等待付款;
+                    mainOrder.PayStatus = (int)PayStatus.未付款;
+                    mainOrder.OrderStatus = (int)OrderStatus.等待付款;
+                }
                 Savelist.Add(mainOrder);
 
                 ShopOrderAction orderAction = new ShopOrderAction()

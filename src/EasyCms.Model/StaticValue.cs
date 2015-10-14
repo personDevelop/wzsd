@@ -232,6 +232,7 @@ namespace EasyCms.Model
     }
     public enum ShipStatus
     {
+        等待付款 = 0,
         等待商家发货 = 2,
         已发货 = 3,
         完成 = 16
