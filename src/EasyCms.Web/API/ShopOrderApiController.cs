@@ -1,6 +1,7 @@
 ﻿using EasyCms.Business;
 using EasyCms.Model;
 using EasyCms.Model.Ali;
+using EasyCms.Model.ViewModel;
 using EasyCms.Web.Common;
 using System;
 using System.Collections.Generic;
@@ -124,11 +125,11 @@ namespace EasyCms.Web.API
                     if (mustGenerSign)
                     {
                         bool isSucess = new ShopPaymentTypesBll().GenerPayPara(orderID, out err);
-                        return new { OrderID = orderID, hasSign = isSucess, Sign = err }.FormatObj();
+                        return new { OrderID = orderID, hasSign = isSucess, GateWay = "alipaydirect", Sign = err }.FormatObj();
                     }
                     else
                     {
-                        return new { OrderID = orderID, hasSign = false, Sign = string.Empty }.FormatObj();
+                        return new { OrderID = orderID, hasSign = false, GateWay = string.Empty, Sign = string.Empty }.FormatObj();
                     }
 
 
@@ -146,7 +147,7 @@ namespace EasyCms.Web.API
             bool isSucess = new ShopPaymentTypesBll().GenerPayPara(payPara, out err);
             if (isSucess)
             {
-                return new { OrderID = payPara.OrderNo, hasSign = isSucess, Sign = err }.FormatObj();
+                return new { OrderID = payPara.OrderNo, hasSign = isSucess, GateWay = "alipaydirect", Sign = err }.FormatObj();
             }
             else
             {
@@ -311,7 +312,7 @@ namespace EasyCms.Web.API
                 case 0:
                     return error.FormatError();
                 default:
-                    return new { Msg = error, Code = isSucess }.FormatObj(); 
+                    return new { Msg = error, Code = isSucess }.FormatObj();
             }
 
 
@@ -326,5 +327,14 @@ namespace EasyCms.Web.API
 
 
         }
+
+        public HttpResponseMessage PaySuccess([FromBody] ReciveForm rf) 
+        {
+            string err = string.Empty;
+            bool isSucess = new ShopOrderBll().PaySuccess(rf.Data, out err);
+            return err.Format(isSucess);
+        }
+
+
     }
 }

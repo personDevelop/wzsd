@@ -1627,6 +1627,47 @@ namespace EasyCms.Dal
             }
             return result;
         }
+
+        /// <summary>
+        /// 客户端主动发起的支付成功，只改成付款待确认
+        /// </summary>
+        /// <param name="orderID"></param>
+        /// <param name="err"></param>
+        /// <returns></returns>
+        public bool PaySuccess(string orderID, out string err)
+        {
+            err = string.Empty;
+            bool result = true;
+            ShopOrder order = Dal.From<ShopOrder>().Select(ShopOrder._.ID, ShopOrder._.PayStatus, ShopOrder._.OrderStatus).Where(ShopOrder._.ID == orderID).ToFirst<ShopOrder>();
+            bool isChangeOrder = false;
+            if (order.PayStatus == (int)PayStatus.未付款)
+            {
+                isChangeOrder = true;
+                order.PayStatus = (int)PayStatus.待商家确认;
+
+            }
+            if (order.OrderStatus == (int)OrderStatus.等待付款)
+            {
+                isChangeOrder = true;
+                order.OrderStatus = (int)OrderStatus.等待商家确认;
+
+            }
+            if (isChangeOrder)
+            {
+                Dal.Submit(order);
+                ShopOrderAction orderAction = new ShopOrderAction()
+                {
+
+                    ID = Guid.NewGuid().ToString(),
+                    ActionCode = ((int)ActionEnum.付款).ToString(),
+                    ActionName = ActionEnum.付款.ToString(),
+                    OrderId = orderID,
+                    ActionDate = DateTime.Now
+                };
+                Dal.Submit(orderAction);
+            }
+            return result;
+        }
     }
 
 

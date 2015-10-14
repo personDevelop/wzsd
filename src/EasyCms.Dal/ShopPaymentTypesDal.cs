@@ -163,7 +163,7 @@ namespace EasyCms.Dal
                     ShopOrder order = Dal.From<ShopOrder>().Where(ShopOrder._.ID == payPara.OrderNo).Select(ShopOrder._.PayMoney,
                         ShopOrder._.ID, ShopOrder._.PayStatus, ShopOrder._.OrderStatus,
                         ShopOrder._.PayTypeID, ShopOrder._.PayTypeName).ToFirst<ShopOrder>();
-                    if (order.PayStatus == (int)PayStatus.已付款)
+                    if (order.PayStatus != (int)PayStatus.未付款)
                     {
                         error = "当前订单已经付过款，无须再次付款";
                         result = false;

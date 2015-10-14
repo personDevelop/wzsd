@@ -81,5 +81,10 @@ namespace EasyCms.Business
         {
             return Dal.CancleOrder(accountid, orderid, out error);
         }
+
+        public bool PaySuccess(string orderID, out string err)
+        {
+            return Dal.PaySuccess(orderID, out err);
+        }
     }
 }

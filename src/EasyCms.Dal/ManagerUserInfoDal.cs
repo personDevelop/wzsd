@@ -37,7 +37,7 @@ namespace EasyCms.Dal
             else
                 return Dal.From<ManagerUserInfo>().OrderBy(ManagerUserInfo._.Code).ToDataTable();
         }
-        public bool Exit(string ID,  string RecordStatus, string val, bool iscode)
+        public bool Exit(string ID, string RecordStatus, string val, bool iscode)
         {
             WhereClip where = new WhereClip();
             if (iscode)
@@ -279,72 +279,16 @@ namespace EasyCms.Dal
             }
             else
             {
+
                 switch (changePwd.VaryType)
                 {
                     case ValidType.手机短信:
-                        if (string.IsNullOrWhiteSpace(user.ContactPhone))
-                        {
-                            value = "您的账户没有设置手机号，不能通过该方式找回密码";
-                            return false;
-                        }
-                        else
-                        {
+                        return StaticValue.GetEncriptContanct(user.ContactPhone, changePwd.VaryType, out value);
 
-                            if (user.ContactPhone.Length != 11)
-                            {
-                                value = "*******" + user.ContactPhone.Substring(7);
-                            }
-                            else
-                            {
-
-                                value = "您的账户手机号不正确，不能通过该方式找回密码";
-                                return false;
-                            }
-                        }
                         break;
                     case ValidType.邮箱:
-                        if (string.IsNullOrWhiteSpace(user.Email))
-                        {
-                            value = "您的账户没有设置邮箱，不能通过该方式找回密码";
-                            return false;
-                        }
-                        else
-                        {
+                        return StaticValue.GetEncriptContanct(user.Email, changePwd.VaryType, out value);
 
-                            if (user.Email.Contains("@"))
-                            {
-                                string pri = user.Email.Substring(0, user.Email.IndexOf("@"));
-                                switch (pri.Length)
-                                {
-                                    case 1:
-                                        value = user.Email;
-                                        break;
-                                    case 2:
-                                        value = pri[0] + "*";
-                                        break;
-                                    case 3:
-                                        value = pri[0] + "*" + pri[2];
-                                        break;
-                                    case 4:
-                                        value = pri[0] + "**" + pri[3];
-                                        break;
-                                    case 5:
-                                        value = pri[0] + "***" + pri[4];
-                                        break;
-                                    default:
-                                        value = "****" + pri.Substring(4);
-                                        break;
-
-                                }
-                                value += user.Email.Substring(user.Email.IndexOf("@"));
-                            }
-                            else
-                            {
-
-                                value = "您的邮箱格式不正确，不能通过该方式找回密码";
-                                return false;
-                            }
-                        }
                         break;
                     case ValidType.手机和邮箱:
                     default:

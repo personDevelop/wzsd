@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Sharp.Common;
 namespace EasyCms.Model
 {
     public class StaticValue
@@ -25,6 +25,85 @@ namespace EasyCms.Model
                 temMsg += r.Next(0, 9);
             }
             return temMsg;
+        }
+
+        public static bool GetEncriptContanct(string no, ValidType type, out string error)
+        {
+            error = string.Empty;
+            bool isSuccess = true;
+            switch (type)
+            {
+                case ValidType.手机短信:
+                    if (string.IsNullOrWhiteSpace(no))
+                    {
+                        error = "手机号不能为空";
+                        isSuccess = false;
+                    }
+                    else
+                    {
+                        if (no.Length != 11)
+                        {
+                            error = "手机号格式不正确";
+                            isSuccess = false;
+                        }
+                        else
+                        {
+                            error = "*******" + no.Substring(7);
+
+                        }
+                    }
+                    break;
+                case ValidType.邮箱:
+                    if (string.IsNullOrWhiteSpace(no))
+                    {
+                        error = "邮箱不能为空";
+                        isSuccess = false;
+                    }
+                    else
+                    {
+
+                        if ( no.IsEmail())
+                        {
+                            string pri = no.Substring(0, no.IndexOf("@"));
+                            switch (pri.Length)
+                            {
+                                case 1:
+                                    error = no;
+                                    break;
+                                case 2:
+                                    error = pri[0] + "*";
+                                    break;
+                                case 3:
+                                    error = pri[0] + "*" + pri[2];
+                                    break;
+                                case 4:
+                                    error = pri[0] + "**" + pri[3];
+                                    break;
+                                case 5:
+                                    error = pri[0] + "***" + pri[4];
+                                    break;
+                                default:
+                                    error = "****" + pri.Substring(4);
+                                    break;
+
+                            }
+                            error += no.Substring(no.IndexOf("@"));
+                        }
+                        else
+                        {
+
+                            error = "邮箱格式不正确";
+                            return false;
+                        }
+                    }
+                    break;
+                case ValidType.手机和邮箱:
+                default:
+                    error = "不支持该方式";
+                    isSuccess = false;
+                    break;
+            }
+            return isSuccess;
         }
         /// <summary>
         /// 促销规则

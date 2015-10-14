@@ -1,0 +1,80 @@
+密文
+0StZ5+dEE5twHcwmWrdmPKvdcThcGgpgAO9OWf8ejekfsQ/5sHRYFZvo8Z0xg5JabZdYU0Pc8ELOpjSg4Y+TALZNn2FXez/HlotPzHippr7Krs1BbIVPu/WOMDTXQILe+Dq0RhRCHBwpW3FX3nM63UXAteA9P1JG2uZsuWXXxNTOOSN5LLW3e9vm0QHk1FdZYfEMEQyBI2GkvvaKseDhUuB24lE0GoH2iXYZcgt9joGe2SG/Adkx0tRD13af7m7ozK3XjdB2EewSrOaeWpCpgC5PKu/kJ2vnVpQ4qEKSjwNv8zqGwOBuKXL1Di+WsEbaa6cJ2qI7wTLXDmj9voisn8dp68GGUvDNrfdCSyUig3W/qQi0i+vbDGTIZruB/MF+2Tlc9RT8nlKELeN5mppgZwvJfu1ZO0Xt3ob60QMg9pPmeEwzqVlglvKJfn2zAwMQWCTEFkMsqNIW1BMcUkmINdU9JxMdu8TZBeJzW421kCAlF7lG81/SapCotQid16wIxv3anE8Huy9pK/FdiTipJNX28HhOd5xAJIZqLhs3jEE6vmydPHjhmgoqkR+ptlS7oRnXadVdkKifMFO2EKAgIq7bKdiUHlU3FV2eFBBX1CPpNUv07pUTyt1jMOQtKcufi1yzrXcO7S3DwoC8WLy+cdI4mb8haSdbLe6DMzChwBkreDNWO3Lpq4lFWrQ7huG+
+
+
+原文
+service="mobile.securitypay.pay"&partner="2088511128054061"&_input_charset="utf-8"&notify_url="http://www.dflink.com.cn/notify.aspx"&out_trade_no="HQ1510080001"&subject="Apple iPhone 6 (A1586) 16GB 金色 移动联通电信4G手机"&payment_type="1"&seller_id="hong7tv@163.com"&total_fee="4500.00"&it_b_pay="30m"&sign="jZa3YGS7Jjv%2bdFTCMW80Dx2GGYEfgbjJFn74y0JsNcYgxFXRbrt%2bw%2bl4vT1dUYgz8FCizPc7Mqb9A%2bxgY9FY5R53yaHnQIKc13X9QCl3WgrJnEorB0KGu8y0ballnfjwvORT0mBrbEWlcjuznY0LHxCCD7C7moLe5qScG%2f%2f2Bbc%3d"&sign_type="RSA"
+
+
+ private static string DecKey = "luylkeyi";
+        private static string DecKeyIV = "keylylIV";
+
+  #region DEC加密解密
+       
+        /// <!--DEC 加密法 --> 
+        /// <summary> 
+        /// DEC 加密法 - design By Phoenix 2008 - 
+        /// </summary> 
+        /// <param name="pToEncrypt">加密的字串</param> 
+        /// <param name="sKey">加密金鑰</param> 
+        /// <param name="sIV">初始化向量</param> 
+        /// <returns></returns> 
+        public static string EncryptDEC(this string pToEncrypt)
+        {
+            byte[] btKey = Encoding.UTF8.GetBytes(DecKey);
+            byte[] btIV = Encoding.UTF8.GetBytes(DecKeyIV);
+            DESCryptoServiceProvider des = new DESCryptoServiceProvider();
+            using (MemoryStream ms = new MemoryStream())
+            {
+                byte[] inData = Encoding.UTF8.GetBytes(pToEncrypt);
+                try
+                {
+                    using (CryptoStream cs = new CryptoStream(ms, des.CreateEncryptor(btKey, btIV), CryptoStreamMode.Write))
+                    {
+                        cs.Write(inData, 0, inData.Length);
+                        cs.FlushFinalBlock();
+                    }
+
+                    return Convert.ToBase64String(ms.ToArray());
+                }
+                catch
+                {
+                    throw;
+                }
+            }
+ 
+        }
+
+        /// <!--DEC 解密法--> 
+        /// <summary> 
+        /// DEC 解密法 - design By Phoenix 2008 - 
+        /// </summary> 
+        /// <param name="pToDecrypt">解密的字串</param> 
+        /// <param name="sKey">加密金鑰</param> 
+        /// <param name="sIV">初始化向量</param> 
+        /// <returns></returns> 
+        public static string DecryptDEC(this string pToDecrypt)
+        {
+            //转义特殊字符
+            pToDecrypt = pToDecrypt.Replace("-", "+");
+            pToDecrypt = pToDecrypt.Replace("_", "/");
+            pToDecrypt = pToDecrypt.Replace("~", "=");
+            byte[] inputByteArray = Convert.FromBase64String(pToDecrypt);
+            using (DESCryptoServiceProvider des = new DESCryptoServiceProvider())
+            {
+                des.Key = ASCIIEncoding.ASCII.GetBytes(DecKey);
+                des.IV = ASCIIEncoding.ASCII.GetBytes(DecKeyIV);
+                System.IO.MemoryStream ms = new System.IO.MemoryStream();
+                using (CryptoStream cs = new CryptoStream(ms, des.CreateDecryptor(), CryptoStreamMode.Write))
+                {
+                    cs.Write(inputByteArray, 0, inputByteArray.Length);
+                    cs.FlushFinalBlock();
+                    cs.Close();
+                }
+                string str = Encoding.UTF8.GetString(ms.ToArray());
+                ms.Close();
+                return str;
+            }
+ 
+        }
+        #endregion

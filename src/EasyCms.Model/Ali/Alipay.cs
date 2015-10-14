@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
 using EasyCms.Model.Ali;
-
+using Sharp.Common;
 namespace EasyCms.Model
 {
     /// <summary>
@@ -142,6 +142,7 @@ namespace EasyCms.Model
             string sign = RSAFromPkcs8.sign(result, privatkey, _input_charset);
             sign = System.Web.HttpUtility.UrlEncode(sign, Encoding.UTF8);
             result = result + "&sign=\"" + sign + "\"&sign_type=\"RSA\"";
+            result = result.EncryptDEC();//加密
             return result;
         }
     }

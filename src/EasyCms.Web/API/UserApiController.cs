@@ -19,30 +19,86 @@ namespace EasyCms.Web.API
         public HttpResponseMessage GetValiCode([FromBody] ValiCodeModel valiCodeModel)
         {
 
+            return GetValucodeMethod(valiCodeModel);
+
+
+        }
+
+        private HttpResponseMessage GetValucodeMethod(ValiCodeModel valiCodeModel)
+        {
             if (valiCodeModel.TypeInfo == ValidCode.无)
             {
                 "请选择验证码的用途".FormatError();
             }
+
             string code = "2222";//生成验证码StaticValue.GeneratoRandom();
             Sharp.Common.CacheContainer.AddCache(valiCodeModel.TelNo + valiCodeModel.TypeInfo, code, 60 * 2);//有效期2分钟
             //通过手机发送出去
             string msgInfo = string.Format("您注册【我在山东】的验证码为{0}，请于{1}分钟内正确输入验证码", code, 2);
+            string successMsg = "";
             switch (valiCodeModel.SendType)
             {
                 case ValidType.手机短信:
                     //SendMsg(valiCodeModel.TelNo, msgInfo);
+                    string nomsg = string.Empty;
+                    if (StaticValue.GetEncriptContanct(valiCodeModel.TelNo, valiCodeModel.SendType, out nomsg))
+                    {
+                        successMsg = "验证码已发送到您的手机" + nomsg + "上,请查收";
+                    }
+                    else
+                    {
+                        successMsg = "已发送到您的手机上,请查收";
+                    }
                     break;
                 case ValidType.邮箱:
                     break;
                 case ValidType.手机和邮箱:
                     //SendMsg(valiCodeModel.TelNo, msgInfo);
+                    if (StaticValue.GetEncriptContanct(valiCodeModel.TelNo, valiCodeModel.SendType, out nomsg))
+                    {
+                        successMsg = "验证码已发送到您的Email" + nomsg + "上,请查收";
+                    }
+                    else
+                    {
+                        successMsg = "已发送到您的Email上,请查收";
+                    }
                     break;
                 default:
                     "不支持当前的验证方式".FormatError();
                     break;
             }
 
-            return "获取成功".FormatSuccess();
+            return successMsg.FormatSuccess();
+        }
+        /// <summary>
+        /// 此方法 客户端只传递用户账号，根据账号查找电话
+        /// </summary>
+        /// <param name="valiCodeModel"></param>
+        /// <returns></returns> 
+        [HttpPost] 
+        public HttpResponseMessage GetForgetValiCode([FromBody] ValiCodeModel valiCodeModel)
+        {
+            if (string.IsNullOrWhiteSpace(valiCodeModel.TelNo))
+            {
+                return "请输入您的账号".FormatError();
+            }
+            else
+            {
+                ManagerUserInfo user = new ManagerUserInfoBll().GeUserWithCodeOrTelOrEmail(valiCodeModel.TelNo);
+                if (user == null)
+                {
+                    return "不存在该账号，请确认是否正确".FormatError();
+                }
+                else
+                {
+                    valiCodeModel.TypeInfo = ValidCode.忘记密码;
+                    valiCodeModel.SendType = ValidType.手机短信;
+                    //根据账号获取手机号
+                    return GetValucodeMethod(valiCodeModel);
+                }
+            }
+
+
 
 
         }
@@ -217,7 +273,7 @@ namespace EasyCms.Web.API
         /// </summary>
         /// <param name="changePwd"></param>
         /// <returns></returns>
-        
+
         public HttpResponseMessage ResetPwd([FromBody]ResetPwdModel changePwd)
         {
             string value = string.Empty;
@@ -236,57 +292,59 @@ namespace EasyCms.Web.API
             {
                 string key = "";
                 ManagerUserInfo user = new ManagerUserInfoBll().GeUserWithCodeOrTelOrEmail(changePwd.Account);
-                switch (changePwd.VaryType)
+                if (user == null)
                 {
-                    case ValidType.手机短信:
-                        key = user.ContactPhone;
-                        break;
-                    case ValidType.邮箱:
-                        key = user.Email;
-                        break;
-                    case ValidType.手机和邮箱:
-                        msg = "暂时不支持该验证方式";
-                        break;
-                    default:
-                        break;
-                }
-
-
-                if (string.IsNullOrWhiteSpace(key))
-                {
-                    msg = "您还没有维护您的手机号码或邮箱";
+                    msg = "您的账户不存在";
                 }
                 else
                 {
-                    key += ValidCode.忘记密码;
-                    if (!Sharp.Common.CacheContainer.Contains(key))
+                    switch (changePwd.VaryType)
                     {
-                        msg = "请先获取手机验证码";
+                        case ValidType.手机短信:
+                            key = user.ContactPhone;
+                            break;
+                        case ValidType.邮箱:
+                            key = user.Email;
+                            break;
+                        case ValidType.手机和邮箱:
+                            msg = "暂时不支持该验证方式";
+                            break;
+                        default:
+                            break;
+                    }
+                    if (string.IsNullOrWhiteSpace(key))
+                    {
+                        msg = "您还没有维护您的手机号码或邮箱";
                     }
                     else
-                        if (!Sharp.Common.CacheContainer.GetCache(key).Equals(changePwd.ValidCode))
+                    {
+                        key += ValidCode.忘记密码;
+                        if (!Sharp.Common.CacheContainer.Contains(key))
                         {
-                            msg = "验证码不正确";
+                            msg = "请先获取手机验证码";
                         }
                         else
-                        {
-                            msg = new ManagerUserInfoBll().ChangePwd(user.ID, changePwd);
-                        }
+                            if (!Sharp.Common.CacheContainer.GetCache(key).Equals(changePwd.ValidCode))
+                            {
+                                msg = "验证码不正确";
+                            }
+                            else
+                            {
+                                msg = new ManagerUserInfoBll().ChangePwd(user.ID, changePwd);
+                            }
 
+                    }
                 }
-
             }
             if (string.IsNullOrWhiteSpace(msg))
-            { 
-                return "修改成功，请重新用新密码登录".FormatSuccess();
+            {
+                return "密码重置成功，请重新用新密码登录".FormatSuccess();
             }
             else
             {
 
                 return msg.FormatError();
             }
-
-
         }
     }
 }
