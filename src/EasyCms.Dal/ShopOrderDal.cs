@@ -518,9 +518,18 @@ namespace EasyCms.Dal
                 }
                 else
                 {
-                    realOrder.ShipStatus = (int)OrderStatus.等待付款;
-                    realOrder.PayStatus = (int)PayStatus.未付款;
-                    realOrder.OrderStatus = (int)OrderStatus.等待付款;
+                    if (realOrder.TotalPrice + realOrder.Freight - realOrder.Discount <= 0)
+                    {
+                        realOrder.PayStatus = (int)PayStatus.待商家确认;
+                        realOrder.ShipStatus = (int)OrderStatus.等待商家确认; 
+                        realOrder.OrderStatus = (int)OrderStatus.等待商家确认;
+                    }
+                    else
+                    {
+                        realOrder.PayStatus = (int)PayStatus.未付款;
+                        realOrder.ShipStatus = (int)OrderStatus.等待付款; 
+                        realOrder.OrderStatus = (int)OrderStatus.等待付款;
+                    }
                 }
                 #endregion
                 //计算商品明细
@@ -661,9 +670,18 @@ namespace EasyCms.Dal
                 }
                 else
                 {
-                    mainOrder.ShipStatus = (int)OrderStatus.等待付款;
-                    mainOrder.PayStatus = (int)PayStatus.未付款;
-                    mainOrder.OrderStatus = (int)OrderStatus.等待付款;
+                    if (mainOrder.TotalPrice + mainOrder.Freight - mainOrder.Discount <= 0)
+                    {
+                        mainOrder.PayStatus = (int)PayStatus.待商家确认;
+                        mainOrder.ShipStatus = (int)OrderStatus.等待商家确认;
+                        mainOrder.OrderStatus = (int)OrderStatus.等待商家确认;
+                    }
+                    else
+                    {
+                        mainOrder.PayStatus = (int)PayStatus.未付款;
+                        mainOrder.ShipStatus = (int)OrderStatus.等待付款;
+                        mainOrder.OrderStatus = (int)OrderStatus.等待付款;
+                    } 
                 }
                 Savelist.Add(mainOrder);
 
