@@ -210,7 +210,7 @@ namespace EasyCms.Web.API
             ShopOrder._.OrderStatus.FullName,
                 "ShopOrder.CommentStatusStr",
             ShopOrder._.CommentStatus.FullName,
-            ShopOrder._.TotalPrice.FullName, ShopOrder._.CreateDate.FullName, ShopOrderItem._.ID.FullName, ShopOrderItem._.OrderID.FullName, ShopOrderItem._.BrandName.FullName,
+            ShopOrder._.TotalPrice.FullName, ShopOrder._.Discount.FullName, ShopOrder._.CreateDate.FullName, ShopOrderItem._.ID.FullName, ShopOrderItem._.OrderID.FullName, ShopOrderItem._.BrandName.FullName,
                 ShopOrderItem._.Count.FullName, ShopOrderItem._.HandselCount.FullName, ShopOrderItem._.IsHandsel.FullName,
                 ShopOrderItem._.IsVirtualProduct.FullName, ShopOrderItem._.MarketPrice.FullName,
                 ShopOrderItem._.Price.FullName, ShopOrderItem._.Preferential.FullName,
@@ -238,8 +238,7 @@ namespace EasyCms.Web.API
             }
 
 
-
-
+            ShopOrder order1 = new ShopOrder(); 
             ManagerUserInfo user = Request.GetAccount();
             string err = null;
             ShopOrder order = new ShopOrderBll().GetOrder(host, id, Request.GetAccountID(false), out   err);
@@ -257,16 +256,16 @@ namespace EasyCms.Web.API
                     ShopOrder._.PayTypeID.FullName, ShopOrder._.ExpressCompanyID.FullName,
                     ShopOrder._.FreightAdjust.FullName,
                     ShopOrder._.FreightActual.FullName, ShopOrder._.Weight
-                    .FullName, ShopOrder._.CostPrice.FullName, ShopOrder._.Discount.FullName,
+                    .FullName, ShopOrder._.CostPrice.FullName, 
                     ShopOrder._.PayMoney.FullName, ShopOrder._.OrderPoint.FullName, ShopOrder._.ReturnMoney.FullName,
                     ShopOrder._.SellerID.FullName, ShopOrder._.SellerName.FullName, ShopOrder._.SellerEmail.FullName, ShopOrder._.SellerPhone.FullName, ShopOrder._.SupplierID
                     .FullName, ShopOrder._.SupplierName.FullName, ShopOrder._.OrderIP
                      .FullName, ShopOrder._.SpecifiedDate.FullName, ShopOrder._.ExportCount.FullName,
                      ShopOrder._.HasDelete.FullName, ShopOrder._.ClientType.FullName, ShopOrder._.PublishDateTime.FullName
                       , ShopOrderItem._.ReturnCount.FullName, ShopOrderItem._.UseJf.FullName, ShopOrderItem._.CostPrice.FullName,
-                      ShopOrderItem._.ReturnMoney.FullName,
+                      ShopOrderItem._.ReturnMoney.FullName, ShopOrderItem._.ProductType.FullName,
                       ShopOrderItem._.Point.FullName
-                       , ShopOrderItem._.Remark.FullName);
+                       );
             }
 
 
@@ -328,7 +327,7 @@ namespace EasyCms.Web.API
 
         }
 
-        public HttpResponseMessage PaySuccess([FromBody] ReciveForm rf) 
+        public HttpResponseMessage PaySuccess([FromBody] ReciveForm rf)
         {
             string err = string.Empty;
             bool isSucess = new ShopOrderBll().PaySuccess(rf.Data, out err);

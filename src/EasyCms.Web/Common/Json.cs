@@ -43,7 +43,7 @@ namespace EasyCms.Web.Common
                 json.Converters.Add(new DataSetConverter());
 
             json.Converters.Add(new DateTimeConverter());
-
+            json.Converters.Add(new DBNullCreationConverter());
             string output = string.Empty;
             using (StringWriter sw = new StringWriter())
             {
@@ -81,6 +81,67 @@ namespace EasyCms.Web.Common
 
 
             return result;
+        }
+    }
+
+    /// <summary>
+    /// 对DBNull的转换处理，此处只写了转换成JSON字符串的处理，JSON字符串转对象的未处理
+    /// </summary>
+    public class DBNullCreationConverter : JsonConverter
+    {
+        /// <summary>
+        /// 是否允许转换
+        /// </summary>
+        public override bool CanConvert(Type objectType)
+        {
+            bool canConvert = false;
+            switch (objectType.FullName)
+            {
+                case "System.DBNull":
+                    canConvert = true;
+                    break;
+                case "System.String":
+                    canConvert = true;
+                    break;
+
+            }
+            return canConvert;
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+
+            return existingValue;
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            if (value == null || value == DBNull.Value)
+            {
+                writer.WriteValue(string.Empty);
+            }
+            else
+            {
+                writer.WriteValue(value);
+            }
+        }
+
+        public override bool CanRead
+        {
+            get
+            {
+                return false;
+            }
+        }
+        /// <summary>
+        /// 是否允许转换JSON字符串时调用
+        /// </summary>
+        public override bool CanWrite
+        {
+            get
+            {
+                return true;
+            }
         }
     }
     /// <summary>

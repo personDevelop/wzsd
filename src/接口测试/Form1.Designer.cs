@@ -117,7 +117,7 @@
             this.txtBody.Name = "txtBody";
             this.txtBody.Size = new System.Drawing.Size(468, 121);
             this.txtBody.TabIndex = 6;
-            this.txtBody.Text = "Account=130&Pwd=aaaaaa&DeviceID=123456";
+            this.txtBody.Text = "Account=18660155001&Pwd=wwwwww&DeviceID=123456";
             // 
             // label4
             // 
@@ -186,6 +186,7 @@
             this.Controls.Add(this.button1);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

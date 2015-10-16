@@ -50,5 +50,41 @@ namespace 接口测试
         {
             new frm签名测试().Show();
         }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            Class2 c = new Class2();
+            DataTable dt = new DataTable();
+            dt.Columns.AddRange(new DataColumn[] { 
+                  new DataColumn("string1"),  
+             new DataColumn("string2"),  
+                new DataColumn("int1"),  
+             new DataColumn("int2"),  
+              new DataColumn("DateTime1"),  
+               new DataColumn("DateTime2"),  
+              new DataColumn("enumdd"),  
+               new DataColumn("bool1"),  
+              new DataColumn("bool2")  
+            });
+            
+            DataRow dr = dt.NewRow();
+            dr["string1"] = DBNull.Value;
+            dr["string2"] = c.string2;
+            dr["int1"] = c.int1;
+            dr["int2"] = c.int2;
+            dr["DateTime1"] = c.DateTime1;
+            dr["DateTime2"] = c.DateTime2;
+            dr["enumdd"] = c.enumdd;
+            dr["bool1"] = c.bool1;
+            dr["bool2"] = c.bool2;
+            dt.AddRow(dr);
+            DataRow dr2 = dt.NewRow();
+            dt.AddRow(dr2);
+            List<Class2> cl = dt.ToList<Class2>();
+            if (cl.Count>0)
+            {
+                return;
+            }
+        }
     }
 }
