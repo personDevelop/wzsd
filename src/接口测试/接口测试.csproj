@@ -131,10 +131,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\01-WinFramework-新架构\Sharp.Common\Sharp.Common.csproj">
-      <Project>{a4e6aa2c-40ba-44e4-8ff8-e51d54745c32}</Project>
-      <Name>Sharp.Common</Name>
-    </ProjectReference>
     <ProjectReference Include="..\EasyCms.Model\EasyCms.Model.csproj">
       <Project>{5bf70ea8-ae93-4ed9-be80-a1be82b795fa}</Project>
       <Name>EasyCms.Model</Name>

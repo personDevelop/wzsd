@@ -264,7 +264,7 @@ namespace EasyCms.Web.API
                      ShopOrder._.HasDelete.FullName, ShopOrder._.ClientType.FullName, ShopOrder._.PublishDateTime.FullName
                       , ShopOrderItem._.ReturnCount.FullName, ShopOrderItem._.UseJf.FullName, ShopOrderItem._.CostPrice.FullName,
                       ShopOrderItem._.ReturnMoney.FullName, ShopOrderItem._.ProductType.FullName,
-                      ShopOrderItem._.Point.FullName
+                      ShopOrderItem._.Point.FullName, ShopOrderItem._.SupplierName.FullName, ShopOrderItem._.RegionName.FullName, ShopOrderItem._.ShortDescription.FullName 
                        );
             }
 

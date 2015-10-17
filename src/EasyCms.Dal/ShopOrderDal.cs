@@ -512,7 +512,7 @@ namespace EasyCms.Dal
                 }
                 if (order.CashOnDelivery)
                 {
-                    realOrder.ShipStatus = (int)OrderStatus.等待商家发货;
+                    realOrder.ShipStatus = (int)ShipStatus.等待商家发货;
                     realOrder.PayStatus = (int)PayStatus.未付款;
                     realOrder.OrderStatus = (int)OrderStatus.等待商家发货;
                 }
@@ -521,13 +521,13 @@ namespace EasyCms.Dal
                     if (realOrder.TotalPrice + realOrder.Freight - realOrder.Discount <= 0)
                     {
                         realOrder.PayStatus = (int)PayStatus.待商家确认;
-                        realOrder.ShipStatus = (int)OrderStatus.等待商家确认; 
+                        realOrder.ShipStatus = (int)ShipStatus.等待商家确认; 
                         realOrder.OrderStatus = (int)OrderStatus.等待商家确认;
                     }
                     else
                     {
                         realOrder.PayStatus = (int)PayStatus.未付款;
-                        realOrder.ShipStatus = (int)OrderStatus.等待付款; 
+                        realOrder.ShipStatus = (int)ShipStatus.等待付款; 
                         realOrder.OrderStatus = (int)OrderStatus.等待付款;
                     }
                 }
@@ -664,7 +664,7 @@ namespace EasyCms.Dal
                 mainOrder.PayMoney = Orderlist.Sum(p => p.PayMoney);
                 if (order.CashOnDelivery)
                 {
-                    mainOrder.ShipStatus = (int)OrderStatus.等待商家发货;
+                    mainOrder.ShipStatus = (int)ShipStatus.等待商家发货;
                     mainOrder.PayStatus = (int)PayStatus.未付款;
                     mainOrder.OrderStatus = (int)OrderStatus.等待商家发货;
                 }
@@ -673,13 +673,13 @@ namespace EasyCms.Dal
                     if (mainOrder.TotalPrice + mainOrder.Freight - mainOrder.Discount <= 0)
                     {
                         mainOrder.PayStatus = (int)PayStatus.待商家确认;
-                        mainOrder.ShipStatus = (int)OrderStatus.等待商家确认;
+                        mainOrder.ShipStatus = (int)ShipStatus.等待商家确认;
                         mainOrder.OrderStatus = (int)OrderStatus.等待商家确认;
                     }
                     else
                     {
                         mainOrder.PayStatus = (int)PayStatus.未付款;
-                        mainOrder.ShipStatus = (int)OrderStatus.等待付款;
+                        mainOrder.ShipStatus = (int)ShipStatus.等待付款;
                         mainOrder.OrderStatus = (int)OrderStatus.等待付款;
                     } 
                 }
@@ -1046,7 +1046,7 @@ namespace EasyCms.Dal
                       ShopOrder._.InvoiceNote,
                 ShopOrder._.CommentStatus, ShopOrder._.MemberID,
                 ShopOrder._.TotalPrice, ShopOrder._.CreateDate,
-                ShopOrder._.PayMoney, ShopOrder._.ShipRegion, ShopOrder._.ShipAddress, ShopOrder._.ShipTel, ShopOrder._.ShipName
+                ShopOrder._.PayMoney, ShopOrder._.ShipRegion, ShopOrder._.ShipAddress, ShopOrder._.ShipTel, ShopOrder._.ShipName, ShopOrder._.Remark
                 )
                 .ToFirst<ShopOrder>();
             if (order == null)
@@ -1066,7 +1066,8 @@ namespace EasyCms.Dal
                     .Select(ShopOrderItem._.ID, ShopOrderItem._.OrderID, ShopOrderItem._.BrandName,
                     ShopOrderItem._.Count, ShopOrderItem._.HandselCount, ShopOrderItem._.IsHandsel,
                     ShopOrderItem._.IsVirtualProduct, ShopOrderItem._.MarketPrice,
-                    ShopOrderItem._.Price, ShopOrderItem._.Preferential,
+                    ShopOrderItem._.Price, ShopOrderItem._.Preferential, ShopOrderItem._.AttributeVal,
+                     ShopOrderItem._.Unit, ShopOrderItem._.Remark, ShopOrderItem._.ProductTypeName,
                     ShopOrderItem._.ProductID, ShopOrderItem._.ProductCode, ShopOrderItem._.ProductSKU,
                     ShopOrderItem._.ProductName, new ExpressionClip("'" + host + "'" + "+ProductThumb").Alias("ProductThumb"), ShopOrderItem._.TotalPrice,
                     ShopOrderItem._.Sequence).List<ShopOrderItem>();
