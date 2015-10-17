@@ -237,8 +237,7 @@ namespace EasyCms.Web.API
                 return "订单编号不能为空".FormatError();
             }
 
-
-            ShopOrder order1 = new ShopOrder(); 
+ 
             ManagerUserInfo user = Request.GetAccount();
             string err = null;
             ShopOrder order = new ShopOrderBll().GetOrder(host, id, Request.GetAccountID(false), out   err);
