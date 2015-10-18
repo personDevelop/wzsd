@@ -1750,6 +1750,12 @@ namespace EasyCms.Model
         [NotDbCol]
         public List<ShopOrderItem> OrderItems { get; set; }
 
+        [NotDbCol]
+        public List<string> Promotion { get; set; }
+
+        [NotDbCol]
+        public List<string> Coupon { get; set; }
+
 
         [NotDbCol]
         public string PayStatusStr
@@ -1771,12 +1777,12 @@ namespace EasyCms.Model
             get
             {
 
-                ShipStatus Ss =  (ShipStatus)ShipStatus; 
+                ShipStatus Ss = (ShipStatus)ShipStatus;
                 return Ss.ToString();
             }
         }
 
-        
+
 
         [NotDbCol]
         public string OrderStatusStr
@@ -1788,7 +1794,7 @@ namespace EasyCms.Model
                 return os.ToString();
             }
         }
-         [NotDbCol]
+        [NotDbCol]
         public string CommentStatusStr
         {
             get

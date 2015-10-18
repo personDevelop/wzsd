@@ -48,6 +48,8 @@ namespace EasyCms.Model
 
         private bool _hasReply;
 
+        private CommentOrder _CommentOrder;
+
         #endregion
 
         #region 属性
@@ -114,7 +116,7 @@ namespace EasyCms.Model
         ///  会员ID,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "UserId", DbTypeString = "char", ColumnIsNull = false, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "UserId", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string UserId
         {
@@ -171,7 +173,7 @@ namespace EasyCms.Model
         ///  父ID,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "ParentID", DbTypeString = "char", ColumnIsNull = true, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ParentID", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string ParentID
         {
@@ -209,7 +211,7 @@ namespace EasyCms.Model
         ///  订单ID,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "OrderId", DbTypeString = "char", ColumnIsNull = false, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "((0))")]
+        [DbProperty(MapingColumnName = "OrderId", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "((0))")]
 
         public string OrderId
         {
@@ -228,7 +230,7 @@ namespace EasyCms.Model
         ///  晒图图片,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "ImagesID", DbTypeString = "char", ColumnIsNull = true, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ImagesID", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string ImagesID
         {
@@ -247,7 +249,7 @@ namespace EasyCms.Model
         ///  分级码,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "ClassCode", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ClassCode", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 500, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string ClassCode
         {
@@ -278,6 +280,25 @@ namespace EasyCms.Model
             {
                 this.OnPropertyChanged("hasReply", this._hasReply, value);
                 this._hasReply = value;
+            }
+        }
+
+        /// <summary>
+        ///  评论等级,0差评 1中评，2好评
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "CommentOrder", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public CommentOrder CommentOrder
+        {
+            get
+            {
+                return this._CommentOrder;
+            }
+            set
+            {
+                this.OnPropertyChanged("CommentOrder", this._CommentOrder, value);
+                this._CommentOrder = value;
             }
         }
 
@@ -312,6 +333,8 @@ namespace EasyCms.Model
                 ClassCode = new PropertyItem("ClassCode", tableName);
 
                 hasReply = new PropertyItem("hasReply", tableName);
+
+                CommentOrder = new PropertyItem("CommentOrder", tableName);
 
 
             }
@@ -363,9 +386,16 @@ namespace EasyCms.Model
             /// 已回复,
             /// </summary> 
             public PropertyItem hasReply = null;
+            /// <summary>
+            /// 评论等级,0差评 1中评，2好评
+            /// </summary> 
+            public PropertyItem CommentOrder = null;
         }
         #endregion
     }
+
+
+
     public partial class ShopProductReviews
     {
         [NotDbCol]

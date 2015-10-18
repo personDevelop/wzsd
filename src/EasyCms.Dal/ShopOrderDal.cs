@@ -392,6 +392,7 @@ namespace EasyCms.Dal
                     err = "您选择的优惠券已过期或余额不足,请返回购物车重新选购商品";
                     return null;
                 }
+
             }
             #endregion
 
@@ -548,19 +549,9 @@ namespace EasyCms.Dal
 
                     if (product.Point > 0)
                     {
-                        JFHistory jh = new JFHistory()
-                        {
-                            ID = Guid.NewGuid().ToString(),
-                            CreateDate = now,
-                            MemberID = accuont.ID,
-                            JFType = 0,
-                            FX = 0,
-                            JFCount = product.Point,
-                            JFSouce = JFType.购物.ToString(),
-                            JFSouceMainID = activeOrder.ID,
-                            JFSouceSubID = product.ID,
-                            JFState = (int)JFStatus.在途
-                        };
+
+                        JFHistory jh = CreateJfHistory(accuont.ID, now, JFType.积分, RuleType.满额送积分, product.Point, activeOrder.ID,
+                            product.ID, null, null);
                         Savelist.Add(jh);
                     }
 
@@ -597,7 +588,15 @@ namespace EasyCms.Dal
                     activeOrder.Discount = activeOrder.TotalPrice;
                     CouponPrice -= activeOrder.TotalPrice;
                 }
+                if (activeOrder.Discount > 0)
+                {
+                    //设置优惠券使用记录，由于这个虽然有拆分订单，但是能保证 如果当前订单使用了优惠券，那基本能保证 优惠券都使用在了该订单上
+                    foreach (string CouponAccountID in listCoupon)
+                    {
 
+                        Savelist.Add(CreateJfHistory(accuont.ID, now, JFType.优惠券, RuleType.其他, 1, activeOrder.ID, null, CouponAccountID, null, AddOrRemove.减少));
+                    }
+                }
                 if (IsCf)
                 {
                     if (OrderCount != 1)// 将其他订单的运费设为0 
@@ -676,7 +675,7 @@ namespace EasyCms.Dal
                         mainOrder.OrderStatus = (int)OrderStatus.等待付款;
                     }
                 }
-                Savelist.Add(mainOrder); 
+                Savelist.Add(mainOrder);
                 ShopOrderAction orderAction = new ShopOrderAction()
                 {
 
@@ -731,9 +730,7 @@ namespace EasyCms.Dal
                             {
                                 sendCount = 0;
                             }
-
                         }
-
                         pro.HasSendCount += sendCount;
 
                     }
@@ -752,47 +749,15 @@ namespace EasyCms.Dal
                     {
                         switch (rt)
                         {
-
-
-
-
                             case RuleType.满额送优惠券:
-                                jh = new JFHistory()
-                                {
-                                    ID = Guid.NewGuid().ToString(),
-                                    CreateDate = now,
-                                    MemberID = accuontID,
-                                    JFType = 1,
-                                    FX = 0,
-                                    JFCount = sendCount,
-                                    JFSouce = JFType.购物.ToString(),
-                                    JFSouceMainID = realOrder.ID,
-                                    JFSouceSubID = jFSouceSubID,
-                                    JFState = (int)JFStatus.在途,
-                                    CouponID = pro.CouponID,
-                                    ActivityID = pro.ID
-                                };
-                                Orderlist.Add(jh);
 
+                                jh = CreateJfHistory(accuontID, now, JFType.优惠券, rt, sendCount, realOrder.ID, jFSouceSubID, pro.CouponID, pro.ID);
+                                Orderlist.Add(jh);
                                 Orderlist.Add(pro);
 
                                 break;
                             case RuleType.满额送积分:
-                                jh = new JFHistory()
-                                {
-                                    ID = Guid.NewGuid().ToString(),
-                                    CreateDate = now,
-                                    MemberID = accuontID,
-                                    JFType = 0,
-                                    FX = 0,
-                                    JFCount = sendCount,
-                                    JFSouce = JFType.购物.ToString(),
-                                    JFSouceMainID = realOrder.ID,
-                                    JFSouceSubID = jFSouceSubID,
-                                    JFState = (int)JFStatus.在途,
-                                    ActivityID = pro.ID
-                                };
-
+                                jh = CreateJfHistory(accuontID, now, JFType.积分, rt, sendCount, realOrder.ID, jFSouceSubID, null, pro.ID);
                                 Orderlist.Add(pro);
                                 Orderlist.Add(jh);
                                 break;
@@ -831,12 +796,14 @@ namespace EasyCms.Dal
                                         IsVirtualProduct = handproduct.IsVirtualProduct
                                     };
                                     handsales.Add(handSaile);
-
+                                    jh = CreateJfHistory(accuontID, now, JFType.赠品, rt, sendCount, realOrder.ID, jFSouceSubID, handSaile.ProductSKU ?? handSaile.ProductID, pro.ID);
                                     Orderlist.Add(pro);
+
                                 }
 
                                 break;
                             case RuleType.满额免运费:
+                                //这个由于目前运费统一是0，所以这个暂不处理
                                 break;
                             case RuleType.首单送优惠券:
                                 if (IsFirst == null)
@@ -847,22 +814,7 @@ namespace EasyCms.Dal
                                 if (IsFirst.Value)
                                 {
 
-
-                                    jh = new JFHistory()
-                                    {
-                                        ID = Guid.NewGuid().ToString(),
-                                        CreateDate = now,
-                                        MemberID = accuontID,
-                                        JFType = 1,
-                                        FX = 0,
-                                        JFCount = sendCount,
-                                        JFSouce = JFType.购物.ToString(),
-                                        JFSouceMainID = realOrder.ID,
-                                        JFSouceSubID = jFSouceSubID,
-                                        JFState = (int)JFStatus.在途,
-                                        CouponID = pro.CouponID,
-                                        ActivityID = pro.ID
-                                    };
+                                    jh = CreateJfHistory(accuontID, now, JFType.优惠券, rt, sendCount, realOrder.ID, jFSouceSubID, pro.CouponID, pro.ID);
                                     Orderlist.Add(jh);
                                     Orderlist.Add(pro);
                                 }
@@ -875,20 +827,7 @@ namespace EasyCms.Dal
                                 }
                                 if (IsFirst.Value)
                                 {
-                                    jh = new JFHistory()
-                                    {
-                                        ID = Guid.NewGuid().ToString(),
-                                        CreateDate = now,
-                                        MemberID = accuontID,
-                                        JFType = 0,
-                                        FX = 0,
-                                        JFCount = sendCount,
-                                        JFSouce = JFType.购物.ToString(),
-                                        JFSouceMainID = realOrder.ID,
-                                        JFSouceSubID = jFSouceSubID,
-                                        JFState = (int)JFStatus.在途,
-                                        ActivityID = pro.ID
-                                    };
+                                    jh = CreateJfHistory(accuontID, now, JFType.积分, rt, sendCount, realOrder.ID, jFSouceSubID, null, pro.ID);
                                     Orderlist.Add(jh);
                                     Orderlist.Add(pro);
                                 }
@@ -939,6 +878,7 @@ namespace EasyCms.Dal
 
                                             handsales.Add(handSaile);
                                             Orderlist.Add(pro);
+                                            jh = CreateJfHistory(accuontID, now, JFType.赠品, rt, sendCount, realOrder.ID, jFSouceSubID, handSaile.ProductSKU ?? handSaile.ProductID, pro.ID);
                                         }
                                     }
                                 }
@@ -952,6 +892,9 @@ namespace EasyCms.Dal
                                 if (IsFirst.Value)
                                 {
                                     realOrder.Freight = 0;
+                                    jh = CreateJfHistory(accuontID, now, JFType.其他, rt, sendCount, realOrder.ID, jFSouceSubID, null, pro.ID);
+                                    Orderlist.Add(jh);
+
                                 }
                                 break;
                             case RuleType.注册送优惠券:
@@ -969,6 +912,25 @@ namespace EasyCms.Dal
             return IsFirst;
         }
 
+        public JFHistory CreateJfHistory(string accountid, DateTime now, JFType jftype, RuleType rultType, decimal sendCount, string mainID, string mxid, string coupponIDoRProductID, string activityid, AddOrRemove addOrRemove = AddOrRemove.增加)
+        {
+
+            return new JFHistory()
+            {
+                ID = Guid.NewGuid().ToString(),
+                CreateDate = now,
+                MemberID = accountid,
+                JFType = jftype,
+                FX = addOrRemove,
+                JFCount = sendCount,
+                JFSouce = rultType,
+                JFSouceMainID = mainID,
+                JFSouceSubID = mxid,
+                JFState = JFStatus.在途,
+                CouponID = coupponIDoRProductID,//优惠券或者赠送商品的id 或skuid
+                ActivityID = activityid
+            };
+        }
         public List<ShopOrder> GetMyOrder(string host, ManagerUserInfo user, int queryPage, int queryStatus, string otherWhere, out string err)
         {
             err = string.Empty;
@@ -1065,11 +1027,57 @@ namespace EasyCms.Dal
                     ShopOrderItem._.Sequence).List<ShopOrderItem>();
 
                 order.OrderItems = orderItems;
+
+                List<JFHistory> Alllist = Dal.From<JFHistory>().Where(JFHistory._.JFSouceMainID == id).List<JFHistory>();
+                List<CouponRule> AllCoupon = Dal.From<CouponRule>().Where(
+                    CouponRule._.ID.In(Alllist.Where(p => p.FX == AddOrRemove.增加 && !string.IsNullOrWhiteSpace(p.CouponID) && p.JFSouce.ToString().Contains("优惠券")).Select(p => p.CouponID).ToList())).List<CouponRule>();
+                List<ShopProductInfo> AllHandsalProducnt = Dal.From<ShopProductInfo>().Where(
+                   ShopProductInfo._.ID.In(Alllist.Where(p => !string.IsNullOrWhiteSpace(p.CouponID) && p.JFSouce.ToString().Contains("赠品")).Select(p => p.CouponID).ToList())).Select(ShopProductInfo._.ID, ShopProductInfo._.Name).List<ShopProductInfo>();
+                List<JFHistory> AllHandSaliProduct = Dal.From<JFHistory>().Where(JFHistory._.JFSouceMainID == id).List<JFHistory>();
                 //获取促销信息
-               
-
+                List<JFHistory> addList = Alllist.Where(p => p.FX == AddOrRemove.增加).ToList();
+                List<string> promostionString = new List<string>();
+                foreach (var item in addList)
+                {
+                    switch (item.JFSouce)
+                    {
+                        case RuleType.满额送优惠券:
+                        case RuleType.首单送优惠券:
+                        case RuleType.注册送优惠券:
+                            //获取优惠券 金额  
+                            promostionString.Add(item.JFSouce.ToString() + ",面值：" + AllCoupon.Find(p => p.ID == item.CouponID).JE);
+                            break;
+                        case RuleType.满额送积分:
+                        case RuleType.首单送积分:
+                        case RuleType.注册送积分:
+                            promostionString.Add(item.JFSouce.ToString() + ",数量：" + item.JFCount);
+                            break;
+                        case RuleType.满额送赠品:
+                        case RuleType.首单送赠品:
+                            //获取赠品名称
+                            promostionString.Add(item.JFSouce.ToString() + "," + AllHandsalProducnt.Find(p => p.ID == item.CouponID).Name);
+                            break;
+                        case RuleType.满额免运费:
+                        case RuleType.首单免运费:
+                        case RuleType.包邮:
+                            promostionString.Add(item.JFSouce.ToString());
+                            break;
+                        case RuleType.其他:
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                order.Promotion = promostionString;
                 //获取使用的优惠券
-
+                List<CouponRule> RemoveCoupon = Dal.From<CouponRule>().Where(
+                  CouponRule._.ID.In(Alllist.Where(p => p.FX == AddOrRemove.减少 && !string.IsNullOrWhiteSpace(p.CouponID) && p.JFSouce.ToString().Contains("优惠券")).Select(p => p.CouponID).ToList())).List<CouponRule>();
+                List<string> CouponList = new List<string>();
+                foreach (var item in RemoveCoupon)
+                {
+                    CouponList.Add("使用优惠券" + item.Name + "一张");
+                }
+                order.Coupon = CouponList;
             }
             return order;
         }
@@ -1335,13 +1343,15 @@ namespace EasyCms.Dal
                             AccountRange accountRage = Dal.From<AccountRange>().Where(AccountRange._.ID == PublishIDS[item].MemberID).ToFirst<AccountRange>();
                             foreach (var jf in listHistory)
                             {
-                                if (jf.JFState == 0)
+                                if (jf.JFState == JFStatus.在途)
                                 {
+                                    jf.JFState = JFStatus.完成;
                                     switch (jf.JFType)
                                     {
-                                        case 0: //积分,只会增加积分，不会减少
-
-                                            if (accountRage != null)
+                                        case JFType.其他:
+                                            break;
+                                        case JFType.积分://积分,只会增加积分，不会减少
+                                             if (accountRage != null)
                                             {
                                                 if (jf.FX == 0)
                                                 {
@@ -1351,11 +1361,10 @@ namespace EasyCms.Dal
                                                 {
                                                     accountRage.JF -= jf.JFCount;
                                                 }
-                                            }
-                                            jf.JFState = 1;
+                                            } 
                                             break;
-                                        case 1: //优惠券
-                                            if (jf.FX == 0)
+                                        case JFType.优惠券:
+                                            if (jf.FX == AddOrRemove.增加)
                                             {
                                                 //获取优惠券 并生成会员优惠券关系
 
@@ -1450,13 +1459,12 @@ namespace EasyCms.Dal
                                                 }
 
                                             }
-
-
+                                            break;
+                                        case JFType.赠品:
                                             break;
                                         default:
                                             break;
-                                    }
-
+                                    } 
                                 }
                                 if (accountRage != null)
                                 {

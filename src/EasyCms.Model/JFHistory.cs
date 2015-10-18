@@ -29,9 +29,9 @@ namespace EasyCms.Model
 
         private string _MemberID;
 
-        private int _FX;
+        private AddOrRemove _FX;
 
-        private string _JFSouce;
+        private RuleType _JFSouce;
 
         private string _JFSouceMainID;
 
@@ -39,11 +39,11 @@ namespace EasyCms.Model
 
         private decimal _JFCount;
 
-        private int _JFState;
+        private JFStatus _JFState;
 
         private DateTime _CreateDate;
 
-        private int _JFType;
+        private JFType _JFType;
 
         private string _CouponID;
 
@@ -102,7 +102,7 @@ namespace EasyCms.Model
 
         [DbProperty(MapingColumnName = "FX", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public int FX
+        public AddOrRemove FX
         {
             get
             {
@@ -119,9 +119,9 @@ namespace EasyCms.Model
         ///  积分来源,参照积分类型，购物送积分，购物使用积分减少，注册送积分
         /// </summary>
 
-        [DbProperty(MapingColumnName = "JFSouce", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 40, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "JFSouce", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public string JFSouce
+        public RuleType JFSouce
         {
             get
             {
@@ -197,7 +197,7 @@ namespace EasyCms.Model
 
         [DbProperty(MapingColumnName = "JFState", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public int JFState
+        public JFStatus JFState
         {
             get
             {
@@ -230,12 +230,12 @@ namespace EasyCms.Model
         }
 
         /// <summary>
-        ///  类型,0,积分，1优惠券
+        ///  类型,其他0,积分1，优惠券2，赠品3
         /// </summary>
 
         [DbProperty(MapingColumnName = "JFType", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public int JFType
+        public JFType JFType
         {
             get
             {
@@ -399,7 +399,7 @@ namespace EasyCms.Model
             /// </summary> 
             public PropertyItem CreateDate = null;
             /// <summary>
-            /// 类型,0,积分，1优惠券
+            /// 类型,其他0,积分1，优惠券2，赠品3
             /// </summary> 
             public PropertyItem JFType = null;
             /// <summary>

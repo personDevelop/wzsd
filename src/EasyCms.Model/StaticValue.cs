@@ -62,7 +62,7 @@ namespace EasyCms.Model
                     else
                     {
 
-                        if ( no.IsEmail())
+                        if (no.IsEmail())
                         {
                             string pri = no.Substring(0, no.IndexOf("@"));
                             switch (pri.Length)
@@ -198,7 +198,11 @@ namespace EasyCms.Model
         无效
     }
 
-
+    public enum AddOrRemove
+    {
+        增加,
+        减少
+    }
     public enum OrderStatus
     {
         等待付款 = 0,
@@ -256,9 +260,7 @@ namespace EasyCms.Model
     public enum JFType
     {
         其他,
-        购物,
-        注册,
-        促销活动
+        积分, 优惠券, 赠品
     }
 
 
@@ -275,7 +277,7 @@ namespace EasyCms.Model
         注册送优惠券,
         注册送积分,
         包邮,
-        其他=99
+        其他 = 99
 
 
     }
@@ -360,6 +362,15 @@ namespace EasyCms.Model
         生效,
         审批退回,
         删除
+
+    }
+
+
+    public enum CommentOrder
+    { 
+        差评,
+        中评,
+        好评
 
     }
 }
