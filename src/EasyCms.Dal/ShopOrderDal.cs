@@ -1029,11 +1029,23 @@ namespace EasyCms.Dal
                 order.OrderItems = orderItems;
 
                 List<JFHistory> Alllist = Dal.From<JFHistory>().Where(JFHistory._.JFSouceMainID == id).List<JFHistory>();
-                List<CouponRule> AllCoupon = Dal.From<CouponRule>().Where(
-                    CouponRule._.ID.In(Alllist.Where(p => p.FX == AddOrRemove.增加 && !string.IsNullOrWhiteSpace(p.CouponID) && p.JFSouce.ToString().Contains("优惠券")).Select(p => p.CouponID).ToList())).List<CouponRule>();
-                List<ShopProductInfo> AllHandsalProducnt = Dal.From<ShopProductInfo>().Where(
-                   ShopProductInfo._.ID.In(Alllist.Where(p => !string.IsNullOrWhiteSpace(p.CouponID) && p.JFSouce.ToString().Contains("赠品")).Select(p => p.CouponID).ToList())).Select(ShopProductInfo._.ID, ShopProductInfo._.Name).List<ShopProductInfo>();
-                List<JFHistory> AllHandSaliProduct = Dal.From<JFHistory>().Where(JFHistory._.JFSouceMainID == id).List<JFHistory>();
+                List<CouponRule> AllCoupon = new List<CouponRule>();
+                List<ShopProductInfo> AllHandsalProducnt = new List<ShopProductInfo>();
+                if (Alllist.Count > 0)
+                {
+                    List<string> whereList = Alllist.Where(p => p.FX == AddOrRemove.增加 && !string.IsNullOrWhiteSpace(p.CouponID) && p.JFSouce.ToString().Contains("优惠券")).Select(p => p.CouponID).ToList();
+                    if (whereList.Count > 0)
+                    {
+                        AllCoupon = Dal.From<CouponRule>().Where(CouponRule._.ID.In(whereList)).List<CouponRule>();
+                    }
+                    whereList = Alllist.Where(p => !string.IsNullOrWhiteSpace(p.CouponID) && p.JFSouce.ToString().Contains("赠品")).Select(p => p.CouponID).ToList();
+                    if (whereList.Count > 0)
+                    {
+                        AllHandsalProducnt = Dal.From<ShopProductInfo>().Where(ShopProductInfo._.ID.In(whereList)).Select(ShopProductInfo._.ID, ShopProductInfo._.Name).List<ShopProductInfo>();
+                    }
+                }
+
+
                 //获取促销信息
                 List<JFHistory> addList = Alllist.Where(p => p.FX == AddOrRemove.增加).ToList();
                 List<string> promostionString = new List<string>();
@@ -1045,17 +1057,24 @@ namespace EasyCms.Dal
                         case RuleType.首单送优惠券:
                         case RuleType.注册送优惠券:
                             //获取优惠券 金额  
-                            promostionString.Add(item.JFSouce.ToString() + ",面值" + AllCoupon.Find(p => p.ID == item.CouponID).JE);
+                            if (AllCoupon.Exists(p => p.ID == item.CouponID))
+                            {
+                                promostionString.Add(item.JFSouce.ToString() + ",面值" + AllCoupon.Find(p => p.ID == item.CouponID).JE);
+                            }
                             break;
                         case RuleType.满额送积分:
                         case RuleType.首单送积分:
                         case RuleType.注册送积分:
+
                             promostionString.Add(item.JFSouce.ToString() + ",数量" + item.JFCount);
                             break;
                         case RuleType.满额送赠品:
                         case RuleType.首单送赠品:
                             //获取赠品名称
-                            promostionString.Add(item.JFSouce.ToString() + "," + AllHandsalProducnt.Find(p => p.ID == item.CouponID).Name);
+                            if (AllHandsalProducnt.Exists(p => p.ID == item.CouponID))
+                            {
+                                promostionString.Add(item.JFSouce.ToString() + "," + AllHandsalProducnt.Find(p => p.ID == item.CouponID).Name);
+                            }
                             break;
                         case RuleType.满额免运费:
                         case RuleType.首单免运费:
@@ -1070,8 +1089,15 @@ namespace EasyCms.Dal
                 }
                 order.Promotion = promostionString;
                 //获取使用的优惠券
-                List<CouponRule> RemoveCoupon = Dal.From<CouponRule>().Where(
-                  CouponRule._.ID.In(Alllist.Where(p => p.FX == AddOrRemove.减少 && !string.IsNullOrWhiteSpace(p.CouponID) && p.JFSouce.ToString().Contains("优惠券")).Select(p => p.CouponID).ToList())).List<CouponRule>();
+                List<CouponRule> RemoveCoupon = new List<CouponRule>();
+
+                List<string> whereStringList = Alllist.Where(p => p.FX == AddOrRemove.减少 && !string.IsNullOrWhiteSpace(p.CouponID) && p.JFSouce.ToString().Contains("优惠券")).Select(p => p.CouponID).ToList();
+                if (whereStringList.Count > 0)
+                {
+                    RemoveCoupon = Dal.From<CouponRule>().Where(
+               CouponRule._.ID.In(whereStringList)).List<CouponRule>();
+                }
+
                 List<string> CouponList = new List<string>();
                 foreach (var item in RemoveCoupon)
                 {
@@ -1351,7 +1377,7 @@ namespace EasyCms.Dal
                                         case JFType.其他:
                                             break;
                                         case JFType.积分://积分,只会增加积分，不会减少
-                                             if (accountRage != null)
+                                            if (accountRage != null)
                                             {
                                                 if (jf.FX == 0)
                                                 {
@@ -1361,7 +1387,7 @@ namespace EasyCms.Dal
                                                 {
                                                     accountRage.JF -= jf.JFCount;
                                                 }
-                                            } 
+                                            }
                                             break;
                                         case JFType.优惠券:
                                             if (jf.FX == AddOrRemove.增加)
@@ -1464,7 +1490,7 @@ namespace EasyCms.Dal
                                             break;
                                         default:
                                             break;
-                                    } 
+                                    }
                                 }
                                 if (accountRage != null)
                                 {
