@@ -42,10 +42,13 @@ namespace EasyCms.Dal
 
 
 
-        public DataTable GetListByProductID(string productID, int pagenum, int pagesize, ref int recordCount)
+        public DataTable GetListByProductID(string productID, int pagenum, int pagesize, ref int recordCount,
+            ref int goodCount, ref int middleCount, ref int badCount)
         {
             int pageCount = 0;
-
+            goodCount = Dal.Count<ShopProductReviews>(ShopProductReviews._.ProductId == productID && ShopProductReviews._.CommentOrder == CommentOrder.好评, ShopProductReviews._.ID,false);
+            middleCount = Dal.Count<ShopProductReviews>(ShopProductReviews._.ProductId == productID && ShopProductReviews._.CommentOrder == CommentOrder.中评, ShopProductReviews._.ID, false);
+            badCount = Dal.Count<ShopProductReviews>(ShopProductReviews._.ProductId == productID && ShopProductReviews._.CommentOrder == CommentOrder.差评, ShopProductReviews._.ID, false);
             return Dal.From<ShopProductReviews>()
                 .Join<ManagerUserInfo>(ShopProductReviews._.UserId == ManagerUserInfo._.ID)
                 .Where(ShopProductReviews._.ProductId == productID && ShopProductReviews._.Status == (int)DjStatus.生效)
@@ -160,7 +163,7 @@ namespace EasyCms.Dal
                         ParentID = item.ID,
                         Status = (int)DjStatus.生效,
                         OrderId = item.OrderId,
-                        ReviewText=replyText
+                        ReviewText = replyText
                     };
                     Save(p);
                     Dal.Submit(item);

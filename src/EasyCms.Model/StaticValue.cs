@@ -368,6 +368,7 @@ namespace EasyCms.Model
 
     public enum CommentOrder
     { 
+        无,
         差评,
         中评,
         好评

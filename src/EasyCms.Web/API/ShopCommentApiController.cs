@@ -17,12 +17,12 @@ namespace EasyCms.Web.API
         public HttpResponseMessage Get(string id, int pageIndex = 1)
         {
             int recordCount = 0;
-            DataTable dt = new ShopProductReviewsBll().GetListByProductID(id, pageIndex, 20, ref recordCount);
-            int commentTotal = dt.Rows.Count;
-            int goodCount = dt.Select("CommentOrder=3").Length;
-            int badCount = dt.Select("CommentOrder=2").Length;
-            int middleCount = dt.Select("CommentOrder=1").Length;
-            int goodPercent = (int)(goodCount * 100 / commentTotal);
+            int goodCount = 0;
+            int badCount = 0;
+            int middleCount = 0;
+            DataTable dt = new ShopProductReviewsBll().GetListByProductID(id, pageIndex, 20, ref recordCount,ref goodCount,ref middleCount,ref badCount);
+
+            int goodPercent = (int)(goodCount * 100 / recordCount);
             int googNum = 0;
             if (goodPercent == 100)
             {
@@ -51,7 +51,7 @@ namespace EasyCms.Web.API
                 PageIndex = pageIndex,
                 RecordCount = dt.Rows.Count,
                 TotalPageCount = 0,
-                TotalRecourdCount = recordCount,
+                TotalRecourdCount = recordCount,//总评论个数
                 GoodPercent = goodPercent,//好评率
                 GoodNum = googNum,//好评星级 1-5
                 GoodCount=goodCount,//好评个数
