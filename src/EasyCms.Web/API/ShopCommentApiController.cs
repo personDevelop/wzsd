@@ -18,7 +18,47 @@ namespace EasyCms.Web.API
         {
             int recordCount = 0;
             DataTable dt = new ShopProductReviewsBll().GetListByProductID(id, pageIndex, 20, ref recordCount);
-            return new { PageIndex = pageIndex, RecordCount = dt.Rows.Count, TotalPageCount = 0, TotalRecourdCount = recordCount, Data = dt }
+            int commentTotal = dt.Rows.Count;
+            int goodCount = dt.Select("CommentOrder=3").Length;
+            int badCount = dt.Select("CommentOrder=2").Length;
+            int middleCount = dt.Select("CommentOrder=1").Length;
+            int goodPercent = (int)(goodCount * 100 / commentTotal);
+            int googNum = 0;
+            if (goodPercent == 100)
+            {
+                googNum = 5;
+            }
+            else if (goodPercent >= 80)
+            {
+                googNum = 4;
+            }
+            else if (goodPercent >= 60)
+            {
+                googNum = 3;
+            }
+            else if (goodPercent >= 40)
+            {
+                googNum = 2;
+            }
+            else
+            {
+                googNum = 1;
+            }
+
+
+            return new
+            {
+                PageIndex = pageIndex,
+                RecordCount = dt.Rows.Count,
+                TotalPageCount = 0,
+                TotalRecourdCount = recordCount,
+                GoodPercent = goodPercent,//好评率
+                GoodNum = googNum,//好评星级 1-5
+                GoodCount=goodCount,//好评个数
+                MiddleCount = middleCount,//中评个数
+                BadCount = badCount,//差评个数
+                Data = dt
+            }
                 .FormatObj();
 
         }
@@ -42,8 +82,8 @@ namespace EasyCms.Web.API
                 new ShopProductReviewsBll().Save(comment);
                 if (string.IsNullOrWhiteSpace(comment.ProductId))
                 {
-                 
-                    new ShopProductInfoBll().AccCommentCount(comment.ProductId,1);
+
+                    new ShopProductInfoBll().AccCommentCount(comment.ProductId, 1);
                 }
                 return "评论成功".FormatSuccess();
             }
