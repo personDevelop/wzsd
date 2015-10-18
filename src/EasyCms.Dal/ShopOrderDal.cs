@@ -1045,12 +1045,12 @@ namespace EasyCms.Dal
                         case RuleType.首单送优惠券:
                         case RuleType.注册送优惠券:
                             //获取优惠券 金额  
-                            promostionString.Add(item.JFSouce.ToString() + ",面值：" + AllCoupon.Find(p => p.ID == item.CouponID).JE);
+                            promostionString.Add(item.JFSouce.ToString() + ",面值" + AllCoupon.Find(p => p.ID == item.CouponID).JE);
                             break;
                         case RuleType.满额送积分:
                         case RuleType.首单送积分:
                         case RuleType.注册送积分:
-                            promostionString.Add(item.JFSouce.ToString() + ",数量：" + item.JFCount);
+                            promostionString.Add(item.JFSouce.ToString() + ",数量" + item.JFCount);
                             break;
                         case RuleType.满额送赠品:
                         case RuleType.首单送赠品:
