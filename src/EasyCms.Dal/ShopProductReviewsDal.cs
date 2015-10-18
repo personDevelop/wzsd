@@ -46,14 +46,14 @@ namespace EasyCms.Dal
             ref int goodCount, ref int middleCount, ref int badCount)
         {
             int pageCount = 0;
-            goodCount = Dal.Count<ShopProductReviews>(ShopProductReviews._.ProductId == productID && ShopProductReviews._.CommentOrder == CommentOrder.好评, ShopProductReviews._.ID,false);
+            goodCount = Dal.Count<ShopProductReviews>(ShopProductReviews._.ProductId == productID && ShopProductReviews._.CommentOrder == CommentOrder.好评, ShopProductReviews._.ID, false);
             middleCount = Dal.Count<ShopProductReviews>(ShopProductReviews._.ProductId == productID && ShopProductReviews._.CommentOrder == CommentOrder.中评, ShopProductReviews._.ID, false);
             badCount = Dal.Count<ShopProductReviews>(ShopProductReviews._.ProductId == productID && ShopProductReviews._.CommentOrder == CommentOrder.差评, ShopProductReviews._.ID, false);
             return Dal.From<ShopProductReviews>()
                 .Join<ManagerUserInfo>(ShopProductReviews._.UserId == ManagerUserInfo._.ID)
                 .Where(ShopProductReviews._.ProductId == productID && ShopProductReviews._.Status == (int)DjStatus.生效)
                 .Select(ShopProductReviews._.ID, ShopProductReviews._.ReviewText,
-                  ShopProductReviews._.CreatedDate, ManagerUserInfo._.Code, ManagerUserInfo._.Name
+                  ShopProductReviews._.CreatedDate, new ExpressionClip("case when IsManager=1   then NickyName when IsAnony =1 then '匿名' else name  end").Alias("Name")
                 )
                 .ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
         }

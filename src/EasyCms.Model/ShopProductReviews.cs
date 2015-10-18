@@ -50,6 +50,8 @@ namespace EasyCms.Model
 
         private CommentOrder _CommentOrder;
 
+        private bool _IsAnony;
+
         #endregion
 
         #region 属性
@@ -302,6 +304,25 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  是否匿名,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "IsAnony", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public bool IsAnony
+        {
+            get
+            {
+                return this._IsAnony;
+            }
+            set
+            {
+                this.OnPropertyChanged("IsAnony", this._IsAnony, value);
+                this._IsAnony = value;
+            }
+        }
+
         #endregion
 
         #region 列定义
@@ -335,6 +356,8 @@ namespace EasyCms.Model
                 hasReply = new PropertyItem("hasReply", tableName);
 
                 CommentOrder = new PropertyItem("CommentOrder", tableName);
+
+                IsAnony = new PropertyItem("IsAnony", tableName);
 
 
             }
@@ -390,6 +413,10 @@ namespace EasyCms.Model
             /// 评论等级,0差评 1中评，2好评
             /// </summary> 
             public PropertyItem CommentOrder = null;
+            /// <summary>
+            /// 是否匿名,
+            /// </summary> 
+            public PropertyItem IsAnony = null;
         }
         #endregion
     }
