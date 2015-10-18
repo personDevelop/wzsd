@@ -130,5 +130,11 @@ namespace EasyCms.Business
         {
             return Dal.GetProductsBySearchKey(searchKey, pageIndex, other, host, ref   pagecount, ref   recordCount);
         }
+
+        public int AccCommentCount(string ProductId, int CommentCount)
+        {
+            return Dal.AccCommentCount(ProductId,   CommentCount);
+         
+        }
     }
 }

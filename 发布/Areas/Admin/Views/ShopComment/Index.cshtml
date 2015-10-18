@@ -62,13 +62,18 @@
                         @HelperExtend.DropDownListEnum("QryDjStatus", enumType: typeof(EasyCms.Model.DjStatus))
                     </td>
                 </tr>
-                <tr><td></td>
-            <td colspan="2"><input type="checkbox" id="OnlyWebUser" checked="checked" />只显示用户的留言</td>
-            <td>
-                <input id="btnQry" type="button" value="搜索">
-            </td>
-            <td></td>
-            </tr>
+                <tr>
+                    <td></td>
+                    <td width="80">评论等级：</td>
+                    <td height="35">
+                        @HelperExtend.DropDownListEnum("QryCommentOrder", enumType: typeof(EasyCms.Model.CommentOrder))
+                    </td>
+                    <td colspan="2"><input type="checkbox" id="OnlyWebUser" checked="checked" />只显示用户的留言</td>
+                    <td>
+                        <input id="btnQry" type="button" value="搜索">
+                    </td>
+                    <td></td>
+                </tr>
 
             </tbody>
         </table>
@@ -108,6 +113,8 @@
             $("#StartDate").jqxDateTimeInput({ formatString: "yyyy-MM-dd", width: 100, height: '25px', showCalendarButton: true });
             $("#EndDate").jqxDateTimeInput({ formatString: "yyyy-MM-dd", width: 100, height: '25px', showCalendarButton: true });
             $("#QryDjStatus").jqxDropDownList('uncheckAll');
+            $("#QryCommentOrder").jqxDropDownList('uncheckAll');
+            
             $('#EndDate').jqxDateTimeInput('setDate', new Date());
             $('#StartDate').jqxDateTimeInput('setDate', get3MonthBefor());
             $("#btnQry").jqxButton({ width: '150', template: 'success' });
@@ -142,19 +149,20 @@
             { name: 'CreatedDate' },
       { name: 'IsManager' }];
             var columns = [
+                  { text: '评论等级', dataField: 'CommentOrder',@HelperExtend.ParseEnum(typeof(EasyCms.Model.CommentOrder)) },
     { text: '评论内容', dataField: 'ReviewText', cellsalign: "left" },
     { text: '商品', dataField: 'ProductName', cellsalign: "left", width: 200 },
     { text: '评论人', dataField: 'Name', cellsalign: "left", width: 100 },
      { text: '是管理员', dataField: 'IsManager', width: 100,@HelperExtend.Parsebool() },
       { text: '已回复', dataField: 'hasReply', width: 100,@HelperExtend.Parsebool() },
     { text: '评论时间', dataField: 'CreatedDate', width: 130, cellsformat: "yyyy-MM-dd HH:mm" },
-    { text: '状态', dataField: 'Status', cellsalign: "left", width: 100,@HelperExtend.ParseEnum(typeof(EasyCms.Model.DjStatus)) },
+    { text: '状态', dataField: 'Status',   width: 100,@HelperExtend.ParseEnum(typeof(EasyCms.Model.DjStatus)) },
      {
          text: '操作', datafield: 'ID', width: 200, cellsrenderer: function (row, column, value) {
 
              var html = "  <div style='text-align: center; overflow: hidden; padding-bottom: 2px; margin-top: 4px; text-overflow: ellipsis;'>";
              html +=
-                  "<a href='javascript:;' onclick='EditGrid(\"jqxgrid\",\""+editUrl+"\",\""+value+"\");'  >详细信息</a> &nbsp;&nbsp;&nbsp;" +
+                  "<a href='javascript:;' onclick='EditGrid(\"jqxgrid\",\"" + editUrl + "\",\"" + value + "\");'  >详细信息</a> &nbsp;&nbsp;&nbsp;" +
               "<a  href='javascript:;' onclick='DelGrid(\"jqxgrid\",\"" + deleteUrl + "\",\"" + value + "\");'  >删除</a>";
              html += "</div>";
 
@@ -170,7 +178,9 @@
                         data.EndDate = $("#EndDate").val();
                         data.ShopProduct = $("#ShopProduct").val();
                         data.QryDjStatus = $("#QryDjStatus").val();
+                        data.QryCommentOrder = $("#QryCommentOrder").val();
                         data.OnlyWebUser = $("#OnlyWebUser").prop("checked");
+                     
                     }
 
                 }, grid: { localization: "zh-Hans" }

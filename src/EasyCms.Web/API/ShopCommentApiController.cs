@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Web.Http;
 using EasyCms.Web.Common;
 using EasyCms.Model;
+using Sharp.Common;
 namespace EasyCms.Web.API
 {
     public class ShopCommentApiController : BaseAPIControl
@@ -39,6 +40,11 @@ namespace EasyCms.Web.API
                 comment.UserId = Request.GetAccountID();
                 comment.CreatedDate = DateTime.Now;
                 new ShopProductReviewsBll().Save(comment);
+                if (string.IsNullOrWhiteSpace(comment.ProductId))
+                {
+                 
+                    new ShopProductInfoBll().AccCommentCount(comment.ProductId,1);
+                }
                 return "评论成功".FormatSuccess();
             }
             catch (Exception ex)

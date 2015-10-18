@@ -94,6 +94,8 @@ namespace EasyCms.Model
 
         private bool _IsEnableSku;
 
+        private int _CommentCount;
+
         #endregion
 
         #region 属性
@@ -764,6 +766,25 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  评论次数,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "CommentCount", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public int CommentCount
+        {
+            get
+            {
+                return this._CommentCount;
+            }
+            set
+            {
+                this.OnPropertyChanged("CommentCount", this._CommentCount, value);
+                this._CommentCount = value;
+            }
+        }
+
         #endregion
 
         #region 列定义
@@ -841,6 +862,8 @@ namespace EasyCms.Model
                 AddedDate = new PropertyItem("AddedDate", tableName);
 
                 IsEnableSku = new PropertyItem("IsEnableSku", tableName);
+
+                CommentCount = new PropertyItem("CommentCount", tableName);
 
 
             }
@@ -984,9 +1007,14 @@ namespace EasyCms.Model
             /// 启用SKU,
             /// </summary> 
             public PropertyItem IsEnableSku = null;
+            /// <summary>
+            /// 评论次数,
+            /// </summary> 
+            public PropertyItem CommentCount = null;
         }
         #endregion
     }
+
 
 
     public partial class ShopProductInfo

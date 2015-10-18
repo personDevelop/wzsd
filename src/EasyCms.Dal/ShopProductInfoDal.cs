@@ -641,6 +641,17 @@ namespace EasyCms.Dal
          .ToDataTable(20, pageIndex, ref pagecount, ref recordCount);
             return dt;
         }
+
+        public int AccCommentCount(string ProductId, int CommentCount)
+        {
+            ShopProductInfo p = new ShopProductInfo();
+            p.ID = ProductId;
+            p.RecordStatus = Sharp.Common.StatusType.update;
+            ExpressionClip commentCount = new ExpressionClip(ShopProductInfo._.CommentCount.ColumnName + "+@CommentCount");
+            commentCount.Parameters.Add("CommentCount", CommentCount);
+            p.SetModifiedProperty(ShopProductInfo._.CommentCount, commentCount);
+            return Dal.Submit(p);
+        }
     }
 
 

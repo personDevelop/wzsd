@@ -21,7 +21,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             return View();
         }
 
-        public string GetList(int pagenum, int pagesize, string StartDate, string EndDate, string QryDjStatus, string ShopProduct, bool OnlyWebUser)
+        public string GetList(int pagenum, int pagesize, string StartDate, string EndDate, string QryDjStatus, string ShopProduct, bool OnlyWebUser, string QryCommentOrder)
         {
 
             int recordCount = 0;
@@ -50,9 +50,18 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                 }
 
             }
+            if (!string.IsNullOrWhiteSpace(QryCommentOrder))
+            {
+                string[] ps = QryCommentOrder.Split(',');
+                if (!ps.Contains(""))
+                {
+                    where = where && ShopProductReviews._.CommentOrder.In(ps);
+                }
+
+            }
             if (OnlyWebUser)
             {
-                 where = where &&ManagerUserInfo._.IsManager==false; 
+                where = where && ManagerUserInfo._.IsManager == false;
             }
             System.Data.DataTable dt = new ShopProductReviewsBll().GetList(pagenum + 1, pagesize, where, ref   recordCount);
 
@@ -179,7 +188,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         public string ApprovalNotPass(string id)
         {
             //审批不通过
-           
+
             string error = new ShopProductReviewsBll().Approve(id, false);
             if (string.IsNullOrWhiteSpace(error))
             {
@@ -196,7 +205,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
 
         public string BachReply(string id, string other)
         {
-            return new ShopProductReviewsBll().BachReply(CmsSession.GetUserID(),id,   other);  
+            return new ShopProductReviewsBll().BachReply(CmsSession.GetUserID(), id, other);
         }
 
     }

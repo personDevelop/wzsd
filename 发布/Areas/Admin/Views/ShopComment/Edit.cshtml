@@ -19,6 +19,7 @@
     <div class="tab-content">
         @Html.ValidationSummary() 
         @HelperExtend.Lable(HelperExtend.img(Model.ProductImg) + " <br />" + Model.ProductName, "商品")
+        @HelperExtend.Lable(Model.CommentOrder.ToString(), "评论等级")
         @HelperExtend.Lable(Model.ReviewText, "评论内容")
         @HelperExtend.Lable(Model.CreatedDate.ToString("yyyy-MM-dd HH:mm"), "评论时间")
         @HelperExtend.Lable(Model.StatusStr, "评论状态")
