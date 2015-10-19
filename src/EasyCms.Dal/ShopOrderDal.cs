@@ -594,7 +594,7 @@ namespace EasyCms.Dal
                     foreach (string CouponAccountID in listCoupon)
                     {
 
-                        Savelist.Add(CreateJfHistory(accuont.ID, now, JFType.优惠券, RuleType.其他, 1, activeOrder.ID, null, CouponAccountID, null, AddOrRemove.减少));
+                        Savelist.Add(CreateJfHistory(accuont.ID, now, JFType.优惠券, RuleType.使用优惠券, 1, activeOrder.ID, null, CouponAccountID, null, AddOrRemove.减少));
                     }
                 }
                 if (IsCf)
@@ -1091,11 +1091,12 @@ namespace EasyCms.Dal
                 //获取使用的优惠券
                 List<CouponRule> RemoveCoupon = new List<CouponRule>();
 
-                List<string> whereStringList = Alllist.Where(p => p.FX == AddOrRemove.减少 && !string.IsNullOrWhiteSpace(p.CouponID) && p.JFSouce.ToString().Contains("优惠券")).Select(p => p.CouponID).ToList();
+                List<string> whereStringList = Alllist.Where(p => p.FX == AddOrRemove.减少 && !string.IsNullOrWhiteSpace(p.CouponID) && p.JFSouce== RuleType.使用优惠券).Select(p => p.CouponID).ToList();
                 if (whereStringList.Count > 0)
                 {
-                    RemoveCoupon = Dal.From<CouponRule>().Where(
-               CouponRule._.ID.In(whereStringList)).List<CouponRule>();
+                    RemoveCoupon = Dal.From<CouponRule>().Join<CusomerAndCoupon>(CouponRule._.ID==CusomerAndCoupon._.CouponID)
+                        .Select(CouponRule._.Name).Where(
+               CusomerAndCoupon._.ID.In(whereStringList)).List<CouponRule>();
                 }
 
                 List<string> CouponList = new List<string>();

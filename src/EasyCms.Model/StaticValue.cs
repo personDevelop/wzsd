@@ -277,6 +277,8 @@ namespace EasyCms.Model
         注册送优惠券,
         注册送积分,
         包邮,
+        使用优惠券=90,
+        使用积分=91,
         其他 = 99
 
 
@@ -364,8 +366,42 @@ namespace EasyCms.Model
         删除
 
     }
+    /// <summary>
+    /// 顾客单据状态
+    /// </summary>
+    public enum UserDjStatus
+    {
+        等待审核,
+        审批通过, 
+        取货中,
+        等待退款,
+        已完成,
+        审批不通过,
+        已取消,
+        删除
 
+    }
+    /// <summary>
+    /// 顾客单据状态
+    /// </summary>
+    public enum LogisticStatus
+    {
+        无,
+        取货中,
+        取货完成 
 
+    }
+     /// <summary>
+    /// 顾客单据状态
+    /// </summary>
+    public enum ReturnMoneyStatus
+    {
+        无,
+        退款中,
+        退款完成 
+
+    }
+    
     public enum CommentOrder
     { 
         无,
