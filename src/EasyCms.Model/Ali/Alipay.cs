@@ -130,6 +130,8 @@ namespace EasyCms.Model
             list.Add(string.Format("seller_id=\"{0}\"", seller_id));
             list.Add(string.Format("total_fee=\"{0}\"", total_fee));
             list.Add(string.Format("it_b_pay=\"{0}\"", it_b_pay));
+            list.Add(string.Format("body=\"{0}\"", body));
+            list.Add(string.Format("return_url=\"{0}\"", "m.alipay.com"));
             string result = string.Empty;
             for (int i = 0; i < list.Count; i++)
             {
