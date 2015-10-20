@@ -118,6 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="textBox1.Text" xml:space="preserve">
-    <value>service="mobile.securitypay.pay"&amp;partner="2088511128054061"&amp;_input_charset="utf-8"&amp;notify_url="http://www.dflink.com.cn/notify.aspx"&amp;out_trade_no="HQ1510080001"&amp;subject="Apple iPhone 6 (A1586) 16GB 金色 移动联通电信4G手机"&amp;payment_type="1"&amp;seller_id="hong7tv@163.com"&amp;total_fee="4500.00"&amp;it_b_pay="30m"&amp;sign="jZa3YGS7Jjv%2bdFTCMW80Dx2GGYEfgbjJFn74y0JsNcYgxFXRbrt%2bw%2bl4vT1dUYgz8FCizPc7Mqb9A%2bxgY9FY5R53yaHnQIKc13X9QCl3WgrJnEorB0KGu8y0ballnfjwvORT0mBrbEWlcjuznY0LHxCCD7C7moLe5qScG%2f%2f2Bbc%3d"&amp;sign_type="RSA"</value>
+    <value>service="mobile.securitypay.pay"&amp;partner="2088511128054061"&amp;_input_charset="utf-8"&amp;notify_url="http://www.dflink.com.cn/notify.aspx"&amp;out_trade_no="HQ1510200011"&amp;subject="金立超强待机王"&amp;payment_type="1"&amp;seller_id="hong7tv@163.com"&amp;total_fee="0.01"&amp;it_b_pay="30m"&amp;body="金立超强待机王"&amp;return_url="m.alipay.com"&amp;sign="LicfVSOE6OvR53xvL2MZcfxxVZnKhPnZ1STfAfbjqDb5n1dhXHEkEKpR1MjcmjnJsghGmsI7CiIRQFrLdPTKk%2bbvek8hEris%2f5K3kywFdccLrRjKRv293Ui6PeGwU%2bgMrbLTUTr%2fBQe4nYAnFx4TbKfF%2fFXV161yz8dFPfmxs1E%3d"&amp;sign_type="RSA"</value>
   </data>
 </root>
