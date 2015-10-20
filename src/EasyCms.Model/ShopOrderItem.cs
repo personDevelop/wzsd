@@ -86,6 +86,8 @@ namespace EasyCms.Model
 
         private bool _IsVirtualProduct;
 
+        private bool _HasComment;
+
         #endregion
 
         #region 属性
@@ -95,7 +97,7 @@ namespace EasyCms.Model
         /// </summary>
 
         [PrimaryKey]
-        [DbProperty(MapingColumnName = "ID", DbTypeString = "char", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ID", DbTypeString = "varchar", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string ID
         {
@@ -133,7 +135,7 @@ namespace EasyCms.Model
         ///  商品ID,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "ProductID", DbTypeString = "char", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ProductID", DbTypeString = "varchar", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string ProductID
         {
@@ -627,7 +629,7 @@ namespace EasyCms.Model
         ///  简单描述,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "ShortDescription", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 5000, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ShortDescription", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 500, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string ShortDescription
         {
@@ -677,6 +679,25 @@ namespace EasyCms.Model
             {
                 this.OnPropertyChanged("IsVirtualProduct", this._IsVirtualProduct, value);
                 this._IsVirtualProduct = value;
+            }
+        }
+
+        /// <summary>
+        ///  已经评论,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "HasComment", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public bool HasComment
+        {
+            get
+            {
+                return this._HasComment;
+            }
+            set
+            {
+                this.OnPropertyChanged("HasComment", this._HasComment, value);
+                this._HasComment = value;
             }
         }
 
@@ -749,6 +770,8 @@ namespace EasyCms.Model
                 Weight = new PropertyItem("Weight", tableName);
 
                 IsVirtualProduct = new PropertyItem("IsVirtualProduct", tableName);
+
+                HasComment = new PropertyItem("HasComment", tableName);
 
 
             }
@@ -876,6 +899,10 @@ namespace EasyCms.Model
             /// 虚拟产品,
             /// </summary> 
             public PropertyItem IsVirtualProduct = null;
+            /// <summary>
+            /// 已经评论,
+            /// </summary> 
+            public PropertyItem HasComment = null;
         }
         #endregion
     }

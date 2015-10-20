@@ -961,8 +961,7 @@ namespace EasyCms.Dal
             if (list.Count > 0)
             {
                 List<string> orderIDS = list.Select(p => p.ID).ToList();
-                List<ShopOrderItem> orderItems = Dal.From<ShopOrderItem>()
-                    .Join<AttachFile>(ShopOrderItem._.ProductThumb == AttachFile._.RefID && AttachFile._.OrderNo == 1, JoinType.leftJoin)
+                List<ShopOrderItem> orderItems = Dal.From<ShopOrderItem>() 
                     .Where(ShopOrderItem._.OrderID.In(orderIDS))
                     .Select(ShopOrderItem._.ID, ShopOrderItem._.OrderID, ShopOrderItem._.BrandName,
                     ShopOrderItem._.Count, ShopOrderItem._.HandselCount, ShopOrderItem._.IsHandsel,
@@ -1015,7 +1014,7 @@ namespace EasyCms.Dal
             {
 
                 List<ShopOrderItem> orderItems = Dal.From<ShopOrderItem>()
-                       .Join<AttachFile>(ShopOrderItem._.ProductThumb == AttachFile._.RefID && AttachFile._.OrderNo == 1, JoinType.leftJoin)
+                      
                     .Where(ShopOrderItem._.OrderID == id)
                     .Select(ShopOrderItem._.ID, ShopOrderItem._.OrderID, ShopOrderItem._.BrandName,
                     ShopOrderItem._.Count, ShopOrderItem._.HandselCount, ShopOrderItem._.IsHandsel,

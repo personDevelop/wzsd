@@ -1,0 +1,223 @@
+﻿@{
+    Layout = null;
+
+
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,initial-scale=1.0,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/bundles/css")
+    @Styles.Render("~/bundles/jqxcss")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqx")
+    @Scripts.Render("~/bundles/eshopJS")
+</head>
+
+<body class="mainbody">
+
+    <input type="hidden" id="ActionID" value="@ViewBag.Action" />
+    <input type="hidden" id="orderID" value="@ViewBag.OrderIDS" />
+    <!--导航栏-->
+    <div class="location">
+        <i class="home"></i>
+        <span>@ViewBag.Title</span>
+    </div>
+    <!--/导航栏-->
+    <!--内容-->
+    <div id="floatHead" class="content-tab-wrap">
+        <div class="content-tab">
+            <div class="content-tab-ul-wrap">
+                <ul>
+                    <li><a class="selected" href="javascript:;">基本信息</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="tab-content">
+
+
+        @HelperExtend.DropDownList("LogistID", "物流公司", hint: "*必填, 请选择要发送的物流公司", downInfo: new DropDownListInfo() { Url = Url.Action("GetListForSelecte", "ShopExpress") });
+
+        <div class="table-container">
+            <div id="jqxgrid">
+            </div>
+            <table>
+                <tr>
+                    <td>
+                        <input id="btnFH" type="button" value="@ViewBag.Action">
+                        @if (ViewBag.Action == EasyCms.Model.ActionEnum.发货)
+                        {
+                            <input id="btnPrintExpress" type="button" value="打印快递单">
+                            <input id="btnPrintInvoice" type="button" value="打印发票">
+                            <script type="text/javascript">
+
+                                $(function () {
+
+
+                                    $("#btnPrintExpress").jqxButton({ width: '150', template: 'success' });
+                                    $("#btnPrintInvoice").jqxButton({ width: '150', template: 'success' });
+                                });
+                            </script>
+
+                        }
+                        else
+                        {
+                            <script type="text/javascript">
+
+                                $(function () {
+                                    $("#LogistID").closest("dl").hide();
+
+                                });
+                            </script>
+                        }
+
+
+                    </td>
+                </tr>
+
+            </table>
+
+        </div>
+    </div>
+    @Html.Partial("_Msg")
+
+    <script type="text/javascript">
+
+        $(function () {
+
+
+            $("#btnFH").jqxButton({ width: '150', template: 'success' });
+            $("#btnFH").on('click', function () {
+                var rowindexes = $('#jqxgrid').jqxGrid('getselectedrowindexes');
+
+                var data = { actionID:@((int)ViewBag.Action), wlgs: $("#LogistID").val(), orderIDs: [] };
+                for (var i in rowindexes) {
+
+                    var d = $('#jqxgrid').jqxGrid('getrowdata', i);
+                    data.orderIDs.push(d.ID);
+                }
+                if (!data.wlgs && $("#LogistID").closest("dl").attr("style")!='display: none;') {
+                    ErrorMsg("请选择要发送的物流公司");
+                } else
+                    if (data.orderIDs.length > 0) {
+
+
+                        $.ajax({
+                            type: "POST",
+                            dataType: "json",
+                            url: "@Url.Action("ExeAction")",
+                            data: data,
+                            success: function (result) {
+                                if (result.IsSuccess) {
+                                    for (var i in result.data) {
+
+                                        $("#jqxgrid").jqxGrid('setcellvaluebyid', i, "PublishInfo", result.data[i]);
+
+                                    }
+                                } else {
+                                    ErrorMsg(result.Msg);
+                                }
+                            }
+                        });
+                    } else {
+
+                        ErrorMsg("请选择要操作的订单");
+                    }
+            });
+
+
+
+            //初始化表单验证
+            $("form").validate({
+                ignore: "",
+                rules: {
+                    LogistID: {
+                        required: true
+                    }
+
+                },
+                messages: {
+                    LogistID: {
+                        required: "请选择物流公司"
+                    }
+                },
+                errorPlacement: errorPlace
+            });
+        })
+    </script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            var url = "@Url.Action("GetForPublishList")";
+            var datafields = [{ name: 'ID' },
+		{ name: 'OrderType' }, { name: 'OrderResId' }, { name: 'ParentID' }, { name: 'HasChildren' }, { name: 'MemberID' }, { name: 'MemberName' }, { name: 'MemberEmail' }, { name: 'MemberCallPhone' }, { name: 'RegionID' }, { name: 'ShipRegion' },
+
+		{ name: 'ShipAddress' }, { name: 'ShipZip' }, { name: 'ShipName' }, { name: 'ShipTel' }, { name: 'ShipEmail' }, { name: 'ShipModeID' }, { name: 'ShipModeName' }, { name: 'PayTypeID' }, { name: 'PayTypeName' }, { name: 'PayTypeGateWay' },
+
+		{ name: 'ExpressCompanyID' }, { name: 'ExpressCompanyName' }, { name: 'ShipOrderNum' }, { name: 'IsFreeShiping' },
+
+		{ name: 'Freight' }, { name: 'FreightAdjust' }, { name: 'FreightActual' }, { name: 'Weight' },
+
+		{ name: 'CostPrice' }, { name: 'Discount' }, { name: 'TotalPrice' },
+
+		{ name: 'PayMoney' }, { name: 'Remark' }, { name: 'OrderPoint' }, { name: 'ShipStatus' },
+
+		{ name: 'PayStatus' }, { name: 'OrderStatus' }, { name: 'HasReturn' }, { name: 'ReturnMoney' },
+
+		{ name: 'RefundStatus' }, { name: 'IsInvoice' }, { name: 'InvoiceInfo' },
+
+		{ name: 'SellerID' }, { name: 'SellerName' }, { name: 'SellerEmail' },
+
+		{ name: 'SellerPhone' }, { name: 'SupplierID' }, { name: 'SupplierName' },
+
+		{ name: 'OrderIP' }, { name: 'CommentStatus' }, { name: 'DeliveryTime' },
+
+		{ name: 'SpecifiedDate' }, { name: 'ExportCount' }, { name: 'CreateDate', type: "date" },
+
+		{ name: 'UpdateDate', type: "date" }, { name: 'HasDelete' }, { name: 'ClientType' },
+
+		{ name: 'InvoiceNote' }];
+            var columns = [
+                 { text: '返回信息', dataField: 'PublishInfo', width: 150 },
+  { text: '订单号', dataField: 'ID', width: 150 },
+ 
+  { text: '付款方式', dataField: 'PayTypeName', width: 80 },
+     {   text: '付款状态', dataField: 'PayStatus', width: 100,@HelperExtend.ParseEnum(typeof(EasyCms.Model.PayStatus))  },
+  { text: '订单状态', dataField: 'OrderStatus', width: 100 ,@HelperExtend.ParseEnum(typeof(EasyCms.Model.OrderStatus))},
+  { text: '总价格', dataField: 'TotalPrice', cellsalign: "right", width:80 },
+              { text: '收件人', dataField: 'ShipName', width: 80 },
+  { text: '收件电话', dataField: 'ShipTel', width: 100 },
+  { text: '地区', dataField: 'ShipRegion', width: 100 },
+  
+   
+    { text: '发票抬头', dataField: 'InvoiceInfo', width: 200 },
+      { text: '发票说明', dataField: 'InvoiceNote', width: 200 },
+      { text: '创建日期', dataField: 'CreateDate', width: 100, cellsformat: "yyyy-MM-dd HH:mm"  }];
+
+            CreateGrid("jqxgrid", url, datafields, columns, {
+                isMutilSelect: true, adapter: {
+                    formatData: function (data) {
+                        data.orderNos = $("#orderID").val();
+                    }
+
+                }, grid: { pageable: false, rendergridrows: null, virtualmode: false, pagerrenderer: null }
+            });
+            $("#jqxgrid").on("bindingcomplete", function (event) {
+                var rows = $('#jqxgrid').jqxGrid('getrows');
+                for (var i = 0; i < rows.length; i++) {
+                    $('#jqxgrid').jqxGrid('selectrow', i);
+                }
+            });
+
+
+
+        });
+    </script>
+</body>
+</html>

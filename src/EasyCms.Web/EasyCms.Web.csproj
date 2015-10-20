@@ -244,6 +244,7 @@
     <Compile Include="Areas\Admin\Controllers\ShopProductStationModeController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopProductTypeController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopPromotionController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ShopReturnOrderController.cs" />
     <Compile Include="Areas\Admin\Controllers\SysDeleteCasCheckController.cs" />
     <Compile Include="Areas\Admin\Controllers\SysRoleAndUserRalationController.cs" />
     <Compile Include="Areas\Admin\Controllers\SysRoleInfoController.cs" />
@@ -781,6 +782,8 @@
     <Content Include="Areas\Admin\Views\ShopComment\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\ShopComment\Edit - 复制.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_LayoutEditNoForm.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopReturnOrder\PublishToWl.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopReturnOrder\Index.cshtml" />
     <None Include="Properties\PublishProfiles\publish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\EshopAdminControl.js" />

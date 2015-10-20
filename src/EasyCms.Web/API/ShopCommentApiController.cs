@@ -20,7 +20,7 @@ namespace EasyCms.Web.API
             int goodCount = 0;
             int badCount = 0;
             int middleCount = 0;
-            DataTable dt = new ShopProductReviewsBll().GetListByProductID(id, pageIndex, 20, ref recordCount,ref goodCount,ref middleCount,ref badCount);
+            DataTable dt = new ShopProductReviewsBll().GetListByProductID(id, pageIndex, 20, ref recordCount, ref goodCount, ref middleCount, ref badCount);
 
             int goodPercent = (int)(goodCount * 100 / recordCount);
             int googNum = 0;
@@ -54,7 +54,7 @@ namespace EasyCms.Web.API
                 TotalRecourdCount = recordCount,//总评论个数
                 GoodPercent = goodPercent,//好评率
                 GoodNum = googNum,//好评星级 1-5
-                GoodCount=goodCount,//好评个数
+                GoodCount = goodCount,//好评个数
                 MiddleCount = middleCount,//中评个数
                 BadCount = badCount,//差评个数
                 Data = dt
@@ -94,5 +94,40 @@ namespace EasyCms.Web.API
             }
         }
 
+          [HttpPost]
+        public HttpResponseMessage GetCommentProduct([FromBody]CommentModel cm)
+        {
+            int recordCount = 0;
+            string orderID = cm.OrderId;//空查所有，非空查当前订单下所有商品
+            int state = cm.state;//0查所有，1查待评论的，2.查已评论的
+            DataTable dt = new ShopProductReviewsBll().GetCommentProduct(host,Request.GetAccountID(), orderID, state, cm.pageIndex, 20, ref recordCount);
+
+            return new
+            {
+                PageIndex = cm.pageIndex,
+                RecordCount = dt.Rows.Count,
+                TotalPageCount = 0,
+                TotalRecourdCount = recordCount,
+                Data = dt
+            }.FormatObj();
+        }
+
+        public class CommentModel
+        {
+            /// <summary>
+            /// 空查所有，非空查当前订单下所有商品
+            /// </summary>
+            public string OrderId { get; set; }
+            /// <summary>
+            /// 页数
+            /// </summary>
+            public int pageIndex { get; set; }
+
+            /// <summary>
+            /// 0查所有，1查待评论的，2.查已评论的
+            /// </summary>
+            public int state { get; set; }
+    
+    }
     }
 }

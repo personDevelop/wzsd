@@ -172,6 +172,31 @@ namespace EasyCms.Dal
 
             }
         }
+
+        public DataTable GetCommentProduct(string host,string accountid, string orderID, int state, int pageIndex, int pageSize, ref int recordCount)
+        {
+            int pageCount = 0;
+            WhereClip where = ShopOrder._.MemberID == accountid;
+            if (!string.IsNullOrWhiteSpace(orderID))
+            {
+                where = where && ShopOrder._.ID == orderID;
+            }
+            if (state == 1)
+            {
+                where = where && ShopOrderItem._.HasComment == false;
+            }
+            else if (state == 2)
+            {
+                where = where && ShopOrderItem._.HasComment == true;
+            }
+            DataTable dt = Dal.From<ShopOrderItem>().Join<ShopOrder>(ShopOrderItem._.OrderID == ShopOrder._.ID)
+                .Select(ShopOrderItem._.OrderID, ShopOrderItem._.ProductID, ShopOrder._.CreateDate, ShopOrderItem._.ProductName, new ExpressionClip("'" + host + "'" + "+ProductThumb").Alias("ProductThumb"), ShopOrderItem._.HasComment)
+                   .Where(where).OrderBy(ShopOrder._.CreateDate.Desc).ToDataTable(pageSize, pageIndex, ref pageCount, ref recordCount);
+
+
+            return dt;
+
+        }
     }
 
 }
