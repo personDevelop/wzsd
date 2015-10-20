@@ -725,11 +725,23 @@ namespace EasyCms.Dal
                             if (hasSendCount > pro.HandsaleMaxCount)
                             {
                                 sendCount = (int)pro.HandsaleMaxCount - hasSendCount;
+                                if (sendCount == 0)
+                                {
+                                    sendCount = 1;//只要大于0就行，方便下面做一次性判断
+                                }
                             }
                             else
                             {
                                 sendCount = 0;
                             }
+                        }
+                        else
+                        {
+                            if (sendCount == 0)
+                            {
+                                sendCount = 1;//只要大于0就行，方便下面做一次性判断
+                            }
+
                         }
                         pro.HasSendCount += sendCount;
 
@@ -961,7 +973,7 @@ namespace EasyCms.Dal
             if (list.Count > 0)
             {
                 List<string> orderIDS = list.Select(p => p.ID).ToList();
-                List<ShopOrderItem> orderItems = Dal.From<ShopOrderItem>() 
+                List<ShopOrderItem> orderItems = Dal.From<ShopOrderItem>()
                     .Where(ShopOrderItem._.OrderID.In(orderIDS))
                     .Select(ShopOrderItem._.ID, ShopOrderItem._.OrderID, ShopOrderItem._.BrandName,
                     ShopOrderItem._.Count, ShopOrderItem._.HandselCount, ShopOrderItem._.IsHandsel,
@@ -1014,7 +1026,7 @@ namespace EasyCms.Dal
             {
 
                 List<ShopOrderItem> orderItems = Dal.From<ShopOrderItem>()
-                      
+
                     .Where(ShopOrderItem._.OrderID == id)
                     .Select(ShopOrderItem._.ID, ShopOrderItem._.OrderID, ShopOrderItem._.BrandName,
                     ShopOrderItem._.Count, ShopOrderItem._.HandselCount, ShopOrderItem._.IsHandsel,
@@ -1090,10 +1102,10 @@ namespace EasyCms.Dal
                 //获取使用的优惠券
                 List<CouponRule> RemoveCoupon = new List<CouponRule>();
 
-                List<string> whereStringList = Alllist.Where(p => p.FX == AddOrRemove.减少 && !string.IsNullOrWhiteSpace(p.CouponID) && p.JFSouce== RuleType.使用优惠券).Select(p => p.CouponID).ToList();
+                List<string> whereStringList = Alllist.Where(p => p.FX == AddOrRemove.减少 && !string.IsNullOrWhiteSpace(p.CouponID) && p.JFSouce == RuleType.使用优惠券).Select(p => p.CouponID).ToList();
                 if (whereStringList.Count > 0)
                 {
-                    RemoveCoupon = Dal.From<CouponRule>().Join<CusomerAndCoupon>(CouponRule._.ID==CusomerAndCoupon._.CouponID)
+                    RemoveCoupon = Dal.From<CouponRule>().Join<CusomerAndCoupon>(CouponRule._.ID == CusomerAndCoupon._.CouponID)
                         .Select(CouponRule._.Name).Where(
                CusomerAndCoupon._.ID.In(whereStringList)).List<CouponRule>();
                 }

@@ -84,6 +84,10 @@ namespace EasyCms.Dal
                         continue;
                     }
                 }
+                if (item.HandsaleCount<=0)
+                {
+                    continue;
+                }
                 if (item.RuleTypeName.StartsWith("注册"))
                 {
                     continue;
