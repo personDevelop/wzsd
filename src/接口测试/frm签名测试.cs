@@ -80,9 +80,13 @@ namespace 接口测试
 
         private void button6_Click(object sender, EventArgs e)
         {
-            string a="service=\"mobile.securitypay.pay\"&partner=\"2088511128054061\"&_input_charset=\"utf-8\"&notify_url=\"http://www.dflink.com.cn/notify.aspx\"&out_trade_no=\"HQ1510200011\"&subject=\"金立超强待机王\"&payment_type=\"1\"&seller_id=\"hong7tv@163.com\"&total_fee=\"0.01\"&it_b_pay=\"30m\"&body=\"金立超强待机王\"&return_url=\"m.alipay.com\"&sign=\"LicfVSOE6OvR53xvL2MZcfxxVZnKhPnZ1STfAfbjqDb5n1dhXHEkEKpR1MjcmjnJsghGmsI7CiIRQFrLdPTKk%2bbvek8hEris%2f5K3kywFdccLrRjKRv293Ui6PeGwU%2bgMrbLTUTr%2fBQe4nYAnFx4TbKfF%2fFXV161yz8dFPfmxs1E%3d\"&sign_type=\"RSA\"";
+            string a = "service=\"mobile.securitypay.pay\"&partner=\"2088511128054061\"&_input_charset=\"utf-8\"&notify_url=\"http://www.dflink.com.cn/notify.aspx\"&out_trade_no=\"HQ1510200011\"&subject=\"金立超强待机王\"&payment_type=\"1\"&seller_id=\"hong7tv@163.com\"&total_fee=\"0.01\"&it_b_pay=\"30m\"&body=\"金立超强待机王\"&return_url=\"m.alipay.com\"&sign=\"LicfVSOE6OvR53xvL2MZcfxxVZnKhPnZ1STfAfbjqDb5n1dhXHEkEKpR1MjcmjnJsghGmsI7CiIRQFrLdPTKk%2bbvek8hEris%2f5K3kywFdccLrRjKRv293Ui6PeGwU%2bgMrbLTUTr%2fBQe4nYAnFx4TbKfF%2fFXV161yz8dFPfmxs1E%3d\"&sign_type=\"RSA\"";
             string b = "service=\"mobile.securitypay.pay\"&partner=\"2088511128054061\"&_input_charset=\"utf-8\"&notify_url=\"http://www.dflink.com.cn/notify.aspx\"&out_trade_no=\"HQ1510200011\"&subject=\"金立超强待机王\"&payment_type=\"1\"&seller_id=\"hong7tv@163.com\"&total_fee=\"0.01\"&it_b_pay=\"30m\"&body=\"金立超强待机王\"&return_url=\"m.alipay.com\"&sign=\"LicfVSOE6OvR53xvL2MZcfxxVZnKhPnZ1STfAfbjqDb5n1dhXHEkEKpR1MjcmjnJsghGmsI7CiIRQFrLdPTKk%2bbvek8hEris%2f5K3kywFdccLrRjKRv293Ui6PeGwU%2bgMrbLTUTr%2fBQe4nYAnFx4TbKfF%2fFXV161yz8dFPfmxs1E%3d\"&sign_type=\"RSA\"";
-            bool s = a == b;
+            string  ee = textBox1.Text.EncryptDEC();
+            string f = ee.DecryptDEC();
+            bool s = textBox1.Text == f.Trim();
+            string z = f.EncryptDEC();
+            bool sd = textBox1.Text.EncryptDEC() == z;
             MessageBox.Show(s.ToString());
             textBox2.Text = textBox1.Text.EncryptDEC();// Encrypt(textBox1.Text);
         }
@@ -124,37 +128,37 @@ namespace 接口测试
             }
         }
 
-              /// <summary>
+        /// <summary>
         /// 对字符串进行DES加密
         /// </summary>
         /// <param name="sourceString">待加密的字符串</param>
         /// <returns>加密后的BASE64编码的字符串</returns>
         public string Encrypt(string sourceString)
-      {
-         byte[] btKey = Encoding.UTF8.GetBytes(sKey);
-         byte[] btIV = Encoding.UTF8.GetBytes(sKey);
-          DESCryptoServiceProvider des = new DESCryptoServiceProvider();
-          using (MemoryStream ms = new MemoryStream())
-          {
-              byte[] inData = Encoding.UTF8.GetBytes(sourceString);
-              try
-              {
-                  using (CryptoStream cs = new CryptoStream(ms, des.CreateEncryptor(btKey, btIV), CryptoStreamMode.Write))
-                  {
-                      cs.Write(inData, 0, inData.Length);
-                      cs.FlushFinalBlock();
-                  }
- 
-                  return Convert.ToBase64String(ms.ToArray());
-              }
-              catch
-              {
-                  throw;
-              }
-          }
-      }
-        
-       
+        {
+            byte[] btKey = Encoding.UTF8.GetBytes(sKey);
+            byte[] btIV = Encoding.UTF8.GetBytes(sKey);
+            DESCryptoServiceProvider des = new DESCryptoServiceProvider();
+            using (MemoryStream ms = new MemoryStream())
+            {
+                byte[] inData = Encoding.UTF8.GetBytes(sourceString);
+                try
+                {
+                    using (CryptoStream cs = new CryptoStream(ms, des.CreateEncryptor(btKey, btIV), CryptoStreamMode.Write))
+                    {
+                        cs.Write(inData, 0, inData.Length);
+                        cs.FlushFinalBlock();
+                    }
+
+                    return Convert.ToBase64String(ms.ToArray());
+                }
+                catch
+                {
+                    throw;
+                }
+            }
+        }
+
+
 
     }
 }
