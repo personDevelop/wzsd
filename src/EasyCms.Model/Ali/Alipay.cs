@@ -144,7 +144,7 @@ namespace EasyCms.Model
             string sign = RSAFromPkcs8.sign(result, privatkey, _input_charset);
             sign = System.Web.HttpUtility.UrlEncode(sign, Encoding.UTF8);
             result = result + "&sign=\"" + sign + "\"&sign_type=\"RSA\"";
-            result = result.EncryptAES();//加密
+            result = result.EncryptDEC();//加密
             return result;
         }
     }

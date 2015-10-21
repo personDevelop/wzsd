@@ -58,6 +58,10 @@
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Sharp.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\refdll\Sharp.Common.dll</HintPath>
+    </Reference>
     <Reference Include="Sharp.Data">
       <HintPath>..\refdll\Sharp.Data.dll</HintPath>
     </Reference>
