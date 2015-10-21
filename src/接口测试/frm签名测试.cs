@@ -82,13 +82,13 @@ namespace 接口测试
         {
             string a = "service=\"mobile.securitypay.pay\"&partner=\"2088511128054061\"&_input_charset=\"utf-8\"&notify_url=\"http://www.dflink.com.cn/notify.aspx\"&out_trade_no=\"HQ1510200011\"&subject=\"金立超强待机王\"&payment_type=\"1\"&seller_id=\"hong7tv@163.com\"&total_fee=\"0.01\"&it_b_pay=\"30m\"&body=\"金立超强待机王\"&return_url=\"m.alipay.com\"&sign=\"LicfVSOE6OvR53xvL2MZcfxxVZnKhPnZ1STfAfbjqDb5n1dhXHEkEKpR1MjcmjnJsghGmsI7CiIRQFrLdPTKk%2bbvek8hEris%2f5K3kywFdccLrRjKRv293Ui6PeGwU%2bgMrbLTUTr%2fBQe4nYAnFx4TbKfF%2fFXV161yz8dFPfmxs1E%3d\"&sign_type=\"RSA\"";
             string b = "service=\"mobile.securitypay.pay\"&partner=\"2088511128054061\"&_input_charset=\"utf-8\"&notify_url=\"http://www.dflink.com.cn/notify.aspx\"&out_trade_no=\"HQ1510200011\"&subject=\"金立超强待机王\"&payment_type=\"1\"&seller_id=\"hong7tv@163.com\"&total_fee=\"0.01\"&it_b_pay=\"30m\"&body=\"金立超强待机王\"&return_url=\"m.alipay.com\"&sign=\"LicfVSOE6OvR53xvL2MZcfxxVZnKhPnZ1STfAfbjqDb5n1dhXHEkEKpR1MjcmjnJsghGmsI7CiIRQFrLdPTKk%2bbvek8hEris%2f5K3kywFdccLrRjKRv293Ui6PeGwU%2bgMrbLTUTr%2fBQe4nYAnFx4TbKfF%2fFXV161yz8dFPfmxs1E%3d\"&sign_type=\"RSA\"";
-            string  ee = textBox1.Text.EncryptDEC();
-            string f = ee.DecryptDEC();
+            string  ee = textBox1.Text.EncryptAES();
+            string f = ee.DecryptAES();
             bool s = textBox1.Text == f.Trim();
-            string z = f.EncryptDEC();
-            bool sd = textBox1.Text.EncryptDEC() == z;
+            string z = f.EncryptAES();
+            bool sd = textBox1.Text.EncryptAES() == z;
             MessageBox.Show(s.ToString());
-            textBox2.Text = textBox1.Text.EncryptDEC();// Encrypt(textBox1.Text);
+            textBox2.Text = textBox1.Text.EncryptAES();// Encrypt(textBox1.Text);
         }
 
         private void button5_Click(object sender, EventArgs e)
