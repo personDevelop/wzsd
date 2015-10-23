@@ -65,7 +65,15 @@ namespace AliNotify.Web
 
             //写日志记录（若要调试，请取消下面两行注释）
             string sWord = "responseTxt=" + responseTxt + "\n isSign=" + isSign.ToString() + "\n 返回回来的参数：" + GetPreSignStr(inputPara) + "\n ";
-            Core.LogResult(sWord);
+            try
+            {
+                Core.LogResult(sWord);
+            }
+            catch (Exception ex)
+            {
+
+                new LogBll().WriteException(ex);
+            }
 
             //判断responsetTxt是否为true，isSign是否为true
             //responsetTxt的结果不是true，与服务器设置问题、合作身份者ID、notify_id一分钟失效有关

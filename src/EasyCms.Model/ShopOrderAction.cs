@@ -40,6 +40,8 @@ namespace EasyCms.Model
 
         private string _ActionName;
 
+        private string _ReturnOrderID;
+
         #endregion
 
         #region 属性
@@ -49,7 +51,7 @@ namespace EasyCms.Model
         /// </summary>
 
         [PrimaryKey]
-        [DbProperty(MapingColumnName = "ID", DbTypeString = "char", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ID", DbTypeString = "varchar", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string ID
         {
@@ -68,7 +70,7 @@ namespace EasyCms.Model
         ///  订单ID,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "OrderId", DbTypeString = "char", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "OrderId", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = true, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string OrderId
         {
@@ -87,7 +89,7 @@ namespace EasyCms.Model
         ///  操作人ID,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "UserId", DbTypeString = "char", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "UserId", DbTypeString = "varchar", ColumnIsNull = true, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string UserId
         {
@@ -106,7 +108,7 @@ namespace EasyCms.Model
         ///  操作人,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "Username", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "Username", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string Username
         {
@@ -197,6 +199,25 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  对应退货单ID,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "ReturnOrderID", DbTypeString = "varchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string ReturnOrderID
+        {
+            get
+            {
+                return this._ReturnOrderID;
+            }
+            set
+            {
+                this.OnPropertyChanged("ReturnOrderID", this._ReturnOrderID, value);
+                this._ReturnOrderID = value;
+            }
+        }
+
         #endregion
 
         #region 列定义
@@ -220,6 +241,8 @@ namespace EasyCms.Model
                 Remark = new PropertyItem("Remark", tableName);
 
                 ActionName = new PropertyItem("ActionName", tableName);
+
+                ReturnOrderID = new PropertyItem("ReturnOrderID", tableName);
 
 
             }
@@ -255,7 +278,12 @@ namespace EasyCms.Model
             /// 操作名称,
             /// </summary> 
             public PropertyItem ActionName = null;
+            /// <summary>
+            /// 对应退货单ID,
+            /// </summary> 
+            public PropertyItem ReturnOrderID = null;
         }
         #endregion
     }
+
 }

@@ -371,14 +371,13 @@ namespace EasyCms.Model
     /// </summary>
     public enum UserDjStatus
     {
-        等待审核,
-        审批通过, 
-        取货中,
-        等待退款,
-        已完成,
-        审批不通过,
-        已取消,
-        删除
+        等待审核=0, 
+        取货中 = 1,
+        等待退款=2,
+        已完成=3,
+        审批不通过=4,
+        已取消=5,
+        删除=6
 
     }
     /// <summary>

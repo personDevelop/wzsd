@@ -88,11 +88,13 @@ namespace EasyCms.Model.Ali
         /// <param name="sWord">要写入日志里的文本内容</param>
         public static void LogResult(string sWord)
         {
-            string strPath = HttpContext.Current.Server.MapPath("log");
-            strPath = strPath + "\\" + DateTime.Now.ToString().Replace(":", "") + ".txt";
-            StreamWriter fs = new StreamWriter(strPath, false, System.Text.Encoding.Default);
-            fs.Write(sWord);
-            fs.Close();
+            
+                string strPath = HttpContext.Current.Server.MapPath("log");
+                strPath = strPath + "\\" + DateTime.Now.ToString().Replace(":", "") + ".txt";
+                StreamWriter fs = new StreamWriter(strPath, false, System.Text.Encoding.Default);
+                fs.Write(sWord);
+                fs.Close();
+            
         }
 
         /// <summary>

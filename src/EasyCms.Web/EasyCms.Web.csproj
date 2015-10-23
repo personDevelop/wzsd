@@ -784,6 +784,7 @@
     <Content Include="Areas\Admin\Views\Shared\_LayoutEditNoForm.cshtml" />
     <Content Include="Areas\Admin\Views\ShopReturnOrder\PublishToWl.cshtml" />
     <Content Include="Areas\Admin\Views\ShopReturnOrder\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopReturnOrder\Edit.cshtml" />
     <None Include="Properties\PublishProfiles\publish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\EshopAdminControl.js" />

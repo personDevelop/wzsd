@@ -21,7 +21,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             return View();
         }
 
-        public string GetList(int pagenum, int pagesize, string orderNo, string ShrMc, string AccountName, string StartOrderDate,
+        public string GetList(int pagenum, int pagesize, string orderNo, string ShrMc,string ShrTel, string AccountName, string StartOrderDate,
             string EndOrderDate, string PayStatus, string ShipStatus, string OrderStatus)
         {
             int recordCount = 0;
@@ -37,6 +37,10 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             if (!string.IsNullOrWhiteSpace(AccountName))
             {
                 where = where && ShopOrder._.MemberName.StartsWith(AccountName);
+            }
+            if (!string.IsNullOrWhiteSpace(ShrTel))
+            {
+                 where = where && (ShopOrder._.MemberCallPhone.StartsWith(ShrTel)|| ShopOrder._.ShipTel.StartsWith(ShrTel));
             }
             DateTime start = DateTime.Now;
             if (StartOrderDate.TryPhrase("yyyy-MM-dd", out start))
@@ -65,15 +69,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                 }
 
             }
-            if (!string.IsNullOrWhiteSpace(PayStatus))
-            {
-                string[] ps = PayStatus.Split(',');
-                if (!ps.Contains(""))
-                {
-                    where = where && ShopOrder._.PayStatus.In(ps);
-                }
-
-            } if (!string.IsNullOrWhiteSpace(OrderStatus))
+            if (!string.IsNullOrWhiteSpace(OrderStatus))
             {
                 string[] ps = OrderStatus.Split(',');
                 if (!ps.Contains(""))

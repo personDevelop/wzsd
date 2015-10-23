@@ -1628,7 +1628,7 @@ namespace EasyCms.Dal
             int result = 1;
             error = string.Empty;
 
-            ShopOrder order = Dal.From<ShopOrder>().Select(ShopOrder._.ID, ShopOrder._.PayStatus, ShopOrder._.ShipStatus,
+            ShopOrder order = Dal.From<ShopOrder>().Select(ShopOrder._.ID, ShopOrder._.PayStatus, ShopOrder._.ShipStatus, ShopOrder._.MemberID,
                 ShopOrder._.RefundStatus, ShopOrder._.OrderStatus, ShopOrder._.IsReqCancle)
                   .Where(ShopOrder._.ID == orderid).ToFirst<ShopOrder>();
 

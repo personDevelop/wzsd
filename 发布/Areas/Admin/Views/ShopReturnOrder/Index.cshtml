@@ -8,6 +8,10 @@
         height: 100%;
         overflow: hidden;
     }
+
+    td {
+        padding-left: 1px;
+    }
 </style>
 
 
@@ -23,7 +27,7 @@
                     <li><a class="edit" href="javascript:;" onclick="Publish(2,'审核');"><i></i><span>审核</span></a></li>
                     <li><a class="edit" href="javascript:;" onclick="Publish(13, '取货');"><i></i><span>取回货物</span></a></li>
                     <li><a class="edit" href="javascript:;" onclick="Publish(3, '退货改换货');"><i></i><span>退货改换货</span></a></li>
-                    <li><a class="edit" href="javascript:;" onclick="Publish(13, '退款');"><i></i><span>退款</span></a></li> 
+                    <li><a class="edit" href="javascript:;" onclick="Publish(13, '退款');"><i></i><span>退款</span></a></li>
                     <li><a class="expandable" href="javascript:;" onclick="exportOrder();"><i></i><span>导出</span></a></li>
 
                 </ul>
@@ -42,34 +46,35 @@
         <table width="100%" class="borderkuang" border="0" cellspacing="0" cellpadding="0">
             <tbody>
                 <tr>
-                    <td>
+                    <td rowspan="2" width="20">
                         @HelperExtend.img("icon-1.gif", "width:19px,height:19px")搜索：
                     </td>
-                    <td>
+                    <td width="50">
                         退单号：
                     </td>
                     <td>
-                        <input type="text" id="OrderNo">
+                        <input type="text" id="returnOrderNo">
                     </td>
-                    <td>
+                    <td width="60">
                         订单编号：
                     </td>
                     <td>
                         <input type="text" id="OrderNo">
                     </td>
-                    <td>
+
+                    <td width="60">
                         收货姓名：
                     </td>
                     <td>
                         <input type="text" id="ShrMc">
                     </td>
-                    <td>
+                    <td width="60">
                         会员账号：
                     </td>
                     <td>
                         <input type="text" id="AccountName">
                     </td>
-                    <td>
+                    <td width="60">
                         申请日期：
                     </td>
 
@@ -89,28 +94,36 @@
                     </td>
                 </tr>
                 <tr>
-                    <td></td>
+
+                    <td>
+                        电话：
+                    </td>
+                    <td>
+                        <input type="text" id="ShrTel">
+                    </td>
+                    <td> 退货状态：</td>
+                    <td>
+                        @HelperExtend.DropDownListEnum("OrderStatus", enumType: typeof(EasyCms.Model.UserDjStatus))
+
+
+                    </td>
                     <td>退款状态：</td>
                     <td height="35">
-                        @HelperExtend.DropDownListEnum("ReturnMoneyStatus", enumType: typeof(EasyCms.Model.ReturnMoneyStatus))
+                        @HelperExtend.DropDownListEnum("PayStatus", enumType: typeof(EasyCms.Model.ReturnMoneyStatus))
 
 
                     </td>
-                    <td> 退货单状态：</td>
-                    <td>
-                        @HelperExtend.DropDownListEnum("UserDjStatus", enumType: typeof(EasyCms.Model.UserDjStatus))
 
 
-                    </td>
                     <td>物流状态：</td>
                     <td>
 
-                        @HelperExtend.DropDownListEnum("LogisticStatus", enumType: typeof(EasyCms.Model.LogisticStatus))
+                        @HelperExtend.DropDownListEnum("ShipStatus", enumType: typeof(EasyCms.Model.LogisticStatus))
                     </td>
                     <td colspan="3">
                         <input id="btnQry" type="button" value="搜索">
                     </td>
-                    <td></td>
+
                 </tr>
 
             </tbody>
@@ -124,7 +137,7 @@
             <li><a class="selected" href="javascript:;">近三个月退货单</a></li>
             <li><a href="javascript:;">等待审核</a></li>
             <li><a href="javascript:;">等待取回货物</a></li>
-            <li><a href="javascript:;">等待退款</a></li> 
+            <li><a href="javascript:;">等待退款</a></li>
             <li><a href="javascript:;">已完成</a></li>
         </ul>
     </div>
@@ -139,7 +152,6 @@
 @section  scripts{
     <script type="text/javascript">
         $(function () {
-
             Dialog.create("@Url.Content("~/Content/Images/movie.png")");
         });
         function Publish(action, title) {
@@ -166,13 +178,14 @@
         }
     </script>
     <script type="text/javascript">
-     
+
         $(function () {
 
             $(".content-tab-ul-wrap ul li").click(function () {
                 $("#PayStatus").jqxDropDownList('uncheckAll');
                 $("#ShipStatus").jqxDropDownList('uncheckAll');
                 $("#OrderStatus").jqxDropDownList('uncheckAll');
+                $("#returnOrderNo").val("");
                 $("#OrderNo").val("");
                 $("#ShrMc").val("");
                 $("#AccountName").val("");
@@ -180,38 +193,28 @@
                 $("#EndOrderDate").val("");
                 var selectType = $(this).index();
                 switch (selectType) {
-                    case 0://近三个月订单
+                    case 0://近三个月退货单
                         $('#EndOrderDate').jqxDateTimeInput('setDate', new Date());
                         $('#StartOrderDate').jqxDateTimeInput('setDate', get3MonthBefor());
                         break;
-                    case 1://等待付款
-
-                        $("#PayStatus").jqxDropDownList('checkIndex', 1);
+                    case 1://等待审核
                         $("#OrderStatus").jqxDropDownList('checkIndex', 1);
                         break;
-                    case 2://等待付款确认
+                    case 2://等待取回货物
                         $("#OrderStatus").jqxDropDownList('checkIndex', 2);
                         break;
-                    case 3://等待处理
+                    case 3://等待退款
                         $("#OrderStatus").jqxDropDownList('checkIndex', 3);
-                        $("#OrderStatus").jqxDropDownList('checkIndex', 2);
-                        $("#ShipStatus").jqxDropDownList('checkIndex', 1);
-                        break;
-                    case 4://已发货
-                        $("#OrderStatus").jqxDropDownList('checkIndex', 4);
-                        $("#ShipStatus").jqxDropDownList('checkIndex', 2);
-                        break;
-                    case 5://取消订单
-                        $("#OrderStatus").jqxDropDownList('checkIndex', 7);
 
                         break;
-                    case 6://已完成
-                        $("#OrderStatus").jqxDropDownList('checkIndex', 8);
+                    case 4://已完成
+                        $("#OrderStatus").jqxDropDownList('checkIndex', 4);
                         break;
                 }
                 $('#jqxgrid').jqxGrid('updatebounddata');
             });
             $("#OrderNo").jqxInput({ height: '25px' });
+            $("#ShrTel").jqxInput({ height: '25px' });
             $("#ShrMc").jqxInput({ height: '25px' });
             $("#AccountName").jqxInput({ height: '25px' });
 
@@ -236,67 +239,75 @@
         $(document).ready(function () {
 
             var url = "@Url.Action("GetList")";
-            var datafields = [{ name: 'ID' },
-		{ name: 'OrderType' }, { name: 'OrderResId' }, { name: 'ParentID' }, { name: 'HasChildren' }, { name: 'MemberID' }, { name: 'MemberName' }, { name: 'MemberEmail' }, { name: 'MemberCallPhone' }, { name: 'RegionID' }, { name: 'ShipRegion' },
-
-		{ name: 'ShipAddress' }, { name: 'ShipZip' }, { name: 'ShipName' }, { name: 'ShipTel' }, { name: 'ShipEmail' }, { name: 'ShipModeID' }, { name: 'ShipModeName' }, { name: 'PayTypeID' }, { name: 'PayTypeName' }, { name: 'PayTypeGateWay' },
-
-		{ name: 'ExpressCompanyID' }, { name: 'ExpressCompanyName' }, { name: 'ShipOrderNum' }, { name: 'IsFreeShiping' },
-
-		{ name: 'Freight' }, { name: 'FreightAdjust' }, { name: 'FreightActual' }, { name: 'Weight' },
-
-		{ name: 'CostPrice' }, { name: 'Discount' }, { name: 'TotalPrice' },
-
-		{ name: 'PayMoney' }, { name: 'Remark' }, { name: 'OrderPoint' }, { name: 'ShipStatus' },
-
-		{ name: 'PayStatus' }, { name: 'OrderStatus' }, { name: 'HasReturn' }, { name: 'ReturnMoney' },
-
-		{ name: 'RefundStatus' }, { name: 'IsInvoice' }, { name: 'InvoiceInfo' },
-
-		{ name: 'SellerID' }, { name: 'SellerName' }, { name: 'SellerEmail' },
-
-		{ name: 'SellerPhone' }, { name: 'SupplierID' }, { name: 'SupplierName' },
-
-		{ name: 'OrderIP' }, { name: 'CommentStatus' }, { name: 'DeliveryTime' },
-
-		{ name: 'SpecifiedDate' }, { name: 'ExportCount' }, { name: 'CreateDate', type: 'date' },
-
-		{ name: 'UpdateDate', type: "date" }, { name: 'HasDelete' }, { name: 'ClientType' },
-
-		{ name: 'InvoiceNote' }];
+            var datafields = [
+                     { name: 'ID' },
+                     { name: 'OrderId' },
+                     { name: 'UserId' },
+                     { name: 'UserName' },
+                     { name: 'CreatedDate' },
+                     { name: 'SupplierId' },
+                     { name: 'SupplierName' },
+                     { name: 'ActualSalesTotal' },
+                     { name: 'Amount' },
+                     { name: 'AmountAdjusted' },
+                     { name: 'AmountActual' },
+                     { name: 'ServiceType' },
+                     { name: 'Credential' },
+                     { name: 'Description' },
+                     { name: 'ImageUrl' },
+                     { name: 'ReturnType' },
+                     { name: 'PickRegionID' },
+                     { name: 'PickRegion' },
+                     { name: 'PickAddress' },
+                     { name: 'PickZipCode' },
+                     { name: 'PickTelPhone' },
+                     { name: 'PickEmail' },
+                     { name: 'ShippingModeId' },
+                     { name: 'ShippingModeName' },
+                     { name: 'ShipOrderNumber' },
+                     { name: 'ExpressCompanyName' },
+                     { name: 'ExpressCompanyAbb' },
+                     { name: 'ReturnTrueName' },
+                     { name: 'ReturnBankName' },
+                     { name: 'ReturnCard' },
+                     { name: 'ReturnCardType' },
+                     { name: 'ContactName' },
+                     { name: 'ContactPhone' },
+                     { name: 'Status' },
+                     { name: 'LogisticStatus' },
+                     { name: 'RefuseReason' },
+                     { name: 'Remark' },
+                     { name: 'ReturnMoneyStatus' },
+                     { name: 'ReturnMoney' },
+                     { name: 'IsShopReviceGood' }];
             var columns = [
-  { text: '订单号', dataField: 'ID', width: 150 },
-     { text: '收件人', dataField: 'ShipName', width: 100 },
-  { text: '收件电话', dataField: 'ShipTel', width: 100 },
-    { text: '总价格', dataField: 'TotalPrice', cellsalign: "right", width: 100 },
-  { text: '付款状态', dataField: 'PayStatus', width: 100,@HelperExtend.ParseEnum(typeof(EasyCms.Model.PayStatus)) },
-  { text: '订单状态', dataField: 'OrderStatus', width: 100,@HelperExtend.ParseEnum(typeof(EasyCms.Model.OrderStatus)) },
+            { text: '退单号', dataField: 'ID', cellsalign: "left", width: 100 },
 
+  { text: '订单号', dataField: 'OrderId', cellsalign: "left", width: 100 },
+  { text: '会员名称', dataField: 'UserName', cellsalign: "left", width: 100 },
 
-  { text: '地区', dataField: 'ShipRegion', width: 100 },
-  { text: '付款方式', dataField: 'PayTypeName', width: 100 },
+  { text: '申请日期', dataField: 'CreatedDate', width: 100 },
+  { text: '退货原因', dataField: 'Description', cellsalign: "left", width: 100 },
+  { text: '联系人', dataField: 'ContactName', cellsalign: "left", width: 100 },
+  { text: '联系电话', dataField: 'ContactPhone', cellsalign: "left", width: 100 },
+      { text: '拒绝原因', dataField: 'RefuseReason', cellsalign: "left", width: 100 },
+  { text: '退款金额', dataField: 'ReturnMoney', cellsalign: "right", width: 100 },
+    { text: '状态', dataField: 'Status', cellsalign: "left", width: 100 },
+    { text: '物流状态', dataField: 'LogisticStatus', width: 100 },
+  { text: '退款状态', dataField: 'ReturnMoneyStatus', width: 100 }
 
-  { text: '快递公司', dataField: 'ExpressCompanyName', width: 100 },
+            ];
 
-  { text: '运单号', dataField: 'ShipOrderNum', width: 100 },
-
-
-  { text: '导出次数', dataField: 'ExportCount', cellsalign: "right", width: 100 },
-  { text: '创建日期', dataField: 'CreateDate', width: 120, cellsformat: "yyyy-MM-dd HH:mm" },
-    { text: '发票抬头', dataField: 'InvoiceInfo', width: 200 },
-      { text: '发票说明', dataField: 'InvoiceNote', width: 200 },
-             { text: '会员姓名', dataField: 'MemberName', width: 100 },
-
-  { text: '会员电话', dataField: 'MemberCallPhone', width: 100 }];
 
             CreateGrid("jqxgrid", url, datafields, columns, {
                 isMutilSelect: true, adapter: {
                     formatData: function (data) {
 
 
+                        data.returnOrderNo = $("#returnOrderNo").val();
                         data.OrderNo = $("#OrderNo").val();
-
                         data.ShrMc = $("#ShrMc").val();
+                        data.ShrTel = $("#ShrTel").val();
 
                         data.AccountName = $("#AccountName").val();
 

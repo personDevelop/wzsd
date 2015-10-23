@@ -25,12 +25,13 @@ namespace EasyCms.Dal
 
         }
 
-        public DataTable GetList(int pagenum, int pagesize, ref int recordCount, bool IsForSelected = false)
+        public DataTable GetList(int pageIndex, int pagesize, WhereClip where, ref int recordCount)
         {
             int pageCount = 0;
 
-            return Dal.From<ShopReturnOrder>().ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
+            return Dal.From<ShopReturnOrder>().Where(where).OrderBy(ShopReturnOrder._.CreatedDate.Desc)
 
+                .ToDataTable(pagesize, pageIndex, ref pageCount, ref recordCount);
 
         }
 
@@ -40,6 +41,13 @@ namespace EasyCms.Dal
         {
 
             return Dal.Find<ShopReturnOrder>(id);
+        }
+
+
+
+        public DataTable GetReturnDetail(string returnOrderNo)
+        {
+            return Dal.From<ShopReturnOrderItem>().Where(ShopReturnOrderItem._.ReturnOrderId == returnOrderNo).ToDataTable();
         }
     }
 

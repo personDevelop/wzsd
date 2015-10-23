@@ -52,6 +52,12 @@
                         <input type="text" id="OrderNo">
                     </td>
                     <td>
+                        电话：
+                    </td>
+                    <td>
+                        <input type="text" id="ShrTel">
+                    </td>
+                    <td>
                         收货姓名：
                     </td>
                     <td>
@@ -190,7 +196,7 @@
                         break;
                     case 3://等待处理
                         $("#OrderStatus").jqxDropDownList('checkIndex', 3);
-                        $("#OrderStatus").jqxDropDownList('checkIndex', 2);
+                        $("#PayStatus").jqxDropDownList('checkIndex', 2);
                         $("#ShipStatus").jqxDropDownList('checkIndex', 1);
                         break;
                     case 4://已发货
@@ -208,6 +214,7 @@
                 $('#jqxgrid').jqxGrid('updatebounddata');
             });
             $("#OrderNo").jqxInput({ height: '25px' });
+            $("#ShrTel").jqxInput({ height: '25px' });
             $("#ShrMc").jqxInput({ height: '25px' });
             $("#AccountName").jqxInput({ height: '25px' });
 
@@ -291,9 +298,9 @@
 
 
                         data.OrderNo = $("#OrderNo").val();
-
+                        data.ShrTel = $("#ShrTel").val();
                         data.ShrMc = $("#ShrMc").val();
-
+                        
                         data.AccountName = $("#AccountName").val();
 
                         data.StartOrderDate = $("#StartOrderDate").val();
@@ -305,6 +312,8 @@
                         data.ShipStatus = $("#ShipStatus").val();
 
                         data.OrderStatus = $("#OrderStatus").val();
+
+
                     }
 
                 }, grid: { localization: "zh-Hans" }
