@@ -212,17 +212,17 @@ namespace EasyCms.Model
         已收货 = 4,
         拒收 = 5,
         作废 = 6,
-        发起退货申请 = 7, 
+        发起退货申请 = 7,
         商家不同意退换 = 8,
-        退货取货中 = 10, 
-        商家已收货等待退款 =11,
-        退货完成 =  12,
+        退货取货中 = 10,
+        商家已收货等待退款 = 11,
+        退货完成 = 12,
         取消退货 = 13,
         申请取消订单 = 14,
         取消订单处理中 = 15,
-        取消订单 = 16, 
+        取消订单 = 16,
         完成 = 99,
-       
+
     }
     public enum QryOrderStatus
     {
@@ -278,8 +278,8 @@ namespace EasyCms.Model
         注册送优惠券,
         注册送积分,
         包邮,
-        使用优惠券=90,
-        使用积分=91,
+        使用优惠券 = 90,
+        使用积分 = 91,
         其他 = 99
 
 
@@ -372,12 +372,13 @@ namespace EasyCms.Model
     /// </summary>
     public enum UserDjStatus
     {
-        等待审核=7,
+        无,
+        等待审核 = 7,
         审批不通过 = 8,
         取货中 = 10,
         等待退款 = 11,
-        已完成 = 12, 
-        已取消 = 13 
+        已完成 = 12,
+        已取消 = 13
 
     }
     /// <summary>
@@ -386,23 +387,37 @@ namespace EasyCms.Model
     public enum LogisticStatus
     {
         无,
-        取货中=10,
-        取货完成=11 
+        取货中 = 10,
+        取货完成 = 11
 
     }
-     /// <summary>
+    /// <summary>
     /// 顾客单据状态
     /// </summary>
     public enum ReturnMoneyStatus
     {
         无,
-        退款中=11,
-        退款完成=12 
+        退款中 = 11,
+        退款完成 = 12
 
     }
-    
+
+    public enum ReturnType
+    {
+        整单退,
+        部分退
+
+    }
+    public enum ServiceType
+    {
+        退货,
+        换货
+    }
+
+
+
     public enum CommentOrder
-    { 
+    {
         无,
         差评,
         中评,

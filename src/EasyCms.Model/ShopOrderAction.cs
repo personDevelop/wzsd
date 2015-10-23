@@ -32,7 +32,7 @@ namespace EasyCms.Model
 
         private string _Username;
 
-        private string _ActionCode;
+        private ActionEnum _ActionCode;
 
         private DateTime _ActionDate;
 
@@ -127,9 +127,9 @@ namespace EasyCms.Model
         ///  操作编号,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "ActionCode", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ActionCode", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public string ActionCode
+        public ActionEnum ActionCode
         {
             get
             {
@@ -200,7 +200,7 @@ namespace EasyCms.Model
         }
 
         /// <summary>
-        ///  对应退货单ID,
+        ///  对应订单ID,订单对应退货单ID,退货单对应订单ID
         /// </summary>
 
         [DbProperty(MapingColumnName = "ReturnOrderID", DbTypeString = "varchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
@@ -279,7 +279,7 @@ namespace EasyCms.Model
             /// </summary> 
             public PropertyItem ActionName = null;
             /// <summary>
-            /// 对应退货单ID,
+            /// 对应订单ID,订单对应退货单ID,退货单对应订单ID
             /// </summary> 
             public PropertyItem ReturnOrderID = null;
         }

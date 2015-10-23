@@ -237,7 +237,7 @@ namespace EasyCms.Web.API
                 return "订单编号不能为空".FormatError();
             }
 
- 
+
             ManagerUserInfo user = Request.GetAccount();
             string err = null;
             ShopOrder order = new ShopOrderBll().GetOrder(host, id, Request.GetAccountID(false), out   err);
@@ -255,7 +255,7 @@ namespace EasyCms.Web.API
                     ShopOrder._.PayTypeID.FullName, ShopOrder._.ExpressCompanyID.FullName,
                     ShopOrder._.FreightAdjust.FullName,
                     ShopOrder._.FreightActual.FullName, ShopOrder._.Weight
-                    .FullName, ShopOrder._.CostPrice.FullName, 
+                    .FullName, ShopOrder._.CostPrice.FullName,
                     ShopOrder._.PayMoney.FullName, ShopOrder._.OrderPoint.FullName, ShopOrder._.ReturnMoney.FullName,
                     ShopOrder._.SellerID.FullName, ShopOrder._.SellerName.FullName, ShopOrder._.SellerEmail.FullName, ShopOrder._.SellerPhone.FullName, ShopOrder._.SupplierID
                     .FullName, ShopOrder._.SupplierName.FullName, ShopOrder._.OrderIP
@@ -263,7 +263,7 @@ namespace EasyCms.Web.API
                      ShopOrder._.HasDelete.FullName, ShopOrder._.ClientType.FullName, ShopOrder._.PublishDateTime.FullName
                       , ShopOrderItem._.ReturnCount.FullName, ShopOrderItem._.UseJf.FullName, ShopOrderItem._.CostPrice.FullName,
                       ShopOrderItem._.ReturnMoney.FullName, ShopOrderItem._.ProductType.FullName,
-                      ShopOrderItem._.Point.FullName, ShopOrderItem._.SupplierName.FullName, ShopOrderItem._.RegionName.FullName, ShopOrderItem._.ShortDescription.FullName 
+                      ShopOrderItem._.Point.FullName, ShopOrderItem._.SupplierName.FullName, ShopOrderItem._.RegionName.FullName, ShopOrderItem._.ShortDescription.FullName
                        );
             }
 
@@ -337,14 +337,16 @@ namespace EasyCms.Web.API
         {
             string error;
             string accountid = Request.GetAccountID();
-            int isSucess = new ShopReturnOrderBll().ReturnOrder(accountid, ro, out error);
-            switch (isSucess)
+            bool isSucess = new ShopReturnOrderBll().ReturnOrder(accountid, ro, out error);
+            if (isSucess)
             {
-                case 0:
-                    return error.FormatError();
-                default:
-                    return new { Msg = error, Code = isSucess }.FormatObj();
+                return error.FormatError();
             }
+            else
+            {
+                return new { Msg = "已提交退货申请，请您耐心等待", ReturnOrderID = error }.FormatObj();
+            }
+
         }
     }
 }

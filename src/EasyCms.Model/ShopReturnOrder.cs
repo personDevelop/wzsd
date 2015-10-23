@@ -38,13 +38,7 @@ namespace EasyCms.Model
 
         private string _SupplierName;
 
-        private decimal _ActualSalesTotal;
-
-        private decimal _Amount;
-
-        private decimal _AmountAdjusted;
-
-        private int _ServiceType;
+        private ServiceType _ServiceType;
 
         private string _Credential;
 
@@ -52,7 +46,7 @@ namespace EasyCms.Model
 
         private string _ImageUrl;
 
-        private int _ReturnType;
+        private ReturnType _ReturnType;
 
         private int _PickRegionID;
 
@@ -69,8 +63,6 @@ namespace EasyCms.Model
         private string _ShippingModeId;
 
         private string _ShippingModeName;
-
-        private int _ShipOrderNumber;
 
         private string _ExpressCompanyName;
 
@@ -98,11 +90,13 @@ namespace EasyCms.Model
 
         private ReturnMoneyStatus _ReturnMoneyStatus;
 
+        private decimal _RequestReturnMoney;
+
         private decimal _ReturnMoney;
 
         private bool _IsShopReviceGood;
 
-        private decimal _RequestReturnMoney;
+        private bool _HasDelete;
 
         #endregion
 
@@ -243,69 +237,12 @@ namespace EasyCms.Model
         }
 
         /// <summary>
-        ///  实际销售数量,
-        /// </summary>
-
-        [DbProperty(MapingColumnName = "ActualSalesTotal", DbTypeString = "decimal", ColumnIsNull = false, IsUnique = false, ColumnLength = 15, ColumnJingDu = 2, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
-
-        public decimal ActualSalesTotal
-        {
-            get
-            {
-                return this._ActualSalesTotal;
-            }
-            set
-            {
-                this.OnPropertyChanged("ActualSalesTotal", this._ActualSalesTotal, value);
-                this._ActualSalesTotal = value;
-            }
-        }
-
-        /// <summary>
-        ///  请求退货数量,
-        /// </summary>
-
-        [DbProperty(MapingColumnName = "Amount", DbTypeString = "decimal", ColumnIsNull = false, IsUnique = false, ColumnLength = 15, ColumnJingDu = 2, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
-
-        public decimal Amount
-        {
-            get
-            {
-                return this._Amount;
-            }
-            set
-            {
-                this.OnPropertyChanged("Amount", this._Amount, value);
-                this._Amount = value;
-            }
-        }
-
-        /// <summary>
-        ///  批准退货数量,
-        /// </summary>
-
-        [DbProperty(MapingColumnName = "AmountAdjusted", DbTypeString = "decimal", ColumnIsNull = false, IsUnique = false, ColumnLength = 15, ColumnJingDu = 2, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
-
-        public decimal AmountAdjusted
-        {
-            get
-            {
-                return this._AmountAdjusted;
-            }
-            set
-            {
-                this.OnPropertyChanged("AmountAdjusted", this._AmountAdjusted, value);
-                this._AmountAdjusted = value;
-            }
-        }
-
-        /// <summary>
         ///  服务类型,0退货，1换货
         /// </summary>
 
         [DbProperty(MapingColumnName = "ServiceType", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public int ServiceType
+        public ServiceType ServiceType
         {
             get
             {
@@ -381,7 +318,7 @@ namespace EasyCms.Model
 
         [DbProperty(MapingColumnName = "ReturnType", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public int ReturnType
+        public ReturnType ReturnType
         {
             get
             {
@@ -543,25 +480,6 @@ namespace EasyCms.Model
             {
                 this.OnPropertyChanged("ShippingModeName", this._ShippingModeName, value);
                 this._ShippingModeName = value;
-            }
-        }
-
-        /// <summary>
-        ///  订单数量,
-        /// </summary>
-
-        [DbProperty(MapingColumnName = "ShipOrderNumber", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
-
-        public int ShipOrderNumber
-        {
-            get
-            {
-                return this._ShipOrderNumber;
-            }
-            set
-            {
-                this.OnPropertyChanged("ShipOrderNumber", this._ShipOrderNumber, value);
-                this._ShipOrderNumber = value;
             }
         }
 
@@ -813,6 +731,25 @@ namespace EasyCms.Model
         }
 
         /// <summary>
+        ///  应退金额,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "RequestReturnMoney", DbTypeString = "decimal", ColumnIsNull = false, IsUnique = false, ColumnLength = 15, ColumnJingDu = 2, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public decimal RequestReturnMoney
+        {
+            get
+            {
+                return this._RequestReturnMoney;
+            }
+            set
+            {
+                this.OnPropertyChanged("RequestReturnMoney", this._RequestReturnMoney, value);
+                this._RequestReturnMoney = value;
+            }
+        }
+
+        /// <summary>
         ///  退款金额,
         /// </summary>
 
@@ -851,21 +788,21 @@ namespace EasyCms.Model
         }
 
         /// <summary>
-        ///  应退金额,
+        ///  客户端删除,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "RequestReturnMoney", DbTypeString = "decimal", ColumnIsNull = false, IsUnique = false, ColumnLength = 15, ColumnJingDu = 2, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "HasDelete", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public decimal RequestReturnMoney
+        public bool HasDelete
         {
             get
             {
-                return this._RequestReturnMoney;
+                return this._HasDelete;
             }
             set
             {
-                this.OnPropertyChanged("RequestReturnMoney", this._RequestReturnMoney, value);
-                this._RequestReturnMoney = value;
+                this.OnPropertyChanged("HasDelete", this._HasDelete, value);
+                this._HasDelete = value;
             }
         }
 
@@ -890,12 +827,6 @@ namespace EasyCms.Model
                 SupplierId = new PropertyItem("SupplierId", tableName);
 
                 SupplierName = new PropertyItem("SupplierName", tableName);
-
-                ActualSalesTotal = new PropertyItem("ActualSalesTotal", tableName);
-
-                Amount = new PropertyItem("Amount", tableName);
-
-                AmountAdjusted = new PropertyItem("AmountAdjusted", tableName);
 
                 ServiceType = new PropertyItem("ServiceType", tableName);
 
@@ -923,8 +854,6 @@ namespace EasyCms.Model
 
                 ShippingModeName = new PropertyItem("ShippingModeName", tableName);
 
-                ShipOrderNumber = new PropertyItem("ShipOrderNumber", tableName);
-
                 ExpressCompanyName = new PropertyItem("ExpressCompanyName", tableName);
 
                 ExpressCompanyAbb = new PropertyItem("ExpressCompanyAbb", tableName);
@@ -951,11 +880,13 @@ namespace EasyCms.Model
 
                 ReturnMoneyStatus = new PropertyItem("ReturnMoneyStatus", tableName);
 
+                RequestReturnMoney = new PropertyItem("RequestReturnMoney", tableName);
+
                 ReturnMoney = new PropertyItem("ReturnMoney", tableName);
 
                 IsShopReviceGood = new PropertyItem("IsShopReviceGood", tableName);
 
-                RequestReturnMoney = new PropertyItem("RequestReturnMoney", tableName);
+                HasDelete = new PropertyItem("HasDelete", tableName);
 
 
             }
@@ -987,18 +918,6 @@ namespace EasyCms.Model
             /// 商家名称,
             /// </summary> 
             public PropertyItem SupplierName = null;
-            /// <summary>
-            /// 实际销售数量,
-            /// </summary> 
-            public PropertyItem ActualSalesTotal = null;
-            /// <summary>
-            /// 请求退货数量,
-            /// </summary> 
-            public PropertyItem Amount = null;
-            /// <summary>
-            /// 批准退货数量,
-            /// </summary> 
-            public PropertyItem AmountAdjusted = null;
             /// <summary>
             /// 服务类型,0退货，1换货
             /// </summary> 
@@ -1052,10 +971,6 @@ namespace EasyCms.Model
             /// </summary> 
             public PropertyItem ShippingModeName = null;
             /// <summary>
-            /// 订单数量,
-            /// </summary> 
-            public PropertyItem ShipOrderNumber = null;
-            /// <summary>
             /// 快递公司名称,
             /// </summary> 
             public PropertyItem ExpressCompanyName = null;
@@ -1108,6 +1023,10 @@ namespace EasyCms.Model
             /// </summary> 
             public PropertyItem ReturnMoneyStatus = null;
             /// <summary>
+            /// 应退金额,
+            /// </summary> 
+            public PropertyItem RequestReturnMoney = null;
+            /// <summary>
             /// 退款金额,
             /// </summary> 
             public PropertyItem ReturnMoney = null;
@@ -1116,9 +1035,9 @@ namespace EasyCms.Model
             /// </summary> 
             public PropertyItem IsShopReviceGood = null;
             /// <summary>
-            /// 应退金额,
+            /// 客户端删除,
             /// </summary> 
-            public PropertyItem RequestReturnMoney = null;
+            public PropertyItem HasDelete = null;
         }
         #endregion
     }

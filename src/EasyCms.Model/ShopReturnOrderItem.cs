@@ -24,7 +24,7 @@ namespace EasyCms.Model
 
         #region 私有变量
 
-        private string _ItemId;
+        private string _ID;
 
         private string _ReturnOrderId;
 
@@ -44,7 +44,7 @@ namespace EasyCms.Model
 
         private decimal _SaleCount;
 
-        private int _RequestQuantity;
+        private decimal _RequestQuantity;
 
         private decimal _ReturnCount;
 
@@ -60,31 +60,27 @@ namespace EasyCms.Model
 
         private decimal _Weight;
 
-        private decimal _Deduct;
-
-        private int _Points;
-
         #endregion
 
         #region 属性
 
         /// <summary>
-        ///  主键,
+        ///  主键ID,
         /// </summary>
 
         [PrimaryKey]
-        [DbProperty(MapingColumnName = "ItemId", DbTypeString = "varchar", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = true, StepSize = 1, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ID", DbTypeString = "varchar", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = true, StepSize = 1, ColumnDefaultValue = "")]
 
-        public string ItemId
+        public string ID
         {
             get
             {
-                return this._ItemId;
+                return this._ID;
             }
             set
             {
-                this.OnPropertyChanged("ItemId", this._ItemId, value);
-                this._ItemId = value;
+                this.OnPropertyChanged("ID", this._ID, value);
+                this._ID = value;
             }
         }
 
@@ -263,9 +259,9 @@ namespace EasyCms.Model
         ///  请求退货数量,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "RequestQuantity", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "RequestQuantity", DbTypeString = "decimal", ColumnIsNull = false, IsUnique = false, ColumnLength = 15, ColumnJingDu = 2, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public int RequestQuantity
+        public decimal RequestQuantity
         {
             get
             {
@@ -411,44 +407,6 @@ namespace EasyCms.Model
             }
         }
 
-        /// <summary>
-        ///  扣除金额（退货时商家一般会扣钱）,
-        /// </summary>
-
-        [DbProperty(MapingColumnName = "Deduct", DbTypeString = "decimal", ColumnIsNull = false, IsUnique = false, ColumnLength = 15, ColumnJingDu = 2, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
-
-        public decimal Deduct
-        {
-            get
-            {
-                return this._Deduct;
-            }
-            set
-            {
-                this.OnPropertyChanged("Deduct", this._Deduct, value);
-                this._Deduct = value;
-            }
-        }
-
-        /// <summary>
-        ///  扣掉积分,
-        /// </summary>
-
-        [DbProperty(MapingColumnName = "Points", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
-
-        public int Points
-        {
-            get
-            {
-                return this._Points;
-            }
-            set
-            {
-                this.OnPropertyChanged("Points", this._Points, value);
-                this._Points = value;
-            }
-        }
-
         #endregion
 
         #region 列定义
@@ -457,7 +415,7 @@ namespace EasyCms.Model
             public Column(string tableName)
             {
 
-                ItemId = new PropertyItem("ItemId", tableName);
+                ID = new PropertyItem("ID", tableName);
 
                 ReturnOrderId = new PropertyItem("ReturnOrderId", tableName);
 
@@ -493,16 +451,12 @@ namespace EasyCms.Model
 
                 Weight = new PropertyItem("Weight", tableName);
 
-                Deduct = new PropertyItem("Deduct", tableName);
-
-                Points = new PropertyItem("Points", tableName);
-
 
             }
             /// <summary>
-            /// 主键,
+            /// 主键ID,
             /// </summary> 
-            public PropertyItem ItemId = null;
+            public PropertyItem ID = null;
             /// <summary>
             /// 退货单ID,
             /// </summary> 
@@ -571,17 +525,8 @@ namespace EasyCms.Model
             /// 重量,
             /// </summary> 
             public PropertyItem Weight = null;
-            /// <summary>
-            /// 扣除金额（退货时商家一般会扣钱）,
-            /// </summary> 
-            public PropertyItem Deduct = null;
-            /// <summary>
-            /// 扣掉积分,
-            /// </summary> 
-            public PropertyItem Points = null;
         }
         #endregion
     }
-
 
 }

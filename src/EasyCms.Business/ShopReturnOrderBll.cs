@@ -43,7 +43,7 @@ namespace EasyCms.Business
             return Dal.GetReturnDetail(returnOrderNo);
         }
 
-        public int ReturnOrder(string accountid, ShopReturnOrder ro, out string error)
+        public bool ReturnOrder(string accountid, ShopReturnOrder ro, out string error)
         {
             return Dal.ReturnOrder(accountid,   ro, out   error);
           

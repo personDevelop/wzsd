@@ -636,7 +636,7 @@ namespace EasyCms.Dal
                 {
 
                     ID = Guid.NewGuid().ToString(),
-                    ActionCode = ((int)ActionEnum.创建订单).ToString(),
+                    ActionCode = ActionEnum.创建订单,
                     ActionName = ActionEnum.创建订单.ToString(),
                     OrderId = activeOrder.ID,
                     ActionDate = now
@@ -680,7 +680,7 @@ namespace EasyCms.Dal
                 {
 
                     ID = Guid.NewGuid().ToString(),
-                    ActionCode = ((int)ActionEnum.创建订单).ToString(),
+                    ActionCode = ActionEnum.创建订单,
                     ActionName = ActionEnum.创建订单.ToString(),
                     OrderId = orderNum,
                     ActionDate = now
@@ -1361,7 +1361,7 @@ namespace EasyCms.Dal
                         {
 
                             ID = Guid.NewGuid().ToString(),
-                            ActionCode = ((int)actionID).ToString(),
+                            ActionCode = actionID,
                             ActionName = actionID.ToString(),
                             OrderId = item,
                             UserId = EasyCms.Session.CmsSession.GetUserID(),
@@ -1599,7 +1599,7 @@ namespace EasyCms.Dal
                 {
 
                     ID = Guid.NewGuid().ToString(),
-                    ActionCode = ((int)ActionEnum.付款).ToString(),
+                    ActionCode = ActionEnum.付款,
                     ActionName = ActionEnum.付款.ToString(),
                     Username = "支付宝",
                     OrderId = orderID,
@@ -1691,7 +1691,7 @@ namespace EasyCms.Dal
               {
 
                   ID = Guid.NewGuid().ToString(),
-                  ActionCode = ((int)ae).ToString(),
+                  ActionCode = ae,
                   ActionName = ae.ToString(),
                   OrderId = orderid,
                   ActionDate = DateTime.Now,
@@ -1733,7 +1733,7 @@ namespace EasyCms.Dal
                 {
 
                     ID = Guid.NewGuid().ToString(),
-                    ActionCode = ((int)ActionEnum.付款).ToString(),
+                    ActionCode = ActionEnum.付款,
                     ActionName = ActionEnum.付款.ToString(),
                     OrderId = orderID,
                     ActionDate = DateTime.Now

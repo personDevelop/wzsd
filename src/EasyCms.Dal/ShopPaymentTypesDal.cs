@@ -199,7 +199,7 @@ namespace EasyCms.Dal
                             {
 
                                 ID = Guid.NewGuid().ToString(),
-                                ActionCode = ((int)ActionEnum.付款).ToString(),
+                                ActionCode = ActionEnum.付款,
                                 ActionName = ActionEnum.付款.ToString(),
                                 Username = "支付宝",
                                 OrderId = payPara.OrderNo,

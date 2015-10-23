@@ -104,7 +104,7 @@ namespace EasyCms.Model
 
         private decimal _ReturnMoney;
 
-        private int _RefundStatus;
+        private UserDjStatus _RefundStatus;
 
         private bool _IsInvoice;
 
@@ -921,7 +921,7 @@ namespace EasyCms.Model
 
         [DbProperty(MapingColumnName = "RefundStatus", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public int RefundStatus
+        public UserDjStatus RefundStatus
         {
             get
             {
