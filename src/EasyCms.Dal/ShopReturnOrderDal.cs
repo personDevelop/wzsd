@@ -49,6 +49,30 @@ namespace EasyCms.Dal
         {
             return Dal.From<ShopReturnOrderItem>().Where(ShopReturnOrderItem._.ReturnOrderId == returnOrderNo).ToDataTable();
         }
+
+        public int ReturnOrder(string accountid, ShopReturnOrder ro, out string error)
+        {
+            int result = 0;
+            error = string.Empty;
+            //先获取其订单状态
+            ShopOrder order = Dal.Find<ShopOrder>(ro.OrderId);
+            if (order.MemberID != accountid)
+            {
+                error = "不是您的订单，您不能退回";
+
+            }
+            else
+            {
+                OrderStatus os = (OrderStatus)order.OrderStatus;
+                if (os != OrderStatus.完成 || os != OrderStatus.已发货 || os != OrderStatus.已收货)
+                {
+                    error = "您的订单状态为"+os+"，您不能退回";
+                }else
+                {}
+
+            }
+            return result;
+        }
     }
 
 

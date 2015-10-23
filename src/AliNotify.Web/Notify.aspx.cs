@@ -14,13 +14,14 @@ namespace AliNotify.Web
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+
+            AliAsynchNotify notify = null;
+            NotifyUtil aliNotify = null;
+            string returnStr = "";
+            string Result = "";
+            string content = "";
             try
             {
-                AliAsynchNotify notify = null;
-                NotifyUtil aliNotify = null;
-                string returnStr = "";
-                string Result = "";
-                string content = "";
                 SortedDictionary<string, string> sPara = GetRequestPost(out   notify, out content);
                 if (sPara.Count > 0)//判断是否有带返回参数
                 {
@@ -124,6 +125,7 @@ namespace AliNotify.Web
             catch (Exception ex)
             {
                 new LogBll().WriteException(ex);
+                new LogBll().WriteException(content);
                 throw;
             }
         }

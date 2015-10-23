@@ -44,8 +44,6 @@ namespace EasyCms.Model
 
         private decimal _AmountAdjusted;
 
-        private decimal _AmountActual;
-
         private int _ServiceType;
 
         private string _Credential;
@@ -103,6 +101,8 @@ namespace EasyCms.Model
         private decimal _ReturnMoney;
 
         private bool _IsShopReviceGood;
+
+        private decimal _RequestReturnMoney;
 
         #endregion
 
@@ -262,7 +262,7 @@ namespace EasyCms.Model
         }
 
         /// <summary>
-        ///  数量,
+        ///  请求退货数量,
         /// </summary>
 
         [DbProperty(MapingColumnName = "Amount", DbTypeString = "decimal", ColumnIsNull = false, IsUnique = false, ColumnLength = 15, ColumnJingDu = 2, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
@@ -281,7 +281,7 @@ namespace EasyCms.Model
         }
 
         /// <summary>
-        ///  调整数量,
+        ///  批准退货数量,
         /// </summary>
 
         [DbProperty(MapingColumnName = "AmountAdjusted", DbTypeString = "decimal", ColumnIsNull = false, IsUnique = false, ColumnLength = 15, ColumnJingDu = 2, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
@@ -296,25 +296,6 @@ namespace EasyCms.Model
             {
                 this.OnPropertyChanged("AmountAdjusted", this._AmountAdjusted, value);
                 this._AmountAdjusted = value;
-            }
-        }
-
-        /// <summary>
-        ///  实际数量,
-        /// </summary>
-
-        [DbProperty(MapingColumnName = "AmountActual", DbTypeString = "decimal", ColumnIsNull = false, IsUnique = false, ColumnLength = 15, ColumnJingDu = 2, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
-
-        public decimal AmountActual
-        {
-            get
-            {
-                return this._AmountActual;
-            }
-            set
-            {
-                this.OnPropertyChanged("AmountActual", this._AmountActual, value);
-                this._AmountActual = value;
             }
         }
 
@@ -869,6 +850,25 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  应退金额,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "RequestReturnMoney", DbTypeString = "decimal", ColumnIsNull = false, IsUnique = false, ColumnLength = 15, ColumnJingDu = 2, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public decimal RequestReturnMoney
+        {
+            get
+            {
+                return this._RequestReturnMoney;
+            }
+            set
+            {
+                this.OnPropertyChanged("RequestReturnMoney", this._RequestReturnMoney, value);
+                this._RequestReturnMoney = value;
+            }
+        }
+
         #endregion
 
         #region 列定义
@@ -896,8 +896,6 @@ namespace EasyCms.Model
                 Amount = new PropertyItem("Amount", tableName);
 
                 AmountAdjusted = new PropertyItem("AmountAdjusted", tableName);
-
-                AmountActual = new PropertyItem("AmountActual", tableName);
 
                 ServiceType = new PropertyItem("ServiceType", tableName);
 
@@ -957,6 +955,8 @@ namespace EasyCms.Model
 
                 IsShopReviceGood = new PropertyItem("IsShopReviceGood", tableName);
 
+                RequestReturnMoney = new PropertyItem("RequestReturnMoney", tableName);
+
 
             }
             /// <summary>
@@ -992,17 +992,13 @@ namespace EasyCms.Model
             /// </summary> 
             public PropertyItem ActualSalesTotal = null;
             /// <summary>
-            /// 数量,
+            /// 请求退货数量,
             /// </summary> 
             public PropertyItem Amount = null;
             /// <summary>
-            /// 调整数量,
+            /// 批准退货数量,
             /// </summary> 
             public PropertyItem AmountAdjusted = null;
-            /// <summary>
-            /// 实际数量,
-            /// </summary> 
-            public PropertyItem AmountActual = null;
             /// <summary>
             /// 服务类型,0退货，1换货
             /// </summary> 
@@ -1119,8 +1115,19 @@ namespace EasyCms.Model
             /// 是否需要商家取货,
             /// </summary> 
             public PropertyItem IsShopReviceGood = null;
+            /// <summary>
+            /// 应退金额,
+            /// </summary> 
+            public PropertyItem RequestReturnMoney = null;
         }
         #endregion
+    }
+
+    public partial class ShopReturnOrder
+    {
+
+        [NotDbCol]
+        public List<ShopReturnOrderItem> OrderItems { get; set; }
     }
 
 }

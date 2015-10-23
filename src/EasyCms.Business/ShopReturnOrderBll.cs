@@ -24,7 +24,7 @@ namespace EasyCms.Business
             return Dal.Save(item);
         }
 
-       
+
 
 
 
@@ -35,12 +35,18 @@ namespace EasyCms.Business
 
         public DataTable GetList(int pageIndex, int pagesize, WhereClip where, ref int recordCount)
         {
-            return Dal.GetList(pageIndex,   pagesize,   where, ref   recordCount);
+            return Dal.GetList(pageIndex, pagesize, where, ref   recordCount);
         }
 
         public DataTable GetReturnDetail(string returnOrderNo)
         {
             return Dal.GetReturnDetail(returnOrderNo);
+        }
+
+        public int ReturnOrder(string accountid, ShopReturnOrder ro, out string error)
+        {
+            return Dal.ReturnOrder(accountid,   ro, out   error);
+          
         }
     }
 }

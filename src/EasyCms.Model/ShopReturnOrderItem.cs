@@ -42,7 +42,11 @@ namespace EasyCms.Model
 
         private string _Description;
 
-        private int _Quantity;
+        private decimal _SaleCount;
+
+        private int _RequestQuantity;
+
+        private decimal _ReturnCount;
 
         private decimal _CostPrice;
 
@@ -237,21 +241,59 @@ namespace EasyCms.Model
         }
 
         /// <summary>
-        ///  数量,
+        ///  购买数量,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "Quantity", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "SaleCount", DbTypeString = "decimal", ColumnIsNull = false, IsUnique = false, ColumnLength = 15, ColumnJingDu = 2, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public int Quantity
+        public decimal SaleCount
         {
             get
             {
-                return this._Quantity;
+                return this._SaleCount;
             }
             set
             {
-                this.OnPropertyChanged("Quantity", this._Quantity, value);
-                this._Quantity = value;
+                this.OnPropertyChanged("SaleCount", this._SaleCount, value);
+                this._SaleCount = value;
+            }
+        }
+
+        /// <summary>
+        ///  请求退货数量,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "RequestQuantity", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public int RequestQuantity
+        {
+            get
+            {
+                return this._RequestQuantity;
+            }
+            set
+            {
+                this.OnPropertyChanged("RequestQuantity", this._RequestQuantity, value);
+                this._RequestQuantity = value;
+            }
+        }
+
+        /// <summary>
+        ///  批准退货数量,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "ReturnCount", DbTypeString = "decimal", ColumnIsNull = false, IsUnique = false, ColumnLength = 15, ColumnJingDu = 2, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public decimal ReturnCount
+        {
+            get
+            {
+                return this._ReturnCount;
+            }
+            set
+            {
+                this.OnPropertyChanged("ReturnCount", this._ReturnCount, value);
+                this._ReturnCount = value;
             }
         }
 
@@ -433,7 +475,11 @@ namespace EasyCms.Model
 
                 Description = new PropertyItem("Description", tableName);
 
-                Quantity = new PropertyItem("Quantity", tableName);
+                SaleCount = new PropertyItem("SaleCount", tableName);
+
+                RequestQuantity = new PropertyItem("RequestQuantity", tableName);
+
+                ReturnCount = new PropertyItem("ReturnCount", tableName);
 
                 CostPrice = new PropertyItem("CostPrice", tableName);
 
@@ -490,9 +536,17 @@ namespace EasyCms.Model
             /// </summary> 
             public PropertyItem Description = null;
             /// <summary>
-            /// 数量,
+            /// 购买数量,
             /// </summary> 
-            public PropertyItem Quantity = null;
+            public PropertyItem SaleCount = null;
+            /// <summary>
+            /// 请求退货数量,
+            /// </summary> 
+            public PropertyItem RequestQuantity = null;
+            /// <summary>
+            /// 批准退货数量,
+            /// </summary> 
+            public PropertyItem ReturnCount = null;
             /// <summary>
             /// 成本价,
             /// </summary> 
@@ -528,5 +582,6 @@ namespace EasyCms.Model
         }
         #endregion
     }
+
 
 }

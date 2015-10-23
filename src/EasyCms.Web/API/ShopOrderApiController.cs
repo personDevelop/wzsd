@@ -333,6 +333,18 @@ namespace EasyCms.Web.API
             return err.Format(isSucess);
         }
 
-
+        public HttpResponseMessage ReturnOrder([FromBody] ShopReturnOrder ro)
+        {
+            string error;
+            string accountid = Request.GetAccountID();
+            int isSucess = new ShopReturnOrderBll().ReturnOrder(accountid, ro, out error);
+            switch (isSucess)
+            {
+                case 0:
+                    return error.FormatError();
+                default:
+                    return new { Msg = error, Code = isSucess }.FormatObj();
+            }
+        }
     }
 }
