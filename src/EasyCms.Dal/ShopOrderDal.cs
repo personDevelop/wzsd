@@ -1223,8 +1223,8 @@ namespace EasyCms.Dal
                             break;
                         case ActionEnum.签收:
                             int[] NotCanQSStatus = new int[] { (int)OrderStatus.完成, (int)OrderStatus.发起退货申请,
-                                (int)OrderStatus.等待商家退货确认, (int)OrderStatus.拒收, (int)OrderStatus.取消订单, (int)OrderStatus.商家同意退换
-                            , (int)OrderStatus.商家同意退换, (int)OrderStatus.商家已收货等待退款, (int)OrderStatus.申请取消订单, (int)OrderStatus.退货完成, (int)OrderStatus.退款完成, (int)OrderStatus.已收货, (int)OrderStatus.作废};
+                                (int)OrderStatus.退货完成, (int)OrderStatus.拒收, (int)OrderStatus.取消订单, (int)OrderStatus.商家不同意退换
+                            , (int)OrderStatus.退货取货中, (int)OrderStatus.商家已收货等待退款, (int)OrderStatus.申请取消订单, (int)OrderStatus.退货完成, (int)OrderStatus.取消订单处理中, (int)OrderStatus.已收货, (int)OrderStatus.作废,(int)OrderStatus. 取消订单};
 
 
                             if (NotCanQSStatus.Contains(order.OrderStatus))
@@ -1321,9 +1321,8 @@ namespace EasyCms.Dal
                             break;
                         case ActionEnum.作废:
                             int[] CanzfStatus = new int[] {  
-                                (int)OrderStatus.拒收, (int)OrderStatus.取消订单 , (int)OrderStatus.退货完成, (int)OrderStatus.退款完成, (int)OrderStatus.已发货};
-
-
+                                (int)OrderStatus.拒收, (int)OrderStatus.取消订单 , (int)OrderStatus.退货完成 };
+                             
                             if (!CanzfStatus.Contains(order.OrderStatus))
                             {
                                 msg = "订单状态为【" + (OrderStatus)(order.OrderStatus) + "】,不能作废";
@@ -1575,60 +1574,47 @@ namespace EasyCms.Dal
 
             ShopOrder order = Dal.From<ShopOrder>().Where(ShopOrder._.ID == orderID).Select(ShopOrder._.ID, ShopOrder._.PayStatus, ShopOrder._.PayMoney,
                 ShopOrder._.OrderStatus).ToFirst<ShopOrder>();
-            order.PayStatus = (int)PayStatus.已付款;
-            OrderStatus oldOrderStatus = EnumPhrase.Phrase<OrderStatus>(order.OrderStatus);
-            switch (oldOrderStatus)
+            if (order.PayStatus == (int)PayStatus.未付款)
             {
-                case OrderStatus.等待付款:
-                    order.OrderStatus = (int)OrderStatus.等待商家确认;
-                    break;
-                case OrderStatus.等待商家确认:
-                case OrderStatus.等待商家发货:
-                case OrderStatus.已发货:
-                case OrderStatus.已收货:
-                case OrderStatus.拒收:
-                case OrderStatus.作废:
-                case OrderStatus.发起退货申请:
-                case OrderStatus.等待商家退货确认:
-                case OrderStatus.商家不同意退换:
-                case OrderStatus.商家同意退换:
-                case OrderStatus.退货完成:
-                case OrderStatus.商家已收货等待退款:
-                case OrderStatus.退款完成:
-                case OrderStatus.申请取消订单:
-                case OrderStatus.取消订单:
-                case OrderStatus.完成:
-                    break;
-                default:
-                    break;
-            }
+                order.PayStatus = (int)PayStatus.已付款;
+                OrderStatus oldOrderStatus = EnumPhrase.Phrase<OrderStatus>(order.OrderStatus);
+                switch (oldOrderStatus)
+                {
+                    case OrderStatus.等待付款:
+                    case OrderStatus.等待商家确认:
+                        order.OrderStatus = (int)OrderStatus.等待商家发货;
+                        break;
+                    default:
+                        break;
+                }
 
-            decimal payMoney = 0;
-            if (decimal.TryParse(payJe, out payMoney))
-            {
-                order.PayMoney = payMoney;
-            }
-            Dal.Submit(order);
-            //生成订单动作日志
-            ShopOrderAction orderAction = new ShopOrderAction()
-            {
+                decimal payMoney = 0;
+                if (decimal.TryParse(payJe, out payMoney))
+                {
+                    order.PayMoney = payMoney;
+                }
+                Dal.Submit(order);
+                //生成订单动作日志
+                ShopOrderAction orderAction = new ShopOrderAction()
+                {
 
-                ID = Guid.NewGuid().ToString(),
-                ActionCode = ((int)ActionEnum.付款).ToString(),
-                ActionName = ActionEnum.付款.ToString(),
-                Username = "支付宝",
-                OrderId = orderID,
-                ActionDate = DateTime.Now
-            };
-            Dal.Submit(orderAction);
+                    ID = Guid.NewGuid().ToString(),
+                    ActionCode = ((int)ActionEnum.付款).ToString(),
+                    ActionName = ActionEnum.付款.ToString(),
+                    Username = "支付宝",
+                    OrderId = orderID,
+                    ActionDate = DateTime.Now
+                };
+                Dal.Submit(orderAction);
+            }
         }
 
         public int CancleOrder(string accountid, string orderid, out string error)
         {
             int result = 1;
-            error = string.Empty;
+            error = "取消成功";
 
-            ShopOrder order = Dal.From<ShopOrder>().Select(ShopOrder._.ID, ShopOrder._.PayStatus, ShopOrder._.ShipStatus, ShopOrder._.MemberID,
+            ShopOrder order = Dal.From<ShopOrder>().Select(ShopOrder._.ID, ShopOrder._.PayTypeID, ShopOrder._.PayStatus, ShopOrder._.ShipStatus, ShopOrder._.MemberID,
                 ShopOrder._.RefundStatus, ShopOrder._.OrderStatus, ShopOrder._.IsReqCancle)
                   .Where(ShopOrder._.ID == orderid).ToFirst<ShopOrder>();
 
@@ -1639,41 +1625,36 @@ namespace EasyCms.Dal
             }
             else
             {
-                ShipStatus ss = (ShipStatus)order.ShipStatus;
-                if (ss != ShipStatus.等待商家发货)
+                OrderStatus os = (OrderStatus)order.OrderStatus;
+                switch (os)
                 {
-                    error = "已提交客服人工处理,您也可以联系客服，给您带来不便敬请谅解";
+                    case OrderStatus.等待付款:
+                    case OrderStatus.等待商家确认:
+                    case OrderStatus.等待商家发货:
 
-                    result = 2;
-                }
-                else
-                {
-                    OrderStatus os = (OrderStatus)order.OrderStatus;
-                    switch (os)
-                    {
-                        case OrderStatus.等待付款:
-                        case OrderStatus.等待商家发货:
-                        case OrderStatus.等待商家确认:
-                            break;
-                        case OrderStatus.已发货:
-                        case OrderStatus.已收货:
-                        case OrderStatus.拒收:
-                        case OrderStatus.作废:
-                        case OrderStatus.完成:
-                        case OrderStatus.发起退货申请:
-                        case OrderStatus.等待商家退货确认:
-                        case OrderStatus.商家不同意退换:
-                        case OrderStatus.商家同意退换:
-                        case OrderStatus.退货完成:
-                        case OrderStatus.商家已收货等待退款:
-                        case OrderStatus.退款完成:
-                        case OrderStatus.申请取消订单:
-                        case OrderStatus.取消订单:
-                        default:
-                            error = "已提交客服人工处理,您也可以联系客服，给您带来不便敬请谅解";
-                            result = 2;
-                            break;
-                    }
+                        break;
+                    case OrderStatus.已发货:
+                    case OrderStatus.已收货:
+                    case OrderStatus.取消退货:
+                        error = "已提交客服人工处理,您也可以联系客服，给您带来不便敬请谅解";
+                        result = 2;
+                        break;
+                    case OrderStatus.拒收:
+                    case OrderStatus.作废:
+                    case OrderStatus.发起退货申请:
+                    case OrderStatus.商家不同意退换:
+                    case OrderStatus.退货取货中:
+                    case OrderStatus.商家已收货等待退款:
+                    case OrderStatus.退货完成:
+                    case OrderStatus.申请取消订单:
+                    case OrderStatus.取消订单处理中:
+                    case OrderStatus.取消订单:
+                    case OrderStatus.完成:
+                        error = "您的订单状态不能发起取消订单操作,您也可以联系客服，给您带来不便敬请谅解";
+                        result = 0;
+                        break;
+                    default:
+                        break;
                 }
             }
             if (result == 1)
@@ -1702,7 +1683,6 @@ namespace EasyCms.Dal
             if (result > 0)
             {
                 ActionEnum ae = ActionEnum.取消订单;
-
                 if (result == 2)
                 {
                     ae = ActionEnum.申请取消订单;
