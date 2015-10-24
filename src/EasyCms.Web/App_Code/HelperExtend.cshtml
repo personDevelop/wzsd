@@ -861,6 +861,7 @@
 {
     string dropid = "jqxDropDownList" + code;
     string defualtid = "defualtid" + code;
+   string defualtPath= new EasyCms.Business.AdministrativeRegionsBll().GetPathByDefault(defaultval);
     <dl>
         <dt>
             @MVCExtention.ExtendHtmlInput.MvcHelper.Label(code, name)
@@ -868,23 +869,24 @@
         <dd>
         <dd>
             <input type="hidden" id="@code" name="@code" value="@defaultval">
-            <input type="hidden" id="@defualtid" value="@defaultval">
+            <input type="hidden" id="@defualtid" value="@defualtPath">
             <div style='float: left;' id='@dropid'>
             </div>
             <script type="text/javascript">
                 var url = "@MVCExtention.ExtendHtmlInput.MvcUrl.RouteUrl("ApiWithWeb", new { controller = "Region", action = "GetChildRegion", })";
+                var source =
+                {
+                    datatype: "json",
+                    datafields: [
+                        { name: '@valuemember' },
+                        { name: '@displaymember' }
+                    ],
+                    id: 'ID',
+                    url: url + "/1"
+                };
                 $(document).ready(function () {
 
-                    var source =
-                    {
-                        datatype: "json",
-                        datafields: [
-                            { name: '@valuemember' },
-                            { name: '@displaymember' }
-                        ],
-                        id: 'ID',
-                        url: url + "/1"
-                    };
+                
                      
                     var dataAdapter = new $.jqx.dataAdapter(source);
                     $("#" + "@dropid").jqxDropDownList({ source: dataAdapter, displayMember: "@displaymember", valueMember: "@valuemember", width: 'auto', height: '25px' });
@@ -920,6 +922,11 @@
                             $("#" + "@defualtid").val("");
                         }
                         //设置当前dropdownlist currentval
+                        if (curentVal) {
+                            var item =  $("#"+event.target.id).jqxDropDownList('getItemByValue', curentVal);
+                            $("#"+event.target.id).jqxDropDownList('selectItem', item);
+                        }
+                       
                     }
 
                 }
@@ -930,13 +937,13 @@
                         var categroy = item.value;
                         $("#" + "@code").val(item.value); //赋值
                         $(event.currentTarget).nextAll().remove();//先删除其子类
-                        createChid(categroy);
+                        createChid(categroy,event);
                     }
                 }
-                function createChid(categroy) { //创建其子类
+                function createChid(categroy,event) { //创建其子类
                     //同时生成dropdownlist
                     //$.getJSON(url, { id: categroy }, function () {
-                    var guid = "dropdown" + categroy;
+                    var guid = "@dropid" + categroy;
                     $(event.currentTarget).parent().append("<div style='float: left;' id='" + guid + "'> </div>");
                     source.url = url + "/" + categroy;
                     var dataAdapter1 = new $.jqx.dataAdapter(source);

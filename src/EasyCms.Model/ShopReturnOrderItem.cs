@@ -60,6 +60,8 @@ namespace EasyCms.Model
 
         private decimal _Weight;
 
+        private string _ProductCode;
+
         #endregion
 
         #region 属性
@@ -161,7 +163,7 @@ namespace EasyCms.Model
         }
 
         /// <summary>
-        ///  商品ISKU,
+        ///  商品SKU,
         /// </summary>
 
         [DbProperty(MapingColumnName = "SKUID", DbTypeString = "varchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
@@ -407,6 +409,25 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  商品编号,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "ProductCode", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string ProductCode
+        {
+            get
+            {
+                return this._ProductCode;
+            }
+            set
+            {
+                this.OnPropertyChanged("ProductCode", this._ProductCode, value);
+                this._ProductCode = value;
+            }
+        }
+
         #endregion
 
         #region 列定义
@@ -451,6 +472,8 @@ namespace EasyCms.Model
 
                 Weight = new PropertyItem("Weight", tableName);
 
+                ProductCode = new PropertyItem("ProductCode", tableName);
+
 
             }
             /// <summary>
@@ -474,7 +497,7 @@ namespace EasyCms.Model
             /// </summary> 
             public PropertyItem ProductId = null;
             /// <summary>
-            /// 商品ISKU,
+            /// 商品SKU,
             /// </summary> 
             public PropertyItem SKUID = null;
             /// <summary>
@@ -525,8 +548,13 @@ namespace EasyCms.Model
             /// 重量,
             /// </summary> 
             public PropertyItem Weight = null;
+            /// <summary>
+            /// 商品编号,
+            /// </summary> 
+            public PropertyItem ProductCode = null;
         }
         #endregion
     }
+
 
 }

@@ -45,9 +45,36 @@ namespace EasyCms.Dal
 
 
 
-        public DataTable GetReturnDetail(string returnOrderNo)
+        public DataTable GetReturnDetail(string host, string returnOrderNo)
         {
-            return Dal.From<ShopReturnOrderItem>().Where(ShopReturnOrderItem._.ReturnOrderId == returnOrderNo).ToDataTable();
+
+            return Dal.From<ShopReturnOrderItem>()
+                .Select(
+ShopReturnOrderItem._.ProductCode,
+ShopReturnOrderItem._.Name,
+new ExpressionClip("'" + host + "'" + "+ThumbnailsUrl").Alias("ThumbnailsUrl"),
+
+ ShopReturnOrderItem._.AttributeDesc,
+ShopReturnOrderItem._.SaleCount,
+ShopReturnOrderItem._.RequestQuantity,
+ShopReturnOrderItem._.SellPrice)
+                .Where(ShopReturnOrderItem._.ReturnOrderId == returnOrderNo).ToDataTable();
+        }
+        public DataTable GetReturnRoute(string returnOrderNo, bool isShowHide = true)
+        {
+            WhereClip where = ShopOrderAction._.OrderId == returnOrderNo;
+            if (!isShowHide)
+            {
+                where = where && ShopOrderAction._.IsHideUser == false;
+            }
+            return Dal.From<ShopOrderAction>()
+                .Select(
+ShopOrderAction._.Username,
+ShopOrderAction._.ActionDate,
+ ShopOrderAction._.Remark,
+ShopOrderAction._.ActionName,
+ShopOrderAction._.ReturnOrderID)
+                .Where(where).ToDataTable();
         }
 
         public bool ReturnOrder(string accountid, ShopReturnOrder ro, out string error)
@@ -73,7 +100,7 @@ namespace EasyCms.Dal
                 else
                 {
 
-                    UserDjStatus os =  order.RefundStatus;
+                    UserDjStatus os = order.RefundStatus;
                     bool isCanReturn = false;
                     switch (os)
                     {
@@ -116,7 +143,7 @@ namespace EasyCms.Dal
                         ro.IsShopReviceGood = true;
                         decimal je = 0;
                         List<ShopOrderItem> list = Dal.From<ShopOrderItem>().Where(ShopOrderItem._.OrderID == ro.OrderId).OrderBy(ShopOrderItem._.Sequence).List<ShopOrderItem>();
-                        if (ro.OrderItems==null)
+                        if (ro.OrderItems == null)
                         {
                             ro.OrderItems = new List<ShopReturnOrderItem>();
                         }
@@ -167,6 +194,7 @@ namespace EasyCms.Dal
                                 item.OrderId = ro.OrderId;
                                 item.OrderItemId = detail.ID;
                                 item.Name = detail.ProductName;
+                                item.ProductCode = detail.ProductCode;
                                 item.ThumbnailsUrl = detail.ProductThumb;
                                 item.Description = detail.ShortDescription;
                                 item.SaleCount = detail.Count;
@@ -230,6 +258,112 @@ namespace EasyCms.Dal
                     }
                 }
             return result;
+        }
+
+        public bool ExeAction(ActionEnum ae, string userid, string userName, string id, string ReturnMoney, string IsShopReviceGood, string RefuseReason, string ContactName, string PickTelPhone, string PickAddress, string PickRegionID, out string err)
+        {
+            err = string.Empty;
+            ShopReturnOrder ro = Dal.From<ShopReturnOrder>().Where(ShopReturnOrder._.ID == id).Select(ShopReturnOrder._.ID, ShopReturnOrder._.OrderId, ShopReturnOrder._.Status, ShopReturnOrder._.LogisticStatus, ShopReturnOrder._.ReturnMoneyStatus, ShopReturnOrder._.PickAddress, ShopReturnOrder._.PickRegion, ShopReturnOrder._.PickRegionID, ShopReturnOrder._.PickTelPhone, ShopReturnOrder._.RefuseReason, ShopReturnOrder._.ContactName, ShopReturnOrder._.IsShopReviceGood, ShopReturnOrder._.Remark, ShopReturnOrder._.ReturnMoney).ToFirst<ShopReturnOrder>();
+            ShopOrder updateOrder = new ShopOrder();
+            updateOrder.ID = ro.OrderId;
+            updateOrder.RecordStatus = StatusType.update;
+            ro.ID = id;
+            ro.RecordStatus = StatusType.update;
+            decimal returnMoney = 0;
+            bool isrecive = false;
+            int addreseid = 0;
+            switch (ae)
+            {
+                case ActionEnum.不同意退货:
+                    if (ro.Status != UserDjStatus.等待审核)
+                    {
+                        err = "当前单据不允许审核";
+                        return false;
+                    }
+                    ro.RefuseReason = RefuseReason;
+                    ro.Status = UserDjStatus.审批不通过;
+                    updateOrder.RefundStatus = UserDjStatus.审批不通过;
+                    break;
+                case ActionEnum.同意退货:
+                    if (ro.Status != UserDjStatus.等待审核)
+                    {
+                        err = "当前单据不允许审核";
+                        return false;
+                    }
+                    ro.Status = UserDjStatus.取货中;
+                    ro.LogisticStatus = LogisticStatus.取货中;
+                    updateOrder.RefundStatus = UserDjStatus.取货中;
+                    if (decimal.TryParse(ReturnMoney, out returnMoney))
+                    {
+                        ro.ReturnMoney = returnMoney;
+                    }
+
+                    if (bool.TryParse(IsShopReviceGood, out isrecive))
+                    {
+                        ro.IsShopReviceGood = isrecive;
+                    }
+                    ro.ContactName = ContactName;
+                    ro.PickTelPhone = PickTelPhone;
+                    ro.PickAddress = PickAddress;
+                    if (int.TryParse(PickRegionID, out addreseid))
+                    {
+                        ro.PickRegionID = addreseid;
+                    }
+                    break;
+                case ActionEnum.完成取货:
+                    if (ro.Status != UserDjStatus.取货中)
+                    {
+                        err = "当前单据不允许取货";
+                        return false;
+                    }
+                    ro.Status = UserDjStatus.等待退款;
+                    ro.LogisticStatus = LogisticStatus.取货完成;
+                    ro.ReturnMoneyStatus = ReturnMoneyStatus.退款中;
+                    updateOrder.RefundStatus = UserDjStatus.等待退款;
+                    break;
+
+                case ActionEnum.完成退款:
+
+                    if (ro.Status != UserDjStatus.等待退款)
+                    {
+                        err = "当前单据不允许退款";
+                        return false;
+                    }
+                    ro.Status = UserDjStatus.已完成;
+                    ro.ReturnMoneyStatus = ReturnMoneyStatus.退款完成;
+                    updateOrder.RefundStatus = UserDjStatus.已完成;
+                    if (decimal.TryParse(ReturnMoney, out returnMoney))
+                    {
+                        ro.ReturnMoney = returnMoney;
+                    }
+                    break;
+            }
+            ShopOrderAction sa = new ShopOrderAction()
+              {
+                  ID = Guid.NewGuid().ToString(),
+                  ActionCode = ae,
+                  ActionDate = DateTime.Now,
+                  ActionName = ae.ToString(),
+                  OrderId = id,
+                  UserId = userid,
+                  Username = userName
+              };
+            SessionFactory dal = null;
+            IDbTransaction tr = Dal.BeginTransaction(out dal);
+            try
+            {
+                dal.SubmitNew(tr, ref dal, ro, sa, updateOrder);
+                dal.CommitTransaction(tr);
+                return true;
+            }
+            catch (Exception)
+            {
+                dal.RollbackTransaction(tr);
+                throw;
+            }
+
+
+
         }
     }
 

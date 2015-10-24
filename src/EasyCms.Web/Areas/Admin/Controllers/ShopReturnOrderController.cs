@@ -7,10 +7,11 @@ using System.Web;
 using System.Web.Mvc;
 using Sharp.Common;
 using EasyCms.Web.Common;
+using EasyCms.Session;
 
 namespace EasyCms.Web.Areas.Admin.Controllers
 {
-    public class ShopReturnOrderController : Controller
+    public class ShopReturnOrderController : BaseControler
     {
         ShopReturnOrderBll bll = new ShopReturnOrderBll();
         //
@@ -90,18 +91,25 @@ namespace EasyCms.Web.Areas.Admin.Controllers
 
         }
 
-        public string GetReturnDetail(string returnOrderNo)
+        public string GetReturnDetail(string id)
         {
-            int recordCount = 0;
 
-            System.Data.DataTable dt = bll.GetReturnDetail(returnOrderNo);
+            System.Data.DataTable dt = bll.GetReturnDetail(host, id);
 
             string result = JsonWithDataTable.Serialize(dt);
 
             return result;
 
         }
+        public string GetReturnRoute(string id)
+        {
+            System.Data.DataTable dt = bll.GetReturnRoute(id);
 
+            string result = JsonWithDataTable.Serialize(dt);
+
+            return result;
+
+        }
 
         //
         // GET: /Admin/ShopOrder/Edit/5
@@ -137,7 +145,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         public JsonResult ExeAction(FormCollection collection)
         {
             string err = string.Empty;
-           //接收动作
+            //接收动作
             string action = collection["SubmitActionType"];
             ActionEnum ae = ActionEnum.作废;
             switch (action)
@@ -161,16 +169,28 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                 return "没有指定的操作".FormatErrorJsonResult();
             }
             else
-            { 
+            {
                 //获取退货单ID  //获取退款金额  //获取取货地址
                 string id = collection["ID"] as string;
                 string ReturnMoney = collection["ReturnMoney"] as string;
                 string IsShopReviceGood = collection["IsShopReviceGood"] as string;
                 string RefuseReason = collection["RefuseReason"] as string;
-                string Remark = collection["Remark"] as string;
-            
+                string ContactName = collection["ContactName"] as string;
+                string PickTelPhone = collection["PickTelPhone"] as string;
+                string PickAddress = collection["PickAddress"] as string;
+                string PickRegionID = collection["PickRegionID"] as string;
+
+                bool issucess = bll.ExeAction(ae, CmsSession.GetUserID(),CmsSession.GetUserName(), id, ReturnMoney, IsShopReviceGood, RefuseReason, ContactName, PickTelPhone, PickAddress, PickRegionID, out err);
+                if (issucess)
+                {
+
+                    return (ae.ToString() + "操作成功").FormatJsonResult();
+                }
+                else
+                { return err.FormatErrorJsonResult(); }
+                
             }
-            return err.FormatErrorJsonResult();
+
         }
     }
 }

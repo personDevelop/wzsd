@@ -1,7 +1,7 @@
 ﻿@model ShopReturnOrder
 @{
     ViewBag.Title = "退货单";
-    Layout = "~/Areas/Admin/Views/Shared/_LayoutEdit.cshtml";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEditNoForm.cshtml";
 }
 
 @Styles.Render("~/bundles/upimgcss")
@@ -9,103 +9,210 @@
 @Scripts.Render("~/bundles/uploadJs")
 
 @using EasyCms.Model
-<!--内容-->
-<div id="floatHead" class="content-tab-wrap">
-    <div class="content-tab">
-        <div class="content-tab-ul-wrap">
-            <ul>
-                <li><a class="selected" href="javascript:;">基本信息</a></li>
-                <li><a href="javascript:;">商品清单</a></li>
-                <li><a href="javascript:;">取货信息</a></li>
-            </ul>
+@using (Ajax.BeginForm("ExeAction", null, new AjaxOptions() { AllowCache = false, OnSuccess = "OnSuccess", OnFailure = "OnFail" }, new { id = "form1" }))
+{
+    <!--内容-->
+    <div id="floatHead" class="content-tab-wrap">
+        <div class="content-tab">
+            <div class="content-tab-ul-wrap">
+                <ul>
+                    <li><a class="selected" href="javascript:;">基本信息</a></li>
+                    <li><a href="javascript:;">商品清单</a></li>
+                    <li><a href="javascript:;">取货信息</a></li>
+                    <li><a href="javascript:;">跟踪信息</a></li>
+                </ul>
+            </div>
         </div>
     </div>
-</div>
-<div class="tab-content">
+    <div class="tab-content">
 
 
-    @HelperExtend.HiddenFor("ID", Model.ID)
+        @HelperExtend.HiddenFor("ID", Model.ID)
+        @Html.Hidden("SubmitActionType")
+        @Html.ValidationSummary()
 
-
-
-
-    @Html.ValidationSummary()
-
-    @HelperExtend.Lable(Model.OrderId, "订单号")
-    @HelperExtend.Lable(Model.CreatedDate.ToString("yyyy-MM-dd HH:mm"), "创建日期")
-    @HelperExtend.Lable(Model.ReturnType.ToString(), "退货类型")
-    @HelperExtend.Lable(@" 1.如果退货类型为【整单退】,应退金额等于原订单的实际支付金额<br/>
+        @HelperExtend.Lable(Model.OrderId, "订单号")
+        @HelperExtend.Lable(Model.CreatedDate.ToString("yyyy-MM-dd HH:mm"), "创建日期")
+        @HelperExtend.Lable(Model.ReturnType.ToString(), "退货类型")
+        @HelperExtend.MarkedLable(@" 1.如果退货类型为【整单退】,应退金额等于原订单的实际支付金额<br/>
     2.如果退货类型为【部分退】,应退金额默认为0<br />
     可根据实际情况来调整应退金额。<br />
     ", "提示 ：")
-    @HelperExtend.Lable(Model.Description, "退货原因")
-    @HelperExtend.Lable("<img>", "图片信息")
-    @HelperExtend.Lable("<img>", "商品出售总额")
-    @HelperExtend.Number("ReturnMoney", "应退金额", defaultval: Model.ReturnMoney, hint: "可根据实际情况来调整应退金额")
-    @HelperExtend.RadioGroup("IsShopReviceGood", "是否需要取货", "false,true", "否,是", Model.IsShopReviceGood)
+        @HelperExtend.Lable(Model.Description, "退货原因")
+        @HelperExtend.Lable("<img>", "图片信息")
+       
+        @HelperExtend.Lable("<img>", "商品出售总额")
+        @switch ((UserDjStatus)ViewBag.DjStatus)
+        {
+            case UserDjStatus.无:
+                  @HelperExtend.Lable(Model.ReturnMoney.ToString(), "应退金额")
+                @HelperExtend.Lable(Model.RefuseReason, "拒绝理由")
+              
+                break;
+            case UserDjStatus.等待审核:
+            case UserDjStatus.审批不通过:
+              @HelperExtend.Number("ReturnMoney", "应退金额", defaultval: Model.ReturnMoney, hint: "可根据实际情况来调整应退金额")
+            @HelperExtend.TextArea("RefuseReason", "拒绝理由", defaultval: Model.RefuseReason)
+          
+                break;
 
-    @HelperExtend.TextArea("RefuseReason", "拒绝理由", defaultval: Model.RefuseReason)
-    @HelperExtend.TextArea("Remark", "备注", defaultval: Model.Remark)
+            case UserDjStatus.等待退款:
+            @HelperExtend.Number("ReturnMoney", "应退金额", defaultval: Model.ReturnMoney, hint: "可根据实际情况来调整应退金额")
+                break;
+            default:
+            @HelperExtend.Lable(Model.ReturnMoney.ToString(), "应退金额")
+                break;
+        }
+        @HelperExtend.RadioGroup("IsShopReviceGood", "是否需要取货", "false,true", "否,是", Model.IsShopReviceGood)
+        @HelperExtend.TextArea("Remark", "备注", defaultval: Model.Remark)
 
 
-</div>
-<div class="tab-content" style="display:none">
-    <div id="jqxgrid"></div>
+    </div>
+    <div class="tab-content" style="display:none">
+        <div id="jqxgrid"></div>
 
-</div>
-<div class="tab-content" style="display:none">
-    @HelperExtend.Lable(Model.ContactName, "联系人")
-    @HelperExtend.Lable(Model.PickTelPhone, "手机号码")
-    @HelperExtend.Lable(Model.PickRegion, "退货地区")
-    @HelperExtend.Lable(Model.PickAddress, "详细地址")
-</div>
+    </div>
+    <div class="tab-content" style="display:none">
+        @switch ((UserDjStatus)ViewBag.DjStatus)
+        {
+            case UserDjStatus.无:
+            case UserDjStatus.等待退款:
+            default:
+                @HelperExtend.Lable(Model.ContactName, "联系人")
+                @HelperExtend.Lable(Model.PickTelPhone, "手机号码")
+                @HelperExtend.Lable(Model.PickRegion, "退货地区")
+                @HelperExtend.Lable(Model.PickAddress, "详细地址")
+                break;
+            case UserDjStatus.等待审核:
+            case UserDjStatus.审批不通过:
+            case UserDjStatus.取货中:
+            @HelperExtend.TextBox("ContactName", "联系人", Model.ContactName)
+            @HelperExtend.TextBox("PickTelPhone", "手机号码", Model.PickTelPhone)
+
+                string url = Url.RouteUrl("ApiWithWeb", new { controller = "Region", action = "GetChildRegion" });
+
+                @HelperExtend.RegionDropDownList("PickRegionID", "退货地区", Model.PickRegionID)
+                @HelperExtend.TextBox("PickAddress", "详细地址", Model.PickAddress)
+                break;
+
+        }
+
+    </div>
+    <div class="tab-content" style="display:none">
+        <div id="jqxgridGz"></div>
+
+    </div>
+    <div class="page-footer">
+        <div class="btn-wrap">
+            @switch ((UserDjStatus)ViewBag.DjStatus)
+            {
+                case UserDjStatus.无:
+                    break;
+                case UserDjStatus.等待审核:
+                    <input type="submit" onclick="$('#SubmitActionType').val(1)" value="审批通过" class="btn" />
+                    <input type="submit" onclick="$('#SubmitActionType').val(2); return validCaluse();" value="审批不通过" class="btn" />
+                    break;
+                case UserDjStatus.审批不通过:
+                    break;
+                case UserDjStatus.取货中:
+                <input type="submit" onclick="$('#SubmitActionType').val(3)" value="确认取货" class="btn" />
+
+                    break;
+                case UserDjStatus.等待退款:
+                <input type="submit" onclick="$('#SubmitActionType').val(4)" value="确认退款" class="btn" />
+                    break;
+            }
+
+
+            <input name="btnReturn" type="button"  value="关闭" class="btn yellow" onclick="javascript: CloseDialog();" />
+        </div>
+    </div>
+    <!--/工具栏-->
+
+}
 @section  scripts{
+    <script type="text/javascript">
 
+        function OnSuccess() {
+
+            $("input[type='submit']").attr({ "disabled": "disabled" });
+                ErrorMsg("操作成功！");
+                
+        }
+        function OnFail() {
+            ErrorMsg("程序出现异常！");
+        }
+
+        function validCaluse() {
+
+            if (!$('#RefuseReason').val()) {
+                ErrorMsg("请输入拒绝原因！");
+                return false;
+            }
+            return true;
+        }
+    </script>
 
     <script type="text/javascript">
 
         $(function () {
-            var url = "@Url.Action("GetReturnDetail")";
+            var url = "@Url.Action("GetReturnDetail", new   { id = Model.ID })";
             var datafields = [
-
-  { name: 'ItemId' },
-  { name: 'ReturnOrderId' },
-  { name: 'OrderId' },
-  { name: 'OrderItemId' },
-  { name: 'ProductId' },
-  { name: 'SKUID' },
-  { name: 'Name' },
-  { name: 'ThumbnailsUrl' },
-  { name: 'Description' },
-  { name: 'SaleCount' },
-   { name: 'ReturnCount' },
-     { name: 'RequestQuantity' },
-  { name: 'CostPrice' },
-  { name: 'SellPrice' },
-  { name: 'ReturnPrice' },
-  { name: 'AttributeDesc' },
-  { name: 'Remark' },
-  { name: 'Weight' },
-  { name: 'Deduct' },
-  { name: 'Points' },
-
+{ name: 'ProductCode' },
+{ name: 'Name' },
+{ name: 'ThumbnailsUrl' },
+ { name: 'AttributeDesc' },
+{ name: 'SaleCount' },
+{ name: 'RequestQuantity' },
+{ name: 'SellPrice' }
             ];
             var columns = [
-
-
-			{ text: '商品图片', dataField: 'ThumbnailsUrl', width: 200 },
-  { text: '商品名称', dataField: 'Name', cellsalign: "left" },
-   { text: '商品编号', dataField: 'Name', cellsalign: "left", width: 100 },
-			{ text: '商品属性', dataField: 'AttributeDesc', cellsalign: "left", width: 100 },
-   { text: '购买数量', dataField: 'SaleCount', cellsalign: "right", width: 100 },
-			{ text: '退货数量', dataField: 'RequestQuantity', cellsalign: "right", width: 100 },
-            { text: '批准数量', dataField: 'ReturnCount', cellsalign: "right", width: 100 },
-            	{ text: '销售单价', dataField: 'SellPrice', cellsalign: "right", width: 100 }
+           {
+               text: '商品图片', dataField: 'ThumbnailsUrl', width: 100, cellsRenderer: function (row, column, value, rowData) {
+                   var image = "<div style='margin: 5px; margin-bottom: 3px;'>";
+                   var imgurl = value;
+                   var img = '<img width="100" height="100" style="display: block;" src="' + imgurl + '"/>';
+                   image += img;
+                   image += "</div>";
+                   return image;
+               }
+           },
+ { text: '商品名称', dataField: 'Name', cellsalign: "left" },
+  { text: '商品编号', dataField: 'ProductCode', cellsalign: "left"  },
+           { text: '商品属性', dataField: 'AttributeDesc', cellsalign: "left", width: 100 },
+  { text: '购买数量', dataField: 'SaleCount', cellsalign: "right", width: 100 },
+           { text: '退货数量', dataField: 'RequestQuantity', cellsalign: "right", width: 100 },
+               { text: '销售单价', dataField: 'SellPrice', cellsalign: "right", width: 100 }
             ];
-            CreateGrid("jqxgrid", url, datafields, columns);
+            CreateGrid("jqxgrid", url, datafields, columns, { grid: { autorowheight: true } });
+
+
 
         })
     </script>
 
+    <script type="text/javascript">
 
+        $(function () {
+            var url = "@Url.Action("GetReturnRoute", new { id = Model.ID })";
+            var datafields = [
+  { name: 'Username' },
+  { name: 'ActionDate' },
+  { name: 'Remark' },
+  { name: 'ActionName' },
+  { name: 'ReturnOrderID' }
+            ];
+            var columns = [
+                { text: '操作名称', dataField: 'ActionName', width: 200 },
+            { text: '操作人', dataField: 'Username', width: 200 },
+
+   { text: '操作时间', dataField: 'ActionDate', width: 200 },
+
+  { text: '备注', dataField: 'Remark', cellsalign: "left" }];
+            CreateGrid("jqxgridGz", url, datafields, columns);
+
+
+
+        })
+    </script>
 }

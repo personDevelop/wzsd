@@ -42,6 +42,8 @@ namespace EasyCms.Model
 
         private string _ReturnOrderID;
 
+        private bool _IsHideUser;
+
         #endregion
 
         #region 属性
@@ -218,6 +220,25 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  是否对用户隐藏,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "IsHideUser", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public bool IsHideUser
+        {
+            get
+            {
+                return this._IsHideUser;
+            }
+            set
+            {
+                this.OnPropertyChanged("IsHideUser", this._IsHideUser, value);
+                this._IsHideUser = value;
+            }
+        }
+
         #endregion
 
         #region 列定义
@@ -243,6 +264,8 @@ namespace EasyCms.Model
                 ActionName = new PropertyItem("ActionName", tableName);
 
                 ReturnOrderID = new PropertyItem("ReturnOrderID", tableName);
+
+                IsHideUser = new PropertyItem("IsHideUser", tableName);
 
 
             }
@@ -282,8 +305,13 @@ namespace EasyCms.Model
             /// 对应订单ID,订单对应退货单ID,退货单对应订单ID
             /// </summary> 
             public PropertyItem ReturnOrderID = null;
+            /// <summary>
+            /// 是否对用户隐藏,
+            /// </summary> 
+            public PropertyItem IsHideUser = null;
         }
         #endregion
     }
+
 
 }

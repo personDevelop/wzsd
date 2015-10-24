@@ -164,8 +164,14 @@ namespace EasyCms.Dal
         {
             if (id > 0)
             {
-                return Dal.From<AdministrativeRegions>().Where(AdministrativeRegions._.ID == id)
+                string result = Dal.From<AdministrativeRegions>().Where(AdministrativeRegions._.ID == id)
                     .Select(AdministrativeRegions._.FullPath).ToScalar().ToString();
+                int index = result.IndexOf("|");
+                if (index > -1)
+                {
+                    result = result.Substring(index + 1);
+                }
+                return result;
             }
             return string.Empty;
         }
