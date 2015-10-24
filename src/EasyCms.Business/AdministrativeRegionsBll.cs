@@ -63,5 +63,15 @@ namespace EasyCms.Business
         {
             return Dal.GetPathByFullPath(fullPath);
         }
+
+        public string GetPathByDefault(int defaultval)
+        {
+            return Dal.GetPathByDefault(defaultval);
+        }
+
+        public DataTable GetByJs(int p)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

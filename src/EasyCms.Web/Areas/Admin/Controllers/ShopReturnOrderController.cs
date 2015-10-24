@@ -97,7 +97,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             System.Data.DataTable dt = bll.GetReturnDetail(returnOrderNo);
 
             string result = JsonWithDataTable.Serialize(dt);
-            
+
             return result;
 
         }
@@ -105,17 +105,20 @@ namespace EasyCms.Web.Areas.Admin.Controllers
 
         //
         // GET: /Admin/ShopOrder/Edit/5
-        public ActionResult Edit(string id)
+        public ActionResult Edit(string id, UserDjStatus other)
         {
 
             ShopReturnOrder p = null;
             if (string.IsNullOrWhiteSpace(id))
             {
-                p = new ShopReturnOrder();
+                throw new Exception("退货单单号不能为空");
+
             }
             else
                 p = bll.GetEntity(id);
-            return View("Edit", p);
+            ViewResult v = View("Edit", p);
+            v.ViewBag.DjStatus = other;
+            return v;
         }
 
         [HttpPost]
@@ -127,69 +130,46 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         }
 
 
-        //
-        // GET: /Admin/ShopOrder/Edit/5
-        public ActionResult PublishToWl(ActionEnum id, string other)
-        {
-            ViewResult v = View("PublishToWl");
-
-            switch (id)
-            {
-                case ActionEnum.创建订单:
-                    break;
-                case ActionEnum.付款:
-                    break;
-                case ActionEnum.发货:
-                    ViewBag.Title = "发货到物流";
-                    break;
-                case ActionEnum.签收:
-                    ViewBag.Title = "客户已签收订单";
-                    break;
-                case ActionEnum.申请退货:
-                    break;
-                case ActionEnum.不同意退货:
-                    break;
-                case ActionEnum.同意退货:
-                    break;
-                case ActionEnum.完成退货:
-                    break;
-                case ActionEnum.完成退款:
-                    break;
-                case ActionEnum.申请取消订单:
-                    break;
-                case ActionEnum.取消订单:
-                    break;
-                case ActionEnum.快递中转:
-                    break;
-                case ActionEnum.导出订单:
-                    break;
-                case ActionEnum.拒收:
-                    ViewBag.Title = "客户已拒收订单";
-                    break;
-                case ActionEnum.作废:
-                    ViewBag.Title = "作废订单";
-                    break;
-                default:
-                    break;
-            }
-            v.ViewBag.Action = id;
-            v.ViewBag.OrderIDS = other;
-            return v;
-        }
-
         [HttpPost]
+        [ValidateInput(false)]
         //
         // GET: /Admin/ShopOrder/Edit/5
-        public ActionResult ExeAction(ActionEnum actionID, string wlgs, List<string> orderIDs)
+        public JsonResult ExeAction(FormCollection collection)
         {
             string err = string.Empty;
-            //Dictionary<string, string> result = bll.ExeAction(actionID, wlgs, orderIDs, out err);
-            //if (string.IsNullOrWhiteSpace(err))
-            //{
-            //    return result.FormatJsonResult();
+           //接收动作
+            string action = collection["SubmitActionType"];
+            ActionEnum ae = ActionEnum.作废;
+            switch (action)
+            {
 
-            //}
-            //else
+                case "1"://审批通过
+                    ae = ActionEnum.同意退货;
+                    break;
+                case "2"://审批不通过
+                    ae = ActionEnum.不同意退货;
+                    break;
+                case "3"://确认取货
+                    ae = ActionEnum.完成取货;
+                    break;
+                case "4"://确认退款
+                    ae = ActionEnum.完成退款;
+                    break;
+            }
+            if (ae == ActionEnum.作废)
+            {
+                return "没有指定的操作".FormatErrorJsonResult();
+            }
+            else
+            { 
+                //获取退货单ID  //获取退款金额  //获取取货地址
+                string id = collection["ID"] as string;
+                string ReturnMoney = collection["ReturnMoney"] as string;
+                string IsShopReviceGood = collection["IsShopReviceGood"] as string;
+                string RefuseReason = collection["RefuseReason"] as string;
+                string Remark = collection["Remark"] as string;
+            
+            }
             return err.FormatErrorJsonResult();
         }
     }

@@ -159,6 +159,16 @@ namespace EasyCms.Dal
                 .OrderBy(AdministrativeRegions._.Jb).ToDataTable();
 
         }
+
+        public string GetPathByDefault(int id)
+        {
+            if (id > 0)
+            {
+                return Dal.From<AdministrativeRegions>().Where(AdministrativeRegions._.ID == id)
+                    .Select(AdministrativeRegions._.FullPath).ToScalar().ToString();
+            }
+            return string.Empty;
+        }
     }
 
 

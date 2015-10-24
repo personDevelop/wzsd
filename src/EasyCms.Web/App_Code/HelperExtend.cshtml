@@ -18,6 +18,19 @@
         </dd>
     </dl>
 }
+@helper MarkedLable(string text, string lable = "")
+{
+    <dl style="color:red">
+        <dt>
+            <span style = "color:red">@lable</span>  
+
+        </dt>
+        <dd>
+            @MVCExtention.ExtendHtmlInput.MvcHelper.Raw(text)
+        </dd>
+    </dl>
+}
+
 @helper TextBox(string code, string name, object defaultval = null, string hint = "", string otherClass = "", int width = 200)
 {
     <dl>
@@ -29,7 +42,7 @@
 
             @MVCExtention.ExtendHtmlInput.MvcHelper.TextBox(code, defaultval as string, new { @class = "input normal " + otherClass, width = width })
 
-            <span>@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(hint)</span>
+            <span style="color:red">@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(hint)</span>
         </dd>
     </dl>
 }
@@ -42,7 +55,7 @@
         <dd>
 
             <div id="@code" name="@code" class="input normal @otherClass"></div>
-            <span>@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(hint)</span>
+            <span style="color:red">@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(hint)</span>
             <script type="text/javascript">
                 $(function(){
                     @{
@@ -97,7 +110,7 @@
             <div id='@ctrlID'>
             </div>
             <input name="@code" id="@code" type="hidden" value="@(defaultval as string)" />
-            <span style="float:left">@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(hint)</span>
+            <span style="float: left; color: red">@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(hint)</span>
         </dd>
     </dl>
     <script type="text/javascript">
@@ -220,7 +233,7 @@
         </dt>
         <dd>
             <div id="@code" name="@code"></div>
-            <span>@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(hint)</span>
+            <span style="color:red">@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(hint)</span>
             <script type="text/javascript">
                 $(function(){
                     @{
@@ -249,7 +262,7 @@
         </dt>
         <dd>
             @MVCExtention.ExtendHtmlInput.MvcHelper.TextArea(code, defaultval as string, row, col, new { id=code, @class = "input " + otherClass })
-            <span>@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(hint)</span>
+            <span style="color:red">@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(hint)</span>
         </dd>
     </dl>
 }
@@ -337,7 +350,7 @@
                         }
                     }
 
-                </span> <span>@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(hint)</span>
+                </span> <span style="color:red">@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(hint)</span>
             </div>
 
         </dd>
@@ -425,7 +438,7 @@
                     </button>
                 </span>
             }
-            <span>@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(hint)</span>
+            <span style="color:red">@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(hint)</span>
 
         </dd>
     </dl>
@@ -831,6 +844,114 @@
                         }
                     }
                 });
+            </script>
+
+        </dd>
+
+    </dl>
+}
+
+@*地区级联下来框
+    如果有默认值 ，先将当前默认值的path获取到
+    然后分解path ,逐级获取
+    如果没有默认值，则只获取第2级别的数据
+*@
+
+@helper RegionDropDownList(string code, string name, int defaultval = 0, string valuemember = "ID", string displaymember = "Name", string hint = "", string otherClass = "")
+{
+    string dropid = "jqxDropDownList" + code;
+    string defualtid = "defualtid" + code;
+    <dl>
+        <dt>
+            @MVCExtention.ExtendHtmlInput.MvcHelper.Label(code, name)
+        </dt>
+        <dd>
+        <dd>
+            <input type="hidden" id="@code" name="@code" value="@defaultval">
+            <input type="hidden" id="@defualtid" value="@defaultval">
+            <div style='float: left;' id='@dropid'>
+            </div>
+            <script type="text/javascript">
+                var url = "@MVCExtention.ExtendHtmlInput.MvcUrl.RouteUrl("ApiWithWeb", new { controller = "Region", action = "GetChildRegion", })";
+                $(document).ready(function () {
+
+                    var source =
+                    {
+                        datatype: "json",
+                        datafields: [
+                            { name: '@valuemember' },
+                            { name: '@displaymember' }
+                        ],
+                        id: 'ID',
+                        url: url + "/1"
+                    };
+                     
+                    var dataAdapter = new $.jqx.dataAdapter(source);
+                    $("#" + "@dropid").jqxDropDownList({ source: dataAdapter, displayMember: "@displaymember", valueMember: "@valuemember", width: 'auto', height: '25px' });
+
+                    $("#" + "@dropid").on('select', function (event) {
+                        onSelectChange(event);
+                    });
+
+                    @if (defaultval>0)
+                    {
+
+                            <text>
+                    $("#" + "@dropid").on('bindingComplete', function (event) {
+                        OnbindingComplete(event);
+                    });
+                    </text>
+
+
+                    }
+
+                });
+                function OnbindingComplete(event) {
+                    var defval = $("#" + "@defualtid").val();
+                    var vals = defval.split("|");
+                    if (vals.length > 0) {
+
+                        var curentVal = vals[0];
+                        //重置val;
+                        var index = defval.indexOf('|');
+                        if (index > -1) {
+                            $("#" + "@defualtid").val(defval.substr(index + 1));
+                        } else {
+                            $("#" + "@defualtid").val("");
+                        }
+                        //设置当前dropdownlist currentval
+                    }
+
+                }
+                function onSelectChange(event) {
+                    var args = event.args;
+                    if (args) {
+                        var item = args.item;
+                        var categroy = item.value;
+                        $("#" + "@code").val(item.value); //赋值
+                        $(event.currentTarget).nextAll().remove();//先删除其子类
+                        createChid(categroy);
+                    }
+                }
+                function createChid(categroy) { //创建其子类
+                    //同时生成dropdownlist
+                    //$.getJSON(url, { id: categroy }, function () {
+                    var guid = "dropdown" + categroy;
+                    $(event.currentTarget).parent().append("<div style='float: left;' id='" + guid + "'> </div>");
+                    source.url = url + "/" + categroy;
+                    var dataAdapter1 = new $.jqx.dataAdapter(source);
+                    $("#" + guid).jqxDropDownList({ source: dataAdapter1, displayMember: "Name", valueMember: "ID", width: 'auto', height: '25px' });
+                    $("#" + guid).on('select', function (event) {
+                        onSelectChange(event);
+                    });
+
+                    $("#" + guid).on('bindingComplete', function (event) {
+                        if ($("#" + guid).jqxDropDownList('getItems').length == 0) {
+                            $(event.currentTarget).remove();
+                        }
+                        OnbindingComplete(event);
+                    });
+                }
             </script>
 
         </dd>
