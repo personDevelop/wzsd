@@ -116,6 +116,10 @@ namespace EasyCms.Dal
                         ro.IsShopReviceGood = true;
                         decimal je = 0;
                         List<ShopOrderItem> list = Dal.From<ShopOrderItem>().Where(ShopOrderItem._.OrderID == ro.OrderId).OrderBy(ShopOrderItem._.Sequence).List<ShopOrderItem>();
+                        if (ro.OrderItems==null)
+                        {
+                            ro.OrderItems = new List<ShopReturnOrderItem>();
+                        }
                         if (ro.OrderItems.Count == 0)
                         {
                             //整单退 

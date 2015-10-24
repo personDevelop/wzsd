@@ -292,9 +292,9 @@
   { text: '联系电话', dataField: 'ContactPhone', cellsalign: "left", width: 100 },
       { text: '拒绝原因', dataField: 'RefuseReason', cellsalign: "left", width: 100 },
   { text: '退款金额', dataField: 'ReturnMoney', cellsalign: "right", width: 100 },
-    { text: '状态', dataField: 'Status', cellsalign: "left", width: 100 },
-    { text: '物流状态', dataField: 'LogisticStatus', width: 100 },
-  { text: '退款状态', dataField: 'ReturnMoneyStatus', width: 100 }
+    { text: '状态', dataField: 'Status', cellsalign: "left", width: 100,@HelperExtend.ParseEnum(typeof(EasyCms.Model.UserDjStatus)) },
+    { text: '物流状态', dataField: 'LogisticStatus', width: 100,@HelperExtend.ParseEnum(typeof(EasyCms.Model.LogisticStatus)) },
+  { text: '退款状态', dataField: 'ReturnMoneyStatus', width: 100,@HelperExtend.ParseEnum(typeof(EasyCms.Model.ReturnMoneyStatus)) }
 
             ];
 

@@ -33,6 +33,17 @@ namespace EasyCms.Dal
                 ShopOrder order = new ShopOrder() { RecordStatus = StatusType.update, Where = ShopOrder._.ID == item.OrderId };
                 order.CommentStatus = true;
                 Dal.Submit(order);
+                if (!string.IsNullOrWhiteSpace(item.ProductId))
+                {
+                    ShopOrderItem orderitem = new ShopOrderItem()
+                    {
+                        RecordStatus = StatusType.update,
+                        Where = ShopOrderItem._.OrderID == item.OrderId
+                            && ShopOrderItem._.ProductID == item.ProductId,
+                        HasComment = true
+                    };
+                    Dal.Submit(orderitem);
+                }
             }
             return CommonDal.UpdatePath<ShopProductReviews>(Dal, item, ShopProductReviews._.ID, ShopProductReviews._.ParentID, ParameterInfo._.ClassCode, null, null, null);
 
@@ -173,7 +184,7 @@ namespace EasyCms.Dal
             }
         }
 
-        public DataTable GetCommentProduct(string host,string accountid, string orderID, int state, int pageIndex, int pageSize, ref int recordCount)
+        public DataTable GetCommentProduct(string host, string accountid, string orderID, int state, int pageIndex, int pageSize, ref int recordCount)
         {
             int pageCount = 0;
             WhereClip where = ShopOrder._.MemberID == accountid;

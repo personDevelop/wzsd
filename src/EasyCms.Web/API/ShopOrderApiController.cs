@@ -340,11 +340,12 @@ namespace EasyCms.Web.API
             bool isSucess = new ShopReturnOrderBll().ReturnOrder(accountid, ro, out error);
             if (isSucess)
             {
-                return error.FormatError();
+                return new { Msg = "已提交退货申请，请您耐心等待", ReturnOrderID = error }.FormatObj();
+              
             }
             else
             {
-                return new { Msg = "已提交退货申请，请您耐心等待", ReturnOrderID = error }.FormatObj();
+                return error.FormatError();
             }
 
         }
