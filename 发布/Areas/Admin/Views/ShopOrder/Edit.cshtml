@@ -1,155 +1,254 @@
-﻿@model NewsInfo
+﻿@model ShopOrder
 @{
-    ViewBag.Title = "编辑新闻信息";
-    Layout = "~/Areas/Admin/Views/Shared/_LayoutEdit.cshtml";
-}
+    ViewBag.Title = "订单信息";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEditDialog.cshtml";
+}  
+@Scripts.Render("~/bundles/jqueryAjax")
 
-@Styles.Render("~/bundles/upimgcss")
-@Scripts.Render("~/bundles/ueditor")
-@Scripts.Render("~/bundles/uploadJs")
-
-@using EasyCms.Model
-<!--内容-->
-<div id="floatHead" class="content-tab-wrap">
-    <div class="content-tab">
-        <div class="content-tab-ul-wrap">
-            <ul>
-                <li><a class="selected" href="javascript:;">基本信息</a></li>
-                <li><a href="javascript:;">详细描述</a></li>
-                <li><a href="javascript:;">扩展选项</a></li>
-            </ul>
+@using EasyCms.Model 
+@using (Ajax.BeginForm("ExeAction", null, new AjaxOptions() { AllowCache = false, OnSuccess = "OnSuccess", OnFailure = "OnFail" }, new { id = "form1" }))
+{
+    <!--内容-->
+    <div id="floatHead" class="content-tab-wrap">
+        <div class="content-tab">
+            <div class="content-tab-ul-wrap">
+                <ul>
+                    <li><a class="selected" href="javascript:;">基本信息</a></li>
+                    <li><a href="javascript:;">商品清单</a></li>
+                    <li><a href="javascript:;">配送信息</a></li>
+                    <li><a href="javascript:;">发票信息</a></li> 
+                    <li><a href="javascript:;">跟踪信息</a></li>
+                </ul>
+            </div>
         </div>
     </div>
-</div>
-<div class="tab-content">
+    <div class="tab-content"> 
+        @Html.Hidden("SubmitActionType") 
+        @HelperExtend.Lable(Model.ID, "订单号")
+        @HelperExtend.Lable(Model.CreateDate.ToString("yyyy-MM-dd HH:mm"), "创建日期") 
+        @HelperExtend.Lable(Model.TotalPrice.ToString(), "订单总额")
+        @HelperExtend.Lable(Model.Discount.ToString(), "折扣金额")
+        @HelperExtend.Lable(Model.Freight.ToString(), "配送费用")
+        @HelperExtend.Lable(Model.PayMoney.ToString(), "应付金额") 
+
+        @HelperExtend.DropDownList(Model.PayMoney.ToString(), "物流公司") @*可改*@
+      
+        @HelperExtend.TextBox("ShipOrderNum", "物流单号", Model.ShipOrderNum)
+        @HelperExtend.Lable(Model.PayMoney.ToString(), "支付方式") @*可改*@
+        @HelperExtend.Lable(Model.PayMoney.ToString(), "商品重量")   @*可改*@
+        @HelperExtend.TextArea("Remark", "备注", defaultval: Model.Remark)
 
 
-    @HelperExtend.HiddenFor("ID", Model.ID)
-    @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())
-   
+    </div>
+    <div class="tab-content" style="display:none">
+        <div id="jqxgrid"></div>
 
-    
-    @Html.ValidationSummary()
+    </div>
+    <div class="tab-content" style="display:none">
+        @HelperExtend.TextBox("ShipName", "收件人", Model.ShipName)
+        @HelperExtend.RegionDropDownList("RegionID", "收件地区", Model.RegionID)
+        @HelperExtend.TextBox("ShipAddress", "详细地址", Model.ShipAddress)
+        @HelperExtend.TextBox("ShipTel", "收件人电话", Model.ShipTel)
+        @HelperExtend.TextBox("ShipEmail", "收件人邮箱", Model.ShipEmail)
+        @HelperExtend.TextBox("ShipZip", "邮政编码", Model.ShipZip)
 
-    @HelperExtend.HelpEdit("ClassID", "ClassName", "所属类别", defaultText: Model.ClassName, dialogTitle: "选择所属类别", hint: "(*必填)", InnitFunc: "InnitFunc", onOk: "onOk", IsTree: true, DataControlID: "treeGrid")
-    @HelperExtend.TextBox("NewsTitle", "标题", defaultval: Model.NewsTitle, hint: "(*必填)")
-    @HelperExtend.TextBox("SubTitle", "副标题", defaultval: Model.SubTitle)
-    @HelperExtend.RadioGroup("State", "显示状态 ", "0,1,2", "正常,待审核,不显示", defaultval: Model.State)
-    @HelperExtend.CheckBoxList("推荐设置", "AllowPl,IsTop,IsRecomend,IsHot,IsColor", "允许评论,置顶,推荐,热门,醒目", defaultval: new object[] { Model.AllowPl, Model.IsTop, Model.IsRecomend, Model.IsHot, Model.IsColor })
-   
-    @HelperExtend.Number("Sequence", "顺序", defaultval: Model.Sequence)
-    @HelperExtend.Number("PvCount", "浏览次数", defaultval: Model.PvCount, disabled: true)
-    @HelperExtend.DateTime("LastEditDate", "最后修改时间", defaultval: Model.LastEditDate) 
-    @HelperExtend.ImageUpLoad("ImageUrl", "封面图片", Model.RecordStatus == Sharp.Common.StatusType.add, defaultval: Model.ImageUrl, maxLength: 1)
-    @HelperExtend.TextArea("Note", "备注", defaultval: Model.Note)
-</div>
-<div class="tab-content" style="display:none">
-    @HelperExtend.TextBox("Summary", "内容摘要", defaultval: Model.Summary)
-    @HelperExtend.TextBox("KeyWords", "关键字", defaultval: Model.KeyWords)
-    @HelperExtend.UEditor("Description", "内容", defaultval: Model.Description ) 
+        @HelperExtend.Lable(Model.MemberName, "购买人")
+        @HelperExtend.Lable(Model.MemberCallPhone, "购买人电话")
+        @HelperExtend.Lable(Model.MemberEmail, "购买人邮箱")
 
-</div>
-<div class="tab-content" style="display:none">
-    @HelperExtend.TextBox("Meta_Title", "页面标题", defaultval: Model.Meta_Title)
-    @HelperExtend.TextArea("Meta_Keywords", "页面关键字", defaultval: Model.Meta_Keywords)
-    @HelperExtend.TextArea("Meta_Description", "页面描述", defaultval: Model.Meta_Description)
+    </div>
+     <div class="tab-content" style="display:none">
+        @HelperExtend.RadioGroup("IsInvoice", "发票","false,true","不需要发票,需要发票",Model.IsInvoice) 
+        @HelperExtend.TextBox("InvoiceInfo", "发票抬头", Model.InvoiceInfo)
+        @HelperExtend.TextArea("InvoiceNote", "发票说明", Model.InvoiceNote, "这里可以标明发票的明细及相关要求，例如是否需要增值税发票") 
+    </div>
+    <div class="tab-content" style="display:none">
+        @{
+        List<Process> list = new List<Process>();
+        list.Add(new Process() { Name = "提交申请", IsReady = true, IsNode = true });
+        list.Add(new Process() { IsReady = true, IsNode = false });
+        switch (Model.Status)
+        {
+            case UserDjStatus.无:
+                break;
+            case UserDjStatus.等待审核:
+                list.Add(new Process() { Name = "等待审核", IsReady = true, IsNode = true });
+                list.Add(new Process() { IsReady = false, IsNode = false });
+                list.Add(new Process() { Name = "取货中", IsReady = false, IsNode = true });
+                list.Add(new Process() { IsReady = false, IsNode = false });
+                list.Add(new Process() { Name = "等待退款", IsReady = false, IsNode = true });
+                list.Add(new Process() { IsReady = false, IsNode = false });
+                list.Add(new Process() { Name = "完成", IsReady = false, IsNode = true });
 
-</div>
+                break;
+            case UserDjStatus.审批不通过:
+                list.Add(new Process() { Name = "审批不通过", IsReady = true, IsNode = true });
+                list.Add(new Process() { IsReady = true, IsNode = false });
+                list.Add(new Process() { Name = "完成", IsReady = true, IsNode = true });
+
+                break;
+            case UserDjStatus.取货中:
+                list.Add(new Process() { Name = "等待审核", IsReady = true, IsNode = true });
+                list.Add(new Process() { IsReady = true, IsNode = false });
+                list.Add(new Process() { Name = "取货中", IsReady = true, IsNode = true });
+                list.Add(new Process() { IsReady = false, IsNode = false });
+                list.Add(new Process() { Name = "等待退款", IsReady = false, IsNode = true });
+                list.Add(new Process() { IsReady = false, IsNode = false });
+                list.Add(new Process() { Name = "完成", IsReady = false, IsNode = true });
+
+                break;
+            case UserDjStatus.等待退款:
+                list.Add(new Process() { Name = "等待审核", IsReady = true, IsNode = true });
+                list.Add(new Process() { IsReady = true, IsNode = false });
+                list.Add(new Process() { Name = "取货中", IsReady = true, IsNode = true });
+                list.Add(new Process() { IsReady = true, IsNode = false });
+                list.Add(new Process() { Name = "等待退款", IsReady = true, IsNode = true });
+                list.Add(new Process() { IsReady = false, IsNode = false });
+                list.Add(new Process() { Name = "完成", IsReady = false, IsNode = true });
+
+                break;
+            case UserDjStatus.已完成:
+                list.Add(new Process() { Name = "等待审核", IsReady = true, IsNode = true });
+                list.Add(new Process() { IsReady = true, IsNode = false });
+                list.Add(new Process() { Name = "取货中", IsReady = true, IsNode = true });
+                list.Add(new Process() { IsReady = true, IsNode = false });
+                list.Add(new Process() { Name = "等待退款", IsReady = true, IsNode = true });
+                list.Add(new Process() { IsReady = true, IsNode = false });
+                list.Add(new Process() { Name = "完成", IsReady = true, IsNode = true });
+
+                break;
+            case UserDjStatus.已取消:
+                break;
+            default:
+                break;
+        }
+        @Html.Partial("_Process", list)
+        }
+
+
+        <div id="jqxgridGz"></div>
+
+    </div>
+    <div class="page-footer">
+        <div class="btn-wrap">
+            @switch ((UserDjStatus)ViewBag.DjStatus)
+            {
+                case UserDjStatus.无:
+                    break;
+                case UserDjStatus.等待审核:
+                    <input type="submit" onclick="$('#SubmitActionType').val(1)" value="审批通过" class="btn" />
+                    <input type="submit" onclick="$('#SubmitActionType').val(2); return validCaluse();" value="审批不通过" class="btn" />
+                    break;
+                case UserDjStatus.审批不通过:
+                    break;
+                case UserDjStatus.取货中:
+                <input type="submit" onclick="$('#SubmitActionType').val(3)" value="确认取货" class="btn" />
+
+                    break;
+                case UserDjStatus.等待退款:
+                <input type="submit" onclick="$('#SubmitActionType').val(4)" value="确认退款" class="btn" />
+                    break;
+            }
+
+
+            <input name="btnReturn" type="button" value="关闭" class="btn yellow" onclick="javascript: CloseDialog();" />
+        </div>
+    </div>
+    <!--/工具栏-->
+
+}
 @section  scripts{
+    <script type="text/javascript">
 
+        function OnSuccess(result) {
+            if (result.IsSuccess) {
+                $("input[type='submit']").attr({ "disabled": "disabled" });
+                SucessMsg("操作成功！");
+            }
+            else {
+
+                ErrorMsg(result.Msg);
+
+            }
+
+
+        }
+        function OnFail() {
+            ErrorMsg("程序出现异常！");
+        }
+
+        function validCaluse() {
+
+            if (!$('#RefuseReason').val()) {
+                ErrorMsg("请输入拒绝原因！");
+                return false;
+            }
+            return true;
+        }
+    </script>
 
     <script type="text/javascript">
 
         $(function () {
+            var url = "@Url.Action("GetReturnDetail", new   { id = Model.ID })";
+            var datafields = [
+{ name: 'ProductCode' },
+{ name: 'Name' },
+{ name: 'ThumbnailsUrl' },
+ { name: 'AttributeDesc' },
+{ name: 'SaleCount' },
+{ name: 'RequestQuantity' },
+{ name: 'SellPrice' }
+            ];
+            var columns = [
+           {
+               text: '商品图片', dataField: 'ThumbnailsUrl', width: 100, cellsRenderer: function (row, column, value, rowData) {
+                   var image = "<div style='margin: 5px; margin-bottom: 3px;'>";
+                   var imgurl = value;
+                   var img = '<img width="100" height="100" style="display: block;" src="' + imgurl + '"/>';
+                   image += img;
+                   image += "</div>";
+                   return image;
+               }
+           },
+ { text: '商品名称', dataField: 'Name', cellsalign: "left" },
+  { text: '商品编号', dataField: 'ProductCode', cellsalign: "left" },
+           { text: '商品属性', dataField: 'AttributeDesc', cellsalign: "left", width: 100 },
+  { text: '购买数量', dataField: 'SaleCount', cellsalign: "right", width: 100 },
+           { text: '退货数量', dataField: 'RequestQuantity', cellsalign: "right", width: 100 },
+               { text: '销售单价', dataField: 'SellPrice', cellsalign: "right", width: 100 }
+            ];
+            CreateGrid("jqxgrid", url, datafields, columns, { grid: { autorowheight: true } });
 
 
-            //初始化表单验证
-            $("form").validate({
-                ignore: "",
-                rules: {
-                    NewsTitle: {
-                        required: true,
-                        maxlength:300 
-                    },
-                    ClassName: {
-                        required: true 
-                    } 
-                 
-                },
-                messages: {
-                    NewsTitle: {
-                        required: "请输入标题",
-                        maxlength: $.validator.format("编号长度不能大于{0}个字符") 
-                        
-                    },
-                    ClassName: {
-                        required: "请选择所属类别" 
-                    } 
-                },
-                errorPlacement: function (error, element) {
 
-                    if (element.is(":radio"))
-                        error.insertAfter($(element).parent());
-                    else if (element.is(":checkbox"))
-                        error.insertAfter($(element).parent());
-                    else
-                        error.insertAfter(element);
-                }
-
-            });
         })
     </script>
 
     <script type="text/javascript">
 
-        function InnitFunc() {
-            var source =
-                        {
-                            dataType: "json",
-                            dataFields: [
+        $(function () {
+            var url = "@Url.Action("GetReturnRoute", new { id = Model.ID })";
+            var datafields = [
+  { name: 'Username' },
+  { name: 'ActionDate' },
+  { name: 'Remark' },
+  { name: 'ActionName' },
+  { name: 'ReturnOrderID' }
+            ];
+            var columns = [
+                { text: '操作名称', dataField: 'ActionName', width: 200 },
+            { text: '操作人', dataField: 'Username', width: 200 },
 
-               { name: 'ID', type: 'string' },
+   { text: '操作时间', dataField: 'ActionDate', width: 200 },
 
-               { name: 'ParentID', type: 'string' },
-
-               { name: 'Code', type: 'string' },
-
-               { name: 'Name', type: 'string' },
-
-               { name: 'AllowSubclass', type: 'string' }
-                            ],
-                            timeout: 10000,
-                            hierarchy:
-                            {
-                                keyDataField: { name: 'ID' },
-                                parentDataField: { name: 'ParentID' }
-                            },
-                            id: 'ID',
-                            root: 'Rows',
-                            url: " @Url.Action("GetListForSelecte", "NewsCategory", new { area = "Admin" })"
-                        };
-            var dataAdapter = new $.jqx.dataAdapter(source);
+  { text: '备注', dataField: 'Remark', cellsalign: "left" }];
+            CreateGrid("jqxgridGz", url, datafields, columns);
 
 
-            $("#treeGrid").jqxTreeGrid(
-                       {
-                           width: "95%",
-                           height: "95%",
-                           source: dataAdapter,
-                           columns: [
-             { text: '编码', dataField: 'Code', type: 'string', width: 200 },
-             { text: '名称', dataField: 'Name', type: 'string', width: 200 }
-                           ]
-                       });
-        }
-        function onOk(data) {
-            if (data.length == 1) {
 
-                $("#ClassName").val(data[0].Name);
-                $("#ClassID").val(data[0].ID);
-
-            } else { ErrorMsg("请选择一条数据"); }
-        }
-        
+        })
     </script>
 }
+
+

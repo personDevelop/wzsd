@@ -62,6 +62,7 @@
     <Compile Include="Gataway.cs" />
     <Compile Include="JFHistory.cs" />
     <Compile Include="ManagerUserInfo.cs" />
+    <Compile Include="Process.cs" />
     <Compile Include="RangeDict.cs" />
     <Compile Include="NewsCategory.cs" />
     <Compile Include="NewsComment.cs" />

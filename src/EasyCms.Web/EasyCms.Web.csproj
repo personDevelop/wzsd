@@ -320,8 +320,10 @@
     <Content Include="Content\artdialog\ui-dialog.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\skin\default\bg_state.jpg" />
     <Content Include="Content\Images\help.png" />
     <Content Include="Content\Images\icon-1.gif" />
+    <Content Include="Content\Images\icons.gif" />
     <Content Include="Content\Images\movie.png" />
     <Content Include="Content\jquery\jquery-1.11.2.min.js" />
     <Content Include="Content\jquery\jquery.form.min.js" />
@@ -785,6 +787,7 @@
     <Content Include="Areas\Admin\Views\ShopReturnOrder\PublishToWl.cshtml" />
     <Content Include="Areas\Admin\Views\ShopReturnOrder\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ShopReturnOrder\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_Process.cshtml" />
     <None Include="Properties\PublishProfiles\publish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\EshopAdminControl.js" />

@@ -1,0 +1,38 @@
+﻿@model List<EasyCms.Model.Process>
+<div class="section4" id="process">
+    @foreach (var item in Model)
+    {
+        string nodeCss = " proce ";
+        if (item.IsNode)
+        {
+            nodeCss = " node ";
+        }
+        string stateCss = " wait ";
+        if (item.IsReady)
+        {
+            stateCss = " ready ";
+        }
+        if (item.IsNode)
+        {
+
+            <div class="@nodeCss @stateCss">
+                <ul>
+                    <li class="tx1">&nbsp;</li>
+                    <li class="tx2">@item.Name</li>
+                    <li class="tx3" id="track_time_0">&nbsp;</li>
+                </ul>
+            </div>
+        }
+        else
+        {
+            <div class="@nodeCss @stateCss">
+                <ul>
+                    <li class="tx1">&nbsp;</li>
+                </ul>
+            </div>
+        }
+
+    }
+</div>
+
+

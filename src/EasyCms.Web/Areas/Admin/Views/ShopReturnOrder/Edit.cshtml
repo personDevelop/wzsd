@@ -1,13 +1,9 @@
 ﻿@model ShopReturnOrder
 @{
     ViewBag.Title = "退货单";
-    Layout = "~/Areas/Admin/Views/Shared/_LayoutEditNoForm.cshtml";
-}
-
-@Styles.Render("~/bundles/upimgcss")
-@Scripts.Render("~/bundles/ueditor")
-@Scripts.Render("~/bundles/uploadJs")
-
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEditDialog.cshtml";
+} 
+@Scripts.Render("~/bundles/jqueryAjax")
 @using EasyCms.Model
 @using (Ajax.BeginForm("ExeAction", null, new AjaxOptions() { AllowCache = false, OnSuccess = "OnSuccess", OnFailure = "OnFail" }, new { id = "form1" }))
 {
@@ -28,9 +24,7 @@
 
 
         @HelperExtend.HiddenFor("ID", Model.ID)
-        @Html.Hidden("SubmitActionType")
-        @Html.ValidationSummary()
-
+        @Html.Hidden("SubmitActionType") 
         @HelperExtend.Lable(Model.OrderId, "订单号")
         @HelperExtend.Lable(Model.CreatedDate.ToString("yyyy-MM-dd HH:mm"), "创建日期")
         @HelperExtend.Lable(Model.ReturnType.ToString(), "退货类型")
@@ -40,27 +34,27 @@
     ", "提示 ：")
         @HelperExtend.Lable(Model.Description, "退货原因")
         @HelperExtend.Lable("<img>", "图片信息")
-       
-        @HelperExtend.Lable("<img>", "商品出售总额")
+
+        @HelperExtend.Lable(Model.RequestReturnMoney.ToString(), "应退金额")
         @switch ((UserDjStatus)ViewBag.DjStatus)
         {
             case UserDjStatus.无:
-                  @HelperExtend.Lable(Model.ReturnMoney.ToString(), "应退金额")
+                @HelperExtend.Lable(Model.ReturnMoney.ToString(), "退款金额")
                 @HelperExtend.Lable(Model.RefuseReason, "拒绝理由")
-              
+
                 break;
             case UserDjStatus.等待审核:
             case UserDjStatus.审批不通过:
-              @HelperExtend.Number("ReturnMoney", "应退金额", defaultval: Model.ReturnMoney, hint: "可根据实际情况来调整应退金额")
+            @HelperExtend.Number("ReturnMoney", "退款金额", defaultval: Model.ReturnMoney, hint: "可根据实际情况来调整退款金额")
             @HelperExtend.TextArea("RefuseReason", "拒绝理由", defaultval: Model.RefuseReason)
-          
+
                 break;
 
             case UserDjStatus.等待退款:
-            @HelperExtend.Number("ReturnMoney", "应退金额", defaultval: Model.ReturnMoney, hint: "可根据实际情况来调整应退金额")
+            @HelperExtend.Number("ReturnMoney", "退款金额", defaultval: Model.ReturnMoney, hint: "可根据实际情况来调整退款金额")
                 break;
             default:
-            @HelperExtend.Lable(Model.ReturnMoney.ToString(), "应退金额")
+            @HelperExtend.Lable(Model.ReturnMoney.ToString(), "退款金额")
                 break;
         }
         @HelperExtend.RadioGroup("IsShopReviceGood", "是否需要取货", "false,true", "否,是", Model.IsShopReviceGood)
@@ -99,6 +93,69 @@
 
     </div>
     <div class="tab-content" style="display:none">
+        @{
+        List<Process> list = new List<Process>();
+        list.Add(new Process() { Name = "提交申请", IsReady = true, IsNode = true });
+        list.Add(new Process() { IsReady = true, IsNode = false });
+        switch (Model.Status)
+        {
+            case UserDjStatus.无:
+                break;
+            case UserDjStatus.等待审核:
+                list.Add(new Process() { Name = "等待审核", IsReady = true, IsNode = true });
+                list.Add(new Process() { IsReady = false, IsNode = false });
+                list.Add(new Process() { Name = "取货中", IsReady = false, IsNode = true });
+                list.Add(new Process() { IsReady = false, IsNode = false });
+                list.Add(new Process() { Name = "等待退款", IsReady = false, IsNode = true });
+                list.Add(new Process() { IsReady = false, IsNode = false });
+                list.Add(new Process() { Name = "完成", IsReady = false, IsNode = true });
+                
+                break;
+            case UserDjStatus.审批不通过:
+                list.Add(new Process() { Name = "审批不通过", IsReady = true, IsNode = true });
+                list.Add(new Process() { IsReady = true, IsNode = false });
+                list.Add(new Process() { Name = "完成", IsReady = true, IsNode = true });
+               
+                break;
+            case UserDjStatus.取货中:
+                list.Add(new Process() { Name = "等待审核", IsReady = true, IsNode = true });
+                list.Add(new Process() { IsReady = true, IsNode = false });
+                list.Add(new Process() { Name = "取货中", IsReady = true, IsNode = true });
+                list.Add(new Process() { IsReady = false, IsNode = false });
+                list.Add(new Process() { Name = "等待退款", IsReady = false, IsNode = true });
+                list.Add(new Process() { IsReady = false, IsNode = false });
+                list.Add(new Process() { Name = "完成", IsReady = false, IsNode = true });
+              
+                break;
+            case UserDjStatus.等待退款:
+                list.Add(new Process() { Name = "等待审核", IsReady = true, IsNode = true });
+                list.Add(new Process() { IsReady = true, IsNode = false });
+                list.Add(new Process() { Name = "取货中", IsReady = true, IsNode = true });
+                list.Add(new Process() { IsReady = true, IsNode = false });
+                list.Add(new Process() { Name = "等待退款", IsReady = true, IsNode = true });
+                list.Add(new Process() { IsReady = false, IsNode = false });
+                list.Add(new Process() { Name = "完成", IsReady = false, IsNode = true });
+                 
+                break;
+            case UserDjStatus.已完成:
+                list.Add(new Process() { Name = "等待审核", IsReady = true, IsNode = true });
+                list.Add(new Process() { IsReady = true, IsNode = false });
+                list.Add(new Process() { Name = "取货中", IsReady = true, IsNode = true });
+                list.Add(new Process() { IsReady = true, IsNode = false });
+                list.Add(new Process() { Name = "等待退款", IsReady = true, IsNode = true });
+                list.Add(new Process() { IsReady = true, IsNode = false });
+                list.Add(new Process() { Name = "完成", IsReady = true, IsNode = true });
+                
+                break;
+            case UserDjStatus.已取消:
+                break;
+            default:
+                break;
+        }  
+        @Html.Partial("_Process", list) 
+        }
+
+
         <div id="jqxgridGz"></div>
 
     </div>
@@ -124,7 +181,7 @@
             }
 
 
-            <input name="btnReturn" type="button"  value="关闭" class="btn yellow" onclick="javascript: CloseDialog();" />
+            <input name="btnReturn" type="button" value="关闭" class="btn yellow" onclick="javascript: CloseDialog();" />
         </div>
     </div>
     <!--/工具栏-->
@@ -133,11 +190,18 @@
 @section  scripts{
     <script type="text/javascript">
 
-        function OnSuccess() {
+        function OnSuccess(result) {
+            if (result.IsSuccess) {
+                $("input[type='submit']").attr({ "disabled": "disabled" });
+                SucessMsg("操作成功！");
+            }
+            else {
 
-            $("input[type='submit']").attr({ "disabled": "disabled" });
-                ErrorMsg("操作成功！");
-                
+                ErrorMsg(result.Msg);
+
+            }
+
+
         }
         function OnFail() {
             ErrorMsg("程序出现异常！");
@@ -178,7 +242,7 @@
                }
            },
  { text: '商品名称', dataField: 'Name', cellsalign: "left" },
-  { text: '商品编号', dataField: 'ProductCode', cellsalign: "left"  },
+  { text: '商品编号', dataField: 'ProductCode', cellsalign: "left" },
            { text: '商品属性', dataField: 'AttributeDesc', cellsalign: "left", width: 100 },
   { text: '购买数量', dataField: 'SaleCount', cellsalign: "right", width: 100 },
            { text: '退货数量', dataField: 'RequestQuantity', cellsalign: "right", width: 100 },

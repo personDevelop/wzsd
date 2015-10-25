@@ -988,7 +988,7 @@ textarea {
 
 /* ==========================列表页样式.开始======================== */
 .toolbar-wrap {
-    padding: 10px 0;
+    padding: 0px 0;
     width: 100%;
     *position: relative;
     *z-index: 1;
@@ -999,7 +999,7 @@ textarea {
     right: 15px;
     left: 15px;
     bottom: auto;
-    padding: 10px 0 5px;
+    padding: 3px 0  0px;
     min-height: 32px;
     background: #fff;
     z-index: 2;
@@ -3205,3 +3205,113 @@ textarea {
         background-color: rgb(255, 255, 255);
          font-size:12px;
     }
+ 
+    #process {
+        margin: 0 auto;
+        padding: 25px 10px 80px;
+    }
+      
+    .section4 {
+        width: 99%;
+    } 
+    #process .node, #process .proce {
+        float: left;
+        height: 13px;
+        background-image: url(bg_state.jpg);
+        background-repeat: no-repeat;
+    }
+
+    #process .node {
+        width: 13px;
+    }
+
+    #process .proce {
+        width: 150px;
+        border: solid #fff;
+        border-width: 0 5px;
+    }
+
+    #process .tx1 {
+        height: 36px;
+        margin-bottom: 16px;
+    }
+
+    #process .tx3 {
+        color: #999;
+        line-height: 15px;
+    }
+
+    .node.wait {
+        background-position: -150px -40px;
+    }
+
+    .node.ready {
+        background-position: -150px 0px;
+    }
+
+    .node.singular {
+        background-position: -150px -60px;
+    }
+
+    .proce.wait {
+        background-position: 0 -40px;
+    }
+
+    .proce.doing {
+        background-position: 0 -20px;
+        color: #360;
+    }
+
+    .proce.ready {
+        background-position: 0 0;
+    }
+
+    #process .wait .tx2 {
+        color: #999;
+    }
+
+    #process ul {
+        position: absolute;
+        margin-top: -38px;
+        text-align: center;
+    }
+
+    #process .proce ul {
+        z-index: 5;
+        width: 150px;
+    }
+
+    #process .node ul {
+        z-index: 1;
+        width: 318px;
+        margin-left: -152px;
+    }
+
+    #process {
+        overflow: hidden;
+    }
+
+        #process .node {
+            background-position-x: -150px;
+        }
+
+        #process .proce {
+            background-position-x: 0;
+        }
+
+        #process .wait {
+            background-position-y: -40px;
+        }
+
+        #process .doing {
+            background-position-y: -20px;
+        }
+
+        #process .ready {
+            background-position-y: 0;
+        }
+
+        #process .singular {
+            background-position-y: -60px;
+        }
+         

@@ -15,28 +15,7 @@
 </style>
 
 
-<!--工具栏-->
 
-<div id="floatHead" class="toolbar-wrap">
-    <div class="toolbar">
-        <div class="box-wrap">
-            <a class="menu-btn"></a>
-            <div class="l-list">
-                <ul class="icon-list">
-                    <li><a class="add" href="javascript:;" onclick="Publish(0);"><i></i><span>查看</span></a></li>
-                    <li><a class="edit" href="javascript:;" onclick="Publish(7 );"><i></i><span>审核</span></a></li>
-                    <li><a class="edit" href="javascript:;" onclick="Publish(10 );"><i></i><span>取回货物</span></a></li>
-                    <li><a class="edit" href="javascript:;" onclick="Publish(11 );"><i></i><span>确认退款</span></a></li>
-                    <li><a class="expandable" href="javascript:;" onclick="exportOrder();"><i></i><span>导出</span></a></li>
-
-                </ul>
-            </div>
-        </div>
-
-
-    </div>
-
-</div>
 <dl>
     <dt>
 
@@ -45,8 +24,8 @@
         <table width="100%" class="borderkuang" border="0" cellspacing="0" cellpadding="0">
             <tbody>
                 <tr>
-                    <td rowspan="2" width="20">
-                        @HelperExtend.img("icon-1.gif", "width:19px,height:19px")搜索：
+                    <td rowspan="3" width="20">
+                        @HelperExtend.img("icon-1.gif", "width:19px,height:19px")搜索 
                     </td>
                     <td width="50">
                         退单号：
@@ -73,8 +52,12 @@
                     <td>
                         <input type="text" id="AccountName">
                     </td>
+                   
+                </tr>
+                <tr>
+
                     <td width="60">
-                        申请日期：
+                        开始日期：
                     </td>
 
                     <td>
@@ -83,7 +66,7 @@
 
                     </td>
                     <td width="10">
-                        -
+                        截止日期
 
                     </td>
                     <td>
@@ -91,21 +74,22 @@
                         <div id='EndOrderDate'>  </div>
 
                     </td>
-                </tr>
-                <tr>
-
                     <td>
                         电话：
                     </td>
                     <td>
                         <input type="text" id="ShrTel">
                     </td>
+                   
+                </tr>
+                <tr>
                     <td> 退货状态：</td>
                     <td>
                         @HelperExtend.DropDownListEnum("OrderStatus", enumType: typeof(EasyCms.Model.UserDjStatus))
 
 
                     </td>
+                   
                     <td>退款状态：</td>
                     <td height="35">
                         @HelperExtend.DropDownListEnum("PayStatus", enumType: typeof(EasyCms.Model.ReturnMoneyStatus))
@@ -124,12 +108,33 @@
                     </td>
 
                 </tr>
-
             </tbody>
         </table>
     </dd>
 </dl>
 
+<!--工具栏-->
+
+<div id="floatHead" class="toolbar-wrap">
+    <div class="toolbar">
+        <div class="box-wrap">
+            <a class="menu-btn"></a>
+            <div class="l-list">
+                <ul class="icon-list">
+                    <li><a class="add" href="javascript:;" onclick="Publish(0);"><i></i><span>查看</span></a></li>
+                    <li><a class="edit" href="javascript:;" onclick="Publish(7 );"><i></i><span>审核</span></a></li>
+                    <li><a class="edit" href="javascript:;" onclick="Publish(10 );"><i></i><span>取回货物</span></a></li>
+                    <li><a class="edit" href="javascript:;" onclick="Publish(11 );"><i></i><span>确认退款</span></a></li>
+                    <li><a class="expandable" href="javascript:;" onclick="exportOrder();"><i></i><span>导出</span></a></li>
+
+                </ul>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
 <div class="content-tab">
     <div class="content-tab-ul-wrap">
         <ul>
@@ -181,9 +186,9 @@
                 }
                 id = d.ID;
             }
-            var title = "正在" + operName+"退货单【" + id + "】的详细信息";
-          
-            Dialog.open("@Url.Action("Edit")/" + id + "/" + action, title, { onClose: function () { $('#jqxgrid').jqxGrid('updatebounddata'); } }, { width: 800, height: 800 });
+            var title = "正在" + operName + "退货单【" + id + "】的详细信息";
+
+            Dialog.open("@Url.Action("Edit")/" + id + "/" + action, title, { onClose: function () { $('#jqxgrid').jqxGrid('updatebounddata'); } }, { width: 850, height:580 });
 
         }
     </script>
@@ -208,28 +213,29 @@
                         $('#StartOrderDate').jqxDateTimeInput('setDate', get3MonthBefor());
                         break;
                     case 1://等待审核
-                        $("#OrderStatus").jqxDropDownList('checkIndex', 1);
-                        break;
-                    case 2://等待取回货物
                         $("#OrderStatus").jqxDropDownList('checkIndex', 2);
                         break;
+                    case 2://等待取回货物
+                        $("#OrderStatus").jqxDropDownList('checkIndex', 4);
+                        break;
                     case 3://等待退款
-                        $("#OrderStatus").jqxDropDownList('checkIndex', 3);
+                        $("#OrderStatus").jqxDropDownList('checkIndex', 5);
 
                         break;
                     case 4://已完成
-                        $("#OrderStatus").jqxDropDownList('checkIndex', 4);
+                        $("#OrderStatus").jqxDropDownList('checkIndex', 6);
                         break;
                 }
                 $('#jqxgrid').jqxGrid('updatebounddata');
             });
-            $("#OrderNo").jqxInput({ height: '25px' });
-            $("#ShrTel").jqxInput({ height: '25px' });
-            $("#ShrMc").jqxInput({ height: '25px' });
-            $("#AccountName").jqxInput({ height: '25px' });
+            $("#returnOrderNo").jqxInput({ height: '20px' });
+            $("#OrderNo").jqxInput({ height: '20px' });
+            $("#ShrTel").jqxInput({ height: '20px' });
+            $("#ShrMc").jqxInput({ height: '20px' });
+            $("#AccountName").jqxInput({ height: '20px' });
 
-            $("#StartOrderDate").jqxDateTimeInput({ formatString: "yyyy-MM-dd", width: 100, height: '25px', showCalendarButton: true });
-            $("#EndOrderDate").jqxDateTimeInput({ formatString: "yyyy-MM-dd", width: 100, height: '25px', showCalendarButton: true });
+            $("#StartOrderDate").jqxDateTimeInput({ formatString: "yyyy-MM-dd", width: 100, height: '20px', showCalendarButton: true });
+            $("#EndOrderDate").jqxDateTimeInput({ formatString: "yyyy-MM-dd", width: 100, height: '20px', showCalendarButton: true });
 
 
             $('#EndOrderDate').jqxDateTimeInput('setDate', new Date());
@@ -315,7 +321,7 @@
          html +=
               "<a href='javascript:;' onclick='Publish(0,\"" + rowData.ID + "\");'  >详细信息</a> &nbsp;&nbsp;&nbsp;";
          if (operName) {
-             html += "<a  href='javascript:;' onclick='Publish("+rowData.Status+",\"" + rowData.ID + "\");' >" + operName + "</a>";
+             html += "<a  href='javascript:;' onclick='Publish(" + rowData.Status + ",\"" + rowData.ID + "\");' >" + operName + "</a>";
          }
 
          html += "</div>";

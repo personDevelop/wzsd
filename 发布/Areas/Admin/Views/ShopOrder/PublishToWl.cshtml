@@ -75,8 +75,16 @@
                                 });
                             </script>
                         }
+                        <input id="btnReturn" type="button" value="关闭" onclick="javascript: CloseDialog();">
+                       
+                        <script type="text/javascript">
 
-                        <input name="btnReturn" type="button" value="关闭" class="btn yellow" onclick="javascript: CloseDialog();" />
+                            $(function () {
+                                $("#btnReturn").jqxButton({ width: '150', template: 'info' });
+
+                            });
+                        </script>
+
                     </td>
                 </tr>
 

@@ -17,7 +17,7 @@
         if (!this.hasInit) {
             $("#modalDialog").jqxWindow($.extend({
                 showCollapseButton: true, autoOpen: false,
-                height: 300, width: 500
+                height: 300, width: 500, maxWidth: 2000, maxHeight: 1200
             }, this.WindowOpts));
             this.hasInit = true;
             $("#modalDialog").on('open', function (event) {
