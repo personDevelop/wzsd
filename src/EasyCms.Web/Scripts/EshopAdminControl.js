@@ -144,7 +144,7 @@ function EditGrid(gridid, url, id, other) {
 
 }
 
-function DelGrid(gridid, url, id, other,success) {
+function DelGrid(gridid, url, id, other, success) {
     gridid = '#' + gridid;
     if (!id) {
 
@@ -383,7 +383,7 @@ function CreateAjaxLoadTree(treeid, url, datafields, columns, opts) {
 
         },
         virtualModeCreateRecords: function (expandedRecord, done) {
-            var dataAdapter = new $.jqx.dataAdapter($.extend( $(treeid).data("source"), opts.data), $.extend(
+            var dataAdapter = new $.jqx.dataAdapter($.extend($(treeid).data("source"), opts.data), $.extend(
                 {
                     formatData: function (data) {
 
@@ -584,7 +584,15 @@ function CloseDialog() {
     }
 
 }
+function SetDialogState(isChanged) {
+    if (!document.parentWindow) {
+        window.parent.SetThisDialogState(isChanged);
 
+    } else {
+        document.parentWindow.parent.SetThisDialogState(isChanged);
+    }
+
+}
 function get3MonthBefor() {
     var resultDate, year, month, date, hms;
     var currDate = new Date();

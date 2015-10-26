@@ -41,7 +41,7 @@
         function OnKzsxValSuccess(data) {
             if (data.result) {
                 SucessMsg("保存成功");
-
+                SetDialogState(true);
             } else {
                 ErrorMsg("保存失败" + data.msg);
             }

@@ -80,6 +80,7 @@
                         success: function (result) {
                             if (result.IsSuccess) {
                                 SucessMsg("添加成功");
+                                SetDialogState(true);
                             } else {
                                 ErrorMsg(result.Msg);
                             }

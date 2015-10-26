@@ -21,6 +21,7 @@
             }, this.WindowOpts));
             this.hasInit = true;
             $("#modalDialog").on('open', function (event) {
+                SetThisDialogState(false);
                 var iframe = $(event.target).find("iframe");
                 var dialog = $(event.target).data("dialog");
                 var currentUrl = iframe.attr("src");
@@ -54,7 +55,7 @@
         if (windowOpts) {
             this.WindowOpts = windowOpts;
         }
-       
+
         this.innit();
         if (title) {
             $("#windowTitlemodalDialog").text(title);
@@ -83,6 +84,16 @@ function CloseThisDialog() {
 
 }
 
- 
+function SetThisDialogState(isChange) {
 
- 
+    $("#modalDialog").data("isChange", isChange);
+
+}
+function GetThisDialogState() {
+
+    return $("#modalDialog").data("isChange");
+
+}
+
+
+

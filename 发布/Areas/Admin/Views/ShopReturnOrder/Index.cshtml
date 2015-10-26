@@ -188,7 +188,13 @@
             }
             var title = "正在" + operName + "退货单【" + id + "】的详细信息";
 
-            Dialog.open("@Url.Action("Edit")/" + id + "/" + action, title, { onClose: function () { $('#jqxgrid').jqxGrid('updatebounddata'); } }, { width: 850, height:580 });
+            Dialog.open("@Url.Action("Edit")/" + id + "/" + action, title, {
+                onClose: function () {
+                    if (GetThisDialogState()) {
+                        $('#jqxgrid').jqxGrid('updatebounddata');
+                    }
+                }
+            }, { width: 850, height: 580 });
 
         }
     </script>

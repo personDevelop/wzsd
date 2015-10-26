@@ -260,10 +260,14 @@
                 onClose: function (grid) {
                     var content = grid[0].textContent;
                     if (content == "  添加扩展属性") {
-
-                        $('#jqxKzsx').jqxGrid('updatebounddata');
+                        if (GetThisDialogState()) {
+                            $('#jqxKzsx').jqxGrid('updatebounddata');
+                        }
+                       
                     } else if (content == "  添加规格") {
-                        $('#jqxGg').jqxGrid('updatebounddata');
+                        if (GetThisDialogState()) {
+                            $('#jqxGg').jqxGrid('updatebounddata');
+                        }  
                     }
                 }
             }, { width: 700, height: 500 });
@@ -282,9 +286,13 @@
                 onClose: function (grid) {
                     var content = grid[0].textContent;
                     if (content == "  添加扩展属性值") {
-
+                        if (GetThisDialogState()) {
+                            $('#jqxgrid').jqxGrid('updatebounddata');
+                        }
                         $('#jqxKzsx').jqxGrid('updatebounddata');
                     } else if (content == "  添加规格值") {
+                        if (GetThisDialogState()) {
+                            $('#jqxgrid').jqxGrid('updatebounddata');
                         $('#jqxGg').jqxGrid('updatebounddata');
                     }
                 }

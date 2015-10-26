@@ -52,7 +52,7 @@
             if (data.result) {
                 $("#formGg").find("#ID").val(data.id);
                 $("#formGg").find("#RecordStatus").val(data.RecordStatus);
-                SucessMsg("保存成功");
+                SucessMsg("保存成功"); SetDialogState(true);
                 if ($('#IsContinueAdd').val() == 1) {
                     $("#formGg").find("#RecordStatus").val("add");
                     $("#formGg").find("#ID").val("");

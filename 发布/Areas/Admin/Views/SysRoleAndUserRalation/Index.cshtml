@@ -25,7 +25,13 @@
             if (!id) {
                 ErrorMsg("请选择要分配的角色");
             } else {
-                Dialog.open("@Url.Action("AddRolePerson")/" + id, "添加人员", { onClose: function () { $('#treeGrid').jqxGrid('updatebounddata'); } }, { width: 800, height: 800 });
+                Dialog.open("@Url.Action("AddRolePerson")/" + id, "添加人员", {
+                    onClose: function () {
+                        if (GetThisDialogState()) {
+                            $('#treeGrid').jqxGrid('updatebounddata');
+                        }  
+                    }
+                }, { width: 800, height: 800 });
             }
         }
         $(function () {

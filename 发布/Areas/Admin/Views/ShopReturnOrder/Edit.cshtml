@@ -194,6 +194,7 @@
             if (result.IsSuccess) {
                 $("input[type='submit']").attr({ "disabled": "disabled" });
                 SucessMsg("操作成功！");
+                SetDialogState(true);
             }
             else {
 

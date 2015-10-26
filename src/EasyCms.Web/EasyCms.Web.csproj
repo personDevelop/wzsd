@@ -768,7 +768,6 @@
     <Content Include="Areas\Admin\Views\ShopExpress\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ShopProductType\AddExtend.cshtml" />
     <Content Include="Areas\Admin\Views\ShopProductType\AddGg.cshtml" />
-    <Content Include="Areas\Admin\Views\ShopProductType\Edit - 复制.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_LayoutEditDialog.cshtml" />
     <Content Include="Areas\Admin\Views\ShopProductType\AddValue.cshtml" />
     <Content Include="Areas\Admin\Views\ShopProductType\AddImg.cshtml" />
@@ -784,7 +783,6 @@
     <Content Include="Areas\Admin\Views\ShopComment\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\ShopComment\Edit - 复制.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_LayoutEditNoForm.cshtml" />
-    <Content Include="Areas\Admin\Views\ShopReturnOrder\PublishToWl.cshtml" />
     <Content Include="Areas\Admin\Views\ShopReturnOrder\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ShopReturnOrder\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_Process.cshtml" />
