@@ -608,3 +608,7 @@ function get3MonthBefor() {
     resultDate = new Date(year, month, date);
     return resultDate;
 }
+
+function OnFail(result) {
+    ErrorMsg("程序出现异常！" + result.responseJSON.Msg);
+}

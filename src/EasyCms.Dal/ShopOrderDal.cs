@@ -29,9 +29,36 @@ namespace EasyCms.Dal
             }
         }
 
-        public int Save(ShopOrder item)
+        public int Save(ShopOrder item, string userID, string username)
         {
-            return Dal.Submit(item);
+            if (item.ChangedProperties != null && item.ChangedProperties.Count > 0 && item.ChangedProperties.ContainsKey("ExpressCompanyID"))
+            {
+                if (string.IsNullOrWhiteSpace(item.ExpressCompanyID))
+                {
+                    item.ExpressCompanyName = string.Empty;
+
+                }
+                else
+                {
+                    item.ExpressCompanyName = Dal.From<ShopExpress>().Where(ShopExpress._.ID == item.ExpressCompanyID).Select(ShopExpress._.Name).ToScalar() as string;
+
+                }
+
+            }
+            ShopOrderAction orderAction = new ShopOrderAction()
+            {
+
+                ID = Guid.NewGuid().ToString(),
+                ActionCode = ActionEnum.修改订单,
+                ActionName = ActionEnum.修改订单.ToString(),
+                UserId = userID,
+
+                OrderId = item.ID,
+                ActionDate = DateTime.Now,
+                IsHideUser = true,
+                Username = username
+            };
+            return Dal.Submit(orderAction, item);
 
 
         }
@@ -946,7 +973,7 @@ namespace EasyCms.Dal
         public List<ShopOrder> GetMyOrder(string host, ManagerUserInfo user, int queryPage, int queryStatus, string otherWhere, out string err)
         {
             err = string.Empty;
-            WhereClip where = ShopOrder._.MemberID == user.ID && ShopOrder._.HasDelete==false;
+            WhereClip where = ShopOrder._.MemberID == user.ID && ShopOrder._.HasDelete == false;
             if (queryStatus > -1)
             {
                 where = where && ShopOrder._.OrderStatus == queryStatus;
@@ -1120,7 +1147,7 @@ namespace EasyCms.Dal
             return order;
         }
 
-        public Dictionary<string, string> ExeAction(ActionEnum actionID, string wlgs, List<string> orderIDs, out string err)
+        public Dictionary<string, string> ExeAction(ActionEnum actionID, string wlgs, List<string> orderIDs, string userID, string username, out string err)
         {
             List<BaseEntity> list = new List<BaseEntity>();
             err = string.Empty;

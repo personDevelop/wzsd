@@ -19,9 +19,9 @@ namespace EasyCms.Business
             return Dal.Delete(id);
         }
 
-        public int Save(ShopOrder item)
+        public int Save(ShopOrder item, string userID, string username)
         {
-            return Dal.Save(item);
+            return Dal.Save(item,userID,   username);
         }
 
         public DataTable GetList(int pagenum, int pagesize, WhereClip where, ref int recordCount, bool IsForSelected = false)
@@ -57,9 +57,9 @@ namespace EasyCms.Business
             return Dal.GetOrder(host, id, userid, out   err);
         }
 
-        public Dictionary<string, string> ExeAction(ActionEnum actionID, string wlgs, List<string> orderIDs, out string err)
+        public Dictionary<string, string> ExeAction(ActionEnum actionID, string wlgs, List<string> orderIDs, string userID, string username, out string err)
         {
-            return Dal.ExeAction(actionID, wlgs, orderIDs, out   err);
+            return Dal.ExeAction(actionID, wlgs, orderIDs,   userID,   username, out   err);
         }
 
         public DataTable GetList(WhereClip where)

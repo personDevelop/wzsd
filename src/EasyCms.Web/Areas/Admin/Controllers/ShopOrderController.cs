@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using Sharp.Common;
 using EasyCms.Web.Common;
+using EasyCms.Session;
 
 namespace EasyCms.Web.Areas.Admin.Controllers
 {
@@ -21,7 +22,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             return View();
         }
 
-        public string GetList(int pagenum, int pagesize, string orderNo, string ShrMc,string ShrTel, string AccountName, string StartOrderDate,
+        public string GetList(int pagenum, int pagesize, string orderNo, string ShrMc, string ShrTel, string AccountName, string StartOrderDate,
             string EndOrderDate, string PayStatus, string ShipStatus, string OrderStatus)
         {
             int recordCount = 0;
@@ -40,7 +41,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             }
             if (!string.IsNullOrWhiteSpace(ShrTel))
             {
-                 where = where && (ShopOrder._.MemberCallPhone.StartsWith(ShrTel)|| ShopOrder._.ShipTel.StartsWith(ShrTel));
+                where = where && (ShopOrder._.MemberCallPhone.StartsWith(ShrTel) || ShopOrder._.ShipTel.StartsWith(ShrTel));
             }
             DateTime start = DateTime.Now;
             if (StartOrderDate.TryPhrase("yyyy-MM-dd", out start))
@@ -108,8 +109,9 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         [ValidateInput(false)]
         public ActionResult Save(FormCollection collection)
         {
-            ShopOrder p = null; ;
-
+            ShopOrder p = null;
+            bool isSuccess = false;
+            string err = string.Empty;
             try
             {
                 if (collection["RecordStatus"] != "add")
@@ -132,31 +134,24 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                     }
 
                 }
-                bll.Save(p);
-                if (TempData.ContainsKey("IsSuccess"))
-                {
-                    TempData["IsSuccess"] = "保存成功";
 
-                }
-                else
-                {
-                    TempData.Add("IsSuccess", "保存成功");
-                }
-                ModelState.Clear();
-                if (collection["IsContinueAdd"] == "1")
-                {
-                    p = new ShopOrder();
-
-                }
-
-
+                bll.Save(p, EasyCms.Session.CmsSession.GetUserID(), CmsSession.GetUserName());
+                isSuccess = true;
+                err = "保存成功";
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("error", ex.Message);
+                err = ex.Message + ex.StackTrace;
+                new LogBll().WriteException(ex, EasyCms.Session.CmsSession.GetUserID());
 
             }
-            return View("Edit", p);
+            if (isSuccess)
+            {
+
+                return err.FormatJsonResult();
+            }
+            else
+            { return err.FormatErrorJsonResult(); }
         }
 
         //
@@ -174,8 +169,8 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             }
             else
                 p = bll.GetEntity(id);
-
-            //v.ViewBag.action = other;
+            ViewResult v = View("Edit", p);
+            v.ViewBag.action = other;
             return View("Edit", p);
         }
 
@@ -241,10 +236,10 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         [HttpPost]
         //
         // GET: /Admin/ShopOrder/Edit/5
-        public ActionResult ExeAction(ActionEnum actionID,string wlgs, List<string> orderIDs)
+        public ActionResult ExeAction(ActionEnum actionID, string wlgs, List<string> orderIDs)
         {
             string err;
-            Dictionary<string, string> result = bll.ExeAction(  actionID,wlgs, orderIDs, out err);
+            Dictionary<string, string> result = bll.ExeAction(actionID, wlgs, orderIDs,CmsSession.GetUserID(), CmsSession.GetUserName(), out err);
             if (string.IsNullOrWhiteSpace(err))
             {
                 return result.FormatJsonResult();
@@ -260,7 +255,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
 
             System.Data.DataTable dt = bll.GetOrderDetail(id);
 
-            string result = JsonWithDataTable.Serialize(dt); 
+            string result = JsonWithDataTable.Serialize(dt);
             return result;
         }
     }
