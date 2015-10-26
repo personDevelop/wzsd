@@ -5,6 +5,7 @@ using Sharp.Data;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -419,6 +420,33 @@ namespace EasyCms.Dal
                 Dal.Submit(user);
                 return string.Empty;
             }
+        }
+
+        public bool ModifyInfo(UserInfo user, out string msg)
+        {
+            ManagerUserInfo mu = new ManagerUserInfo()
+            {
+                ID = user.ID,
+                RecordStatus = StatusType.update,
+                Name = user.Name,
+                NickyName = user.NickyName,
+                Email = user.Email,
+                ContactPhone = user.ContactPhone,
+                Sex = user.Sex,
+                Signature = user.Signature
+            };
+
+            if (!string.IsNullOrWhiteSpace(user.Birthday))
+            {
+                DateTime dt;
+                if (DateTime.TryParseExact(user.Birthday, "yyyy-MM-dd", CultureInfo.CurrentCulture, System.Globalization.DateTimeStyles.AssumeLocal, out dt))
+                {
+                    mu.Birthday = dt;
+                }
+            }
+            Dal.Submit(mu);
+            msg = "修改成功";
+            return true;
         }
     }
 

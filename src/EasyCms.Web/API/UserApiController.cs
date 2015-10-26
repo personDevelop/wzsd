@@ -75,7 +75,7 @@ namespace EasyCms.Web.API
         /// </summary>
         /// <param name="valiCodeModel"></param>
         /// <returns></returns> 
-        [HttpPost] 
+        [HttpPost]
         public HttpResponseMessage GetForgetValiCode([FromBody] ValiCodeModel valiCodeModel)
         {
             if (string.IsNullOrWhiteSpace(valiCodeModel.TelNo))
@@ -346,5 +346,32 @@ namespace EasyCms.Web.API
                 return msg.FormatError();
             }
         }
+
+        [HttpPost]
+        public HttpResponseMessage ModifyInfo([FromBody]UserInfo user)
+        {
+            //检验验证码是否正确，
+            string msg = string.Empty;
+            bool result = true;
+            if (string.IsNullOrWhiteSpace(user.ContactPhone))
+            {
+                msg = "联系电话不能为空";
+                result = false;
+
+            }
+            else if (string.IsNullOrWhiteSpace(user.Name))
+            {
+                msg = "姓名不能为空";
+                result = false;
+            }
+            else
+            {
+                user.ID = Request.GetAccountID();
+                result = new ManagerUserInfoBll().ModifyInfo(user, out msg);
+            }
+            return msg.Format(result);
+
+        }
+
     }
 }

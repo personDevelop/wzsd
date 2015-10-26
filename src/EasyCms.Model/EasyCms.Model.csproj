@@ -110,6 +110,7 @@
     <Compile Include="StaticValue.cs" />
     <Compile Include="SysRoleInfo.cs" />
     <Compile Include="ValiCodeModel.cs" />
+    <Compile Include="ViewModel\UserInfo.cs" />
     <Compile Include="View_ProductInfoBySkuid.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -159,5 +159,10 @@ namespace EasyCms.Business
         {
             return Dal.ChangePwd(userid, changePwd);
         }
+
+        public bool ModifyInfo(UserInfo user, out string msg)
+        {
+            return Dal.ModifyInfo(user, out msg);
+        }
     }
 }

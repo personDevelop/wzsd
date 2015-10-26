@@ -11,29 +11,6 @@
 </style>
 
 
-<!--工具栏-->
-
-<div id="floatHead" class="toolbar-wrap">
-    <div class="toolbar">
-        <div class="box-wrap">
-            <a class="menu-btn"></a>
-            <div class="l-list">
-                <ul class="icon-list">
-                    <li><a class="add" href="javascript:;" onclick="viewOrder();"><i></i><span>查看</span></a></li>
-                    <li><a class="edit" href="javascript:;" onclick="Publish(2,'发货');"><i></i><span>发货</span></a></li>
-                    <li><a class="edit" href="javascript:;" onclick="Publish(3, '签收');"><i></i><span>签收</span></a></li>
-                    <li><a class="edit" href="javascript:;" onclick="Publish(13, '拒收');"><i></i><span>拒收</span></a></li>
-                    <li><a class="del" href="javascript:;" onclick="Publish(99, '作废');"><i></i><span>作废</span></a></li>
-                    <li><a class="expandable" href="javascript:;" onclick="exportOrder();"><i></i><span>导出</span></a></li>
-
-                </ul>
-            </div>
-        </div>
-
-
-    </div>
-
-</div>
 <dl>
     <dt>
 
@@ -42,25 +19,25 @@
         <table width="100%" class="borderkuang" border="0" cellspacing="0" cellpadding="0">
             <tbody>
                 <tr>
-                    <td rowspan="3" width="20">
+                    <td rowspan="3" width="80">
                         @HelperExtend.img("icon-1.gif", "width:19px,height:19px")搜索：
                     </td>
                     <td width="60">
                         订单编号：
                     </td>
-                    <td>
+                    <td width="220">
                         <input type="text" id="OrderNo">
                     </td>
                     <td width="60">
                         电话：
                     </td>
-                    <td>
+                    <td width="220">
                         <input type="text" id="ShrTel">
                     </td>
                     <td width="60">
                         收货姓名：
                     </td>
-                    <td>
+                    <td width="150">
                         <input type="text" id="ShrMc">
                     </td>
 
@@ -70,7 +47,7 @@
                 </tr>
 
                 <tr>
-                    <td  >
+                    <td>
                         会员账号：
                     </td>
                     <td>
@@ -92,9 +69,8 @@
 
                         <div id='EndOrderDate'>  </div>
 
-                    </td><td >
-  
-</td>
+                    </td>
+                    <td></td>
                 </tr>
                 <tr>
 
@@ -115,16 +91,36 @@
 
                         @HelperExtend.DropDownListEnum("OrderStatus", enumType: typeof(EasyCms.Model.QryOrderStatus))
                     </td>
-                    <td  >
+                    <td colspan="2">
                         <input id="btnQry" type="button" value="搜索">
                     </td>
-                    <td></td>
+                    
                 </tr>
             </tbody>
         </table>
     </dd>
 </dl>
+<!--工具栏-->
 
+<div id="floatHead" class="toolbar-wrap">
+    <div class="toolbar">
+        <div class="box-wrap">
+            <a class="menu-btn"></a>
+            <div class="l-list">
+                <ul class="icon-list">
+                    <li><a class="add" href="javascript:;" onclick="OneOper(0);"><i></i><span>查看</span></a></li>
+                    <li><a class="edit" href="javascript:;" onclick="Publish(2,true,'发货');"><i></i><span>发货</span></a></li>
+                    <li><a class="edit" href="javascript:;" onclick="Publish(3, true, '签收');"><i></i><span>签收</span></a></li>
+                    <li><a class="edit" href="javascript:;" onclick="Publish(13, true, '拒收');"><i></i><span>拒收</span></a></li>
+                    <li><a class="del" href="javascript:;" onclick="Publish(99, true, '作废');"><i></i><span>作废</span></a></li>
+                    <li><a class="expandable" href="javascript:;" onclick="exportOrder();"><i></i><span>导出</span></a></li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
 <div class="content-tab">
     <div class="content-tab-ul-wrap">
         <ul>
@@ -151,6 +147,33 @@
 
             Dialog.create("@Url.Content("~/Content/Images/movie.png")");
         });
+
+        function OneOper(action,  id) {
+            var operName = "";
+
+            switch (action) {
+                case 0:
+                    operName = "查看"; break;
+                case 1:
+                    operName = "修改"; break;
+              default:
+                  return; 
+            }
+            if (!id) {
+                var rowindexes = $('#jqxgrid').jqxGrid('getselectedrowindex');
+
+                if (rowindexes < 0) {
+                    ErrorMsg("请选择要操作的退货单");
+                    return;
+                }
+                var d = $('#jqxgrid').jqxGrid('getrowdata', rowindexes); 
+                id = d.ID;
+            }
+            var title = "正在" + operName + "订单【" + id + "】的详细信息";
+
+            Dialog.open("@Url.Action("Edit")/" + id + "/" + action, title, { onClose: function () {  /*不需要重新加载*/ } }, { width: 850, height: 580 });
+
+        }
         function Publish(action, title) {
             var rowindexes = $('#jqxgrid').jqxGrid('getselectedrowindexes');
 
@@ -194,7 +217,7 @@
                         $('#StartOrderDate').jqxDateTimeInput('setDate', get3MonthBefor());
                         break;
                     case 1://等待付款
-                         
+
                         $("#OrderStatus").jqxDropDownList('checkIndex', 1);
                         break;
                     case 2://等待付款确认
@@ -202,11 +225,11 @@
                         break;
                     case 3://等待处理
                         $("#OrderStatus").jqxDropDownList('checkIndex', 3);
-                      
+
                         break;
                     case 4://已发货
                         $("#OrderStatus").jqxDropDownList('checkIndex', 4);
-                        
+
                         break;
                     case 5://取消订单
                         $("#OrderStatus").jqxDropDownList('checkIndex',6);
@@ -273,15 +296,33 @@
 
 		{ name: 'InvoiceNote' }];
             var columns = [
-  { text: '订单号', dataField: 'ID', width: 150 },
-     { text: '收件人', dataField: 'ShipName', width: 100 },
+                {
+                    text: '操作',   cellsrenderer: function (row, column, value, html, colInfo, rowData) { 
+                        var html = "  <div style='text-align: center; overflow: hidden; padding-bottom: 2px; margin-top: 4px; text-overflow: ellipsis;'>";
+                        html += "<a href='javascript:;' onclick='OneOper(1,\"" + rowData.ID + "\");'  >修改</a> ";
+                        html += "</div>";
+                        return html;
+                    }
+                },
+                    {
+                        text: '订单号', width: 120, dataField: 'ID', cellsrenderer: function (row, column, value) {
+
+
+                            var html = "  <div style='text-align: center; overflow: hidden; padding-bottom: 2px; margin-top: 4px; text-overflow: ellipsis;'>";
+                            html += "<a href='javascript:;' onclick='OneOper(0,\"" + value + "\");'  >" + value + "</a> ";
+                            html += "</div>";
+                            return html;
+                        }
+                    },
+
+     { text: '收件人', dataField: 'ShipName', width: 80 },
   { text: '收件电话', dataField: 'ShipTel', width: 100 },
-    { text: '总价格', dataField: 'TotalPrice', cellsalign: "right", width: 100 },
-  { text: '付款状态', dataField: 'PayStatus', width: 100,@HelperExtend.ParseEnum(typeof(EasyCms.Model.PayStatus)) },
-  { text: '订单状态', dataField: 'OrderStatus', width: 100,@HelperExtend.ParseEnum(typeof(EasyCms.Model.OrderStatus)) },
+    { text: '总价格', dataField: 'TotalPrice', cellsalign: "right", width: 80 },
+  { text: '付款状态', dataField: 'PayStatus', width: 80,@HelperExtend.ParseEnum(typeof(EasyCms.Model.PayStatus)) },
+  { text: '订单状态', dataField: 'OrderStatus', width: 80,@HelperExtend.ParseEnum(typeof(EasyCms.Model.OrderStatus)) },
 
 
-  { text: '地区', dataField: 'ShipRegion', width: 100 },
+  { text: '地区', dataField: 'ShipRegion', width: 150 },
   { text: '付款方式', dataField: 'PayTypeName', width: 100 },
 
   { text: '快递公司', dataField: 'ExpressCompanyName', width: 100 },
@@ -289,10 +330,10 @@
   { text: '运单号', dataField: 'ShipOrderNum', width: 100 },
 
 
-  { text: '导出次数', dataField: 'ExportCount', cellsalign: "right", width: 100 },
+  { text: '导出次数', dataField: 'ExportCount', cellsalign: "right", width: 80 },
   { text: '创建日期', dataField: 'CreateDate', width: 120, cellsformat: "yyyy-MM-dd HH:mm" },
-    { text: '发票抬头', dataField: 'InvoiceInfo', width: 200 },
-      { text: '发票说明', dataField: 'InvoiceNote', width: 200 },
+    { text: '发票抬头', dataField: 'InvoiceInfo'  },
+      { text: '发票说明', dataField: 'InvoiceNote'  },
              { text: '会员姓名', dataField: 'MemberName', width: 100 },
 
   { text: '会员电话', dataField: 'MemberCallPhone', width: 100 }];

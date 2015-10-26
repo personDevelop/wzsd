@@ -161,16 +161,21 @@ namespace EasyCms.Web.Areas.Admin.Controllers
 
         //
         // GET: /Admin/ShopOrder/Edit/5
-        public ActionResult Edit(string id)
+        public ActionResult Edit(string id, int other)
         {
+
+
 
             ShopOrder p = null;
             if (string.IsNullOrWhiteSpace(id))
             {
                 p = new ShopOrder();
+                throw new Exception("订单号不能为空");
             }
             else
                 p = bll.GetEntity(id);
+
+            //v.ViewBag.action = other;
             return View("Edit", p);
         }
 
@@ -247,6 +252,16 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             }
             else
                 return err.FormatErrorJsonResult();
+        }
+
+        public string GetOrderDetail(string id)
+        {
+
+
+            System.Data.DataTable dt = bll.GetOrderDetail(id);
+
+            string result = JsonWithDataTable.Serialize(dt); 
+            return result;
         }
     }
 }

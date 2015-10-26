@@ -86,5 +86,10 @@ namespace EasyCms.Business
         {
             return Dal.PaySuccess(orderID, out err);
         }
+
+        public DataTable GetOrderDetail(string id)
+        {
+            return Dal.GetOrderDetail(id);
+        }
     }
 }

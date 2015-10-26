@@ -1322,7 +1322,7 @@ namespace EasyCms.Dal
                         case ActionEnum.作废:
                             int[] CanzfStatus = new int[] {  
                                 (int)OrderStatus.拒收, (int)OrderStatus.取消订单 , (int)OrderStatus.退货完成 };
-                             
+
                             if (!CanzfStatus.Contains(order.OrderStatus))
                             {
                                 msg = "订单状态为【" + (OrderStatus)(order.OrderStatus) + "】,不能作废";
@@ -1741,6 +1741,24 @@ namespace EasyCms.Dal
                 Dal.Submit(orderAction);
             }
             return result;
+        }
+
+        public DataTable GetOrderDetail(string id)
+        {
+            return Dal.From<ShopOrderItem>().Where(ShopOrderItem._.OrderID == id)
+                .Select(ShopOrderItem._.ProductCode,
+ShopOrderItem._.ProductName,
+ShopOrderItem._.AttributeVal,
+ShopOrderItem._.ProductThumb,
+ShopOrderItem._.Count,
+ShopOrderItem._.IsHandsel,
+ShopOrderItem._.ReturnCount,
+ShopOrderItem._.Price,
+ShopOrderItem._.TotalPrice,
+ShopOrderItem._.ReturnMoney,
+ShopOrderItem._.ProductTypeName,
+ShopOrderItem._.BrandName,
+ShopOrderItem._.Weight).ToDataTable();
         }
     }
 

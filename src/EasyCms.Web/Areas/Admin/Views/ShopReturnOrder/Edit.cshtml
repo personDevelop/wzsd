@@ -248,7 +248,7 @@
            { text: '退货数量', dataField: 'RequestQuantity', cellsalign: "right", width: 100 },
                { text: '销售单价', dataField: 'SellPrice', cellsalign: "right", width: 100 }
             ];
-            CreateGrid("jqxgrid", url, datafields, columns, { grid: { autorowheight: true } });
+            CreateGrid("jqxgrid", url, datafields, columns, { grid: { autorowheight: true, autoheight: true, pageable: false } });
 
 
 
@@ -273,7 +273,7 @@
    { text: '操作时间', dataField: 'ActionDate', width: 200 },
 
   { text: '备注', dataField: 'Remark', cellsalign: "left" }];
-            CreateGrid("jqxgridGz", url, datafields, columns);
+            CreateGrid("jqxgridGz", url, datafields, columns, { grid: {   pageable: false } });
 
 
 

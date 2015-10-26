@@ -2,10 +2,10 @@
 @{
     ViewBag.Title = "订单信息";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutEditDialog.cshtml";
-}  
+}
 @Scripts.Render("~/bundles/jqueryAjax")
 
-@using EasyCms.Model 
+@using EasyCms.Model
 @using (Ajax.BeginForm("ExeAction", null, new AjaxOptions() { AllowCache = false, OnSuccess = "OnSuccess", OnFailure = "OnFail" }, new { id = "form1" }))
 {
     <!--内容-->
@@ -16,26 +16,26 @@
                     <li><a class="selected" href="javascript:;">基本信息</a></li>
                     <li><a href="javascript:;">商品清单</a></li>
                     <li><a href="javascript:;">配送信息</a></li>
-                    <li><a href="javascript:;">发票信息</a></li> 
+                    <li><a href="javascript:;">发票信息</a></li>
                     <li><a href="javascript:;">跟踪信息</a></li>
                 </ul>
             </div>
         </div>
     </div>
-    <div class="tab-content"> 
-        @Html.Hidden("SubmitActionType") 
+    <div class="tab-content">
+        @Html.Hidden("SubmitActionType")
         @HelperExtend.Lable(Model.ID, "订单号")
-        @HelperExtend.Lable(Model.CreateDate.ToString("yyyy-MM-dd HH:mm"), "创建日期") 
+        @HelperExtend.Lable(Model.CreateDate.ToString("yyyy-MM-dd HH:mm"), "创建日期")
         @HelperExtend.Lable(Model.TotalPrice.ToString(), "订单总额")
         @HelperExtend.Lable(Model.Discount.ToString(), "折扣金额")
         @HelperExtend.Lable(Model.Freight.ToString(), "配送费用")
-        @HelperExtend.Lable(Model.PayMoney.ToString(), "应付金额") 
+        @HelperExtend.Lable(Model.PayMoney.ToString(), "应付金额")
 
-        @HelperExtend.DropDownList(Model.PayMoney.ToString(), "物流公司") @*可改*@
-      
+
+        @HelperExtend.DropDownList("LogistID", "物流公司", Model.ExpressCompanyID, downInfo: new DropDownListInfo() { Url = Url.Action("GetListForSelecte", "ShopExpress") });
         @HelperExtend.TextBox("ShipOrderNum", "物流单号", Model.ShipOrderNum)
-        @HelperExtend.Lable(Model.PayMoney.ToString(), "支付方式") @*可改*@
-        @HelperExtend.Lable(Model.PayMoney.ToString(), "商品重量")   @*可改*@
+        @HelperExtend.Lable(Model.PayTypeName, "支付方式")
+        @HelperExtend.Number("Weight", "商品重量", Model.Weight)
         @HelperExtend.TextArea("Remark", "备注", defaultval: Model.Remark)
 
 
@@ -57,73 +57,73 @@
         @HelperExtend.Lable(Model.MemberEmail, "购买人邮箱")
 
     </div>
-     <div class="tab-content" style="display:none">
-        @HelperExtend.RadioGroup("IsInvoice", "发票","false,true","不需要发票,需要发票",Model.IsInvoice) 
+    <div class="tab-content" style="display:none">
+        @HelperExtend.RadioGroup("IsInvoice", "发票", "false,true", "不需要发票,需要发票", Model.IsInvoice)
         @HelperExtend.TextBox("InvoiceInfo", "发票抬头", Model.InvoiceInfo)
-        @HelperExtend.TextArea("InvoiceNote", "发票说明", Model.InvoiceNote, "这里可以标明发票的明细及相关要求，例如是否需要增值税发票") 
+        @HelperExtend.TextArea("InvoiceNote", "发票说明", Model.InvoiceNote, "这里可以标明发票的明细及相关要求，例如是否需要增值税发票")
     </div>
     <div class="tab-content" style="display:none">
-        @{
-        List<Process> list = new List<Process>();
-        list.Add(new Process() { Name = "提交申请", IsReady = true, IsNode = true });
-        list.Add(new Process() { IsReady = true, IsNode = false });
-        switch (Model.Status)
-        {
-            case UserDjStatus.无:
-                break;
-            case UserDjStatus.等待审核:
-                list.Add(new Process() { Name = "等待审核", IsReady = true, IsNode = true });
-                list.Add(new Process() { IsReady = false, IsNode = false });
-                list.Add(new Process() { Name = "取货中", IsReady = false, IsNode = true });
-                list.Add(new Process() { IsReady = false, IsNode = false });
-                list.Add(new Process() { Name = "等待退款", IsReady = false, IsNode = true });
-                list.Add(new Process() { IsReady = false, IsNode = false });
-                list.Add(new Process() { Name = "完成", IsReady = false, IsNode = true });
+        @*@{
+            List<Process> list = new List<Process>();
+            list.Add(new Process() { Name = "提交申请", IsReady = true, IsNode = true });
+            list.Add(new Process() { IsReady = true, IsNode = false });
+            switch (Model.Status)
+            {
+                case UserDjStatus.无:
+                    break;
+                case UserDjStatus.等待审核:
+                    list.Add(new Process() { Name = "等待审核", IsReady = true, IsNode = true });
+                    list.Add(new Process() { IsReady = false, IsNode = false });
+                    list.Add(new Process() { Name = "取货中", IsReady = false, IsNode = true });
+                    list.Add(new Process() { IsReady = false, IsNode = false });
+                    list.Add(new Process() { Name = "等待退款", IsReady = false, IsNode = true });
+                    list.Add(new Process() { IsReady = false, IsNode = false });
+                    list.Add(new Process() { Name = "完成", IsReady = false, IsNode = true });
 
-                break;
-            case UserDjStatus.审批不通过:
-                list.Add(new Process() { Name = "审批不通过", IsReady = true, IsNode = true });
-                list.Add(new Process() { IsReady = true, IsNode = false });
-                list.Add(new Process() { Name = "完成", IsReady = true, IsNode = true });
+                    break;
+                case UserDjStatus.审批不通过:
+                    list.Add(new Process() { Name = "审批不通过", IsReady = true, IsNode = true });
+                    list.Add(new Process() { IsReady = true, IsNode = false });
+                    list.Add(new Process() { Name = "完成", IsReady = true, IsNode = true });
 
-                break;
-            case UserDjStatus.取货中:
-                list.Add(new Process() { Name = "等待审核", IsReady = true, IsNode = true });
-                list.Add(new Process() { IsReady = true, IsNode = false });
-                list.Add(new Process() { Name = "取货中", IsReady = true, IsNode = true });
-                list.Add(new Process() { IsReady = false, IsNode = false });
-                list.Add(new Process() { Name = "等待退款", IsReady = false, IsNode = true });
-                list.Add(new Process() { IsReady = false, IsNode = false });
-                list.Add(new Process() { Name = "完成", IsReady = false, IsNode = true });
+                    break;
+                case UserDjStatus.取货中:
+                    list.Add(new Process() { Name = "等待审核", IsReady = true, IsNode = true });
+                    list.Add(new Process() { IsReady = true, IsNode = false });
+                    list.Add(new Process() { Name = "取货中", IsReady = true, IsNode = true });
+                    list.Add(new Process() { IsReady = false, IsNode = false });
+                    list.Add(new Process() { Name = "等待退款", IsReady = false, IsNode = true });
+                    list.Add(new Process() { IsReady = false, IsNode = false });
+                    list.Add(new Process() { Name = "完成", IsReady = false, IsNode = true });
 
-                break;
-            case UserDjStatus.等待退款:
-                list.Add(new Process() { Name = "等待审核", IsReady = true, IsNode = true });
-                list.Add(new Process() { IsReady = true, IsNode = false });
-                list.Add(new Process() { Name = "取货中", IsReady = true, IsNode = true });
-                list.Add(new Process() { IsReady = true, IsNode = false });
-                list.Add(new Process() { Name = "等待退款", IsReady = true, IsNode = true });
-                list.Add(new Process() { IsReady = false, IsNode = false });
-                list.Add(new Process() { Name = "完成", IsReady = false, IsNode = true });
+                    break;
+                case UserDjStatus.等待退款:
+                    list.Add(new Process() { Name = "等待审核", IsReady = true, IsNode = true });
+                    list.Add(new Process() { IsReady = true, IsNode = false });
+                    list.Add(new Process() { Name = "取货中", IsReady = true, IsNode = true });
+                    list.Add(new Process() { IsReady = true, IsNode = false });
+                    list.Add(new Process() { Name = "等待退款", IsReady = true, IsNode = true });
+                    list.Add(new Process() { IsReady = false, IsNode = false });
+                    list.Add(new Process() { Name = "完成", IsReady = false, IsNode = true });
 
-                break;
-            case UserDjStatus.已完成:
-                list.Add(new Process() { Name = "等待审核", IsReady = true, IsNode = true });
-                list.Add(new Process() { IsReady = true, IsNode = false });
-                list.Add(new Process() { Name = "取货中", IsReady = true, IsNode = true });
-                list.Add(new Process() { IsReady = true, IsNode = false });
-                list.Add(new Process() { Name = "等待退款", IsReady = true, IsNode = true });
-                list.Add(new Process() { IsReady = true, IsNode = false });
-                list.Add(new Process() { Name = "完成", IsReady = true, IsNode = true });
+                    break;
+                case UserDjStatus.已完成:
+                    list.Add(new Process() { Name = "等待审核", IsReady = true, IsNode = true });
+                    list.Add(new Process() { IsReady = true, IsNode = false });
+                    list.Add(new Process() { Name = "取货中", IsReady = true, IsNode = true });
+                    list.Add(new Process() { IsReady = true, IsNode = false });
+                    list.Add(new Process() { Name = "等待退款", IsReady = true, IsNode = true });
+                    list.Add(new Process() { IsReady = true, IsNode = false });
+                    list.Add(new Process() { Name = "完成", IsReady = true, IsNode = true });
 
-                break;
-            case UserDjStatus.已取消:
-                break;
-            default:
-                break;
-        }
-        @Html.Partial("_Process", list)
-        }
+                    break;
+                case UserDjStatus.已取消:
+                    break;
+                default:
+                    break;
+            }
+            @Html.Partial("_Process", list)
+                }*@
 
 
         <div id="jqxgridGz"></div>
@@ -131,24 +131,24 @@
     </div>
     <div class="page-footer">
         <div class="btn-wrap">
-            @switch ((UserDjStatus)ViewBag.DjStatus)
-            {
-                case UserDjStatus.无:
-                    break;
-                case UserDjStatus.等待审核:
-                    <input type="submit" onclick="$('#SubmitActionType').val(1)" value="审批通过" class="btn" />
-                    <input type="submit" onclick="$('#SubmitActionType').val(2); return validCaluse();" value="审批不通过" class="btn" />
-                    break;
-                case UserDjStatus.审批不通过:
-                    break;
-                case UserDjStatus.取货中:
-                <input type="submit" onclick="$('#SubmitActionType').val(3)" value="确认取货" class="btn" />
+            @*@switch ((UserDjStatus)ViewBag.DjStatus)
+                {
+                    case UserDjStatus.无:
+                        break;
+                    case UserDjStatus.等待审核:
+                        <input type="submit" onclick="$('#SubmitActionType').val(1)" value="审批通过" class="btn" />
+                        <input type="submit" onclick="$('#SubmitActionType').val(2); return validCaluse();" value="审批不通过" class="btn" />
+                        break;
+                    case UserDjStatus.审批不通过:
+                        break;
+                    case UserDjStatus.取货中:
+                    <input type="submit" onclick="$('#SubmitActionType').val(3)" value="确认取货" class="btn" />
 
-                    break;
-                case UserDjStatus.等待退款:
-                <input type="submit" onclick="$('#SubmitActionType').val(4)" value="确认退款" class="btn" />
-                    break;
-            }
+                        break;
+                    case UserDjStatus.等待退款:
+                    <input type="submit" onclick="$('#SubmitActionType').val(4)" value="确认退款" class="btn" />
+                        break;
+                }*@
 
 
             <input name="btnReturn" type="button" value="关闭" class="btn yellow" onclick="javascript: CloseDialog();" />
@@ -190,19 +190,28 @@
     <script type="text/javascript">
 
         $(function () {
-            var url = "@Url.Action("GetReturnDetail", new   { id = Model.ID })";
+            var url = "@Url.Action("GetOrderDetail", new { id = Model.ID })";
             var datafields = [
+ 
+ 
 { name: 'ProductCode' },
-{ name: 'Name' },
-{ name: 'ThumbnailsUrl' },
- { name: 'AttributeDesc' },
-{ name: 'SaleCount' },
-{ name: 'RequestQuantity' },
-{ name: 'SellPrice' }
-            ];
+{ name: 'ProductName' },
+{ name: 'AttributeVal' },
+{ name: 'ProductThumb' }, 
+{ name: 'Count' },
+{ name: 'IsHandsel' }, 
+{ name: 'ReturnCount' }, 
+{ name: 'Price' }, 
+{ name: 'TotalPrice' },
+{ name: 'ReturnMoney' }, 
+{ name: 'ProductTypeName' },
+{ name: 'BrandName' },  
+{ name: 'Weight' }  
+            ]; 
+
             var columns = [
            {
-               text: '商品图片', dataField: 'ThumbnailsUrl', width: 100, cellsRenderer: function (row, column, value, rowData) {
+               text: '商品图片', dataField: 'ProductThumb', width: 100, cellsRenderer: function (row, column, value, rowData) {
                    var image = "<div style='margin: 5px; margin-bottom: 3px;'>";
                    var imgurl = value;
                    var img = '<img width="100" height="100" style="display: block;" src="' + imgurl + '"/>';
@@ -211,14 +220,19 @@
                    return image;
                }
            },
- { text: '商品名称', dataField: 'Name', cellsalign: "left" },
-  { text: '商品编号', dataField: 'ProductCode', cellsalign: "left" },
-           { text: '商品属性', dataField: 'AttributeDesc', cellsalign: "left", width: 100 },
-  { text: '购买数量', dataField: 'SaleCount', cellsalign: "right", width: 100 },
-           { text: '退货数量', dataField: 'RequestQuantity', cellsalign: "right", width: 100 },
-               { text: '销售单价', dataField: 'SellPrice', cellsalign: "right", width: 100 }
+ { text: '商品名称', dataField: 'ProductName', cellsalign: "left" },
+  { text: '商品编号', dataField: 'ProductCode', cellsalign: "left", width: 100 },
+           { text: '商品属性', dataField: 'AttributeVal', cellsalign: "left", width: 100 },
+            { text: '赠品', dataField: 'IsHandsel', width: 50, @HelperExtend.Parsebool() },
+  { text: '购买数量', dataField: 'Count', cellsalign: "right", width: 80 },
+  { text: '单价', dataField: 'Price', cellsalign: "right", width: 80 },
+      { text: '总价', dataField: 'TotalPrice', cellsalign: "right", width: 80 },
+                 { text: '退回数量', dataField: 'ReturnCount', cellsalign: "right", width: 80 },
+  { text: '商品类型', dataField: 'ProductTypeName', cellsalign: "left", width: 100 },
+
+  { text: '品牌', dataField: 'BrandName', cellsalign: "left", width: 100 }
             ];
-            CreateGrid("jqxgrid", url, datafields, columns, { grid: { autorowheight: true } });
+            CreateGrid("jqxgrid", url, datafields, columns, { grid: { autorowheight: true,autoheight:true ,pageable:false } });
 
 
 
@@ -228,7 +242,7 @@
     <script type="text/javascript">
 
         $(function () {
-            var url = "@Url.Action("GetReturnRoute", new { id = Model.ID })";
+            var url = "@Url.Action("GetReturnRoute", "ShopReturnOrder", new { id = Model.ID })";
             var datafields = [
   { name: 'Username' },
   { name: 'ActionDate' },
@@ -243,7 +257,7 @@
    { text: '操作时间', dataField: 'ActionDate', width: 200 },
 
   { text: '备注', dataField: 'Remark', cellsalign: "left" }];
-            CreateGrid("jqxgridGz", url, datafields, columns);
+            CreateGrid("jqxgridGz", url, datafields, columns, { grid: {   pageable: false } });
 
 
 
