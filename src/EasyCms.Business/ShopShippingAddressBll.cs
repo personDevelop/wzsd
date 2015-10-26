@@ -47,5 +47,12 @@ namespace EasyCms.Business
         {
             return Dal.GetShopAddressForShow(userID, true).ToFirst<ShopShippingAddress>();
         }
+
+        public bool UserDelete(string accountid, string id, out string err)
+        {
+            return Dal.UserDelete(accountid, id, out   err);
+        }
+
+     
     }
 }

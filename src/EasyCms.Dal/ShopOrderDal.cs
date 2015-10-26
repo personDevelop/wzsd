@@ -946,7 +946,7 @@ namespace EasyCms.Dal
         public List<ShopOrder> GetMyOrder(string host, ManagerUserInfo user, int queryPage, int queryStatus, string otherWhere, out string err)
         {
             err = string.Empty;
-            WhereClip where = ShopOrder._.MemberID == user.ID;
+            WhereClip where = ShopOrder._.MemberID == user.ID && ShopOrder._.HasDelete==false;
             if (queryStatus > -1)
             {
                 where = where && ShopOrder._.OrderStatus == queryStatus;

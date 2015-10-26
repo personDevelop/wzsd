@@ -137,6 +137,55 @@ namespace EasyCms.Dal
                 return "操作失败";
             }
         }
+
+
+        public bool UserDelete(string accountid, string id, out string err)
+        {
+            err = string.Empty;
+            bool result = false;
+            ShopOrder order = Dal.From<ShopOrder>().Where(ShopOrder._.ID == id).Select(ShopOrder._.ID, ShopOrder._.MemberID
+                , ShopOrder._.OrderStatus, ShopOrder._.HasDelete).ToFirst<ShopOrder>();
+            if (order.MemberID != accountid)
+            {
+                err = "不是您的订单，您不能删除";
+            }
+            else if (order.HasDelete)
+            {
+                err = "您的订单已经删除，无须再次删除";
+            }
+            else
+            {
+                OrderStatus os = order.OrderStatus.Phrase<OrderStatus>();
+                switch (os)
+                {
+                    case OrderStatus.等待付款:
+                    case OrderStatus.等待商家确认:
+                    case OrderStatus.等待商家发货:
+                    case OrderStatus.已发货:
+                    case OrderStatus.已收货:
+                    case OrderStatus.发起退货申请:
+                    case OrderStatus.退货取货中:
+                    case OrderStatus.商家已收货等待退款:
+                    case OrderStatus.申请取消订单:
+                    case OrderStatus.取消订单处理中:
+                    default:
+                        err = "您的订单正在处理中，不能删除";
+                        break;
+                    case OrderStatus.拒收:
+                    case OrderStatus.作废:
+                    case OrderStatus.商家不同意退换:
+                    case OrderStatus.退货完成:
+                    case OrderStatus.取消退货:
+                    case OrderStatus.取消订单:
+                    case OrderStatus.完成:
+                        order.HasDelete = true;
+                        Dal.Submit(order);
+                        result = true; 
+                        break;
+                }
+            }
+            return result;
+        }
     }
 
 }

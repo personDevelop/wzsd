@@ -318,12 +318,10 @@ namespace EasyCms.Web.API
         [HttpGet]
         public HttpResponseMessage Delete(string id)
         {
+            string err;
 
-
-            string result = new ShopShippingAddressBll().Delete(id);
-            return result.FormatError();
-
-
+            bool result = new ShopShippingAddressBll().UserDelete(Request.GetAccountID(), id, out err);
+            return err.Format(result); 
         }
 
         public HttpResponseMessage PaySuccess([FromBody] ReciveForm rf)
