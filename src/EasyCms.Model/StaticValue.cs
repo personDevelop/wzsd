@@ -229,7 +229,7 @@ namespace EasyCms.Model
         等待付款 = 0,
         等待商家确认 = 1,
         等待商家发货 = 2,
-        已发货 = 3, 
+        已发货 = 3,
         拒收 = 5,
         取消订单 = 16,
         完成 = 99,
@@ -423,6 +423,32 @@ namespace EasyCms.Model
         差评,
         中评,
         好评
+
+    }
+
+    public enum ShowType
+    {
+        无,
+        文本,
+        数值,
+        日期
+
+    }
+    public enum AggregateType
+    {
+        无,
+        求和,
+        平均,
+        最大,
+        最小
+
+    }
+    public enum AlignType
+    {
+        无,
+        居左,
+        居中,
+        居右
 
     }
 }

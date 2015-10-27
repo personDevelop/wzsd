@@ -81,6 +81,7 @@
     <Compile Include="ShopShippingAddressDal.cs" />
     <Compile Include="ShopShoppingCartsDal.cs" />
     <Compile Include="SysDeleteCasCheckDal.cs" />
+    <Compile Include="SysExportSetDal.cs" />
     <Compile Include="SysRoleAndUserRalationDal.cs" />
     <Compile Include="SysRoleInfoDal.cs" />
     <Compile Include="T_LogDal.cs" />

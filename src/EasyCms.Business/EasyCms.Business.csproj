@@ -76,6 +76,7 @@
     <Compile Include="ShopShippingAddressBll.cs" />
     <Compile Include="ShopShoppingCartsBll.cs" />
     <Compile Include="SysDeleteCasCheckBll.cs" />
+    <Compile Include="SysExportSetBll.cs" />
     <Compile Include="SysRoleAndUserRalationBll.cs" />
     <Compile Include="SysRoleInfoBll.cs" />
   </ItemGroup>

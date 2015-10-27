@@ -1,0 +1,231 @@
+﻿@model SysExportSet
+@{
+    ViewBag.Title = "编辑导出设置";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEdit.cshtml";
+}
+
+@Styles.Render("~/bundles/upimgcss")
+@Scripts.Render("~/bundles/ueditor")
+@Scripts.Render("~/bundles/uploadJs")
+
+@using EasyCms.Model
+<!--内容-->
+<div id="floatHead" class="content-tab-wrap">
+    <div class="content-tab">
+        <div class="content-tab-ul-wrap">
+            <ul>
+                <li><a class="selected" href="javascript:;">基本信息</a></li>
+                <li><a href="javascript:;">明细信息</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="tab-content">
+
+
+    @HelperExtend.HiddenFor("ID", Model.ID)
+    @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())
+    @Html.ValidationSummary()
+
+
+    @HelperExtend.TextBox("Code", "编号", defaultval: Model.Code, hint: "")
+
+    @HelperExtend.TextBox("Name", "名称", defaultval: Model.Name, hint: "")
+    @HelperExtend.RadioGroup("ShowTableCaption", "是否显示表头", "true,false", "显示,不显示", defaultval: Model.ShowTableCaption, hint: "导出的excle标题头是否显示")
+    @HelperExtend.TextArea("ExportTable", "涉及到的表", defaultval: Model.ExportTable, hint: "")
+    @HelperExtend.TextArea("Note", "备注", defaultval: Model.Note, hint: "")
+
+</div>
+
+<div class="tab-content" style="display:none">
+    <div id="jqxgrid"></div>
+
+</div>
+@section  scripts{
+
+
+    <script type="text/javascript">
+
+        $(function () {
+
+
+            //初始化表单验证
+            $("form").validate({
+                ignore: "",
+                rules: {
+                    "Code": {
+                        required: true,
+                        maxlength: 50,
+                        remote: {
+                            url: '@Url.Action("CheckRepeat")',
+                            data: {
+                                ID: function () { return $("#ID").val(); },
+
+                                RecordStatus: function () { return $("#RecordStatus").val(); },
+                                val: function () { return $("#Code").val(); }
+                            }
+                        }
+                    },
+                    Name: {
+                        required: true,
+                        maxlength: 100,
+                        remote: {
+                            url: '@Url.Action("CheckRepeat")',
+                            data: {
+                                ID: function () { return $("#ID").val(); },
+                                ParentID: function () { return $("#ParentID").val(); },
+                                RecordStatus: function () { return $("#RecordStatus").val(); },
+                                val: function () { return $("#Name").val(); },
+                                IsCode: false
+                            }
+                        }
+                    },
+                    ClassTypeID: { required: true },
+                    Note: {
+                        maxlength: 500
+                    }
+                },
+                messages: {
+                    Code: {
+                        required: "请输入编号",
+                        maxlength: $.validator.format("编号长度不能大于{0}个字符"),
+                        remote: "同级分类下编号重复"
+                    },
+                    Name: {
+                        required: "请输入名称",
+                        maxlength: $.validator.format("名称长度不能大于{0}个字符"),
+                        remote: "同级分类下名称重复"
+                    }
+                },
+                errorPlacement: errorPlace
+            });
+        })
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var url = "@Url.Action("GetMxList")";
+            var datafields = [
+
+  { name: 'ID' },
+  { name: 'Code' },
+  { name: 'Name' },
+  { name: 'SourcTable' },
+  { name: 'ShowType' },
+  { name: 'AggregateType' },
+  { name: 'AlignType' },
+  { name: 'OrderNo' },
+  { name: 'GroupCode' },
+  { name: 'GroupName' },
+  { name: 'MID' },
+  { name: 'FormatType' },
+
+            ];
+            var AlignTypes = [];
+            @{
+
+                List<Sharp.Common.EnumEnity> AlignTypelist = Sharp.Common.CommonUtils.PhraseEnumToList<ShowType>();
+                foreach (var item in AlignTypelist)
+	{
+		 <text>
+            AlignTypes.push({ ID: "@item.ID", Name: "@item.Name" });
+            </text>
+
+	}
+
+            }
+            var columns = [
+  { text: '编号', dataField: 'Code', cellsalign: "left", width: 100 },
+
+  { text: '名称', dataField: 'Name', cellsalign: "left", width: 100 },
+
+  { text: '所属表', dataField: 'SourcTable', cellsalign: "left", width: 100 },
+
+  {
+      text: '类型', dataField: 'ShowType', width: 100, createeditor: function (row, value, editor) {
+
+          editor.jqxDropDownList({ source: AlignTypes, displayMember: 'Name', valueMember: 'ID' });
+
+      },@HelperExtend.ParseEnum(typeof(ShowType))
+  },
+      { text: '对齐方式', dataField: 'AlignType', width: 100,@HelperExtend.ParseEnum(typeof(AlignType)) },
+      { text: '格式类型', dataField: 'FormatType', width: 100 },
+
+  { text: '聚合类型', dataField: 'AggregateType', width: 100,@HelperExtend.ParseEnum(typeof(AggregateType)) },
+
+
+  { text: '顺序', dataField: 'OrderNo', cellsalign: "left", width: 100 },
+
+  { text: '对应表头合并组', dataField: 'GroupCode', cellsalign: "left", width: 100 },
+
+  { text: '对应表头合并组标题', dataField: 'GroupName', cellsalign: "left", width: 100 }
+
+
+            ];
+            CreateGrid("jqxgrid", url, datafields, columns, {
+                gird: {
+                    editable: true,
+                    selectionmode: 'singlecell',
+                    editmode: 'click',
+                    showtoolbar: true, rendertoolbar: function (toolbar) {
+
+                        var me = this;
+
+                        var container = $("<div style='margin: 5px;'></div>");
+
+                        toolbar.append(container);
+
+                        container.append('<input id="addrowbutton" type="button" value="添加新行" />');
+                        container.append('<input style="margin-left: 5px;" id="deleterowbutton" type="button" value="移除一行" />');
+
+                        $("#addrowbutton").jqxButton();
+                        $("#deleterowbutton").jqxButton();
+
+                        // create new row.
+
+                        $("#addrowbutton").on('click', function () {
+                            var datarow = generaterow();
+                            var commit = $("#jqxgrid").jqxGrid('addrow', null, datarow);
+                        });
+                        // delete row.
+
+                        $("#deleterowbutton").on('click', function () {
+
+                            var selectedrowindex = $("#jqxgrid").jqxGrid('getselectedrowindex');
+
+                            var rowscount = $("#jqxgrid").jqxGrid('getdatainformation').rowscount;
+
+                            if (selectedrowindex >= 0 && selectedrowindex < rowscount) {
+
+                                var id = $("#jqxgrid").jqxGrid('getrowid', selectedrowindex);
+                                var commit = $("#jqxgrid").jqxGrid('deleterow', id);
+                            }
+
+                        });
+
+                    }
+                }
+            });
+
+
+        });
+        var generaterow = function (i) {
+            var rows = $('#jqxgrid').jqxGrid('getrows');
+            var row = {};
+            row["ID"] = "";
+            row["Code"] = "";
+            row["Name"] = "";
+            row["SourcTable"] = "";
+            row["ShowType"] = "";
+            row["AggregateType"] = "";
+            row["AlignType"] = "";
+            row["OrderNo"] = rows.length;
+            row["GroupCode"] = "";
+            row["GroupName"] = "";
+            row["MID"] = "";
+            row["FormatType"] = "";
+            return row;
+
+        }
+    </script>
+} 

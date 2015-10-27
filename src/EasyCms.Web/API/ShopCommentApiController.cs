@@ -22,7 +22,11 @@ namespace EasyCms.Web.API
             int middleCount = 0;
             DataTable dt = new ShopProductReviewsBll().GetListByProductID(id, pageIndex, 20, ref recordCount, ref goodCount, ref middleCount, ref badCount);
 
-            int goodPercent = (int)(goodCount * 100 / recordCount);
+            int goodPercent = 0;
+            if (recordCount>0)
+            {
+                goodPercent = (int)(goodCount * 100 / recordCount);
+            }  
             int googNum = 0;
             if (goodPercent == 100)
             {

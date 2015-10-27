@@ -221,6 +221,7 @@
     <Compile Include="API\ShopPayTypeApiController.cs" />
     <Compile Include="API\ShopProductApiController.cs" />
     <Compile Include="API\UserApiController.cs" />
+    <Content Include="Common\ExcelOperator.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\Controllers\CouponRuleController.cs" />
     <Compile Include="Areas\Admin\Controllers\ErrorController.cs" />
@@ -246,6 +247,7 @@
     <Compile Include="Areas\Admin\Controllers\ShopPromotionController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopReturnOrderController.cs" />
     <Compile Include="Areas\Admin\Controllers\SysDeleteCasCheckController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SysExportSetController.cs" />
     <Compile Include="Areas\Admin\Controllers\SysRoleAndUserRalationController.cs" />
     <Compile Include="Areas\Admin\Controllers\SysRoleInfoController.cs" />
     <Compile Include="Areas\Admin\Models\LoginModel.cs" />
@@ -786,6 +788,8 @@
     <Content Include="Areas\Admin\Views\ShopReturnOrder\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ShopReturnOrder\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_Process.cshtml" />
+    <Content Include="Areas\Admin\Views\SysExportSet\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\SysExportSet\Index.cshtml" />
     <None Include="Properties\PublishProfiles\publish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\EshopAdminControl.js" />

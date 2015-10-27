@@ -82,6 +82,8 @@
     <Compile Include="ShopOrderItem.cs" />
     <Compile Include="ShopReturnOrder.cs" />
     <Compile Include="ShopReturnOrderItem.cs" />
+    <Compile Include="SysExportMx.cs" />
+    <Compile Include="SysExportSet.cs" />
     <Compile Include="SysRoleAndUserRalation.cs" />
     <Compile Include="ViewModel\AccountModel.cs" />
     <Compile Include="ViewModel\AppException.cs" />
