@@ -32,12 +32,20 @@ namespace EasyCms.Dal
                 foreach (var mx in mxLixt)
                 {
                     mx.RecordStatus = StatusType.add;
+                    mx.MID = item.ID;
+                    if (string.IsNullOrWhiteSpace(mx.ID))
+                    {
+                        mx.ID = Guid.NewGuid().ToString();
+                    }
                 }
+                SysExportSet delMain = new SysExportSet();
+                delMain.Where = SysExportSet._.ID == item.ID;
+                delMain.RecordStatus = StatusType.delete;
                 SysExportMx del = new SysExportMx();
                 del.Where = SysExportMx._.MID == item.ID;
                 del.RecordStatus = StatusType.delete;
                 tr = Dal.BeginTransaction(out dal);
-                dal.SubmitNew(tr, ref dal,del, item); 
+                dal.SubmitNew(tr, ref dal, delMain, del, item);
                 dal.SubmitNew(tr, ref dal, mxLixt);
                 dal.CommitTransaction(tr);
                 return 1;
@@ -77,16 +85,16 @@ namespace EasyCms.Dal
             return Dal.Find<SysExportSet>(id);
         }
 
-        public DataTable AddMx(string Mid, string table, bool isSql)
+        public DataTable AddMx( string table )
         {
             List<SysExportMx> mxList = new List<SysExportMx>();
-
-            if (isSql)
+            bool isSql = false;
+            if (table.ToLower().StartsWith("select"))
             {
-                if (!table.ToLower().StartsWith("select"))
-                {
-                    table = "select * from " + table;
-                }
+                isSql = true;
+            }
+            if (isSql)
+            { 
                 if (table.Contains("where"))
                 {
                     table += " and 1=2";
@@ -105,7 +113,7 @@ namespace EasyCms.Dal
                         Code = item.ColumnName,
                         SourcTable = dt.TableName,
                         OrderNo = i++,
-                        MID = Mid
+                       
                     };
                     if (item.DataType == typeof(DateTime))
                     {
@@ -149,8 +157,7 @@ namespace EasyCms.Dal
                                     ID = Guid.NewGuid().ToString(),
                                     Code = item.ColumnName,
                                     SourcTable = dt.TableName,
-                                    OrderNo = i++,
-                                    MID = Mid
+                                    OrderNo = i++, 
                                 };
                                 if (item.DataType == typeof(DateTime))
                                 {
@@ -183,7 +190,7 @@ namespace EasyCms.Dal
             DataTable dtresult = Dal.FromCustomSql("select * from SysExportMx where 1=2").ToDataTable();
             foreach (var item in mxList)
             {
-                dtresult.CloneRow(item);
+                dtresult.AddRow(item);
 
             }
             return dtresult;
@@ -194,7 +201,7 @@ namespace EasyCms.Dal
         public DataTable GetMxList(string id)
         {
             return Dal.From<SysExportMx>().Where(SysExportMx._.MID == id).OrderBy(SysExportMx._.OrderNo).ToDataTable();
-                
+
         }
     }
 

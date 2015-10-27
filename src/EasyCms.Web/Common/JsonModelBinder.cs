@@ -42,13 +42,30 @@ namespace EasyCms.Web
                 object o = Activator.CreateInstance(typeToCreate);
                 BaseEntity be = o as BaseEntity;
                 var provider = bindingContext.ValueProvider;
+                string modelName = bindingContext.ModelName;
+                string name = string.Empty;
                 foreach (var item in be.GetPrimaryKeyProperty())
                 {
-                    item.SetValue(be, provider.GetValue(item.Name).AttemptedValue);
+                    name = item.Name;
+                    if (!string.IsNullOrWhiteSpace(modelName))
+                    {
+                        name = modelName + "[" + item.Name + "]";
+                    }
+                    item.SetValue(be, provider.GetValue(name).AttemptedValue);
                 }
                 StatusType status = StatusType.add;
-                Enum.TryParse<StatusType>(provider.GetValue("RecordStatus").AttemptedValue, out status);
-                be.RecordStatus = status;
+                name = "RecordStatus";
+                if (!string.IsNullOrWhiteSpace(modelName))
+                {
+                    name = modelName + "[" + name + "]";
+                }
+                ValueProviderResult vp=provider.GetValue(name) ;
+                if (vp != null)
+                {
+                    Enum.TryParse<StatusType>(vp.AttemptedValue, out status);
+                    be.RecordStatus = status;
+                }
+
                 return be;
             }
             else
@@ -82,6 +99,6 @@ namespace EasyCms.Web
     }
 
 
-    
+
 
 }

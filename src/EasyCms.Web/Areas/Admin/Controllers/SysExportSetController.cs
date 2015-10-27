@@ -42,55 +42,31 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         // POST: /Admin/SysExportSet/Create
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult Save(FormCollection collection)
+        public ActionResult Save(SysExportSet exportSet, List<SysExportMx> mxList)
         {
-            SysExportSet p = null; ;
 
+            bool isSuccess = true;
+            string msg = "保存成功";
             try
             {
-                if (collection["RecordStatus"] != "add")
+                if (string.IsNullOrWhiteSpace(exportSet.ID))
                 {
-                    p = bll.GetEntity(collection["ID"]);
-                    p.BindForm<SysExportSet>(collection);
-                }
-                else
-                {
-                    // TODO: Add insert logic here
-                    p = collection.Bind<SysExportSet>();
-
+                    exportSet.ID = Guid.NewGuid().ToString();
                 }
 
-                if (p.RecordStatus == Sharp.Common.StatusType.add)
-                {
-                    if (string.IsNullOrWhiteSpace(p.ID))
-                    {
-                        p.ID = Guid.NewGuid().ToString();
-                    }
-
-                }
-                //bll.Save(p);
-                if (TempData.ContainsKey("IsSuccess"))
-                {
-                    TempData.Add("IsSuccess", "保存成功");
-
-                }
-                else
-                {
-                    TempData["IsSuccess"] = "保存成功";
-                }
-                ModelState.Clear();
-                if (collection["IsContinueAdd"] == "1")
-                {
-                    p = new SysExportSet();
-                }
-
+                bll.Save(exportSet, mxList);
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("error", ex.Message);
+                isSuccess = false;
+                msg = ex.Message + ex.Source + ex.StackTrace;
+            }
+            if (isSuccess)
+            {
+                return exportSet.ID.FormatJsonResult();
 
             }
-            return View("Edit", p);
+            else return msg.FormatErrorJsonResult();
         }
 
         //
@@ -116,17 +92,38 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             return bll.Delete(id);
         }
 
-        public string AddMx(string id, string tableName, bool issQL)
+        public ActionResult AddMx(string tableName)
         {
-            DataTable dt = bll.AddMx(id, tableName, issQL);
+            DataTable dt = null;
+            string err = "";
+            bool isSuccess = true;
+            try
+            {
+                dt = bll.AddMx(tableName);
+            }
+            catch (Exception ex)
+            {
+
+                err = ex.Message + ex.StackTrace + ex.Source;
+                isSuccess = false;
+            }
+            if (isSuccess)
+            {
+                return JsonWithDataTable.Serialize(dt).FormatJsonResult();
+            }
+            else
+            {
+                return err.FormatErrorJsonResult();
+            }
+
+
+        }
+        public string GetMxList(string id)
+        {
+            DataTable dt = bll.GetMxList(id);
             return JsonWithDataTable.Serialize(dt);
         }
-        public string GetMxList(string id )
-        {
-            DataTable dt = bll.GetMxList(id );
-            return JsonWithDataTable.Serialize(dt);
-        }
-        
+
     }
 
 }

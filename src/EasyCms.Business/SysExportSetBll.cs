@@ -43,9 +43,9 @@ namespace EasyCms.Business
             return Dal.GetEntity(id);
         }
 
-        public DataTable AddMx(string Mid, string table, bool isSql)
+        public DataTable AddMx(  string table )
         {
-            return Dal.AddMx(Mid, table, isSql);
+            return Dal.AddMx(table);
         }
 
 
