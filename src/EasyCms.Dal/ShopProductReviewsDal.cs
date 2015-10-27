@@ -65,7 +65,7 @@ namespace EasyCms.Dal
                 .Where(ShopProductReviews._.ProductId == productID && ShopProductReviews._.Status == (int)DjStatus.生效)
                 .Select(ShopProductReviews._.ID, ShopProductReviews._.ReviewText,
                   ShopProductReviews._.CreatedDate, new ExpressionClip("case when IsManager=1   then NickyName when IsAnony =1 then '匿名' else name  end").Alias("Name")
-                )
+                ).OrderBy(ShopProductReviews._.CreatedDate.Desc)
                 .ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
         }
 
