@@ -25,9 +25,9 @@ namespace EasyCms.Business
         }
 
 
-        public DataTable GetListByProductID(string productID, int pagenum, int pagesize, ref int recordCount, ref int goodCount, ref int middleCount, ref int badCount)
+        public DataTable GetListByProductID(string productID, int order,int pagenum, int pagesize, ref int recordCount, ref int goodCount, ref int middleCount, ref int badCount)
         {
-            return Dal.GetListByProductID(productID, pagenum, pagesize, ref   recordCount, ref   goodCount, ref   middleCount, ref   badCount);
+            return Dal.GetListByProductID(productID, order, pagenum, pagesize, ref   recordCount, ref   goodCount, ref   middleCount, ref   badCount);
         }
 
 

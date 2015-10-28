@@ -14,13 +14,13 @@ namespace EasyCms.Web.API
     public class ShopCommentApiController : BaseAPIControl
     {
         // GET api/<controller>
-        public HttpResponseMessage Get(string id, int pageIndex = 1)
+        public HttpResponseMessage Get(string id, int pageIndex = 1,int other=0)
         {
             int recordCount = 0;
             int goodCount = 0;
             int badCount = 0;
             int middleCount = 0;
-            DataTable dt = new ShopProductReviewsBll().GetListByProductID(id, pageIndex, 20, ref recordCount, ref goodCount, ref middleCount, ref badCount);
+            DataTable dt = new ShopProductReviewsBll().GetListByProductID(id,other, pageIndex, 20, ref recordCount, ref goodCount, ref middleCount, ref badCount);
 
             int goodPercent = 0;
             if (recordCount>0)

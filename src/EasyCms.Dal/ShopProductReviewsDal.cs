@@ -53,17 +53,23 @@ namespace EasyCms.Dal
 
 
 
-        public DataTable GetListByProductID(string productID, int pagenum, int pagesize, ref int recordCount,
+        public DataTable GetListByProductID(string productID, int order, int pagenum, int pagesize, ref int recordCount,
             ref int goodCount, ref int middleCount, ref int badCount)
         {
             int pageCount = 0;
             goodCount = Dal.Count<ShopProductReviews>(ShopProductReviews._.ProductId == productID && ShopProductReviews._.CommentOrder == CommentOrder.好评, ShopProductReviews._.ID, false);
             middleCount = Dal.Count<ShopProductReviews>(ShopProductReviews._.ProductId == productID && ShopProductReviews._.CommentOrder == CommentOrder.中评, ShopProductReviews._.ID, false);
             badCount = Dal.Count<ShopProductReviews>(ShopProductReviews._.ProductId == productID && ShopProductReviews._.CommentOrder == CommentOrder.差评, ShopProductReviews._.ID, false);
+            WhereClip where = ShopProductReviews._.ProductId == productID && ShopProductReviews._.Status == (int)DjStatus.生效;
+            if (order > 0)
+            {
+                where = ShopProductReviews._.CommentOrder == order;
+            }
             return Dal.From<ShopProductReviews>()
                 .Join<ManagerUserInfo>(ShopProductReviews._.UserId == ManagerUserInfo._.ID)
-                .Where(ShopProductReviews._.ProductId == productID && ShopProductReviews._.Status == (int)DjStatus.生效)
-                .Select(ShopProductReviews._.ID, ShopProductReviews._.ReviewText,
+                .Where(where)
+                .Select(ShopProductReviews._.ID, ShopProductReviews._.ReviewText, ShopProductReviews._.CommentOrder,
+                 new ExpressionClip("case when CommentOrder=1   then '差评' when CommentOrder=2   then '中评' else '好评'  end").Alias("CommentOrderStr"),
                   ShopProductReviews._.CreatedDate, new ExpressionClip("case when IsManager=1   then NickyName when IsAnony =1 then '匿名' else name  end").Alias("Name")
                 ).OrderBy(ShopProductReviews._.CreatedDate.Desc)
                 .ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
@@ -201,7 +207,7 @@ namespace EasyCms.Dal
                 where = where && ShopOrderItem._.HasComment == true;
             }
             DataTable dt = Dal.From<ShopOrderItem>().Join<ShopOrder>(ShopOrderItem._.OrderID == ShopOrder._.ID)
-                .Select(ShopOrderItem._.OrderID, ShopOrderItem._.ProductID, ShopOrder._.CreateDate, ShopOrderItem._.Price,ShopOrderItem._.ProductName, new ExpressionClip("'" + host + "'" + "+ProductThumb").Alias("ProductThumb"), ShopOrderItem._.HasComment)
+                .Select(ShopOrderItem._.OrderID, ShopOrderItem._.ProductID, ShopOrder._.CreateDate, ShopOrderItem._.Price, ShopOrderItem._.ProductName, new ExpressionClip("'" + host + "'" + "+ProductThumb").Alias("ProductThumb"), ShopOrderItem._.HasComment)
                    .Where(where).OrderBy(ShopOrder._.CreateDate.Desc).ToDataTable(pageSize, pageIndex, ref pageCount, ref recordCount);
 
 

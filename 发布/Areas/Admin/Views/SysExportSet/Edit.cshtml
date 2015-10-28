@@ -1,389 +1,112 @@
 ﻿@model SysExportSet
 @{
     ViewBag.Title = "编辑导出设置";
-    Layout = "~/Areas/Admin/Views/Shared/_LayoutEdit.cshtml";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEditDialog.cshtml";
 }
 
-@Styles.Render("~/bundles/upimgcss")
-@Scripts.Render("~/bundles/ueditor")
-@Scripts.Render("~/bundles/uploadJs")
+@Scripts.Render("~/bundles/jqueryAjax")
 
 @using EasyCms.Model
-<!--内容-->
-<div id="floatHead" class="content-tab-wrap">
-    <div class="content-tab">
-        <div class="content-tab-ul-wrap">
-            <ul>
-                <li><a class="selected" href="javascript:;">基本信息</a></li>
-                <li><a href="javascript:;">明细信息</a></li>
-            </ul>
+
+
+<form id="form1">
+    <!--内容-->
+    <div id="floatHead" class="content-tab-wrap">
+        <div class="content-tab">
+            <div class="content-tab-ul-wrap">
+                <ul>
+                    <li><a class="selected" href="javascript:;">基本信息</a></li>
+                    <li><a href="javascript:;">明细信息</a></li>
+                </ul>
+            </div>
         </div>
     </div>
-</div>
-<div class="tab-content">
+    <div class="tab-content">
 
 
-    @HelperExtend.HiddenFor("ID", Model.ID)
-    @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())
-    @Html.ValidationSummary()
+        @HelperExtend.HiddenFor("ID", Model.ID)
+        @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())
+        @Html.ValidationSummary()
 
 
-    @HelperExtend.TextBox("Code", "编号", defaultval: Model.Code, hint: "")
+        @HelperExtend.TextBox("Code", "编号", defaultval: Model.Code, hint: "")
 
-    @HelperExtend.TextBox("Name", "名称", defaultval: Model.Name, hint: "")
-    @HelperExtend.RadioGroup("ShowTableCaption", "是否显示表头", "true,false", "显示,不显示", defaultval: Model.ShowTableCaption, hint: "导出的excle标题头是否显示")
-    @HelperExtend.TextArea("ExportTable", "涉及到的表", defaultval: Model.ExportTable, hint: "")
-    @HelperExtend.TextArea("Note", "备注", defaultval: Model.Note, hint: "")
-    
-</div>
+        @HelperExtend.TextBox("Name", "名称", defaultval: Model.Name, hint: "")
+        @HelperExtend.RadioGroup("ShowTableCaption", "是否显示表头", "true,false", "显示,不显示", defaultval: Model.ShowTableCaption, hint: "导出的excle标题头是否显示")
+        @HelperExtend.TextArea("SqlStr", "取数Sql", defaultval: Model.SqlStr, hint: "")
+        @HelperExtend.TextArea("Note", "备注", defaultval: Model.Note, hint: "")
 
-<div class="tab-content" style="display:none">
-    <div id="jqxgrid"></div>
+    </div>
 
-</div>
+    <div class="tab-content" style="display:none">
+        <div id="jqxgrid"></div>
+
+    </div>
+
+    <!--工具栏-->
+    <div class="page-footer">
+        <div class="btn-wrap">
+            <input type="button" onclick="PostToServer(true); return false;" value="保存后继续新增" class="btn" />
+            <input type="submit" onclick="PostToServer(false); return false;" value="提交保存" class="btn" />
+            <input name="btnReturn" type="button" value="返回上一页" class="btn yellow" onclick="javascript:history.back(-1);" />
+        </div>
+    </div>
+    <!--/工具栏-->
+</form>
 @section  scripts{
-<script type="text/javascript">
-
-    $(document).ready(function () {
-
-        var countries = [
-
-             { value: "AF", label: "Afghanistan" },
-
-             { value: "AL", label: "Albania" },
-
-             { value: "DZ", label: "Algeria" },
-
-             { value: "AR", label: "Argentina" },
-
-             { value: "AM", label: "Armenia" },
-
-             { value: "AU", label: "Australia" },
-
-             { value: "AT", label: "Austria" },
-
-             { value: "AZ", label: "Azerbaijan" },
-
-             { value: "BS", label: "Bahamas" },
-
-             { value: "BH", label: "Bahrain" },
-
-             { value: "BD", label: "Bangladesh" },
-
-             { value: "BB", label: "Barbados" },
-
-             { value: "BY", label: "Belarus" },
-
-             { value: "BE", label: "Belgium" },
-
-             { value: "BZ", label: "Belize" },
-
-             { value: "BJ", label: "Benin" },
-
-             { value: "BM", label: "Bermuda" },
-
-             { value: "BR", label: "Brazil" },
-
-             { value: "BN", label: "Brunei" },
-
-             { value: "BG", label: "Bulgaria" },
-
-             { value: "CM", label: "Cameroon" },
-
-             { value: "CA", label: "Canada" },
-
-             { value: "CL", label: "Chile" },
-
-             { value: "CN", label: "China" },
-
-             { value: "CO", label: "Columbia" },
-
-             { value: "CR", label: "Costa Rica" },
-
-             { value: "HR", label: "Croatia (Hrvatska)" },
-
-             { value: "CU", label: "Cuba" },
-
-             { value: "CY", label: "Cyprus" },
-
-             { value: "CZ", label: "Czech Republic" },
-
-             { value: "DK", label: "Denmark" },
-
-             { value: "TP", label: "East Timor" },
-
-             { value: "EC", label: "Ecuador" },
-
-             { value: "EG", label: "Egypt" },
-
-             { value: "ER", label: "Eritrea" },
-
-             { value: "EE", label: "Estonia" },
-
-             { value: "ET", label: "Ethiopia" },
-
-             { value: "FI", label: "Finland" },
-
-             { value: "FR", label: "France" },
-
-             { value: "DE", label: "Germany" },
-
-             { value: "GR", label: "Greece" },
-
-             { value: "HK", label: "Hong Kong" },
-
-             { value: "HU", label: "Hungary" },
-
-             { value: "IS", label: "Iceland" },
-
-             { value: "IN", label: "India" },
-
-             { value: "ID", label: "Indonesia" },
-
-             { value: "IR", label: "Iran" },
-
-             { value: "IQ", label: "Iraq" },
-
-             { value: "IE", label: "Ireland" },
-
-             { value: "IL", label: "Israel" },
-
-             { value: "IT", label: "Italy" },
-
-             { value: "JM", label: "Jamaica" },
-
-             { value: "JP", label: "Japan" },
-
-             { value: "MX", label: "Mexico" },
-
-             { value: "MC", label: "Monaco" },
-
-             { value: "MA", label: "Morocco" },
-
-             { value: "NL", label: "Netherlands" },
-
-             { value: "NZ", label: "New Zealand" },
-
-             { value: "NE", label: "Niger" },
-
-             { value: "NG", label: "Nigeria" },
-
-             { value: "KP", label: "North Korea" },
-
-             { value: "NO", label: "Norway" },
-
-             { value: "PA", label: "Panama" },
-
-             { value: "PE", label: "Peru" },
-
-             { value: "PH", label: "Philippines" },
-
-             { value: "PL", label: "Poland" },
-
-             { value: "PT", label: "Portugal" },
-
-             { value: "RO", label: "Romania" },
-
-             { value: "RU", label: "Russia" },
-
-             { value: "SA", label: "Saudi Arabia" },
-
-             { value: "SK", label: "Slovak Republic" },
-
-             { value: "SI", label: "Slovenia" },
-
-             { value: "ZA", label: "South Africa" },
-
-             { value: "KR", label: "South Korea" },
-
-             { value: "ES", label: "Spain" },
-
-             { value: "SE", label: "Sweden" },
-
-             { value: "CH", label: "Switzerland" },
-
-             { value: "TN", label: "Tunisia" },
-
-             { value: "TR", label: "Turkey" },
-
-             { value: "UA", label: "Ukraine" },
-
-             { value: "AE", label: "United Arab Emirates" },
-
-             { value: "UK", label: "United Kingdom" },
-
-             { value: "US", label: "United States" }
-
-        ];
-
-
-
-        var countriesSource =
-
-        {
-
-            datatype: "array",
-
-            datafields: [
-
-                { name: 'label', type: 'string' },
-
-                { name: 'value', type: 'string' }
-
-            ],
-
-            localdata: countries
-
-        };
-
-
-
-        var countriesAdapter = new $.jqx.dataAdapter(countriesSource, {
-
-            autoBind: true
-
-        });
-
-
-
-        // prepare the data
-
-        var gridSource =
-
-        {
-
-            datatype: "array",
-
-            localdata:
-
-            [
-
-                { countryCode: "UK" },
-
-                { countryCode: "US" },
-
-                { countryCode: "DE" },
-
-                { countryCode: "FR" },
-
-                { countryCode: "IN" },
-
-                { countryCode: "HK" }
-
-            ],
-
-            datafields: [
-
-                // name - determines the field's name.
-
-                // value - the field's value in the data source.
-
-                // values - specifies the field's values.
-
-                // values.source - specifies the foreign source. The expected value is an array.
-
-                // values.value - specifies the field's value in the foreign source.
-
-                // values.name - specifies the field's name in the foreign source.
-
-                // When the adapter is loaded, each record will have a field called "Country". The "Country" for each record comes from the countriesAdapter where the record's "countryCode" from gridAdapter matches to the "value" from countriesAdapter.
-
-                { name: 'Country', value: 'countryCode', values: { source: countriesAdapter.records, value: 'value', name: 'label' } },
-
-                { name: 'countryCode', type: 'string' }
-
-            ]
-
-        };
-
-        var gridAdapter = new $.jqx.dataAdapter(gridSource);
-
-
-
-        $("#jqxgrid").jqxGrid(
-
-        {
-
-            width: 600,
-
-            source: gridAdapter,
-
-            selectionmode: 'singlecell',
-
-            autoheight: true,
-
-            editable: true,
-
-            columns: [
-
-                {
-
-                    text: 'Country', datafield: 'countryCode', displayfield: 'Country', columntype: 'dropdownlist',
-
-                    createeditor: function (row, value, editor) {
-
-                        editor.jqxDropDownList({ source: countriesAdapter, displayMember: 'label', valueMember: 'value' });
-
-                    }
-
-                }
-
-            ]
-
-        });
-
-
-
-        $("#jqxgrid").on('cellselect', function (event) {
-
-            var column = $("#jqxgrid").jqxGrid('getcolumn', event.args.datafield);
-
-            var value = $("#jqxgrid").jqxGrid('getcellvalue', event.args.rowindex, column.datafield);
-
-            var displayValue = $("#jqxgrid").jqxGrid('getcellvalue', event.args.rowindex, column.displayfield);
-
-
-
-            $("#eventLog").html("<div>Selected Cell<br/>Row: " + event.args.rowindex + ", Column: " + column.text + ", Value: " + value + ", Label: " + displayValue + "</div>");
-
-        });
-
-
-
-        $("#jqxgrid").on('cellendedit', function (event) {
-
-            var column = $("#jqxgrid").jqxGrid('getcolumn', event.args.datafield);
-
-            if (column.displayfield != column.datafield) {
-
-                $("#eventLog").html("<div>Cell Edited:<br/>Index: " + event.args.rowindex + ", Column: " + column.text + "<br/>Value: " + event.args.value.value + ", Label: " + event.args.value.label
-
-                    + "<br/>Old Value: " + event.args.oldvalue.value + ", Old Label: " + event.args.oldvalue.label + "</div>"
-
-                    );
-
-            }
-
-            else {
-
-                $("#eventLog").html("<div>Cell Edited:<br/>Row: " + event.args.rowindex + ", Column: " + column.text + "<br/>Value: " + event.args.value
-
-                    + "<br/>Old Value: " + event.args.oldvalue + "</div>"
-
-                    );
-
-            }
-
-        });
-
-    });
-
-</script>
-
 
 
     <script type="text/javascript">
+        // 将form中的值转换为键值对。
+        // 形如：{name:'aaa',password:'tttt'}
+        // ps:注意将同名的放在一个数组里
+        function getFormJson(frm) {
+            var o = {};
+            var a = $(frm).serializeArray();
+            $.each(a, function () {
+                if (o[this.name] !== undefined) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+            });
+            return o;
+        }
 
+        function PostToServer(isContinueAdd) {
+            if ($("form").valid()) {
+                var d = getFormJson("#form1");
+                d.mxList = $("#jqxgrid").jqxGrid("source").cachedrecords;
+                $.ajax({
+                    url: "@Url.Action("Save")",
+                    type: "POST",
+                    data: d,
+                    dataType: "json",
+                    success: function (d) {
+                        if (d.IsSuccess) {
+                            SucessMsg("保存成功");
+                            if (isContinueAdd) {
+                                $("#ID").val("");
+                                $("#Code").val("");
+                                $("#Name").val("");
+                                $("#SqlStr").val("");
+                                $("#Note").val("");
+                            } else {
+                                $("#ID").val(d.Msg);
+                            }
+                        } else {
+                            ErrorMsg(d.Msg);
+                        }
+                    }
+                });
+            }
+            else { ErrorMsg("表单输入有误"); }
+
+
+        }
         $(function () {
 
 
@@ -440,39 +163,75 @@
         })
     </script>
 
-    @*<script type="text/javascript">
+    <script type="text/javascript">
         $(document).ready(function () {
+
             var url = "@Url.Action("GetMxList")";
-            var datafields = [
 
-  { name: 'ID' },
-  { name: 'Code' },
-  { name: 'Name' },
-  { name: 'SourcTable' },
-  { name: 'ShowType' },
-  { name: 'AggregateType' },
-  { name: 'AlignType' },
-  { name: 'OrderNo' },
-  { name: 'GroupCode' },
-  { name: 'GroupName' },
-  { name: 'MID' },
-  { name: 'FormatType' },
-
-            ];
+            var ShowTypes = [];
+            var AggregateTypes = [];
             var AlignTypes = [];
             @{
 
-                List<Sharp.Common.EnumEnity> AlignTypelist = Sharp.Common.CommonUtils.PhraseEnumToList<ShowType>();
+                List<Sharp.Common.EnumEnity> ShowTypelist = Sharp.Common.CommonUtils.PhraseEnumToList<ShowType>();
+                foreach (var item in ShowTypelist)
+	{
+		 <text>
+            ShowTypes.push({ ID: "@item.ID", Name: "@item.Name" });
+
+            </text>
+
+    } List<Sharp.Common.EnumEnity> AggregateTypelist = Sharp.Common.CommonUtils.PhraseEnumToList<AggregateType>();
+                foreach (var item in AggregateTypelist)
+	{
+		 <text>
+            AggregateTypes.push({ ID: "@item.ID", Name: "@item.Name" });
+
+            </text>
+
+    } List<Sharp.Common.EnumEnity> AlignTypelist = Sharp.Common.CommonUtils.PhraseEnumToList<AlignType>();
                 foreach (var item in AlignTypelist)
 	{
 		 <text>
             AlignTypes.push({ ID: "@item.ID", Name: "@item.Name" });
-           
+
             </text>
 
-	}
+    }
 
             }
+            var ShowTypeSource =
+
+          {
+
+              datatype: "array",
+
+              datafields: [
+                  { name: 'ID', type: 'string' },
+                  { name: 'Name', type: 'string' }
+              ],
+              localdata: ShowTypes
+
+          };
+            var ShowTypeAdapter = new $.jqx.dataAdapter(ShowTypeSource, {
+                autoBind: true
+            });
+            var AggregateTypeSource =
+
+          {
+
+              datatype: "array",
+
+              datafields: [
+                  { name: 'ID', type: 'string' },
+                  { name: 'Name', type: 'string' }
+              ],
+              localdata: AggregateTypes
+
+          };
+            var AggregateTypeAdapter = new $.jqx.dataAdapter(AggregateTypeSource, {
+                autoBind: true
+            });
             var AlignTypeSource =
 
           {
@@ -485,52 +244,104 @@
               ],
               localdata: AlignTypes
 
-          }; 
+          };
             var AlignTypeAdapter = new $.jqx.dataAdapter(AlignTypeSource, {
                 autoBind: true
             });
+            var datafields = [
+    { name: 'ID' },
+    { name: 'Code' },
+    { name: 'Name' },
+    { name: 'SourcTable' },
+    { name: 'ShowType' },
+    { name: 'AggregateType' },
+    { name: 'AlignType' },
+    { name: 'OrderNo' },
+    { name: 'GroupCode' },
+    { name: 'GroupName' },
+    { name: 'MID' },
+    { name: 'FormatType' },
+    { name: 'ShowTypeName', value: 'ShowType', values: { source: ShowTypeAdapter.records, value: 'ID', name: 'Name' } },
+    { name: 'AggregateTypeName', value: 'AggregateType', values: { source: AggregateTypeAdapter.records, value: 'ID', name: 'Name' } },
+    { name: 'AlignTypeName', value: 'AlignType', values: { source: AlignTypeAdapter.records, value: 'ID', name: 'Name' } }
+
+            ];
             var columns = [
-  { text: '编号', dataField: 'Code', cellsalign: "left", width: 100 },
+    { text: '编号', dataField: 'Code', cellsalign: "left", width: 100 },
 
-  { text: '名称', dataField: 'Name', cellsalign: "left", width: 100 },
+    { text: '名称', dataField: 'Name', cellsalign: "left", width: 100 },
 
-  { text: '所属表', dataField: 'SourcTable', cellsalign: "left", width: 100 },
+    { text: '所属表', dataField: 'SourcTable', cellsalign: "left", width: 100 },
 
-  {
-      text: '类型', dataField: 'ShowType',createeditor: function (row, value, editor) {
+    {
+        text: '类型', dataField: 'ShowType', width: 100, columntype: 'dropdownlist', displayfield: 'ShowTypeName', createeditor: function (row, value, editor) {
+            editor.jqxDropDownList({ source: ShowTypeAdapter, displayMember: 'Name', valueMember: 'ID' });
 
-          editor.jqxDropDownList({ source:  AlignTypeAdapter, displayMember: 'Name', valueMember: 'ID' });
+        }
 
-      }, 
-      initeditor: function (row, cellvalue, editor, celltext, pressedkey) {
-           
-          var items = editor.jqxDropDownList('getItems'); 
+    },
+      {
+          text: '对齐方式', dataField: 'AlignType', width: 100, columntype: 'dropdownlist', displayfield: 'AlignTypeName', createeditor: function (row, value, editor) {
+              editor.jqxDropDownList({ source: AlignTypeAdapter, displayMember: 'Name', valueMember: 'ID' });
 
-          
-
+          }
       },
-
-      geteditorvalue: function (row, cellvalue, editor) { 
-          return editor.val(); 
-      }
-  },
-      { text: '对齐方式', dataField: 'AlignType', width: 100,@HelperExtend.ParseEnum(typeof(AlignType)) },
       { text: '格式类型', dataField: 'FormatType', width: 100 },
 
-  { text: '聚合类型', dataField: 'AggregateType', width: 100,@HelperExtend.ParseEnum(typeof(AggregateType)) },
+    {
+        text: '聚合类型', dataField: 'AggregateType', width: 100, columntype: 'dropdownlist', displayfield: 'AggregateTypeName', createeditor: function (row, value, editor) {
+            editor.jqxDropDownList({ source: AggregateTypeAdapter, displayMember: 'Name', valueMember: 'ID' });
+
+        }
+    },
 
 
-  { text: '顺序', dataField: 'OrderNo', cellsalign: "left", width: 100 },
+    { text: '顺序', dataField: 'OrderNo', cellsalign: "left", width: 100 },
 
-  { text: '对应表头合并组', dataField: 'GroupCode', cellsalign: "left", width: 100 },
+    { text: '对应表头合并组', dataField: 'GroupCode', cellsalign: "left" },
 
-  { text: '对应表头合并组标题', dataField: 'GroupName', cellsalign: "left", width: 100 }
+    { text: '对应表头合并组标题', dataField: 'GroupName', cellsalign: "left" }
 
 
             ];
             CreateGrid("jqxgrid", url, datafields, columns, {
+                data: {
+
+                    addrow: function (rowid, rowdata, position, commit) {
+
+                        // synchronize with the server - send insert command
+
+                        // call commit with parameter true if the synchronization with the server is successful
+
+                        //and with parameter false if the synchronization failed.
+
+                        // you can pass additional argument to the commit callback which represents the new ID if it is generated from a DB.
+
+                        commit(true);
+
+                    },
+
+                    deleterow: function (rowid, commit) {
+
+                        // synchronize with the server - send delete command
+
+                        // call commit with parameter true if the synchronization with the server is successful
+
+                        //and with parameter false if the synchronization failed.
+
+                        commit(true);
+
+                    }
+                }, adapter: {
+                    formatData: function (data) {
+                        data.id = $("#ID").val();
+                    }
+
+                },
                 grid: {
                     editable: true,
+                    autoheight: true,
+                    pageable: false,
                     selectionmode: 'singlecell',
                     editmode: 'click',
                     showtoolbar: true, rendertoolbar: function (toolbar) {
@@ -540,13 +351,31 @@
                         var container = $("<div style='margin: 5px;'></div>");
 
                         toolbar.append(container);
-
+                        container.append('<input id="ReAdd" type="button" value="根据取数sql自动加载" />');
                         container.append('<input id="addrowbutton" type="button" value="添加新行" />');
                         container.append('<input style="margin-left: 5px;" id="deleterowbutton" type="button" value="移除一行" />');
-
+                        $("#ReAdd").jqxButton();
                         $("#addrowbutton").jqxButton();
                         $("#deleterowbutton").jqxButton();
+                        $("#ReAdd").on('click', function () {
+                            var talbe = $("#SqlStr").val();
+                            $.post("@Url.Action("AddMx")", { tableName: talbe }, function (result) {
+                                if (result.IsSuccess) {
+                                    var rows = $.parseJSON(result.data).Rows;
+                                    $("#jqxgrid").jqxGrid('beginupdate'); 
+                                    for (var i = 0; i < rows.length; i++) {
+                                        $("#jqxgrid").jqxGrid('addrow', null, rows[i]);
+                                    }
+                                    $("#jqxgrid").jqxGrid('endupdate');
 
+                                } else {
+                                    ErrorMsg(result.Msg);
+
+                                }
+
+                            })
+
+                        });
                         // create new row.
 
                         $("#addrowbutton").on('click', function () {
@@ -557,8 +386,9 @@
 
                         $("#deleterowbutton").on('click', function () {
 
-                            var selectedrowindex = $("#jqxgrid").jqxGrid('getselectedrowindex');
-
+                           
+                            var cell = $('#jqxgrid').jqxGrid('getselectedcell');
+                            var selectedrowindex = cell.rowindex;
                             var rowscount = $("#jqxgrid").jqxGrid('getdatainformation').rowscount;
 
                             if (selectedrowindex >= 0 && selectedrowindex < rowscount) {
@@ -593,5 +423,5 @@
             return row;
 
         }
-    </script>*@
+    </script>
 } 
