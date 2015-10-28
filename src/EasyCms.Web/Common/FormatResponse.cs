@@ -1,4 +1,5 @@
-﻿using Sharp.Common;
+﻿using EasyCms.Model;
+using Sharp.Common;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -97,5 +98,27 @@ namespace EasyCms.Web.Common
             return new JsonResult() { Data = new { IsSuccess = false, Msg = ex.GetExceptionMsg() }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
 
         }
+
+        public static JsonResult FormatExportExcleJsonResult(this HttpServerUtilityBase Server, string exportSetCode, WhereClip where = null, string orderBy = null)
+        {
+
+            string pathID = Guid.NewGuid() + ".xls";
+            string path = Server.MapPath("~/Upload/Export/" + pathID);
+            string err;
+            bool isSuccess = ExcelOperator.ExportExcle(exportSetCode, path, out err, where, "   ShopOrder.CreateDate desc");
+            if (isSuccess)
+            {
+                return pathID.FormatJsonResult();
+            }
+            else
+            {
+                return err.FormatErrorJsonResult();
+
+            }
+
+
+        }
+
+
     }
 }

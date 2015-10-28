@@ -39,6 +39,12 @@
     </div>
 
     <div class="tab-content" style="display:none">
+        <div style="color:red; line-height:2">*注：<br />合并行：当某一列里相邻行的值相同时，可以合并单元格<br />
+            是主键：在合并行判断相邻的值是否相等时，并额外判断当前主键列的值是否相等，主键值也相等时，才可以合并单元格<br />
+            不导出：不导出excle<br />
+            对应表头合并组：复杂标题头，比如多个列可以合并成一个列表头<br />
+            对应表头合并组标题：复杂标题列的标题名，当前组的列中只要有一个列标明了即可<br />
+        </div>
         <div id="jqxgrid"></div>
 
     </div>
@@ -95,7 +101,7 @@
                                 $("#SqlStr").val("");
                                 $("#Note").val("");
                             } else {
-                                $("#ID").val(d.Msg);
+                                $("#ID").val(d.data);
                             }
                         } else {
                             ErrorMsg(d.Msg);
@@ -261,42 +267,49 @@
     { name: 'GroupName' },
     { name: 'MID' },
     { name: 'FormatType' },
+      { name: 'IsMergeRow', type: "bool" },
+      { name: 'IsKey', type: "bool" },
+
+            { name: 'NotExport', type: "bool" },
     { name: 'ShowTypeName', value: 'ShowType', values: { source: ShowTypeAdapter.records, value: 'ID', name: 'Name' } },
     { name: 'AggregateTypeName', value: 'AggregateType', values: { source: AggregateTypeAdapter.records, value: 'ID', name: 'Name' } },
     { name: 'AlignTypeName', value: 'AlignType', values: { source: AlignTypeAdapter.records, value: 'ID', name: 'Name' } }
 
             ];
             var columns = [
-    { text: '编号', dataField: 'Code', cellsalign: "left", width: 100 },
+    { text: '编号', dataField: 'Code', cellsalign: "left", width: 150 },
 
-    { text: '名称', dataField: 'Name', cellsalign: "left", width: 100 },
+    { text: '名称', dataField: 'Name', cellsalign: "left", width: 150 },
 
     { text: '所属表', dataField: 'SourcTable', cellsalign: "left", width: 100 },
 
     {
-        text: '类型', dataField: 'ShowType', width: 100, columntype: 'dropdownlist', displayfield: 'ShowTypeName', createeditor: function (row, value, editor) {
+        text: '类型', dataField: 'ShowType', width: 50, columntype: 'dropdownlist', displayfield: 'ShowTypeName', createeditor: function (row, value, editor) {
             editor.jqxDropDownList({ source: ShowTypeAdapter, displayMember: 'Name', valueMember: 'ID' });
 
         }
 
     },
       {
-          text: '对齐方式', dataField: 'AlignType', width: 100, columntype: 'dropdownlist', displayfield: 'AlignTypeName', createeditor: function (row, value, editor) {
+          text: '对齐', dataField: 'AlignType', width: 50, columntype: 'dropdownlist', displayfield: 'AlignTypeName', createeditor: function (row, value, editor) {
               editor.jqxDropDownList({ source: AlignTypeAdapter, displayMember: 'Name', valueMember: 'ID' });
 
           }
       },
-      { text: '格式类型', dataField: 'FormatType', width: 100 },
+      { text: '格式', dataField: 'FormatType', width: 60 },
+        { text: '合并行', dataField: 'IsMergeRow', columntype: 'checkbox', width: 50 },
+      { text: '是主键', dataField: 'IsKey', columntype: 'checkbox', width: 50 },
+         { text: '不导出', dataField: 'NotExport', columntype: 'checkbox', width: 50 },
 
     {
-        text: '聚合类型', dataField: 'AggregateType', width: 100, columntype: 'dropdownlist', displayfield: 'AggregateTypeName', createeditor: function (row, value, editor) {
+        text: '聚合', dataField: 'AggregateType', width: 50, columntype: 'dropdownlist', displayfield: 'AggregateTypeName', createeditor: function (row, value, editor) {
             editor.jqxDropDownList({ source: AggregateTypeAdapter, displayMember: 'Name', valueMember: 'ID' });
 
         }
     },
 
 
-    { text: '顺序', dataField: 'OrderNo', cellsalign: "left", width: 100 },
+    { text: '顺序', dataField: 'OrderNo', cellsalign: "left", width: 50 },
 
     { text: '对应表头合并组', dataField: 'GroupCode', cellsalign: "left" },
 
@@ -362,8 +375,9 @@
                             $.post("@Url.Action("AddMx")", { tableName: talbe }, function (result) {
                                 if (result.IsSuccess) {
                                     var rows = $.parseJSON(result.data).Rows;
-                                    $("#jqxgrid").jqxGrid('beginupdate'); 
+                                    $("#jqxgrid").jqxGrid('beginupdate');
                                     for (var i = 0; i < rows.length; i++) {
+
                                         $("#jqxgrid").jqxGrid('addrow', null, rows[i]);
                                     }
                                     $("#jqxgrid").jqxGrid('endupdate');
@@ -386,7 +400,7 @@
 
                         $("#deleterowbutton").on('click', function () {
 
-                           
+
                             var cell = $('#jqxgrid').jqxGrid('getselectedcell');
                             var selectedrowindex = cell.rowindex;
                             var rowscount = $("#jqxgrid").jqxGrid('getdatainformation').rowscount;
@@ -413,6 +427,9 @@
             row["Name"] = "";
             row["SourcTable"] = "";
             row["ShowType"] = "";
+            row["IsMergeRow"] = false;
+            row["IsKey"] = false;
+            row["NotExport"] = false;
             row["AggregateType"] = "";
             row["AlignType"] = "";
             row["OrderNo"] = rows.length;

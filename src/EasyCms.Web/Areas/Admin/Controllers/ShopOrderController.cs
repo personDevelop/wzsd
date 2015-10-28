@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using Sharp.Common;
 using EasyCms.Web.Common;
 using EasyCms.Session;
+using System.Data;
 
 namespace EasyCms.Web.Areas.Admin.Controllers
 {
@@ -84,6 +85,68 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             string result = JsonWithDataTable.Serialize(dt);
             result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
             return result;
+
+        }
+        public ActionResult Export(string orderNo, string ShrMc, string ShrTel, string AccountName, string StartOrderDate,
+            string EndOrderDate, string PayStatus, string ShipStatus, string OrderStatus)
+        {
+
+            WhereClip where = new WhereClip();
+            if (!string.IsNullOrWhiteSpace(orderNo))
+            {
+                where = ShopOrder._.ID.StartsWith(orderNo);
+            }
+            if (!string.IsNullOrWhiteSpace(ShrMc))
+            {
+                where = where && ShopOrder._.ShipName.StartsWith(ShrMc);
+            }
+            if (!string.IsNullOrWhiteSpace(AccountName))
+            {
+                where = where && ShopOrder._.MemberName.StartsWith(AccountName);
+            }
+            if (!string.IsNullOrWhiteSpace(ShrTel))
+            {
+                where = where && (ShopOrder._.MemberCallPhone.StartsWith(ShrTel) || ShopOrder._.ShipTel.StartsWith(ShrTel));
+            }
+            DateTime start = DateTime.Now;
+            if (StartOrderDate.TryPhrase("yyyy-MM-dd", out start))
+            {
+                where = where && ShopOrder._.CreateDate >= start;
+            }
+            if (EndOrderDate.TryPhrase("yyyy-MM-dd", out start))
+            {
+                where = where && ShopOrder._.CreateDate < start.AddDays(1);
+            }
+            if (!string.IsNullOrWhiteSpace(PayStatus))
+            {
+                string[] ps = PayStatus.Split(',');
+                if (!ps.Contains(""))
+                {
+                    where = where && ShopOrder._.PayStatus.In(ps);
+                }
+
+            }
+            if (!string.IsNullOrWhiteSpace(ShipStatus))
+            {
+                string[] ps = ShipStatus.Split(',');
+                if (!ps.Contains(""))
+                {
+                    where = where && ShopOrder._.ShipStatus.In(ps);
+                }
+
+            }
+            if (!string.IsNullOrWhiteSpace(OrderStatus))
+            {
+                string[] ps = OrderStatus.Split(',');
+                if (!ps.Contains(""))
+                {
+                    where = where && ShopOrder._.OrderStatus.In(ps);
+                }
+
+            }
+          return Server.FormatExportExcleJsonResult( StaticValue.ExportOrder, where, "   ShopOrder.CreateDate desc");
+          
+
 
         }
 
@@ -239,7 +302,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         public ActionResult ExeAction(ActionEnum actionID, string wlgs, List<string> orderIDs)
         {
             string err;
-            Dictionary<string, string> result = bll.ExeAction(actionID, wlgs, orderIDs,CmsSession.GetUserID(), CmsSession.GetUserName(), out err);
+            Dictionary<string, string> result = bll.ExeAction(actionID, wlgs, orderIDs, CmsSession.GetUserID(), CmsSession.GetUserName(), out err);
             if (string.IsNullOrWhiteSpace(err))
             {
                 return result.FormatJsonResult();

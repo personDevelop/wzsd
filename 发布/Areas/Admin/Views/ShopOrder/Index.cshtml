@@ -94,7 +94,7 @@
                     <td colspan="2">
                         <input id="btnQry" type="button" value="搜索">
                     </td>
-                    
+
                 </tr>
             </tbody>
         </table>
@@ -140,15 +140,35 @@
     <div id="jqxgrid">
     </div>
 </div>
+
+ <a id="file"></a>
 <!--/列表-->
 @section  scripts{
     <script type="text/javascript">
+        function exportOrder() {
+            var data = {};
+            data.OrderNo = $("#OrderNo").val();
+            data.ShrTel = $("#ShrTel").val();
+            data.ShrMc = $("#ShrMc").val();
+            data.AccountName = $("#AccountName").val();
+            data.StartOrderDate = $("#StartOrderDate").val();
+            data.EndOrderDate = $("#EndOrderDate").val();
+            data.PayStatus = $("#PayStatus").val();
+            data.ShipStatus = $("#ShipStatus").val();
+            data.OrderStatus = $("#OrderStatus").val();
+            $.ajax( {cache: false,
+                    url: "@Url.Action("Export")",
+                    data: data,
+                    success: function (result) {
+                        window.location ="@Url.Action("GetFile", "SysExportSet")" + "?filePath=" + result.data;   }  }    );
+
+        }
         $(function () {
 
             Dialog.create("@Url.Content("~/Content/Images/movie.png")");
         });
 
-        function OneOper(action,  id) {
+        function OneOper(action, id) {
             var operName = "";
 
             switch (action) {
@@ -156,8 +176,8 @@
                     operName = "查看"; break;
                 case 1:
                     operName = "修改"; break;
-              default:
-                  return; 
+                default:
+                    return;
             }
             if (!id) {
                 var rowindexes = $('#jqxgrid').jqxGrid('getselectedrowindex');
@@ -166,7 +186,7 @@
                     ErrorMsg("请选择要操作的退货单");
                     return;
                 }
-                var d = $('#jqxgrid').jqxGrid('getrowdata', rowindexes); 
+                var d = $('#jqxgrid').jqxGrid('getrowdata', rowindexes);
                 id = d.ID;
             }
             var title = "正在" + operName + "订单【" + id + "】的详细信息";
@@ -201,9 +221,9 @@
 
             Dialog.open("@Url.Action("PublishToWl")/" + action + "/" + id, title, {
                 onClose: function () {
-                    if (GetThisDialogState( ) ) {
+                    if (GetThisDialogState()) {
                         $('#jqxgrid').jqxGrid('updatebounddata');
-                    } 
+                    }
                 }
             }, { width: 800, height: 550 });
 
@@ -244,7 +264,7 @@
 
                         break;
                     case 5://取消订单
-                        $("#OrderStatus").jqxDropDownList('checkIndex',6);
+                        $("#OrderStatus").jqxDropDownList('checkIndex', 6);
 
                         break;
                     case 6://已完成
@@ -309,7 +329,7 @@
 		{ name: 'InvoiceNote' }];
             var columns = [
                 {
-                    text: '操作',   cellsrenderer: function (row, column, value, html, colInfo, rowData) { 
+                    text: '操作', cellsrenderer: function (row, column, value, html, colInfo, rowData) {
                         var html = "  <div style='text-align: center; overflow: hidden; padding-bottom: 2px; margin-top: 4px; text-overflow: ellipsis;'>";
                         html += "<a href='javascript:;' onclick='OneOper(1,\"" + rowData.ID + "\");'  >修改</a> ";
                         html += "</div>";
@@ -344,8 +364,8 @@
 
   { text: '导出次数', dataField: 'ExportCount', cellsalign: "right", width: 80 },
   { text: '创建日期', dataField: 'CreateDate', width: 120, cellsformat: "yyyy-MM-dd HH:mm" },
-    { text: '发票抬头', dataField: 'InvoiceInfo'  },
-      { text: '发票说明', dataField: 'InvoiceNote'  },
+    { text: '发票抬头', dataField: 'InvoiceInfo' },
+      { text: '发票说明', dataField: 'InvoiceNote' },
              { text: '会员姓名', dataField: 'MemberName', width: 100 },
 
   { text: '会员电话', dataField: 'MemberCallPhone', width: 100 }];

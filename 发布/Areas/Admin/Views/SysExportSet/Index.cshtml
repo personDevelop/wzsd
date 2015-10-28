@@ -34,7 +34,7 @@
   { name: 'ID'},
   { name: 'Code'},
   { name: 'Name'},
-  { name: 'ExportTable'} 
+  { name: 'SqlStr' }
  ];
             var columns = [
 
@@ -43,7 +43,7 @@
 
   { text: '名称', dataField: 'Name', cellsalign: "left", width: 200 },
 
-  { text: '涉及到的表', dataField: 'ExportTable', cellsalign: "left"  },
+  { text: '取数sql', dataField: 'SqlStr', cellsalign: "left" },
  
  ];
    CreateGrid("jqxgrid", url, datafields, columns);

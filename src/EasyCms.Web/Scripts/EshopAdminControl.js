@@ -620,3 +620,6 @@ function get3MonthBefor() {
 function OnFail(result) {
     ErrorMsg("程序出现异常！" + result.responseJSON.Msg);
 }
+
+
+ 

@@ -29,6 +29,7 @@ namespace EasyCms.Dal
             Sharp.Data.SessionFactory dal = null;
             try
             {
+                item.RecordStatus = StatusType.add;
                 foreach (var mx in mxLixt)
                 {
                     mx.RecordStatus = StatusType.add;
@@ -37,6 +38,12 @@ namespace EasyCms.Dal
                     {
                         mx.ID = Guid.NewGuid().ToString();
                     }
+                }
+                mxLixt = mxLixt.OrderBy(p => p.OrderNo).ToList();
+                for (int i = 0; i < mxLixt.Count; i++)
+                {
+                    mxLixt[i].OrderNo = i;
+
                 }
                 SysExportSet delMain = new SysExportSet();
                 delMain.Where = SysExportSet._.ID == item.ID;
@@ -48,6 +55,7 @@ namespace EasyCms.Dal
                 dal.SubmitNew(tr, ref dal, delMain, del, item);
                 dal.SubmitNew(tr, ref dal, mxLixt);
                 dal.CommitTransaction(tr);
+
                 return 1;
 
             }
@@ -62,7 +70,7 @@ namespace EasyCms.Dal
         public DataTable GetList(int pagenum, int pagesize, ref int recordCount)
         {
             int pageCount = 0;
-            return Dal.From<SysExportSet>().Select(SysExportSet._.ID, SysExportSet._.Code, SysExportSet._.Name).OrderBy(SysExportSet._.Code).ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
+            return Dal.From<SysExportSet>().Select(SysExportSet._.ID, SysExportSet._.Code, SysExportSet._.Name, SysExportSet._.SqlStr).OrderBy(SysExportSet._.Code).ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
         }
         public bool Exit(string ID, string RecordStatus, string val)
         {
@@ -75,17 +83,13 @@ namespace EasyCms.Dal
             return !Dal.Exists<SysExportSet>(where);
         }
 
-        public DataTable GetListByParentId(string parentId)
-        {
-            return Dal.From<SysExportMx>().Where(SysExportMx._.MID == parentId).OrderBy(SysExportMx._.OrderNo).ToDataTable();
 
-        }
         public SysExportSet GetEntity(string id)
         {
             return Dal.Find<SysExportSet>(id);
         }
 
-        public DataTable AddMx( string table )
+        public DataTable AddMx(string table)
         {
             List<SysExportMx> mxList = new List<SysExportMx>();
             bool isSql = false;
@@ -94,7 +98,7 @@ namespace EasyCms.Dal
                 isSql = true;
             }
             if (isSql)
-            { 
+            {
                 if (table.Contains("where"))
                 {
                     table += " and 1=2";
@@ -113,7 +117,7 @@ namespace EasyCms.Dal
                         Code = item.ColumnName,
                         SourcTable = dt.TableName,
                         OrderNo = i++,
-                       
+
                     };
                     if (item.DataType == typeof(DateTime))
                     {
@@ -156,8 +160,8 @@ namespace EasyCms.Dal
                                 {
                                     ID = Guid.NewGuid().ToString(),
                                     Code = item.ColumnName,
-                                    SourcTable = dt.TableName,
-                                    OrderNo = i++, 
+                                    SourcTable = oneTalbe,
+                                    OrderNo = i++,
                                 };
                                 if (item.DataType == typeof(DateTime))
                                 {
@@ -188,20 +192,75 @@ namespace EasyCms.Dal
             }
 
             DataTable dtresult = Dal.FromCustomSql("select * from SysExportMx where 1=2").ToDataTable();
+            dtresult.Columns.Add("ShowTypeName");
+            dtresult.Columns.Add("AlignTypeName");
             foreach (var item in mxList)
             {
-                dtresult.AddRow(item);
+                DataRow dr = dtresult.AddRow(item);
+                switch (item.ShowType)
+                {
+                    case ShowType.无:
+                    case ShowType.文本:
+                    default:
+                        dr["ShowTypeName"] = ShowType.文本.ToString();
+                        break;
+                    case ShowType.数值:
+                        dr["ShowTypeName"] = ShowType.数值.ToString();
+                        break;
+                    case ShowType.日期:
+                        dr["ShowTypeName"] = ShowType.日期.ToString();
+                        break;
+                }
+                switch (item.AlignType)
+                {
+                    case AlignType.无:
+                    case AlignType.居左:
+                    default:
+                        dr["ShowTypeName"] = AlignType.居左.ToString();
+                        break;
+                    case AlignType.居中:
+                        dr["ShowTypeName"] = AlignType.居中.ToString();
+                        break;
+                    case AlignType.居右:
+                        dr["ShowTypeName"] = AlignType.居右.ToString();
+                        break;
+                }
+
 
             }
+
+
             return dtresult;
         }
 
 
 
-        public DataTable GetMxList(string id)
+        public DataTable GetMxDataTable(string id)
         {
             return Dal.From<SysExportMx>().Where(SysExportMx._.MID == id).OrderBy(SysExportMx._.OrderNo).ToDataTable();
 
+        }
+        public DataTable GetExportMxDataTable(string id)
+        {
+            return Dal.From<SysExportMx>().Where(SysExportMx._.MID == id && SysExportMx._.NotExport == false).OrderBy(SysExportMx._.OrderNo).ToDataTable();
+
+        }
+        public DataTable GetResult(string sql, Dictionary<string, object> paras)
+        {
+            CustomSqlSection cs = Dal.FromCustomSql(sql);
+            if (paras != null)
+            {
+                foreach (var item in paras.Keys)
+                {
+                    cs.AddInputParameter(item, paras[item]);
+                }
+            }
+            return cs.ToDataTable();
+        }
+
+        public SysExportSet GetEntityByCode(string code)
+        {
+            return Dal.From<SysExportSet>().Where(SysExportSet._.Code == code).ToFirst<SysExportSet>();
         }
     }
 

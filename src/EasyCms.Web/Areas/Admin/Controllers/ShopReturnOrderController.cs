@@ -91,6 +91,73 @@ namespace EasyCms.Web.Areas.Admin.Controllers
 
         }
 
+        public ActionResult Export( string returnOrderNo, string orderNo, string ShrMc, string ShrTel, string AccountName, string StartOrderDate,
+          string EndOrderDate, string PayStatus, string ShipStatus, string OrderStatus)
+        {
+            
+            WhereClip where = new WhereClip();
+            if (!string.IsNullOrWhiteSpace(returnOrderNo))
+            {
+                where = ShopReturnOrder._.ID.StartsWith(orderNo);
+            }
+            if (!string.IsNullOrWhiteSpace(orderNo))
+            {
+                where = ShopReturnOrder._.OrderId.StartsWith(orderNo);
+            }
+            if (!string.IsNullOrWhiteSpace(ShrMc))
+            {
+                where = where && ShopReturnOrder._.ContactName.StartsWith(ShrMc);
+            }
+            if (!string.IsNullOrWhiteSpace(AccountName))
+            {
+                where = where && ShopReturnOrder._.UserName.StartsWith(AccountName);
+            }
+            if (!string.IsNullOrWhiteSpace(ShrTel))
+            {
+                where = where && ShopReturnOrder._.PickTelPhone.StartsWith(ShrTel);
+            }
+            DateTime start = DateTime.Now;
+            if (StartOrderDate.TryPhrase("yyyy-MM-dd", out start))
+            {
+                where = where && ShopReturnOrder._.CreatedDate >= start;
+            }
+            if (EndOrderDate.TryPhrase("yyyy-MM-dd", out start))
+            {
+                where = where && ShopReturnOrder._.CreatedDate < start.AddDays(1);
+            }
+            if (!string.IsNullOrWhiteSpace(PayStatus))
+            {
+                string[] ps = PayStatus.Split(',');
+                if (!ps.Contains(""))
+                {
+                    where = where && ShopReturnOrder._.ReturnMoneyStatus.In(ps);
+                }
+
+            }
+            if (!string.IsNullOrWhiteSpace(ShipStatus))
+            {
+                string[] ps = ShipStatus.Split(',');
+                if (!ps.Contains(""))
+                {
+                    where = where && ShopReturnOrder._.LogisticStatus.In(ps);
+                }
+
+            }
+            if (!string.IsNullOrWhiteSpace(OrderStatus))
+            {
+                string[] ps = OrderStatus.Split(',');
+                if (!ps.Contains(""))
+                {
+                    where = where && ShopReturnOrder._.Status.In(ps);
+                }
+
+            }
+
+
+            return Server.FormatExportExcleJsonResult(StaticValue.ExportReturnOrder, where, "   ShopOrder.CreateDate desc");
+
+        }
+
         public string GetReturnDetail(string id)
         {
 

@@ -91,5 +91,10 @@ namespace EasyCms.Business
         {
             return Dal.GetOrderDetail(id);
         }
+
+        public DataTable getDataTable(WhereClip where)
+        {
+            return Dal.getDataTable(where);
+        }
     }
 }

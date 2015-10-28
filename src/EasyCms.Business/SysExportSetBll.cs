@@ -33,16 +33,15 @@ namespace EasyCms.Business
             return Dal.Exit(ID, RecordStatus, val);
         }
 
-        public DataTable GetListByParentId(string parentId)
-        {
-            return Dal.GetListByParentId(parentId);
-
-        }
+       
         public SysExportSet GetEntity(string id)
         {
             return Dal.GetEntity(id);
         }
-
+        public SysExportSet GetEntityByCode(string code)
+        {
+            return Dal.GetEntityByCode(code);
+        }
         public DataTable AddMx(  string table )
         {
             return Dal.AddMx(table);
@@ -50,9 +49,17 @@ namespace EasyCms.Business
 
 
 
-        public DataTable GetMxList(string id)
+        public DataTable GetMxDataTable(string id)
         {
-            return Dal.GetMxList(id );
+            return Dal.GetMxDataTable(id );
+        }
+        public DataTable GetExportMxDataTable(string id)
+        {
+            return Dal.GetExportMxDataTable(id);
+        }
+        public DataTable GetResult(string sql, Dictionary<string, object> paras)
+        {
+            return Dal.GetResult(sql,paras);
         }
     }
 }

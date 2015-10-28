@@ -48,6 +48,12 @@ namespace EasyCms.Model
 
         private string _FormatType;
 
+        private bool _IsMergeRow;
+
+        private bool _NotExport;
+
+        private bool _IsKey;
+
         #endregion
 
         #region 属性
@@ -266,7 +272,7 @@ namespace EasyCms.Model
         ///  格式类型,日期型 用 yyyymmdd等标准格式，数值用n2代表精度
         /// </summary>
 
-        [DbProperty(MapingColumnName = "FormatType", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "FormatType", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string FormatType
         {
@@ -278,6 +284,63 @@ namespace EasyCms.Model
             {
                 this.OnPropertyChanged("FormatType", this._FormatType, value);
                 this._FormatType = value;
+            }
+        }
+
+        /// <summary>
+        ///  是否合并行,同列不同行 的值可合并
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "IsMergeRow", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public bool IsMergeRow
+        {
+            get
+            {
+                return this._IsMergeRow;
+            }
+            set
+            {
+                this.OnPropertyChanged("IsMergeRow", this._IsMergeRow, value);
+                this._IsMergeRow = value;
+            }
+        }
+
+        /// <summary>
+        ///  不导出,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "NotExport", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public bool NotExport
+        {
+            get
+            {
+                return this._NotExport;
+            }
+            set
+            {
+                this.OnPropertyChanged("NotExport", this._NotExport, value);
+                this._NotExport = value;
+            }
+        }
+
+        /// <summary>
+        ///  是主键,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "IsKey", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public bool IsKey
+        {
+            get
+            {
+                return this._IsKey;
+            }
+            set
+            {
+                this.OnPropertyChanged("IsKey", this._IsKey, value);
+                this._IsKey = value;
             }
         }
 
@@ -312,6 +375,12 @@ namespace EasyCms.Model
                 MID = new PropertyItem("MID", tableName);
 
                 FormatType = new PropertyItem("FormatType", tableName);
+
+                IsMergeRow = new PropertyItem("IsMergeRow", tableName);
+
+                NotExport = new PropertyItem("NotExport", tableName);
+
+                IsKey = new PropertyItem("IsKey", tableName);
 
 
             }
@@ -363,6 +432,18 @@ namespace EasyCms.Model
             /// 格式类型,日期型 用 yyyymmdd等标准格式，数值用n2代表精度
             /// </summary> 
             public PropertyItem FormatType = null;
+            /// <summary>
+            /// 是否合并行,同列不同行 的值可合并
+            /// </summary> 
+            public PropertyItem IsMergeRow = null;
+            /// <summary>
+            /// 不导出,
+            /// </summary> 
+            public PropertyItem NotExport = null;
+            /// <summary>
+            /// 是主键,
+            /// </summary> 
+            public PropertyItem IsKey = null;
         }
         #endregion
     }

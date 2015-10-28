@@ -160,6 +160,16 @@ namespace EasyCms.Model
         public const string FunctionCachKey = "FunctionCachKey";
         public const string FunctionRightCachKey = "FunctionRightCachKey";
 
+        /// <summary>
+        /// 订单导出编号
+        /// </summary>
+        public const string ExportOrder = "ExportOrder";
+        /// <summary>
+        /// 退货单导出编号
+        /// </summary>
+        public const string ExportReturnOrder = "ExportReturnOrder";
+     
+
 
 
     }

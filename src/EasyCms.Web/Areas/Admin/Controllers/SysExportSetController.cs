@@ -120,10 +120,23 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         }
         public string GetMxList(string id)
         {
-            DataTable dt = bll.GetMxList(id);
+            DataTable dt = bll.GetMxDataTable(id);
             return JsonWithDataTable.Serialize(dt);
         }
 
+
+        public ActionResult GetFile(string filePath)
+        {
+            string path = Server.MapPath("~/Upload/Export/" + filePath);
+            if (Request.Browser.Browser == "IE" && Request.Browser.MajorVersion < 9)
+            {
+                return File(path, "application/ms-excel", filePath);
+            }
+            else
+            {
+                return File(path, "application/ms-excel", filePath);
+            }
+        }
     }
 
 }

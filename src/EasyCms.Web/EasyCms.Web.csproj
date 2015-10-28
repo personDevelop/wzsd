@@ -42,6 +42,9 @@
     <Reference Include="Microsoft.CSharp">
       <Private>True</Private>
     </Reference>
+    <Reference Include="NPOI">
+      <HintPath>..\refdll\NPOI.dll</HintPath>
+    </Reference>
     <Reference Include="Sharp.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\refdll\Sharp.Common.dll</HintPath>
@@ -221,7 +224,6 @@
     <Compile Include="API\ShopPayTypeApiController.cs" />
     <Compile Include="API\ShopProductApiController.cs" />
     <Compile Include="API\UserApiController.cs" />
-    <Content Include="Common\ExcelOperator.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\Controllers\CouponRuleController.cs" />
     <Compile Include="Areas\Admin\Controllers\ErrorController.cs" />
@@ -264,6 +266,7 @@
     <Compile Include="Areas\Admin\Models\DialogModel.cs" />
     <Compile Include="Common\AuthorCheck.cs" />
     <Compile Include="Common\BaseControler.cs" />
+    <Compile Include="Common\ExcelOperator.cs" />
     <Compile Include="Common\ExtentionMethod.cs" />
     <Compile Include="Common\FormatResponse.cs" />
     <Compile Include="Common\GatawayConfig.cs" />
@@ -1233,6 +1236,7 @@
     <Folder Include="Areas\Admin\Views\Error\" />
     <Folder Include="Content\css\" />
     <Folder Include="Scripts\jGui\" />
+    <Folder Include="Upload\Export\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

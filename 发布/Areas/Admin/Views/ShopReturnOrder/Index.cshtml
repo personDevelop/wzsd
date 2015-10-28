@@ -155,6 +155,25 @@
 <!--/列表-->
 @section  scripts{
     <script type="text/javascript">
+        function exportOrder() {
+            var data = {}; 
+            data.returnOrderNo = $("#returnOrderNo").val();
+            data.OrderNo = $("#OrderNo").val();
+            data.ShrMc = $("#ShrMc").val();
+            data.ShrTel = $("#ShrTel").val(); 
+            data.AccountName = $("#AccountName").val(); 
+            data.StartOrderDate = $("#StartOrderDate").val(); 
+            data.EndOrderDate = $("#EndOrderDate").val(); 
+            data.PayStatus = $("#PayStatus").val(); 
+            data.ShipStatus = $("#ShipStatus").val(); 
+            data.OrderStatus = $("#OrderStatus").val();
+            $.ajax( {cache: false,
+                url: "@Url.Action("Export")",
+                data: data,
+            success: function (result) {
+                window.location ="@Url.Action("GetFile", "SysExportSet")" + "?filePath=" + result.data;   }  }    );
+
+        }
         $(function () {
             Dialog.create("@Url.Content("~/Content/Images/movie.png")");
         });

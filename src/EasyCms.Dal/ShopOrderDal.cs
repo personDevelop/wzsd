@@ -1787,6 +1787,14 @@ ShopOrderItem._.ProductTypeName,
 ShopOrderItem._.BrandName,
 ShopOrderItem._.Weight).ToDataTable();
         }
+
+        public DataTable getDataTable(WhereClip where)
+        {
+
+            return Dal.From<ShopOrder>().Where(where).OrderBy(ShopOrder._.CreateDate.Desc)
+
+                .ToDataTable();
+        }
     }
 
 
