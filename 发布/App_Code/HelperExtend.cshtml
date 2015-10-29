@@ -170,6 +170,69 @@
 
     </script>
 }
+@helper DropDownListCardEnum(string code, string name, object defaultval = null, Type enumType = null, string hint = "", int width = 150)
+{ string ctrlID = "DropDownListCardEnum" + code;
+          
+           <dl>
+        <dt>
+
+            @MVCExtention.ExtendHtmlInput.MvcHelper.Label(code, name)
+        </dt>
+        <dd>
+            <div id='@ctrlID'>
+            </div>
+            <input name="@code" id="@code" type="hidden" value="@(defaultval as string)" />
+            <span style="float: left; color: red">@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(hint)</span>
+        </dd>
+    </dl>
+    
+    <script type="text/javascript">
+        $(function(){
+
+            @{
+    string jsonStr=string.Empty; 
+    string[] names=    Enum.GetNames(enumType);
+            Array ids = Enum.GetValues(enumType);
+            for (int i = 0; i < ids.Length; i++)
+            {
+                if (i>0)
+                {
+                    jsonStr += ",";
+                }
+
+                  jsonStr+=string.Format("{{ID:{0},Name:\"{1}\"}}",Convert.ToInt32(((int)ids.GetValue(i))),names[i]);
+
+            }
+            }
+            var enumData=[ @MVCExtention.ExtendHtmlInput.MvcHelper.Raw( jsonStr)];
+            var source =
+                   {
+                       localdata: enumData,
+                       datatype: "json",
+                       datafields: [
+                           { name: 'ID' },
+                           { name: 'Name' }
+                       ],
+                       async: false
+                   };
+            var dataAdapter = new $.jqx.dataAdapter(source);
+            // Create a jqxDropDownList
+            $("#@ctrlID").jqxDropDownList({
+                source: dataAdapter, displayMember: "Name", valueMember: "ID", width: @width.ToString(),  height: 25 });
+            @if (defaultval!=null  ) {
+
+                string val = defaultval.ToString();
+                if (!string.IsNullOrWhiteSpace(val))
+                {
+                    @MVCExtention.ExtendHtmlInput.MvcHelper.Raw("var item =$(\"#" + code + "\").jqxDropDownList('getItemByValue', '" + val + "');$(\"#" + code + "\").jqxDropDownList('selectItem', item ); ");
+                }
+            }
+
+        });
+
+
+    </script>
+}
 @helper DropDownListEnum(string code, object defaultval = null, Type enumType = null, bool isContainAll = true, bool isMutilCheck = true, string otherClass = "", int width = 150)
 {
     <div id='@code'>

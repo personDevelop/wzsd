@@ -251,6 +251,8 @@
     <Compile Include="Areas\Admin\Controllers\ShopReturnOrderController.cs" />
     <Compile Include="Areas\Admin\Controllers\SysDeleteCasCheckController.cs" />
     <Compile Include="Areas\Admin\Controllers\SysExportSetController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SysMsgInterSetController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SysMsgTempSetController.cs" />
     <Compile Include="Areas\Admin\Controllers\SysRoleAndUserRalationController.cs" />
     <Compile Include="Areas\Admin\Controllers\SysRoleInfoController.cs" />
     <Compile Include="Areas\Admin\Models\LoginModel.cs" />
@@ -796,6 +798,10 @@
     <Content Include="Areas\Admin\Views\SysExportSet\Index.cshtml" />
     <Content Include="Areas\Admin\Views\CouponSendRecord\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\CouponSendRecord\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\SysMsgInterSet\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\SysMsgInterSet\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\SysMsgTempSet\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\SysMsgTempSet\Index.cshtml" />
     <None Include="Properties\PublishProfiles\publish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\EshopAdminControl.js" />

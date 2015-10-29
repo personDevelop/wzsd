@@ -168,7 +168,7 @@ namespace EasyCms.Model
         /// 退货单导出编号
         /// </summary>
         public const string ExportReturnOrder = "ExportReturnOrder";
-     
+
 
 
 
@@ -287,7 +287,7 @@ namespace EasyCms.Model
         注册送优惠券,
         注册送积分,
         包邮,
-        系统派送=89,
+        系统派送 = 89,
         使用优惠券 = 90,
         使用积分 = 91,
         其他 = 99
@@ -312,8 +312,8 @@ namespace EasyCms.Model
         导出订单 = 12,
         拒收 = 13,
         完成取货 = 14,
-        修改订单=15,
-        评价订单=16,
+        修改订单 = 15,
+        评价订单 = 16,
         作废 = 99,
 
     }
@@ -465,10 +465,28 @@ namespace EasyCms.Model
     }
 
     public enum SendCouponType
-    { 
+    {
         全员发放,
         用户等级,
         注册时间,
-        购买次数 
+        购买次数
+    }
+
+    public enum SendMsgType
+    {
+        新用户注册,
+        订单提交,
+        订单发货,
+        订单付款,
+        订单收货,
+        订单留言,
+        留言反馈,
+        商品评论,
+        商品咨询,
+        余额提醒,
+        找回密码,
+        获取新密码,
+        站内信,
+        手机验证码
     }
 }
