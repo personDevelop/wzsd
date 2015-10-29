@@ -287,6 +287,7 @@ namespace EasyCms.Model
         注册送优惠券,
         注册送积分,
         包邮,
+        系统派送=89,
         使用优惠券 = 90,
         使用积分 = 91,
         其他 = 99
@@ -311,7 +312,8 @@ namespace EasyCms.Model
         导出订单 = 12,
         拒收 = 13,
         完成取货 = 14,
-        修改订单,
+        修改订单=15,
+        评价订单=16,
         作废 = 99,
 
     }
@@ -460,5 +462,13 @@ namespace EasyCms.Model
         居中,
         居右
 
+    }
+
+    public enum SendCouponType
+    { 
+        全员发放,
+        用户等级,
+        注册时间,
+        购买次数 
     }
 }

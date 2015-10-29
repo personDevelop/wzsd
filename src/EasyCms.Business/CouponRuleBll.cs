@@ -51,5 +51,31 @@ namespace EasyCms.Business
         {
             return Dal.GetCoupon(host);
         }
+
+        public DataTable GetSendRecordList(int pagenum, int pagesize, ref int recordCount)
+        {
+            return Dal.GetSendRecordList(pagenum, pagesize, ref   recordCount);
+        }
+
+        public SendCoupon GetSendReordeEntity(string id)
+        {
+            return Dal.GetSendReordeEntity(id);
+        }
+
+        public string DeleteSendRecord(string id)
+        {
+            return Dal.DeleteSendRecord(id);
+        }
+
+        public int SaveSendRecord(SendCoupon p)
+        {
+            return Dal.SaveSendRecord(p);
+        }
+ 
+
+        public bool Send(string id, out string err)
+        {
+            return Dal.Send(id, out   err);
+        }
     }
 }

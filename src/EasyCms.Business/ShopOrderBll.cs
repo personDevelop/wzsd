@@ -47,7 +47,7 @@ namespace EasyCms.Business
             return Dal.Submit(order, accuont, out   mustGenerSign, out err);
         }
 
-        public List<ShopOrder> GetMyOrder(string host, ManagerUserInfo user, int queryPage, int queryStatus, string other, out string err)
+        public List<ShopOrder> GetMyOrder(string host, ManagerUserInfo user, int queryPage, string queryStatus, string other, out string err)
         {
             return Dal.GetMyOrder(host, user, queryPage, queryStatus, other, out err);
         }

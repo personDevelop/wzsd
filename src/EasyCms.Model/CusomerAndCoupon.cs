@@ -48,6 +48,10 @@ namespace EasyCms.Model
 
         private string _Remark;
 
+        private RuleType _HaveType;
+
+        private string _SendID;
+
         #endregion
 
         #region 属性
@@ -57,7 +61,7 @@ namespace EasyCms.Model
         /// </summary>
 
         [PrimaryKey]
-        [DbProperty(MapingColumnName = "ID", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = true, ColumnLength = 16, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ID", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = true, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string ID
         {
@@ -114,7 +118,7 @@ namespace EasyCms.Model
         ///  优惠券ID,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "CouponID", DbTypeString = "char", ColumnIsNull = false, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "CouponID", DbTypeString = "varchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string CouponID
         {
@@ -266,7 +270,7 @@ namespace EasyCms.Model
         ///  备注,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "Remark", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 200, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "Remark", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 200, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string Remark
         {
@@ -278,6 +282,44 @@ namespace EasyCms.Model
             {
                 this.OnPropertyChanged("Remark", this._Remark, value);
                 this._Remark = value;
+            }
+        }
+
+        /// <summary>
+        ///  拥有类型,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "HaveType", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public RuleType HaveType
+        {
+            get
+            {
+                return this._HaveType;
+            }
+            set
+            {
+                this.OnPropertyChanged("HaveType", this._HaveType, value);
+                this._HaveType = value;
+            }
+        }
+
+        /// <summary>
+        ///  发放记录ID,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "SendID", DbTypeString = "varchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string SendID
+        {
+            get
+            {
+                return this._SendID;
+            }
+            set
+            {
+                this.OnPropertyChanged("SendID", this._SendID, value);
+                this._SendID = value;
             }
         }
 
@@ -312,6 +354,10 @@ namespace EasyCms.Model
                 EndDate = new PropertyItem("EndDate", tableName);
 
                 Remark = new PropertyItem("Remark", tableName);
+
+                HaveType = new PropertyItem("HaveType", tableName);
+
+                SendID = new PropertyItem("SendID", tableName);
 
 
             }
@@ -363,9 +409,18 @@ namespace EasyCms.Model
             /// 备注,
             /// </summary> 
             public PropertyItem Remark = null;
+            /// <summary>
+            /// 拥有类型,
+            /// </summary> 
+            public PropertyItem HaveType = null;
+            /// <summary>
+            /// 发放记录ID,
+            /// </summary> 
+            public PropertyItem SendID = null;
         }
         #endregion
     }
+
 
      [Newtonsoft.Json.JsonObject]
     public class CouponAccount 

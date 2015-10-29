@@ -174,21 +174,14 @@ namespace EasyCms.Web.API
                 queryPage = 1;
             }
 
-            int queryStatus = -1;
-            if (!string.IsNullOrWhiteSpace(pageIndex))
-            {
-                if (!int.TryParse(pageIndex, out queryStatus))
-                {
-                    queryStatus = -1;
-                }
-            }
+        
 
             string err = string.Empty;
 
 
             ManagerUserInfo user = Request.GetAccount();
 
-            List<ShopOrder> list = new ShopOrderBll().GetMyOrder(host, user, queryPage, queryStatus, other, out err);
+            List<ShopOrder> list = new ShopOrderBll().GetMyOrder(host, user, queryPage, pageIndex, other, out err);
             if (!string.IsNullOrWhiteSpace(err))
             {
                 return err.FormatError();

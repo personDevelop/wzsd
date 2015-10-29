@@ -225,7 +225,7 @@
 
     </script>
 }
-@helper DateTime(string code, string name, DateTime? defaultval, string hint = "", string otherClass = "", int width = 200)
+@helper DateTime(string code, string name, DateTime? defaultval, string hint = "", string otherClass = "", string formatString = "yyyy-MM-dd", int width = 200)
 {
     <dl>
         <dt>
@@ -245,7 +245,7 @@
                         }
 
                     }
-                    $("#@code").jqxDateTimeInput({width: '@widthstr',culture: 'zh-Hans',formatString: "yyyy-MM-dd" @MVCExtention.ExtendHtmlInput.MvcHelper.Raw(dv)});
+                    $("#@code").jqxDateTimeInput({width: '@widthstr',culture: 'zh-Hans',formatString: "@formatString" @MVCExtention.ExtendHtmlInput.MvcHelper.Raw(dv)});
 
                 });
 

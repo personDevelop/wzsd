@@ -293,5 +293,27 @@ namespace EasyCms.Web.API
             new LogBll().WriteException(exception, userid);
             return "操作成功".FormatSuccess();
         }
+
+
+        public HttpResponseMessage GetCach(int id)
+        {
+
+            if (id == 0)
+            {
+                return CacheContainer.GetCachCount().FormatObj();
+            }
+            else
+            {
+                int count = CacheContainer.GetCachCount();
+                System.Collections.Hashtable hs = CacheContainer.GetMemoryCache();
+                string str = "数量：" + count + Environment.NewLine;
+                foreach (var item in hs.Keys)
+                {
+                    str += item.ToString() + ":" + hs[item].ToString() + Environment.NewLine;
+                }
+                return str.FormatObj();
+            }
+
+        }
     }
 }

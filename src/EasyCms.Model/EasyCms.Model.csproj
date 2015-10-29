@@ -56,6 +56,7 @@
     <Compile Include="Ali\RSAFromPkcs8.cs" />
     <Compile Include="AttachFile.cs" />
     <Compile Include="CouponRule.cs" />
+    <Compile Include="SendCoupon.cs" />
     <Compile Include="CusomerAndCoupon.cs" />
     <Compile Include="FunctionInfo.cs" />
     <Compile Include="FunctionRight.cs" />

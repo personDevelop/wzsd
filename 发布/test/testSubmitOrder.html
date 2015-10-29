@@ -239,8 +239,19 @@
             //    "AddressID": "f4c37867-2bb8-46e3-b05e-82be7474d642",
             //    "Freight": 0
             //}
+            data = {
+                "Description": "Description",
+                "ImageUrlID": "ImageUrlID",
+                "ReturnType": 1,
+                "OrderId": "HQ1510270001",
+                "OrderItems": {
+                    "ProductId": "9b0d20fe-f6a5-413b-a955-84b305acb149",
+                    "SKUID": "011eef18-6acf-4a8b-97a0-868bb00c133c",
+                    "RequestQuantity": 1
+                }
+            };
             $.ajax({
-                url: "http://localhost:7161/api/ShopOrderApi/PostOrder",
+                url: "http://localhost:7161/api/ShopOrderApi/ReturnOrder",
                 type: "POST",
                 data: data,
                 dataType: "json",

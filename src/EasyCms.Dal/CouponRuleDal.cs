@@ -200,7 +200,7 @@ namespace EasyCms.Dal
                             //适合所有商品的优惠券,这个算在总订单里
                             //包含该种商品
                             //计算总个数 和总金额
-                            decimal totalPrice = orderItemlist.Sum(p => p.SalePrice); 
+                            decimal totalPrice = orderItemlist.Sum(p => p.SalePrice);
                             if (totalPrice < item.MinPrice && item.MinPrice > 0)
                             {
 
@@ -231,6 +231,180 @@ namespace EasyCms.Dal
                 return false;
             }
             return true;
+        }
+
+        public DataTable GetSendRecordList(int pagenum, int pagesize, ref int recordCount)
+        {
+            int pageCount = 0;
+            return Dal.From<SendCoupon>().OrderBy(SendCoupon._.CreateTime.Desc).ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
+        }
+
+        public SendCoupon GetSendReordeEntity(string id)
+        {
+            return Dal.Find<SendCoupon>(id);
+        }
+
+        public string DeleteSendRecord(string id)
+        {
+            string error = "";
+            Dal.Delete("SendCoupon", "ID", id, out error);
+            return error;
+        }
+
+        public int SaveSendRecord(SendCoupon item)
+        {
+            return Dal.Submit(item);
+        }
+
+        public bool Send(string id, out string err)
+        {
+            CouponRule cr = null;
+            err = string.Empty;
+            bool isSuccess = false;
+            SendCoupon s = GetSendReordeEntity(id);
+            if (s == null)
+            {
+                err = "没找到对应的发放规则";
+            }
+            else if (string.IsNullOrWhiteSpace(s.CouponID))
+            {
+                err = "请选择要发放的优惠券";
+            }
+            else if (!CheckValid(new List<string>() { s.CouponID }))
+            {
+                err = "要发放的优惠券已经过期了";
+            }
+            else if (s.Status == DjStatus.生效)
+            {
+                err = "当前优惠券已经发放过了";
+            }
+            else if (s.SendCount < 1)
+            {
+                err = "发放个数必须大于0";
+            }
+            else
+            {
+                cr = GetEntity(s.CouponID);
+                string[] userId = null;
+                WhereClip where = ManagerUserInfo._.IsManager == false && ManagerUserInfo._.Status == (int)UserStatus.正常;
+                switch (s.SendType)
+                {
+                    case SendCouponType.全员发放:
+                        break;
+                    case SendCouponType.用户等级:
+                        if (string.IsNullOrEmpty(s.AccountOrder))
+                        {
+                            err = "会员等级不能为空";
+                        }
+                        else
+                        {
+                            //获取人员
+                            userId = Dal.From<AccountRange>().Where(AccountRange._.RangeID == s.AccountOrder).Select(AccountRange._.AccountID)
+                                .ToSinglePropertyArray();
+                        }
+                        break;
+                    case SendCouponType.注册时间:
+                        if (!s.StartRegistTime.HasValue && !s.EndRegistTime.HasValue)
+                        {
+                            err = "注册开始和截止时间必须提供其中一个";
+                        }
+                        else if (s.StartRegistTime.HasValue && s.EndRegistTime.HasValue && s.EndRegistTime < s.StartRegistTime)
+                        {
+                            err = "注册开截止时间必须大于开始时间";
+                        }
+                        else
+                        {
+                            if (s.StartRegistTime.HasValue)
+                            {
+                                where = where && ManagerUserInfo._.CreateDate >= s.StartRegistTime.Value.Date;
+                            }
+                            if (s.EndRegistTime.HasValue)
+                            {
+                                where = where && ManagerUserInfo._.CreateDate < s.EndRegistTime.Value.Date.AddDays(1);
+                            }
+                            //获取人员
+                            userId = Dal.From<ManagerUserInfo>().Where(where).Select(ManagerUserInfo._.ID)
+                                .ToSinglePropertyArray();
+                        }
+                        break;
+                    case SendCouponType.购买次数:
+                        if (s.MaxBuyCount == 0 && s.MinBuyCount == 0)
+                        {
+                            err = "最少和最多购买次数必须提供其中一个";
+                        }
+                        else if (s.MaxBuyCount > 0 && s.MinBuyCount > 0 && s.MaxBuyCount < s.MinBuyCount)
+                        {
+                            err = "最多购买次数必须大于最少购买次数";
+                        }
+                        else
+                        {
+                            DataTable dt = Dal.From<ShopOrder>().Where(ShopOrder._.OrderStatus != (int)OrderStatus.拒收 && ShopOrder._.OrderStatus != (int)OrderStatus.取消订单 && ShopOrder._.OrderStatus != (int)OrderStatus.商家已收货等待退款 && ShopOrder._.OrderStatus != (int)OrderStatus.退货取货中 && ShopOrder._.OrderStatus != (int)OrderStatus.退货完成 && ShopOrder._.OrderStatus != (int)OrderStatus.作废).GroupBy(ShopOrder._.MemberID).Select(ShopOrder._.MemberID, ShopOrder._.ID.Count().Alias("orderCount"))
+                                  .ToDataTable();
+                            string whereStr = string.Empty;
+                            if (s.MinBuyCount > 0)
+                            {
+                                whereStr = " orderCount>=" + s.MinBuyCount;
+                            }
+                            if (s.MaxBuyCount > 0)
+                            {
+                                if (whereStr.Length > 0)
+                                {
+                                    whereStr += " and ";
+                                }
+                                whereStr = " orderCount<=" + s.MaxBuyCount;
+                            }
+                            userId = dt.Select(whereStr).AsQueryable().Select(d => d.Field<string>("MemberID")).ToArray();
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                if (string.IsNullOrWhiteSpace(err))
+                {
+                    if (userId == null || userId.Length == 0)
+                    {
+                        err = "未找到符合条件的会员";
+                    }
+                    else
+                    {
+                        List<BaseEntity> saveList = new List<BaseEntity>();
+                        foreach (var item in userId)
+                        {
+                            CusomerAndCoupon action = new CusomerAndCoupon()
+                                    {
+
+                                        ID = Guid.NewGuid().ToString(),
+                                        Code = GetMaxNo(cr.PreName ?? "Q"),
+                                        CustomerID = item,
+                                        CouponID = cr.ID,
+                                        HaveCount = s.SendCount,
+                                        HasDate = DateTime.Now,
+                                        CardValue = cr.JE,
+                                        EndDate = cr.EndDate,
+                                        HaveType = RuleType.系统派送,
+                                        SendID = id
+                                    };
+                            saveList.Add(action);
+                        }
+                        s.Status = DjStatus.生效;
+                        saveList.Add(s);
+                        SessionFactory dal = null;
+                        IDbTransaction tr = Dal.BeginTransaction(out dal);
+                        try
+                        {
+                            dal.SubmitNew(tr, ref dal, saveList);
+                            dal.CommitTransaction(tr);
+                            isSuccess = true;
+                        }
+                        catch (Exception)
+                        {
+                            dal.RollbackTransaction(tr);
+                            throw;
+                        }
+                    }
+                }
+            }
+            return isSuccess;
         }
     }
 

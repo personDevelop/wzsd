@@ -226,6 +226,7 @@
     <Compile Include="API\UserApiController.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\Controllers\CouponRuleController.cs" />
+    <Compile Include="Areas\Admin\Controllers\CouponSendRecordController.cs" />
     <Compile Include="Areas\Admin\Controllers\ErrorController.cs" />
     <Compile Include="Areas\Admin\Controllers\FunctionInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\FunctionRightController.cs" />
@@ -793,6 +794,8 @@
     <Content Include="Areas\Admin\Views\Shared\_Process.cshtml" />
     <Content Include="Areas\Admin\Views\SysExportSet\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\SysExportSet\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\CouponSendRecord\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\CouponSendRecord\Index.cshtml" />
     <None Include="Properties\PublishProfiles\publish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\EshopAdminControl.js" />
@@ -1208,7 +1211,9 @@
     <Content Include="test\testOpenWindow.html" />
     <Content Include="test\testSubmitOrder.html" />
     <Content Include="test\WebForm1.aspx" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
