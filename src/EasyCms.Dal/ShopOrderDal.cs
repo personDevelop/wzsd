@@ -1842,7 +1842,7 @@ ShopOrderItem._.Weight).ToDataTable();
 
                 .Where(where)
                 .Select(ShopReturnOrder._.ID, ShopReturnOrder._.OrderId, ShopReturnOrder._.CreatedDate,
-                ShopReturnOrder._.Description,
+                ShopReturnOrder._.Description, ShopReturnOrder._.UserId,
                 ShopReturnOrder._.ReturnType,
                 ShopReturnOrder._.Status,
                 ShopReturnOrder._.RefuseReason)
@@ -1905,6 +1905,7 @@ ShopOrderItem._.Weight).ToDataTable();
                 ShopReturnOrder._.Description,
                 ShopReturnOrder._.ReturnType,
                 ShopReturnOrder._.Status,
+               
                 ShopReturnOrder._.RefuseReason)
                 .OrderBy(ShopReturnOrder._.CreatedDate.Desc).ToDataTable(20, queryPage, ref pageCount, ref recordcount).ToList<ShopReturnOrder>();
             if (list.Count > 0)
@@ -1914,7 +1915,7 @@ ShopOrderItem._.Weight).ToDataTable();
                     .Where(ShopReturnOrderItem._.ReturnOrderId.In(orderIDS))
                     .Select(ShopReturnOrderItem._.ID, ShopReturnOrderItem._.OrderId, ShopReturnOrderItem._.ReturnOrderId,
                     ShopReturnOrderItem._.SaleCount, ShopReturnOrderItem._.RequestQuantity, ShopReturnOrderItem._.ReturnCount,
-                    ShopReturnOrderItem._.SellPrice,
+                    ShopReturnOrderItem._.SellPrice,  
                   ShopReturnOrderItem._.ProductCode,
                     ShopReturnOrderItem._.Name, new ExpressionClip("'" + host + "'" + "+ThumbnailsUrl").Alias("ThumbnailsUrl")
                     ).List<ShopReturnOrderItem>();
