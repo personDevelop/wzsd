@@ -391,9 +391,9 @@ namespace EasyCms.Web.API
                 ShopReturnOrder._.Status.FullName,
                 ShopReturnOrder._.RefuseReason.FullName, "ShopReturnOrder.StatusStr", ShopReturnOrderItem._.ID.FullName, ShopReturnOrderItem._.OrderId.FullName, ShopReturnOrderItem._.ReturnOrderId.FullName,
                     ShopReturnOrderItem._.SaleCount.FullName, ShopReturnOrderItem._.RequestQuantity.FullName, ShopReturnOrderItem._.ReturnCount.FullName,
-                    ShopReturnOrderItem._.SellPrice.FullName,
-                  ShopReturnOrderItem._.ProductCode.FullName,
-                    ShopReturnOrderItem._.Name.FullName, "ShopReturnOrderItem.ProductThumb");
+                    "ShopReturnOrderItem.Price", "ShopReturnOrderItem.ProductName", "ShopReturnOrderItem.ProductThumb",
+                  ShopReturnOrderItem._.ProductCode.FullName
+                   );
             }
 
 
@@ -431,9 +431,8 @@ namespace EasyCms.Web.API
                 ShopReturnOrder._.Status.FullName,
                 ShopReturnOrder._.RefuseReason.FullName, "ShopReturnOrder.StatusStr", ShopReturnOrderItem._.ID.FullName, ShopReturnOrderItem._.OrderId.FullName, ShopReturnOrderItem._.ReturnOrderId.FullName,
                     ShopReturnOrderItem._.SaleCount.FullName, ShopReturnOrderItem._.RequestQuantity.FullName, ShopReturnOrderItem._.ReturnCount.FullName,
-                    ShopReturnOrderItem._.SellPrice.FullName,
-                  ShopReturnOrderItem._.ProductCode.FullName,
-                    ShopReturnOrderItem._.Name.FullName, "ShopReturnOrderItem.ProductThumb");
+                     "ShopReturnOrderItem.Price", "ShopReturnOrderItem.ProductName", "ShopReturnOrderItem.ProductThumb",
+                  ShopReturnOrderItem._.ProductCode.FullName);
             }
 
 

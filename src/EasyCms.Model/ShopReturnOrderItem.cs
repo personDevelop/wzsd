@@ -564,6 +564,19 @@ namespace EasyCms.Model
          [NotDbCol]
          public string ProductThumb { get { return ThumbnailsUrl; } }
      
+            /// <summary>
+         /// 为了和商品订单中的图片属性名称统一
+         /// </summary>
+         [NotDbCol]
+         public string ProductName { get { return Name; } }
+
+
+         /// <summary>
+         /// 为了和商品订单中的图片属性名称统一
+         /// </summary>
+         [NotDbCol]
+         public decimal Price { get { return SellPrice; } }
+         
      }
     
 
