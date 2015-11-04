@@ -406,6 +406,59 @@ namespace EasyCms.Dal
             }
             return isSuccess;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="host"></param>
+        /// <param name="status">  1未使用 2 已使用 3 已过期 </param>
+        /// <param name="accountID"></param>
+        /// <returns></returns>
+        public DataTable GetMyCoupon(string host, string status, int pageIndex, string accountID)
+        {
+            int reocrdCount = 0;
+            UpdateCoupon();
+            if (status != "2")
+            {
+
+
+                DataTable dt = Dal.From<CusomerAndCoupon>().Join<CouponRule>(CouponRule._.ID == CusomerAndCoupon._.CouponID)
+                       .Where(CusomerAndCoupon._.CustomerID == accountID).Select(
+                       CusomerAndCoupon._.ID, CusomerAndCoupon._.CouponID, CusomerAndCoupon._.HaveCount, CusomerAndCoupon._.IsOutDate,
+                       CusomerAndCoupon._.HasDate, CusomerAndCoupon._.EndDate, CusomerAndCoupon._.CardValue, CouponRule._.Name
+                       ).ToDataTable(20, pageIndex, ref reocrdCount, ref reocrdCount);
+                if (status == "1")
+                {
+                    //未过期
+                    return dt.Select("IsOutDate=0").CopyToDataTable();
+                }
+                else if (status == "3")
+                {
+                    //已过期
+                    return dt.Select("IsOutDate=1").CopyToDataTable();
+                }
+                else if (status == "0")
+                {
+                    return dt;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                //已使用
+                return Dal.From<JFHistory>().Join<CusomerAndCoupon>(CusomerAndCoupon._.ID == JFHistory._.UserCouponID)
+                        .Join<CouponRule>(CouponRule._.ID == CusomerAndCoupon._.CouponID)
+                        .Where(JFHistory._.MemberID == accountID && JFHistory._.FX == (int)AddOrRemove.减少).Select(
+                         JFHistory._.UserCouponID.Alias("ID"), JFHistory._.CouponID,
+                         JFHistory._.JFCount.Alias("HaveCount"), CusomerAndCoupon._.IsOutDate,
+                          CusomerAndCoupon._.HasDate, CusomerAndCoupon._.EndDate, CusomerAndCoupon._.CardValue, CouponRule._.Name, JFHistory._.CreateDate).ToDataTable(20, pageIndex, ref reocrdCount, ref reocrdCount);
+            }
+        }
+
+
     }
 
 

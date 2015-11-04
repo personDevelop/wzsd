@@ -18,5 +18,14 @@ namespace EasyCms.Web.API
                 return dt.Format();
            
         }
+
+        public HttpResponseMessage GetMyCoupon(string id, int pageIndex = 1)
+        {
+
+
+            DataTable dt = new CouponRuleBll().GetMyCoupon(host, id, pageIndex, Request.GetAccountID());
+            return dt.Format();
+
+        }
     }
 }

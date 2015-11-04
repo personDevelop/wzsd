@@ -77,5 +77,12 @@ namespace EasyCms.Business
         {
             return Dal.Send(id, out   err);
         }
+
+        
+
+        public DataTable GetMyCoupon(string host, string status, int pageIndex, string accountID)
+        {
+            return Dal.GetMyCoupon(host, status, pageIndex, accountID);
+        }
     }
 }
