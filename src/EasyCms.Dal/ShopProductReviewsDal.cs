@@ -70,7 +70,7 @@ namespace EasyCms.Dal
                 .Where(where)
                 .Select(ShopProductReviews._.ID, ShopProductReviews._.ReviewText, ShopProductReviews._.CommentOrder,
                  new ExpressionClip("case when CommentOrder=1   then '差评' when CommentOrder=2   then '中评' else '好评'  end").Alias("CommentOrderStr"),
-                  ShopProductReviews._.CreatedDate, new ExpressionClip("case when IsManager=1   then NickyName when IsAnony =1 then '匿名' when NickyName is null || NickyName ='' then name else  NickyName end").Alias("Name")
+                  ShopProductReviews._.CreatedDate, new ExpressionClip("case when IsManager=1   then NickyName when IsAnony =1 then '匿名' when NickyName is null or NickyName ='' then name else  NickyName end").Alias("Name")
                 ).OrderBy(ShopProductReviews._.CreatedDate.Desc)
                 .ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
         }
