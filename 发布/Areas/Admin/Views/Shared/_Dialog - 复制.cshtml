@@ -1,4 +1,5 @@
 ﻿@model   EasyCms.Web.DialogModel
+@*标题 界面 多选 单选 新原的值是追加还是覆盖（多选时）  是否是树结构  ，选择结果事件  取消关闭事件，对应的url*@
 @using EasyCms.Web
 @{string btnOkID = "tnOk" + Guid.NewGuid();}
 <div id="@Model.DialogID">
@@ -77,3 +78,81 @@
 
 
 </script>
+
+
+
+
+
+
+
+
+
+
+@helper HelpEdit(string url,string id, string code, string name, string defaultVal = null, string defaultText = null, string hint = "",  int width = 200,
+                    string dialogTitle = "", int dialogWidth = 500, int dialogHeight = 500, string DataControlID = "dataGrid",
+                        bool IsMutiSelect = false, bool IsTree = false, bool IsHidButton = false, string OnClose = "OnClose",, string OnGetUrl= "OnGetUrl")
+{
+    string dialogID = code + Guid.NewGuid();
+    string selectButtonID = code + Guid.NewGuid();
+    string OnBeforeFunc = "isContienu=" + OnBefore + "();";
+    <dl>
+        <dt>
+            @MVCExtention.ExtendHtmlInput.MvcHelper.Label(code, name)
+            @MVCExtention.ExtendHtmlInput.MvcHelper.Hidden(id, defaultVal)
+
+
+        </dt>
+        <dd>
+            @MVCExtention.ExtendHtmlInput.MvcHelper.TextBox(code, defaultText, new { @class = "input normal " + otherClass, width = width, @readonly = "readonly" })
+
+            @if (!IsHidButton)
+            {
+
+
+                <span class="input-group-btn">
+
+                    <button class="btn blue btnHelp" id="@selectButtonID">
+                        选择
+                    </button>
+                    <button class="btn yellow btnHelp" onclick="javascript: $('#@id').val(''); $('#@code').val('');return false;">
+                        清除选择
+                    </button>
+                </span>
+            }
+            <span style="color:red">@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(hint)</span>
+
+        </dd>
+    </dl>
+    <script type="text/javascript">
+
+        $(function () {
+
+            $("#@selectButtonID").click(function () {
+                var isContienu=true;
+                @if (!string.IsNullOrWhiteSpace(OnBefore))
+	{
+                     @OnBeforeFunc
+	}
+                if (isContienu) {
+                    $("#@dialogID").jqxWindow('open');
+
+                }
+                return false;
+            });
+
+        });
+    </script>
+
+    @MVCExtention.ExtendHtmlInput.MvcHelper.Partial("_Dialog", new EasyCms.Web.DialogModel
+{
+    DialogID = dialogID,
+    Title = dialogTitle,
+    Height = dialogHeight,
+    Width = dialogWidth,
+    InnitFunc = InnitFunc,
+    OnOk = onOk,
+    DataControlID = DataControlID,
+    IsMutiSelect = IsMutiSelect,
+    IsTree = IsTree
+})
+}

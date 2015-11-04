@@ -1,0 +1,140 @@
+﻿@using MVCExtention;
+@{
+    ViewBag.Title = "搜索会员";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEditDialog.cshtml";
+}
+
+<!--工具栏-->
+<!--/工具栏-->
+<dl>
+    <dt>
+
+    </dt>
+    <dd>
+        <table width="80%" class="borderkuang" border="0" cellspacing="0" cellpadding="0">
+            <tbody>
+                <tr>
+                    <td>
+                        @HelperExtend.img("icon-1.gif", "width:19px,height:19px")搜索：
+                    </td>
+                    <td>
+                        会员账号：
+                    </td>
+                    <td>
+                        <input type="text" id="UserCode">
+                    </td>
+                    <td>
+                        会员姓名：
+                    </td>
+                    <td><input type="text" id="UserName"></td>
+                    <td>会员状态：</td>
+                    <td>
+                        @HelperExtend.DropDownListEnum("UserStatus", enumType: typeof(EasyCms.Model.UserStatus))
+                    </td>
+
+                    <td>
+                        <input id="btnQry" type="button" value="搜索">
+                    </td>
+
+                </tr>
+
+            </tbody>
+        </table>
+    </dd>
+</dl>
+<!--列表-->
+<div class="table-container">
+    <div id="jqxgrid"></div>
+    <table>
+        <tr>
+            <td>
+                <input id="btnOk" type="button" value="确定">
+                <input id="btnCancle" type="button" value="取消" onclick="javascript: CloseDialog();">
+
+
+                <script type="text/javascript">
+
+                    $(function () {
+                        $("#btnOk").jqxButton({ width: '150', template: 'success' });
+                        $("#btnCancle").jqxButton({ width: '150', template: 'info' });
+                        $("#btnOk").on('click', function () {
+                            var rowindexes = $('#jqxgrid').jqxGrid('getselectedrowindexes');
+                            if (rowindexes.length > 0) {
+                                var data = {};
+                                var userIds = "", names = "";
+                                for (var i in rowindexes) {
+                                    if (userIds) {
+                                        userIds += ",";
+                                        names += ",";
+                                    }
+                                    var d = $('#jqxgrid').jqxGrid('getrowdata',rowindexes[i]);
+                                    userIds += d.ID;
+                                    names += d.Name;
+                                }
+                                data.ID = userIds;
+                                data.Name = names; 
+                                SetDialogState(data);
+                                CloseDialog();
+                            } else {
+
+                                ErrorMsg("请至少选择一条数据");
+                            }
+                        });
+
+
+                    });
+                </script>
+
+            </td>
+        </tr>
+
+    </table>
+
+</div>
+<!--/列表-->
+@section  scripts{
+
+
+    <script type="text/javascript">
+        $(function () {
+            $("#UserCode").jqxInput({ height: '25px' });
+            $("#UserName").jqxInput({ height: '25px' });
+            $("#btnQry").jqxButton({ width: '100', template: 'success' });
+            $("#btnQry").on("click", function () { $('#jqxgrid').jqxGrid('updatebounddata'); });
+
+        });
+
+        $(document).ready(function () {
+            var url = "@Url.Action("GetListForAccount")";
+            var datafields = [{ name: 'ID' }, { name: 'Code' }, { name: 'Name' }, { name: 'NickyName' }, { name: 'Birthday', type: "date" }, { name: 'Sex' },
+		{ name: 'ContactPhone' }, { name: 'CreateDate', type: "date" }, { name: 'LastModifyDate', type: "date" },
+		  { name: 'Status' }];
+            var columns = [
+    { text: '编号', dataField: 'Code', cellsalign: "left", width: 100 },
+  { text: '姓名', dataField: 'Name', cellsalign: "left", width: 100 },
+  { text: '昵称', dataField: 'NickyName', cellsalign: "left", width: 100 },
+  { text: '生日', dataField: 'Birthday', width: 100, cellsformat: "yyyy-MM-dd" },
+  { text: '性别', dataField: 'Sex', width: 60, valObj: [{ key: 0, val: '男' }, { key: 1, val: '女' }, { key: 2, val: '保密' }] },
+  { text: '联系手机', dataField: 'ContactPhone', width: 100 },
+  { text: '注册日期', dataField: 'CreateDate', width: 200, cellsformat: "yyyy-MM-dd HH:mm" },
+  { text: '最后登陆日期', dataField: 'LastModifyDate', width: 200, cellsformat: "yyyy-MM-dd HH:mm" },
+  { text: '状态', dataField: 'Status', width: 100, valObj: [{ key: 0, val: '未激活' }, { key: 1, val: '正常' }, { key: 2, val: '锁定' }, { key: 3, val: '注销' }] }];
+            CreateGrid("jqxgrid", url, datafields, columns, {
+                isMutilSelect: true,
+                adapter: {
+                    formatData: function (data) {
+
+
+                        data.UserCode = $("#UserCode").val();
+
+                        data.UserName = $("#UserName").val();
+                        data.UserStatus = $("#UserStatus").val();
+                    }
+
+                }
+            });
+
+
+        });
+    </script>
+}

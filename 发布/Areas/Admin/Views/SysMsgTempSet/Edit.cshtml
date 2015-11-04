@@ -24,9 +24,9 @@
 
     @Html.ValidationSummary()
     @HelperExtend.DropDownListCardEnum("SendType", "发送类型", defaultval: Model.SendType, enumType:  typeof(SendMsgType), hint: "")
-    @HelperExtend.TextBox("IsManager", "对管理员", defaultval: Model.IsManager, hint: "")
+    @HelperExtend.RadioGroup("IsManager", "接收短信方","false,true","注册会员,商家", defaultval: Model.IsManager, hint: "")
 
-    @HelperExtend.TextBox("ManagerTel", "管理员接收手机号", defaultval: Model.ManagerTel, hint: "")
+    @HelperExtend.TextBox("ManagerTel", "商家接收手机号", defaultval: Model.ManagerTel, hint: "")
 
     @HelperExtend.TextArea("MsgTemplate", "短信模板", col:50,row:8, defaultval: Model.MsgTemplate, hint: "<br/>用户名：{$UserName}   用户ID：{$UserID} 真实姓名：{$RealName} 密码：{$Password} 用户昵称：{$NickName} 订单号码：{$OrderNO} 快递公司：{$ExpressCompany} 快递单号：{$ExpressNumber} 金额：{$Money} 时间：{$Time} 标题：{$Title} 内容：{$Content} 客服电话：{$Phone} 客服传真：{$Fax} 客服邮箱：{$Email} 客服QQ：{$QQ} 域名：{$Domain} 站点名称：{$SiteName} 验证码：{$CheckCode} ")
 

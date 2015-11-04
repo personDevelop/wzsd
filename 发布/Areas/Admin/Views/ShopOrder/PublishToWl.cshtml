@@ -106,7 +106,7 @@
                 var data = { actionID:@((int)ViewBag.Action), wlgs: $("#LogistID").val(), orderIDs: [] };
                 for (var i in rowindexes) {
 
-                    var d = $('#jqxgrid').jqxGrid('getrowdata', i);
+                    var d = $('#jqxgrid').jqxGrid('getrowdata',rowindexes[i]);
                     data.orderIDs.push(d.ID);
                 }
                 if (!data.wlgs && $("#LogistID").closest("dl").attr("style")!='display: none;') {
