@@ -68,6 +68,7 @@
     <Compile Include="ParameterInfoDal.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RedeemRulesDal.cs" />
+    <Compile Include="SendMsgInfoDal.cs" />
     <Compile Include="ShopBrandInfoDal.cs" />
     <Compile Include="ShopCategoryDal.cs" />
     <Compile Include="ShopExpressDal.cs" />

@@ -4,6 +4,9 @@
     opts: {},
     lastUrl: "",
     create: function (imgUrl) {
+        if ($("#modalDialog").length>0) {
+            return;
+        }
         var html = '<div id="modalDialog" style="display:none">';
         html += '<div id="windowHeadermodalDialog">';
         html += ' <span><img src="' + imgUrl + '" alt="" style="margin-right: 15px" /> <span id="windowTitlemodalDialog">模态窗口';

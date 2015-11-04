@@ -19,6 +19,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyCms.Session", "EasyCms.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AliNotify.Web", "AliNotify.Web\AliNotify.Web.csproj", "{F1321066-4077-4103-AD37-2DEBA17DEC8E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ThirdPart", "ThirdPart", "{36E19C45-E68A-403F-B0D7-2149DFC22769}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsgService", "MsgService\MsgService.csproj", "{BAEA16B8-291B-4F5E-8579-DE43E8DAF27A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CodeAnalysis|Any CPU = CodeAnalysis|Any CPU
@@ -74,8 +78,17 @@ Global
 		{F1321066-4077-4103-AD37-2DEBA17DEC8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F1321066-4077-4103-AD37-2DEBA17DEC8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F1321066-4077-4103-AD37-2DEBA17DEC8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAEA16B8-291B-4F5E-8579-DE43E8DAF27A}.CodeAnalysis|Any CPU.ActiveCfg = Release|Any CPU
+		{BAEA16B8-291B-4F5E-8579-DE43E8DAF27A}.CodeAnalysis|Any CPU.Build.0 = Release|Any CPU
+		{BAEA16B8-291B-4F5E-8579-DE43E8DAF27A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAEA16B8-291B-4F5E-8579-DE43E8DAF27A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAEA16B8-291B-4F5E-8579-DE43E8DAF27A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAEA16B8-291B-4F5E-8579-DE43E8DAF27A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BAEA16B8-291B-4F5E-8579-DE43E8DAF27A} = {36E19C45-E68A-403F-B0D7-2149DFC22769}
 	EndGlobalSection
 EndGlobal

@@ -145,6 +145,38 @@ namespace EasyCms.Web.API
 
         }
 
+        [HttpGet]
+        public HttpResponseMessage LogOut()
+        {
+
+            string msg = string.Empty;
+            bool isSuccess = false;
+            ManagerUserInfo user = Request.GetAccount();
+
+            if (user == null)
+            {
+                msg = "已退出，无须再次退出";
+            }
+
+            else
+            {
+                isSuccess = LoginModel.RemoveToken(Request.GetToken(), user, out msg);
+                if (isSuccess)
+                {
+                    //清空后台数据库session
+                }
+
+
+                if (string.IsNullOrWhiteSpace(msg))
+                {
+
+                    msg = "成功注销";
+                }
+            }
+            return msg.Format(isSuccess);
+
+
+        }
         // POST api/userapi
         [HttpPost]
         public HttpResponseMessage Regist([FromBody]RegistModel registModel)
@@ -255,9 +287,12 @@ namespace EasyCms.Web.API
             if (string.IsNullOrWhiteSpace(msg))
             {
                 //清空token
-                LoginModel.RemoveToken(Request.GetToken(false), Request.GetAccount(false));
-
-                return "修改成功，请重新用新密码登录".FormatSuccess();
+                bool isSuccess = LoginModel.RemoveToken(Request.GetToken(false), Request.GetAccount(false), out msg);
+                if (string.IsNullOrWhiteSpace(msg))
+                {
+                    msg = "修改成功，请重新用新密码登录";
+                }
+                return msg.Format(isSuccess);
             }
             else
             {

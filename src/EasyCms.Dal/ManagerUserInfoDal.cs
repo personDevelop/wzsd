@@ -448,6 +448,40 @@ namespace EasyCms.Dal
             msg = "修改成功";
             return true;
         }
+
+
+
+
+        public List<string> GetTelNo(WhereClip where)
+        {
+            return Dal.From<ManagerUserInfo>().Where(where).Select(ManagerUserInfo._.ContactPhone).ToSinglePropertyArray().ToList();
+        }
+
+        public List<string> GetTelNoWithOrder(WhereClip where)
+        {
+            return Dal.From<ManagerUserInfo>().Join<AccountRange>(AccountRange._.AccountID == ManagerUserInfo._.ID).Where(where).Select(ManagerUserInfo._.ContactPhone).ToSinglePropertyArray().ToList();
+        }
+
+        public List<string> GetTelNoWithBuyCount(int MinBuyCount, int MaxBuyCount)
+        {
+            DataTable dt = Dal.From<ShopOrder>().Where(ShopOrder._.OrderStatus != (int)OrderStatus.拒收 && ShopOrder._.OrderStatus != (int)OrderStatus.取消订单 && ShopOrder._.OrderStatus != (int)OrderStatus.商家已收货等待退款 && ShopOrder._.OrderStatus != (int)OrderStatus.退货取货中 && ShopOrder._.OrderStatus != (int)OrderStatus.退货完成 && ShopOrder._.OrderStatus != (int)OrderStatus.作废).GroupBy(ShopOrder._.MemberID).Select(ShopOrder._.MemberCallPhone, ShopOrder._.ID.Count().Alias("orderCount"))
+                                .ToDataTable();
+            string whereStr = string.Empty;
+            if (MinBuyCount > 0)
+            {
+                whereStr = " orderCount>=" + MinBuyCount;
+            }
+            if (MaxBuyCount > 0)
+            {
+                if (whereStr.Length > 0)
+                {
+                    whereStr += " and ";
+                }
+                whereStr = " orderCount<=" + MaxBuyCount;
+            }
+            return dt.Select(whereStr).AsQueryable().Select(d => d.Field<string>("MemberCallPhone")).ToList();
+
+        }
     }
 
 

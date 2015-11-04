@@ -52,6 +52,16 @@ namespace EasyCms.Dal
 
 
 
+
+        public SysMsgInterSet GetEnableService()
+        {
+            return Dal.Find<SysMsgInterSet>(SysMsgInterSet._.IsEnable == true);
+        }
+
+        public int Save(MsgSendLog s)
+        {
+            return Dal.Submit(s);
+        }
     }
 
 

@@ -237,6 +237,7 @@
     <Compile Include="Areas\Admin\Controllers\NewsInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\RedeemRulesController.cs" />
     <Compile Include="Areas\Admin\Controllers\RegionsController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SendMsgInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopBrandInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopCategoryController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopCommentController.cs" />
@@ -802,6 +803,12 @@
     <Content Include="Areas\Admin\Views\SysMsgInterSet\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\SysMsgTempSet\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\SysMsgTempSet\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\SendMsgInfo\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\SendMsgInfo\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopProductInfo\SelectProduct.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_Dialog - 复制.cshtml" />
+    <Content Include="Areas\Admin\Views\ManagerUserInfo\SearchAccount.cshtml" />
+    <Content Include="App_Code\HelperSmart.cshtml" />
     <None Include="Properties\PublishProfiles\publish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\EshopAdminControl.js" />
@@ -1269,10 +1276,17 @@
       <Project>{44ce33d0-d419-4958-ba98-986a7a249ba0}</Project>
       <Name>EasyCms.Session</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MsgService\MsgService.csproj">
+      <Project>{baea16b8-291b-4f5e-8579-de43e8daf27a}</Project>
+      <Name>MsgService</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MVCExtention\MVCExtention.csproj">
       <Project>{54f64b71-63b7-4ee7-9b62-3330dd440ab0}</Project>
       <Name>MVCExtention</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

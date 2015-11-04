@@ -164,5 +164,22 @@ namespace EasyCms.Business
         {
             return Dal.ModifyInfo(user, out msg);
         }
+
+
+
+        public List<string> GetTelNo(WhereClip where)
+        {
+            return Dal.GetTelNo(where);
+        }
+
+        public List<string> GetTelNoWithOrder(WhereClip where)
+        {
+            return Dal.GetTelNoWithOrder(where);
+        }
+
+        public List<string> GetTelNoWithBuyCount(int MinBuyCount,int MaxBuyCount)
+        {
+            return Dal.GetTelNoWithBuyCount(MinBuyCount,  MaxBuyCount);
+        }
     }
 }

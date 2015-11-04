@@ -186,5 +186,12 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         {
             return bll.ChangeStatus(id, status);
         }
+
+
+        public ActionResult SearchAccount()
+        {
+
+            return View("SearchAccount");
+        }
     }
 }

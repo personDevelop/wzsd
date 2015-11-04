@@ -62,7 +62,7 @@ namespace EasyCms.Model
             string source = this.Account + "|" + this.Pwd + "|" + this.TimeStamp + "|" + this.DeviceID;
             string token = source.EncryptSHA1();
             token = System.Web.HttpUtility.UrlEncode(token, Encoding.UTF8);
-             Class1.list.Add(token);
+            Class1.list.Add(token);
             return token;
 
         }
@@ -81,14 +81,16 @@ namespace EasyCms.Model
         }
 
 
-        public static void RemoveToken(string token, ManagerUserInfo userInfo)
+        public static bool RemoveToken(string token, ManagerUserInfo userInfo, out string msg)
         {
+            msg = String.Empty;
 
             CacheContainer.RemoveCache(userInfo.Code + userInfo.DeviceID);
             CacheContainer.RemoveCache(token);
+            return true;
 
         }
-        public static ManagerUserInfo GetCachUserInfo(string token,bool IsResetCach=true)
+        public static ManagerUserInfo GetCachUserInfo(string token, bool IsResetCach = true)
         {
             ManagerUserInfo o = CacheContainer.GetCache(token) as ManagerUserInfo;
             if (o != null && IsResetCach)

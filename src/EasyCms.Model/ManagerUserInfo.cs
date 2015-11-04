@@ -581,6 +581,7 @@ namespace EasyCms.Model
             public PropertyItem ClientType = null;
         }
         #endregion
+
     }
 
     public partial class ManagerUserInfo

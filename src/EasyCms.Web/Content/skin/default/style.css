@@ -901,8 +901,8 @@ textarea {
 }
 
     textarea.input {
-        width: 300px;
-        height: 65px;
+        /*width: 300px;
+        height: 65px;*/
     }
 
 .input {

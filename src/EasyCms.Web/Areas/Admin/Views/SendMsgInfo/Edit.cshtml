@@ -1,0 +1,144 @@
+﻿@model SendMsgInfo
+@{
+    ViewBag.Title = "编辑消息推送";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEdit.cshtml";
+}
+
+@Styles.Render("~/bundles/upimgcss")
+@Scripts.Render("~/bundles/ueditor")
+@Scripts.Render("~/bundles/uploadJs")
+
+@using EasyCms.Model
+@using Sharp.Common
+<!--内容-->
+<div id="floatHead" class="content-tab-wrap">
+    <div class="content-tab">
+        <div class="content-tab-ul-wrap">
+            <ul>
+                <li><a class="selected" href="javascript:;">基本信息</a></li>
+                <li><a href="javascript:;">接收人员设置</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="tab-content">
+
+
+    @HelperExtend.HiddenFor("ID", Model.ID)
+    @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())
+
+    @Html.ValidationSummary()
+
+    @HelperExtend.RadioGroup("SendTool", "推送工具", typeof(SendTool).GetEnumVal(),
+                  typeof(SendTool).GetEnumNamesStr(), defaultval: Model.SendTool, hint: "")
+
+
+    @HelperExtend.TextArea("SendContent", "推送内容", defaultval: Model.SendContent, hint: "")
+    @HelperExtend.Lable(Model.Status.ToString(), "状态")
+    @HelperExtend.TextArea("Note", "备注", defaultval: Model.Note, hint: "")
+   
+</div>
+
+<div class="tab-content" style="display:none">
+    @HelperExtend.RadioGroup("SendArea", "推送范围", typeof(SendArea).GetEnumVal(),
+                  typeof(SendArea).GetEnumNamesStr(), defaultval: Model.SendArea, hint: "")
+   
+    @HelperExtend.TextArea("CustomerTelNo", "指定手机号", defaultval: Model.CustomerTelNo, hint: "多个手机号用英文逗号分隔")
+    @HelperExtend.DropDownList("UserOrder", "对应会员等级", defaultval: Model.UserOrder, hint: "", downInfo: new DropDownListInfo { DisplayMember = "Name", ValueMember = "ID", Url = Url.Action("GetListForSelecte", "RangeDict") })
+    @HelperExtend.DateTime("StartRegistTime", "开始注册时间", defaultval: Model.StartRegistTime, hint: "开始和截止时间至少选择一个")
+
+    @HelperExtend.DateTime("EndRegistTime", "截止注册时间", defaultval: Model.EndRegistTime, hint: "开始和截止时间至少选择一个")
+    @HelperExtend.Number("MinBuyCount", "最少购买次数", defaultval: Model.MinBuyCount, hint: "0标示不限制，和最多次数至少选择其中一个")
+    @HelperExtend.Number("MaxBuyCount", "最多购买次数", defaultval: Model.MaxBuyCount, hint: "0标示不限制，和最少次数至少选择其中一个")
+
+     @HelperExtend.HelpSmartDialog(Url.Action("SearchAccount", "ManagerUserInfo"), "CustomerAccuont", "CustomerAccuontName", "指定会员", Model.CustomerAccuont, Model.CustomerAccuontName,dialogTitle:"选择会员",isAppend:true) 
+      
+</div>
+@section  scripts{
+
+    <script type="text/javascript">
+
+        function ChangeSendType() {
+            var val = $("input[name='SendArea']:checked").val();
+
+            $("#UserOrder").closest("dl").hide();
+            $("#CustomerAccuont").closest("dl").hide();
+            $("#CustomerTelNo").closest("dl").hide();
+            $("#StartRegistTime").closest("dl").hide();
+            $("#EndRegistTime").closest("dl").hide();
+            $("#MaxBuyCount").closest("dl").hide();
+            $("#MinBuyCount").closest("dl").hide();
+            /*"0,1,2,3,4,5", "全员推送,用户等级,注册时间,购买次数,指定会员,指定手机号 "*/
+            switch (val) {
+                case "0": break;
+                case "1":
+                    $("#UserOrder").closest("dl").show();
+                    break;
+                case "2":
+                    $("#StartRegistTime").closest("dl").show();
+                    $("#EndRegistTime").closest("dl").show(); break;
+                case "3":
+                    $("#MaxBuyCount").closest("dl").show();
+                    $("#MinBuyCount").closest("dl").show();
+                    break;
+                case "4":
+                    $("#CustomerAccuont").closest("dl").show();
+                    break;
+                case "5":
+                    $("#CustomerTelNo").closest("dl").show();
+                    break;
+            }
+        }
+        $(function () {
+            $("input[name='SendArea']").closest(".multi-radio").find("a").on("click", function (d) {
+                ChangeSendType();
+
+            })
+            ChangeSendType();
+
+        });
+
+    </script>
+
+    <script type="text/javascript">
+
+        $(function () {
+
+
+            //初始化表单验证
+            $("form").validate({
+                ignore: "",
+                rules: {
+                    "SendContent": {
+                        required: true,
+                        maxlength: 500
+                    },
+                    Note: {
+                        maxlength: 500
+                    }
+                },
+                messages: {
+                    Code: {
+                        required: "请输入发送内容",
+                        maxlength: $.validator.format("编号长度不能大于{0}个字符")
+                    }
+                },
+                errorPlacement: errorPlace
+            });
+        })
+    </script>
+
+    <script type="text/javascript">
+
+
+        function onSpOk(data) {
+            if (!data) {
+                ErrorMsg("请选择一条数据");
+            } else {
+                $("#ProductName").val(data.Name);
+                $("#ProductID").val(data.ID);
+            }
+        }
+
+    </script>
+}

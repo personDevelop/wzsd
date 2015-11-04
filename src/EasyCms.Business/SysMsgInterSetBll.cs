@@ -24,24 +24,36 @@ namespace EasyCms.Business
             return Dal.Save(item);
         }
 
-       
-        public DataTable GetList( )
+
+        public DataTable GetList()
         {
-            return Dal.GetList( );
+            return Dal.GetList();
         }
-        public bool Exit(string ID,  string RecordStatus, string val )
+        public bool Exit(string ID, string RecordStatus, string val)
         {
-            return Dal.Exit(ID,   RecordStatus, val );
+            return Dal.Exit(ID, RecordStatus, val);
 
         }
- 
-         
+
+
         public SysMsgInterSet GetEntity(string id)
         {
             return Dal.GetEntity(id);
         }
 
- 
 
+
+
+        public SysMsgInterSet GetEnableService()
+        {
+
+            return Dal.GetEnableService();
+        }
+
+        public int Save(MsgSendLog s)
+        {
+            return Dal.Save(s);
+        }
     }
+
 }

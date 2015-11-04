@@ -317,7 +317,7 @@
         </dd>
     </dl>
 }
-@helper TextArea(string code, string name, object defaultval = null, string hint = "", string otherClass = "", int col = 20, int row = 3)
+@helper TextArea(string code, string name, object defaultval = null, string hint = "", string otherClass = "", int col = 50, int row =8)
 {
     <dl>
         <dt>
@@ -538,6 +538,86 @@
     IsTree = IsTree
 })
 }
+ 
+
+@helper HelpSmartDialog(string url, string id, string code, string name, string defaultVal = null, string defaultText = null, string hint = "", string otherClass = "", int width = 200,
+                        string dialogTitle = "", int dialogWidth = 500, int dialogHeight = 500, bool IsHidButton = false,bool isAppend=false, string OnBefore = "")
+{
+    string dialogID = code + Guid.NewGuid();
+    string selectButtonID = code + Guid.NewGuid();
+    string OnBeforeFunc = "isContienu=" + OnBefore + "();";
+    <dl>
+        <dt>
+            @MVCExtention.ExtendHtmlInput.MvcHelper.Label(code, name)
+            @MVCExtention.ExtendHtmlInput.MvcHelper.Hidden(id, defaultVal)
+        </dt>
+        <dd>
+            @MVCExtention.ExtendHtmlInput.MvcHelper.TextBox(code, defaultText, new { @class = "input normal " + otherClass, width = width, @readonly = "readonly" })
+
+            @if (!IsHidButton)
+            {
+                <span class="input-group-btn">
+
+                    <button class="btn blue btnHelp" id="@selectButtonID">
+                        选择
+                    </button>
+                    <button class="btn yellow btnHelp" onclick="javascript: $('#@id').val(''); $('#@code').val('');return false;">
+                        清除选择
+                    </button>
+                </span>
+            }
+            <span style="color:red">@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(hint)</span>
+
+        </dd>
+    </dl>
+    <script type="text/javascript">
+
+    $(function () {
+        Dialog.create("@MVCExtention.ExtendHtmlInput.MvcUrl.Content("~/Content/Images/movie.png")");
+
+        $("#@selectButtonID").click(function () {
+            var isContienu = true;
+            @if (!string.IsNullOrWhiteSpace(OnBefore))
+	{
+                     @OnBeforeFunc
+	}
+            if (isContienu) {
+                Dialog.open("@url" , "@dialogTitle", {
+                    onClose: function () {
+                        var data=GetThisDialogState();
+                        var oldVal="",oldName="";
+                        if (data) {
+                              oldVal= $("#@id").val( );
+                              oldName=  $("#@code").val( );
+                            if (!@isAppend.ToString().ToLower()) {
+   oldVal="";oldName="";     
+                        }
+                        if (oldVal) {
+                            oldVal+=",";
+                            oldName+=",";
+                        }
+                        oldVal+=data.ID;
+                        oldName+=data.Name;
+                         $("#@id").val(oldVal);
+                       $("#@code").val(oldName);
+
+                    }
+                }
+                }, { width: 850, height: 580 });
+
+        }
+                return false;
+    });
+
+    });
+    </script>
+}
+
+
+
+
+
+
 
 @helper ImageUpLoad(string code, string name, bool isAdd, string defaultval = null, int maxLength = 1, EasyCms.Web.FileUpCallBack callBack = null)
 {

@@ -489,4 +489,33 @@ namespace EasyCms.Model
         站内信,
         手机验证码
     }
+    public enum SendTool
+    {
+        短信,
+        APP客户端,
+        邮件,
+        站内信
+    }
+
+    public enum SendTimeType
+    {
+        即时, 指定时间
+    }
+
+    public enum SendMsgStatus
+    {
+        草稿, 生效, 发送中, 完成
+    }
+
+
+    public enum SendArea
+    {
+
+        全员推送,
+        用户等级,
+        注册时间,
+        购买次数,
+        指定会员,
+        指定手机号
+    }
 }
