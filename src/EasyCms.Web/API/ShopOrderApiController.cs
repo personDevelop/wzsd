@@ -393,7 +393,7 @@ namespace EasyCms.Web.API
                     ShopReturnOrderItem._.SaleCount.FullName, ShopReturnOrderItem._.RequestQuantity.FullName, ShopReturnOrderItem._.ReturnCount.FullName,
                     ShopReturnOrderItem._.SellPrice.FullName,
                   ShopReturnOrderItem._.ProductCode.FullName,
-                    ShopReturnOrderItem._.Name.FullName, ShopReturnOrderItem._.ThumbnailsUrl.FullName);
+                    ShopReturnOrderItem._.Name.FullName, "ShopReturnOrderItem.ProductThumb");
             }
 
 
@@ -433,7 +433,7 @@ namespace EasyCms.Web.API
                     ShopReturnOrderItem._.SaleCount.FullName, ShopReturnOrderItem._.RequestQuantity.FullName, ShopReturnOrderItem._.ReturnCount.FullName,
                     ShopReturnOrderItem._.SellPrice.FullName,
                   ShopReturnOrderItem._.ProductCode.FullName,
-                    ShopReturnOrderItem._.Name.FullName, ShopReturnOrderItem._.ThumbnailsUrl.FullName);
+                    ShopReturnOrderItem._.Name.FullName, "ShopReturnOrderItem.ProductThumb");
             }
 
 

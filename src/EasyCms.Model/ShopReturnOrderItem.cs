@@ -556,5 +556,15 @@ namespace EasyCms.Model
         #endregion
     }
 
+     public partial class ShopReturnOrderItem
+     {
+         /// <summary>
+         /// 为了和商品订单中的图片属性名称统一
+         /// </summary>
+         [NotDbCol]
+         public string ProductThumb { get { return ThumbnailsUrl; } }
+     
+     }
+    
 
 }
