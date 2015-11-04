@@ -101,5 +101,15 @@ namespace EasyCms.Business
         {
             return Dal.GetCanReturnDetail(host, orderID );
         }
+
+        public List<ShopReturnOrder> GetMyReturnOrders(string host, ManagerUserInfo user, int queryPage, string queryStatus, string other, out string err)
+        {
+            return Dal.GetMyReturnOrders(host, user, queryPage, queryStatus, other, out err);  
+        }
+
+        public ShopReturnOrder GetReturnOrder(string host, string orderid, string userid, out string err)
+        {
+            return Dal.GetReturnOrder(host, orderid, userid, out   err);
+        }
     }
 }

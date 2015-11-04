@@ -355,9 +355,89 @@ namespace EasyCms.Web.API
             {
                 return "订单编号不能为空".FormatError();
             }
-           
-            DataTable dt = new ShopOrderBll().GetCanReturnDetail(host, id );
+
+            DataTable dt = new ShopOrderBll().GetCanReturnDetail(host, id);
             return dt.Format();
+        }
+
+
+        public HttpResponseMessage GetReturnOrders(int id = 1, string pageIndex = "", string other = "")
+        {
+            int queryPage = id;
+
+            if (queryPage == 0)
+            {
+                queryPage = 1;
+            }
+
+
+
+            string err = string.Empty;
+
+
+            ManagerUserInfo user = Request.GetAccount();
+
+            List<ShopReturnOrder> list = new ShopOrderBll().GetMyReturnOrders(host, user, queryPage, pageIndex, other, out err);
+            if (!string.IsNullOrWhiteSpace(err))
+            {
+                return err.FormatError();
+
+            }
+            else
+            {
+                return list.FormatObj(true, ShopReturnOrder._.ID.FullName, ShopReturnOrder._.OrderId.FullName, ShopReturnOrder._.CreatedDate.FullName,
+                ShopReturnOrder._.Description.FullName,
+                ShopReturnOrder._.ReturnType.FullName,
+                ShopReturnOrder._.Status.FullName,
+                ShopReturnOrder._.RefuseReason.FullName, "ShopReturnOrder.StatusStr", ShopReturnOrderItem._.ID.FullName, ShopReturnOrderItem._.OrderId.FullName, ShopReturnOrderItem._.ReturnOrderId.FullName,
+                    ShopReturnOrderItem._.SaleCount.FullName, ShopReturnOrderItem._.RequestQuantity.FullName, ShopReturnOrderItem._.ReturnCount.FullName,
+                    ShopReturnOrderItem._.SellPrice.FullName,
+                  ShopReturnOrderItem._.ProductCode.FullName,
+                    ShopReturnOrderItem._.Name.FullName, ShopReturnOrderItem._.ThumbnailsUrl.FullName);
+            }
+
+
+        }
+
+        /// <summary>
+        /// 获取我的订单，排序 按照订单时间倒排 
+        /// </summary>
+        /// <param name="id">页数</param>
+        /// <param name="pageIndex">订单状态（-1 查所有状态）</param>
+        /// <param name="other">其他where 条件</param>
+        /// <returns></returns> 
+        public HttpResponseMessage GetReturnOrder(string id)
+        {
+
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return "订单编号不能为空".FormatError();
+            }
+
+
+            ManagerUserInfo user = Request.GetAccount();
+            string err = null;
+            ShopReturnOrder order = new ShopOrderBll().GetReturnOrder(host, id, user.ID, out   err);
+            if (!string.IsNullOrWhiteSpace(err))
+            {
+                return err.FormatError();
+
+            }
+            else
+            {
+                return order.FormatObj(true, ShopReturnOrder._.ID.FullName, ShopReturnOrder._.OrderId.FullName, ShopReturnOrder._.CreatedDate.FullName,
+                ShopReturnOrder._.Description.FullName,
+                ShopReturnOrder._.ReturnType.FullName,
+                ShopReturnOrder._.Status.FullName,
+                ShopReturnOrder._.RefuseReason.FullName, "ShopReturnOrder.StatusStr", ShopReturnOrderItem._.ID.FullName, ShopReturnOrderItem._.OrderId.FullName, ShopReturnOrderItem._.ReturnOrderId.FullName,
+                    ShopReturnOrderItem._.SaleCount.FullName, ShopReturnOrderItem._.RequestQuantity.FullName, ShopReturnOrderItem._.ReturnCount.FullName,
+                    ShopReturnOrderItem._.SellPrice.FullName,
+                  ShopReturnOrderItem._.ProductCode.FullName,
+                    ShopReturnOrderItem._.Name.FullName, ShopReturnOrderItem._.ThumbnailsUrl.FullName);
+            }
+
+
+
         }
     }
 }

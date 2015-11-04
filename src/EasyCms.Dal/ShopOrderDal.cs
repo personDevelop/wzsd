@@ -1811,15 +1811,15 @@ ShopOrderItem._.Weight).ToDataTable();
                 .ToDataTable();
         }
 
-        public DataTable GetCanReturnDetail(string host, string orderID  )
+        public DataTable GetCanReturnDetail(string host, string orderID)
         {
-         //   err = string.Empty;
-         //string accoutnID=   Dal.From<ShopOrder>().Where(ShopOrder._.ID == orderID
-         //       ).Select(ShopOrder._.MemberID).ToScalar() as string;
-         //if (!accoutnID.Equals(userID))
-         //{
-         //    err = "当前订单不是您的订单，您不能退回";
-         //}
+            //   err = string.Empty;
+            //string accoutnID=   Dal.From<ShopOrder>().Where(ShopOrder._.ID == orderID
+            //       ).Select(ShopOrder._.MemberID).ToScalar() as string;
+            //if (!accoutnID.Equals(userID))
+            //{
+            //    err = "当前订单不是您的订单，您不能退回";
+            //}
             return Dal.From<ShopOrderItem>()
 
                 .Where(ShopOrderItem._.OrderID == orderID)
@@ -1832,6 +1832,98 @@ ShopOrderItem._.Weight).ToDataTable();
                 .OrderBy(ShopOrderItem._.Sequence.Desc)
 
                 .ToDataTable();
+        }
+
+        public ShopReturnOrder GetReturnOrder(string host, string orderid, string userid, out string err)
+        {
+            err = string.Empty;
+            WhereClip where = ShopReturnOrder._.ID == orderid;
+            ShopReturnOrder order = Dal.From<ShopReturnOrder>()
+
+                .Where(where)
+                .Select(ShopReturnOrder._.ID, ShopReturnOrder._.OrderId, ShopReturnOrder._.CreatedDate,
+                ShopReturnOrder._.Description,
+                ShopReturnOrder._.ReturnType,
+                ShopReturnOrder._.Status,
+                ShopReturnOrder._.RefuseReason)
+                .ToFirst<ShopReturnOrder>();
+            if (order == null)
+            {
+                err = "退货单不存在";
+            }
+            else if (order.UserId != userid)
+            {
+                err = "不是您的退货单，您不能查看";
+            }
+            else
+            {
+
+                List<ShopReturnOrderItem> orderItems = Dal.From<ShopReturnOrderItem>()
+
+                    .Where(ShopReturnOrderItem._.ReturnOrderId == orderid)
+                    .Select(ShopReturnOrderItem._.ID, ShopReturnOrderItem._.OrderId, ShopReturnOrderItem._.ReturnOrderId,
+                    ShopReturnOrderItem._.SaleCount, ShopReturnOrderItem._.RequestQuantity, ShopReturnOrderItem._.ReturnCount,
+                    ShopReturnOrderItem._.SellPrice,
+                  ShopReturnOrderItem._.ProductCode,
+                    ShopReturnOrderItem._.Name, new ExpressionClip("'" + host + "'" + "+ThumbnailsUrl").Alias("ThumbnailsUrl")).List<ShopReturnOrderItem>();
+
+            }
+            return order;
+        }
+
+        public List<ShopReturnOrder> GetMyReturnOrders(string host, ManagerUserInfo user, int queryPage, string queryStatusStr, string otherWhere, out string err)
+        {
+            err = string.Empty;
+            WhereClip where = ShopReturnOrder._.UserId == user.ID && ShopReturnOrder._.HasDelete == false;
+
+            if (!string.IsNullOrWhiteSpace(queryStatusStr))
+            {
+                int queryStatus = -1;
+                if (int.TryParse(queryStatusStr, out queryStatus))
+                {
+                    if (queryStatus > -1)
+                    {
+                        where = where && ShopReturnOrder._.Status == queryStatus;
+                    }
+
+                }
+                else
+                {
+                    where = where && ShopReturnOrder._.Status.In(queryStatusStr.Split(new char[] { ',' },
+                         StringSplitOptions.RemoveEmptyEntries).ToArray());
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(otherWhere))
+            {
+                where = where && new WhereClip(otherWhere);
+            }
+            int recordcount = 0;
+            int pageCount = 0;
+            List<ShopReturnOrder> list = Dal.From<ShopReturnOrder>().Where(where)
+                .Select(ShopReturnOrder._.ID, ShopReturnOrder._.OrderId, ShopReturnOrder._.CreatedDate,
+                ShopReturnOrder._.Description,
+                ShopReturnOrder._.ReturnType,
+                ShopReturnOrder._.Status,
+                ShopReturnOrder._.RefuseReason)
+                .OrderBy(ShopReturnOrder._.CreatedDate.Desc).ToDataTable(20, queryPage, ref pageCount, ref recordcount).ToList<ShopReturnOrder>();
+            if (list.Count > 0)
+            {
+                List<string> orderIDS = list.Select(p => p.ID).ToList();
+                List<ShopReturnOrderItem> orderItems = Dal.From<ShopReturnOrderItem>()
+                    .Where(ShopReturnOrderItem._.ReturnOrderId.In(orderIDS))
+                    .Select(ShopReturnOrderItem._.ID, ShopReturnOrderItem._.OrderId, ShopReturnOrderItem._.ReturnOrderId,
+                    ShopReturnOrderItem._.SaleCount, ShopReturnOrderItem._.RequestQuantity, ShopReturnOrderItem._.ReturnCount,
+                    ShopReturnOrderItem._.SellPrice,
+                  ShopReturnOrderItem._.ProductCode,
+                    ShopReturnOrderItem._.Name, new ExpressionClip("'" + host + "'" + "+ThumbnailsUrl").Alias("ThumbnailsUrl")
+                    ).List<ShopReturnOrderItem>();
+                foreach (ShopReturnOrder item in list)
+                {
+                    item.OrderItems = orderItems.Where(p => p.ReturnOrderId == item.ID).OrderBy(p => p.ProductCode).ToList();
+                }
+            }
+            return list;
         }
     }
 
