@@ -1810,6 +1810,29 @@ ShopOrderItem._.Weight).ToDataTable();
 
                 .ToDataTable();
         }
+
+        public DataTable GetCanReturnDetail(string host, string orderID  )
+        {
+         //   err = string.Empty;
+         //string accoutnID=   Dal.From<ShopOrder>().Where(ShopOrder._.ID == orderID
+         //       ).Select(ShopOrder._.MemberID).ToScalar() as string;
+         //if (!accoutnID.Equals(userID))
+         //{
+         //    err = "当前订单不是您的订单，您不能退回";
+         //}
+            return Dal.From<ShopOrderItem>()
+
+                .Where(ShopOrderItem._.OrderID == orderID)
+
+                .Select(ShopOrderItem._.ID, ShopOrderItem._.OrderID, ShopOrderItem._.ProductID, ShopOrderItem._.ProductSKU,
+            new ExpressionClip("ProductName+AttributeVal").Alias("ProductName"), ShopOrderItem._.Count, ShopOrderItem._.Price,
+             new ExpressionClip("'" + host + "'" + "+ProductThumb").Alias("ProductThumb"), ShopOrderItem._.ReturnCount,
+                 new ExpressionClip("Count-ReturnCount").Alias("CanReturnCount")
+                )
+                .OrderBy(ShopOrderItem._.Sequence.Desc)
+
+                .ToDataTable();
+        }
     }
 
 

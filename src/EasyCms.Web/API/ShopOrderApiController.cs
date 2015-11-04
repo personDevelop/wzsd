@@ -174,7 +174,7 @@ namespace EasyCms.Web.API
                 queryPage = 1;
             }
 
-        
+
 
             string err = string.Empty;
 
@@ -233,7 +233,7 @@ namespace EasyCms.Web.API
 
             ManagerUserInfo user = Request.GetAccount();
             string err = null;
-            ShopOrder order = new ShopOrderBll().GetOrder(host, id, Request.GetAccountID(false), out   err);
+            ShopOrder order = new ShopOrderBll().GetOrder(host, id, user.ID, out   err);
             if (!string.IsNullOrWhiteSpace(err))
             {
                 return err.FormatError();
@@ -314,7 +314,7 @@ namespace EasyCms.Web.API
             string err;
 
             bool result = new ShopShippingAddressBll().UserDelete(Request.GetAccountID(), id, out err);
-            return err.Format(result); 
+            return err.Format(result);
         }
 
         public HttpResponseMessage PaySuccess([FromBody] ReciveForm rf)
@@ -332,13 +332,32 @@ namespace EasyCms.Web.API
             if (isSucess)
             {
                 return new { Msg = "已提交退货申请，请您耐心等待", ReturnOrderID = error }.FormatObj();
-              
+
             }
             else
             {
                 return error.FormatError();
             }
 
+        }
+
+
+
+        /// <summary>
+        /// 获取可退商品列表
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public HttpResponseMessage GetCanReturnDetail(string id)
+        {
+
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return "订单编号不能为空".FormatError();
+            }
+           
+            DataTable dt = new ShopOrderBll().GetCanReturnDetail(host, id );
+            return dt.Format();
         }
     }
 }
