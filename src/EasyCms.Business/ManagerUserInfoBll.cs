@@ -30,6 +30,7 @@ namespace EasyCms.Business
 
         public ManagerUserInfo Login(string code, string pwd, out string error)
         {
+            
             return LoginBase(code, pwd, false, out error);
         }
         public ManagerUserInfo LoginManager(string code, string pwd, out string error)

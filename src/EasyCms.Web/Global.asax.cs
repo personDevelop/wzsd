@@ -45,6 +45,7 @@ namespace EasyCms.Web
             //能处理api的control
             //不能处理api的action 找不到的时候拦截不到
             Exception ex = Server.GetLastError();
+            
             if (ex is HttpException && (ex as HttpException).GetHttpCode() == 404)
             {
                 string account = CmsSession.GetUserID();

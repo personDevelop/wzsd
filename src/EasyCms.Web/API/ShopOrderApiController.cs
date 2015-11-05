@@ -326,17 +326,25 @@ namespace EasyCms.Web.API
 
         public HttpResponseMessage ReturnOrder([FromBody] ShopReturnOrder ro)
         {
-            string error;
-            string accountid = Request.GetAccountID();
-            bool isSucess = new ShopReturnOrderBll().ReturnOrder(accountid, ro, out error);
-            if (isSucess)
+            try
             {
-                return new { Msg = "已提交退货申请，请您耐心等待", ReturnOrderID = error }.FormatObj();
+                string error;
+                string accountid = Request.GetAccountID();
+                bool isSucess = new ShopReturnOrderBll().ReturnOrder(accountid, ro, out error);
+                if (isSucess)
+                {
+                    return new { Msg = "已提交退货申请，请您耐心等待", ReturnOrderID = error }.FormatObj();
 
+                }
+                else
+                {
+                    return error.FormatError();
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return error.FormatError();
+
+                throw new Exception(ex.Message+ex.Source+ex.StackTrace,ex) ;
             }
 
         }
