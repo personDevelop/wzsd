@@ -55,22 +55,22 @@
         { name: 'StaticUrl' }, { name: 'AllowPl' }];
             var columns = [
     { text: '标题', dataField: 'NewsTitle', cellsalign: "left", },
-    { text: '所属类别', dataField: 'ClassNme', width: 100 },
+    { text: '所属类别', dataField: 'ClassName', width: 100 },
     { text: '发布日期', dataField: 'LastEditDate', width: 140 },
     { text: '浏览次数', dataField: 'PvCount', width: 80 },
     { text: '顺序', dataField: 'Sequence', cellsalign: "right", width: 40 },
 
-    { text: '推荐', dataField: 'IsRecomend', width: 50 },
+    { text: '推荐', dataField: 'IsRecomend', width: 50 ,@HelperExtend.Parsebool()},
 
-    { text: '热点', dataField: 'IsHot', width: 50 },
+    { text: '热点', dataField: 'IsHot', width: 50 ,@HelperExtend.Parsebool()},
 
-    { text: '醒目', dataField: 'IsColor', width: 50 },
+    { text: '醒目', dataField: 'IsColor', width: 50,@HelperExtend.Parsebool() },
 
-    { text: '置顶', dataField: 'IsTop', width: 50 },
+    { text: '置顶', dataField: 'IsTop', width: 50,@HelperExtend.Parsebool() },
 
     { text: '评论次数', dataField: 'TotalComment', cellsalign: "right", width: 80 },
 
-    { text: '允许评论', dataField: 'AllowPl', width: 80 }];
+    { text: '允许评论', dataField: 'AllowPl', width: 80 ,@HelperExtend.Parsebool()}];
             CreateGrid("jqxgrid", url, datafields, columns, {isMutilSelect:true});
              
         });

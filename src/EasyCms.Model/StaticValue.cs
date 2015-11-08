@@ -518,4 +518,13 @@ namespace EasyCms.Model
         指定会员,
         指定手机号
     }
+
+    public enum CouponType {
+        普通优惠券, 积分兑换优惠券, 系统派发优惠券
+    }
+    public enum QxLx
+    {
+        期限范围, 固定天数
+    }
+    
 }

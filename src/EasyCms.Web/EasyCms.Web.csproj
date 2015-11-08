@@ -809,6 +809,7 @@
     <Content Include="Areas\Admin\Views\Shared\_Dialog - 复制.cshtml" />
     <Content Include="Areas\Admin\Views\ManagerUserInfo\SearchAccount.cshtml" />
     <Content Include="App_Code\HelperSmart.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_Loading.cshtml" />
     <None Include="Properties\PublishProfiles\publish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\EshopAdminControl.js" />

@@ -41,7 +41,7 @@ namespace EasyCms.Web.API
             }
             else
             {
-                NewsInfo news = new NewsInfoBll().GetEntity(id);
+                NewsInfo news = new NewsInfoBll().GetEntity(id,host);
                 if (news.Description == null)
                 {
                     news.Description = string.Empty;

@@ -49,7 +49,7 @@ namespace EasyCms.Dal
 
         public NewsInfo GetEntity(string id, string host)
         {
-            NewsInfo news = Dal.Find<NewsInfo>(id);
+            NewsInfo news = GetEntity(id);
             if (news != null)
             {
                 if (!string.IsNullOrWhiteSpace(news.ImageUrl))
@@ -68,7 +68,8 @@ namespace EasyCms.Dal
         public NewsInfo GetEntity(string id)
         {
 
-            return Dal.Find<NewsInfo>(id);
+       return  Dal.From<NewsInfo>().Join<NewsCategory>(NewsInfo._.ClassID == NewsCategory._.ID).Select(NewsInfo._.ID.All, NewsCategory._.Name.Alias("ClassName"))
+                 .Where(NewsInfo._.ID == id).ToFirst<NewsInfo>();
         }
 
 

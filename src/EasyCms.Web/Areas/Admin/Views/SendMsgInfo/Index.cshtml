@@ -11,7 +11,7 @@
             <div class="l-list">
                 <ul class="icon-list">
                     <li><a class="add" href="@Url.Action("Edit")"><i></i><span>新增</span></a></li>
-                    <li><a class="add" href="javascript:;" onclick="EditGrid('jqxgrid', '@Url.Action("Edit")');"><i></i><span>编辑</span></a></li>
+                    <li><a class="edit" href="javascript:;" onclick="EditGrid('jqxgrid', '@Url.Action("Edit")');"><i></i><span>编辑</span></a></li>
                     <li><a class="del" href="javascript:;" onclick="DelGrid('jqxgrid', '@Url.Action("Delete")');"><i></i><span>删除</span></a></li>
                     <li><a class="del" href="javascript:;" onclick="DelGrid('jqxgrid', '@Url.Action("Send")');"><i></i><span>发送</span></a></li>
                 </ul>
@@ -32,55 +32,42 @@
             var url = "@Url.Action("GetList")";
             var datafields = [
 
-  { name: 'ID'},
-  { name: 'SendTool'}, 
-  { name: 'SendTimeType'},
-  { name: 'SendTime'},
-  { name: 'Status'},
-  { name: 'IsAllUser'},
-  { name: 'UserOrder'},
-  { name: 'ReciveUser'},
+  { name: 'ID' },
+  { name: 'SendTool' },
+      { name: 'SendContent' },
+  { name: 'SendTimeType' },
+  { name: 'SendTime' },
+  { name: 'Status' },
+  { name: 'SendArea' }, 
   { name: 'TotalUserCount' },
   { name: 'HasSendUserCount' },
    { name: 'HasSendCount' },
-  { name: 'CreateTime'},
-  { name: 'CreateName'} 
- ];
+  { name: 'CreateTime' },
+  { name: 'CreateName' }
+            ];
             var columns = [
 
-   
 
-  { text: '推送工具', dataField: 'SendTool', cellsalign: "left", width: 200 },
 
-  { text: '推送内容', dataField: 'SendContent', cellsalign: "left", width: 200 },
+  { text: '推送工具', dataField: 'SendTool',   @HelperExtend.ParseEnum(typeof(EasyCms.Model.SendTool)) },
 
-  { text: '推送商品', dataField: 'ProductID', cellsalign: "left", width: 200 },
+  { text: '推送内容', dataField: 'SendContent', cellsalign: "left"  },
 
-  { text: '推送时机', dataField: 'SendTimeType', cellsalign: "left", width: 200 },
+  { text: '状态', dataField: 'Status', @HelperExtend.ParseEnum(typeof(EasyCms.Model.SendMsgStatus)) },
 
-  { text: '指定时间', dataField: 'SendTime', cellsalign: "left", width: 200 },
 
-  { text: '状态', dataField: 'Status', cellsalign: "left", width: 200 },
+  { text: '发送范围', dataField: 'SendArea', cellsalign: "left", width: 200,@HelperExtend.ParseEnum(typeof(EasyCms.Model.SendArea)) }, 
+  { text: '总发送人个数', dataField: 'TotalUserCount', cellsalign: "right"  },
 
-  { text: '所有会员', dataField: 'IsAllUser', cellsalign: "left", width: 200 },
-
-  { text: '指定会员等级', dataField: 'UserOrder', cellsalign: "left", width: 200 },
-
-  { text: '指定具体接收人', dataField: 'ReciveUser', cellsalign: "left", width: 200 },
-
-  { text: '总发送人个数', dataField: 'TotalUserCount', cellsalign: "left", width: 200 },
-
-  { text: '已成功发送人个数', dataField: 'HasSendUserCount', cellsalign: "left", width: 200 },
-    { text: '发送次数', dataField: 'HasSendCount', cellsalign: "left", width: 200 },
-
-  { text: '备注', dataField: 'Note', cellsalign: "left", width: 200 },
+  { text: '已成功发送人个数', dataField: 'HasSendUserCount', cellsalign: "right"  },
+    { text: '发送次数', dataField: 'HasSendCount', cellsalign: "right"  }, 
 
   { text: '创建时间', dataField: 'CreateTime', cellsalign: "left", width: 200 },
 
   { text: '创建人', dataField: 'CreateName', cellsalign: "left", width: 200 },
 
- ];
-   CreateGrid("jqxgrid", url, datafields, columns);
+            ];
+            CreateGrid("jqxgrid", url, datafields, columns);
 
 
         });

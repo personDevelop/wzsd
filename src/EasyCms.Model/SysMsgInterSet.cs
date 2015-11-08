@@ -38,7 +38,7 @@ namespace EasyCms.Model
 
         private string _TelNum;
 
-        private string _MaxWordCount;
+        private int _MaxWordCount;
 
         #endregion
 
@@ -182,9 +182,9 @@ namespace EasyCms.Model
         ///  最大字数,0不控制字符个数
         /// </summary>
 
-        [DbProperty(MapingColumnName = "MaxWordCount", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "MaxWordCount", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public string MaxWordCount
+        public int MaxWordCount
         {
             get
             {
@@ -257,5 +257,15 @@ namespace EasyCms.Model
             public PropertyItem MaxWordCount = null;
         }
         #endregion
+    }
+
+
+    public partial class SysMsgInterSet
+    {
+        protected override void OnCreate()
+        {
+            IsEnable = true;
+
+        }
     }
 }

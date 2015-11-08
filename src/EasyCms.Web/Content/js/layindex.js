@@ -257,7 +257,8 @@ function linkMenuTree(islink, navid) {
 			addCookie("dt_manage_navigation_cookie", navid, 240);
 		}
 		//检查是否需要跳转链接
-		if (islink == true && cookieObj.attr("href") != "" && cookieObj.attr("href")!= "#") {
+		if (islink == true && cookieObj.attr("href") != "" && cookieObj.attr("href") != "#") {
+		    //OnLoading(true);
 			frames["mainframe"].location.href = cookieObj.attr("href");
 		}
 	} else if (argument == 2) {

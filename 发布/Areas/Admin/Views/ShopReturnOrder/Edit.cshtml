@@ -45,13 +45,13 @@
                 break;
             case UserDjStatus.等待审核:
             case UserDjStatus.审批不通过:
-            @HelperExtend.Number("ReturnMoney", "退款金额", defaultval: Model.ReturnMoney, hint: "可根据实际情况来调整退款金额")
+            @HelperExtend.Number("ReturnMoney", "退款金额", defaultval: Model.ReturnMoney,decimalDigits:2, hint: "可根据实际情况来调整退款金额")
             @HelperExtend.TextArea("RefuseReason", "拒绝理由", defaultval: Model.RefuseReason)
 
                 break;
 
             case UserDjStatus.等待退款:
-            @HelperExtend.Number("ReturnMoney", "退款金额", defaultval: Model.ReturnMoney, hint: "可根据实际情况来调整退款金额")
+            @HelperExtend.Number("ReturnMoney", "退款金额", defaultval: Model.ReturnMoney, decimalDigits: 2, hint: "可根据实际情况来调整退款金额")
                 break;
             default:
             @HelperExtend.Lable(Model.ReturnMoney.ToString(), "退款金额")

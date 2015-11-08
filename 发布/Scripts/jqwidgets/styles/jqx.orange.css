@@ -143,6 +143,9 @@ border-color:#FBB34E; }
 .jqx-icon-calendar-orange, .jqx-icon-calendar-hover-orange, .jqx-icon-calendar-pressed-orange {
     background-image: url('images/icon-calendar-white.png');
 }
+.jqx-icon-time-orange, .jqx-icon-time-hover-orange, .jqx-icon-time-pressed-orange {
+    background-image: url('images/icon-time-white.png');
+}
 .jqx-icon-delete-orange
 {
     background-image: url('images/icon-delete-white.png');
@@ -172,4 +175,24 @@ border-color:#FBB34E; }
 }
 .jqx-editor-toolbar-icon-orange {
     background: url('images/html_editor_white.png') no-repeat;
+}
+.jqx-layout-orange
+{
+    background-color: #E48605;
+}
+.jqx-layout-pseudo-window-pin-icon-orange
+{
+    background-image: url("images/pin-white.png");
+}
+.jqx-layout-pseudo-window-pinned-icon-orange
+{
+    background-image: url("images/pinned-white.png");
+}
+.jqx-scheduler-month-cell-orange, .jqx-scheduler-time-column-orange, .jqx-scheduler-toolbar-orange
+{
+    background: #E48605 !important;
+    color: #fff  !important;
+}
+.jqx-widget-orange .jqx-scheduler-middle-cell-orange, .jqx-scheduler-middle-cell-orange {
+    border-bottom-color: #E48605 !important;
 }

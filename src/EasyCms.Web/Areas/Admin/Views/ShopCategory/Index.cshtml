@@ -46,10 +46,10 @@
 
   { text: '分类名称', dataField: 'Name', width: 200, cellsalign: "left" },
 
-  { text: '上级分类', dataField: 'ParentName', width: 200, cellsalign: "left" },
+ 
 
   { text: '顺序', dataField: 'OrderNo', width: 80, cellsalign: "right" },
-  { text: '启用', dataField: 'IsEnable', width: 80 },
+  { text: '启用', dataField: 'IsEnable', width: 80,@HelperExtend.ParseEnable() },
 
   { text: '分类描述', dataField: 'Note', cellsalign: "left" }];
             CreateTree("treeGrid", url, datafields, columns);

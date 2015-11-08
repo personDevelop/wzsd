@@ -11,7 +11,7 @@ using EasyCms.Web.Common;
 
 namespace EasyCms.Web.Areas.Admin.Controllers
 {
-    public class NewsInfoController : Controller
+    public class NewsInfoController : BaseControler
     {
         NewsInfoBll bll = new NewsInfoBll();
         //
@@ -52,7 +52,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             {
                 if (collection["RecordStatus"] != "add")
                 {
-                    p = bll.GetEntity(collection["ID"]);
+                    p = bll.GetEntity(collection["ID"] );
                     p.BindForm<NewsInfo>(collection);
                 }
                 else
@@ -108,7 +108,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                 p = new NewsInfo();
             }
             else
-                p = bll.GetEntity(id);
+                p = bll.GetEntity(id );
             return View("Edit", p);
         }
 

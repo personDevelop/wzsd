@@ -1,0 +1,22 @@
+﻿
+<div id="jqxLoader">
+</div>
+<script>
+    function OnLoading(isModel) {
+        var model = false;
+        if (!isModel) {
+
+        } else model = isModel;
+        $('#jqxLoader').jqxLoader({ autoOpen: true, isModal: model, text: "正在拼命加载中..." });
+
+    }
+    OnLoading(true);
+    function CloseLoad() {
+        $('#jqxLoader').jqxLoader('close');
+    }
+    $(function () {
+        CloseLoad();
+    });
+
+
+</script>

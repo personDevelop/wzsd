@@ -1,0 +1,778 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://www.vcomcn.co/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://www.vcomcn.co/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">&lt;div style='font-size:14px;font-weight:bolder;'&gt;上海集时通，短信接口&lt;/div&gt;</wsdl:documentation>
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.vcomcn.co/">
+      <s:element name="GetBalance">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="login_name" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetBalanceResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetBalanceResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendSms">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="login_name" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="mobile" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="message" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="start_time" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Search_ID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendSmsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SendSmsResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendSmsGroup">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="login_name" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="mobile" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="message" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="start_time" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Search_ID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendSmsGroupResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SendSmsGroupResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendSmsGroupSpnum">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="login_name" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="mobile" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="message" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="start_time" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Search_ID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="spNum" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendSmsGroupSpnumResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SendSmsGroupSpnumResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetResultbyTime">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="login_name" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="mobile" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="start_time" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="end_time" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetResultbyTimeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetResultbyTimeResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetResultbyId">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="login_name" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Search_ID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetResultbyIdResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetResultbyIdResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSmsStateReport">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="login_name" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSmsStateReportResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetSmsStateReportResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSmsResp">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="login_name" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSmsRespResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetSmsRespResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="string" nillable="true" type="s:string" />
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="GetBalanceSoapIn">
+    <wsdl:part name="parameters" element="tns:GetBalance" />
+  </wsdl:message>
+  <wsdl:message name="GetBalanceSoapOut">
+    <wsdl:part name="parameters" element="tns:GetBalanceResponse" />
+  </wsdl:message>
+  <wsdl:message name="SendSmsSoapIn">
+    <wsdl:part name="parameters" element="tns:SendSms" />
+  </wsdl:message>
+  <wsdl:message name="SendSmsSoapOut">
+    <wsdl:part name="parameters" element="tns:SendSmsResponse" />
+  </wsdl:message>
+  <wsdl:message name="SendSmsGroupSoapIn">
+    <wsdl:part name="parameters" element="tns:SendSmsGroup" />
+  </wsdl:message>
+  <wsdl:message name="SendSmsGroupSoapOut">
+    <wsdl:part name="parameters" element="tns:SendSmsGroupResponse" />
+  </wsdl:message>
+  <wsdl:message name="SendSmsGroupSpnumSoapIn">
+    <wsdl:part name="parameters" element="tns:SendSmsGroupSpnum" />
+  </wsdl:message>
+  <wsdl:message name="SendSmsGroupSpnumSoapOut">
+    <wsdl:part name="parameters" element="tns:SendSmsGroupSpnumResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetResultbyTimeSoapIn">
+    <wsdl:part name="parameters" element="tns:GetResultbyTime" />
+  </wsdl:message>
+  <wsdl:message name="GetResultbyTimeSoapOut">
+    <wsdl:part name="parameters" element="tns:GetResultbyTimeResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetResultbyIdSoapIn">
+    <wsdl:part name="parameters" element="tns:GetResultbyId" />
+  </wsdl:message>
+  <wsdl:message name="GetResultbyIdSoapOut">
+    <wsdl:part name="parameters" element="tns:GetResultbyIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetSmsStateReportSoapIn">
+    <wsdl:part name="parameters" element="tns:GetSmsStateReport" />
+  </wsdl:message>
+  <wsdl:message name="GetSmsStateReportSoapOut">
+    <wsdl:part name="parameters" element="tns:GetSmsStateReportResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetSmsRespSoapIn">
+    <wsdl:part name="parameters" element="tns:GetSmsResp" />
+  </wsdl:message>
+  <wsdl:message name="GetSmsRespSoapOut">
+    <wsdl:part name="parameters" element="tns:GetSmsRespResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetBalanceHttpGetIn">
+    <wsdl:part name="login_name" type="s:string" />
+    <wsdl:part name="password" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBalanceHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="SendSmsHttpGetIn">
+    <wsdl:part name="login_name" type="s:string" />
+    <wsdl:part name="password" type="s:string" />
+    <wsdl:part name="mobile" type="s:string" />
+    <wsdl:part name="message" type="s:string" />
+    <wsdl:part name="start_time" type="s:string" />
+    <wsdl:part name="Search_ID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SendSmsHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="SendSmsGroupHttpGetIn">
+    <wsdl:part name="login_name" type="s:string" />
+    <wsdl:part name="password" type="s:string" />
+    <wsdl:part name="mobile" type="s:string" />
+    <wsdl:part name="message" type="s:string" />
+    <wsdl:part name="start_time" type="s:string" />
+    <wsdl:part name="Search_ID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SendSmsGroupHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="SendSmsGroupSpnumHttpGetIn">
+    <wsdl:part name="login_name" type="s:string" />
+    <wsdl:part name="password" type="s:string" />
+    <wsdl:part name="mobile" type="s:string" />
+    <wsdl:part name="message" type="s:string" />
+    <wsdl:part name="start_time" type="s:string" />
+    <wsdl:part name="Search_ID" type="s:string" />
+    <wsdl:part name="spNum" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SendSmsGroupSpnumHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetResultbyTimeHttpGetIn">
+    <wsdl:part name="login_name" type="s:string" />
+    <wsdl:part name="password" type="s:string" />
+    <wsdl:part name="mobile" type="s:string" />
+    <wsdl:part name="start_time" type="s:string" />
+    <wsdl:part name="end_time" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetResultbyTimeHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetResultbyIdHttpGetIn">
+    <wsdl:part name="login_name" type="s:string" />
+    <wsdl:part name="password" type="s:string" />
+    <wsdl:part name="Search_ID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetResultbyIdHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetSmsStateReportHttpGetIn">
+    <wsdl:part name="login_name" type="s:string" />
+    <wsdl:part name="password" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetSmsStateReportHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetSmsRespHttpGetIn">
+    <wsdl:part name="login_name" type="s:string" />
+    <wsdl:part name="password" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetSmsRespHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBalanceHttpPostIn">
+    <wsdl:part name="login_name" type="s:string" />
+    <wsdl:part name="password" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBalanceHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="SendSmsHttpPostIn">
+    <wsdl:part name="login_name" type="s:string" />
+    <wsdl:part name="password" type="s:string" />
+    <wsdl:part name="mobile" type="s:string" />
+    <wsdl:part name="message" type="s:string" />
+    <wsdl:part name="start_time" type="s:string" />
+    <wsdl:part name="Search_ID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SendSmsHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="SendSmsGroupHttpPostIn">
+    <wsdl:part name="login_name" type="s:string" />
+    <wsdl:part name="password" type="s:string" />
+    <wsdl:part name="mobile" type="s:string" />
+    <wsdl:part name="message" type="s:string" />
+    <wsdl:part name="start_time" type="s:string" />
+    <wsdl:part name="Search_ID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SendSmsGroupHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="SendSmsGroupSpnumHttpPostIn">
+    <wsdl:part name="login_name" type="s:string" />
+    <wsdl:part name="password" type="s:string" />
+    <wsdl:part name="mobile" type="s:string" />
+    <wsdl:part name="message" type="s:string" />
+    <wsdl:part name="start_time" type="s:string" />
+    <wsdl:part name="Search_ID" type="s:string" />
+    <wsdl:part name="spNum" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SendSmsGroupSpnumHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetResultbyTimeHttpPostIn">
+    <wsdl:part name="login_name" type="s:string" />
+    <wsdl:part name="password" type="s:string" />
+    <wsdl:part name="mobile" type="s:string" />
+    <wsdl:part name="start_time" type="s:string" />
+    <wsdl:part name="end_time" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetResultbyTimeHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetResultbyIdHttpPostIn">
+    <wsdl:part name="login_name" type="s:string" />
+    <wsdl:part name="password" type="s:string" />
+    <wsdl:part name="Search_ID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetResultbyIdHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetSmsStateReportHttpPostIn">
+    <wsdl:part name="login_name" type="s:string" />
+    <wsdl:part name="password" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetSmsStateReportHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetSmsRespHttpPostIn">
+    <wsdl:part name="login_name" type="s:string" />
+    <wsdl:part name="password" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetSmsRespHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:portType name="SmsServiceSoap">
+    <wsdl:operation name="GetBalance">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">账户余额查询</wsdl:documentation>
+      <wsdl:input message="tns:GetBalanceSoapIn" />
+      <wsdl:output message="tns:GetBalanceSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendSms">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">发送短信</wsdl:documentation>
+      <wsdl:input message="tns:SendSmsSoapIn" />
+      <wsdl:output message="tns:SendSmsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendSmsGroup">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">批量提交短信，mobile使用英文逗号分割</wsdl:documentation>
+      <wsdl:input message="tns:SendSmsGroupSoapIn" />
+      <wsdl:output message="tns:SendSmsGroupSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendSmsGroupSpnum">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">批量提交短信，mobile使用英文逗号分割,spnum自定义扩展号</wsdl:documentation>
+      <wsdl:input message="tns:SendSmsGroupSpnumSoapIn" />
+      <wsdl:output message="tns:SendSmsGroupSpnumSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetResultbyTime">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">获取结果，根据时间范围</wsdl:documentation>
+      <wsdl:input message="tns:GetResultbyTimeSoapIn" />
+      <wsdl:output message="tns:GetResultbyTimeSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetResultbyId">
+      <wsdl:input message="tns:GetResultbyIdSoapIn" />
+      <wsdl:output message="tns:GetResultbyIdSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSmsStateReport">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">获取短信任务发送状态报告</wsdl:documentation>
+      <wsdl:input message="tns:GetSmsStateReportSoapIn" />
+      <wsdl:output message="tns:GetSmsStateReportSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSmsResp">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">获取上行短信信息</wsdl:documentation>
+      <wsdl:input message="tns:GetSmsRespSoapIn" />
+      <wsdl:output message="tns:GetSmsRespSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="SmsServiceHttpGet">
+    <wsdl:operation name="GetBalance">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">账户余额查询</wsdl:documentation>
+      <wsdl:input message="tns:GetBalanceHttpGetIn" />
+      <wsdl:output message="tns:GetBalanceHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendSms">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">发送短信</wsdl:documentation>
+      <wsdl:input message="tns:SendSmsHttpGetIn" />
+      <wsdl:output message="tns:SendSmsHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendSmsGroup">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">批量提交短信，mobile使用英文逗号分割</wsdl:documentation>
+      <wsdl:input message="tns:SendSmsGroupHttpGetIn" />
+      <wsdl:output message="tns:SendSmsGroupHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendSmsGroupSpnum">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">批量提交短信，mobile使用英文逗号分割,spnum自定义扩展号</wsdl:documentation>
+      <wsdl:input message="tns:SendSmsGroupSpnumHttpGetIn" />
+      <wsdl:output message="tns:SendSmsGroupSpnumHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetResultbyTime">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">获取结果，根据时间范围</wsdl:documentation>
+      <wsdl:input message="tns:GetResultbyTimeHttpGetIn" />
+      <wsdl:output message="tns:GetResultbyTimeHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetResultbyId">
+      <wsdl:input message="tns:GetResultbyIdHttpGetIn" />
+      <wsdl:output message="tns:GetResultbyIdHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSmsStateReport">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">获取短信任务发送状态报告</wsdl:documentation>
+      <wsdl:input message="tns:GetSmsStateReportHttpGetIn" />
+      <wsdl:output message="tns:GetSmsStateReportHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSmsResp">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">获取上行短信信息</wsdl:documentation>
+      <wsdl:input message="tns:GetSmsRespHttpGetIn" />
+      <wsdl:output message="tns:GetSmsRespHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="SmsServiceHttpPost">
+    <wsdl:operation name="GetBalance">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">账户余额查询</wsdl:documentation>
+      <wsdl:input message="tns:GetBalanceHttpPostIn" />
+      <wsdl:output message="tns:GetBalanceHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendSms">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">发送短信</wsdl:documentation>
+      <wsdl:input message="tns:SendSmsHttpPostIn" />
+      <wsdl:output message="tns:SendSmsHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendSmsGroup">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">批量提交短信，mobile使用英文逗号分割</wsdl:documentation>
+      <wsdl:input message="tns:SendSmsGroupHttpPostIn" />
+      <wsdl:output message="tns:SendSmsGroupHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendSmsGroupSpnum">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">批量提交短信，mobile使用英文逗号分割,spnum自定义扩展号</wsdl:documentation>
+      <wsdl:input message="tns:SendSmsGroupSpnumHttpPostIn" />
+      <wsdl:output message="tns:SendSmsGroupSpnumHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetResultbyTime">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">获取结果，根据时间范围</wsdl:documentation>
+      <wsdl:input message="tns:GetResultbyTimeHttpPostIn" />
+      <wsdl:output message="tns:GetResultbyTimeHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetResultbyId">
+      <wsdl:input message="tns:GetResultbyIdHttpPostIn" />
+      <wsdl:output message="tns:GetResultbyIdHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSmsStateReport">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">获取短信任务发送状态报告</wsdl:documentation>
+      <wsdl:input message="tns:GetSmsStateReportHttpPostIn" />
+      <wsdl:output message="tns:GetSmsStateReportHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSmsResp">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">获取上行短信信息</wsdl:documentation>
+      <wsdl:input message="tns:GetSmsRespHttpPostIn" />
+      <wsdl:output message="tns:GetSmsRespHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="SmsServiceSoap" type="tns:SmsServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetBalance">
+      <soap:operation soapAction="http://www.vcomcn.co/GetBalance" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendSms">
+      <soap:operation soapAction="http://www.vcomcn.co/SendSms" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendSmsGroup">
+      <soap:operation soapAction="http://www.vcomcn.co/SendSmsGroup" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendSmsGroupSpnum">
+      <soap:operation soapAction="http://www.vcomcn.co/SendSmsGroupSpnum" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetResultbyTime">
+      <soap:operation soapAction="http://www.vcomcn.co/GetResultbyTime" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetResultbyId">
+      <soap:operation soapAction="http://www.vcomcn.co/GetResultbyId" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSmsStateReport">
+      <soap:operation soapAction="http://www.vcomcn.co/GetSmsStateReport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSmsResp">
+      <soap:operation soapAction="http://www.vcomcn.co/GetSmsResp" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="SmsServiceSoap12" type="tns:SmsServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetBalance">
+      <soap12:operation soapAction="http://www.vcomcn.co/GetBalance" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendSms">
+      <soap12:operation soapAction="http://www.vcomcn.co/SendSms" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendSmsGroup">
+      <soap12:operation soapAction="http://www.vcomcn.co/SendSmsGroup" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendSmsGroupSpnum">
+      <soap12:operation soapAction="http://www.vcomcn.co/SendSmsGroupSpnum" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetResultbyTime">
+      <soap12:operation soapAction="http://www.vcomcn.co/GetResultbyTime" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetResultbyId">
+      <soap12:operation soapAction="http://www.vcomcn.co/GetResultbyId" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSmsStateReport">
+      <soap12:operation soapAction="http://www.vcomcn.co/GetSmsStateReport" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSmsResp">
+      <soap12:operation soapAction="http://www.vcomcn.co/GetSmsResp" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="SmsServiceHttpGet" type="tns:SmsServiceHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="GetBalance">
+      <http:operation location="/GetBalance" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendSms">
+      <http:operation location="/SendSms" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendSmsGroup">
+      <http:operation location="/SendSmsGroup" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendSmsGroupSpnum">
+      <http:operation location="/SendSmsGroupSpnum" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetResultbyTime">
+      <http:operation location="/GetResultbyTime" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetResultbyId">
+      <http:operation location="/GetResultbyId" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSmsStateReport">
+      <http:operation location="/GetSmsStateReport" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSmsResp">
+      <http:operation location="/GetSmsResp" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="SmsServiceHttpPost" type="tns:SmsServiceHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="GetBalance">
+      <http:operation location="/GetBalance" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendSms">
+      <http:operation location="/SendSms" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendSmsGroup">
+      <http:operation location="/SendSmsGroup" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendSmsGroupSpnum">
+      <http:operation location="/SendSmsGroupSpnum" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetResultbyTime">
+      <http:operation location="/GetResultbyTime" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetResultbyId">
+      <http:operation location="/GetResultbyId" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSmsStateReport">
+      <http:operation location="/GetSmsStateReport" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSmsResp">
+      <http:operation location="/GetSmsResp" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="SmsService">
+    <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">&lt;div style='font-size:14px;font-weight:bolder;'&gt;上海集时通，短信接口&lt;/div&gt;</wsdl:documentation>
+    <wsdl:port name="SmsServiceSoap" binding="tns:SmsServiceSoap">
+      <soap:address location="http://wsqd.vcomlive.cn/SmsService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="SmsServiceSoap12" binding="tns:SmsServiceSoap12">
+      <soap12:address location="http://wsqd.vcomlive.cn/SmsService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="SmsServiceHttpGet" binding="tns:SmsServiceHttpGet">
+      <http:address location="http://wsqd.vcomlive.cn/SmsService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="SmsServiceHttpPost" binding="tns:SmsServiceHttpPost">
+      <http:address location="http://wsqd.vcomlive.cn/SmsService.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

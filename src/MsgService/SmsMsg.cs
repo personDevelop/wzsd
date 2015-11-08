@@ -11,12 +11,12 @@ namespace MsgService
     public class SmsMsg : ISendMsg
     {
         SysMsgInterSetBll bll = new SysMsgInterSetBll();
-        dynamic MsgService = null;
+        cn.vcomlive.wsqd.SmsService MsgService = null;
         public SmsMsg()
         {
 
             MsgServiceSet = bll.GetEnableService();
-            MsgService = null;
+            MsgService =  new cn.vcomlive.wsqd.SmsService();
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace MsgService
             telNumList = telNumList.Distinct().ToList();
             foreach (var item in telNumList)
             {
-                if (string.IsNullOrWhiteSpace(item))
+                if (!string.IsNullOrWhiteSpace(item))
                 {
                     SendMsg(MsgServiceSet.TelNum, item, "", msgInfo.SendContent);
                 }

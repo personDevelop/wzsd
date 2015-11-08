@@ -12,7 +12,7 @@
                 <ul class="icon-list">
                     <li><a class="add" href="@Url.Action("Edit")"><i></i><span>新增</span></a></li>
                     <li><a class="add" href="javascript:;" onclick="EditGrid('jqxgrid', '@Url.Action("Edit")');"><i></i><span>编辑</span></a></li>
-                    <li><a class="del" href="javascript:;" onclick="DelGrid('jqxgrid', '@Url.Action("Delete")');"><i></i><span>删除</span><><i></i><span>删除</span></a></li>
+                    <li><a class="del" href="javascript:;" onclick="DelGrid('jqxgrid', '@Url.Action("Delete")');"><i></i><span>删除</span></a></li>
                 </ul>
             </div>
         </div>
@@ -25,7 +25,7 @@
 </div>
 <!--/列表-->
 @section  scripts{
-     
+
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -46,24 +46,24 @@
             var columns = [
   { text: '优惠券名称', dataField: 'Name', cellsalign: "left", width: 200 },
 
-  { text: '优惠券类型', dataField: 'CouponType', width: 200 },
+  { text: '优惠券类型', dataField: 'CouponType',  @HelperExtend.ParseEnum(typeof(EasyCms.Model.CouponType)) },
 
-  { text: '优惠券分类', dataField: 'ClassId', width: 200 },
 
-  { text: '面值', dataField: 'JE', cellsalign: "right", width: 200 },
 
-  { text: '需要积分', dataField: 'NeedPoint', align: "center", cellsalign: "right", width: 200 },
+  { text: '面值', dataField: 'JE', cellsalign: "right" },
 
-  { text: '期限类型', dataField: 'QxLx', width: 200 },
+  { text: '需要积分', dataField: 'NeedPoint', cellsalign: "right" },
 
-  { text: '有效时间起', dataField: 'StartDate', width: 200 },
+  { text: '期限类型', dataField: 'QxLx',  @HelperExtend.ParseEnum(typeof(EasyCms.Model.QxLx)) },
 
-  { text: '有效时间止', dataField: 'EndDate', width: 200 },
+  { text: '有效时间起', dataField: 'StartDate' },
 
-  { text: '期限天数', dataField: 'QXTS', align: "center", cellsalign: "right", width: 200 },
-  { text: '启用', dataField: 'IsEnable', width: 200 },
+  { text: '有效时间止', dataField: 'EndDate' },
 
-  { text: '创建日期', dataField: 'CreateDate', width: 200 }];
+  { text: '期限天数', dataField: 'QXTS', cellsalign: "right" },
+  { text: '启用', dataField: 'IsEnable',  @HelperExtend.ParseEnable() },
+
+  { text: '创建日期', dataField: 'CreateDate' }];
             CreateGrid("jqxgrid", url, datafields, columns);
 
 

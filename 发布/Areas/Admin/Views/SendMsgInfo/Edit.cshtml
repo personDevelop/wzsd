@@ -30,7 +30,7 @@
     @Html.ValidationSummary()
 
     @HelperExtend.RadioGroup("SendTool", "推送工具", typeof(SendTool).GetEnumVal(),
-                  typeof(SendTool).GetEnumNamesStr(), defaultval: Model.SendTool, hint: "")
+                  typeof(SendTool).GetEnumNamesStr(), defaultval: (int)Model.SendTool, hint: "")
 
 
     @HelperExtend.TextArea("SendContent", "推送内容", defaultval: Model.SendContent, hint: "")
@@ -41,7 +41,7 @@
 
 <div class="tab-content" style="display:none">
     @HelperExtend.RadioGroup("SendArea", "推送范围", typeof(SendArea).GetEnumVal(),
-                  typeof(SendArea).GetEnumNamesStr(), defaultval: Model.SendArea, hint: "")
+                          typeof(SendArea).GetEnumNamesStr(), defaultval: (int)Model.SendArea, hint: "")
    
     @HelperExtend.TextArea("CustomerTelNo", "指定手机号", defaultval: Model.CustomerTelNo, hint: "多个手机号用英文逗号分隔")
     @HelperExtend.DropDownList("UserOrder", "对应会员等级", defaultval: Model.UserOrder, hint: "", downInfo: new DropDownListInfo { DisplayMember = "Name", ValueMember = "ID", Url = Url.Action("GetListForSelecte", "RangeDict") })

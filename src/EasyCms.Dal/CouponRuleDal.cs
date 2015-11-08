@@ -34,7 +34,7 @@ namespace EasyCms.Dal
                 return Dal.From<CouponRule>().Select(CouponRule._.ID, CouponRule._.Name).OrderBy(CouponRule._.CreateDate.Desc).ToDataTable();
             }
             else
-                return Dal.From<CouponRule>().Select(CouponRule._.ID, CouponRule._.Name).OrderBy(CouponRule._.CreateDate.Desc)
+                return Dal.From<CouponRule>() .OrderBy(CouponRule._.CreateDate.Desc)
 
                     .ToDataTable();
         }
@@ -57,7 +57,7 @@ namespace EasyCms.Dal
                 return Dal.From<CouponRule>().Select(CouponRule._.ID, CouponRule._.Name).OrderBy(CouponRule._.CreateDate.Desc).ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
             }
             else
-                return Dal.From<CouponRule>().Select(CouponRule._.ID, CouponRule._.Name).OrderBy(CouponRule._.CreateDate.Desc)
+                return Dal.From<CouponRule>() .OrderBy(CouponRule._.CreateDate.Desc)
 
                     .ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
         }
@@ -290,6 +290,9 @@ namespace EasyCms.Dal
                 switch (s.SendType)
                 {
                     case SendCouponType.全员发放:
+                        //获取人员
+                        userId = Dal.From<ManagerUserInfo>().Where(where).Select(ManagerUserInfo._.ID)
+                            .ToSinglePropertyArray();
                         break;
                     case SendCouponType.用户等级:
                         if (string.IsNullOrEmpty(s.AccountOrder))
@@ -426,7 +429,7 @@ namespace EasyCms.Dal
                        .Where(CusomerAndCoupon._.CustomerID == accountID).Select(
                        CusomerAndCoupon._.ID, CusomerAndCoupon._.CouponID, CusomerAndCoupon._.HaveCount, CusomerAndCoupon._.IsOutDate,
                        CusomerAndCoupon._.HasDate, CusomerAndCoupon._.EndDate, CusomerAndCoupon._.CardValue, CouponRule._.Name
-                       ).ToDataTable(20, pageIndex, ref reocrdCount, ref reocrdCount);
+                       ).OrderBy(CusomerAndCoupon._.HasDate).ToDataTable(20, pageIndex, ref reocrdCount, ref reocrdCount);
                 if (status == "1")
                 {
                     //未过期
@@ -454,7 +457,8 @@ namespace EasyCms.Dal
                         .Where(JFHistory._.MemberID == accountID && JFHistory._.FX == (int)AddOrRemove.减少).Select(
                          JFHistory._.UserCouponID.Alias("ID"), JFHistory._.CouponID,
                          JFHistory._.JFCount.Alias("HaveCount"), CusomerAndCoupon._.IsOutDate,
-                          CusomerAndCoupon._.HasDate, CusomerAndCoupon._.EndDate, CusomerAndCoupon._.CardValue, CouponRule._.Name, JFHistory._.CreateDate).ToDataTable(20, pageIndex, ref reocrdCount, ref reocrdCount);
+                          CusomerAndCoupon._.HasDate, CusomerAndCoupon._.EndDate, CusomerAndCoupon._.CardValue,
+                          CouponRule._.Name, JFHistory._.CreateDate).OrderBy(JFHistory._.CreateDate).ToDataTable(20, pageIndex, ref reocrdCount, ref reocrdCount);
             }
         }
 

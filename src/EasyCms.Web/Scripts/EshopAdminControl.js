@@ -183,13 +183,25 @@ function DelGrid(gridid, url, id, other, success) {
             postdata.other = other;
         }
         $.post(url, postdata, function (d) {
-            ErrorMsg(d);
-            if (d.indexOf("成功") > -1) {
+            if (jQuery.type(d) == "object") {
+                if (d.IsSuccess) {
+                    if (!d.Msg) {
+                        SucessMsg("操作成功");
+                    } else
+                        SucessMsg(d.Msg);
+                } else {
+                    ErrorMsg(d.Msg);
 
-                $(gridid).jqxGrid('updatebounddata');
-                if (success) {
-                    success();
                 }
+            } else {
+                if (d.indexOf("成功") > -1) {
+                    $(gridid).jqxGrid('updatebounddata');
+                    if (success) {
+                        success();
+                    }
+                    SucessMsg(d);
+                } else
+                    ErrorMsg(d);
             }
         });
     }
@@ -461,9 +473,9 @@ var theme = "";
 var pagerrenderer = function (gridid) {
     var pageelement;
     if (!gridid) {
-        gridid =  "#" + this.wrapper.prevObject[0].id; 
+        gridid = "#" + this.wrapper.prevObject[0].id;
     }
-   
+
 
     var datainfo = $(gridid).jqxGrid('getdatainformation');
     var paginginfo = datainfo.paginginformation;
@@ -622,6 +634,3 @@ function get3MonthBefor() {
 function OnFail(result) {
     ErrorMsg("程序出现异常！" + result.responseJSON.Msg);
 }
-
-
- 

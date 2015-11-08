@@ -78,6 +78,16 @@
     background-repeat: no-repeat;
     background-position: center;
 }
+.jqx-date-time-input-popup-shinyblack .jqx-icon-arrow-down-shinyblack {
+    background-image: url('images/icon-down.png');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.jqx-date-time-input-popup-shinyblack .jqx-icon-arrow-up-shinyblack {
+    background-image: url('images/icon-up.png');
+    background-repeat: no-repeat;
+    background-position: center;
+}
 
 .jqx-grid-cell-shinyblack.jqx-grid-cell-selected-shinyblack>.jqx-grid-group-expand-shinyblack,
 .jqx-grid-cell-shinyblack.jqx-grid-cell-hover-shinyblack>.jqx-grid-group-expand-shinyblack {
@@ -112,6 +122,9 @@
 .jqx-icon-calendar-shinyblack, .jqx-icon-calendar-hover-shinyblack, .jqx-icon-calendar-pressed-shinyblack {
     background-image: url('images/icon-calendar-white.png');
 }
+.jqx-icon-time-shinyblack, .jqx-icon-time-hover-shinyblack, .jqx-icon-time-pressed-shinyblack {
+    background-image: url('images/icon-time-white.png');
+}
 .jqx-icon-delete-shinyblack
 {
     background-image: url('images/icon-delete-white.png');
@@ -141,4 +154,24 @@
 }
 .jqx-editor-toolbar-icon-shinyblack {
     background: url('images/html_editor_white.png') no-repeat;
+}
+.jqx-layout-shinyblack
+{
+    background-color: #000;
+}
+.jqx-layout-pseudo-window-pin-icon-shinyblack
+{
+    background-image: url("images/pin-white.png");
+}
+.jqx-layout-pseudo-window-pinned-icon-shinyblack
+{
+    background-image: url("images/pinned-white.png");
+}
+.jqx-scheduler-month-cell-shinyblack, .jqx-scheduler-time-column-shinyblack, .jqx-scheduler-toolbar-shinyblack
+{
+    background: #35353A !important;
+    color: #fff  !important;
+}
+.jqx-widget-shinyblack .jqx-scheduler-middle-cell-shinyblack, .jqx-scheduler-middle-cell-shinyblack {
+    border-bottom-color: #35353A !important;
 }
