@@ -82,9 +82,9 @@ namespace EasyCms.Business
                         if (int.TryParse(valPara.Value, out grothvalue))
                         {
                             Dal.ChangeOrder(item.ID, grothvalue);
-                        }
-
+                        } 
                     }
+                    
                 }
             }
             return item;
@@ -181,6 +181,24 @@ namespace EasyCms.Business
         public List<string> GetTelNoWithBuyCount(int MinBuyCount,int MaxBuyCount)
         {
             return Dal.GetTelNoWithBuyCount(MinBuyCount,  MaxBuyCount);
+        }
+
+        public int Save(TokenInfo ti)
+        {
+            return Dal.Save(ti);
+        }
+        public int UpdateToken(string token)
+        {
+            return Dal.UpdateToken(token);
+        }
+        public int RemoveToken(string token)
+        {
+            return Dal.RemoveToken(token);
+        }
+
+        public ManagerUserInfo GetUserByToken(string token)
+        {
+            return Dal.GetUserByToken(token);
         }
     }
 }

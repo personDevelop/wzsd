@@ -59,11 +59,13 @@ namespace EasyCms
 
 
         }
-
-
-        public static ManagerUserInfo GetAccount(this HttpRequestMessage Request, bool isRecord = true)
+        /// <summary>
+        /// 这个是专门给客户端出现异常时调用的
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        internal static ManagerUserInfo GetAccount(string token)
         {
-            string token = Request.GetToken(isRecord);
             if (string.IsNullOrWhiteSpace(token))
             {
                 return null;
@@ -71,6 +73,31 @@ namespace EasyCms
             else
             {
                 ManagerUserInfo user = LoginModel.GetCachUserInfo(token);
+                return user;
+
+            }
+        }
+        static ManagerUserInfoBll bll = new ManagerUserInfoBll();
+        public static ManagerUserInfo GetAccount(this HttpRequestMessage Request, bool isRecord = true)
+        {
+            string token = Request.GetToken(isRecord);
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                //重新获取
+                ManagerUserInfo user = bll.GetUserByToken(token);
+                if (user != null)
+                {
+                    TokenInfo ti;
+                    LoginModel.AddToken(token, user.Code, user.DeviceID, user, out ti, false);
+                }
+
+                return user;
+            }
+            else
+            {
+                ManagerUserInfo user = LoginModel.GetCachUserInfo(token);
+                //更新数据库Token
+                bll.UpdateToken(token);
                 return user;
 
             }
@@ -164,13 +191,13 @@ namespace EasyCms
                         error = "您还没有登录,或登录信息过期，请重新登录";
                         if (isApi)
                         {
-                            //加载所有令牌信息
-                            string s = "当前令牌" + request.GetToken() + ",系统内所有令牌";
-                            foreach (var item in Class1.list)
-                            {
-                                s += item + ";";
-                            }
-                            error += s;
+                            ////加载所有令牌信息
+                            //string s = "当前令牌" + request.GetToken() + ",系统内所有令牌";
+                            //foreach (var item in Class1.list)
+                            //{
+                            //    s += item + ";";
+                            //}
+                            //error += s;
                         }
                     }
                     else
@@ -232,5 +259,7 @@ namespace EasyCms
             }
             return result;
         }
+
+
     }
 }

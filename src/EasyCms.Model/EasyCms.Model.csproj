@@ -90,6 +90,7 @@
     <Compile Include="SysMsgInterSet.cs" />
     <Compile Include="SysMsgTempSet.cs" />
     <Compile Include="SysRoleAndUserRalation.cs" />
+    <Compile Include="TokenInfo.cs" />
     <Compile Include="ViewModel\AccountModel.cs" />
     <Compile Include="ViewModel\AppException.cs" />
     <Compile Include="ViewModel\ChangePwdModel.cs" />

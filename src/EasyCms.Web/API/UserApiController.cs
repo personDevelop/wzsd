@@ -124,14 +124,21 @@ namespace EasyCms.Web.API
             }
             else
             {
-                ManagerUserInfo user = new ManagerUserInfoBll().Login(loginModel.Account, loginModel.Pwd, out msg);
+                ManagerUserInfoBll bll = new ManagerUserInfoBll();
+                ManagerUserInfo user = bll.Login(loginModel.Account, loginModel.Pwd, out msg);
 
                 isSuccess = user != null;
                 if (isSuccess)
                 {
 
                     token = loginModel.GenerateToken();
-                    LoginModel.AddToken(token, loginModel.Account, loginModel.DeviceID, user);
+                    TokenInfo ti = null;
+                    LoginModel.AddToken(token, loginModel.Account, loginModel.DeviceID, user,out ti);
+                    if (ti!=null)
+                    {
+                        bll.Save(ti);
+                    }
+                   
                 }
             }
             if (isSuccess)
@@ -161,10 +168,12 @@ namespace EasyCms.Web.API
 
             else
             {
-                isSuccess = LoginModel.RemoveToken(Request.GetToken(), user, out msg);
+                string token=Request.GetToken();
+                isSuccess = LoginModel.RemoveToken(token, user, out msg);
                 if (isSuccess)
                 {
                     //清空后台数据库session
+                    new ManagerUserInfoBll().RemoveToken(token);
                 }
 
 

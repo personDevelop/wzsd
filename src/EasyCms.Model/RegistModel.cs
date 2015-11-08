@@ -62,7 +62,8 @@ namespace EasyCms.Model
             string source = this.Account + "|" + this.Pwd + "|" + this.TimeStamp + "|" + this.DeviceID;
             string token = source.EncryptSHA1();
             token = System.Web.HttpUtility.UrlEncode(token, Encoding.UTF8);
-            Class1.list.Add(token);
+            //Class1.list.Add(token);
+
             return token;
 
         }
@@ -72,9 +73,29 @@ namespace EasyCms.Model
             return CacheContainer.GetCache(userno + deviceID) as string == token;
         }
         static int cachTime = 60 * 60 * 24 * 7;//缓存一周
-        public static void AddToken(string token, string userno, string deviceID, ManagerUserInfo userInfo)
+        public static void AddToken(string token, string userno, string deviceID, ManagerUserInfo userInfo, out TokenInfo tokenEntity, bool isCreate = true)
         {
             userInfo.DeviceID = deviceID;
+            DateTime now = DateTime.Now;
+            if (isCreate)
+            {
+
+
+                tokenEntity = new TokenInfo()
+                {
+                    ID = token,
+                    DeviceID = deviceID,
+                    UserID = userInfo.ID, 
+                    CreateTime = now,
+                    LastTime = now,
+                    Duration = cachTime,
+                    OutTime = now.AddSeconds(cachTime)
+                };
+            }
+            else
+            {
+                tokenEntity = null;
+            }
             CacheContainer.AddCache(userno + deviceID, token, cachTime);
             CacheContainer.AddCache(token, userInfo, cachTime);
 
@@ -102,8 +123,8 @@ namespace EasyCms.Model
         }
     }
 
-    public class Class1
-    {
-        public static List<String> list = new List<string>();
-    }
+    //public class Class1
+    //{
+    //    public static List<String> list = new List<string>();
+    //}
 }

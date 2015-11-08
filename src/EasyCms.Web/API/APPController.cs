@@ -283,7 +283,7 @@ namespace EasyCms.Web.API
             string userid = "";
             if (!string.IsNullOrWhiteSpace(exception.Token))
             {
-                ManagerUserInfo user = LoginModel.GetCachUserInfo(exception.Token);
+                ManagerUserInfo user = CmsSessionExtend.GetAccount(exception.Token);// LoginModel.GetCachUserInfo(exception.Token);
                 if (user != null)
                 {
                     userid = user.ID;

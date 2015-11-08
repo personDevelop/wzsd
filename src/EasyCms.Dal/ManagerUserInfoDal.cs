@@ -482,6 +482,52 @@ namespace EasyCms.Dal
             return dt.Select(whereStr).AsQueryable().Select(d => d.Field<string>("MemberCallPhone")).ToList();
 
         }
+
+        public int Save(TokenInfo ti)
+        {
+            return Dal.Submit(ti);
+        }
+        public int UpdateToken(string token)
+        {
+            DateTime now = DateTime.Now;
+
+            TokenInfo t = new TokenInfo() { ID = token, RecordStatus = StatusType.update, LastTime = now };
+            ExpressionClip value = new ExpressionClip();
+            value.SqlBuilder = new StringBuilder("dateadd(second,Duration,@LastTime)");
+            value.Parameters.Add("LastTime", now);
+            t.SetModifiedProperty(TokenInfo._.OutTime, value);
+            return Dal.Submit(t);
+
+        }
+        public int RemoveToken(string token)
+        {
+            return Dal.Delete<TokenInfo>(token);
+        }
+
+        public ManagerUserInfo GetUserByToken(string token)
+        {
+            object o = Dal.From<TokenInfo>().Where(TokenInfo._.ID == token).Select(TokenInfo._.OutTime).ToScalar();
+            if (o != DBNull.Value)
+            {
+                DateTime outTime = (DateTime)o;
+                if (outTime <= DateTime.Now)
+                {
+                    return null;
+                }
+                else
+                {
+                    UpdateToken(token);
+                    return Dal.From<ManagerUserInfo>().Join<TokenInfo>(ManagerUserInfo._.ID == TokenInfo._.UserID).Select(ManagerUserInfo._.ID.All, TokenInfo._.DeviceID)
+                            .ToFirst<ManagerUserInfo>();
+                }
+            }
+            else
+            {
+                return null;
+            }
+
+
+        }
     }
 
 
