@@ -91,6 +91,7 @@ namespace EasyCms.Web.API
                 }
                 else
                 {
+                    valiCodeModel.TelNo = user.ContactPhone;
                     valiCodeModel.TypeInfo = ValidCode.忘记密码;
                     valiCodeModel.SendType = ValidType.手机短信;
                     //根据账号获取手机号

@@ -1,0 +1,102 @@
+{
+  "IsSuccess": true,
+  "Msg": "操作成功",
+  "data": [
+    {
+      "ID": "THQ1511050004",
+      "OrderId": "HQ1510150016",
+      "CreatedDate": "2015-11-05 22:55",
+      "Description": "gugf",
+      "ReturnType": 0,
+      "Status": 7,
+      "RefuseReason": "",
+      "OrderItems": [
+        {
+          "ID": "9cfe0810-84ab-47e5-a6c3-632d1562d6de",
+          "ReturnOrderId": "THQ1511050004",
+          "OrderId": "HQ1510150016",
+          "SaleCount": 1.00,
+          "RequestQuantity": 1.00,
+          "ReturnCount": 1.00,
+          "ProductCode": "",
+          "ProductThumb": "http://localhost:7161//Upload/image/20151008/86ca83ee-7861-480a-bb7d-73f3ae18827a.png",
+          "ProductName": "Apple iPhone 6 (A1586) 16GB 金色 移动联通电信4G手机",
+          "Price": 4500.00
+        }
+      ],
+      "StatusStr": "等待审核"
+    },
+    {
+      "ID": "THQ1511050003",
+      "OrderId": "HQ1510160004",
+      "CreatedDate": "2015-11-05 22:54",
+      "Description": "nkknn",
+      "ReturnType": 0,
+      "Status": 7,
+      "RefuseReason": "",
+      "OrderItems": [
+        {
+          "ID": "bbf372b7-be6f-4d2a-a957-854ea6903488",
+          "ReturnOrderId": "THQ1511050003",
+          "OrderId": "HQ1510160004",
+          "SaleCount": 1.00,
+          "RequestQuantity": 1.00,
+          "ReturnCount": 1.00,
+          "ProductCode": "",
+          "ProductThumb": "http://localhost:7161//Upload/image/20151014/a931f3fc-5d5b-48e7-b2be-8775780d75bd.jpg",
+          "ProductName": "老米手机",
+          "Price": 100.00
+        }
+      ],
+      "StatusStr": "等待审核"
+    },
+    {
+      "ID": "THQ1511040002",
+      "OrderId": "HQ1510150015",
+      "CreatedDate": "2015-11-04 14:43",
+      "Description": "123456",
+      "ReturnType": 0,
+      "Status": 7,
+      "RefuseReason": "",
+      "OrderItems": [
+        {
+          "ID": "ff2784d3-9be0-49af-a847-655bf64f5da8",
+          "ReturnOrderId": "THQ1511040002",
+          "OrderId": "HQ1510150015",
+          "SaleCount": 1.00,
+          "RequestQuantity": 1.00,
+          "ReturnCount": 1.00,
+          "ProductCode": "",
+          "ProductThumb": "http://localhost:7161//Upload/image/20151010/ad9e1e9e-ff19-4070-b686-52e660017c13.jpg",
+          "ProductName": "大米手机",
+          "Price": 0.01
+        }
+      ],
+      "StatusStr": "等待审核"
+    },
+    {
+      "ID": "THQ1510240009",
+      "OrderId": "HQ1510180002",
+      "CreatedDate": "2015-10-24 18:05",
+      "Description": "不想要了行不行啊",
+      "ReturnType": 0,
+      "Status": 12,
+      "RefuseReason": "",
+      "OrderItems": [
+        {
+          "ID": "060c4059-353c-4eba-a42d-3a8e13363ce5",
+          "ReturnOrderId": "THQ1510240009",
+          "OrderId": "HQ1510180002",
+          "SaleCount": 1.00,
+          "RequestQuantity": 1.00,
+          "ReturnCount": 1.00,
+          "ProductCode": "",
+          "ProductThumb": "http://localhost:7161//Upload/image/20151008/86ca83ee-7861-480a-bb7d-73f3ae18827a.png",
+          "ProductName": "Apple iPhone 6 (A1586) 16GB 金色 移动联通电信4G手机",
+          "Price": 4500.00
+        }
+      ],
+      "StatusStr": "已完成"
+    }
+  ]
+}
