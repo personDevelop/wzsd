@@ -507,7 +507,7 @@ namespace EasyCms.Dal
         public ManagerUserInfo GetUserByToken(string token)
         {
             object o = Dal.From<TokenInfo>().Where(TokenInfo._.ID == token).Select(TokenInfo._.OutTime).ToScalar();
-            if (o != DBNull.Value)
+            if (o!=null && o != DBNull.Value)
             {
                 DateTime outTime = (DateTime)o;
                 if (outTime <= DateTime.Now)
@@ -517,7 +517,7 @@ namespace EasyCms.Dal
                 else
                 {
                     UpdateToken(token);
-                    return Dal.From<ManagerUserInfo>().Join<TokenInfo>(ManagerUserInfo._.ID == TokenInfo._.UserID).Select(ManagerUserInfo._.ID.All, TokenInfo._.DeviceID)
+                    return Dal.From<ManagerUserInfo>().Join<TokenInfo>(ManagerUserInfo._.ID == TokenInfo._.UserID && TokenInfo._.ID == token).Select(ManagerUserInfo._.ID.All, TokenInfo._.DeviceID)
                             .ToFirst<ManagerUserInfo>();
                 }
             }
