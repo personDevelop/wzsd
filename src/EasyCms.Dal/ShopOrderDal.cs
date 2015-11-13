@@ -139,7 +139,7 @@ namespace EasyCms.Dal
                 }
                 else if (v.Stock < item.BuyCount)
                 {
-                    err = string.Format("您购买的第{0}条商品{1}库存{2},不能再购买了", i, v.Name, v.Stock);
+                    err = string.Format("您购买的第{0}条商品{1}已经没有货了,不能再购买了", i, v.Name, v.Stock);
                     break;
                 }
                 if (v.IsEnableSku)
@@ -1905,7 +1905,7 @@ ShopOrderItem._.Weight).ToDataTable();
                 ShopReturnOrder._.Description,
                 ShopReturnOrder._.ReturnType,
                 ShopReturnOrder._.Status,
-               
+               ShopReturnOrder._.ReturnMoney.Alias("TotalPrice"),
                 ShopReturnOrder._.RefuseReason)
                 .OrderBy(ShopReturnOrder._.CreatedDate.Desc).ToDataTable(20, queryPage, ref pageCount, ref recordcount).ToList<ShopReturnOrder>();
             if (list.Count > 0)

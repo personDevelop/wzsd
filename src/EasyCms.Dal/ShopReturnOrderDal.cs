@@ -106,6 +106,7 @@ ShopOrderAction._.ReturnOrderID)
                     {
                         case UserDjStatus.无:
                         case UserDjStatus.已取消:
+                        case UserDjStatus.已完成://这个已完成的状态，需要再考虑考虑 是否允许多次退款，这个地方要掌控好，后续根据订单实际剩余数量 进行退货  需要再次修改
                             order.HasReturn = true;
                             order.RefundStatus = UserDjStatus.等待审核;
                             isCanReturn = true;
@@ -114,10 +115,11 @@ ShopOrderAction._.ReturnOrderID)
                         case UserDjStatus.审批不通过:
                         case UserDjStatus.取货中:
                         case UserDjStatus.等待退款:
-                        case UserDjStatus.已完成:
+                      
                         default:
                             error = "您的订单状态[" + os + "]，您不能退回";
                             break;
+                       
                     }
                     if (isCanReturn)
                     {

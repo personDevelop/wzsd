@@ -397,6 +397,7 @@ namespace EasyCms.Web.API
                 ShopReturnOrder._.Description.FullName,
                 ShopReturnOrder._.ReturnType.FullName,
                 ShopReturnOrder._.Status.FullName,
+                 "ShopReturnOrder.TotalPrice", 
                 ShopReturnOrder._.RefuseReason.FullName, "ShopReturnOrder.StatusStr", ShopReturnOrderItem._.ID.FullName, ShopReturnOrderItem._.OrderId.FullName, ShopReturnOrderItem._.ReturnOrderId.FullName,
                     ShopReturnOrderItem._.SaleCount.FullName, ShopReturnOrderItem._.RequestQuantity.FullName, ShopReturnOrderItem._.ReturnCount.FullName,
                     "ShopReturnOrderItem.Price", "ShopReturnOrderItem.ProductName", "ShopReturnOrderItem.ProductThumb",

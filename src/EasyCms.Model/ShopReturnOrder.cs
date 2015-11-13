@@ -1050,6 +1050,11 @@ namespace EasyCms.Model
 
         [NotDbCol]
         public string StatusStr { get { return Status.ToString(); } }
+
+
+        [NotDbCol]
+        public decimal TotalPrice { get; set; }
+        
     }
 
 }

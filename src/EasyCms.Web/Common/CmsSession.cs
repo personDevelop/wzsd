@@ -83,21 +83,21 @@ namespace EasyCms
             string token = Request.GetToken(isRecord);
             if (string.IsNullOrWhiteSpace(token))
             {
-                //重新获取
-                ManagerUserInfo user = bll.GetUserByToken(token);
-                if (user != null)
-                {
-                    TokenInfo ti;
-                    LoginModel.AddToken(token, user.Code, user.DeviceID, user, out ti, false);
-                }
-
-                return user;
+                //没有token
+                return null;
             }
             else
             {
                 ManagerUserInfo user = LoginModel.GetCachUserInfo(token);
-                //更新数据库Token
-                bll.UpdateToken(token);
+                if (user == null)
+                {
+                    user = bll.GetUserByToken(token);
+                    TokenInfo ti;
+                    LoginModel.AddToken(token, user.Code, user.DeviceID, user, out ti, false);
+                }
+                else
+                    //更新数据库Token
+                    bll.UpdateToken(token);
                 return user;
 
             }
