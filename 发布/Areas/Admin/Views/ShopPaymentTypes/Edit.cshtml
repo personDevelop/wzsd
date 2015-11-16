@@ -80,7 +80,7 @@
 
     @HelperExtend.RadioGroup("IsPercent", "是否按百分比收费", "false,true", "否,是", defaultval: Model.IsPercent)
     @HelperExtend.RadioGroup("IsEnable", "启用", "false,true", "禁用,启用", defaultval: Model.IsEnable)
-
+    @HelperExtend.RadioGroup("IsDefault", "默认支付方式", "false,true", "否,是", defaultval: Model.IsDefault)
     @HelperExtend.Number("DisplaySequence", "显示顺序", defaultval: Model.DisplaySequence, hint: "<BR/>设置顾客下订单选择支付方式时，此支付方式显示的位置")
     @HelperExtend.TextArea("Description", "详细介绍", defaultval: Model.Description)
 

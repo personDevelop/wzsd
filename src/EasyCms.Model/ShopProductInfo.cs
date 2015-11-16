@@ -96,6 +96,10 @@ namespace EasyCms.Model
 
         private int _CommentCount;
 
+        private bool _IsCashOnDelivery;
+
+        private string _VideoUrl;
+
         #endregion
 
         #region 属性
@@ -105,7 +109,7 @@ namespace EasyCms.Model
         /// </summary>
 
         [PrimaryKey]
-        [DbProperty(MapingColumnName = "ID", DbTypeString = "char", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ID", DbTypeString = "varchar", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string ID
         {
@@ -181,7 +185,7 @@ namespace EasyCms.Model
         ///  商品类型,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "TypeId", DbTypeString = "char", ColumnIsNull = false, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "TypeId", DbTypeString = "varchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string TypeId
         {
@@ -314,7 +318,7 @@ namespace EasyCms.Model
         ///  商品介绍,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "Description", DbTypeString = "text", ColumnIsNull = true, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "Description", DbTypeString = "ntext", ColumnIsNull = true, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string Description
         {
@@ -785,6 +789,44 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  支持货到付款,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "IsCashOnDelivery", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public bool IsCashOnDelivery
+        {
+            get
+            {
+                return this._IsCashOnDelivery;
+            }
+            set
+            {
+                this.OnPropertyChanged("IsCashOnDelivery", this._IsCashOnDelivery, value);
+                this._IsCashOnDelivery = value;
+            }
+        }
+
+        /// <summary>
+        ///  视频连接,一行一个链接，最多支持三个
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "VideoUrl", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 2000, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string VideoUrl
+        {
+            get
+            {
+                return this._VideoUrl;
+            }
+            set
+            {
+                this.OnPropertyChanged("VideoUrl", this._VideoUrl, value);
+                this._VideoUrl = value;
+            }
+        }
+
         #endregion
 
         #region 列定义
@@ -864,6 +906,10 @@ namespace EasyCms.Model
                 IsEnableSku = new PropertyItem("IsEnableSku", tableName);
 
                 CommentCount = new PropertyItem("CommentCount", tableName);
+
+                IsCashOnDelivery = new PropertyItem("IsCashOnDelivery", tableName);
+
+                VideoUrl = new PropertyItem("VideoUrl", tableName);
 
 
             }
@@ -1011,9 +1057,18 @@ namespace EasyCms.Model
             /// 评论次数,
             /// </summary> 
             public PropertyItem CommentCount = null;
+            /// <summary>
+            /// 支持货到付款,
+            /// </summary> 
+            public PropertyItem IsCashOnDelivery = null;
+            /// <summary>
+            /// 视频连接,一行一个链接，最多支持三个
+            /// </summary> 
+            public PropertyItem VideoUrl = null;
         }
         #endregion
     }
+
 
 
 
@@ -1030,6 +1085,7 @@ namespace EasyCms.Model
             Stock = int.MaxValue;
             SalesType = 1;
             SaleStatus = 1;
+            IsCashOnDelivery = true;
         }
 
     }
@@ -1289,5 +1345,21 @@ namespace EasyCms.Model
     }
 
 
+    /// <summary>
+    /// 获取商品的url或者html  和视频连接
+    /// </summary>
+    public class ProductLink {
+
+        public string ID { get; set; }
+        /// <summary>
+        /// 后续考虑静态页 先保留，目前的使用方式是 判断该值是否为null或者空 如果是  则使用HtmlStr
+        /// </summary>
+        public string UrlStr { get; set; }
+        public string HtmlStr { get; set; }
+        /// <summary>
+        /// 最多三个
+        /// </summary>
+        public List<string> VideoUrl { get; set; }
+    }
 
 }

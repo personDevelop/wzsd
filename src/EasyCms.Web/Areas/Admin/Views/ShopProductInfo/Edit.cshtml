@@ -61,6 +61,8 @@
             <ul>
                 <li><a class="selected" href="javascript:;">基本信息</a></li>
                 <li><a href="javascript:;">详细介绍</a></li>
+                <li><a href="javascript:;">统计数据</a></li>
+                <li><a href="javascript:;">扩展属性</a></li>
                 <li><a href="javascript:;">规格</a></li>
                 <li><a href="javascript:;">SEO相关</a></li>
                 <li><a href="javascript:;">相关商品</a></li>
@@ -80,19 +82,11 @@
     @HelperExtend.TextBox("Code", "编号", defaultval: Model.Code, hint: "*编号不能重复")
     @HelperExtend.TextBox("Name", "名称", defaultval: Model.Name, hint: "*必填,长度限制在100个字符以内.")
     @HelperExtend.TextBox("SKU", "SKU码", defaultval: Model.SKU, hint: "")
-    @HelperExtend.DropDownList("TypeId", "商品类型", defaultval: Model.TypeId, hint: "", downInfo: new DropDownListInfo() { Url = Url.Action("GetListForSelecte", "ShopProductType"), change = "changeType", unselect = "unselectType" })
-
-    <fieldset id="extendInfo" style="border-width:1px; border-style:solid;  border-color:#eee">
-        <legend style=" text-align:center;     ">扩展属性</legend>
-    </fieldset>
-
+    @HelperExtend.DropDownList("TypeId", "商品类型", defaultval: Model.TypeId, hint: "", downInfo: new DropDownListInfo() { Url = Url.Action("GetListForSelecte", "ShopProductType"), change = "changeType", unselect = "unselectType" }) 
     @HelperExtend.TextBox("BrandId", "品牌", defaultval: Model.BrandId, hint: "")
     @HelperExtend.ImageUpLoad("ID", "商品图片", Model.RecordStatus == Sharp.Common.StatusType.add, defaultval: Model.ID, maxLength: 7)
-    @HelperExtend.TextBox("SupplierId", "商家", defaultval: Model.SupplierId, hint: "")
-    @HelperExtend.TextBox("RegionId", "所在地", defaultval: Model.RegionId, hint: "")
-
-    @HelperExtend.TextBox("Unit", "计量单位", defaultval: Model.Unit, hint: "")
-    @HelperExtend.Number("Weight", "重量(KG)", defaultval: Model.Weight, hint: "", max: 1000000)
+   
+    @HelperExtend.RadioGroup("IsCashOnDelivery", "支持货到付款 ", "true,false", "支持,不支持", defaultval: Model.IsCashOnDelivery)
     @HelperExtend.RadioGroup("SalesType", "销售类型 ", "0,1", "赠品,正常", defaultval: Model.SalesType)
 
     @HelperExtend.RadioGroup("SaleStatus", "商品状态 ", "0,1", "下架,上架,审批中,审批退回", defaultval: Model.SaleStatus)
@@ -105,8 +99,24 @@
 
     @HelperExtend.Number("Points", "可得积分", defaultval: Model.Points, hint: "", max: 10000000)
 
-    @HelperExtend.Number("Stock", "库存", defaultval: Model.Stock, hint: "库存默认一个超大数， 表示不控制库存",min:int.MinValue)
+    @HelperExtend.Number("Stock", "库存", defaultval: Model.Stock, hint: "库存默认一个超大数， 表示不控制库存",min:int.MinValue) 
+  
+    @HelperExtend.DateTime("AddedDate", "添加日期", defaultval: Model.AddedDate, hint: "")
+</div>
 
+<div class="tab-content" style="display:none">
+    
+   
+    @HelperExtend.TextArea("ShortDescription", "简单描述", defaultval: Model.ShortDescription)
+  
+    @HelperExtend.TextArea("VideoUrl", "视频连接", defaultval: Model.VideoUrl, row: 3, col:100, hint: "一行一个链接，最多支持三个")
+    @HelperExtend.UEditor("Description", "详细介绍", defaultval: Model.Description)
+</div>
+<div class="tab-content" style="display:none">
+    @HelperExtend.TextBox("Unit", "计量单位", defaultval: Model.Unit, hint: "")
+    @HelperExtend.Number("Weight", "重量(KG)", defaultval: Model.Weight, hint: "", max: 1000000)
+    @HelperExtend.TextBox("SupplierId", "商家", defaultval: Model.SupplierId, hint: "")
+    @HelperExtend.TextBox("RegionId", "所在地", defaultval: Model.RegionId, hint: "")
     @HelperExtend.Number("MaxQuantity", "警戒最高库存", defaultval: Model.MaxQuantity, hint: "", max: 10000000)
 
     @HelperExtend.Number("MinQuantity", "警戒最低库存", defaultval: Model.MinQuantity, hint: "", max: 10000000)
@@ -122,12 +132,11 @@
     @HelperExtend.Number("SaleNum", "销售次数", defaultval: Model.SaleNum, hint: "", disabled: true, max: 10000000)
     @HelperExtend.Number("CommentCount", "评论次数", defaultval: Model.CommentCount, hint: "", disabled: true, max: 10000000)
     @HelperExtend.Number("DisplaySequence", "显示顺序", defaultval: Model.DisplaySequence, hint: "", disabled: true, max: 10000000)
-    @HelperExtend.DateTime("AddedDate", "添加日期", defaultval: Model.AddedDate, hint: "")
 </div>
-
 <div class="tab-content" style="display:none">
-    @HelperExtend.TextArea("ShortDescription", "简单描述", defaultval: Model.ShortDescription)
-    @HelperExtend.UEditor("Description", "详细介绍", defaultval: Model.Description)
+    <fieldset id="extendInfo" style="border-width:1px; border-style:solid;  border-color:#eee">
+        <legend style=" text-align:center;     ">扩展属性</legend>
+    </fieldset>
 </div>
 <div class="tab-content" style="display:none">
     规格

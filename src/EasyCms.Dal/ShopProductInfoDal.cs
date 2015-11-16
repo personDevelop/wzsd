@@ -652,6 +652,39 @@ namespace EasyCms.Dal
             p.SetModifiedProperty(ShopProductInfo._.CommentCount, commentCount);
             return Dal.Submit(p);
         }
+
+        public ProductLink GetProductLink(string id, string host)
+        {
+            ProductLink p = null;
+            DataTable dt = Dal.From<ShopProductInfo>().Where(ShopProductInfo._.ID == id).Select(ShopProductInfo._.ID, ShopProductInfo._.VideoUrl, ShopProductInfo._.Description).ToDataTable();
+
+            if (dt.Rows.Count == 1)
+            {
+                DataRow dr = dt.Rows[0];
+                p = new ProductLink()
+                {
+                    ID = dr["ID"] as string,
+                };
+                bool Isjingtai = false;//如果使用静态
+                if (Isjingtai)
+                {
+                    p.UrlStr = dr["Description"] as string;
+                }
+                else
+                {
+                    p.HtmlStr = dr["Description"] as string;
+                }
+                string vidiourl = dr["VideoUrl"] as string;
+
+                if (!string.IsNullOrWhiteSpace(vidiourl))
+                {
+                    string[] videoarry = vidiourl.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+                    p.VideoUrl = videoarry.ToList();
+                }
+
+            }
+            return null;
+        }
     }
 
 

@@ -64,6 +64,8 @@ namespace EasyCms.Model
 
         private string _PublicKey;
 
+        private bool _IsDefault;
+
         #endregion
 
         #region 属性
@@ -73,7 +75,7 @@ namespace EasyCms.Model
         /// </summary>
 
         [PrimaryKey]
-        [DbProperty(MapingColumnName = "ID", DbTypeString = "char", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 1, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ID", DbTypeString = "varchar", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 1, ColumnDefaultValue = "")]
 
         public string ID
         {
@@ -396,7 +398,7 @@ namespace EasyCms.Model
         ///  描述,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "Description", DbTypeString = "text", ColumnIsNull = true, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "Description", DbTypeString = "ntext", ColumnIsNull = true, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string Description
         {
@@ -449,6 +451,25 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  是否默认,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "IsDefault", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public bool IsDefault
+        {
+            get
+            {
+                return this._IsDefault;
+            }
+            set
+            {
+                this.OnPropertyChanged("IsDefault", this._IsDefault, value);
+                this._IsDefault = value;
+            }
+        }
+
         #endregion
 
         #region 列定义
@@ -496,6 +517,8 @@ namespace EasyCms.Model
                 NotifyUrl = new PropertyItem("NotifyUrl", tableName);
 
                 PublicKey = new PropertyItem("PublicKey", tableName);
+
+                IsDefault = new PropertyItem("IsDefault", tableName);
 
 
             }
@@ -579,6 +602,10 @@ namespace EasyCms.Model
             /// 公钥,
             /// </summary> 
             public PropertyItem PublicKey = null;
+            /// <summary>
+            /// 是否默认,
+            /// </summary> 
+            public PropertyItem IsDefault = null;
         }
         #endregion
     }

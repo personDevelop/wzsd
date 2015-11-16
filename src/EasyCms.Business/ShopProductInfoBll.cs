@@ -136,5 +136,10 @@ namespace EasyCms.Business
             return Dal.AccCommentCount(ProductId,   CommentCount);
          
         }
+
+        public ProductLink GetProductLink(string id, string host)
+        {
+            return Dal.GetProductLink(id, host);
+        }
     }
 }

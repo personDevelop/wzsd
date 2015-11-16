@@ -41,7 +41,7 @@ namespace EasyCms.Web.API
             }
             else
             {
-                NewsInfo news = new NewsInfoBll().GetEntity(id,host);
+                NewsInfo news = new NewsInfoBll().GetEntity(id, host);
                 if (news.Description == null)
                 {
                     news.Description = string.Empty;
@@ -82,6 +82,36 @@ namespace EasyCms.Web.API
             else
             {
                 ShopSaleProductInfo p = new ShopProductInfoBll().GetSaleEntity(id, host);
+                if (p == null)
+                {
+                    return "此商品已下架".FormatError();
+
+                }
+                else
+                {
+
+
+
+                    return p.FormatObj();
+                }
+            }
+
+
+        }
+
+        public HttpResponseMessage GetProductUrl(string id = "")
+        {
+            var resp = new HttpResponseMessage(HttpStatusCode.OK);
+
+
+
+            if (string.IsNullOrEmpty(id))
+            {
+                return "传递的参数不能为空".FormatError();
+            }
+            else
+            {
+                ProductLink p = new ShopProductInfoBll().GetProductLink(id, host);
                 if (p == null)
                 {
                     return "此商品已下架".FormatError();
