@@ -25,13 +25,13 @@ namespace EasyCms.Dal
 
         }
 
-        public DataTable GetList( )
+        public DataTable GetList()
         {
 
             return Dal.From<SysMsgInterSet>().ToDataTable();
 
         }
-        public bool Exit(string ID, string RecordStatus, string val )
+        public bool Exit(string ID, string RecordStatus, string val)
         {
             WhereClip where = SysMsgInterSet._.Name == val;
 
@@ -42,7 +42,7 @@ namespace EasyCms.Dal
             }
             return !Dal.Exists<SysMsgInterSet>(where);
         }
-      
+
 
         public SysMsgInterSet GetEntity(string id)
         {
@@ -61,6 +61,14 @@ namespace EasyCms.Dal
         public int Save(MsgSendLog s)
         {
             return Dal.Submit(s);
+        }
+
+        public DataTable GetViewLogList(int pagenum, int pagesize, ref int recordCount)
+        {
+            int pagecount=0;
+            return Dal.From<MsgSendLog>().Join<ManagerUserInfo>(MsgSendLog._.UserID == ManagerUserInfo._.ID, JoinType.leftJoin)
+                .Select(MsgSendLog._.ID.All, ManagerUserInfo._.Name.Alias("UserName"))
+                .ToDataTable(pagesize, pagenum, ref pagecount, ref recordCount);
         }
     }
 

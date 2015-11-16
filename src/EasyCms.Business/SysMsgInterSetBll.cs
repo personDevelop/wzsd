@@ -54,6 +54,11 @@ namespace EasyCms.Business
         {
             return Dal.Save(s);
         }
+
+        public DataTable GetViewLogList(int pagenum, int pagesize, ref int recordCount)
+        {
+            return Dal.GetViewLogList(  pagenum,   pagesize, ref   recordCount);
+        }
     }
 
 }

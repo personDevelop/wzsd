@@ -1,0 +1,52 @@
+﻿@using MVCExtention;
+@{
+    ViewBag.Title = "信息发送记录";
+}
+
+<!--工具栏-->
+<!--/工具栏-->
+<!--列表-->
+<div class="table-container">
+    <div id="jqxgrid"></div>
+</div>
+<!--/列表-->
+@section  scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var url = "@Url.Action("GetViewLogList")";
+            var datafields = [
+
+  { name: 'ID' },
+  { name: 'UserName' },
+  { name: 'MyNum' },
+  { name: 'ContactNum' },
+  { name: 'SendTool' },
+  { name: 'SendContent' },
+  { name: 'SendTime' },
+  { name: 'OrderNo' },
+  { name: 'MsgStatus' },
+
+            ];
+            var columns = [
+
+  { text: '发送人', dataField: 'UserName', cellsalign: "left", width: 80 },
+  { text: '用户联系号', dataField: 'ContactNum', cellsalign: "left", width: 100 },
+
+  { text: '发送工具', dataField: 'SendTool', width:80,@HelperExtend.ParseEnum(typeof(EasyCms.Model.SendTool)) },
+
+  { text: '发送内容', dataField: 'SendContent', cellsalign: "left"  },
+
+  { text: '发送时间', dataField: 'SendTime', width: 200 },
+
+  { text: '流水号', dataField: 'OrderNo', width: 150 },
+
+  { text: '是否成功', dataField: 'MsgStatus', width: 80, @HelperExtend.Parsebool() },
+
+            ];
+            CreateGrid("jqxgrid", url, datafields, columns);
+
+
+        });
+    </script>
+}

@@ -21,19 +21,19 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             return View();
         }
 
-        public string GetList( )
+        public string GetList()
         {
-             
-            System.Data.DataTable dt = bll.GetList( ); 
+
+            System.Data.DataTable dt = bll.GetList();
             string result = JsonWithDataTable.Serialize(dt);
-            
+
             return result;
 
         }
-       
-        public string CheckRepeat(string ID, string RecordStatus, string val )
+
+        public string CheckRepeat(string ID, string RecordStatus, string val)
         {
-            return bll.Exit(ID,  RecordStatus, val ).ToString().ToLower();
+            return bll.Exit(ID, RecordStatus, val).ToString().ToLower();
 
         }
         //
@@ -64,7 +64,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                     {
                         p.ID = Guid.NewGuid().ToString();
                     }
-                     
+
                 }
                 bll.Save(p);
                 if (TempData.ContainsKey("IsSuccess"))
@@ -114,5 +114,22 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         {
             return bll.Delete(id);
         }
+
+
+        public ActionResult ViewLog()
+        {
+            return View();
+        }
+        public string GetViewLogList(int pagenum, int pagesize)
+        {
+            int recordCount = 0;
+            System.Data.DataTable dt = bll.GetViewLogList(pagenum + 1, pagesize, ref   recordCount);
+
+            string result = JsonWithDataTable.Serialize(dt);
+            result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
+            return result;
+
+        }
+
     }
 }
