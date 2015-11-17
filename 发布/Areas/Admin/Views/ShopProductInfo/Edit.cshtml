@@ -79,7 +79,7 @@
     @Html.ValidationSummary()
     @HelperExtend.HelpEdit("ShopCategoryID", "ShopCategoryName", "商品分类", defaultVal: Model.ShopCategoryID, defaultText: Model.ShopCategoryName, hint: "*必填", dialogTitle: "选择商品分类", InnitFunc: "InnitFunc", onOk: "onOk", IsMutiSelect: true, IsTree: true, DataControlID: "treeGrid")
 
-    @HelperExtend.TextBox("Code", "编号", defaultval: Model.Code, hint: "*编号不能重复")
+    @HelperExtend.TextBox("Code", "编号", defaultval: Model.Code, hint: "*必填,不能重复")
     @HelperExtend.TextBox("Name", "名称", defaultval: Model.Name, hint: "*必填,长度限制在100个字符以内.")
     @HelperExtend.TextBox("SKU", "SKU码", defaultval: Model.SKU, hint: "")
     @HelperExtend.DropDownList("TypeId", "商品类型", defaultval: Model.TypeId, hint: "", downInfo: new DropDownListInfo() { Url = Url.Action("GetListForSelecte", "ShopProductType"), change = "changeType", unselect = "unselectType" }) 

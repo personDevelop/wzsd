@@ -82,6 +82,8 @@ ShopOrderAction._.ReturnOrderID)
             bool result = false;
             error = string.Empty;
             //先获取其订单状态
+            //生成退货单 修改原订单  //生成订单动作表
+            List<BaseEntity> savelist = new List<BaseEntity>();
             ShopOrder order = Dal.Find<ShopOrder>(ro.OrderId);
             if (order == null)
             {
@@ -173,6 +175,8 @@ ShopOrderAction._.ReturnOrderID)
                                     AttributeDesc = item.AttributeVal
                                 };
                                 ro.OrderItems.Add(detail);
+                                item.ReturnCount += item.Count;
+                                savelist.Add(item); 
                             }
                             if (order.PayMoney > 0)
                             {
@@ -211,13 +215,15 @@ ShopOrderAction._.ReturnOrderID)
                                     error = "请求退货数量不能大于购买数量";
                                     return false;
                                 }
+                                detail.ReturnCount += item.RequestQuantity;
+                                savelist.Add(detail);
+
                             }
                         }
                         ro.RequestReturnMoney =
                          ro.ReturnMoney = je;
                         #endregion
-                        //生成退货单 修改原订单  //生成订单动作表
-                        List<BaseEntity> savelist = new List<BaseEntity>();
+                       
                         savelist.Add(order); savelist.Add(ro); savelist.AddRange(ro.OrderItems);
                         savelist.Add(new ShopOrderAction()
                         {

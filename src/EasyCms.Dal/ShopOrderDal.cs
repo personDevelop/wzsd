@@ -1822,7 +1822,7 @@ ShopOrderItem._.Weight).ToDataTable();
             //}
             return Dal.From<ShopOrderItem>()
 
-                .Where(ShopOrderItem._.OrderID == orderID)
+                .Where(ShopOrderItem._.OrderID == orderID&& ShopOrderItem._.IsVirtualProduct==false)
 
                 .Select(ShopOrderItem._.ID, ShopOrderItem._.OrderID, ShopOrderItem._.ProductID, ShopOrderItem._.ProductSKU,
             new ExpressionClip("ProductName+AttributeVal").Alias("ProductName"), ShopOrderItem._.Count, ShopOrderItem._.Price,
@@ -1866,7 +1866,7 @@ ShopOrderItem._.Weight).ToDataTable();
                     ShopReturnOrderItem._.SellPrice,
                   ShopReturnOrderItem._.ProductCode,
                     ShopReturnOrderItem._.Name, new ExpressionClip("'" + host + "'" + "+ThumbnailsUrl").Alias("ThumbnailsUrl")).List<ShopReturnOrderItem>();
-
+                order.OrderItems = orderItems;
             }
             return order;
         }
