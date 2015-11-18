@@ -117,11 +117,11 @@ ShopOrderAction._.ReturnOrderID)
                         case UserDjStatus.审批不通过:
                         case UserDjStatus.取货中:
                         case UserDjStatus.等待退款:
-                      
+
                         default:
                             error = "您的订单状态[" + os + "]，您不能退回";
                             break;
-                       
+
                     }
                     if (isCanReturn)
                     {
@@ -168,23 +168,27 @@ ShopOrderAction._.ReturnOrderID)
                                     ThumbnailsUrl = item.ProductThumb,
                                     Description = item.ShortDescription,
                                     SaleCount = item.Count,
-                                    RequestQuantity = item.Count,
-                                    ReturnCount = item.Count,
+                                    RequestQuantity = item.Count - item.ReturnCount,
+                                    ReturnCount = item.Count - item.ReturnCount,
                                     CostPrice = item.CostPrice,
                                     SellPrice = item.Price,
                                     AttributeDesc = item.AttributeVal
                                 };
-                                ro.OrderItems.Add(detail);
-                                item.ReturnCount += item.Count;
-                                savelist.Add(item); 
+                                if (detail.RequestQuantity > 0)
+                                {
+                                    ro.OrderItems.Add(detail);
+                                    item.ReturnCount += item.Count;
+                                    savelist.Add(item);
+                                }
+
                             }
-                            if (order.PayMoney > 0)
+                            if (order.PayMoney - order.ReturnMoney > 0)
                             {
-                                je = order.PayMoney;
+                                je = order.PayMoney - order.ReturnMoney;
                             }
                             else
                             {
-                                je = order.TotalPrice - order.Discount - order.Freight;
+                                je = order.TotalPrice - order.Discount - order.Freight - order.ReturnMoney;
                             }
 
                         }
@@ -223,7 +227,7 @@ ShopOrderAction._.ReturnOrderID)
                         ro.RequestReturnMoney =
                          ro.ReturnMoney = je;
                         #endregion
-                       
+
                         savelist.Add(order); savelist.Add(ro); savelist.AddRange(ro.OrderItems);
                         savelist.Add(new ShopOrderAction()
                         {

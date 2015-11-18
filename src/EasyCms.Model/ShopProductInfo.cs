@@ -100,6 +100,12 @@ namespace EasyCms.Model
 
         private string _VideoUrl;
 
+        private int _GoodCount;
+
+        private int _MiddleCount;
+
+        private int _BadCount;
+
         #endregion
 
         #region 属性
@@ -827,6 +833,63 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  好评个数,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "GoodCount", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public int GoodCount
+        {
+            get
+            {
+                return this._GoodCount;
+            }
+            set
+            {
+                this.OnPropertyChanged("GoodCount", this._GoodCount, value);
+                this._GoodCount = value;
+            }
+        }
+
+        /// <summary>
+        ///  中评个数,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "MiddleCount", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public int MiddleCount
+        {
+            get
+            {
+                return this._MiddleCount;
+            }
+            set
+            {
+                this.OnPropertyChanged("MiddleCount", this._MiddleCount, value);
+                this._MiddleCount = value;
+            }
+        }
+
+        /// <summary>
+        ///  差评个数,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "BadCount", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public int BadCount
+        {
+            get
+            {
+                return this._BadCount;
+            }
+            set
+            {
+                this.OnPropertyChanged("BadCount", this._BadCount, value);
+                this._BadCount = value;
+            }
+        }
+
         #endregion
 
         #region 列定义
@@ -910,6 +973,12 @@ namespace EasyCms.Model
                 IsCashOnDelivery = new PropertyItem("IsCashOnDelivery", tableName);
 
                 VideoUrl = new PropertyItem("VideoUrl", tableName);
+
+                GoodCount = new PropertyItem("GoodCount", tableName);
+
+                MiddleCount = new PropertyItem("MiddleCount", tableName);
+
+                BadCount = new PropertyItem("BadCount", tableName);
 
 
             }
@@ -1065,6 +1134,18 @@ namespace EasyCms.Model
             /// 视频连接,一行一个链接，最多支持三个
             /// </summary> 
             public PropertyItem VideoUrl = null;
+            /// <summary>
+            /// 好评个数,
+            /// </summary> 
+            public PropertyItem GoodCount = null;
+            /// <summary>
+            /// 中评个数,
+            /// </summary> 
+            public PropertyItem MiddleCount = null;
+            /// <summary>
+            /// 差评个数,
+            /// </summary> 
+            public PropertyItem BadCount = null;
         }
         #endregion
     }

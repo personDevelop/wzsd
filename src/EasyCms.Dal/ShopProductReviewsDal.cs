@@ -43,6 +43,32 @@ namespace EasyCms.Dal
                         HasComment = true
                     };
                     Dal.Submit(orderitem);
+
+                    ShopProductInfo product = new ShopProductInfo() { ID = item.ProductId, RecordStatus = StatusType.update };
+                    ExpressionClip commentCount = new ExpressionClip("CommentCount+1");
+                    product.SetModifiedProperty(ShopProductInfo._.CommentCount, commentCount);
+                    ExpressionClip commentOrder = null;
+
+                    switch (item.CommentOrder)
+                    {
+                        case CommentOrder.无:
+                            break;
+                        case CommentOrder.差评:
+                            commentOrder = new ExpressionClip("BadCount+1");
+                            product.SetModifiedProperty(ShopProductInfo._.BadCount, commentOrder);
+                            break;
+                        case CommentOrder.中评:
+                            commentOrder = new ExpressionClip("MiddleCount+1");
+                            product.SetModifiedProperty(ShopProductInfo._.MiddleCount, commentOrder);
+                            break;
+                        case CommentOrder.好评:
+                            commentOrder = new ExpressionClip("GoodCount+1");
+                            product.SetModifiedProperty(ShopProductInfo._.GoodCount, commentOrder);
+                            break;
+                        default:
+                            break;
+                    }
+                    Dal.Submit(product);
                 }
             }
             return CommonDal.UpdatePath<ShopProductReviews>(Dal, item, ShopProductReviews._.ID, ShopProductReviews._.ParentID, ParameterInfo._.ClassCode, null, null, null);
