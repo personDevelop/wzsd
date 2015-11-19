@@ -72,8 +72,8 @@
 </div>
 <div class="tab-content">
 
-   
-     
+
+
     @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())
 
     @Html.ValidationSummary()
@@ -82,16 +82,16 @@
     @HelperExtend.TextBox("Code", "编号", defaultval: Model.Code, hint: "*必填,不能重复")
     @HelperExtend.TextBox("Name", "名称", defaultval: Model.Name, hint: "*必填,长度限制在100个字符以内.")
     @HelperExtend.TextBox("SKU", "SKU码", defaultval: Model.SKU, hint: "")
-    @HelperExtend.DropDownList("TypeId", "商品类型", defaultval: Model.TypeId, hint: "", downInfo: new DropDownListInfo() { Url = Url.Action("GetListForSelecte", "ShopProductType"), change = "changeType", unselect = "unselectType" }) 
+    @HelperExtend.DropDownList("TypeId", "商品类型", defaultval: Model.TypeId, hint: "", downInfo: new DropDownListInfo() { Url = Url.Action("GetListForSelecte", "ShopProductType"), change = "changeType", unselect = "unselectType" })
     @HelperExtend.TextBox("BrandId", "品牌", defaultval: Model.BrandId, hint: "")
     @HelperExtend.ImageUpLoad("ID", "商品图片", Model.RecordStatus == Sharp.Common.StatusType.add, defaultval: Model.ID, maxLength: 7)
-   
+
     @HelperExtend.RadioGroup("IsCashOnDelivery", "支持货到付款 ", "true,false", "支持,不支持", defaultval: Model.IsCashOnDelivery)
     @HelperExtend.RadioGroup("SalesType", "销售类型 ", "0,1", "赠品,正常", defaultval: Model.SalesType)
 
     @HelperExtend.RadioGroup("SaleStatus", "商品状态 ", "0,1", "下架,上架,审批中,审批退回", defaultval: Model.SaleStatus)
-     
-    @HelperExtend.Number("MarketPrice", "市场价", defaultval: Model.MarketPrice, hint: "",decimalDigits:2, max: 10000000)
+
+    @HelperExtend.Number("MarketPrice", "市场价", defaultval: Model.MarketPrice, hint: "", decimalDigits: 2, max: 10000000)
 
     @HelperExtend.Number("SalePrice", "销售价", defaultval: Model.SalePrice, hint: "", decimalDigits: 2, max: 10000000)
 
@@ -99,17 +99,17 @@
 
     @HelperExtend.Number("Points", "可得积分", defaultval: Model.Points, hint: "", max: 10000000)
 
-    @HelperExtend.Number("Stock", "库存", defaultval: Model.Stock, hint: "库存默认一个超大数， 表示不控制库存",min:int.MinValue) 
-  
+    @HelperExtend.Number("Stock", "库存", defaultval: Model.Stock, hint: "库存默认一个超大数， 表示不控制库存", min: int.MinValue)
+
     @HelperExtend.DateTime("AddedDate", "添加日期", defaultval: Model.AddedDate, hint: "")
 </div>
 
 <div class="tab-content" style="display:none">
-    
-   
+
+
     @HelperExtend.TextArea("ShortDescription", "简单描述", defaultval: Model.ShortDescription)
-  
-    @HelperExtend.TextArea("VideoUrl", "视频连接", defaultval: Model.VideoUrl, row: 3, col:100, hint: "一行一个链接，最多支持三个")
+
+    @HelperExtend.TextArea("VideoUrl", "视频连接", defaultval: Model.VideoUrl, row: 3, col: 100, hint: "一行一个链接，最多支持三个")
     @HelperExtend.UEditor("Description", "详细介绍", defaultval: Model.Description)
 </div>
 <div class="tab-content" style="display:none">
@@ -131,6 +131,9 @@
 
     @HelperExtend.Number("SaleNum", "销售次数", defaultval: Model.SaleNum, hint: "", disabled: true, max: 10000000)
     @HelperExtend.Number("CommentCount", "评论次数", defaultval: Model.CommentCount, hint: "", disabled: true, max: 10000000)
+    @HelperExtend.Number("GoodCount", "好评次数", defaultval: Model.GoodCount, hint: "", disabled: true, max: 10000000)
+    @HelperExtend.Number("MiddleCount", "中评次数", defaultval: Model.MiddleCount, hint: "", disabled: true, max: 10000000)
+    @HelperExtend.Number("BadCount", "差评次数", defaultval: Model.BadCount, hint: "", disabled: true, max: 10000000)
     @HelperExtend.Number("DisplaySequence", "显示顺序", defaultval: Model.DisplaySequence, hint: "", disabled: true, max: 10000000)
 </div>
 <div class="tab-content" style="display:none">
@@ -368,7 +371,7 @@
                         //找到对应的单元格
                         var html = "<input type='hidden' name='dtrow|" + (loopcount - 1) + "|" +
                             index + "' value='" + v.attrid + "|" + v.valid + "|" + v.valstr + "|" + columns.get(v.attrid).name + "' />" + v.valstr;
-                        $("#skugrid").find("tr").eq(loopcount).find("td").eq(index).append(html); 
+                        $("#skugrid").find("tr").eq(loopcount).find("td").eq(index).append(html);
 
                     }
                 }
@@ -629,6 +632,6 @@
 
             } else { ErrorMsg("请至少选择一条数据"); }
         }
-        
+
     </script>
 }
