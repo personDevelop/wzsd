@@ -177,7 +177,7 @@ ShopOrderAction._.ReturnOrderID)
                                 if (detail.RequestQuantity > 0)
                                 {
                                     ro.OrderItems.Add(detail);
-                                    item.ReturnCount += item.Count;
+                                    item.ReturnCount += detail.RequestQuantity;
                                     savelist.Add(item);
                                 }
 
