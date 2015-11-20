@@ -1,6 +1,6 @@
 ﻿@using MVCExtention;
 @{
-    ViewBag.Title = "短信模板设置";
+    ViewBag.Title = "信息模板设置";
 }
 
 <!--工具栏-->
@@ -44,13 +44,13 @@
                  
   { text: '发送类型', dataField: 'SendType', cellsalign: "left", width: 200 },
 
-  { text: '接收短信方', dataField: 'IsManager',@HelperExtend.Parsebool() },
+  { text: '接收方', dataField: 'IsManager',@HelperExtend.Parsebool() },
 
-  { text: '商家接收手机号', dataField: 'ManagerTel', cellsalign: "left" },
+  { text: '商家接收号', dataField: 'ManagerTel', cellsalign: "left" },
 
-  { text: '短信模板', dataField: 'MsgTemplate', cellsalign: "left" },
+  { text: '信息模板', dataField: 'MsgTemplate', cellsalign: "left" },
 
-  { text: '关联短信平台', dataField: 'RelationPlatName'   },
+  { text: '使用信息平台', dataField: 'RelationPlatName' },
 
   { text: '启用', dataField: 'IsEnable', width: 80,@HelperExtend.ParseEnable() },
 

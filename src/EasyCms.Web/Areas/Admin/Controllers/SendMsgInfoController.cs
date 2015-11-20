@@ -9,6 +9,7 @@ using Sharp.Common;
 using EasyCms.Web.Common;
 using EasyCms.Session;
 using MsgService;
+using ImsgInterface;
 
 namespace EasyCms.Web.Areas.Admin.Controllers
 {
@@ -118,7 +119,13 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         // GET: /Admin/SendMsgInfo/Delete/5
         public string Send(string id)
         {
-            return MsgFactory.SendMsg(id);
+            string err = "";
+            MsgFactory.SendMsg(id, ref err);
+            if (string.IsNullOrWhiteSpace(err))
+            {
+                err = "发送成功";
+            }
+            return err;
         }
 
     }

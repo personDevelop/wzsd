@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MsgService
+namespace ImsgInterface
 {
-   public  interface ISendMsg
+    public interface ISendMsg
     {
         SysMsgInterSet MsgServiceSet { get; set; }
         bool SendMsg();
-        bool SendMsg(SendMsgInfo msgInfo);
-        bool SendMsg(string from, string to, string userid, string msg);
+        bool SendMsg(SendMsgInfo msgInfo,ref string error);
+        bool SendMsg(string from, string to, string userid, string msg, ref string error);
 
         string GetResultbyId(string seacrchid);
 
@@ -20,5 +20,9 @@ namespace MsgService
         string GetBalance();
 
         bool PhraseResult(string content, out string result);
+
+        bool CheckPlatform(ref string err);
+
+        string Sign(string content0 = "", string content1 = "", string content2 = "");
     }
 }

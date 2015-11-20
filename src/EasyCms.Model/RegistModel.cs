@@ -75,7 +75,7 @@ namespace EasyCms.Model
         static int cachTime = 60 * 60 * 24 * 7;//缓存一周
         public static void AddToken(string token, string userno, string deviceID, ManagerUserInfo userInfo, out TokenInfo tokenEntity, bool isCreate = true)
         {
-            userInfo.DeviceID = deviceID;
+            userInfo.DeviceNo = deviceID;
             DateTime now = DateTime.Now;
             if (isCreate)
             {
@@ -106,7 +106,7 @@ namespace EasyCms.Model
         {
             msg = String.Empty;
 
-            CacheContainer.RemoveCache(userInfo.Code + userInfo.DeviceID);
+            CacheContainer.RemoveCache(userInfo.Code + userInfo.DeviceNo);
             CacheContainer.RemoveCache(token);
             return true;
 
@@ -117,7 +117,7 @@ namespace EasyCms.Model
             if (o != null && IsResetCach)
             {
                 CacheContainer.AddCache(token, o, cachTime);
-                CacheContainer.AddCache(o.ContactPhone + o.DeviceID, token, cachTime);
+                CacheContainer.AddCache(o.ContactPhone + o.DeviceNo, token, cachTime);
             }
             return o;
         }

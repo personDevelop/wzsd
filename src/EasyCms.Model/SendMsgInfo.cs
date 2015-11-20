@@ -70,6 +70,10 @@ namespace EasyCms.Model
 
         private int _HasSendCount;
 
+        private string _AppHandleTag;
+
+        private string _AppHandleContent;
+
         #endregion
 
         #region 属性
@@ -512,6 +516,44 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  APP处理标识,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "AppHandleTag", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string AppHandleTag
+        {
+            get
+            {
+                return this._AppHandleTag;
+            }
+            set
+            {
+                this.OnPropertyChanged("AppHandleTag", this._AppHandleTag, value);
+                this._AppHandleTag = value;
+            }
+        }
+
+        /// <summary>
+        ///  App处理内容,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "AppHandleContent", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 500, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string AppHandleContent
+        {
+            get
+            {
+                return this._AppHandleContent;
+            }
+            set
+            {
+                this.OnPropertyChanged("AppHandleContent", this._AppHandleContent, value);
+                this._AppHandleContent = value;
+            }
+        }
+
         #endregion
 
         #region 列定义
@@ -565,6 +607,10 @@ namespace EasyCms.Model
                 MinBuyCount = new PropertyItem("MinBuyCount", tableName);
 
                 HasSendCount = new PropertyItem("HasSendCount", tableName);
+
+                AppHandleTag = new PropertyItem("AppHandleTag", tableName);
+
+                AppHandleContent = new PropertyItem("AppHandleContent", tableName);
 
 
             }
@@ -660,7 +706,16 @@ namespace EasyCms.Model
             /// 发送次数,可以重复发送
             /// </summary> 
             public PropertyItem HasSendCount = null;
+            /// <summary>
+            /// APP处理标识,
+            /// </summary> 
+            public PropertyItem AppHandleTag = null;
+            /// <summary>
+            /// App处理内容,
+            /// </summary> 
+            public PropertyItem AppHandleContent = null;
         }
         #endregion
     }
+
 }

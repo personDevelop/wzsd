@@ -53,9 +53,9 @@ namespace EasyCms.Dal
 
 
 
-        public SysMsgInterSet GetEnableService()
+        public SysMsgInterSet GetEnableService(SendTool st)
         {
-            return Dal.Find<SysMsgInterSet>(SysMsgInterSet._.IsEnable == true);
+            return Dal.Find<SysMsgInterSet>(SysMsgInterSet._.SendTool == (int)st && SysMsgInterSet._.IsEnable == true);
         }
 
         public int Save(MsgSendLog s)
@@ -65,7 +65,7 @@ namespace EasyCms.Dal
 
         public DataTable GetViewLogList(int pagenum, int pagesize, ref int recordCount)
         {
-            int pagecount=0;
+            int pagecount = 0;
             return Dal.From<MsgSendLog>().Join<ManagerUserInfo>(MsgSendLog._.UserID == ManagerUserInfo._.ID, JoinType.leftJoin)
                 .Select(MsgSendLog._.ID.All, ManagerUserInfo._.Name.Alias("UserName"))
                 .ToDataTable(pagesize, pagenum, ref pagecount, ref recordCount);

@@ -150,6 +150,8 @@ namespace EasyCms.Model
 
         private int _ReqCancleOrderStatus;
 
+        private string _DeviceNo;
+
         #endregion
 
         #region 属性
@@ -1352,6 +1354,25 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  客户端标识,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "DeviceNo", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 100, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string DeviceNo
+        {
+            get
+            {
+                return this._DeviceNo;
+            }
+            set
+            {
+                this.OnPropertyChanged("DeviceNo", this._DeviceNo, value);
+                this._DeviceNo = value;
+            }
+        }
+
         #endregion
 
         #region 列定义
@@ -1485,6 +1506,8 @@ namespace EasyCms.Model
                 HasReqCancled = new PropertyItem("HasReqCancled", tableName);
 
                 ReqCancleOrderStatus = new PropertyItem("ReqCancleOrderStatus", tableName);
+
+                DeviceNo = new PropertyItem("DeviceNo", tableName);
 
 
             }
@@ -1740,6 +1763,10 @@ namespace EasyCms.Model
             /// 申请时订单状态,
             /// </summary> 
             public PropertyItem ReqCancleOrderStatus = null;
+            /// <summary>
+            /// 客户端标识,
+            /// </summary> 
+            public PropertyItem DeviceNo = null;
         }
         #endregion
     }

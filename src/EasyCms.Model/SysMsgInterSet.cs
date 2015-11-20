@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 namespace EasyCms.Model
 {
     /// <summary>
-    /// 短信接口设置
+    /// 消息接口设置
     /// </summary>  
     [JsonObject]
     public partial class SysMsgInterSet : BaseEntity
@@ -40,6 +40,14 @@ namespace EasyCms.Model
 
         private int _MaxWordCount;
 
+        private SendTool _SendTool;
+
+        private string _AppKeyID;
+
+        private string _ExtendVal;
+
+        private string _Url2;
+
         #endregion
 
         #region 属性
@@ -65,7 +73,7 @@ namespace EasyCms.Model
         }
 
         /// <summary>
-        ///  短信平台名称,
+        ///  平台名称,
         /// </summary>
 
         [DbProperty(MapingColumnName = "Name", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = true, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
@@ -197,6 +205,82 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  消息推送类型,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "SendTool", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public SendTool SendTool
+        {
+            get
+            {
+                return this._SendTool;
+            }
+            set
+            {
+                this.OnPropertyChanged("SendTool", this._SendTool, value);
+                this._SendTool = value;
+            }
+        }
+
+        /// <summary>
+        ///  应用唯一标识,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "AppKeyID", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string AppKeyID
+        {
+            get
+            {
+                return this._AppKeyID;
+            }
+            set
+            {
+                this.OnPropertyChanged("AppKeyID", this._AppKeyID, value);
+                this._AppKeyID = value;
+            }
+        }
+
+        /// <summary>
+        ///  扩展字段,以应付未知接口的额外参数
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "ExtendVal", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 500, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string ExtendVal
+        {
+            get
+            {
+                return this._ExtendVal;
+            }
+            set
+            {
+                this.OnPropertyChanged("ExtendVal", this._ExtendVal, value);
+                this._ExtendVal = value;
+            }
+        }
+
+        /// <summary>
+        ///  接口Url2,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "Url2", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 200, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string Url2
+        {
+            get
+            {
+                return this._Url2;
+            }
+            set
+            {
+                this.OnPropertyChanged("Url2", this._Url2, value);
+                this._Url2 = value;
+            }
+        }
+
         #endregion
 
         #region 列定义
@@ -221,6 +305,14 @@ namespace EasyCms.Model
 
                 MaxWordCount = new PropertyItem("MaxWordCount", tableName);
 
+                SendTool = new PropertyItem("SendTool", tableName);
+
+                AppKeyID = new PropertyItem("AppKeyID", tableName);
+
+                ExtendVal = new PropertyItem("ExtendVal", tableName);
+
+                Url2 = new PropertyItem("Url2", tableName);
+
 
             }
             /// <summary>
@@ -228,7 +320,7 @@ namespace EasyCms.Model
             /// </summary> 
             public PropertyItem ID = null;
             /// <summary>
-            /// 短信平台名称,
+            /// 平台名称,
             /// </summary> 
             public PropertyItem Name = null;
             /// <summary>
@@ -255,6 +347,22 @@ namespace EasyCms.Model
             /// 最大字数,0不控制字符个数
             /// </summary> 
             public PropertyItem MaxWordCount = null;
+            /// <summary>
+            /// 消息推送类型,
+            /// </summary> 
+            public PropertyItem SendTool = null;
+            /// <summary>
+            /// 应用唯一标识,
+            /// </summary> 
+            public PropertyItem AppKeyID = null;
+            /// <summary>
+            /// 扩展字段,以应付未知接口的额外参数
+            /// </summary> 
+            public PropertyItem ExtendVal = null;
+            /// <summary>
+            /// 接口Url2,
+            /// </summary> 
+            public PropertyItem Url2 = null;
         }
         #endregion
     }

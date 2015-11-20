@@ -64,6 +64,8 @@ namespace EasyCms.Model
 
         private int _ClientType;
 
+        private string _DeviceNo;
+
         #endregion
 
         #region 属性
@@ -187,7 +189,7 @@ namespace EasyCms.Model
         ///  头像,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "Photo", DbTypeString = "char", ColumnIsNull = true, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "Photo", DbTypeString = "varchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string Photo
         {
@@ -449,6 +451,25 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  用户设备号,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "DeviceNo", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 100, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string DeviceNo
+        {
+            get
+            {
+                return this._DeviceNo;
+            }
+            set
+            {
+                this.OnPropertyChanged("DeviceNo", this._DeviceNo, value);
+                this._DeviceNo = value;
+            }
+        }
+
         #endregion
 
         #region 列定义
@@ -496,6 +517,8 @@ namespace EasyCms.Model
                 Note = new PropertyItem("Note", tableName);
 
                 ClientType = new PropertyItem("ClientType", tableName);
+
+                DeviceNo = new PropertyItem("DeviceNo", tableName);
 
 
             }
@@ -579,10 +602,14 @@ namespace EasyCms.Model
             /// 客户端类型,0 pc 1 android 2 iod 3其他
             /// </summary> 
             public PropertyItem ClientType = null;
+            /// <summary>
+            /// 用户设备号,
+            /// </summary> 
+            public PropertyItem DeviceNo = null;
         }
         #endregion
-
     }
+
 
     public partial class ManagerUserInfo
     {
@@ -590,9 +617,7 @@ namespace EasyCms.Model
         {
             CreateDate = LastModifyDate = StatusChangeDate = DateTime.Now;
         }
-
-        [NotDbCol]
-        public string DeviceID { get; set; }
+ 
         [NotDbCol]
         public RangeDict RangeDict { get; set; }
     }

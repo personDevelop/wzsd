@@ -30,7 +30,7 @@ namespace EasyCms.Business
 
         public ManagerUserInfo Login(string code, string pwd, out string error)
         {
-            
+
             return LoginBase(code, pwd, false, out error);
         }
         public ManagerUserInfo LoginManager(string code, string pwd, out string error)
@@ -82,9 +82,9 @@ namespace EasyCms.Business
                         if (int.TryParse(valPara.Value, out grothvalue))
                         {
                             Dal.ChangeOrder(item.ID, grothvalue);
-                        } 
+                        }
                     }
-                    
+
                 }
             }
             return item;
@@ -178,9 +178,9 @@ namespace EasyCms.Business
             return Dal.GetTelNoWithOrder(where);
         }
 
-        public List<string> GetTelNoWithBuyCount(int MinBuyCount,int MaxBuyCount)
+        public List<string> GetTelNoWithBuyCount(int MinBuyCount, int MaxBuyCount)
         {
-            return Dal.GetTelNoWithBuyCount(MinBuyCount,  MaxBuyCount);
+            return Dal.GetTelNoWithBuyCount(MinBuyCount, MaxBuyCount);
         }
 
         public int Save(TokenInfo ti)
@@ -199,6 +199,16 @@ namespace EasyCms.Business
         public ManagerUserInfo GetUserByToken(string token)
         {
             return Dal.GetUserByToken(token);
+        }
+
+        public List<string> GetDevice(WhereClip where)
+        {
+            return Dal.GetDevice(where);
+        }
+
+        public List<string> GetDeviceWithOrder(WhereClip where)
+        {
+        return Dal.GetDeviceWithOrder(where);
         }
     }
 }

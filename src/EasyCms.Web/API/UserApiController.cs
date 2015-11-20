@@ -133,12 +133,13 @@ namespace EasyCms.Web.API
 
                     token = loginModel.GenerateToken();
                     TokenInfo ti = null;
-                    LoginModel.AddToken(token, loginModel.Account, loginModel.DeviceID, user,out ti);
-                    if (ti!=null)
+                    LoginModel.AddToken(token, loginModel.Account, loginModel.DeviceID, user, out ti);
+                    bll.Save(user);
+                    if (ti != null)
                     {
                         bll.Save(ti);
                     }
-                   
+
                 }
             }
             if (isSuccess)
@@ -168,7 +169,7 @@ namespace EasyCms.Web.API
 
             else
             {
-                string token=Request.GetToken();
+                string token = Request.GetToken();
                 isSuccess = LoginModel.RemoveToken(token, user, out msg);
                 if (isSuccess)
                 {

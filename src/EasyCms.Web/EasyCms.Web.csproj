@@ -1307,6 +1307,10 @@
       <Project>{44ce33d0-d419-4958-ba98-986a7a249ba0}</Project>
       <Name>EasyCms.Session</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ImsgInterface\ImsgInterface.csproj">
+      <Project>{bbbb0376-1004-43eb-a1a4-acd0cd850180}</Project>
+      <Name>ImsgInterface</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MsgService\MsgService.csproj">
       <Project>{baea16b8-291b-4f5e-8579-de43e8daf27a}</Project>
       <Name>MsgService</Name>
@@ -1314,6 +1318,10 @@
     <ProjectReference Include="..\MVCExtention\MVCExtention.csproj">
       <Project>{54f64b71-63b7-4ee7-9b62-3330dd440ab0}</Project>
       <Name>MVCExtention</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Umeng\Umeng.csproj">
+      <Project>{fdf0c756-0ab7-4457-8462-c79d53347e18}</Project>
+      <Name>Umeng</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

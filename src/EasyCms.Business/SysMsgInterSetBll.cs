@@ -44,10 +44,10 @@ namespace EasyCms.Business
 
 
 
-        public SysMsgInterSet GetEnableService()
+        public SysMsgInterSet GetEnableService(SendTool st)
         {
 
-            return Dal.GetEnableService();
+            return Dal.GetEnableService(st);
         }
 
         public int Save(MsgSendLog s)

@@ -93,7 +93,7 @@ namespace EasyCms
                 {
                     user = bll.GetUserByToken(token);
                     TokenInfo ti;
-                    LoginModel.AddToken(token, user.Code, user.DeviceID, user, out ti, false);
+                    LoginModel.AddToken(token, user.Code, user.DeviceNo, user, out ti, false);
                 }
                 else
                     //更新数据库Token

@@ -6,22 +6,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Umeng.Entity;
 
-namespace MsgService
+namespace Umeng
 {
-    public class SmsMsg : ISendMsg
+    public class UmengMsg : ISendMsg
     {
         SysMsgInterSetBll bll = new SysMsgInterSetBll();
-        cn.vcomlive.wsqd.SmsService MsgService = null;
-        public SmsMsg()
+
+        public UmengMsg()
         {
 
-            MsgServiceSet = bll.GetEnableService(SendTool.短信);
-            MsgService = new cn.vcomlive.wsqd.SmsService();
-            if (MsgServiceSet != null && !string.IsNullOrWhiteSpace(MsgServiceSet.Url))
-            {
-                MsgService.Url = MsgServiceSet.Url;
-            }
+            MsgServiceSet = bll.GetEnableService(SendTool.APP客户端);
         }
 
         /// <summary>
@@ -35,11 +31,17 @@ namespace MsgService
         }
         public bool SendMsg(SendMsgInfo msgInfo, ref string err)
         {
+            if (msgInfo.SendArea == SendArea.指定手机号)
+            {
+                err = "客户端推送不能为指定手机号的方式";
+                return false;
+            }
             if (!CheckPlatform(ref err))
             {
 
                 return false;
             }
+
             List<string> telNumList = new List<string>();
             WhereClip where = null;
             switch (msgInfo.SendArea)
@@ -79,6 +81,7 @@ namespace MsgService
                     }
                     break;
                 case SendArea.指定手机号:
+
                     //指定手机号
                     if (!string.IsNullOrWhiteSpace(msgInfo.CustomerTelNo))
                     {
@@ -98,12 +101,13 @@ namespace MsgService
             switch (msgInfo.SendArea)
             {
                 case SendArea.全员推送:
+                    break;
                 case SendArea.注册时间:
                 case SendArea.指定会员:
-                    telNumList = new ManagerUserInfoBll().GetTelNo(where);
+                    telNumList = new ManagerUserInfoBll().GetDevice(where);
                     break;
                 case SendArea.用户等级:
-                    telNumList = new ManagerUserInfoBll().GetTelNoWithOrder(where);
+                    telNumList = new ManagerUserInfoBll().GetDeviceWithOrder(where);
                     break;
 
                 case SendArea.购买次数:
@@ -116,11 +120,45 @@ namespace MsgService
                     break;
             }
             telNumList = telNumList.Distinct().ToList();
-            if (telNumList.Count == 0)
+
+            if (msgInfo.SendArea != SendArea.全员推送 && telNumList.Count == 0)
             {
                 err = "没有找到可发送的人员";
                 return false;
             }
+            UmengSendType st = UmengSendType.broadcast;  //广播
+            UmEntity post = new UmEntity()
+            {
+
+                appkey = MsgServiceSet.AppKeyID,
+                timestamp = ConvertDateTime(DateTime.Now),
+
+
+            };
+            if (telNumList.Count == 1)
+            {
+                //单播
+                st = UmengSendType.unicast;
+                post.type = st;
+                post.device_token = telNumList[0];
+            }
+            else if (telNumList.Count < 500)
+            {
+                //列播
+                st = UmengSendType.listcast;
+                post.device_token = telNumList[0];
+                string deviceStr = telNumList[0];
+                for (int i = 1; i < telNumList.Count; i++)
+                {
+                    deviceStr = "," + telNumList[i];
+                }
+                post.device_token = deviceStr;
+            }
+            else if (msgInfo.SendArea != SendArea.全员推送)
+            {
+                //这时候 可能就需要分段 列播了
+            }
+
             foreach (var item in telNumList)
             {
                 if (!string.IsNullOrWhiteSpace(item))
@@ -165,7 +203,7 @@ namespace MsgService
                         OrderNo = DateTime.Now.ToString("yyMMddHHmmssffffff")
                     };
 
-                result = MsgService.SendSms(MsgServiceSet.UserNo, MsgServiceSet.Pwd, s.ContactNum, s.SendContent, s.SendTime.ToString("yyyy-MM-dd HH:mm:ss"), s.OrderNo.ToString());
+                //result = MsgService.SendSms(MsgServiceSet.UserNo, MsgServiceSet.Pwd, s.ContactNum, s.SendContent, s.SendTime.ToString("yyyy-MM-dd HH:mm:ss"), s.OrderNo.ToString());
 
                 s.MsgStatus = PhraseResult(result, out result);
                 bll.Save(s);
@@ -194,7 +232,7 @@ namespace MsgService
             {
 
 
-                result = MsgService.GetResultbyId(MsgServiceSet.UserNo, MsgServiceSet.Pwd, seacrchid);
+                //result = MsgService.GetResultbyId(MsgServiceSet.UserNo, MsgServiceSet.Pwd, seacrchid);
                 bool isSuccess = PhraseResult(result, out result);
                 MsgSendLog s = new MsgSendLog();
                 s.Where = MsgSendLog._.OrderNo == seacrchid;
@@ -229,7 +267,7 @@ namespace MsgService
                     endstr = end.Value.ToString("yyyy-MM-dd HH:mm:ss");
                 }
 
-                result = MsgService.GetResultbyTime(MsgServiceSet.UserNo, MsgServiceSet.Pwd, telNo, startstr, endstr);
+                //result = MsgService.GetResultbyTime(MsgServiceSet.UserNo, MsgServiceSet.Pwd, telNo, startstr, endstr);
                 PhraseResult(result, out result);
             }
             catch (Exception ex)
@@ -247,7 +285,7 @@ namespace MsgService
             try
             {
 
-                result = MsgService.GetBalance(MsgServiceSet.UserNo, MsgServiceSet.Pwd);
+                //result = MsgService.GetBalance(MsgServiceSet.UserNo, MsgServiceSet.Pwd);
 
             }
             catch (Exception ex)
@@ -298,38 +336,120 @@ namespace MsgService
             return true;
         }
 
-
-
-
-
-
-
         public bool CheckPlatform(ref string err)
         {
             bool isResult = true;
             if (MsgServiceSet == null)
             {
-                err = "没有设置可用的短信平台";
+                err = "没有设置可用的友盟平台";
             }
+
             else if (string.IsNullOrWhiteSpace(MsgServiceSet.UserNo))
             {
-                err = "没有设置短信平台的用户名";
+                err = "没有设置友盟平台的应用唯一标识appkey";
             }
             else if (string.IsNullOrWhiteSpace(MsgServiceSet.Pwd))
             {
-                err = "没有设置短信平台的密码";
+                err = "没有设置短信平台的服务器秘钥app_master_secret";
             }
             else if (string.IsNullOrWhiteSpace(MsgServiceSet.Url))
             {
                 err = "没有设置短信平台的地址URL";
             }
+
             return isResult;
         }
 
 
         public string Sign(string content0 = "", string content1 = "", string content2 = "")
         {
-            throw new NotImplementedException();
+            string method = "POST";
+            string result = method + content0 + content1 + content2;
+            result = GetMD5(result);
+            return result;
+
         }
+
+        /// <summary>
+        /// 计算MD5
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public string GetMD5(String s)
+        {
+            if (string.IsNullOrEmpty(s)) return "";
+            System.Security.Cryptography.MD5 md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
+            byte[] bytes = System.Text.Encoding.UTF8.GetBytes(s);
+            bytes = md5.ComputeHash(bytes);
+            md5.Clear();
+
+            StringBuilder strReturn = new StringBuilder();
+
+            for (int i = 0; i < bytes.Length; i++)
+            {
+                strReturn.Append(Convert.ToString(bytes[i], 16).PadLeft(2, '0'));
+            }
+
+            return strReturn.ToString().PadLeft(32, '0');
+        }
+
+
+        /// <summary> 
+        /// DateTime时间格式转换为Unix时间戳格式 
+        /// </summary> 
+        /// <param name="time"> DateTime时间格式</param> 
+        /// <returns>Unix时间戳格式</returns> 
+        public string ConvertDateTime(System.DateTime time)
+        {
+            System.DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1));
+            return ((int)(time - startTime).TotalSeconds).ToString();
+        }
+
+
+       
+    }
+
+
+
+    public enum UmengSendType
+    {
+        /// <summary>
+        /// 单播 向指定的设备发送消息，包括向单个device_token或者单个alias发消息。
+        /// </summary>
+        unicast,
+        /// <summary>
+        /// 列播 向指定的一批设备发送消息，包括向多个device_token或者多个alias发消息。
+        /// </summary>
+        listcast,
+        /// <summary>
+        /// 广播 向安装该App的所有设备发送消息
+        /// </summary>
+        broadcast,
+        /// <summary>
+        /// 组播 向满足特定条件的设备集合发送消息，例如: "特定版本"、"特定地域"等。友盟消息推送所支持的维度筛选和友盟统计分析所提供的数据展示维度是一致的，后台数据也是打通的
+        /// </summary>
+        groupcast,
+        /// <summary>
+        /// 文件播( 开发者将批量的device_token或者alias存放到文件, 通过文件ID进行消息发送。
+        /// </summary>
+        filecast,
+        /// <summary>
+        /// 自定义播 开发者通过自有的alias进行推送, 可以针对单个或者一批alias进行推送，也可以将alias存放到文件进行发送。
+        /// </summary>
+        customizedcast
+    }
+
+    public enum MsgShowType
+    {
+        /// <summary>
+        /// 通知
+        /// </summary>
+        notification,
+        /// <summary>
+        /// 消息  
+        /// </summary>
+        message
     }
 }
+
+

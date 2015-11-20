@@ -1,6 +1,6 @@
 ﻿@model SysMsgInterSet
 @{
-    ViewBag.Title = "编辑短信接口";
+    ViewBag.Title = "编辑信息平台接口";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutEdit.cshtml";
 }
 
@@ -9,6 +9,7 @@
 @Scripts.Render("~/bundles/uploadJs")
 
 @using EasyCms.Model
+@using Sharp.Common
 <!--内容-->
 <div id="floatHead" class="content-tab-wrap">
     <div class="content-tab">
@@ -27,20 +28,23 @@
     @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString()) 
     
     @Html.ValidationSummary() 
+    @HelperExtend.RadioGroup("SendTool", "信息平台类型", typeof(SendTool).GetEnumVal(),
+                  typeof(SendTool).GetEnumNamesStr(), defaultval: (int)Model.SendTool, hint: "")
+    @HelperExtend.TextBox("Name", "信息平台名称", defaultval: Model.Name, hint: "")
 
-    @HelperExtend.TextBox("Name", "短信平台名称", defaultval: Model.Name, hint: "")
+    @HelperExtend.TextBox("UserNo", "用户名", defaultval: Model.UserNo, hint: "部分信息平台可能需要一个开发者账号")
+    @HelperExtend.TextBox("AppKeyID", "应用唯一标识", defaultval: Model.AppKeyID, hint: "部分信息平台可能需要一个唯一标识")
 
-    @HelperExtend.TextBox("UserNo", "用户名", defaultval: Model.UserNo, hint: "")
-
-    @HelperExtend.TextBox("Pwd", "密码", defaultval: Model.Pwd, hint: "")
+    @HelperExtend.TextBox("Pwd", "密码", defaultval: Model.Pwd, hint: "部分信息平台可能需要一个密钥")
 
     @HelperExtend.TextBox("Url", "接口Url", defaultval: Model.Url, hint: "")
+    @HelperExtend.TextBox("Url2", "接口Url2", defaultval: Model.Url2, hint: "部分信息平台可能需要一个校验链接URL")
 
     @HelperExtend.RadioGroup("IsEnable", "启用","false,true","停用,启用" ,defaultval: Model.IsEnable, hint: "")
 
-    @HelperExtend.TextBox("TelNum", "手机号码", defaultval: Model.TelNum, hint: "")
+    @HelperExtend.TextBox("TelNum", "手机号码", defaultval: Model.TelNum, hint: "短信平台显示的本方电话号码")
 
-    @HelperExtend.Number("MaxWordCount", "最大字数", defaultval: Model.MaxWordCount, hint: "短信平台一条短信可以接受的最大字数") 
+    @HelperExtend.Number("MaxWordCount", "最大字数", defaultval: Model.MaxWordCount, hint: "可以接受的最大字数") 
     
 </div>
  
