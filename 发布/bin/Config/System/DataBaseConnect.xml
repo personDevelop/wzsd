@@ -3,10 +3,10 @@
   <ConnectionStrings>
     <!--数据库类型，0为Sql2005 Server；1为Oracle,2为sql2000,3为MsAccess，4为MySql，5为Sqlite123.232.101.233  172.16.100.209-->
    
-        <!-- <add  Enabled="true"  IsDefault="true" ConnType="Plaintext" Name="RobotConnectionString"
+      <!--<add  Enabled="true"  IsDefault="true" ConnType="Plaintext" Name="RobotConnectionString"
           ConnectionString="Data Source=.;Initial Catalog=eshop;User ID=sa;Password=aaaaaa"
     DataBaseType="0"/>--> 
-  <add  Enabled="true"  IsDefault="true" ConnType="Plaintext" Name="RobotConnectionString"
+     <add  Enabled="true"  IsDefault="true" ConnType="Plaintext" Name="RobotConnectionString"
           ConnectionString="Data Source=hds141901615.my3w.com;Initial Catalog=hds141901615_db;User ID=hds141901615;Password=aaaa1111"
     DataBaseType="0"/> 
     <add  Enabled="false"  IsDefault="false" ConnType="Ciphertext" Name="jiami"
