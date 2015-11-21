@@ -70,9 +70,15 @@ namespace EasyCms.Model
 
         private int _HasSendCount;
 
-        private string _AppHandleTag;
+        private AppHandleTag _AppHandleTag;
 
         private string _AppHandleContent;
+
+        private MsgType _MsgType;
+
+        private string _NoticeTitle;
+
+        private string _NoticeAlert;
 
         #endregion
 
@@ -520,9 +526,9 @@ namespace EasyCms.Model
         ///  APP处理标识,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "AppHandleTag", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "AppHandleTag", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public string AppHandleTag
+        public AppHandleTag AppHandleTag
         {
             get
             {
@@ -551,6 +557,63 @@ namespace EasyCms.Model
             {
                 this.OnPropertyChanged("AppHandleContent", this._AppHandleContent, value);
                 this._AppHandleContent = value;
+            }
+        }
+
+        /// <summary>
+        ///  消息类型,0 notification-通知，1message-消息
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "MsgType", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public MsgType MsgType
+        {
+            get
+            {
+                return this._MsgType;
+            }
+            set
+            {
+                this.OnPropertyChanged("MsgType", this._MsgType, value);
+                this._MsgType = value;
+            }
+        }
+
+        /// <summary>
+        ///  通知标题,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "NoticeTitle", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string NoticeTitle
+        {
+            get
+            {
+                return this._NoticeTitle;
+            }
+            set
+            {
+                this.OnPropertyChanged("NoticeTitle", this._NoticeTitle, value);
+                this._NoticeTitle = value;
+            }
+        }
+
+        /// <summary>
+        ///  通知栏提示文字,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "NoticeAlert", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 200, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string NoticeAlert
+        {
+            get
+            {
+                return this._NoticeAlert;
+            }
+            set
+            {
+                this.OnPropertyChanged("NoticeAlert", this._NoticeAlert, value);
+                this._NoticeAlert = value;
             }
         }
 
@@ -611,6 +674,12 @@ namespace EasyCms.Model
                 AppHandleTag = new PropertyItem("AppHandleTag", tableName);
 
                 AppHandleContent = new PropertyItem("AppHandleContent", tableName);
+
+                MsgType = new PropertyItem("MsgType", tableName);
+
+                NoticeTitle = new PropertyItem("NoticeTitle", tableName);
+
+                NoticeAlert = new PropertyItem("NoticeAlert", tableName);
 
 
             }
@@ -714,6 +783,18 @@ namespace EasyCms.Model
             /// App处理内容,
             /// </summary> 
             public PropertyItem AppHandleContent = null;
+            /// <summary>
+            /// 消息类型,0 notification-通知，1message-消息
+            /// </summary> 
+            public PropertyItem MsgType = null;
+            /// <summary>
+            /// 通知标题,
+            /// </summary> 
+            public PropertyItem NoticeTitle = null;
+            /// <summary>
+            /// 通知栏提示文字,
+            /// </summary> 
+            public PropertyItem NoticeAlert = null;
         }
         #endregion
     }

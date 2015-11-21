@@ -201,14 +201,20 @@ namespace EasyCms.Business
             return Dal.GetUserByToken(token);
         }
 
-        public List<string> GetDevice(WhereClip where)
+        public DataTable GetDevice(WhereClip where)
         {
             return Dal.GetDevice(where);
         }
 
-        public List<string> GetDeviceWithOrder(WhereClip where)
+        public DataTable GetDeviceWithOrder(WhereClip where)
         {
-        return Dal.GetDeviceWithOrder(where);
+            return Dal.GetDeviceWithOrder(where);
+        }
+
+        public DataTable GetDeviceWithBuyCount(int MinBuyCount, int MaxBuyCount)
+        {
+            return Dal.GetDeviceWithBuyCount(MinBuyCount, MaxBuyCount);
+
         }
     }
 }

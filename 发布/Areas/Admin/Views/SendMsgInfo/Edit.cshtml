@@ -34,17 +34,21 @@
 
 
     @HelperExtend.TextArea("SendContent", "推送内容", defaultval: Model.SendContent, hint: "")
-    @HelperExtend.TextBox("AppHandleTag", "APP处理标识", defaultval: Model.SendContent, hint: "根据客户端和服务端双方协定的标识，来决定客户端接收到通知后该如何处理,<br/>常用如下：OpenProduct(打开一个商品明细，则此时处理内容里可能是一个商品ID 或者商品详情链接url)")
-    @HelperExtend.TextArea("SendContent", "APP处理的内容", defaultval: Model.SendContent, hint: "APP客户端接收到消息时要处理的实际内容，例如可能是一个链接")
+    @HelperExtend.RadioGroup("MsgType", "消息类型",  vals: "0,1",texts: "通知,消息", defaultval: (int)Model.MsgType, hint: "只对android客户端有效")
+    @HelperExtend.TextBox("NoticeTitle", "通知标题", defaultval: Model.NoticeTitle, hint: "客户端推送是显示的标题，只对android客户端有效")
+    @HelperExtend.TextBox("NoticeAlert", "通知栏提示文字", defaultval: Model.NoticeAlert, hint: "客户端推送是显示的提示文字，只对android客户端有效")
+    @HelperExtend.RadioGroup("AppHandleTag", "APP处理标识", vals: "0,1,2,3,4,5",texts: "打开应用,打开网页,打开商品,打开新闻,打开活动,打开个人中心", defaultval: Model.AppHandleTag,
+            hint: ",<br/>根据客户端和服务端双方协定的标识，来决定客户端接收到通知后该如何处理,常用如下：<br/>打开应用：打开客户端<br/>打开网页：打开处理内容里的网址<br/>打开商品：根据处理内容里的商品ID,打开商品详细页<br/>打开新闻：根据处理内容里的商品ID,打开新闻详细页<br/>打开活动：根据处理内容里的活动ID,打开团购或促销的详细页<br/>打开个人中心：打个个人中心")
+    @HelperExtend.TextArea("AppHandleContent", "APP处理的内容", defaultval: Model.AppHandleContent, hint: "APP客户端接收到消息时要处理的实际内容，例如可能是一个链接或者商品等待，当是打开应用时，这里可以是空")
     @HelperExtend.Lable(Model.Status.ToString(), "状态")
     @HelperExtend.TextArea("Note", "备注", defaultval: Model.Note, hint: "")
-   
+
 </div>
 
 <div class="tab-content" style="display:none">
     @HelperExtend.RadioGroup("SendArea", "推送范围", typeof(SendArea).GetEnumVal(),
                           typeof(SendArea).GetEnumNamesStr(), defaultval: (int)Model.SendArea, hint: "")
-   
+
     @HelperExtend.TextArea("CustomerTelNo", "指定手机号", defaultval: Model.CustomerTelNo, hint: "多个手机号用英文逗号分隔")
     @HelperExtend.DropDownList("UserOrder", "对应会员等级", defaultval: Model.UserOrder, hint: "", downInfo: new DropDownListInfo { DisplayMember = "Name", ValueMember = "ID", Url = Url.Action("GetListForSelecte", "RangeDict") })
     @HelperExtend.DateTime("StartRegistTime", "开始注册时间", defaultval: Model.StartRegistTime, hint: "开始和截止时间至少选择一个")
@@ -53,10 +57,48 @@
     @HelperExtend.Number("MinBuyCount", "最少购买次数", defaultval: Model.MinBuyCount, hint: "0标示不限制，和最多次数至少选择其中一个")
     @HelperExtend.Number("MaxBuyCount", "最多购买次数", defaultval: Model.MaxBuyCount, hint: "0标示不限制，和最少次数至少选择其中一个")
 
-     @HelperExtend.HelpSmartDialog(Url.Action("SearchAccount", "ManagerUserInfo"), "CustomerAccuont", "CustomerAccuontName", "指定会员", Model.CustomerAccuont, Model.CustomerAccuontName,dialogTitle:"选择会员",isAppend:true) 
-      
+    @HelperExtend.HelpSmartDialog(Url.Action("SearchAccount", "ManagerUserInfo"), "CustomerAccuont", "CustomerAccuontName", "指定会员", Model.CustomerAccuont, Model.CustomerAccuontName, dialogTitle: "选择会员", isAppend: true)
+
 </div>
 @section  scripts{
+<script type="text/javascript">
+
+    function isShow(element) {
+        var val;
+        if (!element) {
+            val = 0;
+        } else {
+            val = $(element).val();
+        }
+        if (val == 1) {
+
+            $("input[name='MsgType']").closest("dl").show();
+            $("#NoticeTitle").closest("dl").show();
+            $("#NoticeAlert").closest("dl").show();
+            $("input[name='AppHandleTag']").closest("dl").show();
+            $("#AppHandleContent").closest("dl").show();
+
+        } else {
+            $("input[name='MsgType']").closest("dl").hide();
+            $("#NoticeTitle").closest("dl").hide();
+            $("#NoticeAlert").closest("dl").hide();
+            $("input[name='AppHandleTag']").closest("dl").hide();
+            $("#AppHandleContent").closest("dl").hide();
+
+             
+        }
+    }
+    $(function () {
+        isShow();
+        $("input[name='SendTool']").click(function () {
+
+            isShow(this);
+        });
+
+
+
+    });
+</script>
 
     <script type="text/javascript">
 

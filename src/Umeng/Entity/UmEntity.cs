@@ -20,7 +20,7 @@ namespace Umeng.Entity
         /// <summary>
         /// 必填 消息发送类型
         /// </summary>
-        public UmengSendType type { get; set; }
+        public string type { get; set; }
 
         /// <summary>
         /// 可选 设备唯一表示  当type=unicast时,必填, 表示指定的单个设备

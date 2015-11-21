@@ -465,7 +465,7 @@ namespace EasyCms.Dal
         public List<string> GetTelNoWithBuyCount(int MinBuyCount, int MaxBuyCount)
         {
             DataTable dt = Dal.From<ShopOrder>().Where(ShopOrder._.OrderStatus != (int)OrderStatus.拒收 &&
-                ShopOrder._.OrderStatus != (int)OrderStatus.取消订单 && ShopOrder._.OrderStatus != (int)OrderStatus.商家已收货等待退款 && 
+                ShopOrder._.OrderStatus != (int)OrderStatus.取消订单 && ShopOrder._.OrderStatus != (int)OrderStatus.商家已收货等待退款 &&
                 ShopOrder._.OrderStatus != (int)OrderStatus.退货取货中 && ShopOrder._.OrderStatus != (int)OrderStatus.退货完成 &&
                 ShopOrder._.OrderStatus != (int)OrderStatus.作废).GroupBy(ShopOrder._.MemberID).Select(ShopOrder._.MemberCallPhone, ShopOrder._.ID.Count().Alias("orderCount"))
                                 .ToDataTable();
@@ -532,26 +532,29 @@ namespace EasyCms.Dal
 
         }
 
-        public List<string> GetDevice(WhereClip where)
+        public DataTable GetDevice(WhereClip where)
         {
-            return Dal.From<ManagerUserInfo>().Distinct().Where(where && !ManagerUserInfo._.DeviceNo.IsNullOrEmpty()).Select(ManagerUserInfo._.DeviceNo).ToSinglePropertyArray().ToList();
+            return Dal.From<ManagerUserInfo>().Distinct()
+                .Where(where && !ManagerUserInfo._.DeviceNo.IsNullOrEmpty()).Select(ManagerUserInfo._.DeviceNo, ManagerUserInfo._.ClientType)
+                .ToDataTable();
         }
 
-        public List<string> GetDeviceWithOrder(WhereClip where)
+        public DataTable GetDeviceWithOrder(WhereClip where)
         {
 
-            return Dal.From<ManagerUserInfo>().Join<AccountRange>(AccountRange._.AccountID == ManagerUserInfo._.ID&&
-                !ManagerUserInfo._.DeviceNo.IsNullOrEmpty()).Where(where).Distinct().Select(ManagerUserInfo._.DeviceNo).ToSinglePropertyArray().ToList();
+            return Dal.From<ManagerUserInfo>().Join<AccountRange>(AccountRange._.AccountID == ManagerUserInfo._.ID &&
+                !ManagerUserInfo._.DeviceNo.IsNullOrEmpty()).Where(where).Distinct()
+                .Select(ManagerUserInfo._.DeviceNo, ManagerUserInfo._.ClientType).ToDataTable();
         }
 
-        public List<string> GetDeviceWithBuyCount(int MinBuyCount, int MaxBuyCount)
+        public DataTable  GetDeviceWithBuyCount(int MinBuyCount, int MaxBuyCount)
         {
             DataTable dt = Dal.From<ShopOrder>().Where(!ShopOrder._.DeviceNo.IsNullOrEmpty() && ShopOrder._.OrderStatus != (int)OrderStatus.拒收 &&
                 ShopOrder._.OrderStatus != (int)OrderStatus.取消订单
                 && ShopOrder._.OrderStatus != (int)OrderStatus.商家已收货等待退款 &&
                 ShopOrder._.OrderStatus != (int)OrderStatus.退货取货中 &&
                 ShopOrder._.OrderStatus != (int)OrderStatus.退货完成 && ShopOrder._.OrderStatus != (int)OrderStatus.作废
-                ).GroupBy(ShopOrder._.DeviceNo).Select(ShopOrder._.DeviceNo, ShopOrder._.ID.Count().Alias("orderCount"))
+                ).GroupBy(ShopOrder._.DeviceNo, ShopOrder._.ClientType).Select(ShopOrder._.DeviceNo, ShopOrder._.ClientType, ShopOrder._.ID.Count().Alias("orderCount"))
                                 .ToDataTable();
             string whereStr = string.Empty;
             if (MinBuyCount > 0)
@@ -566,7 +569,7 @@ namespace EasyCms.Dal
                 }
                 whereStr = " orderCount<=" + MaxBuyCount;
             }
-            return dt.Select(whereStr).AsQueryable().Distinct().Select(d => d.Field<string>("DeviceNo")).ToList();
+            return dt.Select(whereStr).CopyToDataTable();
 
         }
 

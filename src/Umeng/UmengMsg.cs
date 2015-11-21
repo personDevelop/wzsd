@@ -4,16 +4,17 @@ using ImsgInterface;
 using Sharp.Common;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using Umeng.Entity;
-
+using Newtonsoft.Json;
 namespace Umeng
 {
     public class UmengMsg : ISendMsg
     {
         SysMsgInterSetBll bll = new SysMsgInterSetBll();
-
+        SendMsgInfo MsgInfo = null;
         public UmengMsg()
         {
 
@@ -31,6 +32,7 @@ namespace Umeng
         }
         public bool SendMsg(SendMsgInfo msgInfo, ref string err)
         {
+            MsgInfo = msgInfo;
             if (msgInfo.SendArea == SendArea.指定手机号)
             {
                 err = "客户端推送不能为指定手机号的方式";
@@ -42,7 +44,66 @@ namespace Umeng
                 return false;
             }
 
-            List<string> telNumList = new List<string>();
+            DataTable telNumList = null;
+            telNumList = GetDevice(msgInfo);
+
+            if (msgInfo.SendArea != SendArea.全员推送 && (telNumList == null || telNumList.Rows.Count == 0))
+            {
+                err = "没有找到可发送的人员";
+                return false;
+            }
+            if (msgInfo.SendArea == SendArea.全员推送)
+            {
+                PostAndroid(null);
+                PostIos(null);
+            }
+            else
+            {
+
+                //分解出安卓 和IOS数量
+                List<string> android = new List<string>();
+                List<string> IOS = new List<string>();
+                DataRow[] drs = telNumList.Select("ClientType=1");
+                if (drs != null && drs.Length > 0)
+                {
+                    android = drs.Select(d => d.Field<string>("DeviceNo")).ToList();
+
+                }
+                drs = telNumList.Select("ClientType=2");
+
+                if (drs != null && drs.Length > 0)
+                {
+                    IOS = drs.Select(d => d.Field<string>("DeviceNo")).ToList();
+
+                }
+                if (android.Count > 0)
+                {
+
+                    PostAndroid(android);
+
+                }
+                if (IOS.Count > 0)
+                {
+                    PostIos(IOS);
+
+                }
+
+
+            }
+            if (telNumList != null)
+            {
+                msgInfo.TotalUserCount = telNumList.Rows.Count;
+                msgInfo.HasSendUserCount = telNumList.Rows.Count;
+            }
+
+            msgInfo.HasSendCount += 1;
+            new SendMsgInfoBll().Save(msgInfo);
+            return true;
+        }
+
+        private DataTable GetDevice(SendMsgInfo msgInfo)
+        {
+            DataTable dt = null;
             WhereClip where = null;
             switch (msgInfo.SendArea)
             {
@@ -82,18 +143,6 @@ namespace Umeng
                     break;
                 case SendArea.指定手机号:
 
-                    //指定手机号
-                    if (!string.IsNullOrWhiteSpace(msgInfo.CustomerTelNo))
-                    {
-                        string[] tels = msgInfo.CustomerTelNo.Split(',');
-                        foreach (var item in tels)
-                        {
-                            if (!telNumList.Contains(item))
-                            {
-                                telNumList.Add(item);
-                            }
-                        }
-                    }
                     break;
                 default:
                     break;
@@ -104,14 +153,14 @@ namespace Umeng
                     break;
                 case SendArea.注册时间:
                 case SendArea.指定会员:
-                    telNumList = new ManagerUserInfoBll().GetDevice(where);
+                    dt = new ManagerUserInfoBll().GetDevice(where);
                     break;
                 case SendArea.用户等级:
-                    telNumList = new ManagerUserInfoBll().GetDeviceWithOrder(where);
+                    dt = new ManagerUserInfoBll().GetDeviceWithOrder(where);
                     break;
 
                 case SendArea.购买次数:
-                    telNumList = new ManagerUserInfoBll().GetTelNoWithBuyCount(msgInfo.MinBuyCount, msgInfo.MaxBuyCount);
+                    dt = new ManagerUserInfoBll().GetDeviceWithBuyCount(msgInfo.MinBuyCount, msgInfo.MaxBuyCount);
 
                     break;
                 case SendArea.指定手机号:
@@ -119,59 +168,7 @@ namespace Umeng
                 default:
                     break;
             }
-            telNumList = telNumList.Distinct().ToList();
-
-            if (msgInfo.SendArea != SendArea.全员推送 && telNumList.Count == 0)
-            {
-                err = "没有找到可发送的人员";
-                return false;
-            }
-            UmengSendType st = UmengSendType.broadcast;  //广播
-            UmEntity post = new UmEntity()
-            {
-
-                appkey = MsgServiceSet.AppKeyID,
-                timestamp = ConvertDateTime(DateTime.Now),
-
-
-            };
-            if (telNumList.Count == 1)
-            {
-                //单播
-                st = UmengSendType.unicast;
-                post.type = st;
-                post.device_token = telNumList[0];
-            }
-            else if (telNumList.Count < 500)
-            {
-                //列播
-                st = UmengSendType.listcast;
-                post.device_token = telNumList[0];
-                string deviceStr = telNumList[0];
-                for (int i = 1; i < telNumList.Count; i++)
-                {
-                    deviceStr = "," + telNumList[i];
-                }
-                post.device_token = deviceStr;
-            }
-            else if (msgInfo.SendArea != SendArea.全员推送)
-            {
-                //这时候 可能就需要分段 列播了
-            }
-
-            foreach (var item in telNumList)
-            {
-                if (!string.IsNullOrWhiteSpace(item))
-                {
-                    SendMsg(MsgServiceSet.TelNum, item, "", msgInfo.SendContent, ref err);
-                }
-
-            }
-            msgInfo.TotalUserCount = telNumList.Count;
-            msgInfo.HasSendUserCount = telNumList.Count;
-            msgInfo.HasSendCount += 1;
-            new SendMsgInfoBll().Save(msgInfo);
-            return true;
+            return dt;
         }
         /// <summary>
         /// 及时发送
@@ -363,6 +360,7 @@ namespace Umeng
 
         public string Sign(string content0 = "", string content1 = "", string content2 = "")
         {
+
             string method = "POST";
             string result = method + content0 + content1 + content2;
             result = GetMD5(result);
@@ -404,9 +402,139 @@ namespace Umeng
             System.DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1));
             return ((int)(time - startTime).TotalSeconds).ToString();
         }
+        public List<UmEntity> GetListUmEntity(List<string> deviceNo, out UmengSendType st)
+        {
+            List<UmEntity> list = new List<UmEntity>();
+            st = GetSendType(deviceNo);
+            switch (st)
+            {
+                case UmengSendType.unicast:
+                    list.Add(new UmEntity() { device_token = deviceNo[0] });
+                    break;
+                case UmengSendType.listcast:
 
 
-       
+                    int totalCount = deviceNo.Count;
+                    int loopCoount = deviceNo.Count / 500;
+                    for (int i = 0; i <= loopCoount; i++)
+                    {
+                        string deviceNoStr = string.Empty;
+                        int start = 500 * i;
+                        int end = 500 * (i + 1);
+                        if (end > totalCount)
+                        {
+                            end = totalCount;
+                        }
+                        for (int k = start; k < end; k++)
+                        {
+                            if (deviceNoStr.Length > 0)
+                            {
+                                deviceNoStr += ",";
+                            }
+                            deviceNoStr += deviceNo[i];
+                        }
+                        UmEntity ue = new UmEntity();
+                        ue.device_token = deviceNoStr;
+                        list.Add(new UmEntity() { device_token = deviceNoStr });
+                    }
+
+                    break;
+                case UmengSendType.broadcast:
+
+                    list.Add(new UmEntity());
+                    break;
+                case UmengSendType.groupcast:
+                case UmengSendType.filecast:
+                case UmengSendType.customizedcast:
+                default:
+                    break;
+            }
+            return list;
+        }
+        public void PostAndroid(List<string> deviceNo)
+        {
+            List<UmEntity> list = new List<UmEntity>();
+            UmengSendType st = UmengSendType.broadcast;
+            list = GetListUmEntity(deviceNo,out st);
+            foreach (UmEntity item in list)
+            {
+                item.appkey = MsgServiceSet.AppKeyID; item.timestamp = ConvertDateTime(DateTime.Now);
+                item.type = st.ToString(); item.production_mode = "true";
+                item.description = MsgInfo.Note; item.thirdparty_id = MsgInfo.ID;
+
+                AndroidMsgContent msgConetnt = new AndroidMsgContent()
+                {
+                    display_type = MsgInfo.MsgType.ToString()
+                };
+                MsgBody body = new MsgBody()
+                {
+                    ticker = MsgInfo.NoticeAlert,
+                    title = MsgInfo.NoticeTitle,
+                    text = MsgInfo.SendContent,
+                    play_lights = "true",
+                    play_sound = "true",
+                    play_vibrate = "true",
+                    after_open = "go_custom",
+                    custom = ((int )MsgInfo.AppHandleTag).ToString() + "|" + MsgInfo.AppHandleContent
+                };
+                msgConetnt.body = body;
+                item.payload = msgConetnt;
+            }
+            foreach (var item in list)
+            {
+                string postData = JsonConvert.SerializeObject(item);
+                string sign = Sign(MsgServiceSet.Url, postData, MsgServiceSet.Pwd);
+                Sharp.Common.HttpModle.HttpPost(MsgServiceSet.Url + "?sign=" + sign, postData);
+            }
+
+
+        }
+        public void PostIos(List<string> deviceNo)
+        {
+            List<UmEntity> list = new List<UmEntity>();
+            UmengSendType st = UmengSendType.broadcast;
+            list = GetListUmEntity(deviceNo, out st);
+           
+            foreach (UmEntity item in list)
+            {
+                item.appkey = MsgServiceSet.AppKeyID; item.timestamp = ConvertDateTime(DateTime.Now);
+                item.type = st.ToString(); item.production_mode = "true";
+                item.description = MsgInfo.Note; item.thirdparty_id = MsgInfo.ID;
+
+                IOSMsgContent msgConetnt = new IOSMsgContent() { AppHandleTag = ((int)MsgInfo.AppHandleTag).ToString(), AppHandleContent = MsgInfo.AppHandleContent };
+                IOSaps body = new IOSaps()
+                {
+                    alert = MsgInfo.SendContent
+                };
+                msgConetnt.aps = body;
+                item.payload = msgConetnt;
+            }
+            foreach (var item in list)
+            {
+                string postData = JsonConvert.SerializeObject(item);
+                string sign = Sign(MsgServiceSet.Url, postData, MsgServiceSet.Pwd);
+                Sharp.Common.HttpModle.HttpPost(MsgServiceSet.Url + "?sign=" + sign, postData);
+            }
+
+
+        }
+
+        public UmengSendType GetSendType(List<string> deviceNo)
+        {
+            if (deviceNo == null || deviceNo.Count == 0)
+            {
+                return UmengSendType.broadcast;
+            }
+            if (deviceNo.Count == 1)
+            {
+                return UmengSendType.unicast;
+            }
+            else
+
+                return UmengSendType.listcast;
+
+
+        }
     }
 
 

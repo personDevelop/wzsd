@@ -519,12 +519,52 @@ namespace EasyCms.Model
         指定手机号
     }
 
-    public enum CouponType {
+    public enum CouponType
+    {
         普通优惠券, 积分兑换优惠券, 系统派发优惠券
     }
     public enum QxLx
     {
         期限范围, 固定天数
     }
-    
+
+
+    public enum MsgType
+    {
+        //通知
+        notification,
+        //消息
+        message
+    }
+    public enum AppHandleTag
+    {
+        /// <summary>
+        /// 打开应用
+        /// </summary>
+        openApp,
+        /// <summary>
+        /// 打开网页
+        /// </summary>
+        openUrl,
+        /// <summary>
+        /// 打开一个商品明细
+        /// </summary>
+        OpenProductDetail,
+        /// <summary>
+        /// 打开一个新闻明细
+        /// </summary>
+        OpenNewDetail,
+        /// <summary>
+        /// 打开一个活动页，这个活动页不是指app的active，指的是促销活动或团购活动等的详情页
+        /// </summary>
+        OpenActive,
+        /// <summary>
+        /// 打开个人中心
+        /// </summary>
+        OpenPerson,
+        /// <summary>
+        /// 扩展保留项
+        /// </summary>
+        Custom
+    }
 }
