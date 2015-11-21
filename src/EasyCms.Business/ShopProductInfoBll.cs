@@ -72,6 +72,10 @@ namespace EasyCms.Business
         {
             return Dal.GetProductsByCategory(categoryID, pageindex, orderby, host, ref   pageCount, ref   recordCount);
         }
+        public DataTable GetTravalList(string categoryID, int pageindex, string orderby, string host, ref int pageCount, ref int recordCount)
+        {
+            return Dal.GetTravalList(categoryID, pageindex, orderby, host, ref   pageCount, ref   recordCount);
+        }
 
         public DataTable GetProductByWhere(WhereClip where, int pageNum, string host, ref int pageCount, ref int recordCount)
         {

@@ -60,6 +60,7 @@
         <div class="content-tab-ul-wrap">
             <ul>
                 <li><a class="selected" href="javascript:;">基本信息</a></li>
+                <li><a href="javascript:;">图片及视频</a></li>
                 <li><a href="javascript:;">详细介绍</a></li>
                 <li><a href="javascript:;">统计数据</a></li>
                 <li><a href="javascript:;">扩展属性</a></li>
@@ -84,8 +85,6 @@
     @HelperExtend.TextBox("SKU", "SKU码", defaultval: Model.SKU, hint: "")
     @HelperExtend.DropDownList("TypeId", "商品类型", defaultval: Model.TypeId, hint: "", downInfo: new DropDownListInfo() { Url = Url.Action("GetListForSelecte", "ShopProductType"), change = "changeType", unselect = "unselectType" })
     @HelperExtend.TextBox("BrandId", "品牌", defaultval: Model.BrandId, hint: "")
-    @HelperExtend.ImageUpLoad("ID", "商品图片", Model.RecordStatus == Sharp.Common.StatusType.add, defaultval: Model.ID, maxLength: 7)
-
     @HelperExtend.RadioGroup("IsCashOnDelivery", "支持货到付款 ", "true,false", "支持,不支持", defaultval: Model.IsCashOnDelivery)
     @HelperExtend.RadioGroup("SalesType", "销售类型 ", "0,1", "赠品,正常", defaultval: Model.SalesType)
 
@@ -104,12 +103,14 @@
     @HelperExtend.DateTime("AddedDate", "添加日期", defaultval: Model.AddedDate, hint: "")
 </div>
 
+<div class="tab-content" style="display:none"> 
+    @HelperExtend.ImageUpLoad("ID", "商品图片", Model.RecordStatus == Sharp.Common.StatusType.add, defaultval: Model.ID, maxLength: 7) 
+    @HelperExtend.TextArea("VideoUrl", "视频连接", defaultval: Model.VideoUrl, row: 3, col: 100, hint: "一行一个链接，最多支持三个<br/>如果有设置视频连接，必须上传一个视频封面图片")
+    @HelperExtend.ImageUpLoad("VideoImg", "视频封面", Model.RecordStatus == Sharp.Common.StatusType.add, defaultval: Model.VideoImg, maxLength: 1 )
+</div>
 <div class="tab-content" style="display:none">
-
-
-    @HelperExtend.TextArea("ShortDescription", "简单描述", defaultval: Model.ShortDescription)
-
-    @HelperExtend.TextArea("VideoUrl", "视频连接", defaultval: Model.VideoUrl, row: 3, col: 100, hint: "一行一个链接，最多支持三个")
+     
+    @HelperExtend.TextArea("ShortDescription", "简单描述", defaultval: Model.ShortDescription)  
     @HelperExtend.UEditor("Description", "详细介绍", defaultval: Model.Description)
 </div>
 <div class="tab-content" style="display:none">

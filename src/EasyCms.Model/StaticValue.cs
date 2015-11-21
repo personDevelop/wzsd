@@ -154,6 +154,27 @@ namespace EasyCms.Model
         public const string IsCommentAuto = "8a16a38e-bad6-4d6e-86d5-7376ff9ad0f5";
 
         /// <summary>
+        /// 退货指南
+        /// </summary>
+        public const string ReturnFlow = "a72b53ae-1c4a-429e-b513-ab39ba47752a";
+        /// <summary>
+        /// 购物指南
+        /// </summary>
+        public const string BuyFlow = "eae85974-035e-46a2-9d24-1e27bfc1c899";
+        /// <summary>
+        /// 联系我们
+        /// </summary>
+        public const string Contact = "bdf50629-72d3-408f-83bc-ffb7513f2d91";
+        /// <summary>
+        /// 关于我们
+        /// </summary>
+        public const string About = "f647c2b3-e7e9-42bc-8af0-754ff76cb308";
+        /// <summary>
+        /// 旅游频道
+        /// </summary>
+        public const string Traval = "eb79e9eb-e08a-47e3-9239-8bd460c6ca47";
+
+        /// <summary>
         /// 没有找到对应功能时是否记录日志 1记录 0不记录
         /// </summary>
         public const string IsRecordNotFundFunc = "1e1b4608-94a9-41b8-9488-1d3f0a84e073";
@@ -168,6 +189,7 @@ namespace EasyCms.Model
         /// 退货单导出编号
         /// </summary>
         public const string ExportReturnOrder = "ExportReturnOrder";
+
 
 
 

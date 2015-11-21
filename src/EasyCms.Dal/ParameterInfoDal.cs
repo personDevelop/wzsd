@@ -107,9 +107,9 @@ namespace EasyCms.Dal
 
 
 
-        public string GetRegistAgreement()
+        public string GetParaValue(string id)
         {
-            return Dal.From<ParameterInfo>().Where(ParameterInfo._.ID == StaticValue.RegistAgreementID).Select(ParameterInfo._.Value5).ToScalar() as string;
+            return Dal.From<ParameterInfo>().Where(ParameterInfo._.ID == id).Select(ParameterInfo._.Value5).ToScalar() as string;
         }
 
         public DataTable GetIdAndNameByParentId(string parentID)

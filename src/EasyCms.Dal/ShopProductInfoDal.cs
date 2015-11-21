@@ -342,12 +342,34 @@ namespace EasyCms.Dal
          .Join<AttachFile>(AttachFile._.RefID == ShopProductInfo._.ID && AttachFile._.OrderNo == 1, JoinType.leftJoin)
          .Select(ShopProductInfo._.ID, ShopProductCategory._.CategoryID, ShopCategory._.Name.Alias("CategoryName"), ShopProductInfo._.BrandId, ShopProductInfo._.TypeId,
          ShopProductInfo._.Code, ShopProductInfo._.Name, ShopProductInfo._.SKU, ShopProductInfo._.SaleCounts,
-         ShopProductInfo._.GoodCount,ShopProductInfo._.MiddleCount,ShopProductInfo._.BadCount,
+         ShopProductInfo._.GoodCount, ShopProductInfo._.MiddleCount, ShopProductInfo._.BadCount,
          ShopProductInfo._.SalePrice, ShopProductInfo._.MarketPrice, ShopBrandInfo._.Name.Alias("BrandName"),
          ShopProductType._.Name.Alias("TypeName"), AttachFile.GetFilePath(host))
          .OrderBy(orderby)
 
          .Where(ShopProductCategory._.CategoryID.In(getCategorys(categoryID)))
+         .ToDataTable(20, pageindex, ref pageCount, ref recordCount);
+            return dt;
+        }
+        public DataTable GetTravalList(string categoryID, int pageindex, string orderbystr, string host, ref int pageCount, ref int recordCount)
+        {
+            OrderByClip orderby = ShopProductInfo._.SaleNum.Desc;
+            if (!string.IsNullOrWhiteSpace(orderbystr))
+            {
+                orderby = new OrderByClip(orderbystr);
+            }
+
+            DataTable dt = Dal.From<ShopProductCategory>().Join<ShopProductInfo>(
+         ShopProductCategory._.ProductID == ShopProductInfo._.ID)
+         .Join<ShopCategory>(ShopCategory._.ID == ShopProductCategory._.CategoryID)
+         .Join<AttachFile>(AttachFile._.RefID == ShopProductInfo._.VideoImg && AttachFile._.OrderNo == 1, JoinType.leftJoin)
+         .Select(ShopProductInfo._.ID, ShopProductInfo._.VideoUrl,
+         ShopProductInfo._.Code, ShopProductInfo._.Name, ShopProductInfo._.SKU, ShopProductInfo._.SaleCounts,
+         ShopProductInfo._.GoodCount, ShopProductInfo._.MiddleCount, ShopProductInfo._.BadCount,
+         ShopProductInfo._.SalePrice, ShopProductInfo._.MarketPrice,
+          AttachFile.GetFilePath(host))
+         .OrderBy(orderby)
+         .Where(ShopProductCategory._.CategoryID == categoryID)
          .ToDataTable(20, pageindex, ref pageCount, ref recordCount);
             return dt;
         }
@@ -660,7 +682,9 @@ namespace EasyCms.Dal
         public ProductLink GetProductLink(string id, string host)
         {
             ProductLink p = null;
-            DataTable dt = Dal.From<ShopProductInfo>().Where(ShopProductInfo._.ID == id).Select(ShopProductInfo._.ID, ShopProductInfo._.VideoUrl, ShopProductInfo._.Description).ToDataTable();
+            DataTable dt = Dal.From<ShopProductInfo>().Where(ShopProductInfo._.ID == id)
+                .Join<AttachFile>(AttachFile._.ID == ShopProductInfo._.VideoImg, JoinType.leftJoin)
+                .Select(ShopProductInfo._.ID, ShopProductInfo._.VideoUrl, ShopProductInfo._.Description, AttachFile.GetFilePath(host)).ToDataTable();
 
             if (dt.Rows.Count == 1)
             {
@@ -685,6 +709,8 @@ namespace EasyCms.Dal
                     string[] videoarry = vidiourl.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
                     p.VideoUrl = videoarry.ToList();
                 }
+                string FilePath = dr["FilePath"] as string;
+                p.VideoImg = FilePath;
 
             }
             return p;

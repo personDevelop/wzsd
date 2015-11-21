@@ -64,7 +64,7 @@ namespace EasyCms.Web.API
         {
 
 
-            DataTable dt = new ShopCategoryBll().GetAppEntity(id, host);
+            DataTable dt = new ShopCategoryBll().GetAppEntityList(id, host);
             return dt.Format();
 
 
@@ -303,10 +303,34 @@ namespace EasyCms.Web.API
         }
         public HttpResponseMessage GetRegistAgreement()
         {
-            string RA = new ParameterInfoBll().GetRegistAgreement();
+            string RA = new ParameterInfoBll().GetParaValue(StaticValue.RegistAgreementID);
             return RA.FormatSuccess();
         }
-
+        public HttpResponseMessage GetAbout()
+        {
+            string RA = new ParameterInfoBll().GetParaValue(StaticValue.About);
+            return RA.FormatSuccess();
+        }
+        public HttpResponseMessage GetContact()
+        {
+            string RA = new ParameterInfoBll().GetParaValue(StaticValue.Contact);
+            return RA.FormatSuccess();
+        }
+        public HttpResponseMessage GetBuyFlow()
+        {
+            string RA = new ParameterInfoBll().GetParaValue(StaticValue.BuyFlow);
+            return RA.FormatSuccess();
+        }
+        public HttpResponseMessage GetReturnFlow()
+        {
+            string RA = new ParameterInfoBll().GetParaValue(StaticValue.ReturnFlow);
+            return RA.FormatSuccess();
+        }
+        public HttpResponseMessage GetPara(string id)
+        {
+            string RA = new ParameterInfoBll().GetParaValue(id);
+            return RA.FormatSuccess();
+        }
         [HttpPost]
         public HttpResponseMessage CatchException([FromBody] AppException exception)
         {
@@ -344,6 +368,45 @@ namespace EasyCms.Web.API
                 return str.FormatObj();
             }
 
+        }
+
+
+        public HttpResponseMessage GetTravel()
+        {
+            string travalCategoryID = new ParameterInfoBll().GetParaValue(StaticValue.Traval);
+            if (string.IsNullOrWhiteSpace(travalCategoryID))
+            {
+
+                return "还没有设置旅游频道系统参数".FormatError();
+            }
+            else
+            {
+                DataTable dt = new ShopCategoryBll().GetAppEntity(travalCategoryID, host);
+                return dt.Format();
+            }
+        }
+        public HttpResponseMessage GetTravleList(int id, string pageIndex)
+        {
+            string travalCategoryID = new ParameterInfoBll().GetParaValue(StaticValue.Traval);
+            if (string.IsNullOrWhiteSpace(travalCategoryID))
+            {
+
+                return "还没有设置旅游频道系统参数".FormatError();
+            }
+            else
+            {
+                if (id == 0)
+                {
+                    id = 1;
+                }
+
+                int pagecount = 0, recordCount = 0;
+                DataTable dt = new ShopProductInfoBll().GetTravalList(travalCategoryID, id, pageIndex, host, ref pagecount, ref recordCount);
+
+                return new { PageIndex = pageIndex, RecordCount = dt.Rows.Count, TotalPageCount = pagecount, TotalRecourdCount = recordCount, Data = dt }.FormatObj();
+
+
+            }
         }
     }
 }

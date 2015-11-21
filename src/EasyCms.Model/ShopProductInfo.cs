@@ -98,6 +98,8 @@ namespace EasyCms.Model
 
         private bool _IsCashOnDelivery;
 
+        private string _VideoImg;
+
         private string _VideoUrl;
 
         private int _GoodCount;
@@ -815,10 +817,29 @@ namespace EasyCms.Model
         }
 
         /// <summary>
+        ///  视频封面,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "VideoImg", DbTypeString = "varchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string VideoImg
+        {
+            get
+            {
+                return this._VideoImg;
+            }
+            set
+            {
+                this.OnPropertyChanged("VideoImg", this._VideoImg, value);
+                this._VideoImg = value;
+            }
+        }
+
+        /// <summary>
         ///  视频连接,一行一个链接，最多支持三个
         /// </summary>
 
-        [DbProperty(MapingColumnName = "VideoUrl", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 2000, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "VideoUrl", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 2000, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string VideoUrl
         {
@@ -971,6 +992,8 @@ namespace EasyCms.Model
                 CommentCount = new PropertyItem("CommentCount", tableName);
 
                 IsCashOnDelivery = new PropertyItem("IsCashOnDelivery", tableName);
+
+                VideoImg = new PropertyItem("VideoImg", tableName);
 
                 VideoUrl = new PropertyItem("VideoUrl", tableName);
 
@@ -1131,6 +1154,10 @@ namespace EasyCms.Model
             /// </summary> 
             public PropertyItem IsCashOnDelivery = null;
             /// <summary>
+            /// 视频封面,
+            /// </summary> 
+            public PropertyItem VideoImg = null;
+            /// <summary>
             /// 视频连接,一行一个链接，最多支持三个
             /// </summary> 
             public PropertyItem VideoUrl = null;
@@ -1149,7 +1176,6 @@ namespace EasyCms.Model
         }
         #endregion
     }
-
 
 
 
@@ -1288,14 +1314,14 @@ namespace EasyCms.Model
             set;
         }
 
-        /// <summary>
-        ///  商品介绍,
-        /// </summary> 
-        public string Description
-        {
-            get;
-            set;
-        }
+        ///// <summary>
+        /////  商品介绍,
+        ///// </summary> 
+        //public string Description
+        //{
+        //    get;
+        //    set;
+        //}
 
         /// <summary>
         ///  销售类型,0 赠品  1 正常销售
@@ -1441,6 +1467,12 @@ namespace EasyCms.Model
         /// 最多三个
         /// </summary>
         public List<string> VideoUrl { get; set; }
+
+
+        /// <summary>
+        /// 视频封面
+        /// </summary>
+        public string VideoImg { get; set; }
     }
 
 }

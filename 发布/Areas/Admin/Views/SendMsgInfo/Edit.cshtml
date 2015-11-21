@@ -39,7 +39,7 @@
     @HelperExtend.TextBox("NoticeAlert", "通知栏提示文字", defaultval: Model.NoticeAlert, hint: "客户端推送是显示的提示文字，只对android客户端有效")
     @HelperExtend.RadioGroup("AppHandleTag", "APP处理标识", vals: "0,1,2,3,4,5",texts: "打开应用,打开网页,打开商品,打开新闻,打开活动,打开个人中心", defaultval: Model.AppHandleTag,
             hint: ",<br/>根据客户端和服务端双方协定的标识，来决定客户端接收到通知后该如何处理,常用如下：<br/>打开应用：打开客户端<br/>打开网页：打开处理内容里的网址<br/>打开商品：根据处理内容里的商品ID,打开商品详细页<br/>打开新闻：根据处理内容里的商品ID,打开新闻详细页<br/>打开活动：根据处理内容里的活动ID,打开团购或促销的详细页<br/>打开个人中心：打个个人中心")
-    @HelperExtend.TextArea("AppHandleContent", "APP处理的内容", defaultval: Model.AppHandleContent, hint: "APP客户端接收到消息时要处理的实际内容，例如可能是一个链接或者商品等待，当是打开应用时，这里可以是空")
+    @HelperExtend.TextBox("AppHandleContent", "APP处理的内容", defaultval: Model.AppHandleContent, hint: "APP客户端接收到消息时要处理的实际内容，例如可能是一个链接或者商品等待，当是打开应用时，这里可以是空")
     @HelperExtend.Lable(Model.Status.ToString(), "状态")
     @HelperExtend.TextArea("Note", "备注", defaultval: Model.Note, hint: "")
 
