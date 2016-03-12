@@ -442,10 +442,10 @@ namespace EasyCms.Web.API
             }
             else
             {
-                return order.FormatObj(true, "ShopReturnOrder.ProductID", ShopReturnOrder._.OrderId.FullName, "ShopReturnOrder.CreateDate",  
+                return order.FormatObj(true, "ShopReturnOrder.ID",  "ShopReturnOrder.CreateDate",  
                 ShopReturnOrder._.Description.FullName,
                 ShopReturnOrder._.ReturnType.FullName,
-                ShopReturnOrder._.Status.FullName,
+                ShopReturnOrder._.Status.FullName, "ShopReturnOrder.ProductID",
                 ShopReturnOrder._.RefuseReason.FullName, "ShopReturnOrder.StatusStr", ShopReturnOrderItem._.ID.FullName, ShopReturnOrderItem._.OrderId.FullName, ShopReturnOrderItem._.ReturnOrderId.FullName,
                     ShopReturnOrderItem._.SaleCount.FullName, ShopReturnOrderItem._.RequestQuantity.FullName, ShopReturnOrderItem._.ReturnCount.FullName,
                      "ShopReturnOrderItem.Price", "ShopReturnOrderItem.ProductName", "ShopReturnOrderItem.ProductThumb",

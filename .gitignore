@@ -202,3 +202,4 @@ src/EasyCms.Web/bin/EasyCms.Web.dll
 src/EasyCms.Web/bin/MVCExtention.dll
 发布/Upload/*
 src/EasyCms.Web/Config/System/DataBaseConnect.xml
+src/EasyCms.Web/bin/Config/System/DataBaseConnect.xml

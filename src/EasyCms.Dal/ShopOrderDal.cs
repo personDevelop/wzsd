@@ -1913,9 +1913,9 @@ ShopOrderItem._.Weight).ToDataTable();
                 List<string> orderIDS = list.Select(p => p.ID).ToList();
                 List<ShopReturnOrderItem> orderItems = Dal.From<ShopReturnOrderItem>()
                     .Where(ShopReturnOrderItem._.ReturnOrderId.In(orderIDS))
-                    .Select(ShopReturnOrderItem._.ID, ShopReturnOrderItem._.OrderId, ShopReturnOrderItem._.ReturnOrderId,
+                    .Select( ShopReturnOrderItem._.OrderId.Alias("ID"), ShopReturnOrderItem._.ReturnOrderId,
                     ShopReturnOrderItem._.SaleCount, ShopReturnOrderItem._.RequestQuantity, ShopReturnOrderItem._.ReturnCount,
-                    ShopReturnOrderItem._.SellPrice,  
+                    ShopReturnOrderItem._.SellPrice, ShopReturnOrderItem._.ProductId,
                   ShopReturnOrderItem._.ProductCode,
                     ShopReturnOrderItem._.Name, new ExpressionClip("'" + host + "'" + "+ThumbnailsUrl").Alias("ThumbnailsUrl")
                     ).List<ShopReturnOrderItem>();

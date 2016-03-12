@@ -576,8 +576,15 @@ namespace EasyCms.Model
          /// </summary>
          [NotDbCol]
          public decimal Price { get { return SellPrice; } }
-         
-     }
+
+
+        /// <summary>
+        /// 为了和商品订单中的图片属性名称统一
+        /// </summary>
+        [NotDbCol]
+        public string ProductID { get { return ProductId; } }
+
+    }
     
 
 }
