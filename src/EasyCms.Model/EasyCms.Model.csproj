@@ -32,10 +32,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
-    <Reference Include="Sharp.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\refdll\Sharp.Common.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
@@ -90,6 +86,7 @@
     <Compile Include="SysMsgInterSet.cs" />
     <Compile Include="SysMsgTempSet.cs" />
     <Compile Include="SysRoleAndUserRalation.cs" />
+    <Compile Include="SystemBrandInfo.cs" />
     <Compile Include="TokenInfo.cs" />
     <Compile Include="ViewModel\AccountModel.cs" />
     <Compile Include="ViewModel\AppException.cs" />
@@ -123,6 +120,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="验证类扩展字段.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\01-WinFramework-新架构\Sharp.Common\Sharp.Common.csproj">
+      <Project>{a4e6aa2c-40ba-44e4-8ff8-e51d54745c32}</Project>
+      <Name>Sharp.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

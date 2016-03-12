@@ -78,5 +78,13 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             }
         }
 
+
+        public ActionResult LogOut()
+        {
+
+            Session.Clear();
+            return RedirectToAction("", "Login");
+        }
+
     }
 }

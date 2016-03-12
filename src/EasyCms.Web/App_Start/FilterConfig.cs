@@ -66,9 +66,9 @@ namespace EasyCms.Web
                 }
             }
 
-            
+
             string err = string.Empty;
-            bool result = CmsSessionExtend.CheckRight(area, controler, action,false, out err);
+            bool result = CmsSessionExtend.CheckRight(area, controler, action, false, out err);
 
             error = err;
             return result;
@@ -134,7 +134,7 @@ namespace EasyCms.Web
                 funcID = f.ID;
             }
             string accountid = CmsSession.GetUserID();//获取accountID
-            LogService.LogClientInstance.WriteException(filterContext.Exception, accountid, funcID, context);
+            Sharp.Common.SharpLogService.LogClientInstance.WriteException(filterContext.Exception, accountid, funcID, context);
             if (filterContext.HttpContext.Request.IsAjaxRequest())
             {
 

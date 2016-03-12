@@ -467,7 +467,7 @@ namespace EasyCms.Dal
             #region 先获取所有商品
             WhereClip where = View_ProductInfoBySkuid._.ID.In(list.Select(p => p.ProductID).ToArray());
             List<View_ProductInfoBySkuid> productList = Dal.From<View_ProductInfoBySkuid>().Join<ShopBrandInfo>(View_ProductInfoBySkuid._.BrandId == ShopBrandInfo._.ID, JoinType.leftJoin)
-                     .Join<ShopProductType>(View_ProductInfoBySkuid._.TypeId == ShopProductType._.ID)
+                     .Join<ShopProductType>(View_ProductInfoBySkuid._.TypeId == ShopProductType._.ID, JoinType.leftJoin)
                      .Join<AttachFile>(View_ProductInfoBySkuid._.ID == AttachFile._.RefID, JoinType.leftJoin)
                  .Select(View_ProductInfoBySkuid._.ID.All, ShopBrandInfo._.Name.Alias("BrandName"), ShopProductType._.Name.Alias("ProductTypeName"),
                  AttachFile.GetFilePath("")).Where(where  //此处附件路径信息只是存储到数据库，所有不需要host
@@ -734,7 +734,7 @@ namespace EasyCms.Dal
 
         private bool? CoumputeRule(string accuontID, List<BaseEntity> Orderlist, DateTime now, bool? IsFirst, ShopOrder realOrder, List<ShopOrderItem> handsales, List<ShopPromotionSimpal> PromotionList, string jFSouceSubID = null)
         {
-            if (PromotionList != null)
+            if (PromotionList != null&& PromotionList.Count>0)
             {
                 List<ShopPromotion> listPromotion = new ShopPromotionDal().GetList(ShopPromotion._.ID.In(PromotionList.Select(p => p.ID).ToList()));
                 //计算活动规则

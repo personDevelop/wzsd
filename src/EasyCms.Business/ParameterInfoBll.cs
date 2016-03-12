@@ -102,9 +102,9 @@ namespace EasyCms.Business
         #endregion
 
 
-        public string GetParaValue(string paraID)
+        public string GetParaValue5(string paraID)
         {
-            return Dal.GetParaValue(paraID);
+            return Dal.GetParaValue5(paraID);
         }
 
 

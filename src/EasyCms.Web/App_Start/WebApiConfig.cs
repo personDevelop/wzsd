@@ -187,7 +187,7 @@ namespace EasyCms.Web
             {
                 context = actionExecutedContext.Request.RequestUri.ToString();
             }
-            LogService.LogClientInstance.WriteException(actionExecutedContext.Exception, userid, funcID, context);
+            SharpLogService.LogClientInstance.WriteException(actionExecutedContext.Exception, userid, funcID, context);
             actionExecutedContext.Response = actionExecutedContext.Exception.Format();
         }
 

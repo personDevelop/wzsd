@@ -433,11 +433,17 @@ namespace EasyCms.Dal
                 if (status == "1")
                 {
                     //未过期
-                    return dt.Select("IsOutDate=0").CopyToDataTable();
+                    DataRow[] drs = dt.Select("IsOutDate=0");
+                    if (drs.Length>0)
+                    {
+                        return drs.CopyToDataTable();
+                    }
+                    return dt.Clone();
                 }
                 else if (status == "3")
                 {
                     //已过期
+                    
                     DataRow[] drs = dt.Select("IsOutDate=1");
                     if (drs.Length > 0)
                     {

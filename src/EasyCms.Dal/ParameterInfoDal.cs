@@ -107,7 +107,7 @@ namespace EasyCms.Dal
 
 
 
-        public string GetParaValue(string id)
+        public string GetParaValue5(string id)
         {
             return Dal.From<ParameterInfo>().Where(ParameterInfo._.ID == id).Select(ParameterInfo._.Value5).ToScalar() as string;
         }

@@ -222,7 +222,7 @@ namespace EasyCms.Dal
         public ShopSaleProductInfo GetSaleEntity(string id, string host)
         {
             ShopSaleProductInfo p = Dal.From<ShopProductInfo>()
-                .Join<ShopProductType>(ShopProductInfo._.TypeId == ShopProductType._.ID)
+                .Join<ShopProductType>(ShopProductInfo._.TypeId == ShopProductType._.ID, JoinType.leftJoin)
                 .Where(ShopProductInfo._.ID == id && ShopProductInfo._.SaleStatus == 1).ToFirst<ShopSaleProductInfo>();
             if (p != null)
             {
@@ -458,55 +458,55 @@ namespace EasyCms.Dal
             }
             else
                 if (!product.IsEnableSku)
+            {
+                err = "当前商品没启用SKU";
+                return null;
+
+            }
+            else
+            {
+
+                DataTable dtGg = Dal.From<ShopProductSKU>().Join<ShopExtendInfo>(ShopProductSKU._.AttributeId == ShopExtendInfo._.ID)
+                     .Join<ShopExtendInfoValue>(ShopExtendInfoValue._.AttributeId == ShopExtendInfo._.ID)
+
+                     .Select(ShopProductSKU._.AttributeId,
+                     ShopExtendInfo._.Name,
+                     ShopExtendInfoValue._.ID.Alias("GGValID"), ShopExtendInfoValue._.ValueStr, ShopExtendInfo._.DisplayOrder, ShopExtendInfoValue._.DisplaySequence).
+                     Where(ShopProductSKU._.ProductId == id).OrderBy(ShopProductSKU._.AttributeId, ShopExtendInfo._.DisplayOrder, ShopExtendInfoValue._.DisplaySequence)
+                     .Distinct().ToDataTable();
+
+                List<ShopExtendWithValue> gglist = new List<ShopExtendWithValue>();
+
+                foreach (DataRow item in dtGg.Rows)
                 {
-                    err = "当前商品没启用SKU";
-                    return null;
-
+                    string attid = item["AttributeId"] as string;
+                    if (!gglist.Exists(p => p.AttributeId == attid))
+                    {
+                        gglist.Add(item.ToFirst<ShopExtendWithValue>());
+                    }
                 }
-                else
+
+                DataTable dtvalue = new DataTable();
+                dtvalue.Columns.Add("GGValID");
+                dtvalue.Columns.Add("ValueStr");
+                dtvalue.AcceptChanges();
+                foreach (ShopExtendWithValue item in gglist)
                 {
-
-                    DataTable dtGg = Dal.From<ShopProductSKU>().Join<ShopExtendInfo>(ShopProductSKU._.AttributeId == ShopExtendInfo._.ID)
-                         .Join<ShopExtendInfoValue>(ShopExtendInfoValue._.AttributeId == ShopExtendInfo._.ID)
-
-                         .Select(ShopProductSKU._.AttributeId,
-                         ShopExtendInfo._.Name,
-                         ShopExtendInfoValue._.ID.Alias("GGValID"), ShopExtendInfoValue._.ValueStr, ShopExtendInfo._.DisplayOrder, ShopExtendInfoValue._.DisplaySequence).
-                         Where(ShopProductSKU._.ProductId == id).OrderBy(ShopProductSKU._.AttributeId, ShopExtendInfo._.DisplayOrder, ShopExtendInfoValue._.DisplaySequence)
-                         .Distinct().ToDataTable();
-
-                    List<ShopExtendWithValue> gglist = new List<ShopExtendWithValue>();
-
-                    foreach (DataRow item in dtGg.Rows)
+                    item.Values = dtvalue.Clone();
+                    var data = from dt in dtGg.AsEnumerable()
+                               where dt.Field<string>("AttributeId") == item.AttributeId
+                               select dt;
+                    foreach (var row in data)
                     {
-                        string attid = item["AttributeId"] as string;
-                        if (!gglist.Exists(p => p.AttributeId == attid))
-                        {
-                            gglist.Add(item.ToFirst<ShopExtendWithValue>());
-                        }
+                        DataRow dr = item.Values.NewRow();
+                        dr["GGValID"] = row.Field<string>("GGValID");
+                        dr["ValueStr"] = row.Field<string>("ValueStr");
+                        item.Values.AddRow(dr);
                     }
-
-                    DataTable dtvalue = new DataTable();
-                    dtvalue.Columns.Add("GGValID");
-                    dtvalue.Columns.Add("ValueStr");
-                    dtvalue.AcceptChanges();
-                    foreach (ShopExtendWithValue item in gglist)
-                    {
-                        item.Values = dtvalue.Clone();
-                        var data = from dt in dtGg.AsEnumerable()
-                                   where dt.Field<string>("AttributeId") == item.AttributeId
-                                   select dt;
-                        foreach (var row in data)
-                        {
-                            DataRow dr = item.Values.NewRow();
-                            dr["GGValID"] = row.Field<string>("GGValID");
-                            dr["ValueStr"] = row.Field<string>("ValueStr");
-                            item.Values.AddRow(dr);
-                        }
-                        item.Values.AcceptChanges();
-                    }
-                    return gglist;
+                    item.Values.AcceptChanges();
                 }
+                return gglist;
+            }
         }
 
         public DataTable GetProductSkuInfo(string productID, out string err)
@@ -520,42 +520,42 @@ namespace EasyCms.Dal
             }
             else
                 if (!product.IsEnableSku)
-                {
-                    err = "当前商品没启用SKU";
-                    return null;
+            {
+                err = "当前商品没启用SKU";
+                return null;
 
-                }
-                else
-                {
-                    DataTable dt = Dal.From<ShopProductSKUInfo>().Where(ShopProductSKUInfo._.ProductId == productID).OrderBy(ShopProductSKUInfo._.OrderNo)
-                           .Select(ShopProductSKUInfo._.ID.Alias("SkuID"), ShopProductSKUInfo._.IsSale, ShopProductSKUInfo._.MarketPrice, ShopProductSKUInfo._.SalePrice, ShopProductSKUInfo._.SKU, ShopProductSKUInfo._.SKURelationID
-                           , ShopProductSKUInfo._.Stock).ToDataTable();
+            }
+            else
+            {
+                DataTable dt = Dal.From<ShopProductSKUInfo>().Where(ShopProductSKUInfo._.ProductId == productID).OrderBy(ShopProductSKUInfo._.OrderNo)
+                       .Select(ShopProductSKUInfo._.ID.Alias("SkuID"), ShopProductSKUInfo._.IsSale, ShopProductSKUInfo._.MarketPrice, ShopProductSKUInfo._.SalePrice, ShopProductSKUInfo._.SKU, ShopProductSKUInfo._.SKURelationID
+                       , ShopProductSKUInfo._.Stock).ToDataTable();
 
-                    DataTable dtSku = Dal.From<ShopProductSKU>().Where(ShopProductSKU._.ProductId == productID)
-                        .Join<ShopExtendInfo>(ShopExtendInfo._.ID == ShopProductSKU._.AttributeId).Join<ShopExtendInfoValue>(ShopProductSKU._.ValueId == ShopExtendInfoValue._.ID)
-                        .OrderBy(ShopProductSKU._.AttributeId, ShopExtendInfo._.DisplayOrder, ShopExtendInfoValue._.DisplaySequence)
-                        .Select(ShopProductSKU._.ID, ShopProductSKU._.AttributeId, ShopProductSKU._.ValueId).ToDataTable();
-                    DataColumn dcAttrVal = new DataColumn("AttriVal");
-                    dt.Columns.Add(dcAttrVal);
-                    foreach (DataRow item in dt.Rows)
+                DataTable dtSku = Dal.From<ShopProductSKU>().Where(ShopProductSKU._.ProductId == productID)
+                    .Join<ShopExtendInfo>(ShopExtendInfo._.ID == ShopProductSKU._.AttributeId).Join<ShopExtendInfoValue>(ShopProductSKU._.ValueId == ShopExtendInfoValue._.ID)
+                    .OrderBy(ShopProductSKU._.AttributeId, ShopExtendInfo._.DisplayOrder, ShopExtendInfoValue._.DisplaySequence)
+                    .Select(ShopProductSKU._.ID, ShopProductSKU._.AttributeId, ShopProductSKU._.ValueId).ToDataTable();
+                DataColumn dcAttrVal = new DataColumn("AttriVal");
+                dt.Columns.Add(dcAttrVal);
+                foreach (DataRow item in dt.Rows)
+                {
+                    var query = from dr in dtSku.AsEnumerable() where (dr.Field<string>("ID") == item["SKURelationID"] as string) select dr.Field<string>("ValueId");
+                    string resut = string.Empty;
+                    foreach (var oneval in query)
                     {
-                        var query = from dr in dtSku.AsEnumerable() where (dr.Field<string>("ID") == item["SKURelationID"] as string) select dr.Field<string>("ValueId");
-                        string resut = string.Empty;
-                        foreach (var oneval in query)
+                        if (!string.IsNullOrWhiteSpace(resut))
                         {
-                            if (!string.IsNullOrWhiteSpace(resut))
-                            {
-                                resut += "|";
-                            }
-                            resut += oneval;
+                            resut += "|";
                         }
-                        item["AttriVal"] = resut;
-
+                        resut += oneval;
                     }
-                    dt.Columns.Remove("SKURelationID");
-                    dt.AcceptChanges();
-                    return dt;
+                    item["AttriVal"] = resut;
+
                 }
+                dt.Columns.Remove("SKURelationID");
+                dt.AcceptChanges();
+                return dt;
+            }
         }
 
         public string IsSJOperator(string ids, int opcode)
@@ -590,45 +590,45 @@ namespace EasyCms.Dal
             }
             else
                 if (!product.IsEnableSku)
+            {
+                err = "当前商品没启用SKU";
+                return null;
+
+            }
+            else
+            {
+                DataTable dt = Dal.From<ShopProductSKUInfo>().Where(ShopProductSKUInfo._.ProductId == productID
+                    && ShopProductSKUInfo._.IsSale == true
+
+                    ).OrderBy(ShopProductSKUInfo._.OrderNo)
+                       .Select(ShopProductSKUInfo._.ID.Alias("SkuID"), ShopProductSKUInfo._.IsSale, ShopProductSKUInfo._.MarketPrice, ShopProductSKUInfo._.SalePrice, ShopProductSKUInfo._.SKU, ShopProductSKUInfo._.SKURelationID
+                       , ShopProductSKUInfo._.Stock).ToDataTable();
+
+                DataTable dtSku = Dal.From<ShopProductSKU>().Where(ShopProductSKU._.ProductId == productID)
+                    .Join<ShopExtendInfo>(ShopExtendInfo._.ID == ShopProductSKU._.AttributeId).Join<ShopExtendInfoValue>(ShopProductSKU._.ValueId == ShopExtendInfoValue._.ID)
+                    .OrderBy(ShopProductSKU._.AttributeId, ShopExtendInfo._.DisplayOrder, ShopExtendInfoValue._.DisplaySequence)
+                    .Select(ShopProductSKU._.ID, ShopExtendInfoValue._.ValueStr).ToDataTable();
+                DataColumn dcAttrVal = new DataColumn("AttriVal");
+                dt.Columns.Add(dcAttrVal);
+                foreach (DataRow item in dt.Rows)
                 {
-                    err = "当前商品没启用SKU";
-                    return null;
-
-                }
-                else
-                {
-                    DataTable dt = Dal.From<ShopProductSKUInfo>().Where(ShopProductSKUInfo._.ProductId == productID
-                        && ShopProductSKUInfo._.IsSale == true
-
-                        ).OrderBy(ShopProductSKUInfo._.OrderNo)
-                           .Select(ShopProductSKUInfo._.ID.Alias("SkuID"), ShopProductSKUInfo._.IsSale, ShopProductSKUInfo._.MarketPrice, ShopProductSKUInfo._.SalePrice, ShopProductSKUInfo._.SKU, ShopProductSKUInfo._.SKURelationID
-                           , ShopProductSKUInfo._.Stock).ToDataTable();
-
-                    DataTable dtSku = Dal.From<ShopProductSKU>().Where(ShopProductSKU._.ProductId == productID)
-                        .Join<ShopExtendInfo>(ShopExtendInfo._.ID == ShopProductSKU._.AttributeId).Join<ShopExtendInfoValue>(ShopProductSKU._.ValueId == ShopExtendInfoValue._.ID)
-                        .OrderBy(ShopProductSKU._.AttributeId, ShopExtendInfo._.DisplayOrder, ShopExtendInfoValue._.DisplaySequence)
-                        .Select(ShopProductSKU._.ID, ShopExtendInfoValue._.ValueStr).ToDataTable();
-                    DataColumn dcAttrVal = new DataColumn("AttriVal");
-                    dt.Columns.Add(dcAttrVal);
-                    foreach (DataRow item in dt.Rows)
+                    var query = from dr in dtSku.AsEnumerable() where (dr.Field<string>("ID") == item["SKURelationID"] as string) select dr.Field<string>("ValueStr");
+                    string resut = string.Empty;
+                    foreach (var oneval in query)
                     {
-                        var query = from dr in dtSku.AsEnumerable() where (dr.Field<string>("ID") == item["SKURelationID"] as string) select dr.Field<string>("ValueStr");
-                        string resut = string.Empty;
-                        foreach (var oneval in query)
+                        if (!string.IsNullOrWhiteSpace(resut))
                         {
-                            if (!string.IsNullOrWhiteSpace(resut))
-                            {
-                                resut += "   ";
-                            }
-                            resut += oneval;
+                            resut += "   ";
                         }
-                        item["AttriVal"] = resut;
-
+                        resut += oneval;
                     }
-                    dt.Columns.Remove("SKURelationID");
-                    dt.AcceptChanges();
-                    return dt;
+                    item["AttriVal"] = resut;
+
                 }
+                dt.Columns.Remove("SKURelationID");
+                dt.AcceptChanges();
+                return dt;
+            }
         }
 
         public DataTable GetProduct(int pageIndex, int pagesize, ref int pagecount, ref int recordCount)
@@ -701,6 +701,12 @@ namespace EasyCms.Dal
                 else
                 {
                     p.HtmlStr = dr["Description"] as string;
+                    string key = "src=\"/upload/";
+                    p.HtmlStr = p.HtmlStr.Replace("src =\"/Upload/",key);
+                    if (p.HtmlStr.Contains(key))
+                    {
+                        p.HtmlStr = p.HtmlStr.Replace(key, key = "src=\"" + host + "/upload/");
+                    }
                 }
                 string vidiourl = dr["VideoUrl"] as string;
 

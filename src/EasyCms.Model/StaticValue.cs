@@ -589,4 +589,13 @@ namespace EasyCms.Model
         /// </summary>
         Custom
     }
+
+
+    public enum BrandType
+    {
+        旅游频道,
+        商城频道,
+        新闻频道
+
+    }
 }

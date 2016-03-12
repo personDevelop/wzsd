@@ -67,7 +67,7 @@ namespace EasyCms.Dal
 
                 .Join<RedeemRules>(ShopPromotion._.RuleID == RedeemRules._.ID)
                 .Join<ParameterInfo>(RedeemRules._.RuleType == ParameterInfo._.ID)
-                .Where(ShopPromotion._.IsEnable == true && RedeemRules._.IsEnable == true && ParameterInfo._.IsEnable == true
+                .Where(ShopPromotion._.IsEnable == true&& ShopPromotion._.ActionStatus == (int)ValidEnum.有效 && RedeemRules._.IsEnable == true && ParameterInfo._.IsEnable == true
                 && ShopPromotion._.StartDate < DateTime.Now)
                 .Select(ShopPromotion._.ID.All, RedeemRules._.Name.Alias("RuleName"), ParameterInfo._.Code.Alias("RuleTypeCode"), ParameterInfo._.Name.Alias("RuleTypeName"))
 

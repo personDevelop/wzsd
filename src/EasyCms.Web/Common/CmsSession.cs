@@ -127,7 +127,7 @@ namespace EasyCms
                 {
                     if (isRecord)
                     {
-                        LogService.LogClientInstance.WriteException(ex);
+                        SharpLogService.LogClientInstance.WriteException(ex);
                     }
                 }
 

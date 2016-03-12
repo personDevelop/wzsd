@@ -46,6 +46,11 @@ namespace EasyCms.Web.API
                 {
                     news.Description = string.Empty;
                 }
+                 
+                if (news.Description.Contains("/Upload/"))
+                {
+                    news.Description = news.Description.Replace("/Upload/", host + "/Upload/");
+                }
                 string result = JsonWithDataTable.Serialize(news);
                 return result.FormatSuccess();
             }
@@ -303,32 +308,32 @@ namespace EasyCms.Web.API
         }
         public HttpResponseMessage GetRegistAgreement()
         {
-            string RA = new ParameterInfoBll().GetParaValue(StaticValue.RegistAgreementID);
+            string RA = new ParameterInfoBll().GetParaValue5(StaticValue.RegistAgreementID);
             return RA.FormatSuccess();
         }
         public HttpResponseMessage GetAbout()
         {
-            string RA = new ParameterInfoBll().GetParaValue(StaticValue.About);
+            string RA = new ParameterInfoBll().GetParaValue5(StaticValue.About);
             return RA.FormatSuccess();
         }
         public HttpResponseMessage GetContact()
         {
-            string RA = new ParameterInfoBll().GetParaValue(StaticValue.Contact);
+            string RA = new ParameterInfoBll().GetParaValue5(StaticValue.Contact);
             return RA.FormatSuccess();
         }
         public HttpResponseMessage GetBuyFlow()
         {
-            string RA = new ParameterInfoBll().GetParaValue(StaticValue.BuyFlow);
+            string RA = new ParameterInfoBll().GetParaValue5(StaticValue.BuyFlow);
             return RA.FormatSuccess();
         }
         public HttpResponseMessage GetReturnFlow()
         {
-            string RA = new ParameterInfoBll().GetParaValue(StaticValue.ReturnFlow);
+            string RA = new ParameterInfoBll().GetParaValue5(StaticValue.ReturnFlow);
             return RA.FormatSuccess();
         }
         public HttpResponseMessage GetPara(string id)
         {
-            string RA = new ParameterInfoBll().GetParaValue(id);
+            string RA = new ParameterInfoBll().GetParaValue5(id);
             return RA.FormatSuccess();
         }
         [HttpPost]
@@ -373,7 +378,7 @@ namespace EasyCms.Web.API
 
         public HttpResponseMessage GetTravel()
         {
-            string travalCategoryID = new ParameterInfoBll().GetParaValue(StaticValue.Traval);
+            string travalCategoryID = new ParameterInfoBll().GetValue(StaticValue.Traval);
             if (string.IsNullOrWhiteSpace(travalCategoryID))
             {
 
@@ -385,9 +390,9 @@ namespace EasyCms.Web.API
                 return dt.Format();
             }
         }
-        public HttpResponseMessage GetTravleList(int id, string pageIndex)
+        public HttpResponseMessage GetTravleList(int id=0, string pageIndex=null )
         {
-            string travalCategoryID = new ParameterInfoBll().GetParaValue(StaticValue.Traval);
+            string travalCategoryID = new ParameterInfoBll().GetValue(StaticValue.Traval);
             if (string.IsNullOrWhiteSpace(travalCategoryID))
             {
 
@@ -407,6 +412,16 @@ namespace EasyCms.Web.API
 
 
             }
+        }
+
+
+
+        public HttpResponseMessage GetBrand(int id= (int)BrandType.旅游频道,int pageIndex=5)
+        {
+           
+                DataTable dt = new SystemBrandInfoBll().GetBrandList(id, pageIndex, host);
+                return dt.Format();
+            
         }
     }
 }

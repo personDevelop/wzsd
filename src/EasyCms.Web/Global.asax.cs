@@ -18,7 +18,7 @@ namespace EasyCms.Web
     {
         protected void Application_Start()
         {
-            LogService.LogClientInstance = new LogBll();  //实例化日志实例   
+            SharpLogService.LogClientInstance = new LogBll();  //实例化日志实例   
             ModelBinders.Binders.DefaultBinder = new JsonModelBinder();
             GlobalConfiguration.Configuration.Formatters.JsonFormatter.MediaTypeMappings.Add(new QueryStringMapping("json", "true", "application/json"));
             GlobalConfiguration.Configure(WebApiConfig.Register);
@@ -50,7 +50,7 @@ namespace EasyCms.Web
             {
                 string account = CmsSession.GetUserID();
                 //找不到请求的错误。
-                LogService.LogClientInstance.WriteException(ex, account);
+                SharpLogService.LogClientInstance.WriteException(ex, account);
             }
         }
 

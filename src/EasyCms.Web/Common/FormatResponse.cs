@@ -28,7 +28,7 @@ namespace EasyCms.Web.Common
         public static HttpResponseMessage Format(this Exception ex)
         {
             var resp = new HttpResponseMessage(HttpStatusCode.OK);
-            string result = JsonWithDataTable.Serialize(new { IsSuccess = false, Msg = ex.Message });
+            string result = JsonWithDataTable.Serialize(new { IsSuccess = false, Msg = ex.GetExceptionMsg() });
             resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
             return resp;
         }

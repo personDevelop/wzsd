@@ -114,28 +114,36 @@ namespace EasyCms.Web.API
                 ManagerUserInfo user = Request.GetAccount();
 
                 bool mustGenerSign;
-                string orderID = new ShopOrderBll().Submit(order, user, out   mustGenerSign, out err);
-                if (!string.IsNullOrWhiteSpace(err))
+                try
                 {
-                    return err.FormatError();
+                    string orderID = new ShopOrderBll().Submit(order, user, out mustGenerSign, out err);
 
-                }
-                else
-                {
-                    if (mustGenerSign)
+                    if (!string.IsNullOrWhiteSpace(err))
                     {
-                        bool isSucess = new ShopPaymentTypesBll().GenerPayPara(orderID, out err);
-                        return new { OrderID = orderID, hasSign = isSucess, GateWay = "alipaydirect", Sign = err }.FormatObj();
+                        return err.FormatError();
+
                     }
                     else
                     {
-                        return new { OrderID = orderID, hasSign = false, GateWay = string.Empty, Sign = string.Empty }.FormatObj();
+                        if (mustGenerSign)
+                        {
+                            bool isSucess = new ShopPaymentTypesBll().GenerPayPara(orderID, out err);
+                            return new { OrderID = orderID, hasSign = isSucess, GateWay = "alipaydirect", Sign = err }.FormatObj();
+                        }
+                        else
+                        {
+                            return new { OrderID = orderID, hasSign = false, GateWay = string.Empty, Sign = string.Empty }.FormatObj();
+                        }
+
+
+
                     }
-
-
-
                 }
-
+                catch (Exception e)
+                {
+                    return e.Format();
+                    throw e;
+                }
             }
         }
 
@@ -233,7 +241,7 @@ namespace EasyCms.Web.API
 
             ManagerUserInfo user = Request.GetAccount();
             string err = null;
-            ShopOrder order = new ShopOrderBll().GetOrder(host, id, user.ID, out   err);
+            ShopOrder order = new ShopOrderBll().GetOrder(host, id, user.ID, out err);
             if (!string.IsNullOrWhiteSpace(err))
             {
                 return err.FormatError();
@@ -277,7 +285,7 @@ namespace EasyCms.Web.API
 
             ManagerUserInfo user = Request.GetAccount();
             string err = null;
-            DataTable dt = new ShopOrderBll().GetOrderStatus(id, Request.GetAccount(false).ID, out   err);
+            DataTable dt = new ShopOrderBll().GetOrderStatus(id, Request.GetAccount(false).ID, out err);
             if (!string.IsNullOrWhiteSpace(err))
             {
                 return err.FormatError();
@@ -344,7 +352,7 @@ namespace EasyCms.Web.API
             catch (Exception ex)
             {
 
-                throw new Exception(ex.Message+ex.Source+ex.StackTrace,ex) ;
+                throw new Exception(ex.Message + ex.Source + ex.StackTrace, ex);
             }
 
         }
@@ -397,7 +405,7 @@ namespace EasyCms.Web.API
                 ShopReturnOrder._.Description.FullName,
                 ShopReturnOrder._.ReturnType.FullName,
                 ShopReturnOrder._.Status.FullName,
-                 "ShopReturnOrder.TotalPrice", 
+                 "ShopReturnOrder.TotalPrice",
                 ShopReturnOrder._.RefuseReason.FullName, "ShopReturnOrder.StatusStr", ShopReturnOrderItem._.ID.FullName, ShopReturnOrderItem._.OrderId.FullName, ShopReturnOrderItem._.ReturnOrderId.FullName,
                     ShopReturnOrderItem._.SaleCount.FullName, ShopReturnOrderItem._.RequestQuantity.FullName, ShopReturnOrderItem._.ReturnCount.FullName,
                     "ShopReturnOrderItem.Price", "ShopReturnOrderItem.ProductName", "ShopReturnOrderItem.ProductThumb",
@@ -426,7 +434,7 @@ namespace EasyCms.Web.API
 
             ManagerUserInfo user = Request.GetAccount();
             string err = null;
-            ShopReturnOrder order = new ShopOrderBll().GetReturnOrder(host, id, user.ID, out   err);
+            ShopReturnOrder order = new ShopOrderBll().GetReturnOrder(host, id, user.ID, out err);
             if (!string.IsNullOrWhiteSpace(err))
             {
                 return err.FormatError();
@@ -434,10 +442,10 @@ namespace EasyCms.Web.API
             }
             else
             {
-                return order.FormatObj(true, ShopReturnOrder._.ID.FullName, ShopReturnOrder._.OrderId.FullName, ShopReturnOrder._.CreatedDate.FullName,
+                return order.FormatObj(true, "ShopReturnOrder.ProductID", ShopReturnOrder._.OrderId.FullName, "ShopReturnOrder.CreateDate",  
                 ShopReturnOrder._.Description.FullName,
                 ShopReturnOrder._.ReturnType.FullName,
-                ShopReturnOrder._.Status.FullName, 
+                ShopReturnOrder._.Status.FullName,
                 ShopReturnOrder._.RefuseReason.FullName, "ShopReturnOrder.StatusStr", ShopReturnOrderItem._.ID.FullName, ShopReturnOrderItem._.OrderId.FullName, ShopReturnOrderItem._.ReturnOrderId.FullName,
                     ShopReturnOrderItem._.SaleCount.FullName, ShopReturnOrderItem._.RequestQuantity.FullName, ShopReturnOrderItem._.ReturnCount.FullName,
                      "ShopReturnOrderItem.Price", "ShopReturnOrderItem.ProductName", "ShopReturnOrderItem.ProductThumb",

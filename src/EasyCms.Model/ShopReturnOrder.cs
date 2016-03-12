@@ -1054,7 +1054,12 @@ namespace EasyCms.Model
 
         [NotDbCol]
         public decimal TotalPrice { get; set; }
-        
+
+
+        [NotDbCol]
+        public DateTime CreateDate { get { return CreatedDate; } }
+        [NotDbCol]
+        public string ProductID { get { return ID; } }
     }
 
 }
