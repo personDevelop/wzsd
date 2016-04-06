@@ -68,8 +68,10 @@ namespace EasyCms.Dal
         public NewsInfo GetEntity(string id)
         {
 
-       return  Dal.From<NewsInfo>().Join<NewsCategory>(NewsInfo._.ClassID == NewsCategory._.ID).Select(NewsInfo._.ID.All, NewsCategory._.Name.Alias("ClassName"))
-                 .Where(NewsInfo._.ID == id).ToFirst<NewsInfo>();
+       return  Dal.From<NewsInfo>().Join<NewsCategory>(NewsInfo._.ClassID == NewsCategory._.ID)
+                .Join<ShopProductInfo>(NewsInfo._.ProducntID==ShopProductInfo._.ID,  JoinType.leftJoin)
+                .Select(NewsInfo._.ID.All, NewsCategory._.Name.Alias("ClassName"), ShopProductInfo._.Name.Alias("ProductName"))
+                 .Where(NewsInfo._.ID == id).ToFirst<NewsInfo>(); 
         }
 
 
@@ -78,7 +80,7 @@ namespace EasyCms.Dal
         { //新闻id，定标题，简介，缩略图，新闻url 
             int pagecount = 0;
             return Dal.From<NewsInfo>().Join<AttachFile>(NewsInfo._.ImageUrl == AttachFile._.RefID, JoinType.leftJoin)
-                .Select(NewsInfo._.ID, NewsInfo._.NewsTitle, NewsInfo._.Summary, AttachFile.GetFilePath(host), new ExpressionClip("'" + host + "/api/app/getNew/'+ NewsInfo.id as Url"))
+                .Select(NewsInfo._.ID, NewsInfo._.NewsTitle, NewsInfo._.Summary, AttachFile.GetThumbnaifilePath(host), new ExpressionClip("'" + host + "/api/app/getNew/'+ NewsInfo.id as Url"))
                 .OrderBy(NewsInfo._.LastEditDate.Desc).ToDataTable(20, page, ref pagecount, ref pagecount);
         }
     }

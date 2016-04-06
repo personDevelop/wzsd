@@ -53,6 +53,7 @@ namespace 接口测试
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            return;
             Class2 c = new Class2();
             DataTable dt = new DataTable();
             dt.Columns.AddRange(new DataColumn[] { 

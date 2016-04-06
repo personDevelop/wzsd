@@ -1,0 +1,49 @@
+﻿@using MVCExtention;
+@{
+    ViewBag.Title = "帮助分类";
+}
+
+
+<!--工具栏-->
+<div id="floatHead" class="toolbar-wrap">
+    <div class="toolbar">
+        <div class="box-wrap">
+            <a class="menu-btn"></a>
+            <div class="l-list">
+                <ul class="icon-list">
+                    <li><a class="add" href="@Url.Action("Edit")"><i></i><span>新增</span></a></li>
+                    <li><a class="add" href="javascript:;" onclick="EditTree('treeGrid', '@Url.Action("Edit")');"><i></i><span>编辑</span></a></li>
+                    <li><a class="del" href="javascript:;" onclick="DelTree('treeGrid', '@Url.Action("Delete")');"><i></i><span>删除</span></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/工具栏-->
+<!--列表-->
+<div class="table-container">
+    <div id="treeGrid">
+    </div>
+</div>
+<!--/列表-->
+@section  scripts{
+
+    <script type="text/javascript">
+    $(document).ready(function () {
+        var url = "@Url.Action("GetList")";
+        var datafields = [{ name: 'ID' }, { name: 'ParentID' }, { name: 'Code' }, { name: 'Name' },
+
+{ name: 'ClassCode' }, { name: 'IsDetails' }, { name: 'Series' }, { name: 'IsShowButtom' }, { name: 'IsShowNavi' },
+     { name: 'Note' }, { name: 'OrderNo' }];
+        var columns = [
+{ text: '编号', dataField: 'Code',   cellsalign: "left" },
+         { text: '名称', dataField: 'Name',  cellsalign: "left" },
+         { text: '是否在PC底部展示', dataField: 'IsSystem', width: 80 },
+         { text: '是否在PC导航展示', dataField: 'IsEdit', width: 50 },
+         { text: '顺序', dataField: 'IsDelete', width: 50 }, 
+         { text: '备注', dataField: 'Note', cellsalign: "left" }];
+        CreateTree("treeGrid", url, datafields, columns);
+
+    });
+    </script>
+}

@@ -24,9 +24,11 @@ namespace EasyCms.Model
 
         #region 私有变量
 
-        private string _ModeId;
+        private string _ID;
 
         private string _Name;
+
+        private PayType _PayType;
 
         private decimal _Weight;
 
@@ -36,35 +38,39 @@ namespace EasyCms.Model
 
         private decimal _AddPrice;
 
-        private string _Description;
+        private FreightType _FreightType;
+
+        private bool _IsDefaultFreight;
+
+        private bool _IsCusotmPayType;
 
         private int _DisplaySequence;
 
-        private string _ExpressID;
-
         private string _SupplierId;
+
+        private string _Description;
 
         #endregion
 
         #region 属性
 
         /// <summary>
-        ///  主键,
+        ///  主键ID,
         /// </summary>
 
         [PrimaryKey]
-        [DbProperty(MapingColumnName = "ModeId", DbTypeString = "char", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 1, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ID", DbTypeString = "varchar", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 1, ColumnDefaultValue = "")]
 
-        public string ModeId
+        public string ID
         {
             get
             {
-                return this._ModeId;
+                return this._ID;
             }
             set
             {
-                this.OnPropertyChanged("ModeId", this._ModeId, value);
-                this._ModeId = value;
+                this.OnPropertyChanged("ID", this._ID, value);
+                this._ID = value;
             }
         }
 
@@ -88,6 +94,25 @@ namespace EasyCms.Model
         }
 
         /// <summary>
+        ///  付款类型,货到付款选择货到付款后顾客无需再选择支付方式
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "PayType", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public PayType PayType
+        {
+            get
+            {
+                return this._PayType;
+            }
+            set
+            {
+                this.OnPropertyChanged("PayType", this._PayType, value);
+                this._PayType = value;
+            }
+        }
+
+        /// <summary>
         ///  起步重量,
         /// </summary>
 
@@ -107,7 +132,7 @@ namespace EasyCms.Model
         }
 
         /// <summary>
-        ///  加价重量,
+        ///  加价重量,根据重量来计算运费，当物品不足《首重重量》时，按照《首重费用》计算，超过部分按照《续重重量》和《续重费用》乘积来计算
         /// </summary>
 
         [DbProperty(MapingColumnName = "AddWeight", DbTypeString = "decimal", ColumnIsNull = false, IsUnique = false, ColumnLength = 15, ColumnJingDu = 2, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
@@ -164,21 +189,59 @@ namespace EasyCms.Model
         }
 
         /// <summary>
-        ///  描述,
+        ///  地区运费类型,《统一地区运费》：全部的地区都使用默认的《重量设置》中的计费方式。《指定地区运费》：单独指定部分地区的运费 
         /// </summary>
 
-        [DbProperty(MapingColumnName = "Description", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 4000, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "FreightType", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public string Description
+        public FreightType FreightType
         {
             get
             {
-                return this._Description;
+                return this._FreightType;
             }
             set
             {
-                this.OnPropertyChanged("Description", this._Description, value);
-                this._Description = value;
+                this.OnPropertyChanged("FreightType", this._FreightType, value);
+                this._FreightType = value;
+            }
+        }
+
+        /// <summary>
+        ///  地区默认运费 ,注意：如果不开启此项，那么未设置的地区将无法送达！
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "IsDefaultFreight", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public bool IsDefaultFreight
+        {
+            get
+            {
+                return this._IsDefaultFreight;
+            }
+            set
+            {
+                this.OnPropertyChanged("IsDefaultFreight", this._IsDefaultFreight, value);
+                this._IsDefaultFreight = value;
+            }
+        }
+
+        /// <summary>
+        ///  是否指定支付方式,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "IsCusotmPayType", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public bool IsCusotmPayType
+        {
+            get
+            {
+                return this._IsCusotmPayType;
+            }
+            set
+            {
+                this.OnPropertyChanged("IsCusotmPayType", this._IsCusotmPayType, value);
+                this._IsCusotmPayType = value;
             }
         }
 
@@ -202,25 +265,6 @@ namespace EasyCms.Model
         }
 
         /// <summary>
-        ///  物流公司ID,
-        /// </summary>
-
-        [DbProperty(MapingColumnName = "ExpressID", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 1000, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
-
-        public string ExpressID
-        {
-            get
-            {
-                return this._ExpressID;
-            }
-            set
-            {
-                this.OnPropertyChanged("ExpressID", this._ExpressID, value);
-                this._ExpressID = value;
-            }
-        }
-
-        /// <summary>
         ///  关联商家,
         /// </summary>
 
@@ -239,17 +283,38 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  描述,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "Description", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 4000, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string Description
+        {
+            get
+            {
+                return this._Description;
+            }
+            set
+            {
+                this.OnPropertyChanged("Description", this._Description, value);
+                this._Description = value;
+            }
+        }
+
         #endregion
 
-        #region 列定义
+        #region 列定义 
         public class Column
         {
             public Column(string tableName)
             {
 
-                ModeId = new PropertyItem("ModeId", tableName);
+                ID = new PropertyItem("ID", tableName);
 
                 Name = new PropertyItem("Name", tableName);
+
+                PayType = new PropertyItem("PayType", tableName);
 
                 Weight = new PropertyItem("Weight", tableName);
 
@@ -259,30 +324,38 @@ namespace EasyCms.Model
 
                 AddPrice = new PropertyItem("AddPrice", tableName);
 
-                Description = new PropertyItem("Description", tableName);
+                FreightType = new PropertyItem("FreightType", tableName);
+
+                IsDefaultFreight = new PropertyItem("IsDefaultFreight", tableName);
+
+                IsCusotmPayType = new PropertyItem("IsCusotmPayType", tableName);
 
                 DisplaySequence = new PropertyItem("DisplaySequence", tableName);
 
-                ExpressID = new PropertyItem("ExpressID", tableName);
-
                 SupplierId = new PropertyItem("SupplierId", tableName);
+
+                Description = new PropertyItem("Description", tableName);
 
 
             }
             /// <summary>
-            /// 主键,
+            /// 主键ID,
             /// </summary> 
-            public PropertyItem ModeId = null;
+            public PropertyItem ID = null;
             /// <summary>
             /// 名称,
             /// </summary> 
             public PropertyItem Name = null;
             /// <summary>
+            /// 付款类型,货到付款选择货到付款后顾客无需再选择支付方式
+            /// </summary> 
+            public PropertyItem PayType = null;
+            /// <summary>
             /// 起步重量,
             /// </summary> 
             public PropertyItem Weight = null;
             /// <summary>
-            /// 加价重量,
+            /// 加价重量,根据重量来计算运费，当物品不足《首重重量》时，按照《首重费用》计算，超过部分按照《续重重量》和《续重费用》乘积来计算
             /// </summary> 
             public PropertyItem AddWeight = null;
             /// <summary>
@@ -294,21 +367,29 @@ namespace EasyCms.Model
             /// </summary> 
             public PropertyItem AddPrice = null;
             /// <summary>
-            /// 描述,
+            /// 地区运费类型,《统一地区运费》：全部的地区都使用默认的《重量设置》中的计费方式。《指定地区运费》：单独指定部分地区的运费 
             /// </summary> 
-            public PropertyItem Description = null;
+            public PropertyItem FreightType = null;
+            /// <summary>
+            /// 地区默认运费 ,注意：如果不开启此项，那么未设置的地区将无法送达！
+            /// </summary> 
+            public PropertyItem IsDefaultFreight = null;
+            /// <summary>
+            /// 是否指定支付方式,
+            /// </summary> 
+            public PropertyItem IsCusotmPayType = null;
             /// <summary>
             /// 显示顺序,
             /// </summary> 
             public PropertyItem DisplaySequence = null;
             /// <summary>
-            /// 物流公司ID,
-            /// </summary> 
-            public PropertyItem ExpressID = null;
-            /// <summary>
             /// 关联商家,
             /// </summary> 
             public PropertyItem SupplierId = null;
+            /// <summary>
+            /// 描述,
+            /// </summary> 
+            public PropertyItem Description = null;
         }
         #endregion
     }

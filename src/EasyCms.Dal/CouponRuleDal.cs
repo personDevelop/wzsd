@@ -84,7 +84,7 @@ namespace EasyCms.Dal
                 new ExpressionClip("case when QxLx=0 then '时间范围'  else   '固定天数' end ").Alias("QxLx")
                 , CouponRule._.StartDate, CouponRule._.EndDate, CouponRule._.QXTS,
                 new ExpressionClip("case when CouponType=0 then '普通优惠券' when CouponType=1 then '积分兑换优惠券' else '系统派发优惠券' end ").Alias("CouponTypeName"),
-                CouponRule._.CouponType, AttachFile.GetFilePath(host))
+                CouponRule._.CouponType, AttachFile.GetCompressionfilePath(host))
                 .Where(where)
                 .ToDataTable();
 

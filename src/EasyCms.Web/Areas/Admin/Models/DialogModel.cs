@@ -21,6 +21,8 @@ namespace EasyCms.Web
 
         public bool IsTree { get; set; }
 
+        public string FiledID { get; set; }
+
     }
     public class EditDialogModel
     {

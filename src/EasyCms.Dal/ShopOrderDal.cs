@@ -470,7 +470,7 @@ namespace EasyCms.Dal
                      .Join<ShopProductType>(View_ProductInfoBySkuid._.TypeId == ShopProductType._.ID, JoinType.leftJoin)
                      .Join<AttachFile>(View_ProductInfoBySkuid._.ID == AttachFile._.RefID, JoinType.leftJoin)
                  .Select(View_ProductInfoBySkuid._.ID.All, ShopBrandInfo._.Name.Alias("BrandName"), ShopProductType._.Name.Alias("ProductTypeName"),
-                 AttachFile.GetFilePath("")).Where(where  //此处附件路径信息只是存储到数据库，所有不需要host
+                 AttachFile.GetThumbnaifilePath("")).Where(where  //此处附件路径信息只是存储到数据库，所有不需要host
                  ).List<View_ProductInfoBySkuid>();
             #endregion
             //拆分成多个订单( 不用管是否是虚拟产品，这个在前台判断) 
@@ -810,7 +810,7 @@ namespace EasyCms.Dal
                    .Join<ShopProductType>(View_ProductInfoBySkuid._.TypeId == ShopProductType._.ID)
                    .Join<AttachFile>(View_ProductInfoBySkuid._.ID == AttachFile._.RefID, JoinType.leftJoin)
                .Select(View_ProductInfoBySkuid._.ID.All, ShopBrandInfo._.Name.Alias("BrandName"), ShopProductType._.Name.Alias("ProductTypeName"),
-               AttachFile.GetFilePath("")).Where(View_ProductInfoBySkuid._.ID == pro.HandsaleProductId && View_ProductInfoBySkuid._.SKUID == pro.HandsaleProductSKUID
+               AttachFile.GetThumbnaifilePath("")).Where(View_ProductInfoBySkuid._.ID == pro.HandsaleProductId && View_ProductInfoBySkuid._.SKUID == pro.HandsaleProductSKUID
                ).ToFirst<View_ProductInfoBySkuid>();
 
                                     handSaile = new ShopOrderItem()
@@ -886,7 +886,7 @@ namespace EasyCms.Dal
                        .Join<ShopProductType>(View_ProductInfoBySkuid._.TypeId == ShopProductType._.ID)
                        .Join<AttachFile>(View_ProductInfoBySkuid._.ID == AttachFile._.RefID, JoinType.leftJoin)
                    .Select(View_ProductInfoBySkuid._.ID.All, ShopBrandInfo._.Name.Alias("BrandName"), ShopProductType._.Name.Alias("ProductTypeName"),
-                   AttachFile.GetFilePath("")).Where(View_ProductInfoBySkuid._.ID == pro.HandsaleProductId && View_ProductInfoBySkuid._.SKUID == pro.HandsaleProductSKUID
+                   AttachFile.GetThumbnaifilePath("")).Where(View_ProductInfoBySkuid._.ID == pro.HandsaleProductId && View_ProductInfoBySkuid._.SKUID == pro.HandsaleProductSKUID
                    ).ToFirst<View_ProductInfoBySkuid>();
                                         if (handproduct != null)
                                         {
@@ -1841,7 +1841,7 @@ ShopOrderItem._.Weight).ToDataTable();
             ShopReturnOrder order = Dal.From<ShopReturnOrder>()
 
                 .Where(where)
-                .Select(ShopReturnOrder._.ID, ShopReturnOrder._.OrderId, ShopReturnOrder._.CreatedDate,
+                .Select( ShopReturnOrder._.OrderId.Alias("ID"), ShopReturnOrder._.CreatedDate,
                 ShopReturnOrder._.Description, ShopReturnOrder._.UserId,
                 ShopReturnOrder._.ReturnType,
                 ShopReturnOrder._.Status,
@@ -1864,7 +1864,7 @@ ShopOrderItem._.Weight).ToDataTable();
                     .Select(ShopReturnOrderItem._.ID, ShopReturnOrderItem._.OrderId, ShopReturnOrderItem._.ReturnOrderId,
                     ShopReturnOrderItem._.SaleCount, ShopReturnOrderItem._.RequestQuantity, ShopReturnOrderItem._.ReturnCount,
                     ShopReturnOrderItem._.SellPrice,
-                  ShopReturnOrderItem._.ProductCode,
+                  ShopReturnOrderItem._.ProductCode, ShopReturnOrderItem._.ProductId,
                     ShopReturnOrderItem._.Name, new ExpressionClip("'" + host + "'" + "+ThumbnailsUrl").Alias("ThumbnailsUrl")).List<ShopReturnOrderItem>();
                 order.OrderItems = orderItems;
             }
@@ -1913,7 +1913,7 @@ ShopOrderItem._.Weight).ToDataTable();
                 List<string> orderIDS = list.Select(p => p.ID).ToList();
                 List<ShopReturnOrderItem> orderItems = Dal.From<ShopReturnOrderItem>()
                     .Where(ShopReturnOrderItem._.ReturnOrderId.In(orderIDS))
-                    .Select( ShopReturnOrderItem._.OrderId.Alias("ID"), ShopReturnOrderItem._.ReturnOrderId,
+                    .Select(ShopReturnOrderItem._.ID, ShopReturnOrderItem._.OrderId, ShopReturnOrderItem._.ReturnOrderId,
                     ShopReturnOrderItem._.SaleCount, ShopReturnOrderItem._.RequestQuantity, ShopReturnOrderItem._.ReturnCount,
                     ShopReturnOrderItem._.SellPrice, ShopReturnOrderItem._.ProductId,
                   ShopReturnOrderItem._.ProductCode,
@@ -1922,6 +1922,7 @@ ShopOrderItem._.Weight).ToDataTable();
                 foreach (ShopReturnOrder item in list)
                 {
                     item.OrderItems = orderItems.Where(p => p.ReturnOrderId == item.ID).OrderBy(p => p.ProductCode).ToList();
+                     
                 }
             }
             return list;

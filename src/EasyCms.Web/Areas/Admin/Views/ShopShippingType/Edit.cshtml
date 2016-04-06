@@ -1,0 +1,301 @@
+﻿@model ShopShippingType
+@{
+    ViewBag.Title = "编辑配送方式" ;
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEditNoForm.cshtml";
+}
+
+@Styles.Render("~/bundles/upimgcss")
+@Scripts.Render("~/bundles/ueditor")
+@Scripts.Render("~/bundles/uploadJs")
+@Scripts.Render("~/bundles/jqueryAjax")
+
+@using EasyCms.Model
+@using System.Data
+@using Sharp.Common
+
+@using (Ajax.BeginForm("Save", null, new AjaxOptions() { AllowCache = false, OnBegin = "OnBegin", OnSuccess = "OnSuccess", OnFailure = "OnFail" }, new { id = "form1" }))
+{
+
+    @Html.Partial("_Msg")
+    @Html.Hidden("IsContinueAdd")
+
+
+    @HelperExtend.HiddenFor("ID", Model.ID)
+
+    <div id="floatHead" class="content-tab-wrap">
+        <div class="content-tab">
+            <div class="content-tab-ul-wrap">
+                <ul>
+                    <li><a class="selected" href="javascript:;">基本信息</a></li>
+                    <li><a href="javascript:;">支付方式和物流公司</a></li>
+                    <li><a href="javascript:;">地区运费设置</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="tab-content">
+
+
+         
+        @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())
+
+
+        @Html.ValidationSummary()
+        @HelperExtend.TextBox("Name", "名称", defaultval: Model.Name, hint: "")
+        @HelperExtend.RadioGroup("PayType", "付款类型", typeof(PayType).GetEnumVal(),
+                          typeof(PayType).GetEnumNamesStr(), defaultval: (int)Model.PayType, hint: "选择货到付款后顾客无需再选择支付方式")
+         
+        @HelperExtend.Number("Weight", "起步重量", defaultval: Model.Weight, decimalDigits: 2, hint: "")
+        @HelperExtend.Number("Price", "起步价", defaultval: Model.Price, decimalDigits: 2, hint: "")
+        @HelperExtend.Number("AddWeight", "加价重量", defaultval: Model.AddWeight, decimalDigits: 2, hint: "")
+        @HelperExtend.Number("AddPrice", "加价", defaultval: Model.AddPrice, decimalDigits: 2, hint: "") 
+        @HelperExtend.Number("DisplaySequence", "显示顺序", defaultval: Model.DisplaySequence, hint: "") 
+        @HelperExtend.TextArea("Description", "描述", defaultval: Model.Description, hint: "") 
+    </div>
+    <div class="tab-content" style="display:none">
+        @HelperExtend.RadioGroup("IsCusotmPayType", "是否指定支付方式", "false,true",
+                          "使用全部,自定义", defaultval: Model.IsCusotmPayType, hint: "如果不指定，则使用所有可用支付方式")
+
+        @{
+            //获取所有商品类型
+            DataTable ptList = new EasyCms.Business.ShopPaymentTypesBll().GetPayTypeForSelecte(Model.ID);
+            if (ptList.Rows.Count > 0)
+            {
+                string codes = string.Empty;
+                string names = string.Empty;
+                bool[] vals = new bool[ptList.Rows.Count];
+                int i = 0;
+                foreach (DataRow item in ptList.Rows)
+                {
+                    if (!string.IsNullOrEmpty(codes))
+                    {
+                        codes += ",";
+                        names += ",";
+                    }
+                    codes += "spt" + item["ID"];
+                    names += item["ShortName"];
+                    string RalationID = item["RalationID"] as string;
+                    if (string.IsNullOrWhiteSpace(RalationID))
+                    {
+                        vals[i++] = false;
+                    }
+                    else
+                    {
+                        vals[i++] = true;
+                    }
+                }
+
+        @HelperExtend.CheckBoxList("支持支付方式", codes, names, defaultval: vals)
+            }
+        }
+
+
+    </div>
+    <div class="tab-content" style="display:none">
+        @HelperExtend.RadioGroup("FreightType", "地区运费类型", typeof(FreightType).GetEnumVal(),
+                          typeof(FreightType).GetEnumNamesStr(), defaultval: (int)Model.FreightType, hint: "")
+
+        @HelperExtend.RadioGroup("IsDefaultFreight", "地区默认运费 ", "true,false", "支持,不支持", defaultval: Model.IsDefaultFreight, hint: "注意：如果不开启此项，那么未设置的地区将无法送达！ ")
+        
+        <div id="jqxgrid"></div>
+    </div>
+
+   <!--工具栏-->
+            <div class="page-footer">
+                <div class="btn-wrap">
+                     <input type="submit"  value="提交保存" class="btn" />
+                    <input name="btnReturn" type="button" value="返回上一页" class="btn yellow" onclick="javascript:history.back(-1);" />
+                </div>
+            </div>
+    <!--/工具栏-->
+
+            }
+<!--内容-->
+
+@section  scripts{
+
+    <script type="text/javascript">
+        
+        function OnBegin(xhr, data) {
+            $('#jqxLoader').jqxLoader('open');
+            var rows = $("#jqxgrid").jqxGrid('getboundrows');
+            var qz = "ShopRegionFright";
+            for (var i = 0; i < rows.length; i++) {
+                var field = "&" + qz + i + ".ID=";
+                if (rows[i].ID) {
+                    field += rows[i].ID;
+                }
+
+
+                if (rows[i].RegionID) {
+                    field += "&" + qz + i + ".RegionID=" + rows[i].RegionID;
+                }
+
+                if (rows[i].ShippingModeId) {
+                    field += "&" + qz + i + ".ShippingModeId=" + rows[i].ShippingModeId;
+                }
+                if (rows[i].RegionPrice) {
+                    field += "&" + qz + i + ".RegionPrice=" + rows[i].RegionPrice;
+                }
+                if (rows[i].RegionAddPrice) {
+                    field += "&" + qz + i + ".RegionAddPrice=" + rows[i].RegionAddPrice;
+                }
+
+                data.data += field;
+            }
+            return true;
+        }
+
+        function OnSuccess(result) {
+            $('#jqxLoader').jqxLoader('close');
+            if (result.IsSuccess) {
+                $("input[type='submit']").attr({ "disabled": "disabled" });
+              
+                SucessMsg("操作成功！"); 
+            }
+            else {
+
+                ErrorMsg(result.Msg);
+
+            }
+
+
+        }
+    </script>
+    <script type="text/javascript">
+
+        $(function () {
+
+
+            //初始化表单验证
+            $("form").validate({
+                ignore: "",
+                rules: {
+                    Name: {
+                        required: true,
+                        maxlength: 100,
+                        remote: {
+                            url: '@Url.Action("CheckRepeat")',
+                            data: {
+                                ID: function () { return $("#ID").val(); },
+                                RecordStatus: function () { return $("#RecordStatus").val(); },
+                                val: function () { return $("#Name").val(); },
+                                IsCode: false
+                            }
+                        }
+
+                    }
+                },
+                messages: {
+                    Name: {
+                        required: "请输入名称",
+                        maxlength: $.validator.format("名称长度不能大于{0}个字符"),
+                        remote: "已存在相同名称的品牌"
+
+                    }
+                },
+                errorPlacement: function (error, element) {
+
+                    if (element.is(":radio"))
+                        error.insertAfter($(element).parent());
+                    else if (element.is(":checkbox"))
+                        error.insertAfter($(element).parent());
+                    else
+                        error.insertAfter(element);
+                }
+
+            });
+        })
+    </script>
+
+
+
+
+    <script type="text/javascript">
+        function deletSelectRegion() {
+            var selectedrowindex = $("#jqxgrid").jqxGrid('getselectedrowindex');
+            var rowscount = $("#jqxgrid").jqxGrid('getdatainformation').rowscount;
+            if (selectedrowindex >= 0 && selectedrowindex < rowscount) {
+                var id = $("#jqxgrid").jqxGrid('getrowid', selectedrowindex);
+                var commit = $("#jqxgrid").jqxGrid('deleterow', id);
+            }
+        }
+        var dataAdapter = null;
+        $(document).ready(function () {
+
+            var url = "@Url.Action("GetList", "Regions")";
+            var jsonData = null;
+            $.ajax({
+                type: "GET",
+                url: url, async: false,
+                data: { parentID: 1 },
+                dataType: "json",
+                success: function (msg) {
+                    jsonData = msg;
+                }
+            });
+            // prepare the data
+            var source =
+            {
+                datatype: "json",
+                datafields: [
+                    { name: 'ID' },
+                    { name: 'Name' }
+                ],
+                localdata: jsonData,
+                root: 'Rows',
+                id: 'ID',
+            };
+            var dataAdapter = new $.jqx.dataAdapter(source);
+            var generaterow = function (i) {
+                var row = {};
+                row["ID"] = "";
+                row["RegionID"] = null;
+                row["RegionName"] = "";
+                row["RegionPrice"] = 0;
+                row["RegionAddPrice"] = 0;
+                return row;
+            }
+
+          
+            var url = "@Url.Action("GetShopRegionFrightList")/@Model.ID";
+            var datafields = [{ name: 'ID' }, { name: 'ShippingModeId' },
+                { name: 'RegionID', values: { source: dataAdapter.records, value: 'ID', name: 'Name' } }, { name: 'RegionName' }, { name: 'RegionPrice', type: "float" }, { name: 'RegionAddPrice', type: "float" }];
+            var columns = [
+{
+    text: '地区', dataField: 'RegionID', displayfield: 'RegionName', cellsalign: "left", width: 150, columntype: 'combobox',
+    createeditor: function (row, value, editor) {
+        editor.jqxComboBox({ source: dataAdapter, displayMember: 'Name', valueMember: 'ID' });
+    }
+},
+  { text: '起重费用', dataField: 'RegionPrice', width: 100, cellsalign: "right" },
+  { text: '超重费用', dataField: 'RegionAddPrice', cellsalign: "right" },
+             {
+                 text: '操作', cellsrenderer: function (row, column, value, html, colInfo, rowData) {
+                     var html = "  <div style='text-align: center; overflow: hidden; padding-bottom: 2px; margin-top: 4px; text-overflow: ellipsis;'>";
+                     html += "<a href='javascript:;' onclick='deletSelectRegion();'  >删除</a> ";
+                     html += "</div>";
+                     return html;
+                 }
+             }];
+            CreateGrid("jqxgrid", url, datafields, columns, {
+                grid: {
+                    showtoolbar: true, editable: true, editmode: 'click', pageable: false,
+                    rendertoolbar: function (toolbar) {
+                        var me = this;
+                        var container = $('<div class="toolbar">  <div class="box-wrap"> <a class="menu-btn"></a> <div class="l-list"> <ul class="icon-list">' +
+                            '<li id="addRow"><a  class="add"   href="javascript:void(0);"><i></i><span>新增</span></a></li></ul> </div> </div> </div>');
+                        toolbar.append(container);
+                        container.find("#addRow").on("click", function () {
+                            var datarow = generaterow();
+                            var commit = $("#jqxgrid").jqxGrid('addrow', null, datarow);
+                        });
+                    }
+                }
+            });
+
+        });
+    </script>
+
+
+}

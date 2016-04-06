@@ -1,0 +1,94 @@
+﻿@model WebSiteSet
+@{
+    ViewBag.Title = "编辑网站设置";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEdit.cshtml";
+}
+
+@Styles.Render("~/bundles/upimgcss")
+@Scripts.Render("~/bundles/ueditor")
+@Scripts.Render("~/bundles/uploadJs")
+
+@using EasyCms.Model 
+<!--内容-->
+<div id="floatHead" class="content-tab-wrap">
+    <div class="content-tab">
+        <div class="content-tab-ul-wrap">
+            <ul>
+                <li><a class="selected" href="javascript:;">基本信息</a></li>
+                <li><a  href="javascript:;">扩展信息</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="tab-content">
+
+
+    @HelperExtend.HiddenFor("ID", Model.ID)
+    @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString()) 
+    @Html.ValidationSummary() 
+   @HelperExtend.TextBox("WebSiteUrl", "网址", defaultval: Model.WebSiteUrl, hint: "")
+
+@HelperExtend.TextBox("Name", "名称", defaultval: Model.Name, hint: "")
+ 
+    @HelperExtend.ImageUpLoad("Logo", "Logo", Model.RecordStatus == Sharp.Common.StatusType.add, defaultval: Model.Logo, maxLength: 1)
+
+
+@HelperExtend.TextBox("Contactor", "联系人", defaultval: Model.Contactor, hint: "")
+
+@HelperExtend.TextBox("QQ", "QQ", defaultval: Model.QQ, hint: "")
+
+@HelperExtend.TextBox("Email", "Email", defaultval: Model.Email, hint: "")
+
+@HelperExtend.TextBox("Telphone", "手机", defaultval: Model.Telphone, hint: "")
+
+@HelperExtend.TextBox("CallNum", "客服电话", defaultval: Model.CallNum, hint: "")
+
+@HelperExtend.TextBox("Address", "地址", defaultval: Model.Address, hint: "")
+
+
+   
+
+ 
+</div>
+
+<div class="tab-content" style="display:none">
+ 
+
+    @HelperExtend.TextBox("titlePix", "首页title后缀", defaultval: Model.titlePix, hint: "")
+
+    @HelperExtend.TextArea("Keywords", "首页keywords", defaultval: Model.Keywords, hint: "")
+
+    @HelperExtend.TextArea("Description", "首页description", defaultval: Model.Description, hint: "")
+
+    @HelperExtend.UEditor("BeiAN", "备案信息", defaultval: Model.BeiAN)
+</div>
+@section  scripts{
+
+
+    <script type="text/javascript">
+
+        $(function () {
+
+
+            //初始化表单验证
+            $("form").validate({
+                ignore: "",
+                rules: {
+                    
+                    Name: {
+                        required: true,
+                        maxlength: 100 
+                    } 
+                },
+                messages: {
+                   
+                    Name: {
+                        required: "请输入名称",
+                        maxlength: $.validator.format("名称长度不能大于{0}个字符") 
+                    }
+                },
+       errorPlacement: errorPlace
+            });
+        })
+    </script> 
+}

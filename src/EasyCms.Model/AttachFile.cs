@@ -1,4 +1,5 @@
-﻿using Sharp.Common;
+﻿using Newtonsoft.Json;
+using Sharp.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace EasyCms.Model
     /// <summary>
     /// 附件表
     /// </summary>  
+    [JsonObject]
     public partial class AttachFile : BaseEntity
     {
         public static Column _ = new Column("AttachFile");
@@ -26,11 +28,11 @@ namespace EasyCms.Model
 
         private string _FileName;
 
-        private long _FileSize;
+        private long? _FileSize;
 
         private string _FileExtName;
 
-        private DateTime _UploadTime;
+        private DateTime? _UploadTime;
 
         private string _FilePath;
 
@@ -43,6 +45,10 @@ namespace EasyCms.Model
         private string _BigClass;
 
         private int _OrderNo;
+
+        private string _ThumbnaifilePath;
+
+        private string _CompressionfilePath;
 
         #endregion
 
@@ -91,9 +97,9 @@ namespace EasyCms.Model
         ///  文件大小,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "FileSize", DbTypeString = "bigint", ColumnIsNull = true, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "FileSize", DbTypeString = "bigint,", ColumnIsNull = true, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public long FileSize
+        public long? FileSize
         {
             get
             {
@@ -131,7 +137,7 @@ namespace EasyCms.Model
 
         [DbProperty(MapingColumnName = "UploadTime", DbTypeString = "datetime", ColumnIsNull = true, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public DateTime UploadTime
+        public DateTime? UploadTime
         {
             get
             {
@@ -258,9 +264,47 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  缩略图路径,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "ThumbnaifilePath", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 1000, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string ThumbnaifilePath
+        {
+            get
+            {
+                return this._ThumbnaifilePath;
+            }
+            set
+            {
+                this.OnPropertyChanged("ThumbnaifilePath", this._ThumbnaifilePath, value);
+                this._ThumbnaifilePath = value;
+            }
+        }
+
+        /// <summary>
+        ///  压缩路径,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "CompressionfilePath", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 1000, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string CompressionfilePath
+        {
+            get
+            {
+                return this._CompressionfilePath;
+            }
+            set
+            {
+                this.OnPropertyChanged("CompressionfilePath", this._CompressionfilePath, value);
+                this._CompressionfilePath = value;
+            }
+        }
+
         #endregion
 
-        #region 列定义
+        #region 列定义 
         public class Column
         {
             public Column(string tableName)
@@ -287,6 +331,10 @@ namespace EasyCms.Model
                 BigClass = new PropertyItem("BigClass", tableName);
 
                 OrderNo = new PropertyItem("OrderNo", tableName);
+
+                ThumbnaifilePath = new PropertyItem("ThumbnaifilePath", tableName);
+
+                CompressionfilePath = new PropertyItem("CompressionfilePath", tableName);
 
 
             }
@@ -334,9 +382,18 @@ namespace EasyCms.Model
             /// 顺序,
             /// </summary> 
             public PropertyItem OrderNo = null;
+            /// <summary>
+            /// 缩略图路径,
+            /// </summary> 
+            public PropertyItem ThumbnaifilePath = null;
+            /// <summary>
+            /// 压缩路径,
+            /// </summary> 
+            public PropertyItem CompressionfilePath = null;
         }
         #endregion
     }
+
 
     public partial class AttachFile
     {
@@ -347,6 +404,24 @@ namespace EasyCms.Model
                 return AttachFile._.FilePath.SubString(1).Alias(alias);
             }
             return (new ExpressionClip("'" + host + "'") + AttachFile._.FilePath.SubString(1)).Alias(alias);
+
+        }
+        public static ExpressionClip GetThumbnaifilePath(string host, string alias = "FilePath")
+        {
+            if (string.IsNullOrWhiteSpace(host))
+            {
+                return AttachFile._.ThumbnaifilePath.SubString(1).Alias(alias);
+            }
+            return (new ExpressionClip("'" + host + "'") + AttachFile._.ThumbnaifilePath.SubString(1)).Alias(alias);
+
+        }
+        public static ExpressionClip GetCompressionfilePath(string host, string alias = "FilePath")
+        {
+            if (string.IsNullOrWhiteSpace(host))
+            {
+                return AttachFile._.CompressionfilePath.SubString(1).Alias(alias);
+            }
+            return (new ExpressionClip("'" + host + "'") + AttachFile._.CompressionfilePath.SubString(1)).Alias(alias);
 
         }
     }

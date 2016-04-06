@@ -48,5 +48,16 @@ namespace EasyCms.Business
         {
             return Dal.GetBrandList(brandType,   pageSize,   host);
         }
+
+        public DataTable GetTopVideoList(int brandType, int pageSize, string host)
+        {
+            return Dal.GetTopVideoList(brandType, pageSize, host);
+        }
+
+        public DataTable GetVideoList(int brandType, int pageIndex, int pagesize, string host)
+       
+        {
+            return Dal.GetVideoList(brandType, pageIndex,   pagesize, host);
+        }
     }
 }

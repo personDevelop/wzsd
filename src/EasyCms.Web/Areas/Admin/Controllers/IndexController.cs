@@ -7,12 +7,13 @@ using System.Web;
 using System.Web.Mvc;
 using System.Text;
 using EasyCms.Session;
+using System.Web.Security;
 
 namespace EasyCms.Web.Areas.Admin.Controllers
 {
     public class IndexController : Controller
     {
-
+    
         //
         // GET: /Admin/Index/
         public ActionResult Index()
@@ -82,7 +83,9 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         public ActionResult LogOut()
         {
 
-            Session.Clear();
+            CmsSession.LogOut();
+           
+            FormsAuthentication.SignOut();
             return RedirectToAction("", "Login");
         }
 

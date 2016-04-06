@@ -12,7 +12,7 @@ namespace EasyCms.Model
     /// <summary>
     /// 新闻信息
     /// </summary>  
-   [JsonObject]
+    [JsonObject]
     public partial class NewsInfo : BaseEntity
     {
         public static Column _ = new Column("NewsInfo");
@@ -98,6 +98,8 @@ namespace EasyCms.Model
 
         private bool _AllowPl;
 
+        private string _ProducntID;
+
         #endregion
 
         #region 属性
@@ -107,7 +109,7 @@ namespace EasyCms.Model
         /// </summary>
 
         [PrimaryKey]
-        [DbProperty(MapingColumnName = "ID", DbTypeString = "char", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ID", DbTypeString = "varchar", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string ID
         {
@@ -202,7 +204,7 @@ namespace EasyCms.Model
         ///  内容,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "Description", DbTypeString = "text", ColumnIsNull = true, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "Description", DbTypeString = "ntext", ColumnIsNull = true, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string Description
         {
@@ -787,9 +789,28 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  关联商品,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "ProducntID", DbTypeString = "varchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string ProducntID
+        {
+            get
+            {
+                return this._ProducntID;
+            }
+            set
+            {
+                this.OnPropertyChanged("ProducntID", this._ProducntID, value);
+                this._ProducntID = value;
+            }
+        }
+
         #endregion
 
-        #region 列定义
+        #region 列定义 
         public class Column
         {
             public Column(string tableName)
@@ -866,6 +887,8 @@ namespace EasyCms.Model
                 StaticUrl = new PropertyItem("StaticUrl", tableName);
 
                 AllowPl = new PropertyItem("AllowPl", tableName);
+
+                ProducntID = new PropertyItem("ProducntID", tableName);
 
 
             }
@@ -1013,9 +1036,14 @@ namespace EasyCms.Model
             /// 允许评论,
             /// </summary> 
             public PropertyItem AllowPl = null;
+            /// <summary>
+            /// 关联商品,
+            /// </summary> 
+            public PropertyItem ProducntID = null;
         }
         #endregion
     }
+
 
 
     public partial class NewsInfo
@@ -1027,6 +1055,9 @@ namespace EasyCms.Model
         }
         [NotDbCol]
         public string ClassName { get; set; }
+
+        [NotDbCol]
+        public string ProductName { get; set; }
     }
      
 }

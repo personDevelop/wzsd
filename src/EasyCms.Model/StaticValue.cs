@@ -354,7 +354,8 @@ namespace EasyCms.Model
         后台菜单,
         商城导航,
         API,
-        其它
+        其它,
+        商城个人中心
     }
 
     public enum AccessType
@@ -560,34 +561,35 @@ namespace EasyCms.Model
     }
     public enum AppHandleTag
     {
+        无=0,
         /// <summary>
         /// 打开应用
         /// </summary>
-        openApp,
+        openApp=1,
         /// <summary>
         /// 打开网页
         /// </summary>
-        openUrl,
+        openUrl=2,
         /// <summary>
         /// 打开一个商品明细
         /// </summary>
-        OpenProductDetail,
+        OpenProductDetail=3,
         /// <summary>
         /// 打开一个新闻明细
         /// </summary>
-        OpenNewDetail,
+        OpenNewDetail=4,
         /// <summary>
         /// 打开一个活动页，这个活动页不是指app的active，指的是促销活动或团购活动等的详情页
         /// </summary>
-        OpenActive,
+        OpenActive=5,
         /// <summary>
         /// 打开个人中心
         /// </summary>
-        OpenPerson,
+        OpenPerson=6,
         /// <summary>
         /// 扩展保留项
         /// </summary>
-        Custom
+        Custom=99
     }
 
 
@@ -598,4 +600,42 @@ namespace EasyCms.Model
         新闻频道
 
     }
+
+
+    public enum RegistType
+    {
+        邮箱,
+        手机,
+        邮箱和手机
+    }
+    public enum WaterType
+    {
+        无,
+        文字,
+        图片
+    }
+    public enum WaterLocation
+    {
+        左上,
+        左中,
+        左下,
+        中上,
+        中中,
+        中下,
+        右上,
+        右中,
+        右下
+
+
+    }
+
+
+    public enum FreightType
+    {
+        统一地区运费,
+        指定地区运费
+    }
+
+    public enum PayType
+    { 货到付款,在线支付 }
 }

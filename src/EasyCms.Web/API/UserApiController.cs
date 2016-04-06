@@ -2,6 +2,7 @@
 using EasyCms.Model;
 using EasyCms.Model.ViewModel;
 using EasyCms.Web.Common;
+using ImsgInterface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,34 +27,44 @@ namespace EasyCms.Web.API
 
         private HttpResponseMessage GetValucodeMethod(ValiCodeModel valiCodeModel)
         {
+           
             if (valiCodeModel.TypeInfo == ValidCode.无)
             {
-                "请选择验证码的用途".FormatError();
+             return    "请选择验证码的用途".FormatError();
             }
 
-            string code = "2222";//生成验证码StaticValue.GeneratoRandom();
+            string code =StaticValue.GeneratoRandom(); //222";//生成验证码
             Sharp.Common.CacheContainer.AddCache(valiCodeModel.TelNo + valiCodeModel.TypeInfo, code, 60 * 2);//有效期2分钟
             //通过手机发送出去
             string msgInfo = string.Format("您注册【我在山东】的验证码为{0}，请于{1}分钟内正确输入验证码", code, 2);
             string successMsg = "";
+            ISendMsg sendMsg = null;
+            string error = string.Empty;
             switch (valiCodeModel.SendType)
             {
                 case ValidType.手机短信:
-                    //SendMsg(valiCodeModel.TelNo, msgInfo);
+                   
+                     
                     string nomsg = string.Empty;
                     if (StaticValue.GetEncriptContanct(valiCodeModel.TelNo, valiCodeModel.SendType, out nomsg))
                     {
-                        successMsg = "验证码已发送到您的手机" + nomsg + "上,请查收";
+                        sendMsg = MsgFactory.CreateSendMsg(SendTool.短信);
+                        sendMsg.SendMsg("", valiCodeModel.TelNo, "", msgInfo, ref error);
+                        if (string.IsNullOrWhiteSpace(error))
+                        {
+                            successMsg = "验证码已发送到您的手机" + nomsg + "上,请查收";
+                        }else
+                        { return error.FormatError(); }
+                       
                     }
                     else
-                    {
-                        successMsg = "已发送到您的手机上,请查收";
-                    }
+                    { return nomsg.FormatError(); }
                     break;
                 case ValidType.邮箱:
                     break;
                 case ValidType.手机和邮箱:
-                    //SendMsg(valiCodeModel.TelNo, msgInfo);
+                    sendMsg = MsgFactory.CreateSendMsg(SendTool.短信);
+                    sendMsg.SendMsg("", valiCodeModel.TelNo, "", msgInfo, ref error);//没实现邮箱
                     if (StaticValue.GetEncriptContanct(valiCodeModel.TelNo, valiCodeModel.SendType, out nomsg))
                     {
                         successMsg = "验证码已发送到您的Email" + nomsg + "上,请查收";

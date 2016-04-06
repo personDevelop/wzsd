@@ -26,11 +26,11 @@ namespace EasyCms.Business
 
         public DataTable GetList(bool IsForSelected = false)
         {
-            return Dal.GetList(IsForSelected);
+            return Dal.GetList(null,IsForSelected);
         }
-        public DataTable GetList(int pagenum, int pagesize, ref int recordCount, bool IsForSelected = false)
+        public DataTable GetList(string Name, int pagenum, int pagesize, ref int recordCount, bool IsForSelected = false)
         {
-            return Dal.GetList(pagenum, pagesize, ref   recordCount, IsForSelected);
+            return Dal.GetList(  Name, pagenum, pagesize, ref   recordCount, IsForSelected);
         }
 
         public ShopProductInfo GetEntity(string id)

@@ -49,10 +49,27 @@ namespace EasyCms.Dal
 
         public DataTable GetBrandList(int brandType, int pageSize, string host)
         {
-            return Dal.From<SystemBrandInfo>().Where(SystemBrandInfo._.BrandType==brandType)
+            return Dal.From<SystemBrandInfo>().Where(SystemBrandInfo._.IsVideo == false && SystemBrandInfo._.IsTop == true && SystemBrandInfo._.BrandType==brandType)
                 .Join<AttachFile>(AttachFile._.RefID==SystemBrandInfo._.ID)
-                .Select(SystemBrandInfo._.Name,SystemBrandInfo._.AppHandleTag, SystemBrandInfo._.ActionValue,AttachFile.GetFilePath(host))
-                .OrderBy(SystemBrandInfo._.CreateTime.Desc).ToDataTable(pageSize);
+                .Select(SystemBrandInfo._.Name,SystemBrandInfo._.AppHandleTag, SystemBrandInfo._.ActionValue,AttachFile.GetThumbnaifilePath(host))
+                .OrderBy(SystemBrandInfo._.TopTime.Desc).ToDataTable(pageSize);
+        }
+
+        public DataTable GetTopVideoList(int brandType, int pageSize, string host)
+        {
+            return Dal.From<SystemBrandInfo>().Where(SystemBrandInfo._.IsVideo==true&& SystemBrandInfo._.IsTop==true&& SystemBrandInfo._.BrandType == brandType)
+                .Join<AttachFile>(AttachFile._.RefID == SystemBrandInfo._.ID)
+                .Select(SystemBrandInfo._.Name, SystemBrandInfo._.VideoUrl, SystemBrandInfo._.AppHandleTag, SystemBrandInfo._.ActionValue, AttachFile.GetCompressionfilePath(host))
+                .OrderBy(SystemBrandInfo._.TopTime.Desc).ToDataTable(pageSize);
+        }
+
+        public DataTable GetVideoList(int brandType, int pageIndex, int pagesize, string host)
+        {
+            int pageCount = 0,recourdCount=0;
+            return Dal.From<SystemBrandInfo>().Where(SystemBrandInfo._.IsVideo == true   && SystemBrandInfo._.BrandType == brandType)
+                .Join<AttachFile>(AttachFile._.RefID == SystemBrandInfo._.ID)
+                .Select(SystemBrandInfo._.Name, SystemBrandInfo._.VideoUrl, SystemBrandInfo._.AppHandleTag, SystemBrandInfo._.ActionValue, AttachFile.GetCompressionfilePath(host))
+                .OrderBy(SystemBrandInfo._.TopTime.Desc).ToDataTable(pagesize, pageIndex,ref pageCount,ref recourdCount);
         }
     }
 

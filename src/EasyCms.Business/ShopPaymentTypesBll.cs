@@ -43,7 +43,10 @@ namespace EasyCms.Business
 
 
 
-
+        public DataTable GetPayTypeForSelecte(string ShippingModeId)
+        {
+            return Dal.GetPayTypeForSelecte(ShippingModeId);
+        }
 
         public DataTable GetPayType()
         {

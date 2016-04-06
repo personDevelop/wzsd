@@ -1,5 +1,6 @@
 ﻿using EasyCms.Business;
 using EasyCms.Model;
+using Sharp.Common;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -32,6 +33,9 @@ namespace EasyCms.Web.Controllers
                 string fileid = Guid.NewGuid().ToString();
                 string extend = name.Substring(name.LastIndexOf('.') + 1);
                 string filePath = "~/Upload/" + types[0] + "/" + DateTime.Now.ToString("yyyyMMdd") + "/" + fileid + "." + extend;
+                string ThumbnaifilePath = "~/Upload/" + types[0] + "/" + DateTime.Now.ToString("yyyyMMdd") + "/" + fileid + "Thumbnai.jpg";
+                string compressionfilePath = "~/Upload/" + types[0] + "/" + DateTime.Now.ToString("yyyyMMdd") + "/" + fileid + "compression.jpg";
+
                 if (string.IsNullOrWhiteSpace(uid))
                 {
                     uid = fileid;
@@ -47,6 +51,8 @@ namespace EasyCms.Web.Controllers
                     BigClass = types[0],
                     FilePath = filePath,
                     RealFileName = name,
+                     ThumbnaifilePath=ThumbnaifilePath,
+                     CompressionfilePath=compressionfilePath
 
                 };
                 int i = new AttachFileBll().Save(af);
@@ -57,7 +63,19 @@ namespace EasyCms.Web.Controllers
                     {
                         Directory.CreateDirectory(Path.GetDirectoryName(savePath));
                     }
+                    //保存原图
                     file.SaveAs(savePath);
+                    //保存缩略图
+                   int with=0,  height = 0;
+                    ImgThumbnailType ThumbnailType = ImgThumbnailType.无;
+                    ImgThumbnail.ThumbnailRecommend(file.InputStream, file.ContentLength, ref with, ref height, ref ThumbnailType);
+                      ThumbnaifilePath = Server.MapPath(ThumbnaifilePath);
+                    ImgThumbnail.Thumbnail(file.InputStream, ThumbnaifilePath, with, height, 100, ThumbnailType);
+
+                    //保存压缩图 
+                    ImgThumbnail.ThumbnailRecommend(file.InputStream, file.ContentLength,  ref with, ref height, ref ThumbnailType, true);
+                    compressionfilePath = Server.MapPath(compressionfilePath);
+                    ImgThumbnail.Thumbnail(file.InputStream, compressionfilePath, with, height, 100, ThumbnailType);
                     return Json(new
                     {
                         jsonrpc = "2.0",

@@ -29,4 +29,149 @@
 
     </div>
 </body>
+
+
+<dl>
+    <dt>
+        <label for="ProductName">关联商品</label>
+        <input id="ProducntID" name="ProducntID" type="hidden" value="" />
+
+
+    </dt>
+    <dd>
+        <input class="input normal " id="ProductName" name="ProductName" readonly="readonly" type="text" value="" width="200" />
+
+        <span class="input-group-btn">
+
+            <button class="btn blue btnHelp" id="ProductNameeee0485d-2e7b-429d-b6c6-cf08bf75719d">
+                选择
+            </button>
+            <button class="btn yellow btnHelp" onclick="javascript: $('#ProducntID').val(''); $('#ProductName').val('');return false;">
+                清除选择
+            </button>
+        </span>
+        <span style="color:red"></span>
+
+    </dd>
+</dl>
+<script type="text/javascript">
+
+    $(function () {
+
+        $("#ProductNameeee0485d-2e7b-429d-b6c6-cf08bf75719d").click(function () {
+            var isContienu = true;
+            if (isContienu) {
+                $("#ProductNamed49c9aca-a20c-4f1e-b888-3847d423340b").jqxWindow('open');
+
+            }
+            return false;
+        });
+
+    });
+</script>
+
+<div id="ProductNamed49c9aca-a20c-4f1e-b888-3847d423340b">
+    <div>
+        <span>
+
+            <img src="/Content/Images/help.png" alt="" style="" />
+            选择商品
+        </span>
+    </div>
+    <div>
+        <div id="SearchTextProducntID">
+            <input type="text" />
+            <div id="SearchBtnProducntID">
+                <img src="/Content/Images/search_lg.png" alt="" style="height:16px ; width:16px" />
+            </div>
+        </div>
+        <div id="shopGrid">
+        </div>
+        <div>
+            <div style="float: right; margin-top: 15px;">
+                <input id="tnOkProducntID" type="button" style="margin-right: 10px" value="确定" class="btn" onclick="javascript: onSpOk;$('#ProductNamed49c9aca-a20c-4f1e-b888-3847d423340b').jqxWindow('close');" />
+                <input name="btnReturn" type="button" value="取消" class="btn yellow" onclick="javascript: $('#ProductNamed49c9aca-a20c-4f1e-b888-3847d423340b').jqxWindow('close');" />
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    $(function () {
+
+     
+    $("#SearchBtnProducntID58e1c50f-144c-438b-9fb1-df4eca3328f4").click(function () {
+
+        if (false ) {
+            result = $("#shopGrid").jqxTreeGrid('updatebounddata');
+
+        }else
+        {
+            $('#shopGrid').jqxGrid('updatebounddata');
+
+        }});
+    });
+
+</script>
+<script type="text/javascript">
+
+    $(function () {
+        $('#ProductNamed49c9aca-a20c-4f1e-b888-3847d423340b').jqxWindow({
+            autoOpen: false, resizable: true, isModal: true, initContent: InnitShopFunc,
+            showCollapseButton: false, maxHeight: 900, maxWidth: 1000, minHeight: 100, minWidth: 200, height: 500, width: 500
+        });
+        $('#ProductNamed49c9aca-a20c-4f1e-b888-3847d423340b').on('resized', function (event) {
+            if (false) {
+                result = $("#shopGrid").jqxTreeGrid('render');
+
+            } else {
+                result = $("#shopGrid").jqxGrid('render');
+
+            }
+        });
+
+        $('#tnOkProducntID').click(function () {
+            var result;
+
+            if (false) {
+                if (false) {
+                    result = $("#shopGrid").jqxTreeGrid('getSelection');
+
+                } else {
+                    result = $("#shopGrid").jqxTreeGrid('getSelection');
+
+                }
+            } else {
+                if (false) {
+                    result = $("#shopGrid").jqxGrid('getselectedrowindexes');
+                    var arryval = new Array();
+                    for (var i in result) {
+                        arryval.push($('#shopGrid').jqxGrid('getrowdata', result[i]));
+                    }
+                    result = arryval;
+
+                } else {
+                    result = $("#shopGrid").jqxGrid('getselectedrowindex');
+                    result = $('#shopGrid').jqxGrid('getrowdata', result);
+                }
+            }
+            onSpOk(result);
+        });
+
+        $("#SearchTextProducntID").jqxInput({ placeHolder: "输入过滤值", height: 23, width: 350, minLength: 1 });
+        $("#SearchBtnProducntID").click(function () {
+
+            if (false) {
+                result = $("#shopGrid").jqxTreeGrid('updatebounddata');
+
+            } else {
+                $('#shopGrid').jqxGrid('updatebounddata');
+
+            }
+        });
+
+    });
+
+
+</script>
 </html>

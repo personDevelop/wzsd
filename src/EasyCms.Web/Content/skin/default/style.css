@@ -907,17 +907,19 @@ textarea {
 
 .input {
     padding: 0px 4px;
-    min-height: 32px;
+    min-height: 28px;
     line-height: 20px;
-    border: 1px solid #eee;
+    border: 1px solid #55afeb;
     background: #fff;
     vertical-align: middle;
     color: #333;
+   
     font-size: 100%;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     *min-height: 20px;
+
 }
 
     .input.normal {
@@ -2071,8 +2073,9 @@ textarea {
     .tab-content dl, .div-content dl {
         clear: both;
         display: block;
-        padding: 5px 0;
+        padding: 0px 0;
         line-height: 30px;
+       
     }
 
         .tab-content dl:after, .div-content dl:after {
@@ -2091,13 +2094,17 @@ textarea {
             display: block;
             float: left;
             width: 130px;
-            text-align: right;
+            text-align: right; 
             color: #6d7e86;
+               background-color:blanchedalmond;
+           
         }
-
+         .tab-content dl dt label {
+           padding-right:10px;
+        }
         .tab-content dl dd {
             position: relative;
-            margin-left: 150px;
+            margin-left: 150px; 
             *position: static;
         }
     /*迷你样式*/
@@ -3077,6 +3084,9 @@ textarea {
     padding-left: 20px;
     white-space: nowrap;
     background: url(valid_icons.png) no-repeat -20px -40px;
+}
+.cp_img .error {
+    margin-top: -12px;
 }
 
 .Validform_loading {

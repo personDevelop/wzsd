@@ -1,0 +1,80 @@
+﻿@using MVCExtention;
+@{
+    ViewBag.Title = "新闻信息";
+}
+
+<!--工具栏-->
+<div id="floatHead" class="toolbar-wrap">
+    <div class="toolbar">
+        <div class="box-wrap">
+            <a class="menu-btn"></a>
+            <div class="l-list">
+                <ul class="icon-list">
+                    <li><a class="add" href="@Url.Action("Edit")"><i></i><span>新增</span></a></li>
+                    <li><a class="add" href="javascript:;" onclick="EditGrid('jqxgrid', '@Url.Action("Edit")');"><i></i><span>编辑</span></a></li>
+                    <li><a class="del" href="javascript:;" onclick="DelGrid('jqxgrid', '@Url.Action("Delete")');"><i></i><span>删除</span></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/工具栏-->
+<!--列表-->
+<div class="table-container">
+    <div id="jqxgrid"></div>
+</div>
+<!--/列表-->
+@section  scripts{
+    
+ 
+    <script type="text/javascript">
+        $(document).ready(function () {
+           var url = "@Url.Action("GetList")";
+            var datafields = [{ name: 'ID' }, { name: 'ClassName' }, { name: 'ClassID' }, { name: 'NewsTitle' },
+
+        { name: 'SubTitle' }, { name: 'Summary' }, { name: 'Description' }, { name: 'ImageUrl' },
+
+        { name: 'ThumbImageUrl' }, { name: 'NormalImageUrl' }, { name: 'CreatedDate' },
+
+        { name: 'CreatedUserID' }, { name: 'LastEditUserID' }, { name: 'LastEditDate' },
+
+        { name: 'LinkUrl' }, { name: 'PvCount' }, { name: 'State' },
+
+        { name: 'KeyWords' }, { name: 'Sequence' }, { name: 'IsRecomend' },
+
+        { name: 'IsHot' }, { name: 'IsColor' }, { name: 'IsTop' },
+
+        { name: 'Note' }, { name: 'TotalComment' }, { name: 'TotalSupport' },
+
+        { name: 'TotalFav' }, { name: 'TotalShare' }, { name: 'BeFrom' },
+
+        { name: 'Meta_Title' }, { name: 'Meta_Description' }, { name: 'Meta_Keywords' },
+
+        { name: 'SeoUrl' }, { name: 'SeoImageAlt' }, { name: 'SeoImageTitle' },
+
+        { name: 'StaticUrl' }, { name: 'AllowPl' }];
+            var columns = [
+    { text: '标题', dataField: 'NewsTitle', cellsalign: "left", },
+    { text: '所属类别', dataField: 'ClassName', width: 100 },
+    { text: '发布日期', dataField: 'LastEditDate', width: 140 },
+    { text: '浏览次数', dataField: 'PvCount', width: 80 },
+    { text: '顺序', dataField: 'Sequence', cellsalign: "right", width: 40 },
+
+    { text: '推荐', dataField: 'IsRecomend', width: 50 ,@HelperExtend.Parsebool()},
+
+    { text: '热点', dataField: 'IsHot', width: 50 ,@HelperExtend.Parsebool()},
+
+    { text: '醒目', dataField: 'IsColor', width: 50,@HelperExtend.Parsebool() },
+
+    { text: '置顶', dataField: 'IsTop', width: 50,@HelperExtend.Parsebool() },
+
+    { text: '评论次数', dataField: 'TotalComment', cellsalign: "right", width: 80 },
+
+    { text: '允许评论', dataField: 'AllowPl', width: 80 ,@HelperExtend.Parsebool()}];
+            CreateGrid("jqxgrid", url, datafields, columns, {isMutilSelect:true});
+             
+        });
+    </script>
+  
+
+}

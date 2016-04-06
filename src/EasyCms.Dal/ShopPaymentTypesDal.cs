@@ -59,7 +59,14 @@ namespace EasyCms.Dal
         }
 
 
-
+        public DataTable GetPayTypeForSelecte(string ShippingModeId)
+        {
+            return Dal.From<ShopPaymentTypes>()
+                .Join<ShopShippingPayment>(ShopPaymentTypes._.ID== ShopShippingPayment._.PaymentModeId && ShopShippingPayment._.ShippingModeId== ShippingModeId , JoinType.leftJoin)
+                .Where(ShopPaymentTypes._.IsEnable == true)
+                .OrderBy(ShopPaymentTypes._.DisplaySequence)
+                .Select(ShopPaymentTypes._.ID, ShopPaymentTypes._.Gateway,  ShopPaymentTypes._.ShortName, ShopShippingPayment._.ID.Alias("RalationID")).ToDataTable() ;
+        }
 
         public DataTable GetPayType()
         {
@@ -209,7 +216,7 @@ namespace EasyCms.Dal
                             order.PayTypeID = spay.ID;
                             order.PayTypeName = spay.Name;
                             Dal.Submit(orderAction, order);
-                        } 
+                        }
                         error = apy.GenerSign(spay.SecretKey);
 
 

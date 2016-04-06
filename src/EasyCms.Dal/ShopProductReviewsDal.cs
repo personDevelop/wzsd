@@ -130,7 +130,7 @@ namespace EasyCms.Dal
               ShopProductInfo._.Name.Alias("ProductName"),
                     ManagerUserInfo._.Code, ManagerUserInfo._.Name.Alias("UserName"), ManagerUserInfo._.IsManager, AttachFile.GetFilePath("", "ProductImg")
                   ).ToFirst<ShopProductReviews>();
-            sr.Images = Dal.From<AttachFile>().Where(AttachFile._.RefID == sr.ImagesID).Select(AttachFile.GetFilePath("", "Images"))
+            sr.Images = Dal.From<AttachFile>().Where(AttachFile._.RefID == sr.ImagesID).Select(AttachFile.GetCompressionfilePath("", "Images"))
                 .ToSinglePropertyArray();
             List<ShopProductReviews> lastReplay = Dal.From<ShopProductReviews>()
                     .Join<ManagerUserInfo>(ShopProductReviews._.UserId == ManagerUserInfo._.ID)

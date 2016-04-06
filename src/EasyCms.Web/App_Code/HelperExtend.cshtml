@@ -10,7 +10,7 @@
 {
     <dl>
         <dt>
-            @lable
+            @MVCExtention.ExtendHtmlInput.MvcHelper.Label(text, lable) 
 
         </dt>
         <dd>
@@ -363,7 +363,7 @@
 {
     <dl>
         <dt>
-            @label
+            @MVCExtention.ExtendHtmlInput.MvcHelper.Label(code, label)
         </dt>
         <dd>
             <div class="rule-multi-checkbox">
@@ -424,7 +424,7 @@
 {
     <dl>
         <dt>
-            @name
+            @MVCExtention.ExtendHtmlInput.MvcHelper.Label(code, name)  
         </dt>
         <dd>
             <div class="rule-multi-radio">
@@ -466,6 +466,7 @@
     6.其他额外返回的值
     7.取数的action
     8.条件值
+    9.手机端编辑器 建议宽度322 高度 470
 
 
 
@@ -535,13 +536,14 @@
     OnOk = onOk,
     DataControlID = DataControlID,
     IsMutiSelect = IsMutiSelect,
-    IsTree = IsTree
+    IsTree = IsTree,
+    FiledID=id
 })
 }
  
 
 @helper HelpSmartDialog(string url, string id, string code, string name, string defaultVal = null, string defaultText = null, string hint = "", string otherClass = "", int width = 200,
-                        string dialogTitle = "", int dialogWidth = 500, int dialogHeight = 500, bool IsHidButton = false,bool isAppend=false, string OnBefore = "")
+                        string dialogTitle = "", int dialogWidth = 800, int dialogHeight = 600, bool IsHidButton = false,bool isAppend=false, string OnBefore = "")
 {
     string dialogID = code + Guid.NewGuid();
     string selectButtonID = code + Guid.NewGuid();

@@ -166,7 +166,7 @@ namespace EasyCms.Dal
                 DataTable dtvals = Dal.From<ShopExtendInfoValue>().Join<AttachFile>(ShopExtendInfoValue._.ImageID == AttachFile._.RefID, JoinType.leftJoin)
                     .Where(ShopExtendInfoValue._.AttributeId.In(extendID)).Select(ShopExtendInfoValue._.AttributeId, ShopExtendInfoValue._.ValueStr,
                     ShopExtendInfoValue._.Note,
-                    ShopExtendInfoValue._.ImageID, AttachFile.GetFilePath(host)).OrderBy(ShopExtendInfoValue._.DisplaySequence).ToDataTable();
+                    ShopExtendInfoValue._.ImageID, AttachFile.GetThumbnaifilePath(host)).OrderBy(ShopExtendInfoValue._.DisplaySequence).ToDataTable();
                 foreach (DataRow item in dt.Rows)
                 {
                     string temp = "";
@@ -230,7 +230,7 @@ namespace EasyCms.Dal
                 .Select(ShopExtendInfoValue._.ID, ShopExtendInfoValue._.AttributeId, ShopExtendInfoValue._.DisplaySequence, ShopExtendInfoValue._.ImageID, ShopExtendInfoValue._.Note,
 
 
-                ShopExtendInfoValue._.ValueStr, AttachFile.GetFilePath(host))
+                ShopExtendInfoValue._.ValueStr, AttachFile.GetThumbnaifilePath(host))
                 .Where(ShopExtendInfoValue._.AttributeId == attriID)
                 .OrderBy(ShopExtendInfoValue._.DisplaySequence)
                 .ToDataTable();

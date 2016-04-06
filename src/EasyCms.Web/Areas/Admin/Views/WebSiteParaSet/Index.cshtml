@@ -1,0 +1,117 @@
+﻿@model WebSiteParaSet
+@{
+    ViewBag.Title = "编辑网站参数设置";
+
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEdit.cshtml";
+}
+
+@Styles.Render("~/bundles/upimgcss")
+@Scripts.Render("~/bundles/ueditor")
+@Scripts.Render("~/bundles/uploadJs")
+
+@using EasyCms.Model 
+<!--内容-->
+<div id="floatHead" class="content-tab-wrap">
+    <div class="content-tab">
+        <div class="content-tab-ul-wrap">
+            <ul>
+                <li><a class="selected" href="javascript:;">基本信息</a></li>
+                <li><a  href="javascript:;">扩展信息</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="tab-content">
+
+
+    @HelperExtend.HiddenFor("ID", Model.ID)
+    @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString()) 
+    @Html.ValidationSummary() 
+  @HelperExtend.TextBox("RegistType", "注册名类型", defaultval: Model.RegistType, hint: "")
+
+@HelperExtend.TextBox("LoginNameType", "登陆名类型", defaultval: Model.LoginNameType, hint: "")
+
+@HelperExtend.TextBox("SaveName", "保留用户名", defaultval: Model.SaveName, hint: "")
+
+@HelperExtend.TextBox("RegistraTimeLimit", "注册时间限制(分钟)", defaultval: Model.RegistraTimeLimit, hint: "")
+
+@HelperExtend.TextBox("ShadowLoginName", "影子登录名", defaultval: Model.ShadowLoginName, hint: "")
+
+@HelperExtend.TextBox("LoginErrorCount", "登陆失败次数", defaultval: Model.LoginErrorCount, hint: "")
+
+@HelperExtend.TextBox("ImgType", "图片类型", defaultval: Model.ImgType, hint: "")
+
+@HelperExtend.TextBox("ImgLenth", "图片大小（MB）", defaultval: Model.ImgLenth, hint: "")
+
+@HelperExtend.TextBox("WaterType", "水印类型", defaultval: Model.WaterType, hint: "")
+
+@HelperExtend.TextBox("WaterQuality", "水印质量", defaultval: Model.WaterQuality, hint: "")
+
+@HelperExtend.TextBox("WaterLocation", "水印位置", defaultval: Model.WaterLocation, hint: "")
+
+@HelperExtend.TextBox("WaterText", "水印文字", defaultval: Model.WaterText, hint: "")
+
+@HelperExtend.TextBox("WaterFamily", "文字字体", defaultval: Model.WaterFamily, hint: "")
+
+@HelperExtend.TextBox("WaterTextSize", "文字大小", defaultval: Model.WaterTextSize, hint: "")
+
+@HelperExtend.TextBox("WaterImg", "水印图片", defaultval: Model.WaterImg, hint: "")
+
+@HelperExtend.TextBox("ImgTransparency", "图片透明度", defaultval: Model.ImgTransparency, hint: "")
+
+@HelperExtend.TextBox("BrandThumbnail", "品牌缩略图", defaultval: Model.BrandThumbnail, hint: "")
+
+@HelperExtend.TextBox("DisplayThumbnail", "商品展示缩略图", defaultval: Model.DisplayThumbnail, hint: "")
+
+@HelperExtend.TextBox("UserPhotoThumbnail", "用户头像缩略图", defaultval: Model.UserPhotoThumbnail, hint: "")
+
+@HelperExtend.TextBox("UserOrderThumbnail", "用户等级头像缩略图", defaultval: Model.UserOrderThumbnail, hint: "")
+
+
+
+
+
+
+
+
+
+   
+
+ 
+</div>
+
+<div class="tab-content" style="display:none">
+ 
+
+    
+</div>
+@section  scripts{
+
+
+    <script type="text/javascript">
+
+        $(function () {
+
+
+            //初始化表单验证
+            $("form").validate({
+                ignore: "",
+                rules: {
+                    
+                    Name: {
+                        required: true,
+                        maxlength: 100 
+                    } 
+                },
+                messages: {
+                   
+                    Name: {
+                        required: "请输入名称",
+                        maxlength: $.validator.format("名称长度不能大于{0}个字符") 
+                    }
+                },
+       errorPlacement: errorPlace
+            });
+        })
+    </script> 
+}

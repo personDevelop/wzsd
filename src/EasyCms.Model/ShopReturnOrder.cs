@@ -1049,7 +1049,7 @@ namespace EasyCms.Model
         public List<ShopReturnOrderItem> OrderItems { get; set; }
 
         [NotDbCol]
-        public string StatusStr { get { return Status.ToString(); } }
+        public string OrderStatusStr { get { return Status.ToString(); } }
 
 
         [NotDbCol]

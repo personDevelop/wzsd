@@ -38,6 +38,14 @@ namespace EasyCms.Model
 
         private DateTime _CreateTime;
 
+        private bool _IsTop;
+
+        private DateTime _TopTime;
+
+        private string _VideoUrl;
+
+        private bool _IsVideo;
+
         #endregion
 
         #region 属性
@@ -142,7 +150,7 @@ namespace EasyCms.Model
         ///  附属的值,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "ActionValue", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ActionValue", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 500, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string ActionValue
         {
@@ -176,6 +184,82 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  是否置顶,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "IsTop", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public bool IsTop
+        {
+            get
+            {
+                return this._IsTop;
+            }
+            set
+            {
+                this.OnPropertyChanged("IsTop", this._IsTop, value);
+                this._IsTop = value;
+            }
+        }
+
+        /// <summary>
+        ///  置顶日期,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "TopTime", DbTypeString = "datetime", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public DateTime TopTime
+        {
+            get
+            {
+                return this._TopTime;
+            }
+            set
+            {
+                this.OnPropertyChanged("TopTime", this._TopTime, value);
+                this._TopTime = value;
+            }
+        }
+
+        /// <summary>
+        ///  视频URL,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "VideoUrl", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 300, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string VideoUrl
+        {
+            get
+            {
+                return this._VideoUrl;
+            }
+            set
+            {
+                this.OnPropertyChanged("VideoUrl", this._VideoUrl, value);
+                this._VideoUrl = value;
+            }
+        }
+
+        /// <summary>
+        ///  是视频广告,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "IsVideo", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public bool IsVideo
+        {
+            get
+            {
+                return this._IsVideo;
+            }
+            set
+            {
+                this.OnPropertyChanged("IsVideo", this._IsVideo, value);
+                this._IsVideo = value;
+            }
+        }
+
         #endregion
 
         #region 列定义 
@@ -197,6 +281,14 @@ namespace EasyCms.Model
                 ActionValue = new PropertyItem("ActionValue", tableName);
 
                 CreateTime = new PropertyItem("CreateTime", tableName);
+
+                IsTop = new PropertyItem("IsTop", tableName);
+
+                TopTime = new PropertyItem("TopTime", tableName);
+
+                VideoUrl = new PropertyItem("VideoUrl", tableName);
+
+                IsVideo = new PropertyItem("IsVideo", tableName);
 
 
             }
@@ -228,6 +320,22 @@ namespace EasyCms.Model
             /// 创建时间,
             /// </summary> 
             public PropertyItem CreateTime = null;
+            /// <summary>
+            /// 是否置顶,
+            /// </summary> 
+            public PropertyItem IsTop = null;
+            /// <summary>
+            /// 置顶日期,
+            /// </summary> 
+            public PropertyItem TopTime = null;
+            /// <summary>
+            /// 视频URL,
+            /// </summary> 
+            public PropertyItem VideoUrl = null;
+            /// <summary>
+            /// 是视频广告,
+            /// </summary> 
+            public PropertyItem IsVideo = null;
         }
         #endregion
     }

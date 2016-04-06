@@ -59,11 +59,11 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                     if (string.IsNullOrWhiteSpace(p.ID))
                     {
                         p.ID = Guid.NewGuid().ToString();
-                        
+                       
                     }
-                  
+                    p.CreateTime = DateTime.Now;
                 }
-                p.CreateTime = DateTime.Now;
+                p.TopTime = DateTime.Now;
                 bll.Save(p);
                 if (TempData.ContainsKey("IsSuccess"))
                 {

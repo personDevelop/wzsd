@@ -92,5 +92,14 @@ namespace EasyCms.Session
             Session[RoleNameKey] = role.Name;
             
         }
+
+        public static void LogOut()
+        {
+            if (Session == null)
+            {
+                return;
+            }
+            Session.Clear();
+        }
     }
 }

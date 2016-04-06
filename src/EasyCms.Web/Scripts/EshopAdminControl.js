@@ -114,7 +114,7 @@
          pagerrenderer: pagerrenderer,
          pageSize: 20,
          pageable: true,
-         columns: columns
+         columns: columns, localization: "zh-Hans"
      }, opts.grid));
 }
 

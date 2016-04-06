@@ -24,14 +24,14 @@ namespace EasyCms.Dal
         public List<SimpalFile> GetFiles(string refid, string host)
         {
             return Dal.From<AttachFile>().Where(AttachFile._.RefID == refid)
-                .Select(AttachFile._.ID, AttachFile._.RefID, AttachFile.GetFilePath(host))
+                .Select(AttachFile._.ID, AttachFile._.RefID, AttachFile.GetThumbnaifilePath(host))
                 .ToDataTable().ToList<SimpalFile>();
         }
 
         public List<SimpalFile> GetFiles(string host, List<string> refidList)
         {
             return Dal.From<AttachFile>().Where(AttachFile._.RefID.In(refidList) && AttachFile._.OrderNo == 1)
-               .Select(AttachFile._.ID, AttachFile._.RefID, AttachFile.GetFilePath(host))
+               .Select(AttachFile._.ID, AttachFile._.RefID, AttachFile.GetThumbnaifilePath(host))
                .ToDataTable().ToList<SimpalFile>();
         }
     }

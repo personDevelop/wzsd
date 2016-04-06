@@ -50,8 +50,12 @@
     <Compile Include="Ali\Core.cs" />
     <Compile Include="Ali\PayPara.cs" />
     <Compile Include="Ali\RSAFromPkcs8.cs" />
+    <Compile Include="AppSet.cs" />
     <Compile Include="AttachFile.cs" />
     <Compile Include="CouponRule.cs" />
+    <Compile Include="FriendlyLink.cs" />
+    <Compile Include="HelpContent.cs" />
+    <Compile Include="HelpType.cs" />
     <Compile Include="MsgSendLog.cs" />
     <Compile Include="SendCoupon.cs" />
     <Compile Include="CusomerAndCoupon.cs" />
@@ -79,8 +83,10 @@
     <Compile Include="ShopOrder.cs" />
     <Compile Include="ShopOrderAction.cs" />
     <Compile Include="ShopOrderItem.cs" />
+    <Compile Include="ShopRegionFright.cs" />
     <Compile Include="ShopReturnOrder.cs" />
     <Compile Include="ShopReturnOrderItem.cs" />
+    <Compile Include="ShopShipExpress.cs" />
     <Compile Include="SysExportMx.cs" />
     <Compile Include="SysExportSet.cs" />
     <Compile Include="SysMsgInterSet.cs" />
@@ -117,6 +123,8 @@
     <Compile Include="ValiCodeModel.cs" />
     <Compile Include="ViewModel\UserInfo.cs" />
     <Compile Include="View_ProductInfoBySkuid.cs" />
+    <Compile Include="WebSiteParaSet.cs" />
+    <Compile Include="WebSiteSet.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="验证类扩展字段.txt" />

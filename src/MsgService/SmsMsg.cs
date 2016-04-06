@@ -174,7 +174,7 @@ namespace MsgService
             }
             catch (Exception ex)
             {
-
+                err = ex.Message;
                 throw;
             }
             return true;
@@ -298,11 +298,7 @@ namespace MsgService
             return true;
         }
 
-
-
-
-
-
+         
 
         public bool CheckPlatform(ref string err)
         {

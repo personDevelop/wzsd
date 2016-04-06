@@ -54,7 +54,7 @@ namespace EasyCms.Dal
             }
 
             return Dal.From<View_ProductInfoBySkuid>().Join<AttachFile>(View_ProductInfoBySkuid._.ID == AttachFile._.RefID && AttachFile._.OrderNo==1, JoinType.leftJoin)
-                .Select(View_ProductInfoBySkuid._.ID.All, AttachFile.GetFilePath(host))
+                .Select(View_ProductInfoBySkuid._.ID.All, AttachFile.GetThumbnaifilePath(host))
                 .Where( where )
                 .ToDataTable();
         }

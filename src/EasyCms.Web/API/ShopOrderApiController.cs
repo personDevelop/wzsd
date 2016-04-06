@@ -406,7 +406,7 @@ namespace EasyCms.Web.API
                 ShopReturnOrder._.ReturnType.FullName,
                 ShopReturnOrder._.Status.FullName,
                  "ShopReturnOrder.TotalPrice",
-                ShopReturnOrder._.RefuseReason.FullName, "ShopReturnOrder.StatusStr", ShopReturnOrderItem._.ID.FullName, ShopReturnOrderItem._.OrderId.FullName, ShopReturnOrderItem._.ReturnOrderId.FullName,
+                ShopReturnOrder._.RefuseReason.FullName, "ShopReturnOrder.OrderStatusStr", ShopReturnOrderItem._.ID.FullName, ShopReturnOrderItem._.OrderId.FullName, ShopReturnOrderItem._.ReturnOrderId.FullName,
                     ShopReturnOrderItem._.SaleCount.FullName, ShopReturnOrderItem._.RequestQuantity.FullName, ShopReturnOrderItem._.ReturnCount.FullName,
                     "ShopReturnOrderItem.Price", "ShopReturnOrderItem.ProductName", "ShopReturnOrderItem.ProductThumb",
                   ShopReturnOrderItem._.ProductCode.FullName
@@ -445,10 +445,10 @@ namespace EasyCms.Web.API
                 return order.FormatObj(true, "ShopReturnOrder.ID",  "ShopReturnOrder.CreateDate",  
                 ShopReturnOrder._.Description.FullName,
                 ShopReturnOrder._.ReturnType.FullName,
-                ShopReturnOrder._.Status.FullName, "ShopReturnOrder.ProductID",
-                ShopReturnOrder._.RefuseReason.FullName, "ShopReturnOrder.StatusStr", ShopReturnOrderItem._.ID.FullName, ShopReturnOrderItem._.OrderId.FullName, ShopReturnOrderItem._.ReturnOrderId.FullName,
+                ShopReturnOrder._.Status.FullName,
+                ShopReturnOrder._.RefuseReason.FullName, "ShopReturnOrder.OrderStatusStr", ShopReturnOrderItem._.ID.FullName, ShopReturnOrderItem._.OrderId.FullName, ShopReturnOrderItem._.ReturnOrderId.FullName,
                     ShopReturnOrderItem._.SaleCount.FullName, ShopReturnOrderItem._.RequestQuantity.FullName, ShopReturnOrderItem._.ReturnCount.FullName,
-                     "ShopReturnOrderItem.Price", "ShopReturnOrderItem.ProductName", "ShopReturnOrderItem.ProductThumb",
+                     "ShopReturnOrderItem.Price", "ShopReturnOrderItem.ProductID", "ShopReturnOrderItem.ProductName", "ShopReturnOrderItem.ProductThumb",
                   ShopReturnOrderItem._.ProductCode.FullName);
             }
 

@@ -158,6 +158,24 @@ namespace EasyCms.Web.API
 
 
         }
+        public HttpResponseMessage GetProductsWithSelected(string id = "", int pageIndex = 1, string other = "")
+        {
+
+            var resp = new HttpResponseMessage(HttpStatusCode.OK);
+
+            if (pageIndex == 0)
+            {
+                pageIndex = 1;
+            }
+             
+            
+                int pagecount = 0, recordCount = 0;
+                DataTable dt = new ShopProductInfoBll().GetProductsByCategory(id, pageIndex, other, host, ref pagecount, ref recordCount);
+
+                return new { PageIndex = pageIndex, RecordCount = dt.Rows.Count, TotalPageCount = pagecount, TotalRecourdCount = recordCount, Data = dt }.FormatObj();
+
+           
+        }
 
         public HttpResponseMessage GetProductsByWhere()
         {
@@ -173,7 +191,11 @@ namespace EasyCms.Web.API
             {
 
             }
-            else pageNum = 1;
+            if (pageNum==0)
+            {
+                pageNum = 1;
+            }
+            
             WhereClip where = new WhereClip();
             if (!string.IsNullOrWhiteSpace(categoryID))
             {
@@ -421,6 +443,20 @@ namespace EasyCms.Web.API
            
                 DataTable dt = new SystemBrandInfoBll().GetBrandList(id, pageIndex, host);
                 return dt.Format();
+            
+        }
+        public HttpResponseMessage GetTopVideo(int id = (int)BrandType.旅游频道, int pageIndex = 4)
+        {
+            DataTable dt = new SystemBrandInfoBll().GetTopVideoList(id, pageIndex, host);
+            return dt.Format();
+           
+        }
+
+        public HttpResponseMessage GetVideoList(int id = (int)BrandType.旅游频道, int pageIndex = 1 )
+
+        {
+            DataTable dt = new SystemBrandInfoBll().GetVideoList(id, pageIndex, 10, host);
+            return dt.Format();
             
         }
     }

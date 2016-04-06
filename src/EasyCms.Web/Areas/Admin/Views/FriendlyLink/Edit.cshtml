@@ -1,0 +1,73 @@
+﻿@model FriendlyLink
+@{
+    ViewBag.Title = "编辑友情链接";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEdit.cshtml";
+}
+
+@Styles.Render("~/bundles/upimgcss")
+@Scripts.Render("~/bundles/ueditor")
+@Scripts.Render("~/bundles/uploadJs")
+
+@using EasyCms.Model
+<!--内容-->
+<div id="floatHead" class="content-tab-wrap">
+    <div class="content-tab">
+        <div class="content-tab-ul-wrap">
+            <ul>
+                <li><a class="selected" href="javascript:;">基本信息</a></li> 
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="tab-content">
+
+
+    @HelperExtend.HiddenFor("ID", Model.ID)
+    @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString()) 
+    @Html.ValidationSummary()
+
+     @HelperExtend.TextBox("Name", "链接名称", defaultval: Model.Name, hint: "*")
+    @HelperExtend.TextBox("LinkAlt", "链接提示", defaultval: Model.LinkAlt, hint: "")
+    @HelperExtend.TextBox("LinkUrl", "链接地址", defaultval: Model.LinkUrl, hint: "*")
+    @HelperExtend.Number("OrderNo", "顺序", defaultval: Model.OrderNo, hint: "")
+    @HelperExtend.TextBox("GroupTag", "分组标识", defaultval: Model.GroupTag, hint: "可以对友情链接进行分组")
+    @HelperExtend.ImageUpLoad("LogoUrl", "链接Logo地址", Model.RecordStatus == Sharp.Common.StatusType.add, defaultval: Model.LogoUrl, maxLength: 1) 
+</div>
+ 
+@section  scripts{
+
+
+    <script type="text/javascript">
+
+        $(function () {
+         
+            //初始化表单验证
+            $("form").validate({
+                ignore: "",
+                rules: {
+                    
+                    Name: {
+                        required: true,
+                        maxlength: 50 
+                    } 
+                },
+                messages: { 
+                    Name: {
+                        required: "请输入名称",
+                        maxlength: $.validator.format("名称长度不能大于{0}个字符") 
+                    }
+                },
+                errorPlacement: function (error, element) {
+
+                    if (element.is(":radio"))
+                        error.insertAfter($(element).parent());
+                    else if (element.is(":checkbox"))
+                        error.insertAfter($(element).parent());
+                    else
+                        error.insertAfter(element);
+                }
+
+            });
+        })
+    </script> 
+}

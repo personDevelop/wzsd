@@ -14,7 +14,11 @@ namespace EasyCms.Business
     {
 
         LogDal CurrentClient = new LogDal();
+        static LogBll()
+        {
 
+            new LogDal().RegisterErrorSqlLogger();
+        }
 
         /// <summary>
         /// 记录错误信息

@@ -218,7 +218,7 @@ namespace EasyCms.Dal
                 ManagerUserInfo._.Name,
                 ManagerUserInfo._.Email,
                 ManagerUserInfo._.QQ,
-             AttachFile.GetFilePath(host, "Photo"),
+             AttachFile.GetCompressionfilePath(host, "Photo"),
                 ManagerUserInfo._.NickyName,
                 ManagerUserInfo._.Signature,
                 ManagerUserInfo._.IDNumber,
@@ -230,7 +230,7 @@ namespace EasyCms.Dal
                 ManagerUserInfo._.Status,
                 ManagerUserInfo._.Note, AccountRange._.GrowthValue, AccountRange._.JF, RangeDict._.Name.Alias("RangeName"), RangeDict._.HasService, RangeDict._.Img.Alias("RangeImg"))
                 .ToDataTable().Rows[0].ToFirst<AccountModel>();
-            user.RangeImg = Dal.From<AttachFile>().Where(AttachFile._.RefID == user.RangeImg).Select(AttachFile.GetFilePath(host)).ToScalar() as string;
+            user.RangeImg = Dal.From<AttachFile>().Where(AttachFile._.RefID == user.RangeImg).Select(AttachFile.GetCompressionfilePath(host)).ToScalar() as string;
 
             if (!string.IsNullOrWhiteSpace(user.HasService))
             {

@@ -58,6 +58,7 @@ namespace EasyCms.Web
         protected void Session_Start()
         {
             CmsSession.Session = Session;
+            DictionOrFilePathOperator.StartupPath = System.Web.HttpContext.Current.Request.PhysicalApplicationPath+"bin\\";
         }
 
 
