@@ -48,15 +48,17 @@
 <div class="tab-content" style="display:none">
     @HelperExtend.TextBox("Summary", "内容摘要", defaultval: Model.Summary)
     @HelperExtend.TextBox("KeyWords", "关键字", defaultval: Model.KeyWords)
-    @HelperExtend.UEditor("Description", "内容", defaultval: Model.Description)
+    @HelperExtend.UEditor("PCDescription", "详细描述", mobliecode: "Description", defaultPcval: Model.PCDescription, defaultmoblieval: Model.Description)
 
 </div>
 <div class="tab-content" style="display:none">
     @HelperExtend.TextBox("Meta_Title", "页面标题", defaultval: Model.Meta_Title)
     @HelperExtend.TextArea("Meta_Keywords", "页面关键字", defaultval: Model.Meta_Keywords)
-    @HelperExtend.TextArea("Meta_Description", "页面描述", defaultval: Model.Meta_Description)
+   
+   
+        
 
-</div>
+    </div>
 @section  scripts{
 
 

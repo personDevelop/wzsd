@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 namespace EasyCms.Model
 {
     /// <summary>
-    /// 友情链接
+    /// 友情链接 
     /// </summary>  
     [JsonObject]
     public partial class FriendlyLink : BaseEntity
@@ -230,5 +230,12 @@ namespace EasyCms.Model
             public PropertyItem GroupTag = null;
         }
         #endregion
+    }
+
+    public partial class FriendlyLink
+    {
+        [NotDbCol]
+        public string GroupTagName { get; set; }
+
     }
 }

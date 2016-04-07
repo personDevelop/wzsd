@@ -48,9 +48,11 @@
     <Compile Include="AppSetDal.cs" />
     <Compile Include="AsynchNotifyLogDal.cs" />
     <Compile Include="AttachFileDal.cs" />
+    <Compile Include="AttributeTypeDal.cs" />
     <Compile Include="CommonDal.cs" />
     <Compile Include="CouponRuleDal.cs" />
     <Compile Include="FriendlyLinkDal.cs" />
+    <Compile Include="FriendlyLinkTypeDal.cs" />
     <Compile Include="FunctionInfoDal.cs" />
     <Compile Include="FunctionRightDal.cs" />
     <Compile Include="HelpContentDal.cs" />
@@ -60,10 +62,12 @@
     <Compile Include="ManagerUserInfoDal.cs" />
     <Compile Include="MemberOrderDal.cs" />
     <Compile Include="NewsCategoryDal.cs" />
+    <Compile Include="NewsCommentDal.cs" />
     <Compile Include="NewsInfoDal.cs" />
     <Compile Include="ParameterInfoDal.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RedeemRulesDal.cs" />
+    <Compile Include="SearchKeyWordDal.cs" />
     <Compile Include="ShopShippingTypeDal.cs" />
     <Compile Include="SystemBrandInfoDal.cs" />
     <Compile Include="SendMsgInfoDal.cs" />

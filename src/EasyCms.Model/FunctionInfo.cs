@@ -30,11 +30,11 @@ namespace EasyCms.Model
 
         private string _Name;
 
-        private int _FuncType;
+        private FunctionType _FuncType;
 
         private string _Image;
 
-        private int _AccessType;
+        private AccessType _AccessType;
 
         private string _URL;
 
@@ -138,7 +138,7 @@ namespace EasyCms.Model
 
         [DbProperty(MapingColumnName = "FuncType", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public int FuncType
+        public FunctionType FuncType
         {
             get
             {
@@ -155,7 +155,7 @@ namespace EasyCms.Model
         ///  图标,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "Image", DbTypeString = "char", ColumnIsNull = true, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "Image", DbTypeString = "varchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string Image
         {
@@ -176,7 +176,7 @@ namespace EasyCms.Model
 
         [DbProperty(MapingColumnName = "AccessType", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public int AccessType
+        public AccessType AccessType
         {
             get
             {
@@ -514,7 +514,7 @@ namespace EasyCms.Model
 
         #endregion
 
-        #region 列定义
+        #region 列定义 
         public class Column
         {
             public Column(string tableName)
@@ -663,7 +663,6 @@ namespace EasyCms.Model
         }
         #endregion
     }
-
 
     public partial class FunctionInfo
     {

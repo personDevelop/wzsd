@@ -6,11 +6,11 @@
 {
     <input name="@code" id="@code" type="hidden" value="@value" />
 }
-@helper Lable(string text,string lable="")
+@helper Lable(string text, string lable = "")
 {
     <dl>
         <dt>
-            @MVCExtention.ExtendHtmlInput.MvcHelper.Label(text, lable) 
+            @MVCExtention.ExtendHtmlInput.MvcHelper.Label(text, lable)
 
         </dt>
         <dd>
@@ -22,7 +22,7 @@
 {
     <dl style="color:red">
         <dt>
-            <span style = "color:red">@lable</span>  
+            <span style="color:red">@lable</span>
 
         </dt>
         <dd>
@@ -81,26 +81,26 @@
 }
 @helper DropDownList(string code, string name, object defaultval = null, string hint = "", string otherClass = "", int width = 200, EasyCms.Web.DropDownListInfo downInfo = null)
 {
-    if (downInfo == null)
-    {
-        downInfo = new EasyCms.Web.DropDownListInfo();
+if (downInfo == null)
+{
+    downInfo = new EasyCms.Web.DropDownListInfo();
 
-    }
-    if (string.IsNullOrWhiteSpace(downInfo.DisplayMember))
-    {
-        downInfo.DisplayMember = "Name";
+}
+if (string.IsNullOrWhiteSpace(downInfo.DisplayMember))
+{
+    downInfo.DisplayMember = "Name";
 
-    }
-    if (string.IsNullOrWhiteSpace(downInfo.ValueMember))
-    {
-        downInfo.ValueMember = "ID";
+}
+if (string.IsNullOrWhiteSpace(downInfo.ValueMember))
+{
+    downInfo.ValueMember = "ID";
 
-    }
-    if (string.IsNullOrWhiteSpace(downInfo.JsonDataRoor))
-    {
-        downInfo.JsonDataRoor = "Rows";
-    }
-    string ctrlID = "DropDownList" + code;
+}
+if (string.IsNullOrWhiteSpace(downInfo.JsonDataRoor))
+{
+    downInfo.JsonDataRoor = "Rows";
+}
+string ctrlID = "DropDownList" + code;
     <dl>
         <dt>
 
@@ -172,8 +172,8 @@
 }
 @helper DropDownListCardEnum(string code, string name, object defaultval = null, Type enumType = null, string hint = "", int width = 150)
 { string ctrlID = "DropDownListCardEnum" + code;
-          
-           <dl>
+
+    <dl>
         <dt>
 
             @MVCExtention.ExtendHtmlInput.MvcHelper.Label(code, name)
@@ -185,12 +185,12 @@
             <span style="float: left; color: red">@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(hint)</span>
         </dd>
     </dl>
-    
+
     <script type="text/javascript">
         $(function(){
 
             @{
-    string jsonStr=string.Empty; 
+    string jsonStr=string.Empty;
     string[] names=    Enum.GetNames(enumType);
             Array ids = Enum.GetValues(enumType);
             for (int i = 0; i < ids.Length; i++)
@@ -317,7 +317,7 @@
         </dd>
     </dl>
 }
-@helper TextArea(string code, string name, object defaultval = null, string hint = "", string otherClass = "", int col = 50, int row =8)
+@helper TextArea(string code, string name, object defaultval = null, string hint = "", string otherClass = "", int col = 50, int row = 8)
 {
     <dl>
         <dt>
@@ -329,32 +329,95 @@
         </dd>
     </dl>
 }
-@helper UEditor(string code, string name, object defaultval = null, int editorHeight = 300, int EditorWidth = 800)
+@helper UEditor(string pccode, string name, object defaultPcval = null, string mobliecode = null, object defaultmoblieval = null, int editorHeight = 300, int EditorWidth = 800, int MobileeditorHeight = 600, int MobileEditorWidth = 400)
 {
-    string vitualPath = HttpContext.Current.Request.ApplicationPath;
-    if (vitualPath == "/")
-    {
-        vitualPath = string.Empty;
-    }
-    string homeUrl = vitualPath + "/Content/ueditor/";
-    string serverUrl = vitualPath + "/api/controller.ashx";
+string vitualPath = HttpContext.Current.Request.ApplicationPath;
+if (vitualPath == "/")
+{
+    vitualPath = string.Empty;
+}
+string homeUrl = vitualPath + "/Content/ueditor/";
+string serverUrl = vitualPath + "/api/controller.ashx";
     <dl>
         <dt>
-            @MVCExtention.ExtendHtmlInput.MvcHelper.Label(code, name)
+            @MVCExtention.ExtendHtmlInput.MvcHelper.Label(pccode, name)
         </dt>
         <dd>
-            <script id="@code" type="text/plain" style="width:@EditorWidth.ToString()px;height:@editorHeight.ToString()px;">
-            </script>
-            <script type="text/javascript">
-                //实例化编辑器
-                //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
-                UE.getEditor('@code', { textarea: "@code",initialContent:UE.utils.html( UE.utils.unhtml( "@defaultval" )),UEDITOR_HOME_URL:"@homeUrl",serverUrl:"@serverUrl" });
-                @*@{ string uecode = "ue" + code;}
-                var  <text>@uecode</text> =  UE.getEditor('@code', { textarea: "@code",initialContent: "@defaultval" });
-                <text>@uecode</text>.ready(function() {
-                    <text>@uecode</text>.setContent('@defaultval');
-                });*@
-            </script>
+            @if (string.IsNullOrWhiteSpace(mobliecode))
+            {
+                <script id="@pccode" type="text/plain" style="width:@EditorWidth.ToString()px;height:@editorHeight.ToString()px;">
+                </script>
+                <script type="text/javascript">
+                    //实例化编辑器
+                    //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
+                    UE.getEditor('@pccode', { textarea: "@pccode",initialContent:UE.utils.html( UE.utils.unhtml( "@defaultPcval" )),UEDITOR_HOME_URL:"@homeUrl",serverUrl:"@serverUrl" });
+                </script>
+            }
+            else
+            {
+                <div id='@pccode-jqxTongBu'>
+                    <button style="padding:4px 16px;" id="@pccode-Left">
+                        同步到手机
+                    </button>
+                    <button style="padding:4px 16px;" id="@pccode-Right">
+                        同步到电脑
+                    </button> 
+                    
+                </div>
+                <label style="color:red"> *注：同步到手机：将电脑版里的内容自动同步到手机版里，反正亦然。</label>
+                <div id='@pccode-jqxTabs'>
+                    <ul>
+                        <li style="margin-left: 30px;">@name（电脑）</li>
+                        <li>@name（手机）</li>
+                    </ul>
+                    <div>
+                        <script id="@pccode" type="text/plain" style="width:@EditorWidth.ToString()px;height:@editorHeight.ToString()px;">
+                        </script>
+                        <script type="text/javascript">
+                            //实例化编辑器
+                            //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
+                            UE.getEditor('@pccode', { textarea: "@pccode",initialContent:UE.utils.html( UE.utils.unhtml( "@defaultPcval" )),UEDITOR_HOME_URL:"@homeUrl",serverUrl:"@serverUrl" });
+                        </script>
+                    </div>
+                    <div>
+                        <div>
+                            <script id="@mobliecode" type="text/plain" style="width:@MobileEditorWidth.ToString()px;height:@MobileeditorHeight.ToString()px;">
+                            </script>
+                            <script type="text/javascript">
+                                //实例化编辑器
+                                //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
+                                UE.getEditor('@mobliecode', { textarea: "@mobliecode",initialContent:UE.utils.html( UE.utils.unhtml( "@defaultmoblieval" )),UEDITOR_HOME_URL:"@homeUrl",serverUrl:"@serverUrl" });
+                            </script>
+                        </div>
+                    </div>
+
+                </div>
+                <script type="text/javascript">
+                    $(function(){
+                        $("#@pccode-jqxTongBu").jqxButtonGroup({ mode:"default",template:"info" });
+
+                        $("#@pccode-jqxTongBu").on('buttonclick', function (event) {
+                            var clickedButton = event.args.button;
+                            if (clickedButton[0].id=="@pccode-Left") {
+                                Query("确认清空手机版现有内容,并使用电脑版内容同步？",function(){UE.getEditor('@mobliecode').setContent(UE.getEditor('@pccode').getContent());})
+
+                            }
+                            else
+                            { Query("确认清空电脑版现有内容,并使用手机版内容同步？",function(){UE.getEditor('@pccode').setContent(UE.getEditor('@mobliecode').getContent());})
+
+                              
+                            }
+                        });
+                        $('#@pccode-jqxTabs').jqxTabs({ width: '90%', height:  '90%', position: 'top'});});
+
+
+
+                </script>
+
+            }
+
+
+
 
         </dd>
     </dl>
@@ -424,7 +487,7 @@
 {
     <dl>
         <dt>
-            @MVCExtention.ExtendHtmlInput.MvcHelper.Label(code, name)  
+            @MVCExtention.ExtendHtmlInput.MvcHelper.Label(code, name)
         </dt>
         <dd>
             <div class="rule-multi-radio">
@@ -475,9 +538,9 @@
                 string dialogTitle = "", int dialogWidth = 500, int dialogHeight = 500, string InnitFunc = "InnitFunc", string onOk = "onOk"
                             , string DataControlID = "dataGrid", bool IsMutiSelect = false, bool IsTree = false, bool IsHidButton = false, string OnBefore = "")
 {
-    string dialogID = code + Guid.NewGuid();
-    string selectButtonID = code + Guid.NewGuid();
-    string OnBeforeFunc = "isContienu=" + OnBefore + "();";
+string dialogID = code + Guid.NewGuid();
+string selectButtonID = code + Guid.NewGuid();
+string OnBeforeFunc = "isContienu=" + OnBefore + "();";
     <dl>
         <dt>
             @MVCExtention.ExtendHtmlInput.MvcHelper.Label(code, name)
@@ -537,17 +600,17 @@
     DataControlID = DataControlID,
     IsMutiSelect = IsMutiSelect,
     IsTree = IsTree,
-    FiledID=id
+    FiledID = id
 })
 }
- 
+
 
 @helper HelpSmartDialog(string url, string id, string code, string name, string defaultVal = null, string defaultText = null, string hint = "", string otherClass = "", int width = 200,
-                        string dialogTitle = "", int dialogWidth = 800, int dialogHeight = 600, bool IsHidButton = false,bool isAppend=false, string OnBefore = "")
+                        string dialogTitle = "", int dialogWidth = 800, int dialogHeight = 600, bool IsHidButton = false, bool isAppend = false, string OnBefore = "")
 {
-    string dialogID = code + Guid.NewGuid();
-    string selectButtonID = code + Guid.NewGuid();
-    string OnBeforeFunc = "isContienu=" + OnBefore + "();";
+string dialogID = code + Guid.NewGuid();
+string selectButtonID = code + Guid.NewGuid();
+string OnBeforeFunc = "isContienu=" + OnBefore + "();";
     <dl>
         <dt>
             @MVCExtention.ExtendHtmlInput.MvcHelper.Label(code, name)
@@ -574,44 +637,44 @@
     </dl>
     <script type="text/javascript">
 
-    $(function () {
-        Dialog.create("@MVCExtention.ExtendHtmlInput.MvcUrl.Content("~/Content/Images/movie.png")");
+        $(function () {
+            Dialog.create("@MVCExtention.ExtendHtmlInput.MvcUrl.Content("~/Content/Images/movie.png")");
 
-        $("#@selectButtonID").click(function () {
-            var isContienu = true;
-            @if (!string.IsNullOrWhiteSpace(OnBefore))
+            $("#@selectButtonID").click(function () {
+                var isContienu = true;
+                @if (!string.IsNullOrWhiteSpace(OnBefore))
 	{
                      @OnBeforeFunc
 	}
-            if (isContienu) {
-                Dialog.open("@url" , "@dialogTitle", {
-                    onClose: function () {
-                        var data=GetThisDialogState();
-                        var oldVal="",oldName="";
-                        if (data) {
-                              oldVal= $("#@id").val( );
-                              oldName=  $("#@code").val( );
-                            if (!@isAppend.ToString().ToLower()) {
-   oldVal="";oldName="";     
-                        }
-                        if (oldVal) {
-                            oldVal+=",";
-                            oldName+=",";
-                        }
-                        oldVal+=data.ID;
-                        oldName+=data.Name;
-                         $("#@id").val(oldVal);
-                       $("#@code").val(oldName);
+                if (isContienu) {
+                    Dialog.open("@url" , "@dialogTitle", {
+                        onClose: function () {
+                            var data=GetThisDialogState();
+                            var oldVal="",oldName="";
+                            if (data) {
+                                oldVal= $("#@id").val( );
+                                oldName=  $("#@code").val( );
+                                if (!@isAppend.ToString().ToLower()) {
+       oldVal="";oldName="";
+                            }
+                            if (oldVal) {
+                                oldVal+=",";
+                                oldName+=",";
+                            }
+                            oldVal+=data.ID;
+                            oldName+=data.Name;
+                            $("#@id").val(oldVal);
+                            $("#@code").val(oldName);
 
+                        }
                     }
-                }
-                }, { width: 850, height: 580 });
+                    }, { width: 850, height: 580 });
 
-        }
-                return false;
-    });
+            }
+                    return false;
+        });
 
-    });
+        });
     </script>
 }
 
@@ -923,7 +986,7 @@
 @*级联下来框*@
 @helper DropDownListClass(string code, string name, string url, string valuemember = "ID", string displaymember = "Name", string hint = "", string otherClass = "")
 {
-    string dropid = "jqxDropDownList" + code;
+string dropid = "jqxDropDownList" + code;
     <dl>
         <dt>
             @MVCExtention.ExtendHtmlInput.MvcHelper.Label(code, name)
@@ -1004,9 +1067,9 @@
 
 @helper RegionDropDownList(string code, string name, int defaultval = 0, string valuemember = "ID", string displaymember = "Name", string hint = "", string otherClass = "")
 {
-    string dropid = "jqxDropDownList" + code;
-    string defualtid = "defualtid" + code;
-   string defualtPath= new EasyCms.Business.AdministrativeRegionsBll().GetPathByDefault(defaultval);
+string dropid = "jqxDropDownList" + code;
+string defualtid = "defualtid" + code;
+string defualtPath = new EasyCms.Business.AdministrativeRegionsBll().GetPathByDefault(defaultval);
     <dl>
         <dt>
             @MVCExtention.ExtendHtmlInput.MvcHelper.Label(code, name)
@@ -1031,8 +1094,8 @@
                 };
                 $(document).ready(function () {
 
-                
-                     
+
+
                     var dataAdapter = new $.jqx.dataAdapter(source);
                     $("#" + "@dropid").jqxDropDownList({ source: dataAdapter, displayMember: "@displaymember", valueMember: "@valuemember", width: 'auto', height: '25px' });
 
@@ -1071,7 +1134,7 @@
                             var item =  $("#"+event.target.id).jqxDropDownList('getItemByValue', curentVal);
                             $("#"+event.target.id).jqxDropDownList('selectItem', item);
                         }
-                       
+
                     }
 
                 }
@@ -1118,31 +1181,31 @@
 {<text>http://@HttpContext.Current.Request.Url.Authority@HttpContext.Current.Request.ApplicationPath</text><text>Content/Images/@imgName</text>}
 @helper ParseEnum(Type enumType)
 {
-    string result = "valObj: [";
-    Array ids = Enum.GetValues(enumType);
-    for (int i = 0; i < ids.Length; i++)
+string result = "valObj: [";
+Array ids = Enum.GetValues(enumType);
+for (int i = 0; i < ids.Length; i++)
+{
+    if (i > 0)
     {
-        if (i > 0)
-        {
-            result += ",";
-        }
-        result += string.Format("{{ key: {0}, val: '{1}' }}", Convert.ToInt32(ids.GetValue(i)), ids.GetValue(i).ToString());
+        result += ",";
     }
-    result += "]";
+    result += string.Format("{{ key: {0}, val: '{1}' }}", Convert.ToInt32(ids.GetValue(i)), ids.GetValue(i).ToString());
+}
+result += "]";
     <text>@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(result)</text>
 }
 @helper Parsebool()
 {
-    string result = "valObj: [";
-    result += "{key: true, val: '是' },{key: false, val: '否' }";
-    result += "]";
+string result = "valObj: [";
+result += "{key: true, val: '是' },{key: false, val: '否' }";
+result += "]";
     <text>@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(result)</text>
 }
 @helper ParseEnable()
 {
-    string result = "valObj: [";
-    result += "{key: true, val: '启用' },{key: false, val: '停用' }";
-    result += "]";
+string result = "valObj: [";
+result += "{key: true, val: '启用' },{key: false, val: '停用' }";
+result += "]";
     <text>@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(result)</text>
 }
 

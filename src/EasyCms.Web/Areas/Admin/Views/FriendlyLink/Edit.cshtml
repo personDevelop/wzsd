@@ -25,12 +25,12 @@
     @HelperExtend.HiddenFor("ID", Model.ID)
     @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString()) 
     @Html.ValidationSummary()
-
+    @HelperExtend.DropDownList("GroupTag", "分组标识", defaultval: Model.GroupTag, hint: "可以对友情链接进行分组",downInfo:new DropDownListInfo() {   Url=Url.Action("GetList", "FriendlyLinkType") })
      @HelperExtend.TextBox("Name", "链接名称", defaultval: Model.Name, hint: "*")
     @HelperExtend.TextBox("LinkAlt", "链接提示", defaultval: Model.LinkAlt, hint: "")
     @HelperExtend.TextBox("LinkUrl", "链接地址", defaultval: Model.LinkUrl, hint: "*")
     @HelperExtend.Number("OrderNo", "顺序", defaultval: Model.OrderNo, hint: "")
-    @HelperExtend.TextBox("GroupTag", "分组标识", defaultval: Model.GroupTag, hint: "可以对友情链接进行分组")
+ 
     @HelperExtend.ImageUpLoad("LogoUrl", "链接Logo地址", Model.RecordStatus == Sharp.Common.StatusType.add, defaultval: Model.LogoUrl, maxLength: 1) 
 </div>
  

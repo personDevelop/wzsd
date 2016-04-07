@@ -110,8 +110,9 @@
 </div>
 <div class="tab-content" style="display:none">
      
-    @HelperExtend.TextArea("ShortDescription", "简单描述", defaultval: Model.ShortDescription)  
-    @HelperExtend.UEditor("Description", "详细介绍", defaultval: Model.Description)
+    @HelperExtend.TextArea("ShortDescription", "简单描述", defaultval: Model.ShortDescription)   
+    @HelperExtend.UEditor("PCDescription", "详细描述", mobliecode: "Description", defaultPcval: Model.PCDescription, defaultmoblieval: Model.Description)
+     
 </div>
 <div class="tab-content" style="display:none">
     @HelperExtend.TextBox("Unit", "计量单位", defaultval: Model.Unit, hint: "")

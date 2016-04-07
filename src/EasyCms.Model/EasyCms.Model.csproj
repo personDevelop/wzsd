@@ -52,11 +52,15 @@
     <Compile Include="Ali\RSAFromPkcs8.cs" />
     <Compile Include="AppSet.cs" />
     <Compile Include="AttachFile.cs" />
+    <Compile Include="AttributeType.cs" />
     <Compile Include="CouponRule.cs" />
     <Compile Include="FriendlyLink.cs" />
+    <Compile Include="FriendlyLinkType.cs" />
     <Compile Include="HelpContent.cs" />
     <Compile Include="HelpType.cs" />
     <Compile Include="MsgSendLog.cs" />
+    <Compile Include="SearchKeyRelationContent.cs" />
+    <Compile Include="SearchKeyWord.cs" />
     <Compile Include="SendCoupon.cs" />
     <Compile Include="CusomerAndCoupon.cs" />
     <Compile Include="FunctionInfo.cs" />

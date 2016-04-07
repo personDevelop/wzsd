@@ -354,8 +354,10 @@ namespace EasyCms.Model
         后台菜单,
         商城导航,
         API,
+        内置功能,
+        商城个人中心,
         其它,
-        商城个人中心
+        
     }
 
     public enum AccessType

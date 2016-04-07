@@ -38,6 +38,8 @@ namespace EasyCms.Model
 
         private string _Description;
 
+        private string _PCDescription;
+
         private string _ImageUrl;
 
         private string _ThumbImageUrl;
@@ -216,6 +218,25 @@ namespace EasyCms.Model
             {
                 this.OnPropertyChanged("Description", this._Description, value);
                 this._Description = value;
+            }
+        }
+
+        /// <summary>
+        ///  PC内容,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "PCDescription", DbTypeString = "ntext", ColumnIsNull = true, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string PCDescription
+        {
+            get
+            {
+                return this._PCDescription;
+            }
+            set
+            {
+                this.OnPropertyChanged("PCDescription", this._PCDescription, value);
+                this._PCDescription = value;
             }
         }
 
@@ -828,6 +849,8 @@ namespace EasyCms.Model
 
                 Description = new PropertyItem("Description", tableName);
 
+                PCDescription = new PropertyItem("PCDescription", tableName);
+
                 ImageUrl = new PropertyItem("ImageUrl", tableName);
 
                 ThumbImageUrl = new PropertyItem("ThumbImageUrl", tableName);
@@ -916,6 +939,10 @@ namespace EasyCms.Model
             /// 内容,
             /// </summary> 
             public PropertyItem Description = null;
+            /// <summary>
+            /// PC内容,
+            /// </summary> 
+            public PropertyItem PCDescription = null;
             /// <summary>
             /// 图片地址,
             /// </summary> 

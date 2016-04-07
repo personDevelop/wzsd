@@ -223,10 +223,12 @@
     <Compile Include="API\UserApiController.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\Controllers\AppSetController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AttributeTypeController.cs" />
     <Compile Include="Areas\Admin\Controllers\CouponRuleController.cs" />
     <Compile Include="Areas\Admin\Controllers\CouponSendRecordController.cs" />
     <Compile Include="Areas\Admin\Controllers\ErrorController.cs" />
     <Compile Include="Areas\Admin\Controllers\FriendlyLinkController.cs" />
+    <Compile Include="Areas\Admin\Controllers\FriendlyLinkTypeController.cs" />
     <Compile Include="Areas\Admin\Controllers\FunctionInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\FunctionRightController.cs" />
     <Compile Include="Areas\Admin\Controllers\HelpContentController.cs" />
@@ -234,10 +236,12 @@
     <Compile Include="Areas\Admin\Controllers\LoginController.cs" />
     <Compile Include="Areas\Admin\Controllers\LogOperController.cs" />
     <Compile Include="Areas\Admin\Controllers\ManagerUserInfoController.cs" />
+    <Compile Include="Areas\Admin\Controllers\NewsCommentController.cs" />
     <Compile Include="Areas\Admin\Controllers\RangeDictController.cs" />
     <Compile Include="Areas\Admin\Controllers\NewsInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\RedeemRulesController.cs" />
     <Compile Include="Areas\Admin\Controllers\RegionsController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SearchKeyWordController.cs" />
     <Compile Include="Areas\Admin\Controllers\SendMsgInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopBrandInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopCategoryController.cs" />
@@ -839,6 +843,11 @@
     <Content Include="Areas\Admin\Views\HelpContent\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ShopShippingType\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\ShopShippingType\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\FriendlyLinkType\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\FriendlyLinkType\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\AttributeType\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\AttributeType\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\NewsComment\Index.cshtml" />
     <None Include="Properties\PublishProfiles\publish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\EshopAdminControl.js" />
@@ -1312,6 +1321,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Views\Error\" />
+    <Folder Include="Areas\Admin\Views\SearchKeyWord\" />
     <Folder Include="Content\css\" />
     <Folder Include="Scripts\jGui\" />
     <Folder Include="Upload\Export\" />

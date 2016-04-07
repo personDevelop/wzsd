@@ -52,23 +52,26 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                 foreach (var item in list.Where(p => p.ParentID == parentID))
                 {
                     string url = "#";
-                    if (item.AccessType > 1)
+                    switch (item.AccessType)
                     {
-                        switch (item.AccessType)
-                        {
-                            case 0:
-                            case 1:
-                            case 4:
-                            default:
-                                break;
-                            case 2:
-                                url = Url.Action(item.CallAction, item.CallControler, new { area = item.CallArea });
-                                break;
-                            case 3:
-                                url = item.URL;
-                                break;
-                        }
+                        case AccessType.层级模块:
+                            break;
+                        case AccessType.普通模块:
+                            break;
+                        case AccessType.MVC功能:
+                            url = Url.Action(item.CallAction, item.CallControler, new { area = item.CallArea });
+                            break;
+                        case AccessType.API功能:
+                            break;
+                        case AccessType.URL功能:
+                            url = item.URL;
+                            break;
+                        case AccessType.其它:
+                            break;
+                        default:
+                            break;
                     }
+                     
                     sb.AppendFormat(@"  <li> <a href='{1}' navid='{2}' target='mainframe' > <span>{0}</span>  </a>",
                         item.ShowText, url,item.ID);
 

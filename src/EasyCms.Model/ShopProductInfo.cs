@@ -46,6 +46,8 @@ namespace EasyCms.Model
 
         private decimal _Weight;
 
+        private string _PCDescription;
+
         private string _Description;
 
         private string _Meta_Title;
@@ -319,6 +321,25 @@ namespace EasyCms.Model
             {
                 this.OnPropertyChanged("Weight", this._Weight, value);
                 this._Weight = value;
+            }
+        }
+
+        /// <summary>
+        ///  电脑版商品介绍,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "PCDescription", DbTypeString = "ntext", ColumnIsNull = true, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string PCDescription
+        {
+            get
+            {
+                return this._PCDescription;
+            }
+            set
+            {
+                this.OnPropertyChanged("PCDescription", this._PCDescription, value);
+                this._PCDescription = value;
             }
         }
 
@@ -913,7 +934,7 @@ namespace EasyCms.Model
 
         #endregion
 
-        #region 列定义
+        #region 列定义 
         public class Column
         {
             public Column(string tableName)
@@ -940,6 +961,8 @@ namespace EasyCms.Model
                 Unit = new PropertyItem("Unit", tableName);
 
                 Weight = new PropertyItem("Weight", tableName);
+
+                PCDescription = new PropertyItem("PCDescription", tableName);
 
                 Description = new PropertyItem("Description", tableName);
 
@@ -1049,6 +1072,10 @@ namespace EasyCms.Model
             /// 重量,
             /// </summary> 
             public PropertyItem Weight = null;
+            /// <summary>
+            /// 电脑版商品介绍,
+            /// </summary> 
+            public PropertyItem PCDescription = null;
             /// <summary>
             /// 商品介绍,
             /// </summary> 

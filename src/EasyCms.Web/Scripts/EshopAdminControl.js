@@ -577,8 +577,8 @@ function Query(msg, onOk, title) {
         okButton: $('#ok'), cancelButton: $('#cancel'),
         initContent: function () {
 
-            $('#ok').jqxButton({ width: '65px' });
-            $('#cancel').jqxButton({ width: '65px' });
+            $('#ok').jqxButton({ width: '65px', template: "success" });
+            $('#cancel').jqxButton({ width: '65px', template: "warning" });
             $('#ok').focus();
         }
     });
