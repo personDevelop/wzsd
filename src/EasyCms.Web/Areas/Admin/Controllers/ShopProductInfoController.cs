@@ -260,8 +260,22 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                         item.Name = SkuIDName[item.SKURelationID];
                     }
                 }
+                //获取商品推荐
+                List<int> StationModeList = new List<int>();
+                foreach (string item in collection.Keys)
+                {
+                    if (item.StartsWith("spt"))
+                    {
+                        string ptID = item.Substring(3);
+                        string[] s = ptID.Split('|');
+                        if (!string.IsNullOrWhiteSpace(s[1]))
+                        {
+                            StationModeList.Add(Convert.ToInt32(s[1]));
+                        }
 
-                int i = bll.Save(p, list, listAttri, listSku, listSkuInfo);
+                    }
+                }
+                int i = bll.Save(p, list, listAttri, listSku, listSkuInfo, StationModeList);
                 if (i > -1)
                 {
                     if (TempData.ContainsKey("IsSuccess"))

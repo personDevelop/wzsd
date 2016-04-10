@@ -68,5 +68,10 @@ namespace EasyCms.Business
         {
             return Dal.DeleteExtend(id);
         }
+
+        public List<ShopProductStationMode> GetStationMode(string productID, StatusType status)
+        {
+            return Dal.GetStationMode(  productID,   status);
+        }
     }
 }

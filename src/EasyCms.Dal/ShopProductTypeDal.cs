@@ -74,6 +74,32 @@ namespace EasyCms.Dal
             return error;
         }
 
+        public List<ShopProductStationMode> GetStationMode(string productID, StatusType status)
+        {
+            List<ShopProductStationMode> list = new List<ShopProductStationMode>();
+            if (status == StatusType.update)
+            {
+                list = Dal.From<ShopProductStationMode>().Where(ShopProductStationMode._.ProductID == productID)
+                .List<ShopProductStationMode>();
+            }
+           List<ShopProductStationMode> Resultlist = new List<ShopProductStationMode>();
+           Array vals = typeof(StationMode).GetEnumValues();
+            
+            foreach (var item in vals)
+            {
+                if (status == StatusType.add || !list.Exists(p => p.StationMode == (int)item))
+                {
+                    Resultlist.Add(new ShopProductStationMode() { ProductID = productID, StationMode = (int)item, StationModeName = ((StationMode)(int)item).ToString() });
+
+                }else
+              
+                {
+                    Resultlist.Add(list.Find(p => p.StationMode == (int)item));
+                }
+            }
+            return Resultlist;
+        }
+
         public string SaveExtendType(string iDs, string ptypeID)
         {
 
@@ -181,9 +207,9 @@ namespace EasyCms.Dal
                 where = where && ShopExtendInfo._.UsageMode < 2;
             }
             DataTable dt = Dal.From<ShopExtendInfo>().Join<ShopExtendAndType>(ShopExtendInfo._.ID == ShopExtendAndType._.ExtendID)
-                .Join<AttributeType>(ShopExtendInfo._.CategoryID==AttributeType._.ID,  JoinType.leftJoin)
+                .Join<AttributeType>(ShopExtendInfo._.CategoryID == AttributeType._.ID, JoinType.leftJoin)
                 .Where(where).OrderBy(ShopExtendAndType._.OrderNo)
-                .Select(ShopExtendInfo._.ID.Alias("ExtendID"), ShopExtendInfo._.Name, ShopExtendInfo._.FullName, ShopExtendInfo._.ShowType, ShopExtendInfo._.UsageMode, ShopExtendInfo._.UseAttrImg,AttributeType._.Name.Alias("CategoryName"), ShopExtendAndType._.ID, ShopExtendAndType._.OrderNo)
+                .Select(ShopExtendInfo._.ID.Alias("ExtendID"), ShopExtendInfo._.Name, ShopExtendInfo._.FullName, ShopExtendInfo._.ShowType, ShopExtendInfo._.UsageMode, ShopExtendInfo._.UseAttrImg, AttributeType._.Name.Alias("CategoryName"), ShopExtendAndType._.ID, ShopExtendAndType._.OrderNo)
                      .ToDataTable();
             if (dt.Rows.Count > 0)
             {

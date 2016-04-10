@@ -89,7 +89,30 @@
     @HelperExtend.RadioGroup("SalesType", "销售类型 ", "0,1", "赠品,正常", defaultval: Model.SalesType)
 
     @HelperExtend.RadioGroup("SaleStatus", "商品状态 ", "0,1", "下架,上架,审批中,审批退回", defaultval: Model.SaleStatus)
+    @{
+        //推荐类型
+        List<ShopProductStationMode> ptList = new EasyCms.Business.ShopProductTypeBll().GetStationMode(Model.ID, Model.RecordStatus);
+        if (ptList.Count > 0)
+        {
+            string codes = string.Empty;
+            string names = string.Empty;
+            bool[] vals = new bool[ptList.Count];
+            int i = 0;
+            foreach (ShopProductStationMode item in ptList)
+            {
+                if (!string.IsNullOrEmpty(codes))
+                {
+                    codes += ",";
+                    names += ",";
+                }
+                codes += "spt" + string.Format("{0}|{1}",item.ID,item.StationMode);
+                names += item.StationModeName;
+                vals[i++] = string.IsNullOrWhiteSpace(item.ID) ? false : true; 
+            }
 
+            @HelperExtend.CheckBoxList("推荐", codes, names, defaultval: vals)
+        }
+    }
     @HelperExtend.Number("MarketPrice", "市场价", defaultval: Model.MarketPrice, hint: "", decimalDigits: 2, max: 10000000)
 
     @HelperExtend.Number("SalePrice", "销售价", defaultval: Model.SalePrice, hint: "", decimalDigits: 2, max: 10000000)

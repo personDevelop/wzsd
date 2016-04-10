@@ -19,7 +19,7 @@ namespace EasyCms.Dal
             return error;
         }
 
-        public int Save(ShopProductInfo item, List<BaseEntity> list, List<ShopProductAttributes> spas, List<ShopProductSKU> listSku, List<ShopProductSKUInfo> listSkuInfo)
+        public int Save(ShopProductInfo item, List<BaseEntity> list, List<ShopProductAttributes> spas, List<ShopProductSKU> listSku, List<ShopProductSKUInfo> listSkuInfo, List<int> StationModeList)
         {
             List<string> deleteShopProductAttributesIDS = new List<string>();
             foreach (ShopProductAttributes spa in spas)
@@ -69,7 +69,16 @@ namespace EasyCms.Dal
                 }
 
             }
-            SessionFactory dal;
+            //处理推荐信息
+            ShopProductStationMode deletestation = new ShopProductStationMode() {  RecordStatus= StatusType.delete,  Where= ShopProductStationMode._.ProductID==item.ID};
+            List<ShopProductStationMode> listStationMode = new List<ShopProductStationMode>();
+            listStationMode.Add(deletestation);
+            foreach (int staton in StationModeList)
+            {
+                listStationMode.Add(new ShopProductStationMode() { ID=Guid.NewGuid().ToString(), ProductID= item.ID,
+                 StationMode=staton, StationModeName=((StationMode)staton).ToString()}); 
+            }
+              SessionFactory dal;
             IDbTransaction tr = Dal.BeginTransaction(out dal);
             try
             {
@@ -88,6 +97,7 @@ namespace EasyCms.Dal
                 dal.SubmitNew(tr, ref dal, spas);
                 dal.SubmitNew(tr, ref dal, listSku);
                 dal.SubmitNew(tr, ref dal, listSkuInfo);
+                dal.SubmitNew(tr, ref dal, listStationMode);
                 dal.CommitTransaction(tr);
                 return 1;
             }

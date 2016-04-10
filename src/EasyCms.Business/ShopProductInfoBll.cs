@@ -19,9 +19,9 @@ namespace EasyCms.Business
             return Dal.Delete(id);
         }
 
-        public int Save(ShopProductInfo item, List<BaseEntity> list, List<ShopProductAttributes> spa, List<ShopProductSKU> listSku, List<ShopProductSKUInfo> listSkuInfo)
+        public int Save(ShopProductInfo item, List<BaseEntity> list, List<ShopProductAttributes> spa, List<ShopProductSKU> listSku, List<ShopProductSKUInfo> listSkuInfo, List<int> StationModeList)
         {
-            return Dal.Save(item, list, spa, listSku, listSkuInfo);
+            return Dal.Save(item, list, spa, listSku, listSkuInfo,   StationModeList);
         }
 
         public DataTable GetList(bool IsForSelected = false)
