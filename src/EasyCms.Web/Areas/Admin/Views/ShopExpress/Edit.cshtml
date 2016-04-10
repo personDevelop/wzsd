@@ -96,7 +96,11 @@
                         remote: "名称重复"
                     }
                 },
-       errorPlacement: errorPlace
+                errorPlacement: errorPlace,
+                showErrors: function (errorMap, errorList) {
+                    $('#jqxLoader').jqxLoader('close');
+                    this.defaultShowErrors();
+                }
             });
         })
     </script>

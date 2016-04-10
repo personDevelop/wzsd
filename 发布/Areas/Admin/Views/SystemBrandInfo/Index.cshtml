@@ -1,0 +1,55 @@
+﻿@using MVCExtention;
+@{
+    ViewBag.Title = "频道广告栏设置";
+}
+
+<!--工具栏-->
+<div id="floatHead" class="toolbar-wrap">
+    <div class="toolbar">
+        <div class="box-wrap">
+            <a class="menu-btn"></a>
+            <div class="l-list">
+                <ul class="icon-list">
+                    <li><a class="add" href="@Url.Action("Edit")"><i></i><span>新增</span></a></li>
+                    <li><a class="edit" href="javascript:;" onclick="EditGrid('jqxgrid', '@Url.Action("Edit")');"><i></i><span>编辑</span></a></li>
+                    <li><a class="del" href="javascript:;" onclick="DelGrid('jqxgrid', '@Url.Action("Delete")');"><i></i><span>删除</span></a></li>
+                    <li><a class="del" href="javascript:;" onclick="DelGrid('jqxgrid', '@Url.Action("Send")');"><i></i><span>发送</span></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/工具栏-->
+<!--列表-->
+<div class="table-container">
+    <div id="jqxgrid"></div>
+</div>
+<!--/列表-->
+@section  scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var url = "@Url.Action("GetList")";
+            var datafields = [
+
+  { name: 'ID' },
+  { name: 'Code' },
+      { name: 'Name' },
+  { name: 'BrandType' },
+  { name: 'AppHandleTag' },
+  { name: 'CreateTime' }
+            ];
+            var columns = [
+
+ { text: '编号', dataField: 'Code',  cellsalign: "left"  },
+     { text: '名称', dataField: 'Name', cellsalign: "left"  },
+  { text: '位置', dataField: 'BrandType',   @HelperExtend.ParseEnum(typeof(EasyCms.Model.BrandType)) },  
+  { text: '动作类型', dataField: 'AppHandleTag', @HelperExtend.ParseEnum(typeof(EasyCms.Model.AppHandleTag)) },  
+  { text: '创建时间', dataField: 'CreateTime', cellsalign: "left", width: 200 } 
+            ];
+            CreateGrid("jqxgrid", url, datafields, columns);
+
+
+        });
+    </script>
+}

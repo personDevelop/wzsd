@@ -79,7 +79,11 @@
                         remote: "已存在该发送类型的模板"
                     }
                 },
-                errorPlacement: errorPlace
+                errorPlacement: errorPlace,
+                showErrors: function (errorMap, errorList) {
+                    $('#jqxLoader').jqxLoader('close');
+                    this.defaultShowErrors();
+                }
             });
         })
     </script>

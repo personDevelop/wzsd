@@ -52,6 +52,12 @@ namespace EasyCms.Dal
             }
             return !Dal.Exists<AttributeType>(where);
         }
+
+        public DataTable GetListForDropDown()
+        {
+            return Dal.From<AttributeType>().Select(AttributeType._.ID, AttributeType._.Name).OrderBy(AttributeType._.Code).ToDataTable();
+        }
+
         public DataTable GetList(int pagenum, int pagesize, ref int recordCount, bool IsForSelected = false)
         {
             int pageCount = 0;

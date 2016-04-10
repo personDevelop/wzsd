@@ -110,8 +110,9 @@
 </div>
 <div class="tab-content" style="display:none">
      
-    @HelperExtend.TextArea("ShortDescription", "简单描述", defaultval: Model.ShortDescription)  
-    @HelperExtend.UEditor("Description", "详细介绍", defaultval: Model.Description)
+    @HelperExtend.TextArea("ShortDescription", "简单描述", defaultval: Model.ShortDescription)   
+    @HelperExtend.UEditor("PCDescription", "详细描述", mobliecode: "Description", defaultPcval: Model.PCDescription, defaultmoblieval: Model.Description)
+     
 </div>
 <div class="tab-content" style="display:none">
     @HelperExtend.TextBox("Unit", "计量单位", defaultval: Model.Unit, hint: "")
@@ -139,7 +140,7 @@
 </div>
 <div class="tab-content" style="display:none">
     <fieldset id="extendInfo" style="border-width:1px; border-style:solid;  border-color:#eee">
-        <legend style=" text-align:center;     ">扩展属性</legend>
+        <legend style="text-align:center;">扩展属性</legend>
     </fieldset>
 </div>
 <div class="tab-content" style="display:none">
@@ -157,7 +158,7 @@
         </div>
     </div>
     <fieldset id="ggInfo" style="border-width:1px; border-style:solid;  border-color:#eee">
-        <legend style=" text-align:center;     ">规格</legend>
+        <legend style="text-align:center;">规格</legend>
 
     </fieldset>
     <table id="skugrid" class="mytable"></table>
@@ -562,14 +563,10 @@
                     ShopCategoryName: { required: "请输入商品分类" },
                     TypeId: { required: "请输入商品类型" }
                 },
-                errorPlacement: function (error, element) {
-
-                    if (element.is(":radio"))
-                        error.insertAfter($(element).parent());
-                    else if (element.is(":checkbox"))
-                        error.insertAfter($(element).parent());
-                    else
-                        error.insertAfter(element);
+                errorPlacement: errorPlace,
+                showErrors: function (errorMap, errorList) {
+                    $('#jqxLoader').jqxLoader('close');
+                    this.defaultShowErrors();
                 }
 
             });
@@ -589,7 +586,7 @@
                { name: 'ParentID', type: 'string' },
 
                { name: 'Code', type: 'string' },
-
+           { name: 'AssociatedProductType', type: 'string' },
                { name: 'Name', type: 'string' }
                             ],
                             timeout: 10000,
@@ -630,6 +627,9 @@
                 }
                 $("#ShopCategoryName").val(names);
                 $("#ShopCategoryID").val(ids);
+                $("#DropDownListTypeId").jqxDropDownList('val', data[0].AssociatedProductType); 
+                $("#TypeId").val(data[0].AssociatedProductType);
+                
 
             } else { ErrorMsg("请至少选择一条数据"); }
         }

@@ -26,17 +26,19 @@
     @HelperExtend.HiddenFor("ID", Model.ID)
     @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())
 
-   
-    
+
+
     @Html.ValidationSummary()
     @HelperExtend.HelpEdit("ParentID", "ParentName", "上级分类", defaultText: Model.ParentName, hint: "空为一级分类", dialogTitle: "选择上级分类", InnitFunc: "InnitFunc", onOk: "onOk", IsTree: true, DataControlID: "treeGrid")
     @HelperExtend.TextBox("Code", "编号", defaultval: Model.Code, hint: "*编号不能重复")
     @HelperExtend.TextBox("Name", "名称", defaultval: Model.Name, hint: "*名称不能重复.")
+    @HelperExtend.DropDownList("AssociatedProductType", "商品类型", defaultval: Model.AssociatedProductType, hint: "", downInfo: new DropDownListInfo() { Url = Url.Action("GetListForSelecte", "ShopProductType") })
     @HelperExtend.ImageUpLoad("SmallLogo", "小图标", Model.RecordStatus == Sharp.Common.StatusType.add, defaultval: Model.SmallLogo, maxLength: 1)
     @HelperExtend.ImageUpLoad("BigLogo", "大图标", Model.RecordStatus == Sharp.Common.StatusType.add, defaultval: Model.BigLogo, maxLength: 1)
-
+    @HelperExtend.TextArea("PriceArea", "价格范围", defaultval: Model.PriceArea, hint: "<br/>多个之间用换行间隔，格式如0-100，100-200，200- 最后一个可以为空例如200-")
+    @HelperExtend.RadioGroup("IsShow", "首页显示", "false,true", "否,是", defaultval: Model.IsShow,hint:"首页会显示该分类的推荐商品")
     @HelperExtend.RadioGroup("IsEnable", "启用", "false,true", "否,是", defaultval: Model.IsEnable)
-    @HelperExtend.Number("OrderNo", "显示顺序", defaultval: Model.OrderNo )
+    @HelperExtend.Number("OrderNo", "显示顺序", defaultval: Model.OrderNo)
     @HelperExtend.TextArea("Note", "备注", defaultval: Model.Note)
 </div>
 <div class="tab-content" style="display:none">
@@ -102,14 +104,10 @@
                         remote: "同级分类下名称重复"
                     }
                 },
-                errorPlacement: function (error, element) {
-
-                    if (element.is(":radio"))
-                        error.insertAfter($(element).parent());
-                    else if (element.is(":checkbox"))
-                        error.insertAfter($(element).parent());
-                    else
-                        error.insertAfter(element);
+                errorPlacement: errorPlace,
+                showErrors: function (errorMap, errorList) {
+                    $('#jqxLoader').jqxLoader('close');
+                    this.defaultShowErrors();
                 }
 
             });
@@ -129,6 +127,8 @@
                { name: 'ParentID', type: 'string' },
 
                { name: 'Code', type: 'string' },
+                  { name: 'AssociatedProductType', type: 'string' },
+                     { name: 'PriceArea', type: 'string' },
 
                { name: 'Name', type: 'string' }
                             ],
@@ -162,10 +162,12 @@
 
                 $("#ParentName").val(data[0].Name);
                 $("#ParentID").val(data[0].ID);
-
-
+                $("#PriceArea").val(data[0].PriceArea);
+            
+               $("#DropDownListAssociatedProductType").jqxDropDownList('val',  data[0].AssociatedProductType); 
+               $("#AssociatedProductType").val(data[0].AssociatedProductType);
             } else { ErrorMsg("请选择一条数据"); }
         }
-        
+
     </script>
 }

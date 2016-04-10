@@ -1,0 +1,150 @@
+﻿@model ShopExtendInfo
+@{
+    ViewBag.Title = "编辑扩展属性";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEdit.cshtml";
+}
+
+@Styles.Render("~/bundles/upimgcss")
+@Scripts.Render("~/bundles/ueditor")
+@Scripts.Render("~/bundles/uploadJs")
+
+@using EasyCms.Model
+@using Sharp.Common
+<!--内容-->
+<!--内容-->
+<div id="floatHead" class="content-tab-wrap">
+    <div class="content-tab">
+        <div class="content-tab-ul-wrap">
+            <ul>
+                <li><a class="selected" href="javascript:;">基本信息</a></li> 
+            </ul>
+        </div>
+    </div>
+</div>
+ 
+
+    <div class="tab-content">
+       
+
+        @Html.ValidationSummary()  
+            @HelperExtend.HiddenFor("ID", Model.ID)
+            @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())
+            @HelperExtend.DropDownList("CategoryID", "分类", defaultval: Model.CategoryID, hint: "", downInfo: new DropDownListInfo() { Url = Url.Action("GetListForDropDown", "AttributeType") })
+            @HelperExtend.RadioGroup("UsageMode", "类型", typeof(UsageMode).GetEnumVal(), typeof(UsageMode).GetEnumNamesStr(), defaultval: (int)Model.UsageMode, onChange: "onChange")
+            @HelperExtend.TextBox("FullName", "全称", defaultval: Model.FullName, hint: "*必填,全称不能重复")
+            @HelperExtend.TextBox("Name", "显示名称", defaultval: Model.Name, hint: "*必填")
+            @HelperExtend.TextBox("UnitText", "单位", defaultval: Model.UnitText, hint: "属性的计量单位.")
+            @HelperExtend.RadioGroup("ShowType", "展示方式 ", typeof(AttrShowType).GetEnumVal(), typeof(AttrShowType).GetEnumNamesStr(), defaultval: (int)Model.ShowType)
+            @HelperExtend.RadioGroup("UseAttrImg", "显示类型", "false,true", "文本,图片", defaultval: Model.UseAttrImg, onChange: "onUseAttrImgChange")
+            @HelperExtend.RadioGroup("UseDefineImg", "自定义图标", "false,true", "否,是", defaultval: Model.UseDefineImg)
+        @HelperExtend.RadioGroup("IsCanSearch", "搜索条件", "false,true", "否,是", defaultval: Model.IsCanSearch, hint: "作为搜索条件,会在商城的分类搜索条件里显示！")
+            @HelperExtend.Number("DisplayOrder", "显示顺序", defaultval: Model.DisplayOrder)
+        
+            @HelperExtend.TextArea("Vals", "对应值", hint: "对应值，多个对应值之间可用“，”号隔开，每个值最多15个字符！") 
+        
+        
+    </div>
+
+    @section  scripts{
+
+       <script type="text/javascript">
+           $(function () {
+               if ($("#RecordStatus").val() != "add") {
+                   $("#Vals").closest("dl").hide();
+               }
+           });
+          
+           
+           function onUseAttrImgChange(element) {
+            var val;
+            if (!element) {
+                val = 0;
+            } else {
+                val = $(element).val();
+            }
+            if (val=="true") {
+                $("input[name='UseDefineImg']").closest("dl").show();
+            } else
+            { $("input[name='UseDefineImg']").closest("dl").hide(); }
+            
+           }
+
+           function onChange(element) {
+               var val;
+               if (!element) {
+                   val = 0;
+               } else {
+                   val = $(element).val();
+               }
+               switch (val) {
+                   case "0":
+                   case "1":
+                       /*属性*/
+                       $("#UnitText").closest("dl").show();
+                       $("input[name='ShowType']").closest("dl").show();
+                       break;
+                   case "2":
+                   case "3":
+                       /*规格*/
+                       $("#UnitText").closest("dl").hide();
+                       $("input[name='ShowType']").closest("dl").hide();
+                       break;
+                   default:
+               }
+           }
+           
+</script>
+
+        <script type="text/javascript">
+
+            $(function () { 
+                //初始化表单验证
+                $("formGg").validate({
+                    ignore: "",
+                    rules: {
+                        FullName: {
+                            required: true,
+                            maxlength: 100,
+                            remote: {
+                                url: '@Url.Action("CheckRepeat")',
+                                data: {
+                                    ID: function () { return $("#ID").val(); },
+                                    categoryID: function () { return $("#CategoryID").val(); },
+                                    RecordStatus: function () { return $("#RecordStatus").val(); },
+                                    val: function () { return $("#FullName").val(); },
+                                    IsCode: false
+                                }
+                            } 
+                        },
+                        Name: {
+                            required: true,
+                            maxlength: 100
+                        }
+                    },
+                    messages: {
+                        FullName: {
+                            required: "请输入全称",
+                            maxlength: $.validator.format("全称长度不能大于{0}个字符"),
+                            remote: "同分类下全称不能重复"
+
+                        },
+                        Name: {
+                            required: "请输入名称",
+                            maxlength: $.validator.format("名称长度不能大于{0}个字符")
+
+                        }
+                    },
+                    errorPlacement: errorPlace,
+                    showErrors: function (errorMap, errorList) {
+                        $('#jqxLoader').jqxLoader('close');
+                        this.defaultShowErrors();
+                    }
+
+                });
+
+
+            })
+        </script>
+
+
+    }

@@ -13,7 +13,6 @@ namespace EasyCms.Model
     /// 扩展属性
     /// </summary>  
     [JsonObject]
-
     public partial class ShopExtendInfo : BaseEntity
     {
         public static Column _ = new Column("ShopExtendInfo");
@@ -29,21 +28,25 @@ namespace EasyCms.Model
 
         private string _ID;
 
+        private string _FullName;
+
         private string _Name;
 
         private string _UnitText;
 
-        private int _ShowType;
+        private AttrShowType _ShowType;
 
         private int _DisplayOrder;
 
-        private string _ProductTypeID;
+        private string _CategoryID;
 
         private bool _UseAttrImg;
 
         private bool _UseDefineImg;
 
-        private int _UsageMode;
+        private UsageMode _UsageMode;
+
+        private bool _IsCanSearch;
 
         #endregion
 
@@ -54,7 +57,7 @@ namespace EasyCms.Model
         /// </summary>
 
         [PrimaryKey]
-        [DbProperty(MapingColumnName = "ID", DbTypeString = "char", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ID", DbTypeString = "varchar", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string ID
         {
@@ -66,6 +69,25 @@ namespace EasyCms.Model
             {
                 this.OnPropertyChanged("ID", this._ID, value);
                 this._ID = value;
+            }
+        }
+
+        /// <summary>
+        ///  全称,全称不能重复
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "FullName", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 200, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string FullName
+        {
+            get
+            {
+                return this._FullName;
+            }
+            set
+            {
+                this.OnPropertyChanged("FullName", this._FullName, value);
+                this._FullName = value;
             }
         }
 
@@ -113,7 +135,7 @@ namespace EasyCms.Model
 
         [DbProperty(MapingColumnName = "ShowType", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public int ShowType
+        public AttrShowType ShowType
         {
             get
             {
@@ -146,21 +168,21 @@ namespace EasyCms.Model
         }
 
         /// <summary>
-        ///  对应商品类型,
+        ///  分类ID,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "ProductTypeID", DbTypeString = "char", ColumnIsNull = false, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "CategoryID", DbTypeString = "varchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public string ProductTypeID
+        public string CategoryID
         {
             get
             {
-                return this._ProductTypeID;
+                return this._CategoryID;
             }
             set
             {
-                this.OnPropertyChanged("ProductTypeID", this._ProductTypeID, value);
-                this._ProductTypeID = value;
+                this.OnPropertyChanged("CategoryID", this._CategoryID, value);
+                this._CategoryID = value;
             }
         }
 
@@ -208,7 +230,7 @@ namespace EasyCms.Model
 
         [DbProperty(MapingColumnName = "UsageMode", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public int UsageMode
+        public UsageMode UsageMode
         {
             get
             {
@@ -221,15 +243,36 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  作为筛选项,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "IsCanSearch", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public bool IsCanSearch
+        {
+            get
+            {
+                return this._IsCanSearch;
+            }
+            set
+            {
+                this.OnPropertyChanged("IsCanSearch", this._IsCanSearch, value);
+                this._IsCanSearch = value;
+            }
+        }
+
         #endregion
 
-        #region 列定义
+        #region 列定义 
         public class Column
         {
             public Column(string tableName)
             {
 
                 ID = new PropertyItem("ID", tableName);
+
+                FullName = new PropertyItem("FullName", tableName);
 
                 Name = new PropertyItem("Name", tableName);
 
@@ -239,7 +282,7 @@ namespace EasyCms.Model
 
                 DisplayOrder = new PropertyItem("DisplayOrder", tableName);
 
-                ProductTypeID = new PropertyItem("ProductTypeID", tableName);
+                CategoryID = new PropertyItem("CategoryID", tableName);
 
                 UseAttrImg = new PropertyItem("UseAttrImg", tableName);
 
@@ -247,12 +290,18 @@ namespace EasyCms.Model
 
                 UsageMode = new PropertyItem("UsageMode", tableName);
 
+                IsCanSearch = new PropertyItem("IsCanSearch", tableName);
+
 
             }
             /// <summary>
             /// 主键,
             /// </summary> 
             public PropertyItem ID = null;
+            /// <summary>
+            /// 全称,全称不能重复
+            /// </summary> 
+            public PropertyItem FullName = null;
             /// <summary>
             /// 名称,
             /// </summary> 
@@ -270,9 +319,9 @@ namespace EasyCms.Model
             /// </summary> 
             public PropertyItem DisplayOrder = null;
             /// <summary>
-            /// 对应商品类型,
+            /// 分类ID,
             /// </summary> 
-            public PropertyItem ProductTypeID = null;
+            public PropertyItem CategoryID = null;
             /// <summary>
             /// 使用属性图标,
             /// </summary> 
@@ -285,12 +334,27 @@ namespace EasyCms.Model
             /// 使用模式,0:系统扩展属性，1 用户自定义属性，2系统规格，3用户自定义规格,
             /// </summary> 
             public PropertyItem UsageMode = null;
+            /// <summary>
+            /// 作为筛选项,
+            /// </summary> 
+            public PropertyItem IsCanSearch = null;
         }
         #endregion
     }
 
+
+
     public partial class ShopExtendInfo
     {
+        /// <summary>
+        ///  分类名称
+        /// </summary> 
+        [NotDbCol]
+        public string CategoryName
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         ///  新增时传递规格值用

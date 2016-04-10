@@ -12,7 +12,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
 {
     public class ShopExtendInfoValueController : BaseControler
     {
-        ShopProductTypeBll bll = new ShopProductTypeBll();
+        ShopExtendInfoBll bll = new ShopExtendInfoBll();
         //
         // GET: /Admin/ShopExtendInfoValue/
         public ActionResult Index(string ID)
@@ -23,7 +23,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                 ViewData.Add("ShopExtendInfoEntity", null);
             }
             else
-                ViewData.Add("ShopExtendInfoEntity", bll.GetShopExtendInfo(ID));
+                ViewData.Add("ShopExtendInfoEntity", bll.GetEntity(ID));
             return View();
         }
 
@@ -50,17 +50,19 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             {
                 if (collection["RecordStatus"] != "add")
                 {
-                    p = bll.GetAttrVal(collection["ID"]);
+                    p = bll.GetAttrEntity(collection["ID"]);
                     p.BindForm<ShopExtendInfoValue>(collection);
                 }
                 else
                 {
                     // TODO: Add insert logic here
                     p = collection.Bind<ShopExtendInfoValue>();
+                    if (string.IsNullOrWhiteSpace(p.ID))
+                        p.ID = Guid.NewGuid().ToString();
 
                 }
 
-                p.ShopExtendInfo = bll.GetShopExtendInfo(collection["AttributeId"]);
+                p.ShopExtendInfo = bll.GetEntity(collection["AttributeId"]);
                 bll.SaveAttrVal(p);
                 ModelState.Clear();
                 if (TempData.ContainsKey("IsSuccess"))
@@ -75,8 +77,8 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                
                 if (collection["IsContinueAdd"] == "1")
                 {
-                    p = new ShopExtendInfoValue();
-
+                    return Edit("new", p.AttributeId);
+                    
                 }
 
 
@@ -91,14 +93,15 @@ namespace EasyCms.Web.Areas.Admin.Controllers
 
         //
         // GET: /Admin/ShopExtendInfoValue/Edit/5
-        public ActionResult Edit(string id, string other)
+        public ActionResult Edit(string id, string other=null)
         {
             string attrid = other;
             ShopExtendInfoValue p = null;
          
-            if (string.IsNullOrWhiteSpace(id) || id == "new")
+            if (  id == "new")
             {
                 p = new ShopExtendInfoValue();
+                
                 p.AttributeId = other;
 
             }
@@ -107,7 +110,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                 p = bll.GetAttrEntity(id);
                 attrid = p.AttributeId;
             }
-            p .ShopExtendInfo= bll.GetShopExtendInfo(attrid);
+            p .ShopExtendInfo= bll.GetEntity(attrid);
             ViewBag.indexid = attrid;
             return View("Edit", p);
         }

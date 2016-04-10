@@ -199,9 +199,9 @@ namespace ImportData
                                         {
                                             ID = Guid.NewGuid().ToString(),
                                             Name = gg[0],
-                                            ShowType = 2,
-                                            UsageMode = col.ColumnName == "GG" ? 2 : 0,
-                                            ProductTypeID = keyVal,
+                                            ShowType = AttrShowType.文本,
+                                            UsageMode = col.ColumnName == "GG" ? UsageMode.系统规格 : UsageMode.系统属性,
+                                            //luyonglie后续修正 ProductTypeID = keyVal,
                                             DisplayOrder = ggcount++
 
                                         };

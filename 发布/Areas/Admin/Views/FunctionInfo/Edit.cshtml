@@ -9,6 +9,7 @@
 @Scripts.Render("~/bundles/uploadJs")
 
 @using EasyCms.Model
+@using Sharp.Common
 <!--内容-->
 <div id="floatHead" class="content-tab-wrap">
     <div class="content-tab">
@@ -39,9 +40,9 @@
 
     @HelperExtend.TextBox("Name", "名称", defaultval: Model.Name, hint: "")
     @HelperExtend.TextBox("ShowText", "窗口显示的名称", defaultval: Model.ShowText, hint: "")
-    @HelperExtend.RadioGroup("FuncType", "功能类型 ", "0,1,2,3", "后台菜单,商城导航,API,其它", defaultval: Model.FuncType)
+    @HelperExtend.RadioGroup("FuncType", "功能类型 ", typeof(FunctionType).GetEnumVal(),typeof(FunctionType).GetEnumNamesStr(), defaultval:(int) Model.FuncType)
     @HelperExtend.ImageUpLoad("Image", "图标", Model.RecordStatus == Sharp.Common.StatusType.add, defaultval: Model.Image, maxLength: 1)
-    @HelperExtend.RadioGroup("AccessType", "功能类型 ", "0,1,2,3,4,5", "层级模块,普通模块,MVC功能,API功能,URL功能,其它", defaultval: Model.AccessType)
+    @HelperExtend.RadioGroup("AccessType", "功能类型 ", typeof(AccessType).GetEnumVal(), typeof(AccessType).GetEnumNamesStr(), defaultval: (int)Model.AccessType)
     @HelperExtend.TextBox("URL", "网址", defaultval: Model.URL, hint: "")
 
     @HelperExtend.TextBox("CallArea", "域", defaultval: Model.CallArea, hint: "")
@@ -112,14 +113,10 @@
                         remote: "同级分类下名称重复"
                     }
                 },
-                errorPlacement: function (error, element) {
-
-                    if (element.is(":radio"))
-                        error.insertAfter($(element).parent());
-                    else if (element.is(":checkbox"))
-                        error.insertAfter($(element).parent());
-                    else
-                        error.insertAfter(element);
+                errorPlacement: errorPlace,
+                showErrors: function (errorMap, errorList) {
+                    $('#jqxLoader').jqxLoader('close');
+                    this.defaultShowErrors();
                 }
 
             });

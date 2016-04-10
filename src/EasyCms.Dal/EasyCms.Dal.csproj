@@ -35,6 +35,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\refdll\MySql.Data.dll</HintPath>
     </Reference>
+    <Reference Include="Sharp.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\refdll\Sharp.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Sharp.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\refdll\Sharp.Data.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -68,6 +76,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RedeemRulesDal.cs" />
     <Compile Include="SearchKeyWordDal.cs" />
+    <Compile Include="ShopExtendInfoDal.cs" />
     <Compile Include="ShopShippingTypeDal.cs" />
     <Compile Include="SystemBrandInfoDal.cs" />
     <Compile Include="SendMsgInfoDal.cs" />
@@ -94,14 +103,6 @@
     <Compile Include="WebSiteSetDal.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\01-WinFramework-新架构\Sharp.Common\Sharp.Common.csproj">
-      <Project>{a4e6aa2c-40ba-44e4-8ff8-e51d54745c32}</Project>
-      <Name>Sharp.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\..\01-WinFramework-新架构\Sharp.Data\Sharp.Data.csproj">
-      <Project>{ee66c4ff-659f-4c29-a6b7-68d014f7755e}</Project>
-      <Name>Sharp.Data</Name>
-    </ProjectReference>
     <ProjectReference Include="..\EasyCms.Model\EasyCms.Model.csproj">
       <Project>{5bf70ea8-ae93-4ed9-be80-a1be82b795fa}</Project>
       <Name>EasyCms.Model</Name>

@@ -46,6 +46,10 @@
     <Reference Include="NPOI">
       <HintPath>..\refdll\NPOI.dll</HintPath>
     </Reference>
+    <Reference Include="Sharp.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\refdll\Sharp.Common.dll</HintPath>
+    </Reference>
     <Reference Include="System">
       <Private>True</Private>
     </Reference>
@@ -247,6 +251,7 @@
     <Compile Include="Areas\Admin\Controllers\ShopCategoryController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopCommentController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopExpressController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ShopExtendInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopExtendInfoValueController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopOrderController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopPaymentTypesController.cs" />
@@ -848,6 +853,11 @@
     <Content Include="Areas\Admin\Views\AttributeType\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\AttributeType\Index.cshtml" />
     <Content Include="Areas\Admin\Views\NewsComment\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopExtendInfo\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopExtendInfo\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopExtendInfo\AddGg.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopExtendInfo\AddImg.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopExtendInfo\AddValue.cshtml" />
     <None Include="Properties\PublishProfiles\publish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\EshopAdminControl.js" />
@@ -1155,8 +1165,6 @@
     <Content Include="Scripts\jqwidgets\styles\images\rangebar_darkblue.png" />
     <Content Include="Scripts\jqwidgets\styles\images\rangebar_shinyblack.png" />
     <Content Include="Scripts\jqwidgets\styles\images\rangebar_summer.png" />
-    <Content Include="Scripts\jqwidgets\styles\images\recurrence-exception.png" />
-    <Content Include="Scripts\jqwidgets\styles\images\recurrence.png" />
     <Content Include="Scripts\jqwidgets\styles\images\redmond\icon-first.png" />
     <Content Include="Scripts\jqwidgets\styles\images\redmond\icon-last.png" />
     <Content Include="Scripts\jqwidgets\styles\images\redmond\ReadMe.txt" />
@@ -1303,16 +1311,6 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Scripts\jquery-1.10.2.min.map" />
-    <Content Include="Scripts\jqwidgets\styles\images\colorpicker\Thumbs.db" />
-    <Content Include="Scripts\jqwidgets\styles\images\darkness\Thumbs.db" />
-    <Content Include="Scripts\jqwidgets\styles\images\le-frog\Thumbs.db" />
-    <Content Include="Scripts\jqwidgets\styles\images\lightness\Thumbs.db" />
-    <Content Include="Scripts\jqwidgets\styles\images\overcast\Thumbs.db" />
-    <Content Include="Scripts\jqwidgets\styles\images\redmond\Thumbs.db" />
-    <Content Include="Scripts\jqwidgets\styles\images\smoothness\Thumbs.db" />
-    <Content Include="Scripts\jqwidgets\styles\images\start\Thumbs.db" />
-    <Content Include="Scripts\jqwidgets\styles\images\sunny\Thumbs.db" />
-    <Content Include="Scripts\jqwidgets\styles\images\Thumbs.db" />
     <Content Include="Upload\文件路径规则.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -1334,10 +1332,6 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\01-WinFramework-新架构\Sharp.Common\Sharp.Common.csproj">
-      <Project>{a4e6aa2c-40ba-44e4-8ff8-e51d54745c32}</Project>
-      <Name>Sharp.Common</Name>
-    </ProjectReference>
     <ProjectReference Include="..\EasyCms.Business\EasyCms.Business.csproj">
       <Project>{fe0b2d82-5664-4ecb-afb3-c336ce499207}</Project>
       <Name>EasyCms.Business</Name>

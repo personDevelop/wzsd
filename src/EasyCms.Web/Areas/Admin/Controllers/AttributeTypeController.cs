@@ -39,6 +39,14 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
             return result;
         }
+        public string GetListForDropDown( )
+        {
+           
+            System.Data.DataTable dt = bll.GetListForDropDown( );
+            string result = JsonWithDataTable.Serialize(dt);
+           
+            return result;
+        }
         public string CheckRepeat(string ID, string RecordStatus, string val, bool IsCode)
         {
             return bll.Exit(ID,  RecordStatus, val, IsCode).ToString().ToLower();

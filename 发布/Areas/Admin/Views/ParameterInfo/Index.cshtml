@@ -38,10 +38,10 @@
         var columns = [
 { text: '编码', dataField: 'Code', width: 200, cellsalign: "left" },
          { text: '名称', dataField: 'Name', width: 200, cellsalign: "left" },
-         { text: '系统参数', dataField: 'IsSystem', width: 80 },
-         { text: '可编辑', dataField: 'IsEdit', width: 50 },
-         { text: '可删除', dataField: 'IsDelete', width: 50 },
-         { text: '可用', dataField: 'IsEnable', width: 50 },
+         { text: '系统参数', dataField: 'IsSystem', width: 80 , @HelperExtend.Parsebool()},
+         { text: '可编辑', dataField: 'IsEdit', width: 50, @HelperExtend.Parsebool() },
+         { text: '可删除', dataField: 'IsDelete', width: 50,@HelperExtend.Parsebool() },
+         { text: '可用', dataField: 'IsEnable', width: 50,@HelperExtend.ParseEnable() },
          { text: '备注', dataField: 'Note', cellsalign: "left" }];
         CreateTree("treeGrid", url, datafields, columns);
 

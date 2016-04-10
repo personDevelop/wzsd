@@ -640,4 +640,17 @@ namespace EasyCms.Model
 
     public enum PayType
     { 货到付款,在线支付 }
+
+    public enum UsageMode
+    {
+         系统属性,
+        自定义属性,
+        系统规格,
+        自定义规格,
+    }
+    public enum AttrShowType
+    {
+        单选,多选,文本 
+    }
+    
 }

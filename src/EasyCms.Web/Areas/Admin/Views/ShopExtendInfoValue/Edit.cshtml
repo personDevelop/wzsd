@@ -1,6 +1,7 @@
 ﻿@model ShopExtendInfoValue
 @{
     ViewBag.Title = "编辑扩展属性值";
+    ViewBag.Other = Model.AttributeId;
     Layout = "~/Areas/Admin/Views/Shared/_LayoutEdit.cshtml";
 }
 
@@ -21,7 +22,7 @@
     </div>
 </div>
 <div class="tab-content">
-     
+
 
     @HelperExtend.HiddenFor("ID", Model.ID)
     @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())
@@ -68,26 +69,23 @@
                                 ID: function () { return $("#ID").val(); },
                                 AttributeId: function () { return $("#AttributeId").val(); },
                                 RecordStatus: function () { return $("#RecordStatus").val(); },
-                                val: function () { return $("#ValueStr").val(); } 
+                                val: function () { return $("#ValueStr").val(); }
                             }
                         }
                     } 
+
                 },
                 messages: {
                     ValueStr: {
                         required: "请输入值",
                         maxlength: $.validator.format("编号长度不能大于{0}个字符"),
                         remote: "已经存在该值"
-                    } 
+                    }
                 },
-                errorPlacement: function (error, element) {
-
-                    if (element.is(":radio"))
-                        error.insertAfter($(element).parent());
-                    else if (element.is(":checkbox"))
-                        error.insertAfter($(element).parent());
-                    else
-                        error.insertAfter(element);
+                errorPlacement: errorPlace,
+                showErrors: function (errorMap, errorList) {
+                    $('#jqxLoader').jqxLoader('close');
+                    this.defaultShowErrors();
                 }
 
             });

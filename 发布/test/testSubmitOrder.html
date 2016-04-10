@@ -240,18 +240,46 @@
             //    "Freight": 0
             //}
             data = {
-                "Description": "Description",
-                "ImageUrlID": "ImageUrlID",
-                "ReturnType": 1,
-                "OrderId": "HQ1510270001",
-                "OrderItems": {
-                    "ProductId": "9b0d20fe-f6a5-413b-a955-84b305acb149",
-                    "SKUID": "011eef18-6acf-4a8b-97a0-868bb00c133c",
-                    "RequestQuantity": 1
-                }
+                "CashOnDelivery": true,
+                "AddressID": "f7acaf1d-ef1e-4e7a-940e-5816f595916b",
+                "Promotion": [],
+                "OrderItems": [{
+                    "Point": 3999,
+                    "Sku": null,
+                    "Promotion": null,
+                    "BuyCount": 1,
+                    "IsVirtualProduct": false,
+                    "ProductName": "midea\/美的空调风迈id定频柜机大2匹\/大3匹超强送风",
+                    "MarketPrice": 0,
+                    "IsGifts": false,
+                    "ProductID": "8b5d629c-0bfb-4fcc-9e45-33d46b545e1c",
+                    "OrderResId": null,
+                    "ProductCode": "hq145707697788",
+                    "ImgPath": "http:\/\/222.173.32.246:9090\/\/Upload\/image\/20160304\/20160304034148965.jpg",
+                    "SalePrice": 3999,
+                    "OrderType": 0
+                }],
+                "TotalPrice": 3999,
+                "InvoiceInfo": "",
+                "Coupon": null,
+                "ShopAddress": {
+                    "UserId": null,
+                    "ShipName": "大黄鱼",
+                    "Remark": null,
+                    "Address": "中国山东省青岛市市南区dalangchao 大公司",
+                    "RegionId": 1604,
+                    "CelPhone": "18660155006",
+                    "Zipcode": null,
+                    "ID": "f4c37867-2bb8-46e3-b05e-82be7474d642",
+                    "IsDefault": true
+                },
+                "IsInvoice": true,
+                "Remark": "",
+                "InvoiceNote": "",
+                "Freight": 0
             };
             $.ajax({
-                url: "http://localhost:7161/api/ShopOrderApi/ReturnOrder",
+                url: "http://localhost:7161/api/ShopOrderApi/PostOrder",
                 type: "POST",
                 data: data,
                 dataType: "json",
@@ -259,7 +287,20 @@
             });
         }
 
+        function sumitCard() {
 
+            var data =  
+            {
+                SPXX:"68e06248-6b0a-4bdb-b4bd-11cf06dcdfb6,hq144048160923;" 
+            }
+            $.ajax({
+                url: "http://localhost:7161/api/ShopOrderApi/PostOrder",
+                type: "POST",
+                data: data,
+                dataType: "json",
+                success: function () { alert("成功"); }
+            });
+        }
         function sumitJson1() {
 
             var data = [];
@@ -346,6 +387,43 @@
         <input id="btn" type="button" onclick="sumitJson(); return false;" value="Json提交" />
         <input id="btn" type="button" onclick="sumitJson1(); return false;" value="Json数组提交" />
         <input id="btn" type="button" onclick="sumitJson2(); return false;" value="字符串键值对提交" />
+
+        <input id="btn" type="button" onclick="sumitCard(); return false;" value="提交card" />
+        
     </form>
+</body>
+
+
+
+<body class='default'>
+    <div style="visibility: hidden;" id="jqxWidget">
+        <input type="button" value="Show" id="showWindowButton" />
+        <div style="width: 100%; height: 650px; border: 0px solid #ccc; margin-top: 10px;"
+             id="mainDemoContainer">
+            <div>Events Log:</div>
+            <div id="events" style="width: 300px; height: 200px; border-width: 0px;">
+            </div>
+            <div id="eventWindow">
+                <div>
+                    <img width="14" height="14" src="../../images/help.png" alt="" />
+                    Modal Window
+                </div>
+                <div>
+                    <div>
+                        <div id="input">
+                            <input type="text" />
+                            <div id="search"><img alt="search" width="16" height="16" src="../../images/search_lg.png" /></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="float: right; margin-top: 15px;">
+                            <input type="button" id="ok" value="OK" style="margin-right: 10px" />
+                            <input type="button" id="cancel" value="Cancel" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

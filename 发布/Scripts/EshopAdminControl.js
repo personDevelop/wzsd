@@ -114,7 +114,7 @@
          pagerrenderer: pagerrenderer,
          pageSize: 20,
          pageable: true,
-         columns: columns
+         columns: columns, localization: "zh-Hans"
      }, opts.grid));
 }
 
@@ -127,11 +127,12 @@ function EditGrid(gridid, url, id, other) {
 
         if (rowindex.length != 1) {
             ErrorMsg("请选择一条数据");
+            return;
         } else {
             var data = $(gridid).jqxGrid('getrowdata', rowindex[0]);
             if (data) {
                 id = data.ID;
-            } else { ErrorMsg("请选择一条数据"); }
+            } else { ErrorMsg("请选择一条数据"); return; }
         }
     }
     if (id) {
@@ -164,16 +165,16 @@ function DelGrid(gridid, url, id, other, success) {
                     }
 
                 }
-            } else { ErrorMsg("请选择一条数据"); }
+            } else { ErrorMsg("请选择一条数据"); return; }
 
         } else {
             if (rowindexes.length == 1) {
                 var data = $(gridid).jqxGrid('getrowdata', rowindexes[0]);
                 if (data) {
                     id = data.ID;
-                } else { ErrorMsg("请选择一条数据"); }
+                } else { ErrorMsg("请选择一条数据");   return; }
 
-            } else { ErrorMsg("请选择一条数据"); }
+            } else { ErrorMsg("请选择一条数据"); return; }
         }
     }
     if (id) {
@@ -577,8 +578,8 @@ function Query(msg, onOk, title) {
         okButton: $('#ok'), cancelButton: $('#cancel'),
         initContent: function () {
 
-            $('#ok').jqxButton({ width: '65px' });
-            $('#cancel').jqxButton({ width: '65px' });
+            $('#ok').jqxButton({ width: '65px', template: "success" });
+            $('#cancel').jqxButton({ width: '65px', template: "warning" });
             $('#ok').focus();
         }
     });

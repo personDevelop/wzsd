@@ -78,7 +78,11 @@
                         required: "请输入级联表"
                     }
                 },
-                errorPlacement: errorPlace
+                errorPlacement: errorPlace,
+                showErrors: function (errorMap, errorList) {
+                    $('#jqxLoader').jqxLoader('close');
+                    this.defaultShowErrors();
+                }
             });
         })
     </script>

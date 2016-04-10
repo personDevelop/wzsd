@@ -1,4 +1,5 @@
-﻿using Sharp.Common;
+﻿using Newtonsoft.Json;
+using Sharp.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace EasyCms.Model
     /// <summary>
     /// 商品分类
     /// </summary>  
+    [JsonObject]
     public partial class ShopCategory : BaseEntity
     {
         public static Column _ = new Column("ShopCategory");
@@ -58,6 +60,10 @@ namespace EasyCms.Model
 
         private string _AssociatedProductType;
 
+        private bool _IsShow;
+
+        private string _PriceArea;
+
         #endregion
 
         #region 属性
@@ -67,7 +73,7 @@ namespace EasyCms.Model
         /// </summary>
 
         [PrimaryKey]
-        [DbProperty(MapingColumnName = "ID", DbTypeString = "char", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ID", DbTypeString = "varchar", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string ID
         {
@@ -371,7 +377,7 @@ namespace EasyCms.Model
         ///  分类描述,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "Note", DbTypeString = "text", ColumnIsNull = true, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "Note", DbTypeString = "ntext", ColumnIsNull = true, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string Note
         {
@@ -405,9 +411,47 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  首页显示,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "IsShow", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public bool IsShow
+        {
+            get
+            {
+                return this._IsShow;
+            }
+            set
+            {
+                this.OnPropertyChanged("IsShow", this._IsShow, value);
+                this._IsShow = value;
+            }
+        }
+
+        /// <summary>
+        ///  价格范围,多个之间用换行间隔，格式如0-100，100-200，200-
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "PriceArea", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 500, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string PriceArea
+        {
+            get
+            {
+                return this._PriceArea;
+            }
+            set
+            {
+                this.OnPropertyChanged("PriceArea", this._PriceArea, value);
+                this._PriceArea = value;
+            }
+        }
+
         #endregion
 
-        #region 列定义
+        #region 列定义 
         public class Column
         {
             public Column(string tableName)
@@ -448,6 +492,10 @@ namespace EasyCms.Model
                 Note = new PropertyItem("Note", tableName);
 
                 AssociatedProductType = new PropertyItem("AssociatedProductType", tableName);
+
+                IsShow = new PropertyItem("IsShow", tableName);
+
+                PriceArea = new PropertyItem("PriceArea", tableName);
 
 
             }
@@ -523,9 +571,18 @@ namespace EasyCms.Model
             /// 关联商品类型,
             /// </summary> 
             public PropertyItem AssociatedProductType = null;
+            /// <summary>
+            /// 首页显示,
+            /// </summary> 
+            public PropertyItem IsShow = null;
+            /// <summary>
+            /// 价格范围,多个之间用换行间隔，格式如0-100，100-200，200-
+            /// </summary> 
+            public PropertyItem PriceArea = null;
         }
         #endregion
     }
+
     public partial class ShopCategory
     {
         protected override void OnCreate()

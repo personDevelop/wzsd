@@ -167,7 +167,11 @@
                         maxlength: $.validator.format("编号长度不能大于{0}个字符")
                     }
                 },
-                errorPlacement: errorPlace
+                errorPlacement: errorPlace,
+                showErrors: function (errorMap, errorList) {
+                    $('#jqxLoader').jqxLoader('close');
+                    this.defaultShowErrors();
+                }
             });
         })
     </script>

@@ -18,19 +18,9 @@ namespace EasyCms.Dal
             Dal.Delete("ShopProductType", "ID", id, out error);
             return error;
         }
-        public string DeleteExtend(string id)
-        {
-            string error = "";
-            Dal.Delete("ShopExtendInfo", "ID", id, out error);
-            return error;
-        }
 
-        public string DeleteExtendValue(string id)
-        {
-            string error = "";
-            Dal.Delete("ShopExtendInfoValue", "ID", id, out error);
-            return error;
-        }
+
+
         public int Save(ShopProductType item, List<string> brandList)
         {
             SessionFactory dal;
@@ -65,6 +55,7 @@ namespace EasyCms.Dal
 
         }
 
+
         public DataTable GetList(bool IsForSelected = false)
         {
             if (IsForSelected)
@@ -74,6 +65,41 @@ namespace EasyCms.Dal
             else
                 return Dal.From<ShopProductType>().OrderBy(ShopProductType._.Code).ToDataTable();
         }
+
+        public string DeleteExtend(string id)
+        {
+
+            string error = "";
+            Dal.Delete("ShopExtendAndType", "ID", id, out error);
+            return error;
+        }
+
+        public string SaveExtendType(string iDs, string ptypeID)
+        {
+
+            string[] idarry = iDs.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            if (idarry.Length < 1)
+                return "请选择要添加的规格";
+            ShopExtendInfo se = Dal.Find<ShopExtendInfo>(idarry[0]);
+            object o = Dal.FromCustomSql(string.Format(@" select COUNT(1) from  ShopExtendAndType join  ShopExtendInfo   on ShopExtendInfo.ID=ShopExtendAndType.ExtendID 
+ and ShopExtendAndType.TypeID = '{0}' and ShopExtendInfo.UsageMode = '{1}'", ptypeID, (int)se.UsageMode)).ToScalar();
+            int count = Convert.ToInt32(o) + 1;
+            List<ShopExtendAndType> list = new List<ShopExtendAndType>();
+            foreach (var item in idarry)
+            {
+                ShopExtendAndType set = new ShopExtendAndType()
+                {
+                    ID = Guid.NewGuid().ToString(),
+                    ExtendID = item,
+                    TypeID = ptypeID,
+                    OrderNo = count++
+                };
+                list.Add(set);
+            }
+            Dal.Submit(list);
+            return string.Empty;
+        }
+
         public bool Exit(string ID, string RecordStatus, string val, bool IsCode)
         {
             WhereClip where = null;
@@ -145,7 +171,7 @@ namespace EasyCms.Dal
         public DataTable GetAttrList(string host, string ptypeid, bool isGg)
         {
 
-            WhereClip where = ShopExtendInfo._.ProductTypeID == ptypeid;
+            WhereClip where = ShopExtendAndType._.TypeID == ptypeid;
             if (isGg)
             {
                 where = where && ShopExtendInfo._.UsageMode > 1;
@@ -154,7 +180,10 @@ namespace EasyCms.Dal
             {
                 where = where && ShopExtendInfo._.UsageMode < 2;
             }
-            DataTable dt = Dal.From<ShopExtendInfo>().Where(where).OrderBy(ShopExtendInfo._.DisplayOrder)
+            DataTable dt = Dal.From<ShopExtendInfo>().Join<ShopExtendAndType>(ShopExtendInfo._.ID == ShopExtendAndType._.ExtendID)
+                .Join<AttributeType>(ShopExtendInfo._.CategoryID==AttributeType._.ID,  JoinType.leftJoin)
+                .Where(where).OrderBy(ShopExtendAndType._.OrderNo)
+                .Select(ShopExtendInfo._.ID.Alias("ExtendID"), ShopExtendInfo._.Name, ShopExtendInfo._.FullName, ShopExtendInfo._.ShowType, ShopExtendInfo._.UsageMode, ShopExtendInfo._.UseAttrImg,AttributeType._.Name.Alias("CategoryName"), ShopExtendAndType._.ID, ShopExtendAndType._.OrderNo)
                      .ToDataTable();
             if (dt.Rows.Count > 0)
             {
@@ -162,7 +191,7 @@ namespace EasyCms.Dal
                 dt.Columns.Add("Vals");
                 List<string> extendID = new List<string>();
                 var qry = dt.AsEnumerable();
-                extendID = (from d in qry select d.Field<string>("ID")).ToList<string>();
+                extendID = (from d in qry select d.Field<string>("ExtendID")).ToList<string>();
                 DataTable dtvals = Dal.From<ShopExtendInfoValue>().Join<AttachFile>(ShopExtendInfoValue._.ImageID == AttachFile._.RefID, JoinType.leftJoin)
                     .Where(ShopExtendInfoValue._.AttributeId.In(extendID)).Select(ShopExtendInfoValue._.AttributeId, ShopExtendInfoValue._.ValueStr,
                     ShopExtendInfoValue._.Note,
@@ -171,7 +200,7 @@ namespace EasyCms.Dal
                 {
                     string temp = "";
                     string attriID = item["ID"] as string;
-                    DataRow[] drs = dtvals.Select("AttributeId='" + attriID + "'");
+                    DataRow[] drs = dtvals.Select(string.Format("AttributeId='{0}'", attriID));
                     foreach (DataRow itemVal in drs)
                     {
                         string splitStr = ",";
@@ -202,87 +231,6 @@ namespace EasyCms.Dal
             return dt;
         }
 
-        public int SaveShopExtendInfo(ShopExtendInfo p)
-        {
-            return Dal.Submit(p);
-        }
-
-        public ShopExtendInfo GetShopExtendInfo(string id)
-        {
-            return Dal.Find<ShopExtendInfo>(id);
-        }
-
-        public int Save(List<ShopExtendInfoValue> list)
-        {
-            int count = Dal.Count<ShopExtendInfoValue>(ShopExtendInfoValue._.AttributeId == list[0].AttributeId, ShopExtendInfoValue._.ID, false);
-            foreach (var item in list)
-            {
-                item.DisplaySequence = count++ + 1;
-
-            }
-            return Dal.Submit(list);
-        }
-
-        public DataTable GetValList(string host, string attriID)
-        {
-
-            DataTable dt = Dal.From<ShopExtendInfoValue>().Join<AttachFile>(ShopExtendInfoValue._.ImageID == AttachFile._.RefID, JoinType.leftJoin)
-                .Select(ShopExtendInfoValue._.ID, ShopExtendInfoValue._.AttributeId, ShopExtendInfoValue._.DisplaySequence, ShopExtendInfoValue._.ImageID, ShopExtendInfoValue._.Note,
-
-
-                ShopExtendInfoValue._.ValueStr, AttachFile.GetThumbnaifilePath(host))
-                .Where(ShopExtendInfoValue._.AttributeId == attriID)
-                .OrderBy(ShopExtendInfoValue._.DisplaySequence)
-                .ToDataTable();
-            foreach (DataRow item in dt.Rows)
-            {
-                string img = item["FilePath"] as string;
-                if (!string.IsNullOrWhiteSpace(img))
-                {
-                    item["ValueStr"] = string.Format("<img src='{0}' width='16px' height='16px' alt='{1}' />", item["FilePath"], item["ValueStr"]);
-
-                }
-            }
-            dt.AcceptChanges();
-            return dt;
-        }
-
-        public ShopExtendInfoValue GetAttrVal(string id)
-        {
-            return Dal.Find<ShopExtendInfoValue>(id);
-        }
-
-        public int SaveAttrVal(ShopExtendInfoValue p)
-        {
-            return Dal.Submit(p);
-        }
-
-        public ShopExtendInfoValue GetAttrEntity(string id)
-        {
-            return GetAttrVal(id);
-        }
-
-        public int DeleteAttrVal(string id, out string error)
-        {
-            error = string.Empty;
-            return Dal.Delete("ShopExtendInfoValue", "ID", id, out error);
-
-        }
-
-        public bool Exit(string ID, string AttributeId, string RecordStatus, string val)
-        {
-            WhereClip where = ShopExtendInfoValue._.AttributeId == AttributeId
-                && ShopExtendInfoValue._.ValueStr == val;
-
-            if (RecordStatus == StatusType.update.ToString())
-            {
-                where = where && ShopExtendInfoValue._.ID != ID;
-
-            }
-            return !Dal.Exists<ShopExtendInfoValue>(where);
-        }
-
-      
     }
 
 }

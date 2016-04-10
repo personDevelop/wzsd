@@ -29,7 +29,7 @@ namespace EasyCms.Dal
         {
             if (IsForSelected)
             {
-                return Dal.From<ShopCategory>().Select(ShopCategory._.ID, ShopCategory._.ParentID, ShopCategory._.Code, ShopCategory._.Name).OrderBy(ShopCategory._.OrderNo).ToDataTable();
+                return Dal.From<ShopCategory>().Select(ShopCategory._.ID, ShopCategory._.ParentID, ShopCategory._.AssociatedProductType, ShopCategory._.IsShow, ShopCategory._.PriceArea, ShopCategory._.Code, ShopCategory._.Name).OrderBy(ShopCategory._.OrderNo).ToDataTable();
             }
             else
                 return Dal.From<ShopCategory>().OrderBy(ShopCategory._.OrderNo).ToDataTable();

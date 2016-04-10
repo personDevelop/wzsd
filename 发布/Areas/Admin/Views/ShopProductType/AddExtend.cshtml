@@ -1,113 +1,161 @@
-﻿@model ShopExtendInfo
+﻿@model AddExtendModel
+@using MVCExtention;
+@using EasyCms.Model
 @{
-    ViewBag.Title = "编辑扩展属性";
+    if ((int)Model.UseMode > 1)
+    {
+        ViewBag.Title = "添加规格";
+    }
+    else
+    { ViewBag.Title = "添加属性"; }
 
     Layout = "~/Areas/Admin/Views/Shared/_LayoutEditDialog.cshtml";
-
 }
 
-@Styles.Render("~/bundles/upimgcss")
-@Scripts.Render("~/bundles/uploadJs")
-@Scripts.Render("~/bundles/jqueryAjax")
-@using EasyCms.Model
-<!--内容-->
+<!--工具栏-->
+<!--/工具栏-->
+<dl>
+    <dt>
 
-<div class="tab-content">
-    @using (Ajax.BeginForm("SaveExtend", null, new AjaxOptions() { OnBegin = "return  $('#formGg').validate();", AllowCache = false, OnSuccess = "OnGgSuccess", OnFailure = "OnGgFail" }, new { id = "formGg" }))
-    {
+    </dt>
+    <dd>
+        <table width="80%" class="borderkuang" border="0" cellspacing="0" cellpadding="0">
+            <tbody>
+                <tr>
+                    <td>
+                        @HelperExtend.img("icon-1.gif", "width:19px,height:19px")搜索：
+                    </td>
+                    <td>
+                        分类：
+                    </td>
+                    <td>
+                        @HelperExtend.DropDownListWithSearch("CategoryID", "分类", downInfo: new DropDownListInfo() { Url = Url.Action("GetListForDropDown", "AttributeType") })
+                    </td>
+                    <td>
+                        名称：
+                    </td>
+                    <td><input type="text" id="Name"></td>
+                    <td>全称：</td>
+                    <td><input type="text" id="FullName"></td>
 
-        @Html.Partial("_Msg") 
-             @Html.Hidden("IsContinueAdd")
-        @HelperExtend.HiddenFor("ID", Model.ID)
-        @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())
-        @HelperExtend.HiddenFor("ProductTypeID", Model.ProductTypeID)
-        @HelperExtend.HiddenFor("UsageMode", Model.UsageMode.ToString())
-        @HelperExtend.TextBox("Name", "属性名称", defaultval: Model.Name, hint: "*名称不能重复.")
-        @HelperExtend.TextBox("UnitText", "属性单位", defaultval: Model.UnitText, hint: "属性的计量单位.")
-        @HelperExtend.RadioGroup("ShowType", "展示方式 ", "0,1,2", "单选,多选,文本", defaultval: Model.ShowType)
-        @HelperExtend.RadioGroup("UseAttrImg", "显示类型", "false,true", "文本,图片", defaultval: Model.UseAttrImg)
-        @HelperExtend.RadioGroup("UseDefineImg", "自定义图标", "false,true", "否,是", defaultval: Model.UseDefineImg)
-        @HelperExtend.TextBox("DisplayOrder", "显示顺序", defaultval: Model.DisplayOrder)
-        @HelperExtend.TextArea("Vals", "属性值", hint: "扩展属性的值，多个属性值可用“，”号隔开，每个值最多15个字符！")
-    <!--工具栏-->
-        <div class="page-footer">
-            <div class="btn-wrap">
-                <input type="submit" onclick="$('#IsContinueAdd').val(1)" value="保存后继续新增" class="btn" />
-                <input type="submit" onclick="$('#IsContinueAdd').val(0)" value="提交保存" class="btn" />
-                <input name="btnReturn" type="button" value="关闭" class="btn yellow" onclick="javascript: CloseDialog();" />
-            </div>
-        </div>
-    <!--/工具栏-->
+                    <td>
+                        <input id="btnQry" type="button" value="搜索">
+                    </td>
 
-    }
+                </tr>
 
+            </tbody>
+        </table>
+    </dd>
+</dl>
+<!--列表-->
+<div class="table-container">
+    <div id="jqxgrid"></div>
+    <table>
+        <tr>
+            <td>
+                <input id="btnOk" type="button" value="确定">
+                <input id="btnCancle" type="button" value="取消" onclick="javascript: CloseDialog();">
+
+
+                <script type="text/javascript">
+
+                    $(function () {
+                        $("#btnOk").jqxButton({ width: '150', template: 'success' });
+                        $("#btnCancle").jqxButton({ width: '150', template: 'info' });
+                        $("#btnOk").on('click', function () {
+                            var rowindexes = $('#jqxgrid').jqxGrid('getselectedrowindexes');
+                            if (rowindexes.length > 0) {
+
+                                var userIds = "";
+                                for (var i in rowindexes) {
+                                    if (userIds) {
+                                        userIds += ",";
+                                    }
+                                    var d = $('#jqxgrid').jqxGrid('getrowdata',rowindexes[i]);
+                                    userIds += d.ID;
+
+                                }
+                                $.ajax({
+                                    cache: false,
+                                    url: "@Url.Action("SaveExtendType")",
+                                    data: { ID: userIds, ptypeID: "@Model.ProductTypeID" },
+                                    success: function (result) {
+                                        $('#jqxgrid').jqxGrid('updatebounddata');
+                                        SucessMsg(result);
+                                    }
+                                } );
+
+                                SetDialogState(userIds);
+                            } else {
+
+                                ErrorMsg("请至少选择一条数据");
+                            }
+                        });
+
+
+                    });
+                </script>
+
+            </td>
+        </tr>
+
+    </table>
 
 </div>
-
+<!--/列表-->
 @section  scripts{
 
-    <script type="text/javascript">
-
-        function OnGgSuccess(data) {
-            if (data.result) {
-                $("#formGg").find("#ID").val(data.id);
-                $("#formGg").find("#RecordStatus").val(data.RecordStatus);
-                SucessMsg("保存成功");
-                SetDialogState(true);
-                if ($('#IsContinueAdd').val() == 1) {
-                    $("#formGg").find("#RecordStatus").val("add");
-                    $("#formGg").find("#ID").val("");
-                    $("#formGg").find("#Name").val("");
-                    $("#formGg").find("#UnitText").val(""); 
-                    $("#formGg").find("#Vals").val("");
-                }
-                //$('#jqxGg').jqxGrid('updatebounddata');
-            } else {
-                ErrorMsg("保存失败" + data.msg);
-            }
-        }
-        function OnGgFail(res, error, errorText) {
-            ErrorMsg("保存失败" + errorText);
-        }
-    </script>
 
     <script type="text/javascript">
-
         $(function () {
+            $("#Name").jqxInput({ height: '25px' });
+            $("#FullName").jqxInput({ height: '25px' });
+            $("#btnQry").jqxButton({ width: '100', template: 'success' });
+            $("#btnQry").on("click", function () { $('#jqxgrid').jqxGrid('updatebounddata'); });
 
+        });
 
-            //初始化表单验证
-            $("formGg").validate({
-                ignore: "",
-                rules: {
-                    Name: {
-                        required: true,
-                        maxlength: 100
+        $(document).ready(function () {
+
+            var url = "@Url.Action("GetListWithSearch", "ShopExtendInfo")";
+            var datafields = [
+
+  { name: 'ID' },
+  { name: 'Name' },
+  { name: 'UnitText' },
+  { name: 'ShowType' },
+  { name: 'DisplayOrder' },
+  { name: 'CategoryName' },
+  { name: 'UseAttrImg' },
+  { name: 'UseDefineImg' },
+  { name: 'UsageMode' },
+  { name: 'IsCanSearch' },
+
+            ];
+            var columns = [
+                 { text: '分类', dataField: 'CategoryName', cellsalign: "left", width: 80 },
+  { text: '全称', dataField: 'FullName', cellsalign: "left", width: 80 },
+     { text: '名称', dataField: 'Name', cellsalign: "left", width: 80 },
+  { text: '单位', dataField: 'UnitText', width: 50 },
+
+  { text: '展示方式', dataField: 'ShowType', width: 80,@HelperExtend.ParseEnum(typeof(AttrShowType)) },
+  { text: '使用图标', dataField: 'UseAttrImg', width: 80,@HelperExtend.Parsebool() },
+
+            ];
+            CreateGrid("jqxgrid", url, datafields, columns, {
+                isMutilSelect: true, adapter: {
+                    formatData: function (data) {
+                        data.CategoryID = $("#CategoryID").val();
+                        data.Name = $("#Name").val();
+                        data.FullName = $("#FullName").val();
+                        data.PTypeID = "@Model.ProductTypeID";
+                        data.UsageMode = "@Model.UseMode";
                     }
-                },
-                messages: {
-
-                    Name: {
-                        required: "请输入名称",
-                        maxlength: $.validator.format("名称长度不能大于{0}个字符")
-
-                    }
-                },
-                errorPlacement: function (error, element) {
-
-                    if (element.is(":radio"))
-                        error.insertAfter($(element).parent());
-                    else if (element.is(":checkbox"))
-                        error.insertAfter($(element).parent());
-                    else
-                        error.insertAfter(element);
                 }
-
             });
 
 
-        })
+        });
     </script>
-
-
 }

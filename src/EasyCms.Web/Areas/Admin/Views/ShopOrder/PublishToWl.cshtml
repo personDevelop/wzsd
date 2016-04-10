@@ -155,7 +155,11 @@
                         required: "请选择物流公司"
                     }
                 },
-                errorPlacement: errorPlace
+                errorPlacement:  errorPlace,
+                showErrors: function (errorMap, errorList) {
+                    $('#jqxLoader').jqxLoader('close');
+                    this.defaultShowErrors();
+                }
             });
         })
     </script>

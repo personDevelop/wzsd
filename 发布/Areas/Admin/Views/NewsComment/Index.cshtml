@@ -1,0 +1,62 @@
+﻿@using MVCExtention;
+@{
+    ViewBag.Title = "新闻评论";
+}
+
+<!--工具栏-->
+<div id="floatHead" class="toolbar-wrap">
+    <div class="toolbar">
+        <div class="box-wrap">
+            <a class="menu-btn"></a>
+            <div class="l-list">
+                <ul class="icon-list">
+                    <li><a class="add" href="@Url.Action("Edit")"><i></i><span>回复</span></a></li>
+                    <li><a class="add" href="javascript:;" onclick="EditTree('treeGrid', '@Url.Action("Edit")');"><i></i><span>查看</span></a></li>
+                    <li><a class="del" href="javascript:;" onclick="DelTree('treeGrid', '@Url.Action("Delete")');"><i></i><span>删除</span></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/工具栏-->
+<!--列表-->
+<div class="table-container">
+    <div id="treeGrid">
+    </div>
+</div>
+<!--/列表-->
+@section  scripts{
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            var url = "@Url.Action("GetList")";
+            var datafields = [{ name: 'ID' }, { name: 'Code' }, { name: 'Name' }, { name: 'FuncType' },
+
+    { name: 'Image' }, { name: 'AccessType' }, { name: 'URL' }, { name: 'CallArea' },
+
+    { name: 'CallControler' }, { name: 'CallAction' }, { name: 'Enable' },
+
+    { name: 'Visible' }, { name: 'MultilInstance' }, { name: 'ShowText' },
+
+    { name: 'ParentID' }, { name: 'ClassCode' }, { name: 'OrderNo' },
+
+    { name: 'IsMustNot' }, { name: 'IsMust' }, { name: 'Description' }, { name: 'IsAnony' }];
+            var columns = [
+   { text: '编码', dataField: 'Code', cellsalign: "left", width: 300 },
+{ text: '名称', dataField: 'Name', cellsalign: "left", width: 120 },
+{ text: '显示名称', dataField: 'ShowText', cellsalign: "left", width: 120 },
+{ text: '功能类型', dataField: 'FuncType', width: 80,@HelperExtend.ParseEnum(typeof(EasyCms.Model.FunctionType)) },
+{ text: '访问类型', dataField: 'AccessType', width: 80,@HelperExtend.ParseEnum(typeof(EasyCms.Model.AccessType))  },
+    { text: '匿名', dataField: 'IsAnony', width: 50,@HelperExtend.Parsebool() },
+{ text: '启用', dataField: 'Enable', width: 50,@HelperExtend.ParseEnable() },
+{ text: '可见', dataField: 'Visible', width: 50,@HelperExtend.Parsebool() },
+{ text: '多开', dataField: 'MultilInstance', width: 50,@HelperExtend.Parsebool() },
+{ text: '顺序', dataField: 'OrderNo', cellsalign: "right", width: 50 }];
+            CreateTree("treeGrid", url, datafields, columns);
+
+        });
+
+
+    </script>
+}

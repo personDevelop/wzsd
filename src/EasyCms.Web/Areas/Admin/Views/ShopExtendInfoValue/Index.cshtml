@@ -1,8 +1,14 @@
 ﻿@using MVCExtention;
 @{
-    ViewBag.Title = "扩展属性值";
     EasyCms.Model.ShopExtendInfo Se = ViewData["ShopExtendInfoEntity"] as EasyCms.Model.ShopExtendInfo;
-    string typeName = Se.UsageMode > 1 ? "规格" : "属性";
+    if (((int)Se.UsageMode) > 1) {
+        ViewBag.Title = Se.Name+"属性值";
+    } else
+    {
+        ViewBag.Title = Se.Name + "规格属性值";
+    }
+    
+    string typeName = (int)Se.UsageMode > 1 ? "规格" : "属性";
 
 }
 <div class="lbl">
@@ -29,13 +35,14 @@
 <div class="table-container">
     <div id="jqxgrid"></div>
 </div>
-<input name="btnReturn" type="button" value="返回上一页" class="btn yellow" onclick="javascript:history.back(-1);" />
+<input name="btnReturn" type="button" value="返回上一页" class="btn yellow" onclick="javascript: window.location.href ='@Url.Action("index", "ShopExtendInfo")';" />
 <!--/列表-->
 @section  scripts{
 
 
     <script type="text/javascript">
         $(document).ready(function () {
+          
             var url = "@Url.Action("GetList")";
             var editUrl = "@Url.Action("Edit")";
             var deleteUrl = "@Url.Action("Delete")";

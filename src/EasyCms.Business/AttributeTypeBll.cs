@@ -43,9 +43,9 @@ namespace EasyCms.Business
             return Dal.GetEntity(id);
         }
 
-
-       
-
-
+        public DataTable GetListForDropDown()
+        {
+            return Dal.GetListForDropDown( );
+        }
     }
 }

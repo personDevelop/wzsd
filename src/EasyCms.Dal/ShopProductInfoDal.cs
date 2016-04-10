@@ -165,12 +165,12 @@ namespace EasyCms.Dal
             DataTable dt=
               Dal.From<ShopExtendInfo>().Join<ShopExtendInfoValue>(ShopExtendInfo._.ID == ShopExtendInfoValue._.AttributeId).Join
                     <ShopProductAttributes>(ShopExtendInfo._.ID == ShopProductAttributes._.AttributeId
-              && ShopProductAttributes._.ValueId == ShopExtendInfoValue._.ID  )
+              && ShopProductAttributes._.ValueId == ShopExtendInfoValue._.ID && ShopProductAttributes._.ProductId == productID, JoinType.leftJoin  )
               .Select(ShopExtendInfo._.ID, ShopExtendInfo._.Name, ShopExtendInfo._.ShowType
               , ShopExtendInfoValue._.ID.Alias("ExtendInfoValueID"), ShopExtendInfoValue._.ValueStr, ShopExtendInfoValue._.DisplaySequence,
            new ExpressionClip(" case when ShopProductAttributes.ValueId is null then 0 else 1 end HasValue"))
-
-              .Where( ShopExtendInfo._.ProductTypeID == ptypeid && ShopProductAttributes._.ProductId == productID && ShopExtendInfo._.UsageMode < 2)
+           .Join<ShopExtendAndType>(ShopExtendInfo._.ID==ShopExtendAndType._.ExtendID)
+              .Where(ShopExtendAndType._.TypeID == ptypeid && ShopExtendInfo._.UsageMode < 2)
 
               .OrderBy(ShopExtendInfo._.ID, ShopExtendInfo._.DisplayOrder, ShopExtendInfoValue._.DisplaySequence).ToDataTable();
 
@@ -183,8 +183,8 @@ namespace EasyCms.Dal
               .Select(ShopExtendInfo._.ID, ShopExtendInfo._.Name, ShopExtendInfo._.ShowType
               , ShopExtendInfoValue._.ID.Alias("ExtendInfoValueID"), ShopExtendInfoValue._.ValueStr, ShopExtendInfoValue._.DisplaySequence,
            new ExpressionClip(" case when ShopProductAttributes.ValueId is null then 0 else 1 end HasValue"))
-
-              .Where(ShopExtendInfo._.ProductTypeID == ptypeid && ShopProductAttributes._.ProductId.IsNullOrEmpty() && ShopExtendInfo._.UsageMode < 2)
+           .Join<ShopExtendAndType>(ShopExtendInfo._.ID == ShopExtendAndType._.ExtendID)
+               .Where(ShopExtendAndType._.TypeID == ptypeid && ShopProductAttributes._.ProductId.IsNullOrEmpty() && ShopExtendInfo._.UsageMode < 2)
 
               .OrderBy(ShopExtendInfo._.ID, ShopExtendInfo._.DisplayOrder, ShopExtendInfoValue._.DisplaySequence).ToDataTable();
 
@@ -203,19 +203,20 @@ namespace EasyCms.Dal
              .Select(ShopExtendInfo._.ID.All,
               ShopExtendInfoValue._.ID.Alias("ExtendInfoValueID"), ShopExtendInfoValue._.ValueStr, ShopExtendInfoValue._.DisplaySequence, ShopExtendInfoValue._.ImageID, ShopExtendInfoValue._.Note,
                new ExpressionClip(" case when ShopProductSKU.ID is null then 0 else 1 end HasValue"))
-             .Where(ShopExtendInfo._.ProductTypeID == ptypeid && ShopExtendInfo._.UsageMode > 1)
+               .Join<ShopExtendAndType>(ShopExtendInfo._.ID == ShopExtendAndType._.ExtendID)
+              .Where(ShopExtendAndType._.TypeID == ptypeid && ShopExtendInfo._.UsageMode > 1)
              .OrderBy(ShopExtendInfo._.ID, ShopExtendInfo._.DisplayOrder, ShopExtendInfoValue._.DisplaySequence).Distinct()
              .ToDataSet();
             string tempTable = "temp" + Guid.NewGuid().ToString().Replace("-", "");
             Dictionary<string, object> dic = new Dictionary<string, object>();
-            Dal.FromStoredProcedure("PIVOTRowConvertCol").AddInputParameter("tableName", "ShopProductSKU,ShopExtendInfo,ShopExtendInfoValue")
+            Dal.FromStoredProcedure("PIVOTRowConvertCol").AddInputParameter("tableName", "ShopProductSKU,ShopExtendAndType,ShopExtendInfo,ShopExtendInfoValue")
                        .AddInputParameter("groupColumn", "ShopProductSKU.ID SKUID")
                        .AddInputParameter("pivotgroupColumn", "SKUID")
                        .AddInputParameter("row2column", "ShopExtendInfo.Name")
                        .AddInputParameter("pivotrow2column", "Name")
                        .AddInputParameter("row2columnValue", "ShopExtendInfoValue.AttributeId+'|'+ShopExtendInfoValue.id+'|'+ShopExtendInfoValue.ValueStr as ValueStr")
                         .AddInputParameter("pivotrow2columnValue", "ValueStr")
-                         .AddInputParameter("sql_where", "where  ShopExtendInfo.ProductTypeID='" + ptypeid + "' and ShopProductSKU.ProductId='" + productID + "'  and ShopProductSKU.ValueId = ShopExtendInfoValue.ID and ShopExtendInfoValue.AttributeId =  ShopExtendInfo.ID")
+                         .AddInputParameter("sql_where", string.Format("where  ShopExtendAndType.ExtendID=ShopExtendInfo.ID AND  ShopExtendAndType.TypeID='{0}' and ShopProductSKU.ProductId='{1}'  and ShopProductSKU.ValueId = ShopExtendInfoValue.ID and ShopExtendInfoValue.AttributeId =  ShopExtendInfo.ID", ptypeid, productID))
                            .AddInputParameter("orderby", "DisplayOrder")
                            .AddInputParameter("tempTableName", tempTable)
                            .AddOutputParameter("result", 1, DbType.Int32)

@@ -38,7 +38,7 @@
     
     @HelperExtend.Number("NeedPoint", "需要积分", defaultval: Model.NeedPoint, hint: "如果使用积分兑换的方式获取，需要多少积分", max: 1000000 )
      
-    @HelperExtend.RadioGroup("QxLx", "期限类型", "0,1", "期限范围,固定天数", defaultval: Model.QxLx, hint: "")
+    @HelperExtend.RadioGroup("QxLx", "期限类型", "0,1", "期限范围,固定天数", defaultval: Model.QxLx, hint: "",onChange= "isShow")
 
 
     @HelperExtend.RadioGroup("IsCongZengSongKaiShi", "从获取开始计算时间", "false,true", "否,是", defaultval: Model.IsCongZengSongKaiShi)
@@ -48,7 +48,8 @@
     @HelperExtend.DateTime("EndDate", "有效时间止", defaultval: Model.EndDate, hint: "")
 
     @HelperExtend.Number("QXTS", "期限天数", defaultval: Model.QXTS, hint: "", max: 1000000)
-    
+
+
 
     @HelperExtend.TextBox("MinPrice", "最低消费金额", defaultval: Model.MinPrice, hint: "")
 
@@ -119,7 +120,11 @@
                         remote: "名称重复"
                     }
                 },
-                errorPlacement: errorPlace
+                errorPlacement: errorPlace,
+                showErrors: function (errorMap, errorList) {
+                    $('#jqxLoader').jqxLoader('close');
+                    this.defaultShowErrors();
+                }
 
             });
         })
@@ -146,17 +151,7 @@
                 $("#StartDate").closest("dl").hide();
 
             }
-        }
-        $(function () {
-            isShow();
-            $("input[name='QxLx']").click(function () {
-
-                isShow(this);
-            });
-            
-
-
-        });
+        } 
     </script>
 
      

@@ -33,7 +33,7 @@
     @HelperExtend.TextBox("Name", "商品类型名称", defaultval: Model.Name, hint: "*名称不能重复.")
 
 
-    @{//获取所有商品类型
+    @{//获取所有商品品牌
         string codes = string.Empty;
         string names = string.Empty;
         bool[] vals = null;
@@ -69,7 +69,7 @@
             <a class="menu-btn"></a>
             <div class="l-list">
                 <ul class="icon-list">
-                    <li><a class="add" href="javascript:;" onclick="javascript: AddExtend(1, '添加新的规格');  "><i></i><span>添加新规格</span></a></li>
+                    <li><a class="add" href="javascript:;" onclick="javascript: AddExtend(2, '添加新的规格');  "><i></i><span>添加新规格</span></a></li>
                 </ul>
             </div>
         </div>
@@ -151,14 +151,10 @@
                         remote: "名称重复"
                     }
                 },
-                errorPlacement: function (error, element) {
-
-                    if (element.is(":radio"))
-                        error.insertAfter($(element).parent());
-                    else if (element.is(":checkbox"))
-                        error.insertAfter($(element).parent());
-                    else
-                        error.insertAfter(element);
+                errorPlacement: errorPlace,
+                showErrors: function (errorMap, errorList) {
+                    $('#jqxLoader').jqxLoader('close');
+                    this.defaultShowErrors();
                 }
 
             });
@@ -171,8 +167,8 @@
         $(function () {
             /*加载规格*/
             var url = "@Url.Action("GetAttrList")";
-            var datafields = [{ name: 'ID' }, { name: 'Name' }, { name: 'ShowType' }, { name: 'UnitText' }, { name: 'DisplayOrder' },
-            { name: 'ProductTypeID' }, { name: 'UseAttrImg' }, { name: 'UseDefineImg' }, { name: 'UsageMode' }, { name: 'Vals' }];
+            var datafields = [{ name: 'ID' }, { name: 'Name' }, { name: 'FullName' }, { name: 'ShowType' }, { name: 'OrderNo' },
+            { name: 'CategoryName' }, { name: 'UseAttrImg' }, { name: 'UsageMode' }, { name: 'Vals' }];
             var columns = [
             {
                 text: '规格类型', dataField: 'UseAttrImg', width: 100, cellsrenderer: function (row, column, value) {
@@ -184,16 +180,16 @@
                     return html;
                 }
             },
-    { text: '规格名称', dataField: 'Name', cellsalign: "left", width: 120 },
+      { text: '规格分类', dataField: 'CategoryName', cellsalign: "left", width: 120 },
+    { text: '规格名称', dataField: 'FullName', cellsalign: "left", width: 120 },
     { text: '规格值', dataField: 'Vals' },
-    { text: '顺序', dataField: 'DisplayOrder', width: 80 },
+    { text: '顺序', dataField: 'OrderNo', width: 80 },
       {
-          text: '操作', datafield: 'ID', align: "center", cellsalign: "center", width: 200, cellsrenderer: function (row, column, value) {
+          text: '操作', datafield: 'ID', align: "center", cellsalign: "center", width: 100, cellsrenderer: function (row, column, value) {
 
               var html = "  <div style='text-align: center; overflow: hidden; padding-bottom: 2px; margin-top: 4px; text-overflow: ellipsis;'>";
 
-              html += "<a  href='javascript:;' onclick='AddValue(" + row + ",true);'   >添加规格值</a>&nbsp;&nbsp;&nbsp;" +
-                   "<a href='javascript:;' onclick='EditExtendInfo(" + row + ",true);'  >编辑规格值</a> &nbsp;&nbsp;&nbsp;" +
+              html +=  
               "<a  href='javascript:;' onclick='deleteExtendInfo(" + row + ",true);'  >删除规格</a>";
 
               html += "</div>";
@@ -217,22 +213,18 @@
             var urlattr = "@Url.Action("GetAttrList")";
 
             var columnsattr = [
-
-    { text: '属性名称', dataField: 'Name', cellsalign: "left",width: 120 },
-    { text: '单位', dataField: 'UnitText', width: 80 },
-            { text: '展示方式', dataField: 'ShowType', width: 80 },
+   { text: '属性分类', dataField: 'CategoryName', cellsalign: "left", width: 120 },
+    { text: '属性名称', dataField: 'FullName', cellsalign: "left", width: 120 }, 
+           
             { text: '属性值', dataField: 'Vals' },
 
-    { text: '顺序', dataField: 'DisplayOrder', width: 80 },
+    { text: '顺序', dataField: 'OrderNo', width: 80 },
        {
            text: '操作', datafield: 'ID', align: "center", cellsalign: "center", width: 200, cellsrenderer: function (row, column, value) {
 
                var html = "  <div style='text-align: center; overflow: hidden; padding-bottom: 2px; margin-top: 4px; text-overflow: ellipsis;'>";
 
-               html += "<a  href='javascript:;' onclick='AddValue(" + row + " ,false);'   >添加属性值</a>&nbsp;&nbsp;&nbsp;" +
-                    "<a href='javascript:;' onclick='EditExtendInfo(" + row + ",false);'  >编辑属性值</a> &nbsp;&nbsp;&nbsp;" +
-               "<a  href='javascript:;' onclick='deleteExtendInfo(" + row + ",false);'  >删除属性</a>";
-
+               html +=   "<a  href='javascript:;' onclick='deleteExtendInfo(" + row + ",false);'  >删除属性</a>"; 
                html += "</div>";
                return html;
                return
@@ -255,7 +247,7 @@
     <script type="text/javascript">
 
         function AddExtend(action, title) {
-            Dialog.open("@Url.Action("AddExtend")/" + action + "/" + $("#ID").val(), title, {
+            Dialog.open("@Url.Action("AddExtend")/" + $("#ID").val() + "/" + action, title, {
                 AllWayInit:true, 
                 onClose: function (grid) {
                     var content = grid[0].textContent;
@@ -264,57 +256,19 @@
                             $('#jqxKzsx').jqxGrid('updatebounddata');
                         }
                        
-                    } else if (content == "  添加规格") {
+                    } else if (content == "  添加新的规格") {
                         if (GetThisDialogState()) {
                             $('#jqxGg').jqxGrid('updatebounddata');
                         }  
                     }
                 }
             }, { width: 700, height: 500 });
-        }
-
-        function AddValue(rowindex, isgg) {
-            var title = "添加扩展属性值";
-            var gridid = "#jqxKzsx";
-            if (isgg) {
-                gridid = "#jqxGg";
-                var title = "添加规格值";
-            }
-            var data = $(gridid).jqxGrid('getrowdata', rowindex);
-            Dialog.open("@Url.Action("AddValue")/" + data.ID, title, {
-                AllWayInit: true,
-                onClose: function (grid) {
-                    var content = grid[0].textContent;
-                    if (content == "  添加扩展属性值") {
-                        if (GetThisDialogState()) {
-                            $('#jqxgrid').jqxGrid('updatebounddata');
-                        }
-                        $('#jqxKzsx').jqxGrid('updatebounddata');
-                    } else if (content == "  添加规格值") {
-                        if (GetThisDialogState()) {
-                            $('#jqxgrid').jqxGrid('updatebounddata');
-                            $('#jqxGg').jqxGrid('updatebounddata');
-                        }
-                    }
-                }
-            }, { width: 400, height: 450 });
-
-        }
-
+        } 
     </script>
 
     <script type="text/javascript">
 
-        function EditExtendInfo(rowindex, isgg) {
-            var gridid = "#jqxKzsx";
-
-            if (isgg) {
-                gridid = "#jqxGg";
-            }
-            var data = $(gridid).jqxGrid('getrowdata', rowindex);
-
-            window.location.href = "@Url.Action("index", "ShopExtendInfoValue")/" + data.ID;
-        }
+         
         function deleteExtendInfo(rowindex, isgg) {
           
             var gridid = "jqxKzsx";

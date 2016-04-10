@@ -170,6 +170,91 @@ string ctrlID = "DropDownList" + code;
 
     </script>
 }
+@helper DropDownListWithSearch(string code, string name, object defaultval = null, string hint = "", string otherClass = "", int width = 100, EasyCms.Web.DropDownListInfo downInfo = null)
+{
+if (downInfo == null)
+{
+    downInfo = new EasyCms.Web.DropDownListInfo();
+
+}
+if (string.IsNullOrWhiteSpace(downInfo.DisplayMember))
+{
+    downInfo.DisplayMember = "Name";
+
+}
+if (string.IsNullOrWhiteSpace(downInfo.ValueMember))
+{
+    downInfo.ValueMember = "ID";
+
+}
+if (string.IsNullOrWhiteSpace(downInfo.JsonDataRoor))
+{
+    downInfo.JsonDataRoor = "Rows";
+}
+string ctrlID = "DropDownList" + code;
+ 
+            <div id='@ctrlID'>
+            </div>
+            <input name="@code" id="@code" type="hidden" value="@(defaultval as string)" />
+            <span style="float: left; color: red">@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(hint)</span>
+ 
+    <script type="text/javascript">
+        $(function(){
+            var source =
+                   {
+                       datatype: "json",
+                       datafields: [
+                           { name: '@downInfo.ValueMember' },
+                           { name: '@downInfo.DisplayMember' }
+                       ],
+                       url: '@downInfo.Url',
+                       root:"@downInfo.JsonDataRoor",
+                       async: false
+                   };
+            var dataAdapter = new $.jqx.dataAdapter(source);
+            // Create a jqxDropDownList
+            $("#@ctrlID").jqxDropDownList({
+                source: dataAdapter, displayMember: "@downInfo.DisplayMember", valueMember: "@downInfo.ValueMember", width: @width.ToString(), height: 25 });
+            @if (defaultval!=null  ) {
+
+                string val = defaultval.ToString();
+                if (!string.IsNullOrWhiteSpace(val))
+                {
+                    @MVCExtention.ExtendHtmlInput.MvcHelper.Raw("var item =$(\"#" + ctrlID + "\").jqxDropDownList('getItemByValue', '"+val+"');$(\"#" + ctrlID + "\").jqxDropDownList('selectItem', item ); ");
+                }
+            }
+
+            // subscribe to the select event.
+            @if (!string.IsNullOrWhiteSpace(downInfo.change))
+            {
+                @MVCExtention.ExtendHtmlInput.MvcHelper.Raw("$(\"#" + ctrlID + "\").on('change', function (event) { " + downInfo.change + "(event); });");
+            }
+            @if (!string.IsNullOrWhiteSpace(downInfo.select))
+             {
+                @MVCExtention.ExtendHtmlInput.MvcHelper.Raw("$(\"#" + ctrlID + "\").on('select', function (event) { " + downInfo.select + "(event); });");
+             }
+            @if (!string.IsNullOrWhiteSpace(downInfo.unselect))
+             {
+                @MVCExtention.ExtendHtmlInput.MvcHelper.Raw("$(\"#" + ctrlID + "\").on('unselect', function (event) { " + downInfo.unselect + "(event); });");
+             }
+            $("#@ctrlID").on('select', function (event) {
+                var args = event.args;
+                if (args) {
+                    // index represents the item's index.
+                    var index = args.index;
+                    var item = args.item;
+                    $("#@code").val(item.value);
+                }else
+                {
+                    $("#@code").val("");
+                }
+
+            });
+        });
+
+
+    </script>
+}
 @helper DropDownListCardEnum(string code, string name, object defaultval = null, Type enumType = null, string hint = "", int width = 150)
 { string ctrlID = "DropDownListCardEnum" + code;
 
@@ -324,7 +409,7 @@ string ctrlID = "DropDownList" + code;
             @MVCExtention.ExtendHtmlInput.MvcHelper.Label(code, name)
         </dt>
         <dd>
-            @MVCExtention.ExtendHtmlInput.MvcHelper.TextArea(code, defaultval as string, row, col, new { id=code, @class = "input " + otherClass })
+            @MVCExtention.ExtendHtmlInput.MvcHelper.TextArea(code, defaultval as string, row, col, new { id = code, @class = "input " + otherClass })
             <span style="color:red">@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(hint)</span>
         </dd>
     </dl>
@@ -361,8 +446,8 @@ string serverUrl = vitualPath + "/api/controller.ashx";
                     </button>
                     <button style="padding:4px 16px;" id="@pccode-Right">
                         同步到电脑
-                    </button> 
-                    
+                    </button>
+
                 </div>
                 <label style="color:red"> *注：同步到手机：将电脑版里的内容自动同步到手机版里，反正亦然。</label>
                 <div id='@pccode-jqxTabs'>
@@ -405,7 +490,7 @@ string serverUrl = vitualPath + "/api/controller.ashx";
                             else
                             { Query("确认清空电脑版现有内容,并使用手机版内容同步？",function(){UE.getEditor('@pccode').setContent(UE.getEditor('@mobliecode').getContent());})
 
-                              
+
                             }
                         });
                         $('#@pccode-jqxTabs').jqxTabs({ width: '90%', height:  '90%', position: 'top'});});
@@ -483,7 +568,7 @@ string serverUrl = vitualPath + "/api/controller.ashx";
     </dl>
 }
 
-@helper RadioGroup(string code, string name, string vals = "", string texts = "", object defaultval = null, string hint = "", string otherClass = "")
+@helper RadioGroup(string code, string name, string vals = "", string texts = "", object defaultval = null, string hint = "", string otherClass = "", string onChange = "")
 {
     <dl>
         <dt>
@@ -508,8 +593,8 @@ string serverUrl = vitualPath + "/api/controller.ashx";
 
                             radioId += i.ToString();
 
-                            <input id="@radioId" name="@code" type="radio" @IsSelected value="@item" />
-                            <label for="@radioId">@nameArr[i]</label>
+                    <input id="@radioId" name="@code" type="radio" @IsSelected value="@item" />
+                    <label for="@radioId">@nameArr[i]</label>
                             i++;
                         }
 
@@ -518,8 +603,19 @@ string serverUrl = vitualPath + "/api/controller.ashx";
 
             </div>
             <span style="color:red">@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(hint)</span>
+            @if (!string.IsNullOrWhiteSpace(onChange))
+            {
+                <script type="text/javascript">
+                    $(function() {
+                       @MVCExtention.ExtendHtmlInput.MvcHelper.Raw(onChange+"();")
+                        $("input[name='@code']").click(function() {
+                               @MVCExtention.ExtendHtmlInput.MvcHelper.Raw(onChange+ "(this);") 
+                        }); });
+                </script>
+            }
         </dd>
     </dl>
+
 }
 @*一个帮助编辑器的属性有如下几种：
     1. 引用jqx的样式 和js脚本  js脚本 得保证引用了jquery // ok
@@ -589,7 +685,7 @@ string OnBeforeFunc = "isContienu=" + OnBefore + "();";
         });
     </script>
 
-    @MVCExtention.ExtendHtmlInput.MvcHelper.Partial("_Dialog", new EasyCms.Web.DialogModel
+            @MVCExtention.ExtendHtmlInput.MvcHelper.Partial("_Dialog", new EasyCms.Web.DialogModel
 {
     DialogID = dialogID,
     Title = dialogTitle,
@@ -677,6 +773,44 @@ string OnBeforeFunc = "isContienu=" + OnBefore + "();";
         });
     </script>
 }
+@*此打开窗口的方法 可以用dialog.open脚本*@
+@*@helper OpenDialog(string url, string id,  string dialogTitle = "", int dialogWidth = 800, int dialogHeight = 600, string OnBefore = "",string OnFinished="")
+{
+string dialogID = id + Guid.NewGuid();
+string selectButtonID = id ;
+string OnBeforeFunc = "isContienu=" + OnBefore + "();"; 
+    <script type="text/javascript">
+
+        $(function () {
+            Dialog.create("@MVCExtention.ExtendHtmlInput.MvcUrl.Content("~/Content/Images/movie.png")");
+
+            $("#@selectButtonID").click(function () {
+                var isContienu = true;
+                @if (!string.IsNullOrWhiteSpace(OnBefore))
+	{
+                     @OnBeforeFunc
+	}
+                if (isContienu) {
+                    Dialog.open("@url" , "@dialogTitle", {
+                        onClose: function () {
+                            var data=GetThisDialogState();
+
+                            if (data) {
+                                @OnFinished
+                            }
+                        }
+                    }, { width: 850, height: 580 });
+
+                }
+                return false;
+            });
+
+        });
+    </script>
+}*@
+
+
+
 
 
 
