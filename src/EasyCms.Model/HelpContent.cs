@@ -34,7 +34,7 @@ namespace EasyCms.Model
 
         private string _ContentHtml;
 
-        private string _ContentText;
+        private int _OrderNo;
 
         #endregion
 
@@ -137,21 +137,21 @@ namespace EasyCms.Model
         }
 
         /// <summary>
-        ///  内容文字,
+        ///  序号,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "ContentText", DbTypeString = "ntext", ColumnIsNull = true, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "OrderNo", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public string ContentText
+        public int OrderNo
         {
             get
             {
-                return this._ContentText;
+                return this._OrderNo;
             }
             set
             {
-                this.OnPropertyChanged("ContentText", this._ContentText, value);
-                this._ContentText = value;
+                this.OnPropertyChanged("OrderNo", this._OrderNo, value);
+                this._OrderNo = value;
             }
         }
 
@@ -173,7 +173,7 @@ namespace EasyCms.Model
 
                 ContentHtml = new PropertyItem("ContentHtml", tableName);
 
-                ContentText = new PropertyItem("ContentText", tableName);
+                OrderNo = new PropertyItem("OrderNo", tableName);
 
 
             }
@@ -198,9 +198,9 @@ namespace EasyCms.Model
             /// </summary> 
             public PropertyItem ContentHtml = null;
             /// <summary>
-            /// 内容文字,
+            /// 序号,
             /// </summary> 
-            public PropertyItem ContentText = null;
+            public PropertyItem OrderNo = null;
         }
         #endregion
     }

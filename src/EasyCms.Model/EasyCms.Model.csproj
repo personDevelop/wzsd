@@ -64,6 +64,7 @@
     <Compile Include="HelpContent.cs" />
     <Compile Include="HelpType.cs" />
     <Compile Include="MsgSendLog.cs" />
+    <Compile Include="Notice.cs" />
     <Compile Include="SearchKeyRelationContent.cs" />
     <Compile Include="SearchKeyWord.cs" />
     <Compile Include="SendCoupon.cs" />

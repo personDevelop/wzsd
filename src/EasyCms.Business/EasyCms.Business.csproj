@@ -66,6 +66,7 @@
     <Compile Include="NewsCategoryBll.cs" />
     <Compile Include="NewsCommentBll.cs" />
     <Compile Include="NewsInfoBll.cs" />
+    <Compile Include="NoticeBll.cs" />
     <Compile Include="ParameterInfoBll.cs" />
     <Compile Include="PayBill.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

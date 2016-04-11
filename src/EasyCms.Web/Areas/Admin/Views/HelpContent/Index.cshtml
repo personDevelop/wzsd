@@ -1,6 +1,6 @@
 ﻿@using MVCExtention;
 @{
-    ViewBag.Title = "新闻信息";
+    ViewBag.Title = "帮助内容";
 }
 
 <!--工具栏-->
@@ -11,8 +11,8 @@
             <div class="l-list">
                 <ul class="icon-list">
                     <li><a class="add" href="@Url.Action("Edit")"><i></i><span>新增</span></a></li>
-                    <li><a class="add" href="javascript:;" onclick="EditGrid('jqxgrid', '@Url.Action("Edit")');"><i></i><span>编辑</span></a></li>
-                    <li><a class="del" href="javascript:;" onclick="DelGrid('jqxgrid', '@Url.Action("Delete")');"><i></i><span>删除</span></a></li>
+                    <li><a class="add" href="javascript:;" onclick="editOne();"><i></i><span>编辑</span></a></li>
+                    <li><a class="del" href="javascript:;" onclick="deleteOne();"><i></i><span>删除</span></a></li>
                 </ul>
             </div>
         </div>
@@ -21,60 +21,66 @@
 <!--/工具栏-->
 <!--列表-->
 <div class="table-container">
-    <div id="jqxgrid"></div>
-</div>
-<!--/列表-->
-@section  scripts{
-    
- 
-    <script type="text/javascript">
-        $(document).ready(function () {
-           var url = "@Url.Action("GetList")";
-            var datafields = [{ name: 'ID' }, { name: 'ClassName' }, { name: 'ClassID' }, { name: 'NewsTitle' },
+    <div id="treeGrid">
+    </div>
+    <!--/列表-->
+    @section  scripts{
 
-        { name: 'SubTitle' }, { name: 'Summary' }, { name: 'Description' }, { name: 'ImageUrl' },
 
-        { name: 'ThumbImageUrl' }, { name: 'NormalImageUrl' }, { name: 'CreatedDate' },
+        <script type="text/javascript">
+            function editOne()
+            {
+                treeid = '#treeGrid'
+                var data = $(treeid).jqxTreeGrid('getSelection');
+                if (data.length == 1) {
+                    if (data[0].IsContent)
+                    {
+                        EditTree('treeGrid', '@Url.Action("Edit")');
+                    } else { ErrorMsg("请选择一条帮助信息"); }
 
-        { name: 'CreatedUserID' }, { name: 'LastEditUserID' }, { name: 'LastEditDate' },
+                } else { ErrorMsg("请选择一条数据"); }
 
-        { name: 'LinkUrl' }, { name: 'PvCount' }, { name: 'State' },
+            }
 
-        { name: 'KeyWords' }, { name: 'Sequence' }, { name: 'IsRecomend' },
+            function deleteOne()
+            {
+                treeid = '#treeGrid'
+                var data = $(treeid).jqxTreeGrid('getSelection');
+                if (data.length == 1) {
+                    if (data[0].IsContent) {
+                        DelTree('treeGrid', '@Url.Action("Delete")');
+                    } else { ErrorMsg("请选择一条帮助信息"); }
 
-        { name: 'IsHot' }, { name: 'IsColor' }, { name: 'IsTop' },
+                } else { ErrorMsg("请选择一条数据"); }
 
-        { name: 'Note' }, { name: 'TotalComment' }, { name: 'TotalSupport' },
 
-        { name: 'TotalFav' }, { name: 'TotalShare' }, { name: 'BeFrom' },
 
-        { name: 'Meta_Title' }, { name: 'Meta_Description' }, { name: 'Meta_Keywords' },
+            }
+            $(document).ready(function () {
+                var url = "@Url.Action("GetList")";
+                var datafields = [{ name: 'ID' }, { name: 'ParentID' }, { name: 'Code' }, { name: 'Name' },
 
-        { name: 'SeoUrl' }, { name: 'SeoImageAlt' }, { name: 'SeoImageTitle' },
+           { name: 'IsShowButtom' }, { name: 'IsShowNavi' },
+            { name: 'OrderNo' }, {name:"IsContent"}];
+                var columns = [
+        {
+            text: '编号', dataField: 'Code', cellsalign: "left", cellsRenderer: function (rowKey, dataField, value, data) {
+                if (data.IsContent) {
 
-        { name: 'StaticUrl' }, { name: 'AllowPl' }];
-            var columns = [
-    { text: '标题', dataField: 'NewsTitle', cellsalign: "left", },
-    { text: '所属类别', dataField: 'ClassName', width: 100 },
-    { text: '发布日期', dataField: 'LastEditDate', width: 140 },
-    { text: '浏览次数', dataField: 'PvCount', width: 80 },
-    { text: '顺序', dataField: 'Sequence', cellsalign: "right", width: 40 },
+                    return '<span class="treeicon file"  style="margin:0px 5px;display: inline-block" ></span>' + value;
+                } else { return '<span class="treeicon folder"  style="margin:0px 5px;display: inline-block"  ></span>' + value; }
+            }
+        },
+       
+                 { text: '名称', dataField: 'Name', cellsalign: "left" }, 
+                 { text: '底部展示', dataField: 'IsShowButtom', width: 80 },
+                 { text: '导航展示', dataField: 'IsShowNavi', width: 80 },
+                 { text: '顺序', dataField: 'OrderNo', width: 50 },
+                 { text: '备注', dataField: 'Note', cellsalign: "left" }];
+                CreateTree("treeGrid", url, datafields, columns );
 
-    { text: '推荐', dataField: 'IsRecomend', width: 50 ,@HelperExtend.Parsebool()},
+            });
+        </script>
 
-    { text: '热点', dataField: 'IsHot', width: 50 ,@HelperExtend.Parsebool()},
 
-    { text: '醒目', dataField: 'IsColor', width: 50,@HelperExtend.Parsebool() },
-
-    { text: '置顶', dataField: 'IsTop', width: 50,@HelperExtend.Parsebool() },
-
-    { text: '评论次数', dataField: 'TotalComment', cellsalign: "right", width: 80 },
-
-    { text: '允许评论', dataField: 'AllowPl', width: 80 ,@HelperExtend.Parsebool()}];
-            CreateGrid("jqxgrid", url, datafields, columns, {isMutilSelect:true});
-             
-        });
-    </script>
-  
-
-}
+    }

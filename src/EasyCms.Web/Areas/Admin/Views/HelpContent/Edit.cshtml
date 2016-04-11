@@ -30,8 +30,8 @@
 
 
     @Html.ValidationSummary()
-   
-    @HelperExtend.HelpEdit("CategoryID", "CategoryName", "所属分类", defaultText: Model.CategoryName, dialogTitle: "选择所属分类", hint: "(*必填)", InnitFunc: "InnitFunc", onOk: "onOk", IsTree: true, DataControlID: "treeGrid")
+      
+    @HelperExtend.HelpEdit("CategoryID", "CategoryName", "所属分类", defaultVal: Model.CategoryID, defaultText: Model.CategoryName, dialogTitle: "选择所属分类", hint: "(*必填)", InnitFunc: "InnitFunc", onOk: "onOk", IsTree: true, DataControlID: "treeGrid")
    @HelperExtend.TextBox("Code", "编号", defaultval: Model.Code, hint: "")
 
     @HelperExtend.TextBox("Name", "名称", defaultval: Model.Name, hint: "")
@@ -53,7 +53,7 @@
             $("form").validate({
                 ignore: "",
                 rules: {
-                    ClassName: {
+                    CategoryName: {
                         required: true 
                     },
                     Code: {
@@ -77,7 +77,7 @@
                         maxlength: $.validator.format("名称长度不能大于{0}个字符")
 
                     },
-                    ClassName: {
+                    CategoryName: {
                         required: "请选择所属分类"
                     }
                 },
@@ -115,7 +115,7 @@
                             },
                             id: 'ID',
                             root: 'Rows',
-                            url: " @Url.Action("GetListForSelecte")"
+                            url: " @Url.Action("GetListForSelecte", "HelpType")"
                         };
             var dataAdapter = new $.jqx.dataAdapter(source);
 
@@ -134,52 +134,12 @@
         function onOk(data) {
             if (data.length == 1) {
 
-                $("#ClassName").val(data[0].Name);
-                $("#ClassID").val(data[0].ID);
+                $("#CategoryName").val(data[0].Name);
+                $("#CategoryID").val(data[0].ID);
 
             } else { ErrorMsg("请选择一条数据"); }
         }
 
     </script>
-    <script type="text/javascript">
-
-
-
-
-        function InnitShopFunc() {
-
-            var url = "@Url.Action("GetListForSelecte", "ShopProductInfo", new { area = "Admin" })";
-            var datafields = [{ name: 'ID' },
-        { name: 'Code' }, { name: 'Name' }, { name: 'SalePrice', type: 'float' }];
-            var columns = [
-
-     { text: '编号', dataField: 'Code', width: 120, cellsalign: "left" },
-    { text: '名称', dataField: 'Name', cellsalign: "left" },
-
-    { text: '销售价', dataField: 'SalePrice', width: 80, cellsalign: "right" }];
-
-            CreateGrid("shopGrid", url, datafields, columns, {
-                adapter: {
-                    formatData: function (data) {
-
-
-                        data.Name = $("#SearchTextProducntID").val();
-                    }
-                }, grid: { height: "82%" }
-            });
-        }
-            function onSpOk(data) {
-                if (!data) {
-
-                    ErrorMsg("请选择一条数据");
-
-
-                } else {
-                    $("#ProductName").val(data.Name);
-                    $("#ProducntID").val(data.ID);
-                }
-            }
-
-
-    </script>
+   
 }

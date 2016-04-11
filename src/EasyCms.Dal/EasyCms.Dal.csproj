@@ -72,6 +72,7 @@
     <Compile Include="NewsCategoryDal.cs" />
     <Compile Include="NewsCommentDal.cs" />
     <Compile Include="NewsInfoDal.cs" />
+    <Compile Include="NoticeDal.cs" />
     <Compile Include="ParameterInfoDal.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RedeemRulesDal.cs" />

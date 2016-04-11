@@ -241,6 +241,7 @@
     <Compile Include="Areas\Admin\Controllers\LogOperController.cs" />
     <Compile Include="Areas\Admin\Controllers\ManagerUserInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\NewsCommentController.cs" />
+    <Compile Include="Areas\Admin\Controllers\NoticeController.cs" />
     <Compile Include="Areas\Admin\Controllers\RangeDictController.cs" />
     <Compile Include="Areas\Admin\Controllers\NewsInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\RedeemRulesController.cs" />
@@ -364,7 +365,9 @@
     <Content Include="Content\js\laymain.js" />
     <Content Include="Content\js\uploader.js" />
     <Content Include="Content\skin\base.css" />
+    <Content Include="Content\skin\default\folder.bmp" />
     <Content Include="Content\skin\default\ie_update.jpg" />
+    <Content Include="Content\skin\default\Item_Master.gif" />
     <Content Include="Content\skin\default\loadimg.gif" />
     <Content Include="Content\skin\default\logo.png" />
     <Content Include="Content\skin\default\nav\home.png" />
@@ -858,6 +861,8 @@
     <Content Include="Areas\Admin\Views\ShopExtendInfo\AddGg.cshtml" />
     <Content Include="Areas\Admin\Views\ShopExtendInfo\AddImg.cshtml" />
     <Content Include="Areas\Admin\Views\ShopExtendInfo\AddValue.cshtml" />
+    <Content Include="Areas\Admin\Views\Notice\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Notice\Edit.cshtml" />
     <None Include="Properties\PublishProfiles\publish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\EshopAdminControl.js" />

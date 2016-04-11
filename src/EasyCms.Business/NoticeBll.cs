@@ -10,34 +10,36 @@ using Sharp.Common;
 
 namespace EasyCms.Business
 {
-    public class HelpContentBll
+    public class NoticeBll
     {
-        HelpContentDal Dal = new HelpContentDal();
+        NoticeDal Dal = new NoticeDal();
         public string Delete(string id)
         {
 
             return Dal.Delete(id);
         }
 
-        public int Save(HelpContent item)
+        public int Save(Notice item)
         {
             return Dal.Save(item);
         }
 
-        public DataTable GetList( )
+        
+        public DataTable GetList(int pagenum, int pagesize, ref int recordCount, bool IsForSelected = true)
         {
-            return Dal.GetList( );
+            return Dal.GetList(pagenum, pagesize, ref recordCount, IsForSelected);
         }
-       
-       
-        public HelpContent GetEntity(string id)
+     
+        public Notice GetEntity(string id)
         {
             return Dal.GetEntity(id);
         }
 
+        
 
-      
-
-
+        public string Publish(string id, int stat)
+        {
+           return Dal.Publish(id,stat);
+        }
     }
 }

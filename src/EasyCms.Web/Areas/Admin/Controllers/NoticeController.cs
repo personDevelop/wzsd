@@ -10,46 +10,55 @@ using EasyCms.Web.Common;
 
 namespace EasyCms.Web.Areas.Admin.Controllers
 {
-    public class HelpContentController : Controller
+    public class NoticeController : Controller
     {
-        HelpContentBll bll = new HelpContentBll();
+        NoticeBll bll = new NoticeBll();
         //
-        // GET: /Admin/HelpContent/
+        // GET: /Admin/Notice/
         public ActionResult Index()
         {
 
             return View();
         }
 
-        public string GetList()
+        public string GetList(int pagenum, int pagesize)
         {
-           
-            System.Data.DataTable dt = bll.GetList(  );
+            int recordCount = 0;
+            System.Data.DataTable dt = bll.GetList(pagenum + 1, pagesize, ref recordCount);
 
             string result = JsonWithDataTable.Serialize(dt);
-          
+            result = string.Format("{{\"total\":\"{0}\",\"data\":{1}}}", recordCount, result);
             return result;
 
-        } 
+        }
+        public string GetListForSelecte(int pagenum, int pagesize)
+        {
+            int recordCount = 0;
+            System.Data.DataTable dt = bll.GetList(pagenum, pagesize, ref recordCount, true);
+            string result = JsonWithDataTable.Serialize(dt);
+            result = string.Format("{{\"total\":\"{0}\",\"data\":{1}}}", recordCount, result);
+            return result;
+        }
+      
         //
-        // POST: /Admin/HelpContent/Create
+        // POST: /Admin/Notice/Create
         [HttpPost]
         [ValidateInput(false)]
         public ActionResult Save(FormCollection collection)
         {
-            HelpContent p = null; ;
+            Notice p = null; ;
 
             try
             {
                 if (collection["RecordStatus"] != "add")
                 {
                     p = bll.GetEntity(collection["ID"]);
-                    p.BindForm<HelpContent>(collection);
+                    p.BindForm<Notice>(collection);
                 }
                 else
                 {
                     // TODO: Add insert logic here
-                    p = collection.Bind<HelpContent>();
+                    p = collection.Bind<Notice>();
 
                 }
 
@@ -59,7 +68,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                     {
                         p.ID = Guid.NewGuid().ToString();
                     }
-                     
+                    p.CreateDate = DateTime.Now;
                 }
                 bll.Save(p);
                 if (TempData.ContainsKey("IsSuccess"))
@@ -74,7 +83,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                 ModelState.Clear();
                 if (collection["IsContinueAdd"] == "1")
                 {
-                    p = new HelpContent();
+                    p = new Notice();
 
                 }
 
@@ -88,14 +97,14 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         }
 
         //
-        // GET: /Admin/HelpContent/Edit/5
+        // GET: /Admin/Notice/Edit/5
         public ActionResult Edit(string id)
         {
 
-            HelpContent p = null;
+            Notice p = null;
             if (string.IsNullOrWhiteSpace(id))
             {
-                p = new HelpContent();
+                p = new Notice();
             }
             else
                 p = bll.GetEntity(id);
@@ -104,10 +113,20 @@ namespace EasyCms.Web.Areas.Admin.Controllers
 
         [HttpPost]
         //
-        // GET: /Admin/HelpContent/Delete/5
+        // GET: /Admin/Notice/Delete/5
         public string Delete(string id)
         {
             return bll.Delete(id);
         }
+
+        [HttpPost]
+        //
+        // GET: /Admin/Notice/Delete/5
+        public string ChangeStatus(string id,int  stat )
+        {
+            return bll.Publish(id,stat);
+        }
+
+       
     }
 }

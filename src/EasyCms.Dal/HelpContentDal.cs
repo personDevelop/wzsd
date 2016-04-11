@@ -21,48 +21,35 @@ namespace EasyCms.Dal
 
         public int Save(HelpContent item)
         {
+            if (item.RecordStatus== StatusType.add)
+                item.OrderNo = Dal.Count<HelpContent>(HelpContent._.CategoryID==item.CategoryID,HelpContent._.ID, false)+1;
             return Dal.Submit (  item); 
         }
 
-        public DataTable GetList(bool IsForSelected = false)
+        public DataTable GetList( )
         {
-            if (IsForSelected)
-            {
-                return Dal.From<HelpContent>().Join<HelpType>(HelpContent._.CategoryID==HelpType._.ID)
-                .Select(HelpContent._.ID, HelpContent._.Code, HelpContent._.Name,
-
-
-                    HelpType._.Name.Alias("CategoryName") ).OrderBy(HelpContent._.Code).ToDataTable();
-            }
-            else
-                return Dal.From<HelpContent>().Join<HelpType>(HelpContent._.CategoryID == HelpType._.ID)
-                 .Select(HelpContent._.ID.All, HelpType._.Name.Alias("CategoryName")).OrderBy(HelpContent._.Code).ToDataTable();
+            DataTable dt= Dal.From<HelpType>().Select(HelpType._.ID, HelpType._.Code, HelpType._.Name,
+                HelpType._.IsShowButtom, HelpType._.IsShowNavi, HelpType._.OrderNo, HelpType._.ParentID
+                ,new ExpressionClip("CONVERT(bit,0)").Alias("IsContent")
+                )   .ToDataTable();
+                
+            DataTable dt1=Dal.From<HelpContent>().Join<HelpType>(HelpContent._.CategoryID==HelpType._.ID)
+                .Select(HelpContent._.ID, HelpContent._.Code, HelpContent._.Name, HelpType._.IsShowButtom, HelpType._.IsShowNavi,
+                HelpContent._.OrderNo, HelpType._.ID.Alias("ParentID"), new ExpressionClip("CONVERT(bit,1)").Alias("IsContent")
+                ).ToDataTable();
+            if (dt1.Rows.Count>0)
+                dt.Merge(dt1);
+            return dt ;
+            
         }
        
-        public DataTable GetList(int pagenum, int pagesize, ref int recordCount, bool IsForSelected = false)
-        {
-            int pageCount = 0;
-
-            if (IsForSelected)
-            {
-                return Dal.From<HelpContent>().Join<HelpType>(HelpContent._.CategoryID == HelpType._.ID)
-                .Select(HelpContent._.ID, HelpContent._.Code, HelpContent._.Name,
-
-
-                    HelpType._.Name.Alias("CategoryName")).OrderBy(HelpContent._.Code).ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
-            }
-            else
-                return Dal.From<HelpContent>().Join<HelpType>(HelpContent._.CategoryID == HelpType._.ID)
-                 .Select(HelpContent._.ID.All, HelpType._.Name.Alias("CategoryName")).OrderBy(HelpContent._.Code).ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
-           
-        }
+    
       
         public HelpContent GetEntity(string id)
         {
-            WhereClip where = new WhereClip("a.id=@id");
-            where.Parameters.Add("id", id);
+           
             return Dal.From<HelpContent>().Join<HelpType>(HelpContent._.CategoryID == HelpType._.ID)
-                 .Select(HelpContent._.ID.All, HelpType._.Name.Alias("CategoryName")).Where(where).OrderBy(HelpContent._.Code).ToFirst<HelpContent>();
+                .Select(HelpContent._.ID.All, HelpType._.Name.Alias("CategoryName")  ).Where(HelpContent._.ID==id).ToFirst<HelpContent>();
         }
 
 

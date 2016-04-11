@@ -38,9 +38,9 @@
         var columns = [
 { text: '编号', dataField: 'Code',   cellsalign: "left" },
          { text: '名称', dataField: 'Name',  cellsalign: "left" },
-         { text: '是否在PC底部展示', dataField: 'IsSystem', width: 80 },
-         { text: '是否在PC导航展示', dataField: 'IsEdit', width: 50 },
-         { text: '顺序', dataField: 'IsDelete', width: 50 }, 
+         { text: '底部展示', dataField: 'IsShowButtom', width: 80 },
+         { text: '导航展示', dataField: 'IsShowNavi', width: 80 },
+         { text: '顺序', dataField: 'OrderNo', width: 50 },
          { text: '备注', dataField: 'Note', cellsalign: "left" }];
         CreateTree("treeGrid", url, datafields, columns);
 

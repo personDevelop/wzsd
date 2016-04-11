@@ -1,0 +1,87 @@
+﻿@using MVCExtention;
+@using EasyCms.Model
+@{
+    ViewBag.Title = "公告信息列表";
+}
+
+<!--工具栏-->
+<div id="floatHead" class="toolbar-wrap">
+    <div class="toolbar">
+        <div class="box-wrap">
+            <a class="menu-btn"></a>
+            <div class="l-list">
+                <ul class="icon-list">
+                    <li><a class="add" href="@Url.Action("Edit")"><i></i><span>新增</span></a></li>
+                    <li><a class="add" href="javascript:;" onclick="EditGrid('jqxgrid', '@Url.Action("Edit")');"><i></i><span>编辑</span></a></li>
+                    <li><a class="del" href="javascript:;" onclick="DelGrid('jqxgrid', '@Url.Action("Delete")');"><i></i><span>删除</span></a></li>
+                    <li><a class="list" href="javascript:;" onclick="isSJ(1 );"><i></i><span>批量发布</span></a></li>
+                    <li><a class="lock" href="javascript:;" onclick="isSJ(0);"><i></i><span>批量撤回</span></a></li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/工具栏-->
+<!--列表-->
+<div class="table-container">
+    <div id="jqxgrid"></div>
+</div>
+<!--/列表-->
+@section  scripts{
+    
+ 
+    <script type="text/javascript">
+        function isSJ(opcode) {
+            var rowindexes = $('#jqxgrid').jqxGrid('getselectedrowindexes');
+
+
+            if (rowindexes.length > 0) {
+
+
+                href = "@Url.Action("ChangeStatus")";
+                $.post(href, { ID: getSelectIDS(rowindexes), stat: opcode }, function (d) {
+
+                    if (d.indexOf("成功") > -1) {
+                        SucessMsg(d);
+                        $('#jqxgrid').jqxGrid('updatebounddata');
+                    } else { ErrorMsg(d); }
+                });
+            } else { ErrorMsg("请选择至少一条数据"); }
+        }
+        function getSelectIDS(rowindexes) {
+            var ids = null;
+            for (var i in rowindexes) {
+                if (ids) {
+                    ids += ";";
+                }
+                var data = $('#jqxgrid').jqxGrid('getrowdata', rowindexes[i]);
+                ids += data.ID;
+            }
+            return ids;
+        }
+        $(document).ready(function () {
+           var url = "@Url.Action("GetList")";
+            var datafields = [{ name: 'ID' },
+  { name: 'NoticeTitle' },
+  { name: 'PublishTime' },
+  { name: 'CreateDate' },
+  { name: 'DjStatus' }];
+            var columns = [
+    
+
+  { text: '标题', dataField: 'NoticeTitle', cellsalign: "left" },
+
+  
+  { text: '发布时间', dataField: 'PublishTime',  width: 80 },
+
+  { text: '创建时间', dataField: 'CreateDate',  width:80 },
+
+  { text: '状态', dataField: 'DjStatus',   width: 80 ,@HelperExtend.ParseEnum(typeof(DjStatus))} ];
+            CreateGrid("jqxgrid", url, datafields, columns, {isMutilSelect:true});
+
+        });
+    </script>
+  
+
+}

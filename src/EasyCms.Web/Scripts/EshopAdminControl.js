@@ -105,6 +105,7 @@
          height: middleHeight,
          source: dataAdapter,
          columnsresize: true,
+         theme: "metro",
          virtualmode: true,
          selectionmode: selectionmode,
          altrows: true,
@@ -311,6 +312,7 @@ function CreateTree(treeid, url, datafields, columns, opts) {
     var middleHeight = totalHeight - topHight;
     $(treeid).jqxTreeGrid($.extend({
         width: "95%",
+        theme: "metro",
         height: middleHeight,
         source: dataAdapter,
         columns: columns
