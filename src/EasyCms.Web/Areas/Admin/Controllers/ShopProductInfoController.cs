@@ -22,25 +22,40 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             return View();
         }
 
-        public string GetList(int pagenum, int pagesize)
-        {
+        public string GetList(string categoryID, string Name, int pagenum, int pagesize)
+        { 
             int recordCount = 0;
-            System.Data.DataTable dt = bll.GetList(null,pagenum + 1, pagesize, ref   recordCount);
-
+            System.Data.DataTable dt = bll.GetList(  categoryID, Name, pagenum+1, pagesize, ref recordCount);
             string result = JsonWithDataTable.Serialize(dt);
-            result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
-            return result;
-
-        }
-        public string GetListForSelecte(string Name,int pagenum, int pagesize)
-        {
-            int recordCount = 0;
-            System.Data.DataTable dt = bll.GetList(  Name, pagenum+1, pagesize, ref   recordCount, true);
-            string result = JsonWithDataTable.Serialize(dt);
-            result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
+            result = string.Format("{{\"total\":\"{0}\",\"data\":{1}}}", recordCount, result);
             return result;
         }
-
+        public string GetRelationList(string productID,  string categoryID, string Name, int pagenum, int pagesize )
+        {
+            int recordCount = 0;
+            System.Data.DataTable dt = bll.GetRelationList(productID, true, categoryID, Name, pagenum, pagesize, ref recordCount);
+            string result = JsonWithDataTable.Serialize(dt);
+            result = string.Format("{{\"total\":\"{0}\",\"data\":{1}}}", recordCount, result);
+            return result; 
+        }
+        public string GetNotRelationList(string productID,  string categoryID, string Name, int pagenum, int pagesize )
+        {
+            int recordCount = 0;
+            System.Data.DataTable dt = bll.GetRelationList(productID, false, categoryID, Name, pagenum, pagesize, ref recordCount);
+            string result = JsonWithDataTable.Serialize(dt);
+            result = string.Format("{{\"total\":\"{0}\",\"data\":{1}}}", recordCount, result);
+            return result;
+        }
+        [HttpPost]
+        public string AddRelation(string productID, string RlationProductIDs, bool isDoubleRelation)
+        {
+            return bll.AddRelation(productID, RlationProductIDs, isDoubleRelation);
+        }
+        [HttpPost]
+        public string RemoveRelation(string productID, string RlationProductIDs)
+        {
+            return bll.RemoveRelation(productID, RlationProductIDs);
+        }
         //
         // POST: /Admin/ShopProductInfo/Create
         [HttpPost]
@@ -358,6 +373,77 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             return JsonWithDataTable.Serialize(dt);
         }
 
-       
+        public ActionResult  Ralation()
+        {
+            return View();
+        }
+
+        public ActionResult SelectProductCard(string activityId,string ShopCountProducntID)
+        {
+            ShopCountProducnt p = null;
+            if (string.IsNullOrWhiteSpace(ShopCountProducntID))
+            {
+                p = new ShopCountProducnt() { ID = Guid.NewGuid().ToString(), ActivityID = activityId };
+            }
+            else
+            {
+                p = bll.GetShopCountProducnt(ShopCountProducntID);
+
+            }
+            return View(p);
+        }
+        [HttpPost]
+        [ValidateInput(false)]
+
+        public ActionResult SaveProductCard(FormCollection collection)
+        {
+            ShopCountProducnt p = null; ;
+
+            try
+            {
+                if (collection["RecordStatus"] != "add")
+                {
+                    p = bll.GetShopCountProducnt(collection["ID"]); 
+                    p.BindForm<ShopCountProducnt>(collection);
+                }
+                else
+                {
+                    // TODO: Add insert logic here
+                    p = collection.Bind<ShopCountProducnt>();
+
+                }
+
+                if (p.RecordStatus == Sharp.Common.StatusType.add)
+                {
+                    if (string.IsNullOrWhiteSpace(p.ID))
+                    {
+                        p.ID = Guid.NewGuid().ToString();
+                    } 
+                }
+                bll.SaveShopCountProducnt(p);
+                if (TempData.ContainsKey("IsSuccess"))
+                {
+                    TempData.Add("IsSuccess", "保存成功");
+
+                }
+                else
+                {
+                    TempData["IsSuccess"] = "保存成功";
+                }
+                ModelState.Clear();
+                if (collection["IsContinueAdd"] == "1")
+                {
+                    p = new ShopCountProducnt() {  ActivityID=p.ActivityID}; 
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("error", ex.Message);
+
+            }
+            return View("SelectProductCard", p);
+
+        }
     }
 }

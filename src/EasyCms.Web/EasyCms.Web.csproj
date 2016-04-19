@@ -242,6 +242,7 @@
     <Compile Include="Areas\Admin\Controllers\ManagerUserInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\NewsCommentController.cs" />
     <Compile Include="Areas\Admin\Controllers\NoticeController.cs" />
+    <Compile Include="Areas\Admin\Controllers\OnLineUserController.cs" />
     <Compile Include="Areas\Admin\Controllers\RangeDictController.cs" />
     <Compile Include="Areas\Admin\Controllers\NewsInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\RedeemRulesController.cs" />
@@ -251,9 +252,11 @@
     <Compile Include="Areas\Admin\Controllers\ShopBrandInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopCategoryController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopCommentController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ShopCountDownController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopExpressController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopExtendInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopExtendInfoValueController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ShopGroupBuyController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopOrderController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopPaymentTypesController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopProductInfoController.cs" />
@@ -760,7 +763,6 @@
     <Content Include="Areas\Admin\Views\ShopExtendInfoValue\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\ShopExtendInfoValue\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ShopProductInfo\Edit.cshtml" />
-    <Content Include="Areas\Admin\Views\ShopProductInfo\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_SelecteShopCategory.cshtml" />
     <Content Include="Areas\Admin\Views\Regions\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\Regions\Index.cshtml" />
@@ -823,7 +825,6 @@
     <Content Include="Areas\Admin\Views\SendMsgInfo\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\SendMsgInfo\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ShopProductInfo\SelectProduct.cshtml" />
-    <Content Include="Areas\Admin\Views\Shared\_Dialog - 复制.cshtml" />
     <Content Include="Areas\Admin\Views\ManagerUserInfo\SearchAccount.cshtml" />
     <Content Include="App_Code\HelperSmart.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_Loading.cshtml" />
@@ -837,6 +838,8 @@
     <Content Include="Scripts\jqwidgets\styles\images\icon-plus.png" />
     <Content Include="Scripts\jqwidgets\styles\jqx.dark.css" />
     <Content Include="Scripts\jqwidgets\styles\jqx.light.css" />
+    <Content Include="Scripts\jqwidgets\test2.js" />
+    <Content Include="Scripts\jqwidgets\test.js" />
     <Content Include="清空sql.txt" />
     <Content Include="Areas\Admin\Views\SystemBrandInfo\Index.cshtml" />
     <Content Include="Areas\Admin\Views\SystemBrandInfo\Edit.cshtml" />
@@ -863,6 +866,20 @@
     <Content Include="Areas\Admin\Views\ShopExtendInfo\AddValue.cshtml" />
     <Content Include="Areas\Admin\Views\Notice\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Notice\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\OnLineUser\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\OnLineUser\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopProductInfo\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopProductInfo\Ralation.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopGroupBuy\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopGroupBuy\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopGroupBuy\SelectProductCard.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_HelpEdit.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_HelpEditProduct.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_SelectShopClass.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopCountDown\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopCountDown\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_HelpEditCoupon.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopCountDown\CountDownTime.cshtml" />
     <None Include="Properties\PublishProfiles\publish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\EshopAdminControl.js" />

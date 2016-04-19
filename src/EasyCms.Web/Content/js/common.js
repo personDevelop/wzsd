@@ -25,7 +25,10 @@ function checkAll(chkobj) {
         $(".checkall input:enabled").prop("checked", false);
     }
 }
-
+//单选按钮组，改变值前触发的函数，如果返回false 则停止改变值，可以在使用的页面重写该方法，并根据element进行判断筛选
+function checkChanging(element,elementName,oldvalue,newvalue) {
+    return true;
+}
 //===========================工具类函数============================
 //只允许输入数字
 function checkNumber(e) {
@@ -414,12 +417,18 @@ $.fn.ruleMultiRadio = function () {
             }
             //绑定事件
             $(newObj).click(function () {
+                var name=parentObj.find('input[type="radio"]').attr("name");
+                if (checkChanging(this, name,
+                  parentObj.find('input[type="radio"]').index(parentObj.find('input[type="radio"]:checked')[0]), indexNum)) {
+
+                
                 $(this).siblings().removeClass("selected");
                 $(this).addClass("selected");
                 parentObj.find('input[type="radio"]').prop("checked", false);
                 parentObj.find('input[type="radio"]').eq(indexNum).prop("checked", true);
                 parentObj.find('input[type="radio"]').eq(indexNum).trigger("click"); //触发对应的radio的click事件
-                //alert(parentObj.find('input[type="radio"]').eq(indexNum).prop("checked"));
+                    //alert(parentObj.find('input[type="radio"]').eq(indexNum).prop("checked"));
+                }
             });
         });
     };

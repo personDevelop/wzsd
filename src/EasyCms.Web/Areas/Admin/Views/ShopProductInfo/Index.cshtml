@@ -2,7 +2,12 @@
 @{
     ViewBag.Title = "商品信息";
 }
+<span>
+    @HelperExtend.DropDownListClass("qryALLCategory", "商品分类", Url.RouteUrl("ApiWithWeb", new { controller = "APP", action = "GetChildCategory" }))
+</span><input name="ProductName" width="200" class="input normal " id="ProductName" type="text" value="">
+<input type="button" class="searchBtn" value="搜索" id='BtnqryCateTj' />
 
+ 
 <!--工具栏-->
 <div id="floatHead" class="toolbar-wrap">
     <div class="toolbar">
@@ -22,15 +27,19 @@
 </div>
 <!--/工具栏-->
 <!--列表-->
-<div class="table-container">
-    <div id="jqxgrid"></div>
-</div>
+  
+        <div id="jqxgrid"></div>
+    
 <!--/列表-->
 @section  scripts{
 
 
     <script type="text/javascript">
         $(document).ready(function () {
+            $(".searchBtn").jqxButton({ width: '100', template: "success" });
+            $('#BtnqryCateTj').on('click', function () {
+                $('#jqxgrid').jqxGrid('updatebounddata');
+            });
             var url = "@Url.Action("GetList")";
             var datafields = [{ name: 'ID' }, { name: 'Code' }, { name: 'Name' }, { name: 'SKU' }, { name: 'TypeName' },
 
@@ -68,7 +77,15 @@
   { text: '库存', dataField: 'Stock', width: 80, cellsalign: "right" },
   { text: '上架日期', dataField: 'SaleDate', width: 80 },
   { text: '添加日期', dataField: 'AddedDate', width: 80 }];
-            CreateGrid("jqxgrid", url, datafields, columns, { isMutilSelect: true });
+            CreateGrid("jqxgrid", url, datafields, columns, {
+                isMutilSelect: true,
+                grid: { pagesize: 25, width: '99%', height: '90%' }, adapter: {
+                    formatData: function (data) {
+                        data.categoryID = $("#qryALLCategory").val();
+                        data.Name = $("#ProductName").val();
+                    }
+                }
+            });
 
         });
     </script>

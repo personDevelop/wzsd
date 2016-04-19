@@ -26,20 +26,20 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             return JsonWithDataTable.Serialize(dt);
 
         }
-        public string GetList(int pagenum, int pagesize)
+        public string GetList(string name, int pagenum, int pagesize)
         {
             int recordCount = 0;
-            System.Data.DataTable dt = bll.GetList(pagenum + 1, pagesize, ref   recordCount);
+            System.Data.DataTable dt = bll.GetList(  name, pagenum + 1, pagesize, ref   recordCount);
 
             string result = JsonWithDataTable.Serialize(dt);
             result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
             return result;
 
         }
-        public string GetListForSelecte(int pagenum, int pagesize)
+        public string GetListForSelecte(string name, int pagenum, int pagesize)
         {
             int recordCount = 0;
-            System.Data.DataTable dt = bll.GetList(pagenum, pagesize, ref   recordCount, true);
+            System.Data.DataTable dt = bll.GetList(  name, pagenum, pagesize, ref   recordCount, true);
             string result = JsonWithDataTable.Serialize(dt);
             result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
             return result;

@@ -73,11 +73,13 @@
     <Compile Include="NewsCommentDal.cs" />
     <Compile Include="NewsInfoDal.cs" />
     <Compile Include="NoticeDal.cs" />
+    <Compile Include="OnLineUserDal.cs" />
     <Compile Include="ParameterInfoDal.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RedeemRulesDal.cs" />
     <Compile Include="SearchKeyWordDal.cs" />
     <Compile Include="ShopExtendInfoDal.cs" />
+    <Compile Include="ShopGroupBuyDal.cs" />
     <Compile Include="ShopShippingTypeDal.cs" />
     <Compile Include="SystemBrandInfoDal.cs" />
     <Compile Include="SendMsgInfoDal.cs" />

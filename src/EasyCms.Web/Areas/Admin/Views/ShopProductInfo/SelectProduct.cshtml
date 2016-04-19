@@ -5,174 +5,54 @@
 
 <!--工具栏-->
  
-<dl>
-    <dt>
-
-    </dt>
-    <dd>
-        <table width="100%" class="borderkuang" border="0" cellspacing="0" cellpadding="0">
-            <tbody>
-                <tr>
-                    <td rowspan="3" width="80">
-                        @HelperExtend.img("icon-1.gif", "width:19px,height:19px")搜索：
-                    </td>
-                    <td width="60">
-                        商品编号：
-                    </td>
-                    <td width="220">
-                        <input type="text" id="OrderNo">
-                    </td>
-                    <td width="60">
-                        商品名称：
-                    </td>
-                    <td width="220">
-                        <input type="text" id="ShrTel">
-                    </td>
-                    <td width="60">
-                        品牌：
-                    </td>
-                    <td width="150">
-                        <input type="text" id="ShrMc">
-                    </td>
-
-
-                    <td></td>
-
-                </tr>
-
-                <tr>
-                    <td>
-                        商品类型：
-                    </td>
-                    <td>
-                        <input type="text" id="AccountName">
-                    </td>
-                    <td>
-                        上架日期开始：
-                    </td>
-                    <td>
-
-                        <div id='StartOrderDate'>  </div>
-
-                    </td>
-                    <td width="10">
-                        上架日期截止
-
-                    </td>
-                    <td>
-
-                        <div id='EndOrderDate'>  </div>
-
-                    </td>
-                    <td></td>
-                </tr>
-                <tr>
-
-                    <td>销售类型：</td>
-                    <td height="35">
-                        @HelperExtend.DropDownListEnum("PayStatus", enumType: typeof(EasyCms.Model.PayStatus))
-                         
-                    </td>
-                    
-                    <td colspan="2">
-                        <input id="btnQry" type="button" value="搜索">
-                    </td>
-
-                </tr>
-            </tbody>
-        </table>
-    </dd>
-</dl>
+ 
 <!--/工具栏-->
 <!--列表-->
-<div class="table-container">
-    <div id="jqxgrid"></div>
+<div class="table-container" style="height:100%">
+    <div>
+        <span>
+            @HelperExtend.DropDownListClass("qryALLCategory", "商品分类", Url.RouteUrl("ApiWithWeb", new { controller = "APP", action = "GetChildCategory" }))
+        </span><input name="ProductName" width="200" class="input normal " id="ProductName" type="text" value="">
+        <input type="button" class="searchBtn" value="搜索" id='BtnqryCateTj' />
+        <div style="margin-top: 5px;" id="jqxgrid"></div>
+    </div>
 </div>
 <!--/列表-->
 @section  scripts{
 
 <script type="text/javascript">
+    var url = "@Url.Action("GetList")";
+    var datafields = [{ name: 'ID' }, { name: 'Code' }, { name: 'Name' }, { name: 'TypeName' },
 
+{ name: 'BrandName' }, { name: 'SaleDate' }, { name: 'AddedDate' }];
+    var columns = [
+{ text: '编号', dataField: 'Code', width: 100, cellsalign: "left" },
+{ text: '名称', dataField: 'Name', width: '300', cellsalign: "left" },
+{ text: '商品类型', dataField: 'TypeName', width: 80 },
+{ text: '品牌', dataField: 'BrandName', width: 80 },
+{ text: '上架日期', dataField: 'SaleDate', width: 80 },
+{ text: '添加日期', dataField: 'AddedDate', width: 80 }];
     $(function () {
          
-        $("#OrderNo").jqxInput({ height: '20px' });
-        $("#ShrTel").jqxInput({ height: '20px' });
-        $("#ShrMc").jqxInput({ height: '20px' });
-        $("#AccountName").jqxInput({ height: '20px' });
+       
 
-        $("#StartOrderDate").jqxDateTimeInput({ formatString: "yyyy-MM-dd", width: 100, height: '20px', showCalendarButton: true });
-        $("#EndOrderDate").jqxDateTimeInput({ formatString: "yyyy-MM-dd", width: 100, height: '20px', showCalendarButton: true });
+        $(".searchBtn").jqxButton({ width: '100', template: "success" });
+        $('#BtnqryCateTj').on('click', function () {
+            $('#jqxgrid').jqxGrid('updatebounddata');
+        });
 
-
-        $('#EndOrderDate').jqxDateTimeInput('setDate', new Date());
-        $('#StartOrderDate').jqxDateTimeInput('setDate', get3MonthBefor());
-        $("#btnQry").jqxButton({ width: '150', template: 'success' });
-
-
-        $("#btnQry").on("click", function () { $('#jqxgrid').jqxGrid('updatebounddata'); });
+        CreateGrid("jqxgrid", url, datafields, columns, {
+            grid: { pagesize: 10, width: '99%', autoheight: true }, adapter: {
+                formatData: function (data) {
+                    data.categoryID = $("#qryALLCategory").val();
+                    data.Name = $("#ProductName").val();
+                }
+            }
+        });
 
     });
 
 
 </script>
-
-    <script type="text/javascript">
-        $(document).ready(function () {
-            var url = "@Url.Action("GetList")";
-            var datafields = [{ name: 'ID' }, { name: 'Code' }, { name: 'Name' }, { name: 'SKU' }, { name: 'TypeName' },
-
-		{ name: 'BrandId', type: 'BrandName' }, { name: 'SupplierId' }, { name: 'RegionId' }, { name: 'ShortDescription' },
-
-		{ name: 'Unit' }, { name: 'Description' }, { name: 'Meta_Title' }, { name: 'Meta_Description' }, { name: 'Meta_Keywords' },
-
-		{ name: 'SalesType' }, { name: 'SaleStatus' }, { name: 'VistiCounts' }, { name: 'SaleCounts' }, { name: 'SaleNum' }, { name: 'DisplaySequence' },
-
-		{ name: 'MarketPrice' }, { name: 'SalePrice' }, { name: 'CostPrice' }, { name: 'Points' }, { name: 'Stock' }, { name: 'MaxQuantity' },
-
-		{ name: 'MinQuantity' }, { name: 'Tags' }, { name: 'IsVirtualProduct' }, { name: 'ManufactureDate' },
-
-		{ name: 'LaunchDate' }, { name: 'SaleDate' }, { name: 'AddedDate' }, { name: 'CommentCount' }];
-            var columns = [
-  { text: '编号', dataField: 'Code', width: 100, cellsalign: "left" },
-  { text: '名称', dataField: 'Name', width: '300', cellsalign: "left" },
-  { text: '商品类型', dataField: 'TypeName', width: 80 },
-  { text: '品牌', dataField: 'BrandName', width: 80 },
-  {
-      text: '销售类型', dataField: 'SalesType', width: 80, valObj: [{ key: 0, val: '赠品' }, { key: 1, val: '普通商品' }]
-  },
-  {
-      text: '商品状态', dataField: 'SaleStatus', width: 80, valObj: [{ key: 0, val: '下架' }, { key: 1, val: '上架' }, { key: 2, val: '待审批' }]
-  },
-  { text: '访问次数', dataField: 'VistiCounts', width: 80, cellsalign: "right" },
-  { text: '销售个数', dataField: 'SaleCounts', width: 80, cellsalign: "right" },
-  { text: '销售次数', dataField: 'SaleNum', width: 80, cellsalign: "right" },
-     { text: '评论次数', dataField: 'CommentCount', width: 80, cellsalign: "right" },
-  { text: '显示顺序', dataField: 'DisplaySequence', width: 80, cellsalign: "right" },
-  { text: '市场价', dataField: 'MarketPrice', width: 80, cellsalign: "right" },
-  { text: '销售价', dataField: 'SalePrice', width: 80, cellsalign: "right" },
-  { text: '成本价', dataField: 'CostPrice', width: 80, cellsalign: "right" },
-  { text: '可得积分', dataField: 'Points', width: 80, cellsalign: "right" },
-  { text: '库存', dataField: 'Stock', width: 80, cellsalign: "right" },
-  { text: '上架日期', dataField: 'SaleDate', width: 80 },
-  { text: '添加日期', dataField: 'AddedDate', width: 80 }];
-           
-            CreateGrid("jqxgrid", url, datafields, columns, {
-               adapter: {
-                    formatData: function (data) { 
-                        data.OrderNo = $("#OrderNo").val();
-                        data.ShrTel = $("#ShrTel").val();
-                        data.ShrMc = $("#ShrMc").val(); 
-                        data.AccountName = $("#AccountName").val(); 
-                        data.StartOrderDate = $("#StartOrderDate").val(); 
-                        data.EndOrderDate = $("#EndOrderDate").val(); 
-                        data.PayStatus = $("#PayStatus").val(); 
-                        data.ShipStatus = $("#ShipStatus").val(); 
-                        data.OrderStatus = $("#OrderStatus").val(); 
-                    }
-
-                }, grid: { localization: "zh-Hans" }
-        });
-    </script>
-   
-
+     
 }

@@ -1,0 +1,288 @@
+﻿@model ShopProductStationMode
+@{
+    ViewBag.Title = "设置相关联商品";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+@using EasyCms.Model
+
+<!--内容-->
+<div id="floatHead" class="content-tab-wrap">
+    <div class="content-tab">
+        <div class="content-tab-ul-wrap">
+            <ul>
+                <li><a class="selected" href="javascript:;">设置相关联商品</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="tab-content" style="height:1000px">
+
+    <script type="text/javascript">
+        var isCreatGrid = false;
+        var url = "@Url.Action("GetList")";
+        var urldgl = "@Url.Action("GetNotRelationList")";
+        var urlygl = "@Url.Action("GetRelationList")";
+        var datafields = [{ name: 'ID' }, { name: 'Code' }, { name: 'Name' }, { name: 'TypeName' },
+
+      { name: 'BrandName' }, { name: 'SaleDate' }, { name: 'AddedDate' }];
+        var columns = [
+{ text: '编号', dataField: 'Code', width: 100, cellsalign: "left" },
+{ text: '名称', dataField: 'Name', width: '300', cellsalign: "left" },
+{ text: '商品类型', dataField: 'TypeName', width: 80 },
+{ text: '品牌', dataField: 'BrandName', width: 80 },
+{ text: '上架日期', dataField: 'SaleDate', width: 80 },
+{ text: '添加日期', dataField: 'AddedDate', width: 80 }];
+        var dglColumns = [
+              {
+                  text: '操作', align: 'center', dataField: 'ID', width: 80, cellsRenderer: function (row, column, value, rowData) {
+                      var html = "  <div style='text-align: center; overflow: hidden; padding-bottom: 2px; margin-top: 4px; text-overflow: ellipsis;'>";
+
+                      html += "<a  href='javascript:;' onclick='add(\"" + value + "\");'   >添加关联</a> ";
+
+                      html += "</div>";
+                      return html;
+                  }
+              },
+{ text: '编号', dataField: 'Code', width: 100, cellsalign: "left" },
+{ text: '名称', dataField: 'Name', width: '300', cellsalign: "left" },
+{ text: '商品类型', dataField: 'TypeName', width: 80 },
+{ text: '品牌', dataField: 'BrandName', width: 80 },
+{ text: '上架日期', dataField: 'SaleDate', width: 80 },
+{ text: '添加日期', dataField: 'AddedDate', width: 80 }];
+        var yglColumns = [{
+            text: '操作', align: 'center', dataField: 'ID', width: 80, cellsRenderer: function (row, column, value, rowData) {
+                var html = "  <div style='text-align: center; overflow: hidden; padding-bottom: 2px; margin-top: 4px; text-overflow: ellipsis;'>";
+
+                html += "<a  href='javascript:;' onclick='RemoveValue(\"" + value + "\");'   >移除关联</a> ";
+
+                html += "</div>";
+                return html;
+            }
+        },
+{ text: '编号', dataField: 'Code', width: 100, cellsalign: "left" },
+{ text: '名称', dataField: 'Name', width: '300', cellsalign: "left" },
+{ text: '商品类型', dataField: 'TypeName', width: 80 },
+{ text: '品牌', dataField: 'BrandName', width: 80 },
+{ text: '上架日期', dataField: 'SaleDate', width: 80 },
+{ text: '添加日期', dataField: 'AddedDate', width: 80 }];
+
+        $(function () {
+            $('#bigDiv').jqxSplitter({ width: '100%', theme: "metro", height: '100%', panels: [{ size: '50%' }] });
+            $('#smallDiv').jqxSplitter({ width: '100%', theme: "metro", height: '100%', orientation: "horizontal", panels: [{ size: '50%' }] });
+            $(".jqxExpander").jqxExpander({ width: '100%', theme: "metro", height: '100%', showArrow: false });
+            $(".searchBtn").jqxButton({ width: '100', template: "success" });
+            $('#BtnqryCateTj').on('click', function () {
+                $('#jqxgrid').jqxGrid('updatebounddata');
+            });
+            $('#BtnqryDgl').on('click', function () {
+                if (isCreatGrid) {
+                    $('#jqxdglgrid').jqxGrid('updatebounddata');
+                } else {
+
+                    ErrorMsg("请先选择左侧要设置关联的商品");
+                }
+            });
+            $('#BtnqryYgl').on('click', function () {
+                if (isCreatGrid) {
+                    $('#jqxyglgrid').jqxGrid('updatebounddata');
+                } else {
+
+                    ErrorMsg("请先选择左侧要设置关联的商品");
+                }
+            });
+
+            CreateGrid("jqxgrid", url, datafields, columns, {
+                grid: { pagesize: 10, width: '99%', autoheight: true }, adapter: {
+                    formatData: function (data) {
+                        data.categoryID = $("#qryALLCategory").val();
+                        data.Name = $("#ProductName").val();
+                    }
+                }
+            });
+
+            $('#jqxgrid').on('rowclick', function (event) {
+                var args = event.args;
+                // row's bound index.
+                var boundIndex = args.rowindex;
+                var data = $('#jqxgrid').jqxGrid('getrowdata', boundIndex);
+                $("#SelecteProduct").val(data.ID);
+                $(".productName").text(data.Code + "-" + data.Name)
+                if (isCreatGrid) {
+                    $('#jqxdglgrid').jqxGrid('updatebounddata');
+                    $('#jqxyglgrid').jqxGrid('updatebounddata');
+                } else {
+                    isCreatGrid = true;
+                    CreateGrid("jqxdglgrid", urldgl, datafields, dglColumns, {
+                        isMutilSelect: true,
+                        grid: { pagesize: 10, width: '99%', autoheight: true }, adapter: {
+                            formatData: function (data) {
+                                data.productID = $("#SelecteProduct").val();
+                                data.categoryID = $("#qryDglCategory").val();
+                                data.Name = $("#DGLProductName").val();
+                            }
+                        }
+                    });
+
+                    CreateGrid("jqxyglgrid", urlygl, datafields, yglColumns, {
+                        isMutilSelect: true,
+                        grid: { pagesize: 10, width: '99%', autoheight: true }, adapter: {
+                            formatData: function (data) {
+                                data.productID = $("#SelecteProduct").val();
+                                data.categoryID = $("#qryYglCategory").val();
+                                data.Name = $("#YGLProductName").val();
+                            }
+                        }
+                    });
+                }
+            });
+
+
+
+        });
+
+        function RemoveValue(productID) {
+            var gridid = '#jqxyglgrid';
+            if (!productID) {
+                //多条
+                var rowindexes = $(gridid).jqxGrid('getselectedrowindexes');
+                if (rowindexes.length > 0) {
+                    productID = "";
+                    for (var i = 0; i < rowindexes.length; i++) {
+                        if (i > 0) {
+                            productID += ",";
+                        }
+                        var data = $(gridid).jqxGrid('getrowdata', rowindexes[i]);
+                        if (data) {
+                            productID += data.ID;
+                        }
+
+                    }
+                } else { ErrorMsg("请选择一条数据"); return; }
+            }
+
+            var postdata = { productID: $("#SelecteProduct").val(), RlationProductIDs: productID, isDoubleRelation: true };
+            $.post("@Url.Action("RemoveRelation")", postdata, function (d) {
+                if (!d) {
+                    SucessMsg("操作成功");
+                    $(gridid).jqxGrid('updatebounddata');
+                    $('#jqxdglgrid').jqxGrid('updatebounddata');
+                } else { ErrorMsg(d); }
+                  
+            });
+
+        }
+        function add(productID) {
+            var gridid = '#jqxdglgrid';
+            if (!productID) {
+                //多条
+                var rowindexes = $(gridid).jqxGrid('getselectedrowindexes');
+                if (rowindexes.length > 0) {
+                    productID = "";
+                    for (var i = 0; i < rowindexes.length; i++) {
+                        if (i > 0) {
+                            productID += ",";
+                        }
+                        var data = $(gridid).jqxGrid('getrowdata', rowindexes[i]);
+                        if (data) {
+                            productID += data.ID;
+                        }
+
+                    }
+                } else { ErrorMsg("请选择一条数据"); return; }
+            }
+
+            var postdata = { productID: $("#SelecteProduct").val(), RlationProductIDs: productID, isDoubleRelation: true };
+            $.post("@Url.Action("AddRelation")", postdata, function (d) {
+                if (!d) {
+                    SucessMsg("操作成功");
+                    $(gridid).jqxGrid('updatebounddata');
+                    $('#jqxyglgrid').jqxGrid('updatebounddata');
+                } else { ErrorMsg(d); }
+            });
+
+        }
+    </script>
+    <input type="hidden" id="SelecteProduct" />
+    <div id="bigDiv">
+        <div class="splitter-panel">
+            <div class='jqxExpander'>
+                <div class="leftPanel">
+                    <h1> 需要关联的商品</h1>
+                </div>
+                <div>
+                    <span>
+                        @HelperExtend.DropDownListClass("qryALLCategory", "商品分类", Url.RouteUrl("ApiWithWeb", new { controller = "APP", action = "GetChildCategory" }))
+                    </span><input name="ProductName" width="200" class="input normal " id="ProductName" type="text" value="">
+                    <input type="button" class="searchBtn" value="搜索" id='BtnqryCateTj' /> 
+                    <div style="margin-top: 5px;" id="jqxgrid"></div>
+                </div>
+            </div>
+
+        </div>
+        <div class="splitter-panel">
+            <div id="smallDiv">
+                <div class="splitter-panel">
+                    <div class='jqxExpander'>
+                        <div class="leftPanel">
+                            <h1> 待关联商品--<label class="productName"></label></h1>
+                        </div>
+                        <div>
+                            <span>
+                                @HelperExtend.DropDownListClass("qryDglCategory", "商品分类", Url.RouteUrl("ApiWithWeb", new { controller = "APP", action = "GetChildCategory" }))
+                            </span><input name="DGLProductName" width="200" class="input normal " id="DGLProductName" type="text" value="">
+                            <input type="button" class="searchBtn" value="搜索" id='BtnqryDgl' /> 
+                            <div class="toolbar">
+                                <div class="box-wrap">
+                                    <a class="menu-btn"></a>
+                                    <div class="l-list">
+                                        <ul class="icon-list">
+                                            <li><a class="add" href="javascript:;" onclick="add();"><i></i><span>批量关联</span></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="margin-top: 5px;" id="jqxdglgrid"></div>
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="splitter-panel">
+                    <div class='jqxExpander'>
+                        <div class="leftPanel">
+                            <h1> 已关联商品--<label class="productName"></label></h1>
+                        </div>
+                        <div>
+                            <span>
+                                @HelperExtend.DropDownListClass("qryYglCategory", "商品分类", Url.RouteUrl("ApiWithWeb", new { controller = "APP", action = "GetChildCategory" }))
+                            </span><input name="YGLProductName" width="200" class="input normal " id="YGLProductName" type="text" value="">
+                            <input type="button" class="searchBtn" value="搜索" id='BtnqryYgl' /> 
+                            <div class="toolbar">
+                                <div class="box-wrap">
+                                    <a class="menu-btn"></a>
+                                    <div class="l-list">
+                                        <ul class="icon-list">
+                                            <li><a class="delete" href="javascript:;" onclick="RemoveValue();"><i></i><span>批量移除关联</span></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="margin-top: 5px;" id="jqxyglgrid"></div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+@section  scripts{
+
+
+}

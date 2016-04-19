@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json;
-using Sharp.Common;
+﻿using Sharp.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 namespace EasyCms.Model
 {
     /// <summary>
@@ -30,8 +30,6 @@ namespace EasyCms.Model
 
         private string _RlationProductID;
 
-        private bool _IsDouble;
-
         #endregion
 
         #region 属性
@@ -41,7 +39,7 @@ namespace EasyCms.Model
         /// </summary>
 
         [PrimaryKey]
-        [DbProperty(MapingColumnName = "ID", DbTypeString = "char", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ID", DbTypeString = "varchar", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string ID
         {
@@ -60,7 +58,7 @@ namespace EasyCms.Model
         ///  商品ID,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "ProductID", DbTypeString = "char", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ProductID", DbTypeString = "varchar", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string ProductID
         {
@@ -79,7 +77,7 @@ namespace EasyCms.Model
         ///  关联商品ID,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "RlationProductID", DbTypeString = "char", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "RlationProductID", DbTypeString = "varchar", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string RlationProductID
         {
@@ -94,28 +92,9 @@ namespace EasyCms.Model
             }
         }
 
-        /// <summary>
-        ///  是否是双关联,
-        /// </summary>
-
-        [DbProperty(MapingColumnName = "IsDouble", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
-
-        public bool IsDouble
-        {
-            get
-            {
-                return this._IsDouble;
-            }
-            set
-            {
-                this.OnPropertyChanged("IsDouble", this._IsDouble, value);
-                this._IsDouble = value;
-            }
-        }
-
         #endregion
 
-        #region 列定义
+        #region 列定义 
         public class Column
         {
             public Column(string tableName)
@@ -126,8 +105,6 @@ namespace EasyCms.Model
                 ProductID = new PropertyItem("ProductID", tableName);
 
                 RlationProductID = new PropertyItem("RlationProductID", tableName);
-
-                IsDouble = new PropertyItem("IsDouble", tableName);
 
 
             }
@@ -143,10 +120,6 @@ namespace EasyCms.Model
             /// 关联商品ID,
             /// </summary> 
             public PropertyItem RlationProductID = null;
-            /// <summary>
-            /// 是否是双关联,
-            /// </summary> 
-            public PropertyItem IsDouble = null;
         }
         #endregion
     }

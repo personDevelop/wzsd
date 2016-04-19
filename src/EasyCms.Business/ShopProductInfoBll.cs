@@ -24,15 +24,26 @@ namespace EasyCms.Business
             return Dal.Save(item, list, spa, listSku, listSkuInfo,   StationModeList);
         }
 
-        public DataTable GetList(bool IsForSelected = false)
+      
+        public DataTable GetList(string categoryID, string Name, int pagenum, int pagesize, ref int recordCount )
         {
-            return Dal.GetList(null,IsForSelected);
+            return Dal.GetList(  categoryID, Name, pagenum, pagesize, ref   recordCount );
         }
-        public DataTable GetList(string Name, int pagenum, int pagesize, ref int recordCount, bool IsForSelected = false)
+        public DataTable GetRelationList(string productID, bool IsHasRelation, string categoryID, string Name, int pagenum, int pagesize, ref int recordCount)
         {
-            return Dal.GetList(  Name, pagenum, pagesize, ref   recordCount, IsForSelected);
+
+            return Dal.GetRelationList(productID,   IsHasRelation, categoryID, Name, pagenum, pagesize, ref recordCount);
         }
 
+        public string AddRelation(string productID, string RlationProductIDs, bool isDoubleRelation)
+        {
+            return Dal.AddRelation(productID, RlationProductIDs, isDoubleRelation);
+        }
+
+        public string RemoveRelation(string productID, string RlationProductIDs )
+        {
+            return Dal.RemoveRelation(productID, RlationProductIDs );
+        }
         public ShopProductInfo GetEntity(string id)
         {
             return Dal.GetEntity(id);
@@ -144,6 +155,16 @@ namespace EasyCms.Business
         public ProductLink GetProductLink(string id, string host)
         {
             return Dal.GetProductLink(id, host);
+        }
+
+        public ShopCountProducnt GetShopCountProducnt(string shopCountProducntID)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SaveShopCountProducnt(ShopCountProducnt p)
+        {
+            throw new NotImplementedException();
         }
     }
 }

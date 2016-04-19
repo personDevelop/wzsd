@@ -59,13 +59,13 @@
 				eras: [{ "name": "公历", "start": null, "offset": 0 }],
 				patterns: {
 					d: "yyyy/MM/dd",
-					D: "yyyy'年'M'月'd'日'",
-					t: "H:mm",
-					T: "H:mm:ss",
-					f: "yyyy'年'M'月'd'日' H:mm",
-					F: "yyyy'年'M'月'd'日' H:mm:ss",
-					M: "M'月'd'日'",
-					Y: "yyyy'年'M'月'"
+					D: "yyyy'年'M'月'dd'日'",
+					t: "HH:mm",
+					T: "HH:mm:ss",
+					f: "yyyy'年'MM'月'd'日' HH:mm",
+					F: "yyyy'年'MM'月'd'日' HH:mm:ss",
+					M: "MM'月'dd'日'",
+					Y: "yyyy'年'MM'月'"
 				}
 			},
 			Chinese: {
@@ -85,13 +85,13 @@
 				twoDigitYearMax: 99,
 				patterns: {
 					d: "yyyy/MM/dd",
-					D: "yyyy'年'M'月'd'日'",
-					t: "H:mm",
-					T: "H:mm:ss",
-					f: "yyyy'年'M'月'd'日' H:mm",
-					F: "yyyy'年'M'月'd'日' H:mm:ss",
-					M: "M'月'd'日'",
-					Y: "yyyy'年'M'月'"
+					D: "yyyy'年'MM'月'dd'日'",
+					t: "HH:mm",
+					T: "HH:mm:ss",
+					f: "yyyy'年'MM'月'dd'日' HH:mm",
+					F: "yyyy'年'MM'月'dd'日' HH:mm:ss",
+					M: "MM'月'dd'日'",
+					Y: "yyyy'年'MM'月'"
 				}
 			}
 		}

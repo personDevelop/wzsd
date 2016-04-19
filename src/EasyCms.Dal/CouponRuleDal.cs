@@ -49,16 +49,17 @@ namespace EasyCms.Dal
             }
             return !Dal.Exists<CouponRule>(where);
         }
-        public DataTable GetList(int pagenum, int pagesize, ref int recordCount, bool IsForSelected = false)
+        public DataTable GetList(string name,int pagenum, int pagesize, ref int recordCount, bool IsForSelected = false)
         {
             int pageCount = 0;
+            WhereClip where = CouponRule._.Name.Contains(name);
             if (IsForSelected)
             {
-                return Dal.From<CouponRule>().Select(CouponRule._.ID, CouponRule._.Name).OrderBy(CouponRule._.CreateDate.Desc).ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
+                return Dal.From<CouponRule>().Select(CouponRule._.ID, CouponRule._.Name).Where(where).OrderBy(CouponRule._.CreateDate.Desc).ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
             }
             else
                 return Dal.From<CouponRule>().OrderBy(CouponRule._.CreateDate.Desc)
-
+                    .Where(where)
                     .ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
         }
 

@@ -207,7 +207,7 @@ namespace EasyCms.Web.API
 
 
             }
-            if (string.IsNullOrWhiteSpace(productName))
+            if (!string.IsNullOrWhiteSpace(productName))
             {
                 where = where && ShopProductInfo._.Name.Contains(productName);
             }

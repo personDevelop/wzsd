@@ -1,0 +1,120 @@
+﻿@using MVCExtention;
+@using EasyCms.Model;
+@{
+    ViewBag.Title = "限时抢购";
+}
+<span> 
+</span><input name="Name" width="200" class="input normal " id="Name" type="text" value="">
+<input type="button" class="searchBtn" value="搜索" id='BtnqryCateTj' /> 
+<!--工具栏-->
+<div id="floatHead" class="toolbar-wrap">
+    <div class="toolbar">
+        <div class="box-wrap">
+            <a class="menu-btn"></a>
+            <div class="l-list">
+                <ul class="icon-list">
+                    <li><a class="add" href="@Url.Action("Edit")"><i></i><span>新增</span></a></li>
+                    <li><a class="save" href="javascript:;" onclick="EditGrid('jqxgrid', '@Url.Action("Edit")');"><i></i><span>编辑</span></a></li>
+                    <li><a class="list" href="javascript:;" onclick="isQyOrStop(1);"><i></i><span>开启</span></a></li>
+                    <li><a class="lock" href="javascript:;" onclick="isQyOrStop(0);"><i></i><span>停止</span></a></li>
+                    <li><a class="del" href="javascript:;" onclick="DelGrid('jqxgrid', '@Url.Action("Delete")');"><i></i><span>删除</span></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/工具栏-->
+<!--列表-->
+  
+        <div id="jqxgrid"></div>
+    
+<!--/列表-->
+@section  scripts{
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".searchBtn").jqxButton({ width: '100', template: "success" });
+            $('#BtnqryCateTj').on('click', function () {
+                $('#jqxgrid').jqxGrid('updatebounddata');
+            });
+            var url = "@Url.Action("GetList")";
+            var datafields = [{ name: 'ID' },
+  { name: 'ActivityName' },
+  { name: 'ActivityTitle' },
+  { name: 'ActivityStatus' },
+  { name: 'MaxCount' },
+  { name: 'BuyCount' },
+  { name: 'IsLimit' },
+  { name: 'SendJf' },
+  { name: 'OneMaxCount' },
+  { name: 'OneMinCount' },
+  { name: 'ActivityType' },
+  { name: 'LoopType' } ];
+            var columns = [
+    
+
+  { text: '活动名称', dataField: 'ActivityName', cellsalign: "left"  },
+
+  { text: '活动标语', dataField: 'ActivityTitle', cellsalign: "left"  },
+
+  { text: '状态', dataField: 'ActivityStatus', width: 50,@HelperExtend.ParseEnum(typeof(AcitivyStatus))  },
+
+  { text: '限制总数量', dataField: 'MaxCount', cellsalign: "right", width: 80 },
+
+  { text: '已购买的数量', dataField: 'BuyCount', cellsalign: "right", width: 80 },  
+  { text: '是否限购', dataField: 'IsLimit',   width: 80,@HelperExtend.Parsebool() },
+
+  { text: '赠送积分', dataField: 'SendJf', cellsalign: "right", width: 80 },
+
+  { text: '每人限购上限', dataField: 'OneMaxCount', cellsalign: "right", width: 80 } ,
+
+            { text: '活动类型', dataField: 'ActivityType',width:80,@HelperExtend.ParseEnum(typeof(ActivityType)) },
+
+  { text: '轮询方式', dataField: 'LoopType',  width:80,@HelperExtend.ParseEnum(typeof(LoopType))} ];
+            CreateGrid("jqxgrid", url, datafields, columns, {
+
+                grid: { pagesize: 25, width: '99%'  }, adapter: {
+                    formatData: function (data) {
+                        data.Name = $("#Name").val();
+                    }
+                }
+            });
+
+        });
+    </script>
+    <script type="text/javascript">
+
+
+
+        function isQyOrStop(opcode) {
+            var rowindexes = $('#jqxgrid').jqxGrid('getselectedrowindexes'); 
+            if (rowindexes.length > 0) {
+
+
+                href = "@Url.Action("IsQyOrStop", new { area = "admin" })";
+                $.post(href, { ID: getSelectIDS(rowindexes), opcode: opcode }, function (d) {
+
+                    if (d.indexOf("成功") > -1) {
+                        SucessMsg(d);
+                        $('#jqxgrid').jqxGrid('updatebounddata');
+                    } else { ErrorMsg(d); }
+                });
+            } else { ErrorMsg("请选择至少一条数据"); }
+        }
+
+
+        function getSelectIDS(rowindexes) {
+            var ids = "";
+            for (var i in rowindexes) {
+                if (ids) {
+                    ids += ";";
+                }
+                var data = $('#jqxgrid').jqxGrid('getrowdata', rowindexes[i]);
+                ids += data.ID;
+            }
+            return ids;
+        }
+    </script>
+
+}

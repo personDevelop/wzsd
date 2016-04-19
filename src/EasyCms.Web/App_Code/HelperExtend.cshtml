@@ -192,13 +192,13 @@ if (string.IsNullOrWhiteSpace(downInfo.JsonDataRoor))
     downInfo.JsonDataRoor = "Rows";
 }
 string ctrlID = "DropDownList" + code;
- 
-            <div id='@ctrlID'>
-            </div>
+
+    <div id='@ctrlID'>
+    </div>
             <input name="@code" id="@code" type="hidden" value="@(defaultval as string)" />
             <span style="float: left; color: red">@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(hint)</span>
- 
-    <script type="text/javascript">
+
+            <script type="text/javascript">
         $(function(){
             var source =
                    {
@@ -253,7 +253,7 @@ string ctrlID = "DropDownList" + code;
         });
 
 
-    </script>
+            </script>
 }
 @helper DropDownListCardEnum(string code, string name, object defaultval = null, Type enumType = null, string hint = "", int width = 150)
 { string ctrlID = "DropDownListCardEnum" + code;
@@ -373,8 +373,12 @@ string ctrlID = "DropDownList" + code;
 
     </script>
 }
-@helper DateTime(string code, string name, DateTime? defaultval, string hint = "", string otherClass = "", string formatString = "yyyy-MM-dd", int width = 200)
+@helper DateTime(string code, string name, DateTime? defaultval, string hint = "", string otherClass = "", string formatString = "yyyy-MM-dd", int width = 200,bool isShowTime=false,bool showCalendarButton=true)
 {
+if (isShowTime && formatString== "yyyy-MM-dd")
+{
+    formatString = "yyyy-MM-dd HH:mm";
+}
     <dl>
         <dt>
             @MVCExtention.ExtendHtmlInput.MvcHelper.Label(code, name)
@@ -389,11 +393,11 @@ string ctrlID = "DropDownList" + code;
                         string dv = string.Empty;
                         if (defaultval.HasValue && defaultval.Value.Year > 1980)
                         {
-                            dv = ",value:\"" + defaultval.Value.ToString("yyyy-MM-dd") + "\"";
+                            dv = ",value:\"" + defaultval.Value.ToString("yyyy-MM-dd HH:mm:ss") + "\"";
                         }
 
                     }
-                    $("#@code").jqxDateTimeInput({width: '@widthstr',culture: 'zh-Hans',formatString: "@formatString" @MVCExtention.ExtendHtmlInput.MvcHelper.Raw(dv)});
+                    $("#@code").jqxDateTimeInput({width: '@widthstr',culture: 'zh-Hans',showCalendarButton:@showCalendarButton.ToString().ToLower() ,showTimeButton: @isShowTime.ToString().ToLower(),formatString: "@formatString" @MVCExtention.ExtendHtmlInput.MvcHelper.Raw(dv)});
 
                 });
 
@@ -430,54 +434,54 @@ string serverUrl = vitualPath + "/api/controller.ashx";
         <dd>
             @if (string.IsNullOrWhiteSpace(mobliecode))
             {
-                <script id="@pccode" type="text/plain" style="width:@EditorWidth.ToString()px;height:@editorHeight.ToString()px;">
-                </script>
-                <script type="text/javascript">
+            <script id="@pccode" type="text/plain" style="width:@EditorWidth.ToString()px;height:@editorHeight.ToString()px;">
+            </script>
+            <script type="text/javascript">
                     //实例化编辑器
                     //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
                     UE.getEditor('@pccode', { textarea: "@pccode",initialContent:UE.utils.html( UE.utils.unhtml( "@defaultPcval" )),UEDITOR_HOME_URL:"@homeUrl",serverUrl:"@serverUrl" });
-                </script>
+            </script>
             }
             else
             {
-                <div id='@pccode-jqxTongBu'>
-                    <button style="padding:4px 16px;" id="@pccode-Left">
-                        同步到手机
-                    </button>
-                    <button style="padding:4px 16px;" id="@pccode-Right">
-                        同步到电脑
-                    </button>
+            <div id='@pccode-jqxTongBu'>
+                <button style="padding:4px 16px;" id="@pccode-Left">
+                    同步到手机
+                </button>
+                <button style="padding:4px 16px;" id="@pccode-Right">
+                    同步到电脑
+                </button>
 
-                </div>
-                <label style="color:red"> *注：同步到手机：将电脑版里的内容自动同步到手机版里，反正亦然。</label>
-                <div id='@pccode-jqxTabs'>
-                    <ul>
-                        <li style="margin-left: 30px;">@name（电脑）</li>
-                        <li>@name（手机）</li>
-                    </ul>
-                    <div>
-                        <script id="@pccode" type="text/plain" style="width:@EditorWidth.ToString()px;height:@editorHeight.ToString()px;">
-                        </script>
-                        <script type="text/javascript">
+            </div>
+            <label style="color:red"> *注：同步到手机：将电脑版里的内容自动同步到手机版里，反正亦然。</label>
+            <div id='@pccode-jqxTabs'>
+                <ul>
+                    <li style="margin-left: 30px;">@name（电脑）</li>
+                    <li>@name（手机）</li>
+                </ul>
+                <div>
+                    <script id="@pccode" type="text/plain" style="width:@EditorWidth.ToString()px;height:@editorHeight.ToString()px;">
+                    </script>
+                    <script type="text/javascript">
                             //实例化编辑器
                             //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
                             UE.getEditor('@pccode', { textarea: "@pccode",initialContent:UE.utils.html( UE.utils.unhtml( "@defaultPcval" )),UEDITOR_HOME_URL:"@homeUrl",serverUrl:"@serverUrl" });
-                        </script>
-                    </div>
+                    </script>
+                </div>
+                <div>
                     <div>
-                        <div>
-                            <script id="@mobliecode" type="text/plain" style="width:@MobileEditorWidth.ToString()px;height:@MobileeditorHeight.ToString()px;">
-                            </script>
-                            <script type="text/javascript">
+                        <script id="@mobliecode" type="text/plain" style="width:@MobileEditorWidth.ToString()px;height:@MobileeditorHeight.ToString()px;">
+                        </script>
+                        <script type="text/javascript">
                                 //实例化编辑器
                                 //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
                                 UE.getEditor('@mobliecode', { textarea: "@mobliecode",initialContent:UE.utils.html( UE.utils.unhtml( "@defaultmoblieval" )),UEDITOR_HOME_URL:"@homeUrl",serverUrl:"@serverUrl" });
-                            </script>
-                        </div>
+                        </script>
                     </div>
-
                 </div>
-                <script type="text/javascript">
+
+            </div>
+            <script type="text/javascript">
                     $(function(){
                         $("#@pccode-jqxTongBu").jqxButtonGroup({ mode:"default",template:"info" });
 
@@ -497,7 +501,7 @@ string serverUrl = vitualPath + "/api/controller.ashx";
 
 
 
-                </script>
+            </script>
 
             }
 
@@ -552,11 +556,11 @@ string serverUrl = vitualPath + "/api/controller.ashx";
                                 }
                                 bool valb = false;
                                 bool.TryParse(val.ToString(), out valb);
-                                <input type="checkbox" name="@item" checked="@val" />
+                <input type="checkbox" name="@item" checked="@val" />
                             }
-                            <label for="@item">
-                                @nameArr[i]
-                            </label>
+                <label for="@item">
+                    @nameArr[i]
+                </label>
                             i++;
                         }
                     }
@@ -605,13 +609,13 @@ string serverUrl = vitualPath + "/api/controller.ashx";
             <span style="color:red">@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(hint)</span>
             @if (!string.IsNullOrWhiteSpace(onChange))
             {
-                <script type="text/javascript">
+            <script type="text/javascript">
                     $(function() {
                        @MVCExtention.ExtendHtmlInput.MvcHelper.Raw(onChange+"();")
                         $("input[name='@code']").click(function() {
-                               @MVCExtention.ExtendHtmlInput.MvcHelper.Raw(onChange+ "(this);") 
+                               @MVCExtention.ExtendHtmlInput.MvcHelper.Raw(onChange+ "(this);")
                         }); });
-                </script>
+            </script>
             }
         </dd>
     </dl>
@@ -651,15 +655,15 @@ string OnBeforeFunc = "isContienu=" + OnBefore + "();";
             {
 
 
-                <span class="input-group-btn">
+            <span class="input-group-btn">
 
-                    <button class="btn blue btnHelp" id="@selectButtonID">
-                        选择
-                    </button>
-                    <button class="btn yellow btnHelp" onclick="javascript: $('#@id').val(''); $('#@code').val('');return false;">
-                        清除选择
-                    </button>
-                </span>
+                <button class="btn blue btnHelp" id="@selectButtonID">
+                    选择
+                </button>
+                <button class="btn yellow btnHelp" onclick="javascript: $('#@id').val(''); $('#@code').val('');return false;">
+                    清除选择
+                </button>
+            </span>
             }
             <span style="color:red">@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(hint)</span>
 
@@ -685,19 +689,19 @@ string OnBeforeFunc = "isContienu=" + OnBefore + "();";
         });
     </script>
 
-            @MVCExtention.ExtendHtmlInput.MvcHelper.Partial("_Dialog", new EasyCms.Web.DialogModel
-{
-    DialogID = dialogID,
-    Title = dialogTitle,
-    Height = dialogHeight,
-    Width = dialogWidth,
-    InnitFunc = InnitFunc,
-    OnOk = onOk,
-    DataControlID = DataControlID,
-    IsMutiSelect = IsMutiSelect,
-    IsTree = IsTree,
-    FiledID = id
-})
+    @MVCExtention.ExtendHtmlInput.MvcHelper.Partial("_Dialog", new EasyCms.Web.DialogModel
+       {
+           DialogID = dialogID,
+           Title = dialogTitle,
+           Height = dialogHeight,
+           Width = dialogWidth,
+           InnitFunc = InnitFunc,
+           OnOk = onOk,
+           DataControlID = DataControlID,
+           IsMutiSelect = IsMutiSelect,
+           IsTree = IsTree,
+           FiledID = id
+       })
 }
 
 
@@ -717,15 +721,15 @@ string OnBeforeFunc = "isContienu=" + OnBefore + "();";
 
             @if (!IsHidButton)
             {
-                <span class="input-group-btn">
+            <span class="input-group-btn">
 
-                    <button class="btn blue btnHelp" id="@selectButtonID">
-                        选择
-                    </button>
-                    <button class="btn yellow btnHelp" onclick="javascript: $('#@id').val(''); $('#@code').val('');return false;">
-                        清除选择
-                    </button>
-                </span>
+                <button class="btn blue btnHelp" id="@selectButtonID">
+                    选择
+                </button>
+                <button class="btn yellow btnHelp" onclick="javascript: $('#@id').val(''); $('#@code').val('');return false;">
+                    清除选择
+                </button>
+            </span>
             }
             <span style="color:red">@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(hint)</span>
 
@@ -775,39 +779,39 @@ string OnBeforeFunc = "isContienu=" + OnBefore + "();";
 }
 @*此打开窗口的方法 可以用dialog.open脚本*@
 @*@helper OpenDialog(string url, string id,  string dialogTitle = "", int dialogWidth = 800, int dialogHeight = 600, string OnBefore = "",string OnFinished="")
-{
-string dialogID = id + Guid.NewGuid();
-string selectButtonID = id ;
-string OnBeforeFunc = "isContienu=" + OnBefore + "();"; 
-    <script type="text/javascript">
+    {
+    string dialogID = id + Guid.NewGuid();
+    string selectButtonID = id ;
+    string OnBeforeFunc = "isContienu=" + OnBefore + "();";
+        <script type="text/javascript">
 
-        $(function () {
-            Dialog.create("@MVCExtention.ExtendHtmlInput.MvcUrl.Content("~/Content/Images/movie.png")");
+            $(function () {
+                Dialog.create("@MVCExtention.ExtendHtmlInput.MvcUrl.Content("~/Content/Images/movie.png")");
 
-            $("#@selectButtonID").click(function () {
-                var isContienu = true;
-                @if (!string.IsNullOrWhiteSpace(OnBefore))
-	{
-                     @OnBeforeFunc
-	}
-                if (isContienu) {
-                    Dialog.open("@url" , "@dialogTitle", {
-                        onClose: function () {
-                            var data=GetThisDialogState();
+                $("#@selectButtonID").click(function () {
+                    var isContienu = true;
+                    @if (!string.IsNullOrWhiteSpace(OnBefore))
+        {
+                         @OnBeforeFunc
+        }
+                    if (isContienu) {
+                        Dialog.open("@url" , "@dialogTitle", {
+                            onClose: function () {
+                                var data=GetThisDialogState();
 
-                            if (data) {
-                                @OnFinished
+                                if (data) {
+                                    @OnFinished
+                                }
                             }
-                        }
-                    }, { width: 850, height: 580 });
+                        }, { width: 850, height: 580 });
 
-                }
-                return false;
+                    }
+                    return false;
+                });
+
             });
-
-        });
-    </script>
-}*@
+        </script>
+    }*@
 
 
 
@@ -1118,79 +1122,89 @@ string OnBeforeFunc = "isContienu=" + OnBefore + "();";
     </dl>
 }
 @*级联下来框*@
-@helper DropDownListClass(string code, string name, string url, string valuemember = "ID", string displaymember = "Name", string hint = "", string otherClass = "")
+@helper DropDownListClass(string code, string name, string url, string valuemember = "ID", string displaymember = "Name", string hint = "", string otherClass = "",bool isCard = false)
 {
 string dropid = "jqxDropDownList" + code;
-    <dl>
-        <dt>
-            @MVCExtention.ExtendHtmlInput.MvcHelper.Label(code, name)
-        </dt>
-        <dd>
-        <dd>
-            <input type="hidden" id="@code" name="@code" value="">
-            <div style='float: left;' id='@dropid'>
-            </div>
-            <script type="text/javascript">
-                $(document).ready(function () {
+    <input type="hidden" id="@code" name="@code" value="">
+if (isCard)
+{
+        <dl>
+            <dt>
+                @MVCExtention.ExtendHtmlInput.MvcHelper.Label(code, name)
+            </dt>
+            <dd>
+            <dd>
 
-                    var url = "@url";
-                    var source =
-                    {
-                        datatype: "json",
-                        datafields: [
-                            { name: '@valuemember' },
-                            { name: '@displaymember' }
-                        ],
-                        id: 'ID',
-                        url: url
-                    };
-                    // create a new instance of the jqx.dataAdapter.
-                    var dataAdapter = new $.jqx.dataAdapter(source);
-                    $("#"+"@dropid").jqxDropDownList({ source: dataAdapter, displayMember: "@displaymember", valueMember: "@valuemember", width: 'auto', height: '25px' });
+                <div style='float: left;' id='@dropid'>
+                </div>
 
-                    $("#"+"@dropid").on('select', function (event) {
+
+            </dd>
+
+        </dl>
+}
+else
+{  <div style='float: left;' id='@dropid'>
+        </div>
+}
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            var url = "@url";
+            var source =
+            {
+                datatype: "json",
+                datafields: [
+                    { name: '@valuemember' },
+                    { name: '@displaymember' }
+                ],
+                id: 'ID',
+                url: url
+            };
+            // create a new instance of the jqx.dataAdapter.
+            var dataAdapter = new $.jqx.dataAdapter(source);
+            $("#"+"@dropid").jqxDropDownList({ source: dataAdapter, displayMember: "@displaymember", valueMember: "@valuemember", width: 'auto', height: '25px' });
+
+            $("#"+"@dropid").on('select', function (event) {
+                onSelectChange(event);
+            });
+
+
+            function onSelectChange(event)
+            {
+                var args = event.args;
+                if (args) {
+                    var item = args.item;
+                    var categroy = item.value;
+                    $("#"+"@code").val(item.value);
+                    //删除其子类
+                    $(event.currentTarget).  nextAll().remove();
+                    //创建其子类
+                    //同时生成dropdownlist
+                    //$.getJSON(url, { id: categroy }, function () {
+                    var guid = "dropdown" + categroy;
+                    $(event.currentTarget).parent().append("<div style='float: left;' id='" + guid + "'> </div>");
+                    source. url= url + "/" + categroy;
+                    var dataAdapter1 = new $.jqx.dataAdapter(source);
+                    $("#" + guid).jqxDropDownList({ source: dataAdapter1, displayMember: "Name", valueMember: "ID",  width: 'auto',height: '25px' });
+
+                    $("#"+guid).on('select', function (event) {
                         onSelectChange(event);
                     });
+                    $("#"+guid).on('bindingComplete', function (event) {
 
-
-                    function onSelectChange(event)
-                    {
-                        var args = event.args;
-                        if (args) {
-                            var item = args.item;
-                            var categroy = item.value;
-                            $("#"+"@code").val(item.value);
-                            //删除其子类
-                            $(event.currentTarget).  nextAll().remove();
-                            //创建其子类
-                            //同时生成dropdownlist
-                            //$.getJSON(url, { id: categroy }, function () {
-                            var guid = "dropdown" + categroy;
-                            $(event.currentTarget).parent().append("<div style='float: left;' id='" + guid + "'> </div>");
-                            source. url= url + "/" + categroy;
-                            var dataAdapter1 = new $.jqx.dataAdapter(source);
-                            $("#" + guid).jqxDropDownList({ source: dataAdapter1, displayMember: "Name", valueMember: "ID",  width: 'auto',height: '25px' });
-
-                            $("#"+guid).on('select', function (event) {
-                                onSelectChange(event);
-                            });
-                            $("#"+guid).on('bindingComplete', function (event) {
-
-                                if ( $("#"+guid).jqxDropDownList('getItems').length==0) {
-                                    $(event.currentTarget) .remove();
-                                }
-
-                            });
-
-                            //});
+                        if ( $("#"+guid).jqxDropDownList('getItems').length==0) {
+                            $(event.currentTarget) .remove();
                         }
-                    }
-                });
-            </script>
 
-        </dd>
+                    });
 
-    </dl>
+                    //});
+                }
+            }
+        });
+    </script>
 }
 
 @*地区级联下来框

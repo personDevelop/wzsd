@@ -357,7 +357,7 @@ namespace EasyCms.Model
         内置功能,
         商城个人中心,
         其它,
-        
+
     }
 
     public enum AccessType
@@ -563,35 +563,35 @@ namespace EasyCms.Model
     }
     public enum AppHandleTag
     {
-        无=0,
+        无 = 0,
         /// <summary>
         /// 打开应用
         /// </summary>
-        openApp=1,
+        openApp = 1,
         /// <summary>
         /// 打开网页
         /// </summary>
-        openUrl=2,
+        openUrl = 2,
         /// <summary>
         /// 打开一个商品明细
         /// </summary>
-        OpenProductDetail=3,
+        OpenProductDetail = 3,
         /// <summary>
         /// 打开一个新闻明细
         /// </summary>
-        OpenNewDetail=4,
+        OpenNewDetail = 4,
         /// <summary>
         /// 打开一个活动页，这个活动页不是指app的active，指的是促销活动或团购活动等的详情页
         /// </summary>
-        OpenActive=5,
+        OpenActive = 5,
         /// <summary>
         /// 打开个人中心
         /// </summary>
-        OpenPerson=6,
+        OpenPerson = 6,
         /// <summary>
         /// 扩展保留项
         /// </summary>
-        Custom=99
+        Custom = 99
     }
 
 
@@ -639,18 +639,38 @@ namespace EasyCms.Model
     }
 
     public enum PayType
-    { 货到付款,在线支付 }
+    { 货到付款, 在线支付 }
 
     public enum UsageMode
     {
-         系统属性,
+        系统属性,
         自定义属性,
         系统规格,
         自定义规格,
     }
     public enum AttrShowType
     {
-        单选,多选,文本 
+        单选, 多选, 文本
     }
-    
+
+    public enum AcitivyStatus
+    {
+        制单,
+        开启,
+        停用, 
+        进行中,
+        完成
+    }
+
+    public enum ActivityType
+    {
+        单品促销,买送促销,赠品促销,套装促销,满赠促销,满减促销
+    }
+
+
+    public enum LoopType
+    {
+        固定日期, 天, 周
+    }
+
 }
