@@ -161,11 +161,11 @@ namespace EasyCms.Dal
             p.RecordStatus = StatusType.update;
             if (isPass)
             {
-                p.Status = (int)DjStatus.生效;
+                p.Status = DjStatus.生效;
 
             }
             else
-            { p.Status = (int)DjStatus.审批退回; }
+            { p.Status =  DjStatus.审批不通过; }
             Dal.Submit(p);
             return string.Empty;
         }
@@ -204,7 +204,7 @@ namespace EasyCms.Dal
                         SKUID = item.SKUID,
                         CreatedDate = DateTime.Now,
                         ParentID = item.ID,
-                        Status = (int)DjStatus.生效,
+                        Status = DjStatus.生效,
                         OrderId = item.OrderId,
                         ReviewText = replyText
                     };

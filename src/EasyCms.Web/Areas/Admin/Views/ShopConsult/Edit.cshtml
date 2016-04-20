@@ -1,0 +1,88 @@
+﻿@model ShopConsult
+@{
+    ViewBag.Title = "商品咨询";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEditNoForm.cshtml";
+}
+
+@Styles.Render("~/bundles/upimgcss")
+@Scripts.Render("~/bundles/ueditor")
+@Scripts.Render("~/bundles/uploadJs")
+
+@using EasyCms.Model
+<!--内容-->
+@using (Html.BeginForm("Save", null))
+{
+    @Html.Hidden("SubmitActionType")
+    @HelperExtend.HiddenFor("ID", Model.ID)
+    @HelperExtend.HiddenFor("ReplyID", Model.CurrentReply == null ? "" : Model.CurrentReply.ID)
+   
+    <div class="tab-content">
+        @Html.ValidationSummary() 
+        @HelperExtend.Lable(HelperExtend.img(Model.ProductImg) + " <br />" + Model.ProductName, "商品")
+        @HelperExtend.Lable(Model.CommentOrder.ToString(), "评论等级")
+        @HelperExtend.Lable(Model.ReviewText, "评论内容")
+        @HelperExtend.Lable(Model.CreatedDate.ToString("yyyy-MM-dd HH:mm"), "评论时间")
+        @HelperExtend.Lable(Model.StatusStr, "评论状态")
+
+        <dl>
+            <dt>
+                用户晒单
+            </dt>
+            <dd>
+                @if (Model.Images != null && Model.Images.Length > 0)
+                {
+                    <div id="photoGallery">
+                        @foreach (var item in Model.Images)
+                        {
+                            <div><div class="photo" style="background-image: url(@item)"></div></div>
+
+                        }
+                    </div>
+                    <script type="text/javascript">
+                        $(function () {
+                            $('#photoGallery').jqxScrollView({ width: 600, height: 100, buttonsOffset: [0, 0] });
+                        });</script>
+                }
+                else
+                {
+                    <text>无</text>
+                }
+
+
+            </dd>
+        </dl>
+        @HelperExtend.Lable(Model.LastReply, "之前答复")
+        @HelperExtend.TextArea("ReviewText", "回复", Model.CurrentReply == null ? "" : Model.CurrentReply.ReviewText, hint: "<br /><input type='submit' onclick='return Reply();' value='答复' class='btn'/>", col: 100)
+
+    </div>
+    <!--工具栏-->
+    <div class="page-footer">
+        <div class="btn-wrap"> 
+            <input type="submit" onclick="$('#SubmitActionType').val(1)" value="审批通过" class="btn" />
+            <input type="submit" onclick="$('#SubmitActionType').val(0)" value="审批不通过" class="btn" />
+
+            <input name="btnReturn" type="button" value="返回上一页" class="btn yellow" onclick="javascript:history.back(-1);" />
+        </div>
+    </div>
+    <!--/工具栏-->
+
+}
+
+
+@section  scripts{
+
+
+    <script type="text/javascript">
+        function Reply() {
+            $('#SubmitActionType').val(2);
+            if (!$('#ReviewText').val()) {
+                ErrorMsg("请输入回复内容！");
+                return false;
+            }
+            return true;
+
+        } 
+    </script>
+
+    
+}

@@ -38,7 +38,7 @@ namespace EasyCms.Model
 
         private string _ParentID;
 
-        private int _Status;
+        private DjStatus _Status;
 
         private string _OrderId;
 
@@ -61,7 +61,7 @@ namespace EasyCms.Model
         /// </summary>
 
         [PrimaryKey]
-        [DbProperty(MapingColumnName = "ID", DbTypeString = "char", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 1, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ID", DbTypeString = "varchar", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 1, ColumnDefaultValue = "")]
 
         public string ID
         {
@@ -196,7 +196,7 @@ namespace EasyCms.Model
 
         [DbProperty(MapingColumnName = "Status", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public int Status
+        public DjStatus Status
         {
             get
             {
@@ -325,7 +325,7 @@ namespace EasyCms.Model
 
         #endregion
 
-        #region 列定义
+        #region 列定义 
         public class Column
         {
             public Column(string tableName)
@@ -420,7 +420,6 @@ namespace EasyCms.Model
         }
         #endregion
     }
-
 
 
     public partial class ShopProductReviews

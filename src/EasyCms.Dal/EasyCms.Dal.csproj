@@ -78,6 +78,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RedeemRulesDal.cs" />
     <Compile Include="SearchKeyWordDal.cs" />
+    <Compile Include="ShopConsultDal.cs" />
+    <Compile Include="ShopConsultTypeDal.cs" />
     <Compile Include="ShopExtendInfoDal.cs" />
     <Compile Include="ShopGroupBuyDal.cs" />
     <Compile Include="ShopShippingTypeDal.cs" />

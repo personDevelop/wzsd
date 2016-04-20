@@ -88,6 +88,8 @@
     <Compile Include="SendMsgInfo.cs" />
     <Compile Include="ShopBrandInfo.cs" />
     <Compile Include="ShopCategory.cs" />
+    <Compile Include="ShopConsult.cs" />
+    <Compile Include="ShopConsultType.cs" />
     <Compile Include="ShopCountDown.cs" />
     <Compile Include="ShopCountDownTime.cs" />
     <Compile Include="ShopCountProducnt.cs" />

@@ -252,6 +252,8 @@
     <Compile Include="Areas\Admin\Controllers\ShopBrandInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopCategoryController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopCommentController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ShopConsultController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ShopConsultTypeController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopCountDownController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopExpressController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopExtendInfoController.cs" />
@@ -880,6 +882,10 @@
     <Content Include="Areas\Admin\Views\ShopCountDown\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_HelpEditCoupon.cshtml" />
     <Content Include="Areas\Admin\Views\ShopCountDown\CountDownTime.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopConsultType\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopConsultType\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopConsult\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopConsult\Index.cshtml" />
     <None Include="Properties\PublishProfiles\publish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\EshopAdminControl.js" />

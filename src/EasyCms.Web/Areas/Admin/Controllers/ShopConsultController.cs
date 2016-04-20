@@ -1,6 +1,5 @@
 ﻿using EasyCms.Business;
 using EasyCms.Model;
-using EasyCms.Model.ViewModel;
 using EasyCms.Session;
 using EasyCms.Web.Common;
 using Sharp.Common;
@@ -12,7 +11,7 @@ using System.Web.Mvc;
 
 namespace EasyCms.Web.Areas.Admin.Controllers
 {
-    public class ShopCommentController : Controller
+    public class ShopConsultController : Controller
     {
         //
         // GET: /Admin/ShopComment/
@@ -31,11 +30,11 @@ namespace EasyCms.Web.Areas.Admin.Controllers
 
             if (StartDate.TryPhrase("yyyy-MM-dd", out start))
             {
-                where = where && ShopProductReviews._.CreatedDate >= start;
+                where = where && ShopConsult._.CreatedDate >= start;
             }
             if (EndDate.TryPhrase("yyyy-MM-dd", out start))
             {
-                where = where && ShopProductReviews._.CreatedDate < start.AddDays(1);
+                where = where && ShopConsult._.CreatedDate < start.AddDays(1);
             }
             if (!string.IsNullOrWhiteSpace(ShopProduct))
             {
@@ -46,24 +45,24 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                 string[] ps = QryDjStatus.Split(',');
                 if (!ps.Contains(""))
                 {
-                    where = where && ShopProductReviews._.Status.In(ps);
+                    where = where && ShopConsult._.Status.In(ps);
                 }
 
             }
-            if (!string.IsNullOrWhiteSpace(QryCommentOrder))
-            {
-                string[] ps = QryCommentOrder.Split(',');
-                if (!ps.Contains(""))
-                {
-                    where = where && ShopProductReviews._.CommentOrder.In(ps);
-                }
+            //if (!string.IsNullOrWhiteSpace(QryCommentOrder))
+            //{
+            //    string[] ps = QryCommentOrder.Split(',');
+            //    if (!ps.Contains(""))
+            //    {
+            //        where = where && ShopConsult._.CommentOrder.In(ps);
+            //    }
 
-            }
+            //}
             if (OnlyWebUser)
             {
                 where = where && ManagerUserInfo._.IsManager == false;
             }
-            System.Data.DataTable dt = new ShopProductReviewsBll().GetList(pagenum + 1, pagesize, where, ref   recordCount);
+            System.Data.DataTable dt = new ShopConsultBll().GetList(pagenum + 1, pagesize, where, ref recordCount);
 
             string result = JsonWithDataTable.Serialize(dt);
             result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
@@ -74,15 +73,15 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         public ActionResult Edit(string id)
         {
 
-            ShopProductReviews p = null;
+            ShopConsult p = null;
             if (!string.IsNullOrWhiteSpace(id))
             {
-                p = new ShopProductReviewsBll().GetEntity(id);
+                p = new ShopConsultBll().GetEntity(id);
             }
             else
             {
 
-                p = new ShopProductReviews();
+                p = new ShopConsult();
             }
 
             return View("Edit", p);
@@ -92,8 +91,8 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         [ValidateInput(false)]
         public ActionResult Save(FormCollection collection)
         {
-            ShopProductReviews p = new ShopProductReviews();
-            ShopProductReviewsBll bll = new ShopProductReviewsBll();
+            ShopConsult p = new ShopConsult();
+            ShopConsultBll bll = new ShopConsultBll();
             try
             {
                 string SubmitActionType = collection["SubmitActionType"];
@@ -108,7 +107,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                         error = bll.Approve(shopCommentID, false);
                         if (string.IsNullOrWhiteSpace(error))
                         {
-                            p.Status =  DjStatus.审批不通过;
+                            p.Status = CommentStatus.屏蔽;
                             error = "审批成功";
                         }
                         break;
@@ -117,7 +116,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                         error = bll.Approve(shopCommentID, true);
                         if (string.IsNullOrWhiteSpace(error))
                         {
-                            p.Status =  DjStatus.生效;
+                            p.Status = CommentStatus.已回复;
                             error = "审批成功";
                         }
 
@@ -127,25 +126,25 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                         string ReplyID = collection["ReplyID"];
                         if (string.IsNullOrWhiteSpace(ReplyID))
                         {
-                            p.CurrentReply = new ShopProductReviews()
-                            {
-                                ID = Guid.NewGuid().ToString(),
-                                UserId = CmsSession.GetUserID(),
-                                ProductId = p.ProductId,
-                                SKUID = p.SKUID,
-                                CreatedDate = DateTime.Now,
-                                ParentID = shopCommentID,
-                                Status =  DjStatus.生效,
-                                OrderId = p.OrderId
-                            };
+                            //p.CurrentReply = new ShopConsult()
+                            //{
+                            //    ID = Guid.NewGuid().ToString(),
+                            //    UserId = CmsSession.GetUserID(),
+                            //    ProductId = p.ProductId,
+                            //    SKUID = p.SKUID,
+                            //    CreatedDate = DateTime.Now,
+                            //    ParentID = shopCommentID,
+                            //    Status = DjStatus.生效,
+                            //    OrderId = p.OrderId
+                            //};
                         }
                         else
                         {
-                            p.CurrentReply = bll.GetEntity(ReplyID);
+                            //p.CurrentReply = bll.GetEntity(ReplyID);
                         }
-                        p.CurrentReply.ReviewText = collection["ReviewText"];
-                        p.hasReply = true;
-                        bll.Reply(p);
+                        //p.CurrentReply.ReviewText = collection["ReviewText"];
+                        //p.hasReply = true;
+                        //bll.Reply(p);
                         error = "回复成功";
                         break;
                     default:
@@ -175,7 +174,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         public string ApprovalPass(string id)
         {
             //审批通过
-            string error = new ShopProductReviewsBll().Approve(id, true);
+            string error = new ShopConsultBll().Approve(id, true);
             if (string.IsNullOrWhiteSpace(error))
             {
 
@@ -189,7 +188,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         {
             //审批不通过
 
-            string error = new ShopProductReviewsBll().Approve(id, false);
+            string error = new ShopConsultBll().Approve(id, false);
             if (string.IsNullOrWhiteSpace(error))
             {
 
@@ -200,12 +199,12 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         [HttpPost]
         public string Delete(string id)
         {
-            return new ShopProductReviewsBll().Delete(id);
+            return new ShopConsultBll().Delete(id);
         }
 
         public string BachReply(string id, string other)
         {
-            return new ShopProductReviewsBll().BachReply(CmsSession.GetUserID(), id, other);
+            return new ShopConsultBll().BachReply(CmsSession.GetUserID(), id, other);
         }
 
     }

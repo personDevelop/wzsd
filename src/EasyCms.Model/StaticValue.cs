@@ -215,7 +215,12 @@ namespace EasyCms.Model
         团购,
         秒杀
     }
-
+    public enum CommentStatus
+    {
+        正常,
+        已回复,
+        屏蔽
+    }
     public enum ShopSaleStatus
     {
         下架,
@@ -399,9 +404,9 @@ namespace EasyCms.Model
     /// </summary>
     public enum DjStatus
     {
-        草稿,
+        未审核,
         生效,
-        审批退回,
+        审批不通过,
         删除
 
     }

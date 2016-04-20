@@ -77,10 +77,10 @@ namespace EasyCms.Web.API
                 string isAutoSX = new ParameterInfoBll().GetValue(StaticValue.IsCommentAuto);
                 if (isAutoSX == "1")
                 {
-                    comment.Status = (int)DjStatus.生效;
+                    comment.Status =  DjStatus.生效;
                 }
                 else
-                { comment.Status = (int)DjStatus.草稿; }
+                { comment.Status =  DjStatus.未审核; }
                 comment.UserId = Request.GetAccountID();
                 comment.CreatedDate = DateTime.Now;
                 new ShopProductReviewsBll().Save(comment);
