@@ -104,7 +104,7 @@
         }
     $(gridid).jqxGrid(
      $.extend({
-         width: "100%",
+         width: "99%",
          autoheight: true,
          source: dataAdapter,
          columnsresize: true,
@@ -115,7 +115,8 @@
          rendergridrows: function (params) {
              return params.data;
          },
-         pagerrenderer: pagerrenderer,
+         pagermode: 'simple',
+        /* pagerrenderer: pagerrenderer,*/
          pageSize: 20,
          pageable: true,
          columns: columns, localization: "zh-Hans"

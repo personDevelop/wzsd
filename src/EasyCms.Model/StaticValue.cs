@@ -219,6 +219,7 @@ namespace EasyCms.Model
     {
         正常,
         已回复,
+        商家答复,
         屏蔽
     }
     public enum ShopSaleStatus

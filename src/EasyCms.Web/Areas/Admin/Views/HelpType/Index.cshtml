@@ -12,7 +12,7 @@
             <div class="l-list">
                 <ul class="icon-list">
                     <li><a class="add" href="@Url.Action("Edit")"><i></i><span>新增</span></a></li>
-                    <li><a class="add" href="javascript:;" onclick="EditTree('treeGrid', '@Url.Action("Edit")');"><i></i><span>编辑</span></a></li>
+                    <li><a class="edit" href="javascript:;" onclick="EditTree('treeGrid', '@Url.Action("Edit")');"><i></i><span>修改</span></a></li>
                     <li><a class="del" href="javascript:;" onclick="DelTree('treeGrid', '@Url.Action("Delete")');"><i></i><span>删除</span></a></li>
                 </ul>
             </div>
@@ -38,8 +38,8 @@
         var columns = [
 { text: '编号', dataField: 'Code',   cellsalign: "left" },
          { text: '名称', dataField: 'Name',  cellsalign: "left" },
-         { text: '底部展示', dataField: 'IsShowButtom', width: 80 },
-         { text: '导航展示', dataField: 'IsShowNavi', width: 80 },
+         { text: '底部展示', dataField: 'IsShowButtom', width: 80,@HelperExtend.Parsebool() },
+         { text: '导航展示', dataField: 'IsShowNavi', width: 80,@HelperExtend.Parsebool() },
          { text: '顺序', dataField: 'OrderNo', width: 50 },
          { text: '备注', dataField: 'Note', cellsalign: "left" }];
         CreateTree("treeGrid", url, datafields, columns);

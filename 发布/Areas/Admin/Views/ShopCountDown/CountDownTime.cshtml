@@ -1,0 +1,114 @@
+﻿@model ShopCountDownTime
+@{
+    ViewBag.Title = "设置活动时间";
+    Layout =   "~/Areas/Admin/Views/Shared/_LayoutEditDialog.cshtml";
+} 
+@using EasyCms.Model 
+ 
+@Scripts.Render("~/bundles/jqueryAjax")
+ 
+<div class="tab-content">
+@using (Ajax.BeginForm("SaveTime", null, new AjaxOptions() { OnBegin = "return  $('#formTime').validate();", AllowCache = false, OnSuccess = "OnSaveSuccess", OnFailure = "OnSaveFail" }, new { id = "formTime" }))
+{
+
+    @HelperExtend.HiddenFor("ID", Model.ID)
+    @HelperExtend.HiddenFor("ActivityID", Model.ActivityID)
+    @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())
+    @HelperExtend.HiddenFor("LoopType",((int) Model.LoopType).ToString())
+    @Html.ValidationSummary()
+    @HelperExtend.DateTime("StartDate", "开始时间", defaultval: Model.StartDate,formatString:"T",isShowTime:true, showCalendarButton: false)
+    @HelperExtend.DateTime("EndDate", "截止时间", defaultval: Model.EndDate, formatString: "T", isShowTime: true, showCalendarButton: false)
+     switch (Model.LoopType)
+    {
+        case LoopType.固定日期:
+            @HelperExtend.DateTime("StaticDate", "活动日期", defaultval: Model.StaticDate)
+            break;
+        case LoopType.天:
+            @HelperExtend.Number("WeekOrDay", "天", defaultval: Model.WeekOrDay,hint:"每月的固定某一天，最大是28天",max:28 )
+            break;
+        case LoopType.周:
+            @HelperExtend.Number("WeekOrDay", "星期", defaultval: Model.WeekOrDay, hint: "每周的固定某一天，最大是7天", max: 7)
+            break;
+        default:
+            break;
+    } 
+     <!--工具栏-->
+    <div class="page-footer">
+        <div class="btn-wrap">
+            
+            <input type="submit" onclick="$('#IsContinueAdd').val(0)" value="提交保存" class="btn" />
+            <input name="btnReturn" type="button" value="关闭" class="btn yellow" onclick="javascript: CloseDialog();" />
+        </div>
+    </div>
+    <!--/工具栏-->
+
+}
+</div>
+<!--/列表-->
+@section  scripts{
+    <script type="text/javascript">
+
+        $(function () {
+
+
+            //初始化表单验证
+            $("form").validate({
+                ignore: "",
+                rules: {
+                    StartDate: {
+                        required: true
+                    },
+                    EndDate: {
+                        required: true
+                    }
+                    ,
+                    StaticDate: {
+                        required: true
+                    }
+                    ,
+                    WeekOrDay: {
+                        required: true
+                    }
+                     
+                },
+                messages: {
+                    StartDate: {
+                        required: "开始时间不能为空"
+                    },
+                    EndDate: {
+                        required: "截止时间不能为空"
+                    },
+                    StaticDate: {
+                        required: "活动日期不能为空"
+                    },
+                    WeekOrDay: {
+                        required: "天数不能为空"
+                    }
+                },
+                errorPlacement: errorPlace
+            });
+        })
+    </script>
+
+    <script type="text/javascript">
+
+         
+
+        function OnSaveSuccess(data) {
+            if (data.result) {
+                SucessMsg("保存成功");
+                $('#ID').val(data.id);
+                $('#RecordStatus').val("update");
+                SetDialogState(true);
+            } else {
+                $('#ID').val(data.id);
+                ErrorMsg("保存失败" + data.msg);
+            }
+        }
+        function OnSaveFail(res, error, errorText) {
+            ErrorMsg("保存失败" + errorText);
+        }
+    </script>
+   
+
+}

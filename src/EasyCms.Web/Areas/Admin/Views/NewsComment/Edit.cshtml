@@ -1,0 +1,77 @@
+﻿@model NewsComment
+@{
+    ViewBag.Title = "新闻评论";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEditNoForm.cshtml";
+} 
+@using EasyCms.Model
+<!--内容-->
+@using (Html.BeginForm("Save", null))
+{
+    @Html.Hidden("SubmitActionType") 
+    @HelperExtend.HiddenFor("ID", Model.ID)
+  
+    @HelperExtend.HiddenFor("ReplyID", Model.CurrentNewsComment == null ? "" : Model.CurrentNewsComment.ID)
+
+    <div class="tab-content">
+        @Html.ValidationSummary() 
+       
+
+
+        @HelperExtend.Lable( Model.NewsName, "新闻")
+      
+      @HelperExtend.Lable(Model.UserName, "会员") 
+        @HelperExtend.Lable(Model.Description, "评论内容")
+        @HelperExtend.Lable(Model.CreatedDate.ToString("yyyy-MM-dd HH:mm"), "评论时间")
+        @HelperExtend.Lable(Model.State.ToString(), "评论状态")
+
+        
+        @HelperExtend.Lable(Model.LastReply, "之前答复")
+        @HelperExtend.TextArea("Description", "回复", Model.CurrentNewsComment.Description == null ? "" : Model.CurrentNewsComment.Description, col: 100)
+
+    </div>
+    <!--工具栏-->
+    <div class="page-footer">
+        <div class="btn-wrap"> 
+            <input type="submit" onclick="return  $('form').validate();" value="答复" class="btn" />
+            <input type="submit" onclick="$('#SubmitActionType').val(0)" value="屏蔽" class="btn" />
+
+            <input name="btnReturn" type="button" value="返回上一页" class="btn yellow" onclick="javascript:history.back(-1);" />
+        </div>
+    </div>
+    <!--/工具栏-->
+
+}
+
+
+@section  scripts{
+
+<script type="text/javascript">
+
+        $(function () {
+
+
+            //初始化表单验证
+            $("form").validate({
+                ignore: "",
+                rules: {
+                    ReviewText: {
+                        required: true,
+                        maxlength: 500 
+                    }  
+                },
+                messages: {
+                    ReviewText: {
+                        required: "请输入回复内容",
+                        maxlength: $.validator.format("编号长度不能大于{0}个字符") 
+                    } 
+                },
+       errorPlacement: errorPlace
+            });
+        })
+</script>
+
+
+     
+
+    
+}

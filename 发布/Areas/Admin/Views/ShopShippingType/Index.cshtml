@@ -2,7 +2,8 @@
 @{
     ViewBag.Title = "配送方式";
 }
-
+@using EasyCms.Model
+@using Sharp.Common
 
 <!--工具栏-->
 <div id="floatHead" class="toolbar-wrap">
@@ -12,7 +13,7 @@
             <div class="l-list">
                 <ul class="icon-list">
                     <li><a class="add" href="@Url.Action("Edit")"><i></i><span>新增</span></a></li>
-                    <li><a class="add" href="javascript:;" onclick="EditGrid('jqxgrid', '@Url.Action("Edit")');"><i></i><span>编辑</span></a></li>
+                    <li><a class="edit" href="javascript:;" onclick="EditGrid('jqxgrid', '@Url.Action("Edit")');"><i></i><span>修改</span></a></li>
                     <li><a class="del" href="javascript:;" onclick="DelGrid('jqxgrid', '@Url.Action("Delete")');"><i></i><span>删除</span></a></li>
                 </ul>
             </div>
@@ -50,31 +51,28 @@
             ];
             var columns = [
 
-  { text: '主键ID', dataField: 'ID', cellsalign: "left", width: 200 },
 
   { text: '名称', dataField: 'Name', cellsalign: "left", width: 200 },
 
-  { text: '付款类型', dataField: 'PayType', cellsalign: "left", width: 200 },
+  { text: '付款类型', dataField: 'PayType', width: 100, @HelperExtend.ParseEnum(typeof(PayType)) },
 
-  { text: '起步重量', dataField: 'Weight', cellsalign: "left", width: 200 },
+  { text: '起步重量', dataField: 'Weight', cellsalign: "right", width: 80 },
 
-  { text: '加价重量', dataField: 'AddWeight', cellsalign: "left", width: 200 },
+  { text: '加价重量', dataField: 'AddWeight', cellsalign: "right", width: 80 },
 
-  { text: '起步价', dataField: 'Price', cellsalign: "left", width: 200 },
+  { text: '起步价', dataField: 'Price', cellsalign: "right", width: 80 },
 
-  { text: '加价', dataField: 'AddPrice', cellsalign: "left", width: 200 },
+  { text: '加价', dataField: 'AddPrice', cellsalign: "right", width: 80 },
 
-  { text: '地区运费类型', dataField: 'FreightType', cellsalign: "left", width: 200 },
+  { text: '地区运费类型', dataField: 'FreightType',  width: 100, @HelperExtend.ParseEnum(typeof(FreightType))},
 
-  { text: '地区默认运费 ', dataField: 'IsDefaultFreight', cellsalign: "left", width: 200 },
+  { text: '地区默认运费 ', dataField: 'IsDefaultFreight',@HelperExtend.ParseEnable()},
 
-  { text: '指定支付方式', dataField: 'IsCusotmPayType', cellsalign: "left", width: 100,@HelperExtend.Parsebool() },
+  { text: '指定支付方式', dataField: 'IsCusotmPayType', width: 100,@HelperExtend.Parsebool() },
 
-  { text: '显示顺序', dataField: 'DisplaySequence', cellsalign: "left", width: 200 },
+  { text: '顺序', dataField: 'DisplaySequence', cellsalign: "left", width:50 },
 
-  { text: '关联商家', dataField: 'SupplierId', cellsalign: "left", width: 200 },
-
-  { text: '描述', dataField: 'Description', cellsalign: "left", width: 200 },
+  { text: '关联商家', dataField: 'SupplierId', cellsalign: "left", width: 100 } 
 
             ];
             CreateGrid("jqxgrid", url, datafields, columns);

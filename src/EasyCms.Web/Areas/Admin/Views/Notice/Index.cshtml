@@ -12,10 +12,10 @@
             <div class="l-list">
                 <ul class="icon-list">
                     <li><a class="add" href="@Url.Action("Edit")"><i></i><span>新增</span></a></li>
-                    <li><a class="add" href="javascript:;" onclick="EditGrid('jqxgrid', '@Url.Action("Edit")');"><i></i><span>编辑</span></a></li>
+                    <li><a class="edit" href="javascript:;" onclick="EditGrid('jqxgrid', '@Url.Action("Edit")');"><i></i><span>修改</span></a></li>
                     <li><a class="del" href="javascript:;" onclick="DelGrid('jqxgrid', '@Url.Action("Delete")');"><i></i><span>删除</span></a></li>
-                    <li><a class="list" href="javascript:;" onclick="isSJ(1 );"><i></i><span>批量发布</span></a></li>
-                    <li><a class="lock" href="javascript:;" onclick="isSJ(0);"><i></i><span>批量撤回</span></a></li>
+                    <li><a class="publish" href="javascript:;" onclick="isSJ(1 );"><i></i><span>批量发布</span></a></li>
+                    <li><a class="cancle" href="javascript:;" onclick="isSJ(0);"><i></i><span>批量撤回</span></a></li>
 
                 </ul>
             </div>
@@ -65,7 +65,7 @@
             var datafields = [{ name: 'ID' },
   { name: 'NoticeTitle' },
   { name: 'PublishTime' },
-  { name: 'CreateDate' },
+  { name: 'CreateDate'},
   { name: 'DjStatus' }];
             var columns = [
     
@@ -73,9 +73,9 @@
   { text: '标题', dataField: 'NoticeTitle', cellsalign: "left" },
 
   
-  { text: '发布时间', dataField: 'PublishTime',  width: 80 },
+  { text: '发布时间', dataField: 'PublishTime', width: 110, datafield: 'date' },
 
-  { text: '创建时间', dataField: 'CreateDate',  width:80 },
+  { text: '创建时间', dataField: 'CreateDate', width: 110, datafield: 'date' },
 
   { text: '状态', dataField: 'DjStatus',   width: 80 ,@HelperExtend.ParseEnum(typeof(DjStatus))} ];
             CreateGrid("jqxgrid", url, datafields, columns, {isMutilSelect:true});

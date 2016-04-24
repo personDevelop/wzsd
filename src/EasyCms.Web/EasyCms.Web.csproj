@@ -860,7 +860,6 @@
     <Content Include="Areas\Admin\Views\FriendlyLinkType\Index.cshtml" />
     <Content Include="Areas\Admin\Views\AttributeType\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\AttributeType\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\NewsComment\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ShopExtendInfo\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\ShopExtendInfo\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ShopExtendInfo\AddGg.cshtml" />
@@ -886,6 +885,8 @@
     <Content Include="Areas\Admin\Views\ShopConsultType\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ShopConsult\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\ShopConsult\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\NewsComment\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\NewsComment\Index.cshtml" />
     <None Include="Properties\PublishProfiles\publish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\EshopAdminControl.js" />

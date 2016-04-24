@@ -1131,7 +1131,25 @@ textarea {
                     .toolbar .l-list .icon-list li a.msg i {
                         background-position: -364px -28px;
                     }
-
+                     .toolbar .l-list .icon-list li a.edit i {
+                        background-position: -140px -84px;
+                    }
+                       .toolbar .l-list .icon-list li a.publish i {
+                        background-position: -28px -84px;
+                    }
+                        .toolbar .l-list .icon-list li a.cancle i {
+                        background-position: -168px -112px;
+                       
+                    }
+                       
+  .toolbar .l-list .icon-list li a.start i {
+                        background-position: -196px -112px;
+                       
+                    }  
+  .toolbar .l-list .icon-list li a.end i {
+                        background-position: -140px -112px;
+                       
+                    }
         .toolbar .l-list .menu-list {
             float: left;
             display: block;

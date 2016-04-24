@@ -35,6 +35,8 @@ namespace EasyCms.Web.Common
                 }
             }
             json.ContractResolver = new LimitPropsContractResolver(otherProp, conatin);
+            json.Converters.Add(new DateTimeConverter());
+            json.Converters.Add(new DBNullCreationConverter());
             if (type == typeof(DataRow))
                 json.Converters.Add(new DataRowConverter());
             else if (type == typeof(DataTable))
@@ -42,8 +44,7 @@ namespace EasyCms.Web.Common
             else if (type == typeof(DataSet))
                 json.Converters.Add(new DataSetConverter());
 
-            json.Converters.Add(new DateTimeConverter());
-            json.Converters.Add(new DBNullCreationConverter());
+     
             string output = string.Empty;
             using (StringWriter sw = new StringWriter())
             {
@@ -166,7 +167,9 @@ namespace EasyCms.Web.Common
             foreach (DataColumn column in row.Table.Columns)
             {
                 writer.WritePropertyName(column.ColumnName);
-                ser.Serialize(writer, row[column]);
+                //writer.WriteValue(row[column]);
+                serializer.Serialize(writer, row[column]);
+
             }
             writer.WriteEndObject();
         }

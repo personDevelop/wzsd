@@ -1,0 +1,120 @@
+﻿@model ShopCountProducnt
+@{
+    ViewBag.Title = "编辑抢购商品";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEditDialog.cshtml";
+} 
+@using EasyCms.Model 
+@Scripts.Render("~/bundles/jqueryAjax")
+<div class="tab-content">
+@using (Ajax.BeginForm("SaveProduct", null, new AjaxOptions() { OnBegin = "return  $('#formGg').validate();", AllowCache = false, OnSuccess = "OnSaveSuccess", OnFailure = "OnSaveFail" }, new { id = "formGg" }))
+{
+
+    @HelperExtend.HiddenFor("ID", Model.ID)
+    @HelperExtend.HiddenFor("ActivityID", Model.ActivityID)
+    @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())
+    @Html.ValidationSummary()
+    @Html.Partial("_HelpEditProduct", new HelpEditShopProductModel() { DisplayField = "ProductName", 
+    OtherField = "OldPrice",
+    ReturnOtherField = "SalePrice",
+    DisplayFieldValue = Model.ProductName, Hint = "*必须选择一个参与活动的商品", Lable = "商品", ValueField = "ProductId",  ValueFieldValue=Model.ProductId})
+
+    @Html.Partial("_HelpEdit", new HelpEditModel()
+{
+    DisplayField = "SKUCode",
+    DisplayFieldValue = Model.SKUCode,
+    Hint = "不选择SKU,则商品下所有规格类型商品都参与该活动",
+    Lable = "商品SKU",
+    ValueField = "SKUID",
+    ValueFieldValue = Model.SKUID,
+    Columns= @"[
+                   { text: 'SKU编号', dataField: 'SKU',   width: 100 }, 
+                    { text: '规格', dataField: 'AttriVal',  width:  300  }, 
+                   { text: '市场价', dataField: 'MarketPrice',  width: 80 }, 
+                   { text: '销售价', dataField: 'SalePrice',  width: 80 }  ]",
+    DataFields= @"[
+
+               { name: 'SkuID', type: 'string' },
+
+
+
+               { name: 'SKU', type: 'string' },
+
+               { name: 'AttriVal', type: 'string' },
+      { name: 'MarketPrice', type: 'string' },
+      { name: 'SalePrice', type: 'string' }
+                            ]",
+    HelpTitle="选择商品SKU", ReturnDisplayField= "SKUName", ReturnValueField= "SKUID", SearchField= "SKUName", Url= Url.RouteUrl("ApiWithWeb", new { controller = "ShopProductApi", action = "GetSkuByProductID" }),
+    OtherSerchFieldFunction="GetProductCondition", OtherField= "OldPrice", ReturnOtherField= "SalePrice"
+})
+     
+    @HelperExtend.Number("OldPrice", "原价格", defaultval: Model.OldPrice, hint: "", max: int.MaxValue)
+    @HelperExtend.Number("Price", "活动价格", defaultval: Model.Price, hint: "",max:int.MaxValue)
+     <!--工具栏-->
+    <div class="page-footer">
+        <div class="btn-wrap">
+            
+            <input type="submit" onclick="$('#IsContinueAdd').val(0)" value="提交保存" class="btn" />
+            <input name="btnReturn" type="button" value="关闭" class="btn yellow" onclick="javascript: CloseDialog();" />
+        </div>
+    </div>
+    <!--/工具栏-->
+
+}
+</div>
+<!--/列表-->
+@section  scripts{
+    <script type="text/javascript">
+
+        $(function () {
+
+
+            //初始化表单验证
+            $("form").validate({
+                ignore: "",
+                rules: {
+                    ProductName: {
+                        required: true
+                    },
+                    Price: {
+                        required: true
+                    }
+                },
+                messages: {
+                    ProductName: {
+                        required: "请输入商品"
+                    },
+                    Price: {
+                        required: "请输入价格"
+                    }
+                },
+                errorPlacement: errorPlace
+            });
+        })
+    </script>
+
+    <script type="text/javascript">
+
+        function GetProductCondition(data) {
+            
+            data.id = $('#ProductId').val();
+            
+        }
+
+        function OnSaveSuccess(data) {
+            if (data.result) {
+                SucessMsg("保存成功");
+                $('#ID').val(data.id);
+                $('#RecordStatus').val("update");
+                SetDialogState(true);
+            } else {
+                $('#ID').val(data.id);
+                ErrorMsg("保存失败" + data.msg);
+            }
+        }
+        function OnSaveFail(res, error, errorText) {
+            ErrorMsg("保存失败" + errorText);
+        }
+    </script>
+   
+
+}

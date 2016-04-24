@@ -20,6 +20,7 @@
         if (!this.hasInit) {
             $("#modalDialog").jqxWindow($.extend({
                 showCollapseButton: true, autoOpen: false,
+                theme: "metro",
                 height: 300, width: 500, maxWidth: 2000, maxHeight: 1200
             }, this.WindowOpts));
             this.hasInit = true;
@@ -32,7 +33,9 @@
                     iframe.attr("src", dialog.lastUrl);
                 } else {
                     if (dialog.opts.AllWaysNew) {
-                        iframe.attr("src", dialog.lastUrl);
+                       // iframe.attr("src","");
+                       // iframe.attr("src", dialog.lastUrl);
+                        iframe[0].location.reload(true)
                     }
                 }
 

@@ -28,6 +28,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
 
             string result = JsonWithDataTable.Serialize(dt);
             result = string.Format("{{\"total\":\"{0}\",\"data\":{1}}}", recordCount, result);
+           
             return result;
 
         }

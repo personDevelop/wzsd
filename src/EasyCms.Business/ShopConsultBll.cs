@@ -52,10 +52,7 @@ namespace EasyCms.Business
             return Dal.Reply(p);
         }
 
-        public string BachReply(string userid, string id, string replyText)
-        {
-            return Dal.BachReply(userid, id, replyText);
-        }
+       
 
 
         public DataTable GetCommentProduct(string host, string accountid, string orderID, int state, int pageIndex, int pageSize, ref int recordCount)

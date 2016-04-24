@@ -1,0 +1,231 @@
+﻿@model ShopGroupBuy
+@{
+    ViewBag.Title = "编辑团购信息";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEdit.cshtml";
+}
+
+@Styles.Render("~/bundles/upimgcss")
+@Scripts.Render("~/bundles/ueditor")
+@Scripts.Render("~/bundles/uploadJs") 
+
+@using EasyCms.Model
+<!--内容-->
+<div id="floatHead" class="content-tab-wrap">
+    <div class="content-tab">
+        <div class="content-tab-ul-wrap">
+            <ul>
+                <li><a class="selected" href="javascript:;">基本信息</a></li> 
+                <li><a href="javascript:;">参与团购商品</a></li>
+                <li><a href="javascript:;">详细介绍</a></li> 
+                <li><a href="javascript:;">SEO相关</a></li> 
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="tab-content">
+
+
+    @HelperExtend.HiddenFor("ID", Model.ID)
+    @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())
+
+    @Html.ValidationSummary()
+    @HelperExtend.TextBox("ActivityName", "活动名称", defaultval: Model.ActivityName, hint: "*必填")
+
+    @HelperExtend.TextBox("ActivityTitle", "活动标语", defaultval: Model.ActivityTitle, hint: "*必填")
+
+    @HelperExtend.DateTime("StartDate", "团购开始时间", defaultval: Model.StartDate, hint: "",isShowTime:true)
+
+    @HelperExtend.DateTime("EndDate", "团购结束时间", defaultval: Model.EndDate, hint: "", isShowTime: true)
+  
+    @HelperExtend.Number("FinePrice", "违约金", defaultval: Model.FinePrice, hint: "", decimalDigits: 2, max: 10000000) 
+    @HelperExtend.Number("GroupCount", "团购满足数量", defaultval: Model.GroupCount, hint: "", decimalDigits: 2, max: 10000000)
+    
+    @HelperExtend.Number("LimitQty", "单次购买限购数量", defaultval: Model.LimitQty, hint: "", decimalDigits: 2, max: 10000000)
+    @HelperExtend.Number("MaxCount", "商品总限购数量", defaultval: Model.MaxCount, hint: "", decimalDigits: 2, max: 10000000) 
+   
+    @HelperExtend.ImageUpLoad("GroupBuyImage", "团购宣传图片", Model.RecordStatus == Sharp.Common.StatusType.add, defaultval: Model.GroupBuyImage, maxLength: 7)
+     
+
+    @HelperExtend.TextBox("Sequence", "顺序", defaultval: Model.Sequence, hint: "")
+    @HelperExtend.TextBox("BuyCount", "已提交订单购买的数量", defaultval: Model.BuyCount, hint: "")
+    @HelperExtend.Lable(Model.BuyCount.ToString() , "已提交订单购买的数量")
+      @HelperExtend.Lable(Model.Status.ToString(), "团购状态")
+
+    @HelperExtend.Lable(Model.CreateDate.ToString("yyyy-MM-dd"), "创建日期")
+</div>
+<div class="tab-content" style="display:none">
+    <div class="toolbar">
+        <div class="box-wrap">
+            <a class="menu-btn"></a>
+            <div class="l-list">
+                <ul class="icon-list">
+                    <li><a class="add" href="javascript:;" onclick="AddValue();"><i></i><span>添加商品</span></a></li>
+                    <li><a class="delete" href="javascript:;" onclick="RemoveValue();"><i></i><span>批量移除商品</span></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div style="margin-top: 5px;" id="jqxgrid"></div>
+</div>
+<div class="tab-content" style="display:none"> 
+    
+    @HelperExtend.UEditor("PCDescribe", "详细描述", mobliecode: "Description", defaultPcval: Model.PCDescribe, defaultmoblieval: Model.Description)
+     
+</div>
+ 
+<div class="tab-content" style="display:none"> 
+   
+    @HelperExtend.TextArea("KeyWords", "Meta关键字", defaultval: Model.KeyWords, hint: "")
+    @HelperExtend.TextArea("SEODescription", "SEO描述", defaultval: Model.SEODescription, hint: "")
+</div>
+
+@section  scripts{
+
+
+    <script type="text/javascript">
+         
+        $(function () {
+
+
+            //初始化表单验证
+            $("form").validate({
+                ignore: "",
+                rules: {
+                    "ActivityName": {
+                        required: true 
+                    },
+                    ActivityTitle: {
+                        required: true 
+                    } 
+                },
+                messages: {
+                    ActivityName: {
+                        required: "请输入活动名称" 
+                        
+                    },
+                    ActivityTitle: {
+                        required: "请输入活动标语" 
+                    } 
+                },
+                errorPlacement: errorPlace,
+                showErrors: function (errorMap, errorList) {
+                    $('#jqxLoader').jqxLoader('close');
+                    this.defaultShowErrors();
+                }
+
+            });
+            Dialog.create("@Url.Content("~/Content/Images/movie.png")");
+        })
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var dataID = $("#ID").val();
+            if (!dataID) {
+                dataID = "";
+            }
+            var url = "@Url.Action("GetSubList")" + "/" + dataID;
+            var editUrl = "@Url.Action("AddProduct")" + "/" + dataID;;
+            var deleteUrl = "@Url.Action("RemoveIDProduct")";
+            var datafields = [
+
+  { name: 'ID'},
+  { name: 'ProductName' },
+  { name: 'SKUName' },
+  { name: 'OldPrice'},
+  { name: 'Price'}
+
+ ];
+            var columns = [
+
+
+  { text: '名称', dataField: 'ProductName', cellsalign: "left"  },
+
+  { text: '商品SKU', dataField: 'SKUName', cellsalign: "left" },
+
+  { text: '原价格', dataField: 'OldPrice', cellsalign: "right", width: 80 },
+
+  { text: '活动价格', dataField: 'Price', cellsalign: "right", width: 80 },
+ {
+     text: '操作', datafield: 'ID', width: 200, cellsrenderer: function (row, column, value) {
+
+         var html = "  <div style='text-align: center; overflow: hidden; padding-bottom: 2px; margin-top: 4px; text-overflow: ellipsis;'>";
+         html +=
+              "<a href='javascript:;' onclick='EditValue(\"" + value + "\");'  >修改</a> &nbsp;&nbsp;&nbsp;" +
+         "<a  href='javascript:;' onclick='RemoveValue(\"" + value + "\");'  >删除</a>";
+         html += "</div>";
+         return html;
+     }
+ }
+
+ ];
+            CreateGrid("jqxgrid", url, datafields, columns, { isMutilSelect: true, grid: { pageable: false } });
+
+
+        });
+</script>
+
+    <script  type="text/javascript">
+        var jsq = 0;//计数器
+        function AddValue()
+        {
+            var dataID = $("#ID").val();
+            if (!dataID) {
+                ErrorMsg("请先保存当前活动后，再添加商品");
+                return;
+            }
+            Dialog.open("@Url.Action("AddProduct")/" + dataID + "/" + (jsq++), "添加活动商品", {
+                AllWayInit: true,
+                onClose: function (grid) {
+                        if (GetThisDialogState()) {
+                            $("#jqxgrid").jqxGrid('updatebounddata');
+                        }
+                }
+            }, { width:600, height: 450 });
+        }
+            function EditValue(id) { 
+          
+            Dialog.open("@Url.Action("AddProduct")/" + $("#ID").val() + "/" + id, "编辑商品", {
+                AllWayInit: true,
+                AllWaysNew:true,
+                onClose: function (grid) {
+                        if (GetThisDialogState()) {
+                            $("#jqxgrid").jqxGrid('updatebounddata');
+                        }
+                }
+            }, { width:600, height: 450 });
+
+        }
+
+        function RemoveValue(productID) {
+            var gridid = '#jqxgrid';
+            if (!productID) {
+                //多条
+                var rowindexes = $(gridid).jqxGrid('getselectedrowindexes');
+                if (rowindexes.length > 0) {
+                    productID = "";
+                    for (var i = 0; i < rowindexes.length; i++) {
+                        if (i > 0) {
+                            productID += ",";
+                        }
+                        var data = $(gridid).jqxGrid('getrowdata', rowindexes[i]);
+                        if (data) {
+                            productID += data.ID;
+                        }
+
+                    }
+                } else { ErrorMsg("请选择一条数据"); return; }
+            }
+
+            var postdata = {  id: productID };
+            $.post("@Url.Action("RemoveIDProduct")", postdata, function (d) {
+                if (!d) {
+                    SucessMsg("操作成功");
+                    $(gridid).jqxGrid('updatebounddata');
+                } else { ErrorMsg(d); }
+
+            });
+
+        }
+    </script>
+}

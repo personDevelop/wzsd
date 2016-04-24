@@ -73,8 +73,8 @@
         },
        
                  { text: '名称', dataField: 'Name', cellsalign: "left" }, 
-                 { text: '底部展示', dataField: 'IsShowButtom', width: 80 },
-                 { text: '导航展示', dataField: 'IsShowNavi', width: 80 },
+                 { text: '底部展示', dataField: 'IsShowButtom', width: 80 ,@HelperExtend.Parsebool()},
+                 { text: '导航展示', dataField: 'IsShowNavi', width: 80,@HelperExtend.Parsebool() },
                  { text: '顺序', dataField: 'OrderNo', width: 50 },
                  { text: '备注', dataField: 'Note', cellsalign: "left" }];
                 CreateTree("treeGrid", url, datafields, columns );

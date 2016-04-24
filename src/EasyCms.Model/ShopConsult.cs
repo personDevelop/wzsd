@@ -373,7 +373,12 @@ namespace EasyCms.Model
 
     public partial class ShopConsult
     {
-       [NotDbCol]
+        [NotDbCol]
+        public string ProductImg { get; set; }
+        [NotDbCol]
     public ShopConsult CurrentShopConsult { get; set; }
-}
+
+        [NotDbCol]
+        public string LastReply { get; set; }
+    }
 }

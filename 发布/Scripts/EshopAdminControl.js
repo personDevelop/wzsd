@@ -20,8 +20,7 @@
             datafields[i].align = "string";
         }
     }
-    var source =
-              {
+    var source = {
                   datatype: "json",
                   cache: false,
                   datafields: datafields,
@@ -99,10 +98,14 @@
     if (!opts.grid.pageable) {
         opts.grid.rendergridrows = null, opts.grid.virtualmode = false, opts.grid.pagerrenderer = null;
     }
+    if (opts.isMutilSelect) {
+        $(gridid).on("bindingcomplete", function (event) { $(gridid).jqxGrid('clearselection'); });
+            
+        }
     $(gridid).jqxGrid(
      $.extend({
-         width: "95%",
-         height: middleHeight,
+         width: "99%",
+         autoheight: true,
          source: dataAdapter,
          columnsresize: true,
          theme: "metro",
@@ -112,11 +115,15 @@
          rendergridrows: function (params) {
              return params.data;
          },
-         pagerrenderer: pagerrenderer,
+         pagermode: 'simple',
+        /* pagerrenderer: pagerrenderer,*/
          pageSize: 20,
          pageable: true,
          columns: columns, localization: "zh-Hans"
      }, opts.grid));
+     
+   
+   
 }
 
 function EditGrid(gridid, url, id, other) {
@@ -537,12 +544,14 @@ var pagerrenderer = function (gridid) {
 
 $(function () {
     $("#messageNotification").jqxNotification({
+        theme: "metro",
         width: 250, position: "top-right"
     });
 })
 function SucessMsg(msg, append) {
     $("#msgDiv").text(msg);
     $("#messageNotification").jqxNotification({
+        theme: "metro",
         template: "success", appendContainer: append
     });
     $("#messageNotification").jqxNotification("open");
@@ -550,6 +559,7 @@ function SucessMsg(msg, append) {
 function ErrorMsg(msg, append) {
     $("#msgDiv").text(msg);
     $("#messageNotification").jqxNotification({
+        theme: "metro",
         template: "error", appendContainer: append
     });
     $("#messageNotification").jqxNotification("open");
@@ -558,6 +568,7 @@ function ErrorMsg(msg, append) {
 function InfoMsg(msg, append) {
     $("#msgDiv").text(msg);
     $("#messageNotification").jqxNotification({
+        theme: "metro",
         template: "info", appendContainer: append
     });
     $("#messageNotification").jqxNotification("open");
@@ -565,16 +576,18 @@ function InfoMsg(msg, append) {
 function WarningMsg(msg, append) {
     $("#msgDiv").text(msg);
     $("#messageNotification").jqxNotification({
+        theme: "metro",
         template: "warning", appendContainer: append
     });
     $("#messageNotification").jqxNotification("open");
 }
 
-function Query(msg, onOk, title) {
+function Query(msg, onOk, title, onCancel) {
     if (!title) {
         title = "确认";
     }
     $('#eventWindow').jqxWindow({
+        theme: "metro",
         maxHeight: 150, maxWidth: 280, minHeight: 30, minWidth: 250, height: 145, width: 270,
         resizable: false, isModal: true, modalOpacity: 0.3, autoOpen: false,
         okButton: $('#ok'), cancelButton: $('#cancel'),
@@ -588,6 +601,10 @@ function Query(msg, onOk, title) {
     $('#eventWindowContent').html(msg);
     $('#eventWindowTitle').html(title);
     $('#ok').one('click', onOk);
+    if (onCancel) {
+        $('#cancel').one('click', onCancel);
+    }
+    
     $('#eventWindow').jqxWindow('open');
 };
 

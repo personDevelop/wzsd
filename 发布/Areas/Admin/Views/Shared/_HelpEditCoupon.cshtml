@@ -1,0 +1,35 @@
+﻿@model HelpEditCouponModel
+@{
+
+    HelpEditModel p = new HelpEditModel()
+    {
+        OtherField = Model.OtherField,
+        ReturnOtherField = Model.ReturnOtherField,
+        DisplayFieldValue = Model.DisplayFieldValue,
+        ReturnValueField = "ID",
+        ReturnDisplayField = "Name",
+        DisplayField = Model.DisplayField,
+        ValueFieldValue = Model.ValueFieldValue,
+        Url = Url.Action("GetListForSelecte", "CouponRule"),
+        DataFields = @"[{ name: 'ID' }, { name: 'Name' }, { name: 'CouponType' }, { name: 'SendCount' },
+
+      { name: 'JE' }, { name: 'Status' } ]",
+        Columns = @"[
+ 
+{ text: '名称', dataField: 'Name',  cellsalign: 'left' },
+    { text: '优惠券类型', dataField: 'CouponType', width: 80 },
+    { text: '已送出数量', dataField: 'SendCount', width: 80 },
+    { text: '面值', dataField: 'JE', width: 80 },
+    { text: '状态', dataField: 'Status' }]",
+        ValueField = Model.ValueField,
+        HelpTitle = "请选择优惠券",
+        Hint = Model.Hint,
+        Lable = Model.Lable,
+        PlaceHolder = "请选择优惠券",
+        IsMutiSelect = Model.IsMutiSelect,
+        IsViewModel = Model.IsViewModel, 
+        OtherSet = "{adapter: {  formatData: function (data) {  data.Name = $('#" + Model.ValueField + "SearchText').val();  } }}"
+
+    };
+}
+@Html.Partial("_HelpEdit", p) 

@@ -145,16 +145,18 @@ namespace EasyCms.Dal
             }
             return !Dal.Exists<ShopProductType>(where);
         }
-        public DataTable GetList(int pagenum, int pagesize, ref int recordCount, bool IsForSelected = false)
+        public DataTable GetList(string Name, int pagenum, int pagesize, ref int recordCount, bool IsForSelected = false)
         {
             int pageCount = 0;
+            WhereClip where = ShopProductType._.Code.Contains(Name) || ShopProductType._.Name.Contains(Name);
             if (IsForSelected)
             {
-                return Dal.From<ShopProductType>().Select(ShopProductType._.ID, ShopProductType._.Name).OrderBy(ShopProductType._.Code).ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
+                return Dal.From<ShopProductType>()
+                    .Where(where).Select(ShopProductType._.ID, ShopProductType._.Name).OrderBy(ShopProductType._.Code).ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
             }
             else
                 return Dal.From<ShopProductType>().OrderBy(ShopProductType._.Code)
-
+                      .Where(where)
                     .ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
         }
 

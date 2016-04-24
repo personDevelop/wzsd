@@ -129,7 +129,7 @@ string ctrlID = "DropDownList" + code;
             var dataAdapter = new $.jqx.dataAdapter(source);
             // Create a jqxDropDownList
             $("#@ctrlID").jqxDropDownList({
-                source: dataAdapter, displayMember: "@downInfo.DisplayMember", valueMember: "@downInfo.ValueMember", width: @width.ToString(), height: 25 });
+                source: dataAdapter, displayMember: "@downInfo.DisplayMember",placeHolder: "请选择",  theme: "metro",valueMember: "@downInfo.ValueMember", width: @width.ToString(), height: 25 });
             @if (defaultval!=null  ) {
 
                 string val = defaultval.ToString();
@@ -214,7 +214,7 @@ string ctrlID = "DropDownList" + code;
             var dataAdapter = new $.jqx.dataAdapter(source);
             // Create a jqxDropDownList
             $("#@ctrlID").jqxDropDownList({
-                source: dataAdapter, displayMember: "@downInfo.DisplayMember", valueMember: "@downInfo.ValueMember", width: @width.ToString(), height: 25 });
+                source: dataAdapter, displayMember: "@downInfo.DisplayMember",placeHolder: "请选择",  theme: "metro", valueMember: "@downInfo.ValueMember", width: @width.ToString(), height: 25 });
             @if (defaultval!=null  ) {
 
                 string val = defaultval.ToString();
@@ -303,7 +303,7 @@ string ctrlID = "DropDownList" + code;
             var dataAdapter = new $.jqx.dataAdapter(source);
             // Create a jqxDropDownList
             $("#@ctrlID").jqxDropDownList({
-                source: dataAdapter, displayMember: "Name", valueMember: "ID", width: @width.ToString(),  height: 25 });
+                source: dataAdapter, displayMember: "Name",placeHolder: "请选择",  theme: "metro", valueMember: "ID", width: @width.ToString(),  height: 25 });
             @if (defaultval!=null  ) {
 
                 string val = defaultval.ToString();
@@ -358,7 +358,7 @@ string ctrlID = "DropDownList" + code;
             var dataAdapter = new $.jqx.dataAdapter(source);
             // Create a jqxDropDownList
             $("#@code").jqxDropDownList({
-                source: dataAdapter, displayMember: "Name", valueMember: "ID", width: @width.ToString(),checkboxes:@isMutilCheck.ToString().ToLower(), height: 25 });
+                source: dataAdapter, displayMember: "Name",placeHolder: "请选择",  theme: "metro", valueMember: "ID", width: @width.ToString(),checkboxes:@isMutilCheck.ToString().ToLower(), height: 25 });
             @if (defaultval!=null  ) {
 
                 string val = defaultval.ToString();
@@ -1144,10 +1144,10 @@ if (isCard)
         </dl>
 }
 else
-{  <div style='float: left;' id='@dropid'>
-        </div>
+{ <div>  <div style='float: left;' id='@dropid'>
+        </div>  </div>
 }
-    
+
     <script type="text/javascript">
         $(document).ready(function () {
 
@@ -1164,7 +1164,7 @@ else
             };
             // create a new instance of the jqx.dataAdapter.
             var dataAdapter = new $.jqx.dataAdapter(source);
-            $("#"+"@dropid").jqxDropDownList({ source: dataAdapter, displayMember: "@displaymember", valueMember: "@valuemember", width: 'auto', height: '25px' });
+            $("#"+"@dropid").jqxDropDownList({ source: dataAdapter,placeHolder: "请选择",  theme: "metro", displayMember: "@displaymember", valueMember: "@valuemember", width: 'auto', height: '25px' });
 
             $("#"+"@dropid").on('select', function (event) {
                 onSelectChange(event);
@@ -1187,7 +1187,7 @@ else
                     $(event.currentTarget).parent().append("<div style='float: left;' id='" + guid + "'> </div>");
                     source. url= url + "/" + categroy;
                     var dataAdapter1 = new $.jqx.dataAdapter(source);
-                    $("#" + guid).jqxDropDownList({ source: dataAdapter1, displayMember: "Name", valueMember: "ID",  width: 'auto',height: '25px' });
+                    $("#" + guid).jqxDropDownList({ source: dataAdapter1,placeHolder: "请选择",  theme: "metro", displayMember: "Name", valueMember: "ID",  width: 'auto',height: '25px' });
 
                     $("#"+guid).on('select', function (event) {
                         onSelectChange(event);
@@ -1245,7 +1245,7 @@ string defualtPath = new EasyCms.Business.AdministrativeRegionsBll().GetPathByDe
 
 
                     var dataAdapter = new $.jqx.dataAdapter(source);
-                    $("#" + "@dropid").jqxDropDownList({ source: dataAdapter, displayMember: "@displaymember", valueMember: "@valuemember", width: 'auto', height: '25px' });
+                    $("#" + "@dropid").jqxDropDownList({ source: dataAdapter, placeHolder: "请选择",  theme: "metro",displayMember: "@displaymember", valueMember: "@valuemember", width: 'auto', height: '25px' });
 
                     $("#" + "@dropid").on('select', function (event) {
                         onSelectChange(event);
@@ -1303,7 +1303,7 @@ string defualtPath = new EasyCms.Business.AdministrativeRegionsBll().GetPathByDe
                     $(event.currentTarget).parent().append("<div style='float: left;' id='" + guid + "'> </div>");
                     source.url = url + "/" + categroy;
                     var dataAdapter1 = new $.jqx.dataAdapter(source);
-                    $("#" + guid).jqxDropDownList({ source: dataAdapter1, displayMember: "Name", valueMember: "ID", width: 'auto', height: '25px' });
+                    $("#" + guid).jqxDropDownList({ source: dataAdapter1,placeHolder: "请选择",  theme: "metro", displayMember: "Name", valueMember: "ID", width: 'auto', height: '25px' });
                     $("#" + guid).on('select', function (event) {
                         onSelectChange(event);
                     });

@@ -1,0 +1,4 @@
+﻿@model string
+<span>
+    @HelperExtend.DropDownListClass(Model+ "Category", "商品分类", Url.RouteUrl("ApiWithWeb", new { controller = "APP", action = "GetChildCategory" }))
+</span>

@@ -2,7 +2,8 @@
 @{
     ViewBag.Title = "商品类型";
 }
-
+<input name="Name" width="200" class="input normal " id="Name" type="text" value="">
+<input type="button" class="searchBtn" value="搜索" id='BtnqryCateTj' />
 <!--工具栏-->
 <div id="floatHead" class="toolbar-wrap">
     <div class="toolbar">
@@ -11,7 +12,7 @@
             <div class="l-list">
                 <ul class="icon-list">
                     <li><a class="add" href="@Url.Action("Edit")"><i></i><span>新增</span></a></li>
-                    <li><a class="add" href="javascript:;" onclick="EditGrid('jqxgrid', '@Url.Action("Edit")');"><i></i><span>编辑</span></a></li>
+                    <li><a class="edit" href="javascript:;" onclick="EditGrid('jqxgrid', '@Url.Action("Edit")');"><i></i><span>修改</span></a></li>
                     <li><a class="del" href="javascript:;" onclick="DelGrid('jqxgrid', '@Url.Action("Delete")');"><i></i><span>删除</span></a></li>
                 </ul>
             </div>
@@ -29,6 +30,10 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
+            $(".searchBtn").jqxButton({ width: '100', template: "success" });
+            $('#BtnqryCateTj').on('click', function () {
+                $('#jqxgrid').jqxGrid('updatebounddata');
+            });
               var url = "@Url.Action("GetList")";
             var datafields = [{ name: 'ID' }, { name: 'Code' }, { name: 'Name' }, { name: 'Note' }];
             var columns = [
@@ -37,8 +42,16 @@
   { text: '商品类型名称', dataField: 'Name', width: 200, cellsalign: "left" },
 
   { text: '备注', dataField: 'Note', width: 200, cellsalign: "left" }];
-            CreateGrid("jqxgrid", url, datafields, columns);
- 
+        
+            CreateGrid("jqxgrid", url, datafields, columns, {
+                isMutilSelect: true,
+                grid: { pagesize: 12 }, adapter: {
+                    formatData: function (data) {
+                       
+                        data.Name = $("#Name").val();
+                    }
+                }
+            });
         });
     </script>
    

@@ -11,6 +11,7 @@ using Sharp.Common;
 namespace EasyCms.Business
 {
     public class NewsCommentBll
+      
     {
         NewsCommentDal Dal = new NewsCommentDal();
         public string Delete(string id)
@@ -24,28 +25,36 @@ namespace EasyCms.Business
             return Dal.Save(item);
         }
 
-        public DataTable GetList(bool IsForSelected = false)
-        {
-            return Dal.GetList(IsForSelected);
-        }
-        public DataTable GetList(int pagenum, int pagesize, ref int recordCount, bool IsForSelected = false)
-        {
-            return Dal.GetList(pagenum, pagesize, ref recordCount, IsForSelected);
-        }
-        
 
-        public DataTable GetListByParentId(string parentId)
+        public DataTable GetListByNewsID(string Newsid, int order, int pagenum, int pagesize, ref int recordCount, ref int goodCount, ref int middleCount, ref int badCount)
         {
-            return Dal.GetListByParentId(parentId);
-
+            return Dal.GetListByNewsID(Newsid, order, pagenum, pagesize, ref recordCount, ref goodCount, ref middleCount, ref badCount);
         }
+
+
+
+        public DataTable GetList(int pagenum, int pagesize, WhereClip where, ref int recordCount)
+        {
+            return Dal.GetList(pagenum, pagesize, where, ref recordCount);
+        }
+
         public NewsComment GetEntity(string id)
         {
             return Dal.GetEntity(id);
         }
 
+        public string Approve(string shopCommentID, bool isPass)
+        {
+            return Dal.Approve(shopCommentID, isPass);
+        }
+
+        public int Reply(NewsComment p)
+        {
+            return Dal.Reply(p);
+        }
+
+
+
  
-
-
     }
 }

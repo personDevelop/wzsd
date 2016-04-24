@@ -2,13 +2,7 @@
 @{
     ViewBag.Title = "订单管理";
 }
-<style>
-    html, body {
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-    }
-</style>
+ 
 
 
 <dl>
@@ -371,7 +365,7 @@
   { text: '会员电话', dataField: 'MemberCallPhone', width: 100 }];
 
             CreateGrid("jqxgrid", url, datafields, columns, {
-                isMutilSelect: true, adapter: {
+                isMutilSelect: true, grid: { pagesize: 10 }, adapter: {
                     formatData: function (data) {
 
 

@@ -1,0 +1,39 @@
+﻿@model HelpEditShopProductModel
+    @{
+
+        HelpEditModel p = new HelpEditModel()
+        {
+             OtherField=Model.OtherField,
+              ReturnOtherField= Model.ReturnOtherField,
+            DisplayFieldValue = Model.DisplayFieldValue,
+            ReturnValueField = "ID",
+            ReturnDisplayField = "Name",
+            DisplayField = Model.DisplayField,
+            ValueFieldValue = Model.ValueFieldValue,
+            Url = Url.Action("GetList", "ShopProductInfo"),
+            DataFields = @"[{ name: 'ID' }, { name: 'Code' }, { name: 'Name' }, { name: 'TypeName' },
+
+      { name: 'BrandName' }, { name: 'SaleDate' }, { name: 'AddedDate' }, { name: 'TypeName' },{ name: 'SalePrice' }
+]",
+            Columns = @"[
+{ text: '编号', dataField: 'Code', width: 100, cellsalign: 'left'
+},
+{ text: '名称', dataField: 'Name', width: '300', cellsalign: 'left'
+},
+    { text: '商品类型', dataField: 'TypeName', width: 80 },
+    { text: '品牌', dataField: 'BrandName', width: 80 },
+    { text: '上架日期', dataField: 'SaleDate', width: 80 },
+    { text: '添加日期', dataField: 'AddedDate', width: 80 }]",
+            ValueField = Model.ValueField,
+            HelpTitle = "请选择商品",
+            Hint = Model.Hint,
+            Lable = Model.Lable,
+            PlaceHolder = "请选择商品",
+            IsMutiSelect = Model.IsMutiSelect,
+            IsViewModel = Model.IsViewModel,
+            OtherConditionView = "_SelectShopClass",
+            OtherSet = "{adapter: {  formatData: function (data) { data.CategoryID = $('#" + Model.ValueField + @"Category').val();   data.Name = $('#"+ Model.ValueField+"SearchText').val();  } }}" 
+
+        };
+    }
+@Html.Partial("_HelpEdit", p) 

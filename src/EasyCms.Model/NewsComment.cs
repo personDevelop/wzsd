@@ -28,23 +28,23 @@ namespace EasyCms.Model
 
         private string _ContentId;
 
+        private string _CreatedUserID;
+
         private string _Description;
 
         private DateTime _CreatedDate;
 
-        private string _CreatedUserID;
-
-        private int _ReplyCount;
-
         private string _ParentID;
-
-        private string _TypeID;
 
         private DjStatus _State;
 
-        private bool _IsRead;
+        private string _ClassCode;
 
-        private string _CreatedNickName;
+        private bool _IsAnony;
+
+        private string _NewsName;
+
+        private string _UserName;
 
         #endregion
 
@@ -90,10 +90,29 @@ namespace EasyCms.Model
         }
 
         /// <summary>
+        ///  会员ID,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "CreatedUserID", DbTypeString = "varchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string CreatedUserID
+        {
+            get
+            {
+                return this._CreatedUserID;
+            }
+            set
+            {
+                this.OnPropertyChanged("CreatedUserID", this._CreatedUserID, value);
+                this._CreatedUserID = value;
+            }
+        }
+
+        /// <summary>
         ///  评论内容,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "Description", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 4000, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "Description", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 500, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string Description
         {
@@ -128,44 +147,6 @@ namespace EasyCms.Model
         }
 
         /// <summary>
-        ///  会员ID,
-        /// </summary>
-
-        [DbProperty(MapingColumnName = "CreatedUserID", DbTypeString = "varchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
-
-        public string CreatedUserID
-        {
-            get
-            {
-                return this._CreatedUserID;
-            }
-            set
-            {
-                this.OnPropertyChanged("CreatedUserID", this._CreatedUserID, value);
-                this._CreatedUserID = value;
-            }
-        }
-
-        /// <summary>
-        ///  回复次数,
-        /// </summary>
-
-        [DbProperty(MapingColumnName = "ReplyCount", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
-
-        public int ReplyCount
-        {
-            get
-            {
-                return this._ReplyCount;
-            }
-            set
-            {
-                this.OnPropertyChanged("ReplyCount", this._ReplyCount, value);
-                this._ReplyCount = value;
-            }
-        }
-
-        /// <summary>
         ///  父评论ID,
         /// </summary>
 
@@ -181,25 +162,6 @@ namespace EasyCms.Model
             {
                 this.OnPropertyChanged("ParentID", this._ParentID, value);
                 this._ParentID = value;
-            }
-        }
-
-        /// <summary>
-        ///  类型ID,
-        /// </summary>
-
-        [DbProperty(MapingColumnName = "TypeID", DbTypeString = "varchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
-
-        public string TypeID
-        {
-            get
-            {
-                return this._TypeID;
-            }
-            set
-            {
-                this.OnPropertyChanged("TypeID", this._TypeID, value);
-                this._TypeID = value;
             }
         }
 
@@ -223,40 +185,80 @@ namespace EasyCms.Model
         }
 
         /// <summary>
-        ///  已读,
+        ///  分级码,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "IsRead", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ClassCode", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 400, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public bool IsRead
+        public string ClassCode
         {
             get
             {
-                return this._IsRead;
+                return this._ClassCode;
             }
             set
             {
-                this.OnPropertyChanged("IsRead", this._IsRead, value);
-                this._IsRead = value;
+                this.OnPropertyChanged("ClassCode", this._ClassCode, value);
+                this._ClassCode = value;
             }
         }
 
         /// <summary>
-        ///  评论人昵称,
+        ///  是否匿名,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "CreatedNickName", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 400, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "IsAnony", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public string CreatedNickName
+        public bool IsAnony
         {
             get
             {
-                return this._CreatedNickName;
+                return this._IsAnony;
             }
             set
             {
-                this.OnPropertyChanged("CreatedNickName", this._CreatedNickName, value);
-                this._CreatedNickName = value;
+                this.OnPropertyChanged("IsAnony", this._IsAnony, value);
+                this._IsAnony = value;
+            }
+        }
+
+        /// <summary>
+        ///  新闻名称,
+        /// </summary>
+        [NotDbCol]
+
+        [DbProperty(MapingColumnName = "NewsName", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string NewsName
+        {
+            get
+            {
+                return this._NewsName;
+            }
+            set
+            {
+                this.OnPropertyChanged("NewsName", this._NewsName, value);
+                this._NewsName = value;
+            }
+        }
+
+        /// <summary>
+        ///  会员名称,
+        /// </summary>
+        [NotDbCol]
+
+        [DbProperty(MapingColumnName = "UserName", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string UserName
+        {
+            get
+            {
+                return this._UserName;
+            }
+            set
+            {
+                this.OnPropertyChanged("UserName", this._UserName, value);
+                this._UserName = value;
             }
         }
 
@@ -272,23 +274,23 @@ namespace EasyCms.Model
 
                 ContentId = new PropertyItem("ContentId", tableName);
 
+                CreatedUserID = new PropertyItem("CreatedUserID", tableName);
+
                 Description = new PropertyItem("Description", tableName);
 
                 CreatedDate = new PropertyItem("CreatedDate", tableName);
 
-                CreatedUserID = new PropertyItem("CreatedUserID", tableName);
-
-                ReplyCount = new PropertyItem("ReplyCount", tableName);
-
                 ParentID = new PropertyItem("ParentID", tableName);
-
-                TypeID = new PropertyItem("TypeID", tableName);
 
                 State = new PropertyItem("State", tableName);
 
-                IsRead = new PropertyItem("IsRead", tableName);
+                ClassCode = new PropertyItem("ClassCode", tableName);
 
-                CreatedNickName = new PropertyItem("CreatedNickName", tableName);
+                IsAnony = new PropertyItem("IsAnony", tableName);
+
+                NewsName = new PropertyItem("NewsName", tableName);
+
+                UserName = new PropertyItem("UserName", tableName);
 
 
             }
@@ -301,6 +303,10 @@ namespace EasyCms.Model
             /// </summary> 
             public PropertyItem ContentId = null;
             /// <summary>
+            /// 会员ID,
+            /// </summary> 
+            public PropertyItem CreatedUserID = null;
+            /// <summary>
             /// 评论内容,
             /// </summary> 
             public PropertyItem Description = null;
@@ -309,34 +315,39 @@ namespace EasyCms.Model
             /// </summary> 
             public PropertyItem CreatedDate = null;
             /// <summary>
-            /// 会员ID,
-            /// </summary> 
-            public PropertyItem CreatedUserID = null;
-            /// <summary>
-            /// 回复次数,
-            /// </summary> 
-            public PropertyItem ReplyCount = null;
-            /// <summary>
             /// 父评论ID,
             /// </summary> 
             public PropertyItem ParentID = null;
-            /// <summary>
-            /// 类型ID,
-            /// </summary> 
-            public PropertyItem TypeID = null;
             /// <summary>
             /// 状态,0未审核，1审核，2 审核不通过
             /// </summary> 
             public PropertyItem State = null;
             /// <summary>
-            /// 已读,
+            /// 分级码,
             /// </summary> 
-            public PropertyItem IsRead = null;
+            public PropertyItem ClassCode = null;
             /// <summary>
-            /// 评论人昵称,
+            /// 是否匿名,
             /// </summary> 
-            public PropertyItem CreatedNickName = null;
+            public PropertyItem IsAnony = null;
+            /// <summary>
+            /// 新闻名称,
+            /// </summary> 
+            public PropertyItem NewsName = null;
+            /// <summary>
+            /// 会员名称,
+            /// </summary> 
+            public PropertyItem UserName = null;
         }
         #endregion
+    }
+    public partial class NewsComment
+    {
+        
+        [NotDbCol]
+        public NewsComment CurrentNewsComment { get; set; }
+
+        [NotDbCol]
+        public string LastReply { get; set; }
     }
 }
