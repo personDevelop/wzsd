@@ -27,9 +27,34 @@
 
    
     @Html.ValidationSummary()
+    
+    @Html.Partial("_HelpEdit", new HelpEditModel()
+{
+    IsTree = true,
+    DisplayField = "ParentName",
+    DisplayFieldValue = Model.ParentName,
+    Hint = "空为一级行政区域",
+    Lable = "上级区域",
+    ValueField = "ParentID",
+    ValueFieldValue = Model.ParentID.ToString(),
+    Columns = @"[
+                   { text: '编号', dataField: 'Code',   width: 200, cellsalign: 'left'},
+                    { text: '名称', dataField: 'Name',  width:  300  }  ]",
+    DataFields = @"[
 
+               { name: 'ID', type: 'string' },
+               { name: 'Code', type: 'string' },
+{ name: 'Name', type: 'string' },
+               { name: 'ParentID', type: 'string' }
+                            ]",
+    HelpTitle = "选择上级区域",
+    ReturnDisplayField = "Name",
+    ReturnValueField = "ID",
+    SearchField = "Name",
+    Url = Url.Action("GetListForSelecte"),
+    IsViewModel=   Model.RecordStatus == Sharp.Common.StatusType.update
 
-    @HelperExtend.HelpEdit("ParentID", "ParentName", "上级区域", defaultText: Model.ParentName, hint: "空为一级行政区域", dialogTitle: "选择上级行政区域", InnitFunc: "InnitFunc", onOk: "onOk", IsTree: true, DataControlID: "treeGrid", IsHidButton: Model.RecordStatus == Sharp.Common.StatusType.update)
+}) 
 
     @HelperExtend.TextBox("Code", "编号", defaultval: Model.Code, hint: "")
 
@@ -112,99 +137,5 @@
         })
     </script>
 
-    <script type="text/javascript">
-
-        function InnitFunc() {
-            var source =
-            {
-                dataType: "json",
-                dataFields: [
-
-       { name: 'ID', type: 'string' },
-
-       { name: 'ParentID', type: 'string' },
-
-       { name: 'Code', type: 'string' },
-
-       { name: 'Name', type: 'string' },
-
-
-       { name: 'Path', type: 'string' }
-
-                ],
-                timeout: 10000,
-                hierarchy:
-                {
-                    keyDataField: { name: 'ID' },
-                    parentDataField: { name: 'ParentID' }
-                },
-                id: 'ID',
-                root: 'Rows',
-                url: " @Url.Action("GetListForSelecte", "Regions", new { area = "Admin" })"
-            };
-            var dataAdapter = new $.jqx.dataAdapter(source);
-           
-            var totalHeight = $(window).outerHeight();
-            if (totalHeight == 0) {
-                totalHeight = $(window).clientHeight();
-            }
-            var topHight = 50;
-
-            var middleHeight = totalHeight - topHight;
-
-            $("#treeGrid").jqxTreeGrid(
-                       {
-                           width: "95%",
-                           height: "95%",
-                           virtualModeCreateRecords: function (expandedRecord, done) {
-                               var dataAdapter = new $.jqx.dataAdapter(source,
-                                   {
-                                       formatData: function (data) {
-                                           if (expandedRecord == null) {
-                                               data.parentID = 0;
-                                           }
-                                           else {
-                                               data.parentID = expandedRecord.ID;
-                                           }
-                                           return data;
-                                       },
-                                       loadComplete: function () {
-                                           done(dataAdapter.records);
-                                       },
-                                       loadError: function (xhr, status, error) {
-                                           done(false);
-                                           throw new Error("http://services.odata.org: " + error.toString());
-                                       }
-                                   }
-                               );
-                               dataAdapter.dataBind();
-                           },
-                           virtualModeRecordCreating: function (record) {
-                               // record is creating.
-                           },
-                           columns: [
-  { text: '编号', dataField: 'Code', align: "center", type: 'string', width: 200 },
-
-  { text: '名称', dataField: 'Name', align: "center", cellsalign: "center", type: 'string', width: 100 },
-
-  { text: '简称', dataField: 'ShotName', align: "center", cellsalign: "center", type: 'string' },
-
-
-
-
-                           ]
-                       });
-        }
-        function onOk(data) {
-            if (data.length == 1) {
-
-
-                $("#ParentName").val(data[0].Name);
-                $("#ParentID").val(data[0].ID);
-
-
-            } else { ErrorMsg("请选择一条数据"); }
-        }
-        
-    </script>
+  
 }

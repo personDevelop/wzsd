@@ -57,5 +57,18 @@ namespace ImportData
             }
 
         }
+
+        private void simpleButton6_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                new frmAttr().Show();
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.GetExceptionMsg());
+            }
+        }
     }
 }

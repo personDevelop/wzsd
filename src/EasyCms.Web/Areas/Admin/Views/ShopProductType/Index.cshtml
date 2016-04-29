@@ -1,4 +1,5 @@
 ﻿@using MVCExtention;
+@using EasyCms.Model
 @{
     ViewBag.Title = "商品类型";
 }
@@ -22,37 +23,92 @@
 <!--/工具栏-->
 <!--列表-->
 <div class="table-container">
-    <div id="jqxgrid"></div>
+
+    <div id="mainSplitter">
+        <div class="splitter-panel">
+            <input type="hidden" id="SelecteProductType" />
+            <div id="jqxgrid"></div>
+        </div>
+        <div class="splitter-panel">
+            <div id="jqxge"></div>
+        </div>
+
+    </div>
+
 </div>
 <!--/列表-->
 @section  scripts{
-     
+
 
     <script type="text/javascript">
+        var isCreatGrid=false;
         $(document).ready(function () {
+            $('#mainSplitter').jqxSplitter({ width: "100%", height: 480, showSplitBar: false ,panels: [{ size: 320 }] });
             $(".searchBtn").jqxButton({ width: '100', template: "success" });
             $('#BtnqryCateTj').on('click', function () {
                 $('#jqxgrid').jqxGrid('updatebounddata');
             });
-              var url = "@Url.Action("GetList")";
+            var url = "@Url.Action("GetList")";
             var datafields = [{ name: 'ID' }, { name: 'Code' }, { name: 'Name' }, { name: 'Note' }];
             var columns = [
-{ text: '商品类型编号', dataField: 'Code', width: 200, cellsalign: "left" },
+{ text: '商品类型编号', dataField: 'Code', width: 100, cellsalign: "left" },
 
-  { text: '商品类型名称', dataField: 'Name', width: 200, cellsalign: "left" },
+  { text: '商品类型名称', dataField: 'Name', width: 100, cellsalign: "left" },
 
-  { text: '备注', dataField: 'Note', width: 200, cellsalign: "left" }];
-        
+  { text: '备注', dataField: 'Note', width: 100, cellsalign: "left" }];
+
             CreateGrid("jqxgrid", url, datafields, columns, {
                 isMutilSelect: true,
                 grid: { pagesize: 12 }, adapter: {
                     formatData: function (data) {
-                       
+
                         data.Name = $("#Name").val();
                     }
                 }
             });
+
+
+            $('#jqxgrid').on('rowclick', function (event) {
+                var args = event.args;
+                // row's bound index.
+                var boundIndex = args.rowindex;
+                var data = $('#jqxgrid').jqxGrid('getrowdata', boundIndex);
+                $("#SelecteProductType").val(data.ID);
+
+                if (isCreatGrid) {
+                    $('#jqxge').jqxGrid('updatebounddata');
+                } else {
+                    isCreatGrid = true;
+                    var ggurl = "@Url.Action("GetAllAttrList")";
+
+                    var dataggfields = [{ name: 'ID' }, { name: 'ValInfo' },
+      { name: 'Name' }, { name: 'FullName' },
+      { name: 'UnitText' },
+      { name: 'ShowType' },
+      { name: 'DisplayOrder' },
+      { name: 'CategoryName' },
+      { name: 'UseAttrImg' },
+      { name: 'UseDefineImg' },
+      { name: 'UsageMode' },
+      { name: 'IsCanSearch' }];
+                    var ggcolumns = [
+         { text: '名称', dataField: 'Name', cellsalign: "left", width: 80 },
+      { text: '使用模式', dataField: 'UsageMode', width: 80,@HelperExtend.ParseEnum(typeof(UsageMode)) },
+
+                { text: '值', dataField: 'ValInfo' },
+         { text: '顺序', dataField: 'DisplayOrder', width: 50 }];
+                    CreateGrid("jqxge", ggurl, dataggfields, ggcolumns, {
+                        isMutilSelect: false, data: {
+                            data: {
+                                ptypeid: $("#SelecteProductType").val(),
+                                isGg: true
+                            }
+                        }, grid: { autoheight: true }
+                    });
+
+                }
+            });
         });
     </script>
-   
+
 }

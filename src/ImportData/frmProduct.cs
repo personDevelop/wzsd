@@ -69,7 +69,7 @@ namespace ImportData
             if (!backgroundWorker1.IsBusy)
             {
                 backgroundWorker1.RunWorkerAsync();
-            } 
+            }
         }
 
         private string DownLoadImg(string details)
@@ -86,7 +86,7 @@ namespace ImportData
                     index = details.IndexOf(key); endIndex = details.IndexOf(endKey, index);
                     string code = details.Substring(index + key.Length, endIndex - index - key.Length);
                     string path = string.Empty;
-                    DownLoadImg(code, 0, null,ref path);
+                    DownLoadImg(code, 0, null, ref path);
                     if (!string.IsNullOrWhiteSpace(path))
                     {
                         result = result.Replace(code, path);
@@ -107,7 +107,7 @@ namespace ImportData
 
             return result;
         }
-        private AttachFile DownLoadImg(string imgUrl, int order, string refID,ref string newPath)
+        private AttachFile DownLoadImg(string imgUrl, int order, string refID, ref string newPath)
         {
             AttachFile af = null;
             newPath = string.Empty;
@@ -121,11 +121,11 @@ namespace ImportData
                 int index = imgUrl.LastIndexOf(".");
                 imgExtend = imgUrl.Substring(index + 1);
                 index = imgUrl.LastIndexOf("/");
-                  ImgName = imgUrl.Substring(index + 1);
+                ImgName = imgUrl.Substring(index + 1);
             }
             else
             {
-                  af = new AttachFile() { ID = Guid.NewGuid().ToString(), RefID = refID, OrderNo = order };
+                af = new AttachFile() { ID = Guid.NewGuid().ToString(), RefID = refID, OrderNo = order };
 
                 if (!imgUrl.StartsWith("/"))
                 {
@@ -137,7 +137,7 @@ namespace ImportData
                 index = imgUrl.LastIndexOf("/");
                 ImgName = imgUrl.Substring(index + 1);
                 temPath = imgUrl.Substring(0, index);
-               
+
                 //解析存储路径 /upload/2015/05/25/20150525022430736.jpg 和 /upload/image/20140924/20140924173349_82108.jpg
                 if (imgUrl.StartsWith("/upload/image/"))
                 {
@@ -212,14 +212,14 @@ namespace ImportData
                 catch (Exception ex)
                 {
 
-                    backgroundWorker1.ReportProgress(1, new data(1, imgUrl + "下载失败" + ex.GetExceptionMsg())  );
-                    backgroundWorker1.ReportProgress(1, new data(2,   imgUrl)  );
+                    backgroundWorker1.ReportProgress(1, new data(1, imgUrl + "下载失败" + ex.GetExceptionMsg()));
+                    backgroundWorker1.ReportProgress(1, new data(2, imgUrl));
                 }
 
             }
             else
             {
-                backgroundWorker1.ReportProgress(1, new data(1, "图片已存在，跳过下载") );
+                backgroundWorker1.ReportProgress(1, new data(1, "图片已存在，跳过下载"));
 
             }
             return af;
@@ -333,7 +333,11 @@ namespace ImportData
                     Dictionary<string, string> ProductTypeCodeAndID = new Dictionary<string, string>();
                     foreach (var item in listProductType)
                     {
-                        ProductTypeCodeAndID.Add(item.Code, item.ID);
+                        if (!ProductTypeCodeAndID.ContainsKey(item.Code))
+                        {
+                            ProductTypeCodeAndID.Add(item.Code, item.ID);
+                        }
+                      
                     }
                     List<h7_category_extend> dtCatory = oldDb.From<h7_category_extend>().List<h7_category_extend>();
 
@@ -357,7 +361,7 @@ namespace ImportData
                     string refString = string.Empty;
                     foreach (var item in listShopProductInfo)
                     {
-                        backgroundWorker1.ReportProgress(1, new data(1, "开始下载图像"+item.RegionId));
+                        backgroundWorker1.ReportProgress(1, new data(1, "开始下载图像" + item.RegionId));
                         List<goods_photo> listPhoto = goodPhotoList.Where(p => p.goods_id.ToString() == item.RegionId).ToList<goods_photo>();
                         for (int i = 0; i < listPhoto.Count; i++)
                         {
@@ -390,23 +394,23 @@ namespace ImportData
                 }
                 catch (Exception ex)
                 {
-                    backgroundWorker1.ReportProgress(1, new data(100, "处理失败")+ ex.GetExceptionMsg());
-                   
+                    backgroundWorker1.ReportProgress(1, new data(100, "处理失败") + ex.GetExceptionMsg());
+
                 }
             }
             else
-            { backgroundWorker1.ReportProgress(1, new data(100, "没有需要同步的数据"));  }
+            { backgroundWorker1.ReportProgress(1, new data(100, "没有需要同步的数据")); }
         }
 
         private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             data d = e.UserState as data;
-            if (d!=null)
+            if (d != null)
             {
                 switch (d.id)
                 {
                     case 1:
-                        memoEdit1.Text =d.msg+Environment.NewLine+ memoEdit1.Text;
+                        memoEdit1.Text = d.msg + Environment.NewLine + memoEdit1.Text;
                         break;
                     default:
                         memoEdit2.Text = d.msg + Environment.NewLine + memoEdit2.Text;
@@ -419,8 +423,9 @@ namespace ImportData
         {
             MessageBox.Show("同步完成");
         }
-        class data {
-            
+        class data
+        {
+
 
             public data(int v1, string v2)
             {
@@ -433,5 +438,42 @@ namespace ImportData
 
         }
 
+        private void 更新分类ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+            List<ShopProductInfo> list = newDb.From<ShopProductInfo>().List<ShopProductInfo>();
+
+            List<ShopProductCategory> DeleteShopCategoryList = new List<ShopProductCategory>();
+
+            List<ShopProductCategory> ShopCategoryList = newDb.From<ShopProductCategory>().Join<ShopCategory>(ShopCategory._.ID == ShopProductCategory._.CategoryID)
+                   .Select(ShopProductCategory._.ID.All, ShopCategory._.IsMx).List<ShopProductCategory>();
+            foreach (ShopProductInfo item in list)
+            {
+                if (ShopCategoryList.Exists(p => p.ProductID == item.ID))
+                {
+                    List<ShopProductCategory> temList = ShopCategoryList.Where(p => p.ProductID == item.ID).ToList();
+                    int count = 0;
+                    foreach (var dd in temList)
+                    {
+                        if (!dd.IsMx)
+                        {
+                            count++;
+                            dd.RecordStatus = StatusType.delete;
+                            DeleteShopCategoryList.Add(dd);
+
+                        }
+                    }
+                    if (count != 0 && temList.Count == count)
+                    {
+                        DeleteShopCategoryList.RemoveAt(DeleteShopCategoryList.Count - 1);
+
+                    }
+                }
+            }
+            newDb.Submit(DeleteShopCategoryList);
+            MessageBox.Show("同步完成");
+        }
+
+       
     }
 }

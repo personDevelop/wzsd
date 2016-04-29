@@ -2,7 +2,8 @@
 @{
     ViewBag.Title = "品牌信息";
 }
-
+<input name="Name" width="200" class="input normal " id="Name" type="text" value="">
+<input type="button" class="searchBtn" value="搜索" id='BtnqryCateTj' /> 
 <!--工具栏-->
 <div id="floatHead" class="toolbar-wrap">
     <div class="toolbar">
@@ -29,6 +30,10 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
+            $(".searchBtn").jqxButton({ width: '100', template: "success" });
+            $('#BtnqryCateTj').on('click', function () {
+                $('#jqxgrid').jqxGrid('updatebounddata');
+            });
            var url = "@Url.Action("GetList")";
             var datafields = [{ name: 'ID' }, { name: 'Code' }, { name: 'Name' },
 		{ name: 'Logo' }, { name: 'OrderNo' }];

@@ -15,7 +15,7 @@
         <div class="content-tab-ul-wrap">
             <ul>
                 <li><a class="selected" href="javascript:;">基本信息</a></li>
-                <li><a href="javascript:;">适用商品</a></li>
+                <li><a href="javascript:;">扩展信息</a></li>
             </ul>
         </div>
     </div>
@@ -38,7 +38,7 @@
     
     @HelperExtend.Number("NeedPoint", "需要积分", defaultval: Model.NeedPoint, hint: "如果使用积分兑换的方式获取，需要多少积分", max: 1000000 )
      
-    @HelperExtend.RadioGroup("QxLx", "期限类型", "0,1", "期限范围,固定天数", defaultval: Model.QxLx, hint: "",onChange= "isShow")
+    @HelperExtend.RadioGroup("QxLx", "期限类型", "0,1", "期限范围,固定天数", defaultval: Model.QxLx, hint: "",onChange:"isShow")
 
 
     @HelperExtend.RadioGroup("IsCongZengSongKaiShi", "从获取开始计算时间", "false,true", "否,是", defaultval: Model.IsCongZengSongKaiShi)
@@ -56,6 +56,61 @@
     @HelperExtend.TextBox("MaxPrice", "最大消费金额", defaultval: Model.MaxPrice, hint: "")
     @HelperExtend.RadioGroup("IsEnable", "是否启用", "false,true", "否,是", defaultval: Model.IsEnable)
 
+    @Html.Partial("_HelpEditProductCategory", new HelpEditShopProductCategory()
+ {
+     DisplayField = "ShopCategoryName",
+     DisplayFieldValue = Model.ShopCategoryName,
+     Hint = "不选择商品分类，就适合全部商品",
+     IsMutiSelect = false,
+     Lable = "商品分类",
+     ValueField = "CategoryId",
+     ValueFieldValue = Model.CategoryId
+ })
+    @Html.Partial("_HelpEditProduct", new HelpEditShopProductModel()
+  {
+      DisplayField = "ShopName",
+      DisplayFieldValue = Model.ShopName,
+      Hint = "不选择商品，就适合当前分类下所有商品",
+      Lable = "商品",
+      ValueField = "ProductId",
+      ValueFieldValue = Model.ProductId
+  })
+
+    @Html.Partial("_HelpEdit", new HelpEditModel()
+{
+    DisplayField = "ShopSkuCode",
+    DisplayFieldValue = Model.ShopSkuCode,
+    Hint = "不选择SKU,就适合当前商品下所有规格类型商品",
+    Lable = "商品SKU",
+    ValueField = "ProductSku",
+    ValueFieldValue = Model.ProductSku,
+    Columns = @"[
+                   { text: 'SKU编号', dataField: 'SKU',   width: 100 },
+                    { text: '规格', dataField: 'AttriVal',  width:  300  },
+                   { text: '市场价', dataField: 'MarketPrice',  width: 80 },
+                   { text: '销售价', dataField: 'SalePrice',  width: 80 }  ]",
+    DataFields = @"[
+
+               { name: 'SkuID', type: 'string' },
+
+
+
+               { name: 'SKU', type: 'string' },
+
+               { name: 'AttriVal', type: 'string' },
+      { name: 'MarketPrice', type: 'string' },
+      { name: 'SalePrice', type: 'string' }
+                            ]",
+    HelpTitle = "选择商品SKU",
+    ReturnDisplayField = "SKU",
+    ReturnValueField = "SkuID",
+    SearchField = "SKUName",
+    Url = Url.RouteUrl("ApiWithWeb", new { controller = "ShopProductApi", action = "GetSkuByProductID" }),
+    OtherSerchFieldFunction = "GetProductCondition", 
+    OtherSet= "{ data:{root: 'data'}}",
+
+})
+
 
 </div>
 
@@ -67,15 +122,9 @@
     @HelperExtend.TextBox("CpLength", "优惠券卡号长度", defaultval: Model.CpLength, hint: "")
 
     @HelperExtend.RadioGroup("IsPwd", "需要密码", "false,true", "否,是", defaultval: Model.IsPwd)
-
-    @HelperExtend.HelpEdit("CategoryId", "ShopCategoryName", "商品分类", defaultVal: Model.CategoryId, defaultText: Model.ShopCategoryName, hint: "不选择商品分类，就适合全部商品", dialogTitle: "选择商品分类", InnitFunc: "InnitFunc", DataControlID: "treeGrid", IsTree: true, onOk: "onOk")
-
-    @HelperExtend.HelpEdit("ProductId", "ShopName", "商品", defaultVal: Model.ProductId, defaultText: Model.ShopName, hint: "不选择商品，就适合当前分类下所有商品", dialogTitle: "选择商品", InnitFunc: "InnitShopFunc", DataControlID: "shopGrid", onOk: "onSpOk", OnBefore: "OnBeforeSp")
-
-
-    @HelperExtend.HelpEdit("ProductSku", "ShopSkuCode", "商品SKU", defaultVal: Model.ProductSku, defaultText: Model.ShopSkuCode, hint: "不选择SKU,就适合当前商品下所有规格类型商品", dialogTitle: "选择商品SKU", InnitFunc: "InnitSKUFunc", DataControlID: "SKUGrid", onOk: "onSkuOk", OnBefore: "OnBeforeSku")
-
-
+  
+   
+ 
 
     @HelperExtend.ImageUpLoad("ImageUrl", "图片", Model.RecordStatus == Sharp.Common.StatusType.add, defaultval: Model.ImageUrl, maxLength: 1)
 
@@ -131,7 +180,11 @@
     </script>
 
     <script type="text/javascript">
+        function GetProductCondition(data) {
 
+            data.id = $('#ProductId').val();
+
+        }
         function isShow(element) {
             var val;
             if (!element) {
@@ -154,245 +207,5 @@
         } 
     </script>
 
-     
-    <script type="text/javascript">
-        function OnBeforeSp() {
-            var categorid = $("#CategoryId").val();
-            if (!categorid) {
-                ErrorMsg("请先选择商品分类");
-                return false;
-            }
-            var oldcategorid = $('#shopGrid').data("CategoryId");  // undefined
-
-            if (oldcategorid && oldcategorid != categorid) {
-                $('#shopGrid').jqxGrid('updatebounddata');
-            }
-            $('#shopGrid').data("CategoryId", categorid);
-            return true;
-        }
-        function OnBeforeSku() {
-            var categorid = $("#ProductId").val();
-            if (!categorid) {
-                ErrorMsg("请先选择商品");
-                return false;
-            }
-
-
-            var oldcategorid = $('#SKUGrid').data("CategoryId");  // undefined
-
-            if (oldcategorid && oldcategorid != categorid) {
-                $('#SKUGrid').jqxGrid('updatebounddata');
-            }
-            $('#SKUGrid').data("CategoryId", categorid);
-            return true;
-            return true;
-        }
-
-        function InnitFunc() {
-            var source =
-                        {
-                            dataType: "json",
-                            dataFields: [
-
-               { name: 'ID', type: 'string' },
-
-               { name: 'ParentID', type: 'string' },
-
-               { name: 'Code', type: 'string' },
-
-               { name: 'Name', type: 'string' }
-                            ],
-                            timeout: 10000,
-                            hierarchy:
-                            {
-                                keyDataField: { name: 'ID' },
-                                parentDataField: { name: 'ParentID' }
-                            },
-                            id: 'ID',
-                            root: 'Rows',
-                            url: "@Url.Action("GetListForSelecte", "ShopCategory", new { area = "Admin" })"
-                        };
-            var dataAdapter = new $.jqx.dataAdapter(source);
-
-
-            $("#treeGrid").jqxTreeGrid(
-                       {
-                           width: "95%",
-                           height: "95%",
-                           source: dataAdapter,
-                           columns: [
-             { text: '编码', dataField: 'Code', type: 'string', width: 200 },
-             { text: '名称', dataField: 'Name', type: 'string', width: 200 }
-                           ]
-                       });
-        }
-        function onOk(data) {
-            if (data.length == 1) {
-
-
-                $("#ShopCategoryName").val(data[0].Name);
-                $("#CategoryId").val(data[0].ID);
-
-            } else { ErrorMsg("请选择一条数据"); }
-        }
-
-
-
-        function InnitShopFunc() {
-            var source =
-          {
-              datatype: "json",
-              cache: false,
-              datafields: [
-
-      { name: 'ID', type: 'string' },
-      { name: 'Code', type: 'string' },
-      { name: 'Name', type: 'string' },
-      { name: 'MarketPrice', type: 'string' },
-      { name: 'SalePrice', type: 'string' }
-
-              ],
-              beforeprocessing: function (data) {
-                  source.totalrecords = data.total;
-
-              },
-              root: 'data',
-              id: 'ID',
-              url: "@Url.RouteUrl("ApiWithWeb", new { controller = "APP", action = "GetProductsByCategory" })"
-          };
-
-            var dataAdapter = new $.jqx.dataAdapter(source,
-                   {
-
-                       formatData: function (data) {
-
-                           $.extend(data, {
-                               id: $("#CategoryId").val()
-                           });
-                           return data;
-                       }
-
-                   }
-
-               );
-            $("#shopGrid").jqxGrid(
-            {
-                width: "95%",
-                autoheight: true,
-                source: dataAdapter,
-                columnsresize: true,
-                virtualmode: true,
-                altrows: true,
-                rendergridrows: function (params) {
-                    return params.data;
-                },
-                pagerrenderer: function () { pagerrenderer("#shopGrid") },
-                pageSize: 20,
-                pageable: true,
-                columns: [
-        { text: '编号', dataField: 'Code', align: "center", cellsalign: "center", type: 'string', width: 100 },
-
-        { text: '名称', dataField: 'Name', align: "center", cellsalign: "center", type: 'string', width: '300' },
-
-        { text: '市场价', dataField: 'MarketPrice', align: "center", cellsalign: "center", type: 'string', width: 80 },
-
-        { text: '销售价', dataField: 'SalePrice', align: "center", cellsalign: "center", type: 'string', width: 80 }
-
-
-
-                ]
-            });
-
-        }
-        function onSpOk(data) {
-            if (!data) {
-
-                ErrorMsg("请选择一条数据");
-
-
-            } else {
-                $("#ShopName").val(data.Name);
-                $("#ProductId").val(data.ID);
-            }
-        }
-
-
-
-        function InnitSKUFunc() {
-            var source =
-                        {
-                            dataType: "json",
-                            dataFields: [
-
-               { name: 'SkuID', type: 'string' },
-
-
-
-               { name: 'SKU', type: 'string' },
-
-               { name: 'AttriVal', type: 'string' },
-      { name: 'MarketPrice', type: 'string' },
-      { name: 'SalePrice', type: 'string' }
-                            ],
-
-                            root: 'data',
-                            id: 'SkuID',
-                            url: "@Url.RouteUrl("ApiWithWeb", new { controller = "ShopProductApi", action = "GetSkuByProductID" })"
-                        };
-            var dataAdapter = new $.jqx.dataAdapter(source,
-                     {
-
-                         formatData: function (data) {
-
-                             $.extend(data, {
-                                 id: $("#ProductId").val()
-                             });
-                             return data;
-                         }
-
-                     }
-
-                 );
-
-            $("#SKUGrid").jqxGrid(
-                       {
-                           width: "95%",
-                           autoheight: true,
-                           source: dataAdapter,
-                           columnsresize: true,
-                           virtualmode: true,
-                           altrows: true,
-                           rendergridrows: function (params) {
-                               return params.data;
-                           },
-                           pagerrenderer: function () { pagerrenderer("#SKUGrid") },
-                           pageSize: 20,
-                           pageable: true,
-                           columns: [
-                   { text: 'SKU编号', dataField: 'SKU', align: "center", cellsalign: "center", type: 'string', width: 100 },
-
-
-                    { text: '规格', dataField: 'AttriVal', align: "center", cellsalign: "center", type: 'string', width: '300' },
-
-                   { text: '市场价', dataField: 'MarketPrice', align: "center", cellsalign: "center", type: 'string', width: 80 },
-
-                   { text: '销售价', dataField: 'SalePrice', align: "center", cellsalign: "center", type: 'string', width: 80 }
-
-
-
-                           ]
-                       });
-        }
-        function onSkuOk(data) {
-            if (!data) {
-
-                ErrorMsg("请选择一条数据");
-
-
-            } else {
-                $("#ShopSkuCode").val(data.AttriVal);
-                $("#ProductSku").val(data.SkuID);
-            }
-        }
-    </script>
+   
 }

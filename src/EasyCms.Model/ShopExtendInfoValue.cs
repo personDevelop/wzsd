@@ -210,6 +210,16 @@ namespace EasyCms.Model
          [NotDbCol]
          public ShopExtendInfo ShopExtendInfo { get; set; }
 
+        [NotDbCol]
+        public string ImgUrl { get; set; }
+    }
 
-     }
+
+    public class SimpalShopExtendInfoValue
+    {
+
+        public string ID { get; set; }
+        public string ValueStr { get; set; }
+        public string ImgUrl { get; set; } 
+    }
 }

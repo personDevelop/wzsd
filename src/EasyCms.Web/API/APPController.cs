@@ -138,10 +138,9 @@ namespace EasyCms.Web.API
 
             var resp = new HttpResponseMessage(HttpStatusCode.OK);
 
-            if (pageIndex == 0)
-            {
-                pageIndex = 1;
-            }
+             
+                pageIndex = pageIndex.PhrasePageIndex(false);
+            
             if (string.IsNullOrEmpty(id))
             {
                 return "商品类型不能为空".FormatError();
@@ -163,13 +162,10 @@ namespace EasyCms.Web.API
 
             var resp = new HttpResponseMessage(HttpStatusCode.OK);
 
-            if (pageIndex == 0)
-            {
-                pageIndex = 1;
-            }
-             
-            
-                int pagecount = 0, recordCount = 0;
+            pageIndex = pageIndex.PhrasePageIndex(false);
+
+
+            int pagecount = 0, recordCount = 0;
                 DataTable dt = new ShopProductInfoBll().GetProductsByCategory(id, pageIndex, other, host, ref pagecount, ref recordCount);
 
                 return new { PageIndex = pageIndex, RecordCount = dt.Rows.Count, TotalPageCount = pagecount, TotalRecourdCount = recordCount, Data = dt }.FormatObj();
@@ -185,16 +181,9 @@ namespace EasyCms.Web.API
             string productName = Request.GetQueryValue("ProductName");
             string pageNumStr = Request.GetQueryValue("pagenum");
             string stationMode = Request.GetQueryValue("stationMode");
-            int pageNum = 1;
+            int pageNum = pageNumStr.PhrasePageIndex(false);
 
-            if (int.TryParse(pageNumStr, out pageNum))
-            {
-
-            }
-            if (pageNum==0)
-            {
-                pageNum = 1;
-            }
+            
             
             WhereClip where = new WhereClip();
             if (!string.IsNullOrWhiteSpace(categoryID))
@@ -263,10 +252,9 @@ namespace EasyCms.Web.API
             int.TryParse(StationModestr, out id);
             string pagenumstr = Request.GetQueryValue("pagenum");
             string pagesizestr = Request.GetQueryValue("pagesize");
-            if (!int.TryParse(pagenumstr, out pageIndex))
-            {
-                pageIndex = 1;
-            }
+            
+                pageIndex = pagenumstr.PhrasePageIndex(false);  
+            
             if (!int.TryParse(pagesizestr, out pagesize))
             {
                 pagesize = 20;
@@ -295,7 +283,7 @@ namespace EasyCms.Web.API
                 return "分类不能为空".FormatError();
             }
             int pagecount = 0, recordCount = 0;
-            DataTable dt = new ShopProductInfoBll().GetProductsByStation(id, pageIndex, other, host, ref pagecount, ref recordCount);
+            DataTable dt = new ShopProductInfoBll().GetProductsByStation(id, pageIndex.PhrasePageIndex(false), other, host, ref pagecount, ref recordCount);
 
             return new { PageIndex = pageIndex, RecordCount = dt.Rows.Count, TotalPageCount = pagecount, TotalRecourdCount = recordCount, Data = dt }.FormatObj();
 

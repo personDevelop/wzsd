@@ -25,7 +25,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         public string GetList(string categoryID, string Name, int pagenum, int pagesize)
         { 
             int recordCount = 0;
-            System.Data.DataTable dt = bll.GetList(  categoryID, Name, pagenum+1, pagesize, ref recordCount);
+            System.Data.DataTable dt = bll.GetList(  categoryID, Name, pagenum.PhrasePageIndex(), pagesize, ref recordCount);
             string result = JsonWithDataTable.Serialize(dt);
             result = string.Format("{{\"total\":\"{0}\",\"data\":{1}}}", recordCount, result);
             return result;
@@ -33,7 +33,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         public string GetRelationList(string productID,  string categoryID, string Name, int pagenum, int pagesize )
         {
             int recordCount = 0;
-            System.Data.DataTable dt = bll.GetRelationList(productID, true, categoryID, Name, pagenum, pagesize, ref recordCount);
+            System.Data.DataTable dt = bll.GetRelationList(productID, true, categoryID, Name, pagenum.PhrasePageIndex(), pagesize, ref recordCount);
             string result = JsonWithDataTable.Serialize(dt);
             result = string.Format("{{\"total\":\"{0}\",\"data\":{1}}}", recordCount, result);
             return result; 
@@ -41,7 +41,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         public string GetNotRelationList(string productID,  string categoryID, string Name, int pagenum, int pagesize )
         {
             int recordCount = 0;
-            System.Data.DataTable dt = bll.GetRelationList(productID, false, categoryID, Name, pagenum, pagesize, ref recordCount);
+            System.Data.DataTable dt = bll.GetRelationList(productID, false, categoryID, Name, pagenum.PhrasePageIndex(), pagesize, ref recordCount);
             string result = JsonWithDataTable.Serialize(dt);
             result = string.Format("{{\"total\":\"{0}\",\"data\":{1}}}", recordCount, result);
             return result;

@@ -123,4 +123,10 @@ namespace EasyCms.Model
         }
         #endregion
     }
+
+    public partial class ShopProductCategory
+    {
+        [NotDbCol]
+        public bool IsMx { get; set; }
+    }
 }

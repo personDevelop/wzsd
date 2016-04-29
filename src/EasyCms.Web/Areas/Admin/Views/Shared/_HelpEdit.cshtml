@@ -1,6 +1,4 @@
 ﻿@model HelpEditModel
-
-<link href="http://localhost:7161/Scripts/jqwidgets/styles/jqx.orange.css" rel="stylesheet" />
 <dl>
     <dt>
         @Html.Label(Model.ValueField, Model.Lable)
@@ -9,7 +7,7 @@
     </dt>
     <dd>
         <div id="@Model.DisplayField" style="float:left">
-            <input type="text" readonly="readonly" />
+            <input type="text" readonly="readonly" style="display:inline; float:left" />
             @if (!Model.IsViewModel)
             {
                 <div class="search">
@@ -47,7 +45,7 @@
         $("#@Model.DisplayField").find(".close").click(function () {
             $("#@Model.ValueField").val("");
             $('#@Model.DisplayField').jqxInput('val',"");
-           
+
         });
 
     });
@@ -61,27 +59,28 @@
     <div>
         @if (!string.IsNullOrWhiteSpace(Model.OtherConditionView))
         {
-           
-    @Html.Partial(Model.OtherConditionView,Model.ValueField) 
-    }
 
-    <div id="@(Model.ValueField + "SearchText")">
-        <input type="text" />
-        <div id="@(Model.ValueField + "SerchBtnID")">@HelperExtend.img("search_lg.png", "height:16px ; width:16px")</div>
-    </div>
-    <div id="@(Model.ValueField + "DataControl")">
-    </div>
-    @if (Model.IsMutiSelect)
-    {
-        <text> 按住Ctrl 或Shift可以多选</text>
-    }
-    <div class="page-footer">
-        <div class="btn-wrap">
-            <input id="@(Model.ValueField + "Ok")" type="button" style="margin-right: 10px" value="确定" class="btn" />
-            <input name="btnReturn" type="button" value="取消" class="btn yellow" onclick="javascript: $('#@(Model.ValueField + "Dialog")').jqxWindow('close');" />
+            @Html.Partial(Model.OtherConditionView, Model.ValueField)
+        }
+
+        <div id="@(Model.ValueField + "SearchText")">
+            <input type="text" />
+            <div id="@(Model.ValueField + "SerchBtnID")">@HelperExtend.img("search_lg.png", "height:16px ; width:16px")</div>
+        </div>
+        @if (Model.IsMutiSelect)
+        {
+            <text> 按住Ctrl 或Shift可以多选</text>
+        }
+        <div id="@(Model.ValueField + "DataControl")">
+        </div>
+       
+        <div class="page-footer">
+            <div class="btn-wrap">
+                <input id="@(Model.ValueField + "Ok")" type="button" style="margin-right: 10px" value="确定" class="btn" />
+                <input name="btnReturn" type="button" value="取消" class="btn yellow" onclick="javascript: $('#@(Model.ValueField + "Dialog")').jqxWindow('close');" />
+            </div>
         </div>
     </div>
-</div>
 </div>
 
 
@@ -92,11 +91,11 @@
             showCollapseButton: false, height: @Model.Height , width: @Model.Width  });
         $('#@(Model.ValueField + "Dialog")').on('resized', function (event) {
             if (@Model.IsTree.ToString().ToLower() ) {
-                    result = $("#@(Model.ValueField + "DataControl")").jqxTreeGrid('render');
+                     $("#@(Model.ValueField + "DataControl")").jqxTreeGrid('render');
 
         }else
     {
-                    result = $("#@(Model.ValueField + "DataControl")").jqxGrid('render');
+                     $("#@(Model.ValueField + "DataControl")").jqxGrid('render');
 
     }
     });
@@ -112,7 +111,7 @@
             $("#@(Model.ValueField + "SerchBtnID")").click(function () {
                 @if (Model.IsTree)
                 {
-                <text>$("#@(Model.ValueField + "DataControl")").jqxTreeGrid('updatebounddata');</text>
+                <text>$("#@(Model.ValueField + "DataControl")").jqxTreeGrid('updateBoundData');</text>
                 }
                 else {
                 <text>$("#@(Model.ValueField + "DataControl")").jqxGrid('updatebounddata');</text>
@@ -120,50 +119,76 @@
             });
             @if (Model.IsTree)
             {
-                <text>
-            }</text>
-            }else
-            { <text> CreateGrid("@(Model.ValueField + "DataControl")", url, datafields, columns,
-                $.extend({
-                isMutilSelect:@Model.IsMutiSelect.ToString().ToLower(),
-                adapter: {
-                    formatData: function (data) {
-                        data.@Model.SearchField  = $("#@(Model.ValueField + "SearchText")").val();
-                        @if (!string.IsNullOrWhiteSpace(Model.OtherSerchFieldFunction))
+
+<text> CreateTree("@(Model.ValueField + "DataControl")", url, datafields, columns,
+        $.extend({
+            isMutilSelect:@Model.IsMutiSelect.ToString().ToLower(),
+            adapter: {
+                formatData: function (data) {
+                    data.@Model.SearchField  = $("#@(Model.ValueField + "SearchText")").val();
+                    @if (!string.IsNullOrWhiteSpace(Model.OtherSerchFieldFunction))
                         {
-                            @(Model.OtherSerchFieldFunction + "(data);") 
+                            @(Model.OtherSerchFieldFunction + "(data);")
 
                         }
-                    }
-                }},  @Html.Raw(Model.OtherSet) ));</text>
-    }
+                }
+            }},  @Html.Raw(Model.OtherSet) ));</text>
+
+        }else
+        { <text> CreateGrid("@(Model.ValueField + "DataControl")", url, datafields, columns,
+        $.extend({
+            isMutilSelect:@Model.IsMutiSelect.ToString().ToLower(),
+            adapter: {
+                formatData: function (data) {
+                    data.@Model.SearchField  = $("#@(Model.ValueField + "SearchText")").val();
+                    @if (!string.IsNullOrWhiteSpace(Model.OtherSerchFieldFunction))
+                        {
+                            @(Model.OtherSerchFieldFunction + "(data);")
+
+                        }
+                }
+            }},  @Html.Raw(Model.OtherSet) ));</text>
+        }
 
             $("#@(Model.ValueField + "Ok")").on("click",function(){
 
                 @(Model.ValueField+"GetOk")();
             });
-            $("#@(Model.ValueField + "DataControl")").on("rowdoubleclick",function(){
+            @if (Model.IsTree)
+            {
+                <text>
+            $("#@(Model.ValueField + "DataControl")").on("rowDoubleClick", function(){
 
-                @(Model.ValueField+"GetOk")();
-            });
+                @(Model.ValueField + "GetOk")();
+            });</text>
+
+            }
+            else
+            {   <text>$("#@(Model.ValueField + "DataControl")").on("rowdoubleclick", function(){
+
+                @(Model.ValueField + "GetOk")();
+                });</text>
+            }
+
         }
 
     });
 
-
-
     });
+
+
     function @(Model.ValueField+"GetOk")()
     {
         var result;
-
+          
         if (@Model.IsTree.ToString().ToLower() ) {
             if (@Model.IsMutiSelect.ToString().ToLower() ) {
-            result = $("#@(Model.ValueField + "DataControl")").jqxTreeGrid('getSelection');
-
+            var arryval=new   Array ();
             var valuefieldValue="";displayfieldValue="";
-            for (var data  in result)
+            result = $("#@(Model.ValueField + "DataControl")").jqxTreeGrid('getSelection');
+            for (var i  in result)
             {
+                var data=   result[i] ;
                 if (valuefieldValue) {
                     valuefieldValue+=",";
                     displayfieldValue+=",";
@@ -172,16 +197,28 @@
                 displayfieldValue+=data.@Model.ReturnDisplayField;
                 arryval.push(data );
             }
+            result=arryval;
+              @if (!string.IsNullOrWhiteSpace(Model.OnOking)) {
+                  <text>if(@(Model.OnOking + "(result)!=true")) return;</text>
+
+              }
             $("#@Model.ValueField").val(valuefieldValue);
             $('#@Model.DisplayField').jqxInput('val',displayfieldValue);
-            $('#@Model.DisplayField').jqxTooltip({ content:displayfieldValue });
+            $('#@Model.DisplayField').jqxTooltip({ content:displayfieldValue});
+           
+
+
 
         }else
         {
             result = $("#@(Model.ValueField + "DataControl")").jqxTreeGrid('getSelection');
+              @if (!string.IsNullOrWhiteSpace(Model.OnOking)) {
+                  <text>if(@(Model.OnOking + "(result)!=true")) return;</text>
+
+              }
             $("#@Model.ValueField").val(result[0].@Model.ReturnValueField);
-            $('#@Model.DisplayField').jqxInput('val',@Model.ReturnDisplayField);
-            $('#@Model.DisplayField').jqxTooltip({ content:@Model.ReturnDisplayField });
+            $('#@Model.DisplayField').jqxInput('val',result[0].@Model.ReturnDisplayField);
+            $('#@Model.DisplayField').jqxTooltip({ content:result[0].@Model.ReturnDisplayField });
             @if (!string.IsNullOrWhiteSpace(Model.OtherField))
             {
                 string[] otherFields = Model.OtherField.Split(new char[] {',',';' }, StringSplitOptions.RemoveEmptyEntries);
@@ -209,15 +246,24 @@
                 displayfieldValue+=data.@Model.ReturnDisplayField;
                 arryval.push(data );
             }
-            $("#@Model.ValueField").val(valuefieldValue); 
+            result=arryval;
+             @if (!string.IsNullOrWhiteSpace(Model.OnOking)) {
+                 <text>if(@(Model.OnOking + "(arryval)!=true")) return;</text>
+
+             }
+            $("#@Model.ValueField").val(valuefieldValue);
             $('#@Model.DisplayField').jqxInput('val',displayfieldValue);
             $('#@Model.DisplayField').jqxTooltip({ content:displayfieldValue});
-            result=arryval;
+            
 
         }else
     {
             result =$("#@(Model.ValueField + "DataControl")").jqxGrid('getselectedrowindex');
     result = $('#@(Model.ValueField + "DataControl")').jqxGrid('getrowdata', result);
+       @if (!string.IsNullOrWhiteSpace(Model.OnOking)) {
+           <text>if(@(Model.OnOking + "(result)!=true")) return;</text>
+
+       }
     $("#@Model.ValueField").val(result.@Model.ReturnValueField);
     $('#@Model.DisplayField').jqxInput('val',result.@Model.ReturnDisplayField);
     $('#@Model.DisplayField').jqxTooltip({ content:result.@Model.ReturnDisplayField });
@@ -233,8 +279,11 @@
 
     }
     }
+    @if (!string.IsNullOrWhiteSpace(Model.OnOk))
+    {
+           @(Model.OnOk+"(result);")
+    }
 
-    @(@Model.OnOk+"(result)")
 
     $('#@(Model.ValueField+"Dialog")').jqxWindow('close');
     }

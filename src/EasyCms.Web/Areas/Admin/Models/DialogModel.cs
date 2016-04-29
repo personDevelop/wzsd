@@ -152,7 +152,7 @@ namespace EasyCms.Web
             }
             set
             {
-                _SearchField = value;
+                _ReturnDisplayField = value;
             }
         }
          
@@ -240,6 +240,11 @@ namespace EasyCms.Web
         /// </summary>
         public string OnOk { get; set; }
 
+        /// <summary>
+        /// 选中完成前事件 只有返回true 才会继续赋值
+        /// </summary>
+        public string OnOking { get; set; }
+        
         /// <summary>
         /// 帮助框高度 默认500
         /// </summary>
@@ -334,7 +339,62 @@ namespace EasyCms.Web
 
 
     }
+    public class HelpEditShopProductCategory
+    {
+        /// <summary>
+        /// 帮助的label
+        /// </summary>
+        public string Lable { get; set; }
 
+        /// <summary>
+        /// 帮助的值对应字段
+        /// </summary>
+        public string ValueField { get; set; }
+
+        /// <summary>
+        /// 帮助的默认值
+        /// </summary>
+        public string ValueFieldValue { get; set; }
+
+        /// <summary>
+        /// 帮助的显示字段
+        /// </summary>
+
+        public string DisplayField { get; set; }
+
+
+        /// <summary>
+        /// 帮助对应的默认显示值
+        /// </summary>
+        public string DisplayFieldValue { get; set; }
+
+        /// <summary>
+        /// 是否多选
+        /// </summary>
+        public bool IsMutiSelect { get; set; }
+
+        /// <summary>
+        /// 是否是查看模式 查看模式下 帮助控件不可用
+        /// </summary>
+        public bool IsViewModel { get; set; }
+
+
+        public string Hint { get; set; }
+
+
+        /// <summary>
+        /// 帮助其他对应字段
+        /// </summary>
+        public string OtherField { get; set; }
+
+        /// <summary>
+        /// 帮助其他对应字段
+        /// </summary>
+        public string ReturnOtherField { get; set; }
+
+
+
+    }
     public class HelpEditCouponModel
     {
         /// <summary>
@@ -391,4 +451,53 @@ namespace EasyCms.Web
 
 
     }
+
+    public class HelpEditProductType
+    { 
+        /// <summary>
+        /// 帮助的值对应字段
+        /// </summary>
+        public string ValueField { get; set; }
+
+        /// <summary>
+        /// 帮助的默认值
+        /// </summary>
+        public string ValueFieldValue { get; set; }
+
+        /// <summary>
+        /// 帮助的显示字段
+        /// </summary>
+
+        public string DisplayField { get; set; }
+
+
+        /// <summary>
+        /// 帮助对应的默认显示值
+        /// </summary>
+        public string DisplayFieldValue { get; set; }
+
+       
+
+        /// <summary>
+        /// 是否是查看模式 查看模式下 帮助控件不可用
+        /// </summary>
+        public bool IsViewModel { get; set; }
+
+
+        public string Hint { get; set; }
+
+        public string OnOk { get; set; }
+
+        /// <summary>
+        /// 只有这个方法返回true 才会继续打开帮助窗口
+        /// </summary>
+        public string OnSelecting { get; set; }
+
+        /// <summary>
+        /// 只有这个方法返回true 才会继续清空数据
+        /// </summary>
+        public string OnClearing { get; set; }
+        
+    }
 }
+ 

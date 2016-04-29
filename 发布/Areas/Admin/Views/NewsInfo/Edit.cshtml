@@ -30,16 +30,47 @@
 
 
     @Html.ValidationSummary()
-   
-    @HelperExtend.HelpEdit("ClassID", "ClassName", "所属类别", defaultText: Model.ClassName, dialogTitle: "选择所属类别", hint: "(*必填)", InnitFunc: "InnitFunc", onOk: "onOk", IsTree: true, DataControlID: "treeGrid")
+    @Html.ValidationSummary()
+    @Html.Partial("_HelpEdit", new HelpEditModel()
+{
+    IsTree = true,
+    DisplayField = "ClassName",
+    DisplayFieldValue = Model.ClassName,
+    Lable = "所属类别",
+    ValueField = "ClassID",
+    Hint = "(*必填)",
+    ValueFieldValue = Model.ClassID,
+    Columns = @"[
+                   { text: '编号', dataField: 'Code',   width: 200, cellsalign: 'left'},
+                    { text: '名称', dataField: 'Name',  width:  300  }  ]",
+    DataFields = @"[
+
+               { name: 'ID', type: 'string' },
+               { name: 'Code', type: 'string' },
+{ name: 'Name', type: 'string' } ,  { name: 'ParentID', type: 'string' }
+                            ]",
+    HelpTitle = "选择所属类别",
+    ReturnDisplayField = "Name",
+    ReturnValueField = "ID",
+    SearchField = "Name",
+    Url = Url.Action("GetListForSelecte", "NewsCategory", new { area = "Admin" }) 
+
+})
+ 
     @HelperExtend.TextBox("NewsTitle", "标题", defaultval: Model.NewsTitle, hint: "(*必填)")
     @HelperExtend.TextBox("SubTitle", "副标题", defaultval: Model.SubTitle)
     @HelperExtend.RadioGroup("State", "显示状态 ", "0,1,2", "正常,待审核,不显示", defaultval: Model.State)
     @HelperExtend.CheckBoxList("推荐设置", "AllowPl,IsTop,IsRecomend,IsHot,IsColor", "允许评论,置顶,推荐,热门,醒目", defaultval: new object[] { Model.AllowPl, Model.IsTop, Model.IsRecomend, Model.IsHot, Model.IsColor })
     @HelperExtend.Number("Sequence", "顺序", defaultval: Model.Sequence, max: 100000)
-    @HelperExtend.HelpEdit("ProducntID", "ProductName", "关联商品", defaultVal: Model.ProducntID,dialogWidth:800, defaultText: Model.ProductName, hint: "", dialogTitle: "选择商品", InnitFunc: "InnitShopFunc", DataControlID: "shopGrid", onOk: "onSpOk")
-
-
+   
+    @Html.Partial("_HelpEditProduct", new HelpEditShopProductModel()
+{
+    DisplayField = "ProductName",
+    DisplayFieldValue = Model.ProductName, 
+    Lable = "关联商品",
+    ValueField = "ProducntID",
+    ValueFieldValue = Model.ProducntID
+})
     @HelperExtend.Number("PvCount", "浏览次数", defaultval: Model.PvCount, max: 10000000, disabled: true)
     @HelperExtend.DateTime("LastEditDate", "最后修改时间", defaultval: Model.LastEditDate)
     @HelperExtend.ImageUpLoad("ImageUrl", "封面图片", Model.RecordStatus == Sharp.Common.StatusType.add, defaultval: Model.ImageUrl, maxLength: 1)
@@ -100,97 +131,6 @@
         })
     </script>
 
-    <script type="text/javascript">
-
-        function InnitFunc() {
-            var source =
-                        {
-                            dataType: "json",
-                            dataFields: [
-
-               { name: 'ID', type: 'string' },
-
-               { name: 'ParentID', type: 'string' },
-
-               { name: 'Code', type: 'string' },
-
-               { name: 'Name', type: 'string' },
-
-               { name: 'AllowSubclass', type: 'string' }
-                            ],
-                            timeout: 10000,
-                            hierarchy:
-                            {
-                                keyDataField: { name: 'ID' },
-                                parentDataField: { name: 'ParentID' }
-                            },
-                            id: 'ID',
-                            root: 'Rows',
-                            url: " @Url.Action("GetListForSelecte", "NewsCategory", new { area = "Admin" })"
-                        };
-            var dataAdapter = new $.jqx.dataAdapter(source);
-
-
-            $("#treeGrid").jqxTreeGrid(
-                       {
-                           width: "95%",
-                           height: "95%",
-                           source: dataAdapter,
-                           columns: [
-             { text: '编码', dataField: 'Code', type: 'string', width: 200 },
-             { text: '名称', dataField: 'Name', type: 'string', width: 200 }
-                           ]
-                       });
-        }
-        function onOk(data) {
-            if (data.length == 1) {
-
-                $("#ClassName").val(data[0].Name);
-                $("#ClassID").val(data[0].ID);
-
-            } else { ErrorMsg("请选择一条数据"); }
-        }
-
-    </script>
-    <script type="text/javascript">
-
-
-
-
-        function InnitShopFunc() {
-
-            var url = "@Url.Action("GetListForSelecte", "ShopProductInfo", new { area = "Admin" })";
-            var datafields = [{ name: 'ID' },
-        { name: 'Code' }, { name: 'Name' }, { name: 'SalePrice', type: 'float' }];
-            var columns = [
-
-     { text: '编号', dataField: 'Code', width: 120, cellsalign: "left" },
-    { text: '名称', dataField: 'Name', cellsalign: "left" },
-
-    { text: '销售价', dataField: 'SalePrice', width: 80, cellsalign: "right" }];
-
-            CreateGrid("shopGrid", url, datafields, columns, {
-                adapter: {
-                    formatData: function (data) {
-
-
-                        data.Name = $("#SearchTextProducntID").val();
-                    }
-                }, grid: { height: "82%" }
-            });
-        }
-            function onSpOk(data) {
-                if (!data) {
-
-                    ErrorMsg("请选择一条数据");
-
-
-                } else {
-                    $("#ProductName").val(data.Name);
-                    $("#ProducntID").val(data.ID);
-                }
-            }
-
-
-    </script>
+    
+     
 }

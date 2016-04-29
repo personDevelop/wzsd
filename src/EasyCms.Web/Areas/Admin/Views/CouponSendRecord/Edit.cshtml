@@ -21,8 +21,16 @@
     @HelperExtend.HiddenFor("ID", Model.ID)
     @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())
     @Html.ValidationSummary()
-    @HelperExtend.HelpEdit("CouponID", "CouponName", "优惠券", defaultVal: Model.CouponID, defaultText: Model.CouponName, hint: "", dialogTitle: "选择优惠券", InnitFunc: "InnitCouponFunc", DataControlID: "CouponGrid", onOk: "onCouponOk")
-    @HelperExtend.Number("SendCount", "发放个数", defaultval: Model.SendCount, hint: "")
+    @Html.Partial("_HelpEditCoupon", new HelpEditCouponModel()
+{
+    DisplayField = "CouponName",
+    DisplayFieldValue = Model.CouponName,
+    Hint = "",
+    Lable = "优惠券",
+    ValueField = "CouponID",
+    ValueFieldValue = Model.CouponID
+})
+     @HelperExtend.Number("SendCount", "发放个数", defaultval: Model.SendCount, hint: "")
     @HelperExtend.RadioGroup("SendType", "发放类型", typeof(SendCouponType).GetEnumVal(),
                   typeof(SendCouponType).GetEnumNamesStr(), defaultval: Model.SendType, hint: "")
     @HelperExtend.DropDownList("AccountOrder", "对应会员等级", defaultval: Model.AccountOrder, hint: "", downInfo: new DropDownListInfo { DisplayMember = "Name", ValueMember = "ID", Url = Url.Action("GetListForSelecte", "RangeDict") })

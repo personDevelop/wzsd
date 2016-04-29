@@ -125,7 +125,7 @@ namespace EasyCms.Dal
             {
                 string ClassCode = new ShopCategoryDal().GetClassCode(categoryID);
                 string[] classcode = ClassCode.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-                where = ShopProductCategory._.CategoryID.In(classcode);
+                where = where&& ShopProductCategory._.CategoryID.In(classcode);
                 qry.Join<ShopProductCategory>(ShopProductInfo._.ID == ShopProductCategory._.ProductID);
             }
             int pageCount = 0;
@@ -212,8 +212,15 @@ namespace EasyCms.Dal
 
         public ShopProductInfo GetEntity(string id)
         {
-            ShopProductInfo p = Dal.Find<ShopProductInfo>(id);
-            List<ShopCategory> list = Dal.From<ShopCategory>().Join<ShopProductCategory>(ShopCategory._.ID == ShopProductCategory._.CategoryID && ShopProductCategory._.ProductID == p.ID)
+            ShopProductInfo p = Dal.From<ShopProductInfo>( )
+                 .Join<ShopBrandInfo>(ShopProductInfo._.BrandId == ShopBrandInfo._.ID, JoinType.leftJoin)
+                   .Join<ShopProductType>(ShopProductInfo._.TypeId == ShopProductType._.ID, JoinType.leftJoin)
+                   .Select(ShopProductInfo._.ID.All,ShopBrandInfo._.Name.Alias("BrandName"), ShopProductType._.Name.Alias("TypeName"))
+                   .Where(ShopProductInfo._.ID==id)
+                   .ToFirst<ShopProductInfo>();
+            List<ShopCategory> list = Dal.From<ShopCategory>().
+                Join<ShopProductCategory>(ShopCategory._.ID == ShopProductCategory._.CategoryID && ShopProductCategory._.ProductID == p.ID)
+               
                    .Select(ShopCategory._.ID, ShopCategory._.Name).List<ShopCategory>();
             foreach (ShopCategory item in list)
             {
@@ -280,7 +287,7 @@ namespace EasyCms.Dal
             DataSet ds =
               Dal.From<ShopExtendInfo>().Join<ShopExtendInfoValue>(ShopExtendInfo._.ID == ShopExtendInfoValue._.AttributeId, JoinType.leftJoin)
                 .Join<ShopProductSKU>(ShopExtendInfoValue._.ID == ShopProductSKU._.ValueId && ShopProductSKU._.ProductId == productID, JoinType.leftJoin)
-             .Select(ShopExtendInfo._.ID.All,
+             .Select(ShopExtendInfo._.ID,ShopExtendInfo._.CategoryID, ShopExtendInfo._.DisplayOrder, ShopExtendInfo._.FullName, ShopExtendInfo._.Name, ShopExtendInfo._.ShowType, ShopExtendInfo._.UnitText, ShopExtendInfo._.UsageMode, ShopExtendInfo._.UseAttrImg, ShopExtendInfo._.UseDefineImg,
               ShopExtendInfoValue._.ID.Alias("ExtendInfoValueID"), ShopExtendInfoValue._.ValueStr, ShopExtendInfoValue._.DisplaySequence, ShopExtendInfoValue._.ImageID, ShopExtendInfoValue._.Note,
                new ExpressionClip(" case when ShopProductSKU.ID is null then 0 else 1 end HasValue"))
                .Join<ShopExtendAndType>(ShopExtendInfo._.ID == ShopExtendAndType._.ExtendID)

@@ -63,7 +63,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                 }
 
                 p.ShopExtendInfo = bll.GetEntity(collection["AttributeId"]);
-                bll.SaveAttrVal(p);
+                string msg= bll.SaveAttrVal(p);
                 ModelState.Clear();
                 if (TempData.ContainsKey("IsSuccess"))
                 {

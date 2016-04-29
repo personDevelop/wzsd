@@ -55,15 +55,19 @@ namespace EasyCms.Dal
 
         }
 
-        public DataTable GetList(int pagenum, int pagesize, ref int recordCount, bool IsForSelected = false)
+        public DataTable GetList(string name, int pagenum, int pagesize, ref int recordCount, bool IsForSelected = false)
         {
             int pageCount = 0;
             if (IsForSelected)
             {
-                return Dal.From<ShopBrandInfo>().Select(ShopBrandInfo._.ID, ShopBrandInfo._.Name).OrderBy(ShopBrandInfo._.OrderNo).ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
+                return Dal.From<ShopBrandInfo>()
+                    
+                    .Where(ShopBrandInfo._.Name.Contains(name))
+                    .Select(ShopBrandInfo._.ID, ShopBrandInfo._.Name).OrderBy(ShopBrandInfo._.OrderNo).ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
             }
             else
                 return Dal.From<ShopBrandInfo>().OrderBy(ShopBrandInfo._.OrderNo)
+                       .Where(ShopBrandInfo._.Name.Contains(name))
                     .ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
         }
 

@@ -591,5 +591,8 @@ namespace EasyCms.Model
         }
         [NotDbCol]
         public string ParentName { get; set; }
+
+
+       
     }
 }

@@ -30,8 +30,32 @@
 
 
     @Html.ValidationSummary()
-      
-    @HelperExtend.HelpEdit("CategoryID", "CategoryName", "所属分类", defaultVal: Model.CategoryID, defaultText: Model.CategoryName, dialogTitle: "选择所属分类", hint: "(*必填)", InnitFunc: "InnitFunc", onOk: "onOk", IsTree: true, DataControlID: "treeGrid")
+      @Html.Partial("_HelpEdit", new HelpEditModel()
+ {
+     IsTree= true,
+     DisplayField = "CategoryName",
+     DisplayFieldValue = Model.CategoryName,
+     Lable = "所属分类",
+     ValueField = "CategoryID",
+     Hint= "(*必填)",
+     ValueFieldValue = Model.CategoryID,
+     Columns = @"[
+                   { text: '编号', dataField: 'Code',   width: 200, cellsalign: 'left'},
+                    { text: '名称', dataField: 'Name',  width:  300  }  ]",
+     DataFields = @"[
+
+               { name: 'ID', type: 'string' },
+               { name: 'Code', type: 'string' },
+{ name: 'Name', type: 'string' } ,  { name: 'ParentID', type: 'string' } 
+                            ]",
+     HelpTitle = "选择所属分类",
+     ReturnDisplayField = "Name",
+     ReturnValueField = "ID",
+     SearchField = "Name",
+     Url = Url.Action("GetListForSelecte", "HelpType") 
+
+ })
+   
    @HelperExtend.TextBox("Code", "编号", defaultval: Model.Code, hint: "")
 
     @HelperExtend.TextBox("Name", "名称", defaultval: Model.Name, hint: "")
@@ -91,55 +115,6 @@
         })
     </script>
 
-    <script type="text/javascript">
-
-        function InnitFunc() {
-            var source =
-                        {
-                            dataType: "json",
-                            dataFields: [
-
-               { name: 'ID', type: 'string' },
-
-               { name: 'ParentID', type: 'string' },
-
-               { name: 'Code', type: 'string' },
-
-               { name: 'Name', type: 'string' } 
-                            ],
-                            timeout: 10000,
-                            hierarchy:
-                            {
-                                keyDataField: { name: 'ID' },
-                                parentDataField: { name: 'ParentID' }
-                            },
-                            id: 'ID',
-                            root: 'Rows',
-                            url: " @Url.Action("GetListForSelecte", "HelpType")"
-                        };
-            var dataAdapter = new $.jqx.dataAdapter(source);
-
-
-            $("#treeGrid").jqxTreeGrid(
-                       {
-                           width: "95%",
-                           height: "95%",
-                           source: dataAdapter,
-                           columns: [
-             { text: '编码', dataField: 'Code', type: 'string', width: 200 },
-             { text: '名称', dataField: 'Name', type: 'string', width: 200 }
-                           ]
-                       });
-        }
-        function onOk(data) {
-            if (data.length == 1) {
-
-                $("#CategoryName").val(data[0].Name);
-                $("#CategoryID").val(data[0].ID);
-
-            } else { ErrorMsg("请选择一条数据"); }
-        }
-
-    </script>
+   
    
 }

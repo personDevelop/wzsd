@@ -43,8 +43,10 @@
       { name: 'MarketPrice', type: 'string' },
       { name: 'SalePrice', type: 'string' }
                             ]",
-    HelpTitle="选择商品SKU", ReturnDisplayField= "SKUName", ReturnValueField= "SKUID", SearchField= "SKUName", Url= Url.RouteUrl("ApiWithWeb", new { controller = "ShopProductApi", action = "GetSkuByProductID" }),
-    OtherSerchFieldFunction="GetProductCondition", OtherField= "OldPrice", ReturnOtherField= "SalePrice"
+    HelpTitle="选择商品SKU", ReturnDisplayField= "SKU", ReturnValueField= "SkuID", SearchField= "SKUName", Url= Url.RouteUrl("ApiWithWeb", new { controller = "ShopProductApi", action = "GetSkuByProductID" }),
+    OtherSerchFieldFunction="GetProductCondition", OtherField= "OldPrice", ReturnOtherField= "SalePrice",
+    OtherSet = "{ data:{root: 'data'}}",
+
 })
      
     @HelperExtend.Number("OldPrice", "原价格", defaultval: Model.OldPrice, hint: "", max: int.MaxValue)

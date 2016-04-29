@@ -74,6 +74,73 @@ namespace EasyCms.Dal
             return error;
         }
 
+        public DataTable GetAllAttrList(string host, string ptypeid,bool isGg,bool isAll)
+        {
+
+            WhereClip where = ShopExtendAndType._.TypeID == ptypeid;
+            if (!isAll)
+            {
+                if (isGg)
+                {
+                    where = where && ShopExtendInfo._.UsageMode > 1;
+                }
+                else
+                {
+                    where = where && ShopExtendInfo._.UsageMode < 2;
+                }
+            }
+           
+            DataTable dt = Dal.From<ShopExtendInfo>().Join<ShopExtendAndType>(ShopExtendInfo._.ID == ShopExtendAndType._.ExtendID)
+                .Join<AttributeType>(ShopExtendInfo._.CategoryID == AttributeType._.ID, JoinType.leftJoin)
+                .Where(where).OrderBy(ShopExtendAndType._.OrderNo)
+                .Select(ShopExtendInfo._.ID.Alias("ExtendID"), ShopExtendInfo._.ValInfo, ShopExtendInfo._.Name, ShopExtendInfo._.FullName, ShopExtendInfo._.ShowType, ShopExtendInfo._.UsageMode, ShopExtendInfo._.UseAttrImg, AttributeType._.Name.Alias("CategoryName"), ShopExtendAndType._.ID, ShopExtendAndType._.OrderNo)
+                     .ToDataTable();
+            if (dt.Rows.Count > 0)
+            {
+                //加载规格值
+                dt.Columns.Add("Vals");
+                List<string> extendID = new List<string>();
+                var qry = dt.AsEnumerable();
+                extendID = (from d in qry select d.Field<string>("ExtendID")).ToList<string>();
+                DataTable dtvals = Dal.From<ShopExtendInfoValue>().Join<AttachFile>(ShopExtendInfoValue._.ImageID == AttachFile._.RefID, JoinType.leftJoin)
+                    .Where(ShopExtendInfoValue._.AttributeId.In(extendID)).Select(ShopExtendInfoValue._.AttributeId, ShopExtendInfoValue._.ValueStr,
+                    ShopExtendInfoValue._.Note,
+                    ShopExtendInfoValue._.ImageID, AttachFile.GetThumbnaifilePath(host)).OrderBy(ShopExtendInfoValue._.DisplaySequence).ToDataTable();
+                foreach (DataRow item in dt.Rows)
+                {
+                    string temp = "";
+                    string attriID = item["ID"] as string;
+                    DataRow[] drs = dtvals.Select(string.Format("AttributeId='{0}'", attriID));
+                    foreach (DataRow itemVal in drs)
+                    {
+                        string splitStr = ",";
+                        string temResult = "";
+                        string img = itemVal["FilePath"] as string;
+                        if (string.IsNullOrWhiteSpace(img))
+                        {
+                            temResult = itemVal["ValueStr"] as string;
+                        }
+                        else
+                        {
+                            splitStr = "&nbsp;&nbsp;";
+                            //是图片
+                            temResult = string.Format("<img src='{0}' width='16px' height='16px' alt='{1}' />", itemVal["FilePath"], itemVal["ValueStr"]);
+
+                        }
+
+                        if (!string.IsNullOrWhiteSpace(temp))
+                        {
+                            temp += splitStr;
+                        }
+                        temp += temResult;
+                    }
+                    item["Vals"] = temp;
+                }
+            }
+            dt.AcceptChanges();
+            return dt;
+        }
+
         public List<ShopProductStationMode> GetStationMode(string productID, StatusType status)
         {
             List<ShopProductStationMode> list = new List<ShopProductStationMode>();
@@ -198,65 +265,8 @@ namespace EasyCms.Dal
 
         public DataTable GetAttrList(string host, string ptypeid, bool isGg)
         {
-
-            WhereClip where = ShopExtendAndType._.TypeID == ptypeid;
-            if (isGg)
-            {
-                where = where && ShopExtendInfo._.UsageMode > 1;
-            }
-            else
-            {
-                where = where && ShopExtendInfo._.UsageMode < 2;
-            }
-            DataTable dt = Dal.From<ShopExtendInfo>().Join<ShopExtendAndType>(ShopExtendInfo._.ID == ShopExtendAndType._.ExtendID)
-                .Join<AttributeType>(ShopExtendInfo._.CategoryID == AttributeType._.ID, JoinType.leftJoin)
-                .Where(where).OrderBy(ShopExtendAndType._.OrderNo)
-                .Select(ShopExtendInfo._.ID.Alias("ExtendID"), ShopExtendInfo._.Name, ShopExtendInfo._.FullName, ShopExtendInfo._.ShowType, ShopExtendInfo._.UsageMode, ShopExtendInfo._.UseAttrImg, AttributeType._.Name.Alias("CategoryName"), ShopExtendAndType._.ID, ShopExtendAndType._.OrderNo)
-                     .ToDataTable();
-            if (dt.Rows.Count > 0)
-            {
-                //加载规格值
-                dt.Columns.Add("Vals");
-                List<string> extendID = new List<string>();
-                var qry = dt.AsEnumerable();
-                extendID = (from d in qry select d.Field<string>("ExtendID")).ToList<string>();
-                DataTable dtvals = Dal.From<ShopExtendInfoValue>().Join<AttachFile>(ShopExtendInfoValue._.ImageID == AttachFile._.RefID, JoinType.leftJoin)
-                    .Where(ShopExtendInfoValue._.AttributeId.In(extendID)).Select(ShopExtendInfoValue._.AttributeId, ShopExtendInfoValue._.ValueStr,
-                    ShopExtendInfoValue._.Note,
-                    ShopExtendInfoValue._.ImageID, AttachFile.GetThumbnaifilePath(host)).OrderBy(ShopExtendInfoValue._.DisplaySequence).ToDataTable();
-                foreach (DataRow item in dt.Rows)
-                {
-                    string temp = "";
-                    string attriID = item["ID"] as string;
-                    DataRow[] drs = dtvals.Select(string.Format("AttributeId='{0}'", attriID));
-                    foreach (DataRow itemVal in drs)
-                    {
-                        string splitStr = ",";
-                        string temResult = "";
-                        string img = itemVal["FilePath"] as string;
-                        if (string.IsNullOrWhiteSpace(img))
-                        {
-                            temResult = itemVal["ValueStr"] as string;
-                        }
-                        else
-                        {
-                            splitStr = "&nbsp;&nbsp;";
-                            //是图片
-                            temResult = string.Format("<img src='{0}' width='16px' height='16px' alt='{1}' />", itemVal["FilePath"], itemVal["ValueStr"]);
-
-                        }
-
-                        if (!string.IsNullOrWhiteSpace(temp))
-                        {
-                            temp += splitStr;
-                        }
-                        temp += temResult;
-                    }
-                    item["Vals"] = temp;
-                }
-            }
-            dt.AcceptChanges();
-            return dt;
+            return GetAllAttrList(host, ptypeid, isGg, false);
+            
         }
 
     }

@@ -8,6 +8,8 @@ using System.Web.Mvc;
 using Sharp.Common;
 using EasyCms.Web.Common;
 using System.Web.Helpers;
+using System.Data;
+using Newtonsoft.Json;
 
 namespace EasyCms.Web.Areas.Admin.Controllers
 {
@@ -25,7 +27,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         public string GetList(string Name,int pagenum, int pagesize)
         {
             int recordCount = 0;
-            System.Data.DataTable dt = bll.GetList(Name,pagenum + 1, pagesize, ref   recordCount);
+            System.Data.DataTable dt = bll.GetList(Name,pagenum.PhrasePageIndex(), pagesize, ref   recordCount);
 
             string result = JsonWithDataTable.Serialize(dt);
             result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
@@ -147,6 +149,72 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         public string GetAttrList(string ptypeid, bool isGg)
         {
             System.Data.DataTable dt = bll.GetAttrList(host, ptypeid, isGg);
+            foreach (DataRow item in dt.Rows)
+            {
+                string val = item["ValInfo"] as string;
+                if (string.IsNullOrWhiteSpace(val))
+                {
+                    continue;
+                }
+                List<ShopExtendInfoValue> _list = JsonConvert.DeserializeObject<List<ShopExtendInfoValue>>(val);
+                bool isUseAttrImg = (bool)item["UseAttrImg"];
+                val = string.Empty;
+                foreach (ShopExtendInfoValue valInfo in _list)
+                {
+                    string tem = string.Empty;
+                    if (isUseAttrImg)
+                    {
+                        tem = string.Format("<img src='{0}' width='16px' height='16px' alt='{1}' />", host + valInfo.ImgUrl, valInfo.ValueStr);
+
+                    }
+                    else
+                    {
+                        tem = valInfo.ValueStr;
+                    }
+                    if (!isUseAttrImg && !string.IsNullOrWhiteSpace(val))
+                    {
+                        val += ",";
+                    }
+                    val += tem;
+                }
+                item["ValInfo"] = val;
+            }
+            return JsonWithDataTable.Serialize(dt);
+        }
+
+        public string GetAllAttrList(string ptypeid )
+        {
+            System.Data.DataTable dt = bll.GetAllAttrList(host, ptypeid );
+            foreach (DataRow item in dt.Rows)
+            {
+                string val = item["ValInfo"] as string;
+                if (string.IsNullOrWhiteSpace(val))
+                {
+                    continue;
+                }
+                List<ShopExtendInfoValue> _list = JsonConvert.DeserializeObject<List<ShopExtendInfoValue>>(val);
+                bool isUseAttrImg = (bool)item["UseAttrImg"];
+                val = string.Empty;
+                foreach (ShopExtendInfoValue valInfo in _list)
+                {
+                    string tem = string.Empty;
+                    if (isUseAttrImg)
+                    {
+                        tem = string.Format("<img src='{0}' width='16px' height='16px' alt='{1}' />", host + valInfo.ImgUrl, valInfo.ValueStr);
+
+                    }
+                    else
+                    {
+                        tem = valInfo.ValueStr;
+                    }
+                    if (!isUseAttrImg && !string.IsNullOrWhiteSpace(val))
+                    {
+                        val += ",";
+                    }
+                    val += tem;
+                }
+                item["ValInfo"] = val;
+            }
             return JsonWithDataTable.Serialize(dt);
         }
 

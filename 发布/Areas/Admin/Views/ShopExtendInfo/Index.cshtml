@@ -3,141 +3,151 @@
 @{
     ViewBag.Title = "商品属性和规格";
 }
-
-<!--工具栏-->
-<div id="floatHead" class="toolbar-wrap">
-    <div class="toolbar">
-        <div class="box-wrap">
-            <a class="menu-btn"></a>
-            <div class="l-list">
-                <ul class="icon-list">
-                    <li><a class="add" href="@Url.Action("Edit")"><i></i><span>新增</span></a></li>
-                    <li><a class="edit" href="javascript:;" onclick="EditGrid('jqxgrid', '@Url.Action("Edit")');"><i></i><span>修改</span></a></li>
-                    <li><a class="del" href="javascript:;" onclick="DelGrid('jqxgrid', '@Url.Action("Delete")');"><i></i><span>删除</span></a></li>
-                </ul>
+<span  style="float:left">
+    @HelperExtend.DropDownListWithSearch("CategoryID", "分类", downInfo: new DropDownListInfo() { Url = Url.Action("GetListForDropDown", "AttributeType") })
+</span> 
+    <input name="Name" width="200" class="input normal " id="Name" type="text">
+    <input id="btnQry" type="button" value="搜索">
+ 
+<span style="clear:left"></span>
+    <!--工具栏-->
+    <div id="floatHead" class="toolbar-wrap">
+        <div class="toolbar">
+            <div class="box-wrap">
+                <a class="menu-btn"></a>
+                <div class="l-list">
+                    <ul class="icon-list">
+                        <li><a class="add" href="@Url.Action("Edit")"><i></i><span>新增</span></a></li>
+                        <li><a class="edit" href="javascript:;" onclick="EditGrid('jqxgrid', '@Url.Action("Edit")');"><i></i><span>修改</span></a></li>
+                        <li><a class="del" href="javascript:;" onclick="DelGrid('jqxgrid', '@Url.Action("Delete")');"><i></i><span>删除</span></a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<!--/工具栏-->
-<!--列表-->
-<div class="table-container">
-    <div id="jqxgrid"></div>
-</div>
-<!--/列表-->
-@section  scripts{
+    <!--/工具栏-->
+    <!--列表-->
+    <div class="table-container">
+        <div id="jqxgrid"></div>
+    </div>
+    <!--/列表-->
+    @section  scripts{
 
-    <script type="text/javascript">
-        $(document).ready(function () {
-            Dialog.create("@Url.Content("~/Content/Images/movie.png")");
-            var url = "@Url.Action("GetList")";
-            var datafields = [
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("#btnQry").jqxButton({ width: '100', template: 'success' });
+                $("#btnQry").on("click", function () { $('#jqxgrid').jqxGrid('updatebounddata'); });
 
-  { name: 'ID'},
-  { name: 'Name'},
-  { name: 'UnitText'},
-  { name: 'ShowType'},
-  { name: 'DisplayOrder'},
-  { name: 'CategoryName'},
-  { name: 'UseAttrImg'},
-  { name: 'UseDefineImg'},
-  { name: 'UsageMode'},
-  { name: 'IsCanSearch'},
+                Dialog.create("@Url.Content("~/Content/Images/movie.png")");
+                var url = "@Url.Action("GetList")";
+                var datafields = [
 
- ];
-            var columns = [
-                 { text: '分类', dataField: 'CategoryName', cellsalign: "left", width:80 },
-  { text: '全称', dataField: 'FullName', cellsalign: "left", width: 80 },
-     { text: '名称', dataField: 'Name', cellsalign: "left", width: 80 },
-  { text: '单位', dataField: 'UnitText',   width: 50 },
+      { name: 'ID' }, { name: 'ValInfo' },
+      { name: 'Name' }, { name: 'FullName' },
+      { name: 'UnitText' },
+      { name: 'ShowType' },
+      { name: 'DisplayOrder' },
+      { name: 'CategoryName' },
+      { name: 'UseAttrImg' },
+      { name: 'UseDefineImg' },
+      { name: 'UsageMode' },
+      { name: 'IsCanSearch' },
 
-  { text: '展示方式', dataField: 'ShowType',  width: 80,@HelperExtend.ParseEnum(typeof(AttrShowType)) },
+                ];
+                var columns = [
+                     { text: '分类', dataField: 'CategoryName', cellsalign: "left", width: 80 },
+      { text: '全称', dataField: 'FullName', cellsalign: "left", width: 80 },
+         { text: '名称', dataField: 'Name', cellsalign: "left", width: 80 },
+      { text: '单位', dataField: 'UnitText', width: 50 },
 
- 
+      { text: '展示方式', dataField: 'ShowType', width: 80,@HelperExtend.ParseEnum(typeof(AttrShowType)) },
 
 
 
-  { text: '使用图标', dataField: 'UseAttrImg',   width: 80,@HelperExtend.Parsebool() },
 
-  { text: '自定义图标', dataField: 'UseDefineImg',   width: 80,@HelperExtend.Parsebool() },
 
-  { text: '使用模式', dataField: 'UsageMode', width:80,@HelperExtend.ParseEnum(typeof(UsageMode))},
+      { text: '使用图标', dataField: 'UseAttrImg', width: 80,@HelperExtend.Parsebool() },
 
-  { text: '筛选项', dataField: 'IsCanSearch', width: 80,@HelperExtend.Parsebool() },
-     { text: '顺序', dataField: 'DisplayOrder', width: 50 },
-       {
-           text: '操作', datafield: 'ID', align: "center", cellsalign: "center", width: 200, cellsrenderer: function (row,field, value,html, column,data) {
+      { text: '自定义图标', dataField: 'UseDefineImg', width: 80,@HelperExtend.Parsebool() },
 
-               var html = "  <div style='text-align: center; overflow: hidden; padding-bottom: 2px; margin-top: 4px; text-overflow: ellipsis;'>";
+      { text: '使用模式', dataField: 'UsageMode', width: 80,@HelperExtend.ParseEnum(typeof(UsageMode)) },
+        
+                { text: '值', dataField: 'ValInfo'  },
+      { text: '筛选项', dataField: 'IsCanSearch', width: 80,@HelperExtend.Parsebool() },
+         { text: '顺序', dataField: 'DisplayOrder', width: 50 },
+           {
+               text: '操作', datafield: 'ID', align: "center", cellsalign: "center", width: 200, cellsrenderer: function (row, field, value, html, column, data) {
 
-               html += "<a  href='javascript:;' onclick='AddValue(" + row + "," + data.UsageMode + ");'   >添加值</a>&nbsp;&nbsp;&nbsp;" +
-                    "<a href='javascript:;' onclick='EditExtendInfo(" + row + "," + data.UsageMode + ");'  >编辑值</a> &nbsp;&nbsp;&nbsp;" +
-               "<a  href='javascript:;' onclick='deleteExtendInfo(" + row + "," + data.UsageMode + ");'  >删除</a>";
+                   var html = "  <div style='text-align: center; overflow: hidden; padding-bottom: 2px; margin-top: 4px; text-overflow: ellipsis;'>";
 
-               html += "</div>";
-               return html;
+                   html += "<a  href='javascript:;' onclick='AddValue(" + row + "," + data.UsageMode + ");'   >添加值</a>&nbsp;&nbsp;&nbsp;" +
+                        "<a href='javascript:;' onclick='EditExtendInfo(" + row +");'  >编辑值</a> &nbsp;&nbsp;&nbsp;" +
+                   "<a  href='javascript:;' onclick='deleteExtendInfo(" + row  + ");'  >删除</a>";
 
+                   html += "</div>";
+                   return html;
+
+               }
            }
-       }
- ];
-   CreateGrid("jqxgrid", url, datafields, columns);
-
-
-        });
-    </script>
-
-<script type="text/javascript">
-
-      
-
-    function AddValue(rowindex, UsageMode) {
-        var isgg = UsageMode > 1;
-            var title = "添加扩展属性值";
-            var gridid = "#jqxgrid";
-            if (isgg) {
-              //  gridid = "#jqxGg";
-                var title = "添加规格值";
-            }
-            var data = $(gridid).jqxGrid('getrowdata', rowindex);
-            Dialog.open("@Url.Action("AddValue")/" + data.ID, title, {
-                AllWayInit: true,
-                onClose: function (grid) {
-                    var content = grid[0].textContent;
-                    if (content == "  添加扩展属性值") {
-                        if (GetThisDialogState()) {
-                            $(gridid).jqxGrid('updatebounddata');
-                        }
-                        
-                    } else if (content == "  添加规格值") {
-                        if (GetThisDialogState()) {
-                            $(gridid).jqxGrid('updatebounddata'); 
+                ];
+                CreateGrid("jqxgrid", url, datafields, columns, {
+                     adapter: {
+                        formatData: function (data) {
+                            data.CategoryID = $("#CategoryID").val();
+                            data.Name = $("#Name").val(); 
                         }
                     }
+                });
+
+
+            });
+        </script>
+
+        <script type="text/javascript">
+
+
+
+            function AddValue(rowindex, UsageMode) {
+                var isgg = UsageMode > 1;
+                var title = "添加扩展属性值";
+                var gridid = "#jqxgrid";
+                if (isgg) {
+                    //  gridid = "#jqxGg";
+                    var title = "添加规格值";
                 }
-            }, { width:600, height: 450 });
+                var data = $(gridid).jqxGrid('getrowdata', rowindex);
+                Dialog.open("@Url.Action("AddValue")/" + data.ID, title, {
+                    AllWayInit: true,
+                    onClose: function (grid) {
+                        var content = grid[0].textContent;
+                        if (content == "  添加扩展属性值") {
+                            if (GetThisDialogState()) {
+                                $(gridid).jqxGrid('updatebounddata');
+                            }
 
-        }
-
-</script>
-
-<script type="text/javascript">
-
-        function EditExtendInfo(rowindex, isgg) {
-            var gridid = "#jqxgrid"; 
-           
-            var data = $(gridid).jqxGrid('getrowdata', rowindex);
-
-            window.location.href = "@Url.Action("index", "ShopExtendInfoValue")/" + data.ID;
-        }
-        function deleteExtendInfo(rowindex, isgg) {
-
-            var gridid = "jqxgrid";
-            var isgg = UsageMode > 1;
-            if (isgg) {
-                gridid = "#jqxGg";
+                        } else if (content == "  添加规格值") {
+                            if (GetThisDialogState()) {
+                                $(gridid).jqxGrid('updatebounddata');
+                            }
+                        }
+                    }
+                }, { width: 600, height: 450 });
 
             }
-            DelGrid(gridid, '@Url.Action("DeleteExtend")');
-        }
-</script>
-}
+
+        </script>
+
+        <script type="text/javascript">
+
+            function EditExtendInfo(rowindex ) {
+                
+                var data = $( "#jqxgrid").jqxGrid('getrowdata', rowindex);
+
+                window.location.href = "@Url.Action("index", "ShopExtendInfoValue")/" + data.ID;
+            }
+            function deleteExtendInfo(rowindex ) { 
+              
+                DelGrid("jqxgrid", '@Url.Action("Delete")');
+            }
+        </script>
+    }

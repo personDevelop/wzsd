@@ -1,0 +1,33 @@
+﻿@model HelpEditShopProductCategory
+    @{
+
+        HelpEditModel p = new HelpEditModel()
+        {
+            OtherField=Model.OtherField,
+            ReturnOtherField= Model.ReturnOtherField,
+            DisplayFieldValue = Model.DisplayFieldValue,
+            ReturnValueField = "ID",
+            ReturnDisplayField = "Name",
+            DisplayField = Model.DisplayField,
+            ValueFieldValue = Model.ValueFieldValue,
+            Url = Url.Action("GetList", "ShopCategory"),
+            DataFields = @"[{ name: 'ID' }, { name: 'Code' }, { name: 'Name' },{ name: 'ParentID' }  ]",
+            Columns = @"[
+{ text: '编号', dataField: 'Code', width: 100, cellsalign: 'left'
+},
+{ text: '名称', dataField: 'Name', width: '300', cellsalign: 'left'
+} ]",
+            ValueField = Model.ValueField,
+            HelpTitle = "请选择商品分类",
+            Hint = Model.Hint,
+            Lable = Model.Lable,
+            PlaceHolder = "请选择商品分类",
+            IsMutiSelect = Model.IsMutiSelect,
+            IsTree=true,
+            IsViewModel = Model.IsViewModel,
+            Height="400",
+            Width= "500"
+
+        };
+    }
+@Html.Partial("_HelpEdit", p) 

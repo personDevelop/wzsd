@@ -40,12 +40,12 @@ namespace EasyCms.Web.Areas.Admin.Controllers
 
         }
 
-        public string GetListForSelecte(int pagenum, int pagesize)
+        public string GetListForSelecte( )
         {
-            int recordCount = 0;
+           
             System.Data.DataTable dt = bll.GetList(true);
             string result = JsonWithDataTable.Serialize(dt);
-            result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
+          
             return result;
         }
         public string CheckRepeat(string ID, string ParentID, string RecordStatus, string val, bool IsCode)

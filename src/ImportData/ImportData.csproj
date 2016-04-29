@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ImportData</RootNamespace>
     <AssemblyName>ImportData</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -88,6 +88,12 @@
     <Compile Include="Form3.Designer.cs">
       <DependentUpon>Form3.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmAttr.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAttr.Designer.cs">
+      <DependentUpon>frmAttr.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmProduct.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -109,6 +115,7 @@
     <Compile Include="OldEntity\h7_brand.cs" />
     <Compile Include="OldEntity\h7_category.cs" />
     <Compile Include="OldEntity\h7_goods.cs" />
+    <Compile Include="OldEntity\h7_spec.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
@@ -119,6 +126,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form3.resx">
       <DependentUpon>Form3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmAttr.resx">
+      <DependentUpon>frmAttr.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmProduct.resx">
       <DependentUpon>frmProduct.cs</DependentUpon>
@@ -163,6 +173,10 @@
     <ProjectReference Include="..\EasyCms.Model\EasyCms.Model.csproj">
       <Project>{5bf70ea8-ae93-4ed9-be80-a1be82b795fa}</Project>
       <Name>EasyCms.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EasyCms.Web\EasyCms.Web.csproj">
+      <Project>{f061dff2-24cb-4ebb-a9fb-0e506d84fc18}</Project>
+      <Name>EasyCms.Web</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

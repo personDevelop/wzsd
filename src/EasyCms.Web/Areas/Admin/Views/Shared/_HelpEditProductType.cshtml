@@ -1,0 +1,207 @@
+﻿@model HelpEditProductType
+@using EasyCms.Model
+<dl>
+    <dt>
+        @Html.Label(Model.ValueField, "商品类型") 
+        @Html.Hidden(Model.ValueField, Model.ValueFieldValue)
+        @Html.Hidden(Model.ValueField + "HasOpen", "0")
+    </dt>
+    <dd>
+        <div id="@Model.DisplayField" style="float:left">
+            <input type="text" readonly="readonly" />
+            @if (!Model.IsViewModel)
+            {
+                <div class="search">
+                    <img alt="search" width="16" height="16" src="@HelperExtend.imgUrl("search_lg.png")" />
+                </div>
+                <div class="close">
+                    <img alt="search" width="16" height="16" src="@HelperExtend.imgUrl("close_black.png")" />
+                </div>
+            }
+
+        </div>
+
+        <div style="color:red;">@Html.Raw(Model.Hint)</div><div style="clear:left"></div>
+    </dd>
+</dl>
+
+
+<script type="text/javascript">
+
+    $(function () {
+        $("#@Model.DisplayField").jqxInput({ placeHolder: "请选择商品类型", height: 26, width: 310, theme: "orange" });
+        $('#@Model.DisplayField').jqxInput('val','@Model.DisplayFieldValue');
+        $("#@Model.DisplayField").jqxTooltip({ content:  '@Model.DisplayFieldValue', position: 'mouse', name: 'movieTooltip', theme: "orange"});
+        $('#@Model.DisplayField').bind('open', function () { var content = $('#@Model.DisplayField').jqxTooltip('content');
+            if (!content) {
+                $('#@Model.DisplayField').jqxTooltip('close');
+            }
+
+        });
+
+        $("#@Model.DisplayField").find(".search").click(function () {
+
+            @if (!string.IsNullOrWhiteSpace(Model.OnSelecting)) {
+                <text>if(@(Model.OnSelecting+ "()!=true")) return;</text>
+
+            }
+                Query("会清空之前设置好的规格和属性，确定要修改商品类型？",function(){  $("#@(Model.ValueField + "Dialog")").jqxWindow('open');});
+
+
+        });
+        $("#@Model.DisplayField").find(".close").click(function () {
+            @if (!string.IsNullOrWhiteSpace(Model.OnSelecting)) {
+                 <text>if(@(Model.OnClearing + "()!=true")) return;</text>
+
+      }
+            Query("会清空之前设置好的规格和属性，确定要清空商品类型？",function(){
+                $("#@Model.ValueField").val("");
+            $('#@Model.DisplayField').jqxInput('val',"");
+            });
+
+
+
+        });
+
+    });
+</script>
+<div id="@(Model.ValueField + "Dialog")">
+    <div>
+        <span>
+            @HelperExtend.img("help.png") 请选择商品类型
+        </span>
+    </div>
+    <div> 
+        <input name="TypeSearchName" width="200" class="input normal " id="TypeSearchName" type="text" value="">
+        <input type="button" class="searchBtn" value="搜索" id='BtnTypeSearch' />
+        
+        <!--列表-->
+        <div class="table-container">
+
+            <div id="mainSplitter">
+                <div class="splitter-panel">
+                    <input type="hidden" id="SelecteProductType" />
+                    <div id="jqxtypegrid"></div>
+                </div>
+                <div class="splitter-panel">
+                    <div id="jqxge"></div>
+                </div>
+
+            </div>
+
+        </div>
+        <!--/列表-->
+       
+        <div class="page-footer">
+            <div class="btn-wrap">
+                <input id="@(Model.ValueField + "Ok")" type="button" style="margin-right: 10px" value="确定" class="btn" />
+                <input name="btnReturn" type="button" value="取消" class="btn yellow" onclick="javascript: $('#@(Model.ValueField + "Dialog")').jqxWindow('close');" />
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    var isCreatGrid=false;
+    $(function () {
+        $('#@(Model.ValueField + "Dialog")').jqxWindow({autoOpen: false, resizable: true,  isModal: true,
+            showCollapseButton: false, height: 600 , width: 800 });
+        $('#@(Model.ValueField + "Dialog")').on('resized', function (event) { $("#mainSplitter").jqxSplitter('render');   });
+    $('#@(Model.ValueField + "Dialog")').on('open', function (event) {
+
+        var hasOpen=$("#@(Model.ValueField + "HasOpen")").val();
+        if (hasOpen=="0") {
+            $("#@(Model.ValueField + "HasOpen")").val("1");
+            $("#TypeSearchName").jqxInput({ placeHolder: "请输入过滤值", height: 26, width:200, theme: "orange" });
+            $("#BtnTypeSearch").click(function () {
+                var paginginformation = $('#jqxtypegrid').jqxGrid('getpaginginformation');
+                
+                if (paginginformation.pagenum>1) {
+                    $('#jqxtypegrid').jqxGrid('gotopage', 0);
+                }
+                $("#jqxtypegrid").jqxGrid('updatebounddata');
+
+            });
+            $('#mainSplitter').jqxSplitter({ width: "100%", height: 480, showSplitBar: false ,panels: [{ size: 320 }] });
+            $(".searchBtn").jqxButton({ width: '100', template: "success" });
+            $('#BtnTypeSearch').on('click', function () {
+                $('#jqxtypegrid').jqxGrid('updatebounddata');
+            });
+            var url = "@Url.Action("GetList", "ShopProductType")";
+            var datafields = [{ name: 'ID' }, { name: 'Code' }, { name: 'Name' }, { name: 'Note' }];
+            var columns = [
+{ text: '商品类型编号', dataField: 'Code', width: 100, cellsalign: "left" },
+
+  { text: '商品类型名称', dataField: 'Name',  cellsalign: "left" } ];
+
+            CreateGrid("jqxtypegrid", url, datafields, columns, {
+                isMutilSelect: false,
+                grid: { pagesize: 12 }, adapter: {
+                    formatData: function (data) {
+
+                        data.Name = $("#TypeSearchName").val();
+                    }
+                }
+            });
+            $('#jqxtypegrid').on('rowclick', function (event) {
+                var args = event.args;
+                // row's bound index.
+                var boundIndex = args.rowindex;
+                var data = $('#jqxtypegrid').jqxGrid('getrowdata', boundIndex);
+                $("#SelecteProductType").val(data.ID);
+
+                if (isCreatGrid) {
+                    $('#jqxge').jqxGrid('updatebounddata');
+                } else {
+                    isCreatGrid = true;
+                    var ggurl = "@Url.Action("GetAllAttrList", "ShopProductType")";
+
+                    var dataggfields = [{ name: 'ID' }, { name: 'ValInfo' },
+      { name: 'Name' }, { name: 'FullName' },
+      { name: 'UnitText' },
+      { name: 'ShowType' },
+      { name: 'DisplayOrder' },
+      { name: 'CategoryName' },
+      { name: 'UseAttrImg' },
+      { name: 'UseDefineImg' },
+      { name: 'UsageMode' },
+      { name: 'IsCanSearch' }];
+                    var ggcolumns = [
+         { text: '名称', dataField: 'Name', cellsalign: "left", width: 80 },
+      { text: '使用模式', dataField: 'UsageMode', width: 80,@HelperExtend.ParseEnum(typeof(UsageMode)) },
+
+                { text: '值', dataField: 'ValInfo' } 
+         ];
+                    CreateGrid("jqxge", ggurl, dataggfields, ggcolumns, {
+                        isMutilSelect: false, adapter: {
+                            formatData: function (data) {
+                                data.ptypeid = $("#SelecteProductType").val();
+                                
+                            }
+                        }, grid: { autoheight: true }
+                    });
+
+                }
+            });
+            $("#@(Model.ValueField + "Ok")").on("click",function(){
+
+                @(Model.ValueField+"GetOk")();
+            }); 
+        }
+
+    });
+
+
+
+    });
+    function @(Model.ValueField+"GetOk")()
+    {
+        var result  =$("#jqxtypegrid").jqxGrid('getselectedrowindex');
+        result = $('#jqxtypegrid').jqxGrid('getrowdata', result);
+        $("#@Model.ValueField").val(result.ID);
+        $('#@Model.DisplayField').jqxInput('val',result.Name); 
+        @(@Model.OnOk+"(result)")
+        $('#@(Model.ValueField+"Dialog")').jqxWindow('close');
+    }
+</script>

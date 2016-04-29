@@ -1211,6 +1211,12 @@ namespace EasyCms.Model
         [NotDbCol]
         public string ShopCategoryName { get; set; }
         [NotDbCol]
+        public string TypeName  { get; set; }
+        [NotDbCol]
+        public string BrandName { get; set; }
+
+        
+        [NotDbCol]
         public string ShopCategoryID { get; set; }
         protected override void OnCreate()
         {

@@ -7,6 +7,8 @@ using System.Web;
 using System.Web.Mvc;
 using Sharp.Common;
 using EasyCms.Web.Common;
+using Newtonsoft.Json;
+using System.Data;
 
 namespace EasyCms.Web.Areas.Admin.Controllers
 {
@@ -20,30 +22,93 @@ namespace EasyCms.Web.Areas.Admin.Controllers
 
             return View();
         }
-       
 
-        
-        public string GetList(int pagenum, int pagesize)
+
+
+        public string GetList(string CategoryID, string Name, int pagenum, int pagesize)
         {
             int recordCount = 0;
-            System.Data.DataTable dt = bll.GetList(pagenum + 1, pagesize, ref recordCount);
+            System.Data.DataTable dt = bll.GetList(CategoryID, Name,  pagenum.PhrasePageIndex(), pagesize, ref recordCount);
+            foreach (DataRow item in dt.Rows)
+            {
+                string val = item["ValInfo"] as string;
+                if (string.IsNullOrWhiteSpace(val))
+                {
+                    continue;
+                }
+                List<ShopExtendInfoValue> _list = JsonConvert.DeserializeObject<List<ShopExtendInfoValue>>(val);
+                bool isUseAttrImg = (bool)item["UseAttrImg"];
+                val = string.Empty;
+                foreach (ShopExtendInfoValue valInfo in _list)
+                {
+                    string tem = string.Empty;
+                    if (isUseAttrImg)
+                    {
+                        tem = string.Format("<img src='{0}' width='16px' height='16px' alt='{1}' />", host + valInfo.ImgUrl, valInfo.ValueStr);
 
+                    }
+                    else
+                    {
+                        tem = valInfo.ValueStr;
+                    }
+                    if (!isUseAttrImg && !string.IsNullOrWhiteSpace(val))
+                    {
+                        val += ",";
+                    }
+                    val += tem;
+                }
+                item["ValInfo"] = val;
+            }
             string result = JsonWithDataTable.Serialize(dt);
             result = string.Format("{{\"total\":\"{0}\",\"data\":{1}}}", recordCount, result);
             return result;
 
         }
-        public string GetListForSelecte(int pagenum, int pagesize)
+
+        public string GetListWithSearch(string CategoryID, string Name, 
+           string PTypeID, UsageMode UsageMode, int pagenum, int pagesize)
         {
             int recordCount = 0;
-            System.Data.DataTable dt = bll.GetList(pagenum, pagesize, ref recordCount, true);
+            System.Data.DataTable dt = bll.GetList(CategoryID, Name,  
+              PTypeID, UsageMode, pagenum.PhrasePageIndex(), pagesize, ref recordCount);
+            foreach (DataRow item in dt.Rows)
+            {
+                string val = item["ValInfo"] as string;
+                if (string.IsNullOrWhiteSpace(val))
+                {
+                    continue;
+                }
+                List<ShopExtendInfoValue> _list = JsonConvert.DeserializeObject<List<ShopExtendInfoValue>>(val);
+                bool isUseAttrImg = (bool)item["UseAttrImg"];
+                val = string.Empty;
+                foreach (ShopExtendInfoValue valInfo in _list)
+                {
+                    string tem = string.Empty;
+                    if (isUseAttrImg)
+                    {
+                        tem = string.Format("<img src='{0}' width='16px' height='16px' alt='{1}' />",host+ valInfo.ImgUrl, valInfo.ValueStr);
+                         
+                    }
+                    else
+                    {
+                        tem = valInfo.ValueStr;
+                    }
+                    if (!isUseAttrImg&&!string.IsNullOrWhiteSpace(val))
+                    {
+                        val += ",";
+                    }
+                    val += tem;
+                }
+                item["ValInfo"] = val;
+            }
             string result = JsonWithDataTable.Serialize(dt);
             result = string.Format("{{\"total\":\"{0}\",\"data\":{1}}}", recordCount, result);
             return result;
         }
-        public string CheckRepeat(string ID, string categoryID, string RecordStatus, string val )
+
+        public string CheckRepeat(string ID, string categoryID, string RecordStatus, string val)
         {
-            return bll.Exit(ID, categoryID, RecordStatus, val ).ToString().ToLower();
+            return bll.Exit(ID, categoryID, RecordStatus, val).ToString().ToLower();
 
         }
         //
@@ -74,12 +139,12 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                     {
                         p.ID = Guid.NewGuid().ToString();
                     }
-                   
+
                 }
-              
+
                 bll.Save(p);
                 AddVals(p.ID, p.Vals);
-                
+
                 if (TempData.ContainsKey("IsSuccess"))
                 {
                     TempData.Add("IsSuccess", "保存成功");
@@ -153,7 +218,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                 return View("AddImg");
             }
             else
-                return View(); 
+                return View();
         }
         public ActionResult SaveValue(string AttributeId, string Vals)
         {
@@ -176,7 +241,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
 
 
 
-                string[] vals = Vals.Split(new char[] { ',', ';', '，', '；', '/', '\\', '、', '、' }, StringSplitOptions.RemoveEmptyEntries);
+                string[] vals = Vals.Split(new char[] { ',', ';', '，', '；' }, StringSplitOptions.RemoveEmptyEntries);
                 List<ShopExtendInfoValue> list = new List<ShopExtendInfoValue>();
                 foreach (var item in vals)
                 {
@@ -192,7 +257,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                 int i = bll.Save(list);
             }
         }
-       
+
         public ActionResult SaveImgValue(string AttributeId, string ImageID, string Note)
         {
             try
@@ -219,26 +284,17 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         }
 
 
-        [HttpPost] 
+        [HttpPost]
         //
         // GET: /Admin/ShopProductInfo/Delete/5
         public string DeleteExtendValue(string id)
         {
             string error;
-              bll.DeleteAttrVal(id,out error);
+            bll.DeleteAttrVal(id, out error);
             return error;
         }
-         
-       
-        public string GetListWithSearch(string CategoryID, string Name, string FullName,
-            string PTypeID, UsageMode UsageMode,   int pagenum, int pagesize)
-        {
-            int recordCount = 0;
-            System.Data.DataTable dt = bll.GetList(  CategoryID,   Name,   FullName,
-              PTypeID,   UsageMode, pagenum, pagesize, ref recordCount );
-            string result = JsonWithDataTable.Serialize(dt);
-            result = string.Format("{{\"total\":\"{0}\",\"data\":{1}}}", recordCount, result);
-            return result;
-        }
+
+
+        
     }
 }

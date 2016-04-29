@@ -56,7 +56,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
 
             }
             where = where && ManagerUserInfo._.IsManager == true;
-            System.Data.DataTable dt = bll.GetListForAccount(pagenum + 1, pagesize, where, ref   recordCount);
+            System.Data.DataTable dt = bll.GetListForAccount(pagenum.PhrasePageIndex(), pagesize, where, ref   recordCount);
 
             string result = JsonWithDataTable.Serialize(dt);
             result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
@@ -85,7 +85,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
 
             }
             where = where && ManagerUserInfo._.IsManager == false;
-            System.Data.DataTable dt = bll.GetListForAccount(pagenum + 1, pagesize, where, ref   recordCount);
+            System.Data.DataTable dt = bll.GetListForAccount(pagenum.PhrasePageIndex(), pagesize, where, ref   recordCount);
 
             string result = JsonWithDataTable.Serialize(dt);
             result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
@@ -95,7 +95,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         public string GetListForSelecte(int pagenum, int pagesize)
         {
             int recordCount = 0;
-            System.Data.DataTable dt = bll.GetList(pagenum, pagesize, ref   recordCount, true);
+            System.Data.DataTable dt = bll.GetList(pagenum.PhrasePageIndex(), pagesize, ref   recordCount, true);
             string result = JsonWithDataTable.Serialize(dt);
             result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
             return result;

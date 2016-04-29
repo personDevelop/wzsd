@@ -29,7 +29,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         public string GetList(string name, int pagenum, int pagesize)
         {
             int recordCount = 0;
-            System.Data.DataTable dt = bll.GetList(  name, pagenum + 1, pagesize, ref   recordCount);
+            System.Data.DataTable dt = bll.GetList(  name, pagenum .PhrasePageIndex(), pagesize, ref   recordCount);
 
             string result = JsonWithDataTable.Serialize(dt);
             result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
@@ -39,7 +39,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         public string GetListForSelecte(string name, int pagenum, int pagesize)
         {
             int recordCount = 0;
-            System.Data.DataTable dt = bll.GetList(  name, pagenum, pagesize, ref   recordCount, true);
+            System.Data.DataTable dt = bll.GetList(  name, pagenum.PhrasePageIndex(), pagesize, ref   recordCount, true);
             string result = JsonWithDataTable.Serialize(dt);
             result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
             return result;

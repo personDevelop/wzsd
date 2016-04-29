@@ -123,7 +123,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         public string GetViewLogList(int pagenum, int pagesize)
         {
             int recordCount = 0;
-            System.Data.DataTable dt = bll.GetViewLogList(pagenum + 1, pagesize, ref   recordCount);
+            System.Data.DataTable dt = bll.GetViewLogList(pagenum.PhrasePageIndex(), pagesize, ref   recordCount);
 
             string result = JsonWithDataTable.Serialize(dt);
             result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";

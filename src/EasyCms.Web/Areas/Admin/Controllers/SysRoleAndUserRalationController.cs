@@ -52,7 +52,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             int recordCount = 0;
 
 
-            System.Data.DataTable dt = bll.GetRolePersonList(pagenum + 1, pagesize, roleID, ref   recordCount);
+            System.Data.DataTable dt = bll.GetRolePersonList(pagenum.PhrasePageIndex(), pagesize, roleID, ref   recordCount);
 
             string result = JsonWithDataTable.Serialize(dt);
             result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";

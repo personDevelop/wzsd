@@ -32,9 +32,34 @@
 
     @Html.ValidationSummary()
 
+    @Html.Partial("_HelpEdit", new HelpEditModel()
+{
+    IsTree=true,
+    DisplayField = "ParentName",
+    DisplayFieldValue = Model.ParentName,
+    Hint = "空为一级模块",
+    Lable = "上级功能",
+    ValueField = "ParentID",
+    ValueFieldValue = Model.ParentID,
+    Columns = @"[
+                   { text: '编号', dataField: 'Code',   width: 200, cellsalign: 'left'},
+                    { text: '名称', dataField: 'Name',  width:  300  }  ]",
+    DataFields = @"[
 
-    @HelperExtend.HelpEdit("ParentID", "ParentName", "上级功能", defaultVal: Model.ParentID, defaultText: Model.ParentName, hint: "空为一级模块", dialogTitle: "选择上级功能", InnitFunc: "InnitFunc", onOk: "onOk", IsTree: true, DataControlID: "treeGrid")
+               { name: 'ID', type: 'string' }, 
+               { name: 'Code', type: 'string' },
+{ name: 'Name', type: 'string' },{ name: 'AccessType'  }, 
+               { name: 'ParentID', type: 'string' } 
+                            ]",
+    HelpTitle = "选择上级功能",
+    ReturnDisplayField = "Name",
+    ReturnValueField = "ID",
+    SearchField = "Name",
+    Url = Url.Action("GetParentMoudle"),
+    OnOking = "OnOking"
 
+})
+    
 
     @HelperExtend.TextBox("Code", "编码", defaultval: Model.Code, hint: "")
 
@@ -125,55 +150,19 @@
 
     <script type="text/javascript">
 
-        function InnitFunc() {
-            var source =
-                        {
-                            dataType: "json",
-                            dataFields: [
-
-               { name: 'ID', type: 'string' },
-
-               { name: 'ParentID', type: 'string' },
-
-               { name: 'Code', type: 'string' },
-
-               { name: 'Name', type: 'string' },
-
-               { name: 'AccessType', type: 'string' }
-                            ],
-                            timeout: 10000,
-                            hierarchy:
-                            {
-                                keyDataField: { name: 'ID' },
-                                parentDataField: { name: 'ParentID' }
-                            },
-                            id: 'ID',
-                            root: 'Rows',
-                            url: " @Url.Action("GetParentMoudle", "FunctionInfo", new { area = "Admin" })"
-                        };
-            var dataAdapter = new $.jqx.dataAdapter(source);
-
-
-            $("#treeGrid").jqxTreeGrid(
-                       {
-                           width: "95%",
-                           height: "95%",
-                           source: dataAdapter,
-                           columns: [
-             { text: '编码', dataField: 'Code', type: 'string', width: 200 },
-             { text: '名称', dataField: 'Name', type: 'string', width: 200 }
-                           ]
-                       });
-        }
-        function onOk(data) {
-            if (data.length == 1) {
+        
+            function OnOking(data) {
+            if (data.length>0) {
 
                 if (data[0].AccessType < 2) {
-                    $("#ParentName").val(data[0].Name);
-                    $("#ParentID").val(data[0].ID);
+                    if (data[0].ID == $("#ID").val()) {
+                        ErrorMsg("不能选择自己");
+                        return false;
+                    }
+                    return true;
                 } else {
-
                     ErrorMsg("当前分类不能有下级分类");
+                    return false;
                 }
 
             } else { ErrorMsg("请选择一条数据"); }

@@ -48,6 +48,8 @@ namespace EasyCms.Model
 
         private bool _IsCanSearch;
 
+        private string _ValInfo;
+
         #endregion
 
         #region 属性
@@ -262,6 +264,25 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  对应的值,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "ValInfo", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 4000, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string ValInfo
+        {
+            get
+            {
+                return this._ValInfo;
+            }
+            set
+            {
+                this.OnPropertyChanged("ValInfo", this._ValInfo, value);
+                this._ValInfo = value;
+            }
+        }
+
         #endregion
 
         #region 列定义 
@@ -291,6 +312,8 @@ namespace EasyCms.Model
                 UsageMode = new PropertyItem("UsageMode", tableName);
 
                 IsCanSearch = new PropertyItem("IsCanSearch", tableName);
+
+                ValInfo = new PropertyItem("ValInfo", tableName);
 
 
             }
@@ -338,10 +361,13 @@ namespace EasyCms.Model
             /// 作为筛选项,
             /// </summary> 
             public PropertyItem IsCanSearch = null;
+            /// <summary>
+            /// 对应的值,
+            /// </summary> 
+            public PropertyItem ValInfo = null;
         }
         #endregion
     }
-
 
 
     public partial class ShopExtendInfo

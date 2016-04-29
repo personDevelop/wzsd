@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using EasyCms.Web.Common;
+using Sharp.Common;
 
 namespace EasyCms.Web.API
 {
@@ -33,7 +34,7 @@ namespace EasyCms.Web.API
             {
 
             }
-            pageIndex += 1;
+            pageIndex = pageIndexStr.PhrasePageIndex(false);
             if (int.TryParse(pagesizeStr, out pagesize))
             {
 

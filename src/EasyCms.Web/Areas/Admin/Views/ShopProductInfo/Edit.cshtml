@@ -62,11 +62,12 @@
                 <li><a class="selected" href="javascript:;">基本信息</a></li>
                 <li><a href="javascript:;">图片及视频</a></li>
                 <li><a href="javascript:;">详细介绍</a></li>
-                <li><a href="javascript:;">统计数据</a></li>
+               
                 <li><a href="javascript:;">扩展属性</a></li>
                 <li><a href="javascript:;">规格</a></li>
                 <li><a href="javascript:;">SEO相关</a></li>
                 <li><a href="javascript:selectRelationProduct();">相关商品</a></li>
+                <li><a href="javascript:;">统计数据</a></li>
             </ul>
         </div>
     </div>
@@ -77,18 +78,60 @@
 
     @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())
 
-    @Html.ValidationSummary()
-    @HelperExtend.HelpEdit("ShopCategoryID", "ShopCategoryName", "商品分类", defaultVal: Model.ShopCategoryID, defaultText: Model.ShopCategoryName, hint: "*必填", dialogTitle: "选择商品分类", InnitFunc: "InnitFunc", onOk: "onOk", IsMutiSelect: true, IsTree: true, DataControlID: "treeGrid")
+    @Html.ValidationSummary() 
+    @Html.Partial("_HelpEditProductCategory", new HelpEditShopProductCategory()
+{
+    DisplayField = "ShopCategoryName", 
+    DisplayFieldValue = Model.ShopCategoryName,
+    Hint = "*必填 可以选择多个分类",
+     IsMutiSelect=true,
+    Lable = "商品分类", 
+    ValueField = "ShopCategoryID",
+    ValueFieldValue = Model.ShopCategoryID
+})
+
 
     @HelperExtend.TextBox("Code", "编号", defaultval: Model.Code, hint: "*必填,不能重复")
-    @HelperExtend.TextBox("Name", "名称", defaultval: Model.Name, hint: "*必填,长度限制在100个字符以内.")
-    @HelperExtend.TextBox("SKU", "SKU码", defaultval: Model.SKU, hint: "")
-    @HelperExtend.DropDownList("TypeId", "商品类型", defaultval: Model.TypeId, hint: "", downInfo: new DropDownListInfo() { Url = Url.Action("GetListForSelecte", "ShopProductType"), change = "changeType", unselect = "unselectType" })
-    @HelperExtend.TextBox("BrandId", "品牌", defaultval: Model.BrandId, hint: "")
+    @HelperExtend.TextBox("Name", "名称", defaultval: Model.Name, hint: "*必填,长度限制在100个字符以内.") 
+     @Html.Partial("_HelpEditProductType", new HelpEditProductType()
+{
+    DisplayField = "TypeName",
+    DisplayFieldValue = Model.TypeName,
+    ValueField = "TypeId",
+    ValueFieldValue = Model.TypeId,
+    Hint="当商品上架后，不允许修改商品类型",
+    OnSelecting= "OnSelecting",
+    OnClearing = "OnClearing",
+    OnOk= "changeType",
+})
+
+    @Html.Partial("_HelpEdit", new HelpEditModel()
+{
+     
+    Columns = @"[
+                   { text: '编号', dataField: 'Code',   width: 100 }, 
+                    { text: '名称', dataField: 'Name'  }  ]",
+    DataFields = @"[  { name: 'ID', type: 'string' },  
+               { name: 'Code', type: 'string' }, 
+               { name: 'Name', type: 'string' }   ]",
+    HelpTitle = "选择商品品牌",
+    ReturnDisplayField = "Name",
+    ReturnValueField = "ID",
+    SearchField = "Name",
+    Url = Url.Action("GetList", "ShopBrandInfo" ), 
+    DisplayField = "BrandName",
+    DisplayFieldValue = Model.BrandName, 
+    IsMutiSelect = false,
+    Lable = "品牌",
+    ValueField = "BrandId", 
+    ValueFieldValue = Model.BrandId
+})
+
+
     @HelperExtend.RadioGroup("IsCashOnDelivery", "支持货到付款 ", "true,false", "支持,不支持", defaultval: Model.IsCashOnDelivery)
     @HelperExtend.RadioGroup("SalesType", "销售类型 ", "0,1", "赠品,正常", defaultval: Model.SalesType)
-
-    @HelperExtend.RadioGroup("SaleStatus", "商品状态 ", "0,1", "下架,上架,审批中,审批退回", defaultval: Model.SaleStatus)
+    @Html.Hidden("SaleStatus", Model.SaleStatus)   
+    @HelperExtend.Lable(((ShopSaleStatus)Model.SaleStatus).ToString(), "商品状态 "  )   
     @{
         //推荐类型
         List<ShopProductStationMode> ptList = new EasyCms.Business.ShopProductTypeBll().GetStationMode(Model.ID, Model.RecordStatus);
@@ -127,7 +170,7 @@
 </div>
 
 <div class="tab-content" style="display:none"> 
-    @HelperExtend.ImageUpLoad("ID", "商品图片", Model.RecordStatus == Sharp.Common.StatusType.add, defaultval: Model.ID, maxLength: 7) 
+    @HelperExtend.ImageUpLoad("ID", "商品图片", Model.RecordStatus == Sharp.Common.StatusType.add, defaultval: Model.ID, maxLength:20) 
     @HelperExtend.TextArea("VideoUrl", "视频连接", defaultval: Model.VideoUrl, row: 3, col: 100, hint: "一行一个链接，最多支持三个<br/>如果有设置视频连接，必须上传一个视频封面图片")
     @HelperExtend.ImageUpLoad("VideoImg", "视频封面", Model.RecordStatus == Sharp.Common.StatusType.add, defaultval: Model.VideoImg, maxLength: 1 )
 </div>
@@ -137,30 +180,7 @@
     @HelperExtend.UEditor("PCDescription", "详细描述", mobliecode: "Description", defaultPcval: Model.PCDescription, defaultmoblieval: Model.Description)
      
 </div>
-<div class="tab-content" style="display:none">
-    @HelperExtend.TextBox("Unit", "计量单位", defaultval: Model.Unit, hint: "")
-    @HelperExtend.Number("Weight", "重量(KG)", defaultval: Model.Weight, hint: "", max: 1000000)
-    @HelperExtend.TextBox("SupplierId", "商家", defaultval: Model.SupplierId, hint: "")
-    @HelperExtend.TextBox("RegionId", "所在地", defaultval: Model.RegionId, hint: "")
-    @HelperExtend.Number("MaxQuantity", "警戒最高库存", defaultval: Model.MaxQuantity, hint: "", max: 10000000)
 
-    @HelperExtend.Number("MinQuantity", "警戒最低库存", defaultval: Model.MinQuantity, hint: "", max: 10000000)
-
-    @HelperExtend.RadioGroup("IsVirtualProduct", "虚拟产品", "false,true", "否,是", defaultval: Model.IsVirtualProduct)
-    @HelperExtend.DateTime("ManufactureDate", "生产日期", defaultval: Model.ManufactureDate, hint: "")
-    @HelperExtend.DateTime("LaunchDate", "上市日期", defaultval: Model.LaunchDate, hint: "")
-    @HelperExtend.DateTime("SaleDate", "上架日期", defaultval: Model.SaleDate, hint: "")
-    @HelperExtend.Number("VistiCounts", "访问次数", defaultval: Model.VistiCounts, hint: "", disabled: true, max: 10000000)
-
-    @HelperExtend.Number("SaleCounts", "销售个数", defaultval: Model.SaleCounts, hint: "", disabled: true, max: 10000000)
-
-    @HelperExtend.Number("SaleNum", "销售次数", defaultval: Model.SaleNum, hint: "", disabled: true, max: 10000000)
-    @HelperExtend.Number("CommentCount", "评论次数", defaultval: Model.CommentCount, hint: "", disabled: true, max: 10000000)
-    @HelperExtend.Number("GoodCount", "好评次数", defaultval: Model.GoodCount, hint: "", disabled: true, max: 10000000)
-    @HelperExtend.Number("MiddleCount", "中评次数", defaultval: Model.MiddleCount, hint: "", disabled: true, max: 10000000)
-    @HelperExtend.Number("BadCount", "差评次数", defaultval: Model.BadCount, hint: "", disabled: true, max: 10000000)
-    @HelperExtend.Number("DisplaySequence", "显示顺序", defaultval: Model.DisplaySequence, hint: "", disabled: true, max: 10000000)
-</div>
 <div class="tab-content" style="display:none">
     <fieldset id="extendInfo" style="border-width:1px; border-style:solid;  border-color:#eee">
         <legend style="text-align:center;">扩展属性</legend>
@@ -205,6 +225,30 @@
     </div>
     <div style="margin-top: 5px;" id="jqxyglgrid"></div>
 </div>
+<div class="tab-content" style="display:none">
+    @HelperExtend.TextBox("Unit", "计量单位", defaultval: Model.Unit, hint: "")
+    @HelperExtend.Number("Weight", "重量(KG)", defaultval: Model.Weight, hint: "", max: 1000000)
+    @HelperExtend.TextBox("SupplierId", "商家", defaultval: Model.SupplierId, hint: "")
+    @HelperExtend.TextBox("RegionId", "所在地", defaultval: Model.RegionId, hint: "")
+    @HelperExtend.Number("MaxQuantity", "警戒最高库存", defaultval: Model.MaxQuantity, hint: "", max: 10000000)
+
+    @HelperExtend.Number("MinQuantity", "警戒最低库存", defaultval: Model.MinQuantity, hint: "", max: 10000000)
+
+    @HelperExtend.RadioGroup("IsVirtualProduct", "虚拟产品", "false,true", "否,是", defaultval: Model.IsVirtualProduct)
+    @HelperExtend.DateTime("ManufactureDate", "生产日期", defaultval: Model.ManufactureDate, hint: "")
+    @HelperExtend.DateTime("LaunchDate", "上市日期", defaultval: Model.LaunchDate, hint: "")
+    @HelperExtend.DateTime("SaleDate", "上架日期", defaultval: Model.SaleDate, hint: "")
+    @HelperExtend.Number("VistiCounts", "访问次数", defaultval: Model.VistiCounts, hint: "", disabled: true, max: 10000000)
+
+    @HelperExtend.Number("SaleCounts", "销售个数", defaultval: Model.SaleCounts, hint: "", disabled: true, max: 10000000)
+
+    @HelperExtend.Number("SaleNum", "销售次数", defaultval: Model.SaleNum, hint: "", disabled: true, max: 10000000)
+    @HelperExtend.Number("CommentCount", "评论次数", defaultval: Model.CommentCount, hint: "", disabled: true, max: 10000000)
+    @HelperExtend.Number("GoodCount", "好评次数", defaultval: Model.GoodCount, hint: "", disabled: true, max: 10000000)
+    @HelperExtend.Number("MiddleCount", "中评次数", defaultval: Model.MiddleCount, hint: "", disabled: true, max: 10000000)
+    @HelperExtend.Number("BadCount", "差评次数", defaultval: Model.BadCount, hint: "", disabled: true, max: 10000000)
+    @HelperExtend.Number("DisplaySequence", "显示顺序", defaultval: Model.DisplaySequence, hint: "", disabled: true, max: 10000000)
+</div>
 @section  scripts{
 
 
@@ -215,7 +259,7 @@
             //先判断是否有选择商品类型
 
             if (!pid) {
-                ErrorMsg("请先选择商品类型");
+               return;
             } else {
                 $.getJSON("@Url.Action("GetGgWithProdcutVal")", { ptypeid: pid, productID: $("#ID").val() },
                 function (data, isSuccess) {
@@ -476,21 +520,34 @@
 
             });
         }
-        function changeType(event) {
-            var args = event.args;
-            if (args) {
-                // index represents the item's index.
-                var index = args.index;
-                var item = args.item;
-                // get item's label and value.
-                var label = item.label;
-                var value = item.value;
-                GetAttri(value);
-                StartGg(value);
+        function changeType(type) {
+            
+            if (type) {
+              
+                GetAttri(type.ID);
+                StartGg(type.ID);
             }
 
         }
+        function OnSelecting() {
+            
+            var state = $("#SaleStatus").val();
+            if (state == "1") {
+                ErrorMsg("已上架的商品不允许修改商品类型");
+                return false;
+            }  
+            return true;
 
+        }
+        function OnClearing() {
+            
+            var state = $("#SaleStatus").val();
+            if (state == "1") {
+                ErrorMsg("已上架的商品不允许修改商品类型");
+                return false;
+            }
+            return true;
+        }
         $(function () { GetAttri("@Model.TypeId"); StartGg("@Model.TypeId") });
         function GetAttri(pid) {
             if (!pid) {
@@ -578,9 +635,7 @@
                         required: true,
                         maxlength: 100
                     },
-                    ShopCategoryName: { required: true }
-                    ,
-                    TypeId: { required: true }
+                    ShopCategoryName: { required: true } 
 
                 },
                 messages: {
@@ -593,8 +648,7 @@
                         required: "请输入名称",
                         maxlength: $.validator.format("名称长度不能大于{0}个字符")
                     },
-                    ShopCategoryName: { required: "请输入商品分类" },
-                    TypeId: { required: "请输入商品类型" }
+                    ShopCategoryName: { required: "请输入商品分类" } 
                 },
                 errorPlacement: errorPlace,
                 showErrors: function (errorMap, errorList) {

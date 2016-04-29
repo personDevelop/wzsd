@@ -13,7 +13,8 @@ namespace EasyCms.Web
                 "~/Content/skin/default/style.css"));
             bundles.Add(new StyleBundle("~/bundles/jqxcss").Include(
               "~/Scripts/jqwidgets/styles/jqx.base.css",
-             "~/Scripts/jqwidgets/styles/jqx.metro.css"));
+             "~/Scripts/jqwidgets/styles/jqx.metro.css",
+             "~/Scripts/jqwidgets/styles/jqx.orange.css"));
 
 
 

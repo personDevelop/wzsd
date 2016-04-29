@@ -43,6 +43,10 @@
     <Reference Include="Microsoft.CSharp">
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="NPOI">
       <HintPath>..\refdll\NPOI.dll</HintPath>
     </Reference>
@@ -152,10 +156,6 @@
     </Reference>
     <Reference Include="System.Web.Optimization">
       <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.1\lib\net40\System.Web.Optimization.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <Private>True</Private>
-      <HintPath>..\packages\Newtonsoft.Json.5.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
@@ -294,7 +294,6 @@
     <Compile Include="Common\ExtentionMethod.cs" />
     <Compile Include="Common\FormatResponse.cs" />
     <Compile Include="Common\GatawayConfig.cs" />
-    <Compile Include="Common\Json.cs" />
     <Compile Include="Common\JsonModelBinder.cs" />
     <Compile Include="Common\UEFileUpLoad\Config.cs">
       <SubType>Code</SubType>
@@ -765,7 +764,6 @@
     <Content Include="Areas\Admin\Views\ShopExtendInfoValue\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\ShopExtendInfoValue\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ShopProductInfo\Edit.cshtml" />
-    <Content Include="Areas\Admin\Views\Shared\_SelecteShopCategory.cshtml" />
     <Content Include="Areas\Admin\Views\Regions\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\Regions\Index.cshtml" />
     <Content Include="Areas\Admin\Views\RedeemRules\Index.cshtml" />
@@ -797,10 +795,7 @@
     <Content Include="Areas\Admin\Views\ShopExpress\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\ShopExpress\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ShopProductType\AddExtend.cshtml" />
-    <Content Include="Areas\Admin\Views\ShopProductType\AddGg.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_LayoutEditDialog.cshtml" />
-    <Content Include="Areas\Admin\Views\ShopProductType\AddValue.cshtml" />
-    <Content Include="Areas\Admin\Views\ShopProductType\AddImg.cshtml" />
     <Content Include="Areas\Admin\Views\FunctionRight\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\Error.cshtml" />
     <Content Include="Areas\Admin\Views\Login\Index.cshtml" />
@@ -862,7 +857,6 @@
     <Content Include="Areas\Admin\Views\AttributeType\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ShopExtendInfo\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\ShopExtendInfo\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\ShopExtendInfo\AddGg.cshtml" />
     <Content Include="Areas\Admin\Views\ShopExtendInfo\AddImg.cshtml" />
     <Content Include="Areas\Admin\Views\ShopExtendInfo\AddValue.cshtml" />
     <Content Include="Areas\Admin\Views\Notice\Index.cshtml" />
@@ -887,6 +881,8 @@
     <Content Include="Areas\Admin\Views\ShopConsult\Index.cshtml" />
     <Content Include="Areas\Admin\Views\NewsComment\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\NewsComment\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_HelpEditProductCategory.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_HelpEditProductType.cshtml" />
     <None Include="Properties\PublishProfiles\publish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\EshopAdminControl.js" />

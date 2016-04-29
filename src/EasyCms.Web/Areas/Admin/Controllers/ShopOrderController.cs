@@ -80,7 +80,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                 }
 
             }
-            System.Data.DataTable dt = bll.GetList(pagenum + 1, pagesize, where, ref   recordCount);
+            System.Data.DataTable dt = bll.GetList(pagenum.PhrasePageIndex(), pagesize, where, ref   recordCount);
 
             string result = JsonWithDataTable.Serialize(dt);
             result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";

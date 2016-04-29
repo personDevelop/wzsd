@@ -16,30 +16,42 @@ namespace EasyCms.Dal
         {
             string error = string.Empty;
             Dal.Delete("ShopExtendInfo", "ID", id, out error);
+           
             return error;
         }
-        public int DeleteAttrVal(string id, out string error)
+        public string DeleteAttrVal(string id, out string error)
         {
             error = string.Empty;
-            return Dal.Delete("ShopExtendInfoValue", "ID", id, out error);
+        string extendid=    Dal.From<ShopExtendInfoValue>().Where(ShopExtendInfoValue._.ID == id).Select(ShopExtendInfoValue._.AttributeId).ToScalar() as string;
+              Dal.Delete("ShopExtendInfoValue", "ID", id, out error);
+            List<SimpalShopExtendInfoValue> childValue = Dal.From<ShopExtendInfoValue>()
+              .Join<AttachFile>(ShopExtendInfoValue._.ImageID == AttachFile._.RefID, JoinType.leftJoin)
+              .Select(ShopExtendInfoValue._.ID, ShopExtendInfoValue._.ValueStr, AttachFile.GetThumbnaifilePath("", "ImgUrl"))
+              .Where(ShopExtendInfoValue._.AttributeId == extendid)
+              .OrderBy(ShopExtendInfoValue._.DisplaySequence).ToDataTable().ToList<SimpalShopExtendInfoValue>();
+            ShopExtendInfo extendInfo = new ShopExtendInfo() { RecordStatus = StatusType.update, Where = ShopExtendInfo._.ID == extendid };
 
+            if (childValue.Count > 0)
+            {
+
+                extendInfo.ValInfo = JsonWithDataTable.Serialize(childValue);
+              
+            }
+            else
+            {
+                extendInfo.ValInfo = string.Empty;
+            }
+            Dal.Submit(extendInfo);
+            return error;
         }
-        
+
         public int Save(ShopExtendInfo item)
         {
             return Dal.Submit(item);
 
         }
 
-        public DataTable GetList(bool IsForSelected = false)
-        {
-            if (IsForSelected)
-            {
-                return Dal.From<ShopExtendInfo>().Select(ShopExtendInfo._.ID,   ShopExtendInfo._.FullName, ShopExtendInfo._.Name ).OrderBy(ShopExtendInfo._.DisplayOrder).ToDataTable();
-            }
-            else
-                return Dal.From<ShopExtendInfo>().OrderBy(ShopExtendInfo._.DisplayOrder).ToDataTable();
-        }
+
 
         public DataTable GetValList(string host, string attriID)
         {
@@ -65,31 +77,32 @@ namespace EasyCms.Dal
             return dt;
         }
 
-        public DataTable GetList(string categoryID, string name, string fullName, string pTypeID, UsageMode usageMode, int pagenum, int pagesize, ref int recordCount)
+        public DataTable GetList(string categoryID, string name, string pTypeID, UsageMode usageMode, int pagenum, int pagesize, ref int recordCount)
         {
             DataTable dt = null;
-            string sql = "select ExtendID from ShopExtendAndType where TypeID='"+"pTypeID"+"'";
+            string sql = "select ExtendID from ShopExtendAndType where TypeID='" + "pTypeID" + "'";
             WhereClip where = new WhereClip(string.Format(" NOT EXISTS (select 1  from ShopExtendAndType where TypeID='{0}' AND ShopExtendInfo.ID=ExtendID)", pTypeID));
 
-            where = where &&  ShopExtendInfo._.Name.Contains(name) && ShopExtendInfo._.FullName.Contains(fullName);
+            where = where && (ShopExtendInfo._.Name.Contains(name) || ShopExtendInfo._.FullName.Contains(name));
             if (!string.IsNullOrWhiteSpace(categoryID))
                 where = where && ShopExtendInfo._.CategoryID == categoryID;
             if ((int)usageMode > 1) where = where && ShopExtendInfo._.UsageMode > 1;
             else where = where && ShopExtendInfo._.UsageMode < 2;
-            int pagecount=0;
-            dt = Dal.From<ShopExtendInfo>().Join<AttributeType>(ShopExtendInfo._.CategoryID==AttributeType._.ID)
-                .Select(ShopExtendInfo._.ID.All,AttributeType._.Name.Alias("CategoryName"))
+            int pagecount = 0;
+            dt = Dal.From<ShopExtendInfo>().Join<AttributeType>(ShopExtendInfo._.CategoryID == AttributeType._.ID)
+                .Select(ShopExtendInfo._.ID.All, AttributeType._.Name.Alias("CategoryName"))
+                  .OrderBy(ShopExtendInfo._.DisplayOrder)
                 .Where(where).ToDataTable(pagesize, pagenum, ref pagecount, ref recordCount);
             return dt;
         }
 
-        public bool Exit(string ID, string categoryID, string RecordStatus, string val )
+        public bool Exit(string ID, string categoryID, string RecordStatus, string val)
         {
-            WhereClip where = ShopExtendInfo._.CategoryID==categoryID;
+            WhereClip where = ShopExtendInfo._.CategoryID == categoryID;
 
-            
-                where = where && ShopExtendInfo._.FullName == val;
-            
+
+            where = where && ShopExtendInfo._.FullName == val;
+
             if (RecordStatus == StatusType.update.ToString())
             {
                 where = where && ShopExtendInfo._.ID != ID;
@@ -125,31 +138,88 @@ namespace EasyCms.Dal
             return Dal.Submit(list);
         }
 
-      
 
-        public DataTable GetList(int pagenum, int pagesize, ref int recordCount, bool IsForSelected = false)
+
+        public DataTable GetList(string categoryID, string name, int pagenum, int pagesize, ref int recordCount)
         {
-            int pageCount = 0;
-            
-                return Dal.From<ShopExtendInfo>().Join<AttributeType>(ShopExtendInfo._.CategoryID == AttributeType._.ID, 
-                    JoinType.leftJoin).Select(ShopExtendInfo._.ID.All, AttributeType._.Name.Alias("CategoryName")   ).
-                    OrderBy(ShopExtendInfo._.DisplayOrder).ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
-            
+            DataTable dt = null;
+
+            WhereClip where = (ShopExtendInfo._.Name.Contains(name) || ShopExtendInfo._.FullName.Contains(name));
+            if (!string.IsNullOrWhiteSpace(categoryID))
+                where = where && ShopExtendInfo._.CategoryID == categoryID;
+            int pagecount = 0;
+            dt = Dal.From<ShopExtendInfo>().Join<AttributeType>(ShopExtendInfo._.CategoryID == AttributeType._.ID)
+                .Select(ShopExtendInfo._.ID.All, AttributeType._.Name.Alias("CategoryName"))
+                .OrderBy(ShopExtendInfo._.DisplayOrder)
+                .Where(where).ToDataTable(pagesize, pagenum, ref pagecount, ref recordCount);
+
+            return dt;
         }
-         public ShopExtendInfo GetEntity(string id)
+        public ShopExtendInfo GetEntity(string id)
         {
-            
-            return Dal.Find<ShopExtendInfo>(id) ;
+
+            return Dal.Find<ShopExtendInfo>(id);
         }
 
 
-        public int SaveAttrVal(ShopExtendInfoValue p)
+        public string SaveAttrVal(ShopExtendInfoValue p)
         {
-            return Dal.Submit(p);
+            List<BaseEntity> list = new List<BaseEntity>();
+            list.Add(p);
+            string result = string.Empty;
+            if (p.RecordStatus == StatusType.add)
+            {
+                int count = Dal.Count<ShopExtendInfoValue>(ShopExtendInfoValue._.AttributeId == p.AttributeId, ShopExtendInfoValue._.ID, false);
+                p.DisplaySequence = count;
+                if (string.IsNullOrWhiteSpace(p.ImageID))
+                {
+                    string[] val = p.ValueStr.Split(new char[] { '，', ',','；',';'}, StringSplitOptions.RemoveEmptyEntries);
+                    if (val.Length > 1)
+                    {
+
+                        for (int i = 0; i < val.Length; i++)
+                        {
+                            if (i == 0)
+                            {
+                                p.ValueStr = val[i];
+                            }
+                            else
+                            {
+
+
+
+                                list.Add(new ShopExtendInfoValue() { ID = Guid.NewGuid().ToString(), AttributeId = p.AttributeId,
+                                    DisplaySequence = count + i, ImageID = p.ImageID, Note = p.Note, ValueStr = val[i] 
+                                });
+                            }
+                            
+                        }
+                    }
+                    
+                }
+                
+            }
+            Dal.Submit(list);
+
+            List<SimpalShopExtendInfoValue> childValue = Dal.From<ShopExtendInfoValue>()
+                .Join<AttachFile>(ShopExtendInfoValue._.ImageID == AttachFile._.RefID, JoinType.leftJoin)
+                .Select(ShopExtendInfoValue._.ID, ShopExtendInfoValue._.ValueStr, AttachFile.GetThumbnaifilePath("", "ImgUrl"))
+                .Where(ShopExtendInfoValue._.AttributeId == p.AttributeId)
+                .OrderBy(ShopExtendInfoValue._.DisplaySequence).ToDataTable().ToList<SimpalShopExtendInfoValue>();
+
+            if (childValue.Count > 0)
+            {
+                ShopExtendInfo extendInfo = new ShopExtendInfo() { RecordStatus = StatusType.update, Where = ShopExtendInfo._.ID == p.AttributeId };
+
+                extendInfo.ValInfo = JsonWithDataTable.Serialize(childValue);
+                Dal.Submit(extendInfo);
+            }
+
+            return result;
         }
 
-     
+
     }
 
-    
+
 }

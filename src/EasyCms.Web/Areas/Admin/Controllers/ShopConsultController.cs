@@ -54,7 +54,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             {
                 where = where && ManagerUserInfo._.IsManager == false;
             }
-            System.Data.DataTable dt = new ShopConsultBll().GetList(pagenum + 1, pagesize, where, ref recordCount);
+            System.Data.DataTable dt = new ShopConsultBll().GetList(pagenum.PhrasePageIndex(), pagesize, where, ref recordCount);
 
             string result = JsonWithDataTable.Serialize(dt);
             result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";

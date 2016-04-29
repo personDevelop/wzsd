@@ -27,11 +27,8 @@
       { name: 'BrandName' }, { name: 'SaleDate' }, { name: 'AddedDate' }];
         var columns = [
 { text: '编号', dataField: 'Code', width: 100, cellsalign: "left" },
-{ text: '名称', dataField: 'Name', width: '300', cellsalign: "left" },
-{ text: '商品类型', dataField: 'TypeName', width: 80 },
-{ text: '品牌', dataField: 'BrandName', width: 80 },
-{ text: '上架日期', dataField: 'SaleDate', width: 80 },
-{ text: '添加日期', dataField: 'AddedDate', width: 80 }];
+{ text: '名称', dataField: 'Name',  cellsalign: "left" },
+ ];
         var dglColumns = [
               {
                   text: '操作', align: 'center', dataField: 'ID', width: 80, cellsRenderer: function (row, column, value, rowData) {
@@ -44,11 +41,8 @@
                   }
               },
 { text: '编号', dataField: 'Code', width: 100, cellsalign: "left" },
-{ text: '名称', dataField: 'Name', width: '300', cellsalign: "left" },
-{ text: '商品类型', dataField: 'TypeName', width: 80 },
-{ text: '品牌', dataField: 'BrandName', width: 80 },
-{ text: '上架日期', dataField: 'SaleDate', width: 80 },
-{ text: '添加日期', dataField: 'AddedDate', width: 80 }];
+{ text: '名称', dataField: 'Name',  cellsalign: "left" } 
+ ];
         var yglColumns = [{
             text: '操作', align: 'center', dataField: 'ID', width: 80, cellsRenderer: function (row, column, value, rowData) {
                 var html = "  <div style='text-align: center; overflow: hidden; padding-bottom: 2px; margin-top: 4px; text-overflow: ellipsis;'>";
@@ -60,11 +54,8 @@
             }
         },
 { text: '编号', dataField: 'Code', width: 100, cellsalign: "left" },
-{ text: '名称', dataField: 'Name', width: '300', cellsalign: "left" },
-{ text: '商品类型', dataField: 'TypeName', width: 80 },
-{ text: '品牌', dataField: 'BrandName', width: 80 },
-{ text: '上架日期', dataField: 'SaleDate', width: 80 },
-{ text: '添加日期', dataField: 'AddedDate', width: 80 }];
+{ text: '名称', dataField: 'Name',  cellsalign: "left" } 
+ ];
 
         $(function () {
             $('#bigDiv').jqxSplitter({ width: '100%', theme: "metro", height: '100%', panels: [{ size: '50%' }] });

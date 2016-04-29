@@ -179,10 +179,10 @@ namespace ImportData
 
             af.FileExtName = imgExtend;
             af.FileName = af.RealFileName = ImgName;
-            af.FilePath = "~" + temPath + "/" + ImgName;
+            af.FilePath = "~/Upload/image/" + ImgName;
             af.BigClass = "image";
 
-            temPath = "\\Upload\\image\\" + dtime.ToString("yyyyMMdd");
+            temPath = "Upload\\image\\" + dtime.ToString("yyyyMMdd");
             if (temPath.StartsWith("\\"))
             {
                 temPath = temPath.Substring(1);

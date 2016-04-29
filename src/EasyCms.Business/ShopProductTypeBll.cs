@@ -73,5 +73,10 @@ namespace EasyCms.Business
         {
             return Dal.GetStationMode(  productID,   status);
         }
+
+        public DataTable GetAllAttrList(string host, string ptypeid)
+        {
+            return Dal.GetAllAttrList(host, ptypeid,false,true);
+        }
     }
 }

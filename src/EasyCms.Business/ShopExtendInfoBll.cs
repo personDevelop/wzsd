@@ -24,15 +24,17 @@ namespace EasyCms.Business
             return Dal.Save(item);
         }
 
-        public DataTable GetList(bool IsForSelected = false)
+     
+        public DataTable GetList(string CategoryID, string Name, int pagenum, int pagesize, ref int recordCount )
         {
-            return Dal.GetList(IsForSelected);
+            return Dal.GetList(  CategoryID,   Name, pagenum, pagesize, ref recordCount );
         }
-        public DataTable GetList(int pagenum, int pagesize, ref int recordCount, bool IsForSelected = false)
+        public DataTable GetList(string categoryID, string name,  string pTypeID, UsageMode usageMode, int pagenum, int pagesize,
+         ref int recordCount)
         {
-            return Dal.GetList(pagenum, pagesize, ref recordCount, IsForSelected);
+            return Dal.GetList(categoryID, name, 
+               pTypeID, usageMode, pagenum, pagesize, ref recordCount);
         }
-
         public DataTable GetValList(string host, string attriID)
         {
             return Dal.GetValList(host, attriID);
@@ -59,7 +61,7 @@ namespace EasyCms.Business
 
         
 
-        public int SaveAttrVal(ShopExtendInfoValue p)
+        public string SaveAttrVal(ShopExtendInfoValue p)
         {
             return Dal.SaveAttrVal(p);
         }
@@ -69,16 +71,11 @@ namespace EasyCms.Business
             return Dal.GetAttrVal(valueID);
         }
 
-        public int DeleteAttrVal(string id, out string eroor)
+        public string DeleteAttrVal(string id, out string eroor)
         {
             return Dal.DeleteAttrVal(id, out eroor);
         }
 
-        public DataTable GetList(string categoryID, string name, string fullName, string pTypeID, UsageMode usageMode, int pagenum, int pagesize, 
-            ref int recordCount )
-        {
-            return Dal.GetList(categoryID, name, fullName,
-               pTypeID, usageMode, pagenum, pagesize, ref recordCount );
-        }
+     
     }
 }

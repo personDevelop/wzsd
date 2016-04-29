@@ -107,15 +107,15 @@
             var datafields = [{ name: 'ID' },
 		{ name: 'Info' }, { name: 'CrateDate' }, { name: 'msgOrder' }, { name: 'OrderName' }, { name: 'Createor' }, { name: 'CreateorName' }, { name: 'FunName' }, { name: 'ModleNameSource' }, { name: 'ContextInfo' }];
             var columns = [
-  { text: '日志信息', dataField: 'Info', cellsalign: "left" },
+  { text: '日志信息', dataField: 'Info', cellsalign: "left", width: 470 },
   { text: '日志类型', dataField: 'OrderName', width: 100 },
      { text: '发生日期', dataField: 'CrateDate', width: 120, cellsformat: "yyyy-MM-dd HH:mm" },
   { text: '对应功能', dataField: 'FunName', width: 100 },
-    { text: '是APP', dataField: 'ModleNameSource', width: 80 },
+    { text: '是APP', dataField: 'ModleNameSource', width: 50 },
     { text: '上下文信息', dataField: 'ContextInfo', width: 100 },
-    { text: '操作人', dataField: 'CreateorName', width: 100 },
+    { text: '操作人', dataField: 'CreateorName', width: 50 },
  {
-     text: '操作', datafield: 'ID', width: 200, cellsrenderer: function (row, column, value) {
+     text: '操作', datafield: 'ID', width: 100, cellsrenderer: function (row, column, value) {
 
          var html = "  <div style='text-align: center; overflow: hidden; padding-bottom: 2px; margin-top: 4px; text-overflow: ellipsis;'>";
          html +=

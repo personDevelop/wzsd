@@ -14,40 +14,12 @@
 
 <!--工具栏-->
 <!--/工具栏-->
-<dl>
-    <dt>
-
-    </dt>
-    <dd>
-        <table width="80%" class="borderkuang" border="0" cellspacing="0" cellpadding="0">
-            <tbody>
-                <tr>
-                    <td>
-                        @HelperExtend.img("icon-1.gif", "width:19px,height:19px")搜索：
-                    </td>
-                    <td>
-                        分类：
-                    </td>
-                    <td>
-                        @HelperExtend.DropDownListWithSearch("CategoryID", "分类", downInfo: new DropDownListInfo() { Url = Url.Action("GetListForDropDown", "AttributeType") })
-                    </td>
-                    <td>
-                        名称：
-                    </td>
-                    <td><input type="text" id="Name"></td>
-                    <td>全称：</td>
-                    <td><input type="text" id="FullName"></td>
-
-                    <td>
-                        <input id="btnQry" type="button" value="搜索">
-                    </td>
-
-                </tr>
-
-            </tbody>
-        </table>
-    </dd>
-</dl>
+<span style="float:left">
+    @HelperExtend.DropDownListWithSearch("CategoryID", "分类", downInfo: new DropDownListInfo() { Url = Url.Action("GetListForDropDown", "AttributeType") })
+</span>
+<input name="Name" width="200" class="input normal " id="Name" type="text">
+<input id="btnQry" type="button" value="搜索">
+ 
 <!--列表-->
 <div class="table-container">
     <div id="jqxgrid"></div>
@@ -110,7 +82,7 @@
     <script type="text/javascript">
         $(function () {
             $("#Name").jqxInput({ height: '25px' });
-            $("#FullName").jqxInput({ height: '25px' });
+           
             $("#btnQry").jqxButton({ width: '100', template: 'success' });
             $("#btnQry").on("click", function () { $('#jqxgrid').jqxGrid('updatebounddata'); });
 
@@ -121,8 +93,8 @@
             var url = "@Url.Action("GetListWithSearch", "ShopExtendInfo")";
             var datafields = [
 
-  { name: 'ID' },
-  { name: 'Name' },
+  { name: 'ID' }, { name: 'ValInfo' },
+  { name: 'Name' }, { name: 'FullName' },
   { name: 'UnitText' },
   { name: 'ShowType' },
   { name: 'DisplayOrder' },
@@ -138,17 +110,16 @@
   { text: '全称', dataField: 'FullName', cellsalign: "left", width: 80 },
      { text: '名称', dataField: 'Name', cellsalign: "left", width: 80 },
   { text: '单位', dataField: 'UnitText', width: 50 },
-
+        { text: '值', dataField: 'ValInfo' },
   { text: '展示方式', dataField: 'ShowType', width: 80,@HelperExtend.ParseEnum(typeof(AttrShowType)) },
   { text: '使用图标', dataField: 'UseAttrImg', width: 80,@HelperExtend.Parsebool() },
 
             ];
             CreateGrid("jqxgrid", url, datafields, columns, {
-                isMutilSelect: true, adapter: {
+                isMutilSelect: true,grid:{pageSize:9}, adapter: {
                     formatData: function (data) {
                         data.CategoryID = $("#CategoryID").val();
-                        data.Name = $("#Name").val();
-                        data.FullName = $("#FullName").val();
+                        data.Name = $("#Name").val(); 
                         data.PTypeID = "@Model.ProductTypeID";
                         data.UsageMode = "@Model.UseMode";
                     }

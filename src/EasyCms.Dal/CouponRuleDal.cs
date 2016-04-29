@@ -49,7 +49,7 @@ namespace EasyCms.Dal
             }
             return !Dal.Exists<CouponRule>(where);
         }
-        public DataTable GetList(string name,int pagenum, int pagesize, ref int recordCount, bool IsForSelected = false)
+        public DataTable GetList(string name, int pagenum, int pagesize, ref int recordCount, bool IsForSelected = false)
         {
             int pageCount = 0;
             WhereClip where = CouponRule._.Name.Contains(name);
@@ -65,8 +65,13 @@ namespace EasyCms.Dal
 
         public CouponRule GetEntity(string id)
         {
-
-            return Dal.Find<CouponRule>(id);
+            CouponRule d= Dal.From<CouponRule>().Join<ShopCategory>(!CouponRule._.CategoryId.IsNullOrEmpty() && CouponRule._.CategoryId == ShopCategory._.ID, JoinType.leftJoin)
+                .Join<ShopProductInfo>(!CouponRule._.ProductId.IsNullOrEmpty() && CouponRule._.ProductId == ShopProductInfo._.ID)
+                .Join<ShopProductSKUInfo>(!CouponRule._.ProductSku.IsNullOrEmpty() && CouponRule._.ProductSku == ShopProductSKUInfo._.ID)
+                .Select(CouponRule._.ID.All, ShopCategory._.Name.Alias("ShopCategoryName"), ShopProductInfo._.Name.Alias("ShopName")
+                , ShopProductSKUInfo._.SKU.Alias("ShopSkuCode")).Where(CouponRule._.ID == id).ToFirst<CouponRule>( );
+         
+            return d;
         }
 
 
@@ -143,72 +148,72 @@ namespace EasyCms.Dal
                 }
                 else
                     if (!string.IsNullOrWhiteSpace(item.ProductId))
+                {
+                    //检测商品
+                    if (orderItemlist.Exists(p => p.ProductID == item.ProductId))
                     {
-                        //检测商品
-                        if (orderItemlist.Exists(p => p.ProductID == item.ProductId))
+                        //包含该种商品
+                        foreach (OrderItem order in orderItemlist.Where(p => p.ProductID == item.ProductId))
                         {
-                            //包含该种商品
-                            foreach (OrderItem order in orderItemlist.Where(p => p.ProductID == item.ProductId))
-                            {
-                                if (order.BuyCount * order.SalePrice < item.MinPrice && item.MinPrice > 0)
-                                {
-
-                                }
-                                else
-                                    //然后检测当前订单内是否存在不满足的商品ID
-                                    if (!orderItemlist.Exists(p => p.ProductID != item.ProductId))
-                                    {
-                                        result.Add(item);
-                                    }
-
-                            }
-                        }
-                        else
-                        { continue; }
-                    }
-
-                    else
-                        if (!string.IsNullOrWhiteSpace(item.CategoryId))
-                        {
-                            //检测分类
-                            string[] products = Dal.From<ShopProductCategory>().Where(ShopProductCategory._.CategoryID == item.CategoryId
-                                   && ShopProductCategory._.ProductID.In(productIdList)).Select(ShopProductCategory._.ProductID).ToSinglePropertyArray();
-                            if (products != null && products.Length > 0)
-                            {
-
-                                foreach (OrderItem order in orderItemlist.Where(p => products.Contains(p.ProductID)))
-                                {
-                                    if (order.BuyCount * order.SalePrice < item.MinPrice && item.MinPrice > 0)
-                                    {
-
-                                    }
-                                    else
-                                        //然后检测当前订单内是否存在不满足的商品ID
-                                        if (!orderItemlist.Exists(p => !products.Contains(p.ProductID)))
-                                        {
-                                            result.Add(item);
-                                        }
-
-                                }
-                            }
-                            else
-                            {
-                                continue;
-                            }
-                        }
-                        else
-                        {
-                            //适合所有商品的优惠券,这个算在总订单里
-                            //包含该种商品
-                            //计算总个数 和总金额
-                            decimal totalPrice = orderItemlist.Sum(p => p.SalePrice);
-                            if (totalPrice < item.MinPrice && item.MinPrice > 0)
+                            if (order.BuyCount * order.SalePrice < item.MinPrice && item.MinPrice > 0)
                             {
 
                             }
                             else
+                                //然后检测当前订单内是否存在不满足的商品ID
+                                if (!orderItemlist.Exists(p => p.ProductID != item.ProductId))
+                            {
                                 result.Add(item);
+                            }
+
                         }
+                    }
+                    else
+                    { continue; }
+                }
+
+                else
+                        if (!string.IsNullOrWhiteSpace(item.CategoryId))
+                {
+                    //检测分类
+                    string[] products = Dal.From<ShopProductCategory>().Where(ShopProductCategory._.CategoryID == item.CategoryId
+                           && ShopProductCategory._.ProductID.In(productIdList)).Select(ShopProductCategory._.ProductID).ToSinglePropertyArray();
+                    if (products != null && products.Length > 0)
+                    {
+
+                        foreach (OrderItem order in orderItemlist.Where(p => products.Contains(p.ProductID)))
+                        {
+                            if (order.BuyCount * order.SalePrice < item.MinPrice && item.MinPrice > 0)
+                            {
+
+                            }
+                            else
+                                //然后检测当前订单内是否存在不满足的商品ID
+                                if (!orderItemlist.Exists(p => !products.Contains(p.ProductID)))
+                            {
+                                result.Add(item);
+                            }
+
+                        }
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+                else
+                {
+                    //适合所有商品的优惠券,这个算在总订单里
+                    //包含该种商品
+                    //计算总个数 和总金额
+                    decimal totalPrice = orderItemlist.Sum(p => p.SalePrice);
+                    if (totalPrice < item.MinPrice && item.MinPrice > 0)
+                    {
+
+                    }
+                    else
+                        result.Add(item);
+                }
 
             }
 
@@ -375,19 +380,19 @@ namespace EasyCms.Dal
                         foreach (var item in userId)
                         {
                             CusomerAndCoupon action = new CusomerAndCoupon()
-                                    {
+                            {
 
-                                        ID = Guid.NewGuid().ToString(),
-                                        Code = GetMaxNo(cr.PreName ?? "Q"),
-                                        CustomerID = item,
-                                        CouponID = cr.ID,
-                                        HaveCount = s.SendCount,
-                                        HasDate = DateTime.Now,
-                                        CardValue = cr.JE,
-                                        EndDate = cr.EndDate,
-                                        HaveType = RuleType.系统派送,
-                                        SendID = id
-                                    };
+                                ID = Guid.NewGuid().ToString(),
+                                Code = GetMaxNo(cr.PreName ?? "Q"),
+                                CustomerID = item,
+                                CouponID = cr.ID,
+                                HaveCount = s.SendCount,
+                                HasDate = DateTime.Now,
+                                CardValue = cr.JE,
+                                EndDate = cr.EndDate,
+                                HaveType = RuleType.系统派送,
+                                SendID = id
+                            };
                             saveList.Add(action);
                         }
                         s.Status = DjStatus.生效;
@@ -435,7 +440,7 @@ namespace EasyCms.Dal
                 {
                     //未过期
                     DataRow[] drs = dt.Select("IsOutDate=0");
-                    if (drs.Length>0)
+                    if (drs.Length > 0)
                     {
                         return drs.CopyToDataTable();
                     }
@@ -444,7 +449,7 @@ namespace EasyCms.Dal
                 else if (status == "3")
                 {
                     //已过期
-                    
+
                     DataRow[] drs = dt.Select("IsOutDate=1");
                     if (drs.Length > 0)
                     {

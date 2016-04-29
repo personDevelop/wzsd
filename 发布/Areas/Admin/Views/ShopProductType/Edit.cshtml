@@ -168,7 +168,7 @@
             /*加载规格*/
             var url = "@Url.Action("GetAttrList")";
             var datafields = [{ name: 'ID' }, { name: 'Name' }, { name: 'FullName' }, { name: 'ShowType' }, { name: 'OrderNo' },
-            { name: 'CategoryName' }, { name: 'UseAttrImg' }, { name: 'UsageMode' }, { name: 'Vals' }];
+            { name: 'CategoryName' }, { name: 'UseAttrImg' }, { name: 'UsageMode' }, { name: 'ValInfo' }];
             var columns = [
             {
                 text: '规格类型', dataField: 'UseAttrImg', width: 100, cellsrenderer: function (row, column, value) {
@@ -182,7 +182,7 @@
             },
       { text: '规格分类', dataField: 'CategoryName', cellsalign: "left", width: 120 },
     { text: '规格名称', dataField: 'FullName', cellsalign: "left", width: 120 },
-    { text: '规格值', dataField: 'Vals' },
+    { text: '规格值', dataField: 'ValInfo' },
     { text: '顺序', dataField: 'OrderNo', width: 80 },
       {
           text: '操作', datafield: 'ID', align: "center", cellsalign: "center", width: 100, cellsrenderer: function (row, column, value) {
@@ -216,7 +216,7 @@
    { text: '属性分类', dataField: 'CategoryName', cellsalign: "left", width: 120 },
     { text: '属性名称', dataField: 'FullName', cellsalign: "left", width: 120 }, 
            
-            { text: '属性值', dataField: 'Vals' },
+            { text: '属性值', dataField: 'ValInfo' },
 
     { text: '顺序', dataField: 'OrderNo', width: 80 },
        {

@@ -20,24 +20,17 @@ namespace EasyCms.Web.Areas.Admin.Controllers
 
             return View();
         }
-        public string GetList(int pagenum, int pagesize)
+        public string GetList(string name,int pagenum, int pagesize)
         {
             int recordCount = 0;
-            System.Data.DataTable dt = bll.GetList(pagenum + 1, pagesize, ref   recordCount);
+            System.Data.DataTable dt = bll.GetList(name,pagenum.PhrasePageIndex(), pagesize, ref   recordCount);
 
             string result = JsonWithDataTable.Serialize(dt);
             result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
             return result;
 
         }
-        public string GetListForSelecte(int pagenum, int pagesize)
-        {
-            int recordCount = 0;
-            System.Data.DataTable dt = bll.GetList(pagenum, pagesize, ref   recordCount, true);
-            string result = JsonWithDataTable.Serialize(dt);
-            result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
-            return result;
-        }
+      
         public string CheckRepeat(string ID,   string RecordStatus, string val, bool IsCode)
         {
             return bll.Exit(ID,  RecordStatus, val, IsCode).ToString().ToLower();
