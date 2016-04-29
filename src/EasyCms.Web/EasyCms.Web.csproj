@@ -319,6 +319,7 @@
     <Compile Include="Common\UEFileUpLoad\UploadHandler.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UpLoadController.cs" />
     <Compile Include="Global.asax.cs">
@@ -729,6 +730,12 @@
     <Content Include="Content\upload\Customrwebuploader.css" />
     <Content Include="Content\upload\upload - 复制.css" />
     <Content Include="Content\upload\upload.css" />
+    <Content Include="Content\web\css\cart.css" />
+    <Content Include="Content\web\css\list.css" />
+    <Content Include="Content\web\css\login.css" />
+    <Content Include="Content\web\css\main.css" />
+    <Content Include="Content\web\css\product.css" />
+    <Content Include="Content\web\css\register.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -1342,16 +1349,18 @@
     </Content>
     <Content Include="Scripts\jqwidgets\globalization\globalize.culture.zh-Hans.js" />
     <Content Include="Views\Home\View.cshtml" />
-    <Content Include="Views\shared\_main_wrap.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\web.config" />
+    <Content Include="Views\Shared\_Head.cshtml" />
+    <Content Include="Views\Shared\_Footer.cshtml" />
+    <Content Include="Views\Default\Index.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Views\Error\" />
     <Folder Include="Areas\Admin\Views\SearchKeyWord\" />
-    <Folder Include="Content\css\" />
     <Folder Include="Scripts\jGui\" />
     <Folder Include="Upload\Export\" />
   </ItemGroup>

@@ -1,0 +1,451 @@
+
+#root-nav {
+    clear: both;
+}
+#root-nav {
+    background: #f2f2f2;
+}
+#root-nav .w .breadcrumb {
+    padding: 0 0 4px 6px;
+    overflow: hidden;
+    vertical-align: baseline;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    height: 45px;
+    line-height: 45px;
+}
+.breadcrumb h1, .breadcrumb strong {
+    display: inline;
+    font-weight: 700;
+    line-height: 20px;
+    font-size: 18px;
+    font-family: "microsoft yahei";
+}
+.breadcrumb span {
+    font-family: simsun;
+}
+
+#preview {
+    float: left;
+   	height: 450px;
+    display: inline;
+    width: 378px;
+    position: relative;
+}
+#spec-n1 {
+    width: 350px;
+    height: 350px;
+    margin: 14px 0 14px 14px;
+    position: relative;
+}
+#itemInfo{
+    width: 810px;
+    float: left;
+    height: 400px;
+    
+    padding-right: 22px;
+}
+.jqZoomPup {
+    z-index: 3;
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50px;
+    height: 50px;
+    border: 1px solid #aaa;
+    background: #FEDE4F 50% top no-repeat;
+    opacity: .5;
+    -moz-opacity: .5;
+    -khtml-opacity: .5;
+    filter: alpha(Opacity=50);
+    cursor: move;
+}
+#spec-list {
+    position: relative;
+    width: 310px;
+    height: 54px;
+    overflow: hidden;
+    padding: 0 20px 0 34px;
+}
+
+.spec-control{
+    background-image: url(http://static.360buyimg.com/item/main/1.0.14/css/i/newicon20140910.png);
+    background-repeat: no-repeat;
+}
+#spec-backward {
+    right: 0;
+    background-position: -14px -346px;
+}
+#spec-forward {
+    left: 14px;
+    background-position: 0 -346px;
+}
+#spec-list .spec-control {
+    display: block;
+    position: absolute;
+    top: 0;
+    width: 14px;
+    height: 54px;
+}
+#spec-backward.disabled {
+    background-position: -70px -346px;
+}
+#spec-forward.disabled {
+    background-position: -56px -346px;
+}
+#preview #spec-list a.disabled {
+    cursor: default;
+}
+
+#spec-list .spec-items {
+    position: absolute;
+    top: 0;
+    left: 36px;
+}
+.lh {
+    overflow: hidden;
+    zoom: 1;
+}
+#spec-list .spec-items li {
+	float: left;
+    width: 62px;
+    text-align: center;
+    font-size: 0;
+    position: relative;
+}
+
+#spec-list .spec-items img {
+    width: 50px;
+    height: 50px;
+    padding: 2px;
+    display: block;
+}
+#spec-list .spec-items img.img-hover {
+    border: 2px solid #e4393c;
+    padding: 0;
+}
+
+
+
+#name {
+    padding: 15px 10px 10px 0;
+}
+#name h1 {
+    line-height: 1.5em;
+    overflow: hidden;
+    font-weight: 700;
+    font-family: arial,"microsoft yahei";
+    font-size: 16px;
+}
+
+#summary {
+    width: 100%;
+    position: relative;
+    z-index: 3;
+}
+#summary-price {
+    padding-top: 10px;
+    padding-bottom: 0;
+    padding-right: 81px;
+    height: 30px;
+    line-height: 30px;
+  
+}
+#summary-price .dt, #summary-promotion .dt, #summary-service .dt, #summary-stock .dt {
+    float: left;
+    width: 72px;
+    display: inline;
+    text-align: right;
+    font-family: simsun;
+}
+#summary-price .dd {
+    width: 432px;
+}
+#summary-price .p-price {
+    display: inline-block;
+    vertical-align: middle;
+    color: #e4393c;
+    font-size: 20px;
+}
+.summary  li {
+    padding-left: 6px;
+    margin: 10px 0;
+    line-height: 20px;
+    color: #636363;
+}
+.summary .red2{
+	color: #e4393c;
+    font-size: 20px;
+}
+s, strike, del {
+    text-decoration: line-through;
+}
+a.orange, .orange {
+    color: #cc0000;
+}
+.f_r {
+    float: right;
+}
+
+
+#choose #choose-btns {
+    width: 578px;
+    padding: 10px 0 8px 10px;
+    border-bottom: none;
+}
+.choose-amount {
+    width: 49px;
+    height: 34px;
+    overflow: hidden;
+    border: 1px solid #ccc;
+    position: relative;
+    margin: 8px 10px 0 0;
+}
+
+
+.choose-amount a.btn-reduce {
+    bottom: -1px;
+}
+.choose-amount a.btn-add {
+    top: -1px;
+}
+.choose-amount a {
+    display: block;
+    width: 15px;
+    text-align: center;
+    height: 17px;
+    line-height: 17px;
+    overflow: hidden;
+    background: #f1f1f1;
+    color: #666;
+    position: absolute;
+    right: -1px;
+    border: 1px solid #ccc;
+}
+#choose a {
+    display: block;
+    white-space: nowrap;
+    text-decoration: none;
+}
+.choose-amount input {
+    display: block;
+    width: 31px;
+    height: 32px;
+    line-height: 32px;
+    position: absolute;
+    top: 1px;
+    left: 0;
+    border: none;
+    border: 0;
+    text-align: center;
+}
+#choose-btns .btn {
+    float: left;
+    height: 38px;
+    margin-top: 8px;
+    margin-bottom: 5px;
+}
+#choose-btns .btn-append {
+    width: 137px;
+    height: 38px;
+}
+#choose-btns .btn a {
+    float: left;
+    margin-right: 6px;
+    overflow: hidden;
+}
+#choose-btns .btn a {
+    position: relative;
+    font: 400 18px/38px "microsoft yahei";
+    text-align: center;
+    color: #e4393c;
+}
+#choose-btns .btn a b, .nav-minicart-btn a {
+    background-image: url(http://static.360buyimg.com/item/main/1.0.14/css/i/p-btns.png);
+    background-repeat: no-repeat;
+}
+#choose-btns .btn a b {
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+}
+.buy b{
+	background-position: 0 -123px;
+}
+#choose {
+    width: 100%;
+    padding-top: 10px;
+    border-top: 1px dotted #ddd;
+    margin-top: 5px;
+    margin-bottom: 20px;
+}
+#choose .li {
+    width: 516px;
+    padding:5px 0 5px 0px;
+    float: left;
+}
+#choose .dt {
+    float: left;
+    width: 72px;
+   
+    display: inline;
+    
+    font-family: simsun;
+}
+#choose-suit .dt, #choose-type .dt, #choose-version .dt {
+    margin-top: 8px;
+}
+
+
+
+.p-choose-wrap .item {
+    float: left;
+    margin: 2px 8px 2px 0
+}
+
+.p-choose-wrap .item a {
+    padding: 4px 6px;
+    border: 1px solid #ccc;
+    background: #fff
+}
+
+.p-choose-wrap .item a:hover {
+    padding: 3px 5px;
+    border: 2px solid #e4393c
+}
+
+.p-choose-wrap .item.selected {
+    position: relative;
+    zoom:1}
+
+.p-choose-wrap .item.selected a {
+    padding: 3px 5px;
+    border: 2px solid #e4393c
+}
+
+.p-choose-wrap .item.selected b {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 12px;
+    height: 12px;
+    overflow: hidden;
+    background: url(//static.360buyimg.com/item/main/1.0.14/css/i/newicon20140910.png) no-repeat -202px -224px
+}
+
+.p-choose-wrap .item.disabled {
+    position: relative;
+    zoom:1}
+
+.p-choose-wrap .item.disabled i {
+    display: none
+}
+
+.p-choose-wrap .item.disabled a,.p-choose-wrap .item.disabled a:hover {
+    cursor: not-allowed;
+    border: 1px dashed #ccc;
+    padding: 4px 6px;
+    color: #999
+}
+
+#view-buy{
+    float: left; width: 210px;
+    margin-top: 4px;
+}
+#p-box{
+    overflow: auto;
+}
+#view-buy .mt{
+    font: 14px/30px 'microsoft yahei';
+    height: 28px;
+   
+    line-height: 28px;
+    border: 1px solid #ddd;
+    background-color: #f7f7f7;
+}
+#view-buy .mt h2{
+    font-size: 14px;
+    color: #666;
+    padding: 0 8px;
+}
+#view-buy .mc {
+    border: 1px solid #ddd;
+    border-top: none;
+}
+
+#view-buy .mc ul {
+    padding: 0 8px;
+    overflow: hidden;
+    zoom: 1;
+}
+#view-buy .mc ul li {
+    padding: 8px 0;
+    border-top: 1px dotted #DEDEDE;
+}
+#view-buy .mc ul li .p-img {
+    padding: 5px 0;
+    text-align: center;
+}
+#view-buy .mc ul li .p-price {
+    text-align: center;
+}
+#view-buy .mc ul li .p-name {
+    word-break: break-all;
+    word-wrap: break-word;
+}
+#view-buy .mc ul li .p-price strong {
+    color: #E4393C;
+}
+#view-buy .mc .fore1 {
+    border-top: none;
+}
+
+#prd-detail{
+    float: left;
+    width: 980px;
+    margin-left: 10px;
+}
+.m-tab-trigger-wrap {
+    position: relative;
+    height: 30px;
+    line-height: 30px;
+    margin-top: 4px;
+    border-right: 1px solid #DEDFDE;
+    border-bottom: 1px solid #DEDFDE;
+    border-left: 1px solid #DEDFDE;
+    border-top: 2px solid #999;
+    background-color: #F7F7F7;
+    overflow: visible;
+}
+.m-tab-trigger {
+    float: left;
+    height: 31px;
+    margin-bottom: -1px;
+}
+.m-tab-trigger .trig-item {
+    float: left;
+    height: 30px;
+}
+.m-tab-trigger .trig-item a {
+    display: inline-block;
+    padding: 0 10px;
+    font-family: "microsoft yahei";
+    font-size: 14px;
+}
+
+.m-tab-trigger .trig-item.curr a {
+    position: relative;
+    height: 35px;
+    line-height: 35px;
+    margin-top: -6px;
+    margin-left: -1px;
+    border-top: 2px solid #e4393c;
+    border-left: 1px solid #DEDFDE;
+    border-right: 1px solid #DEDFDE;
+    background-color: #fff;
+}
