@@ -1343,6 +1343,9 @@
     <Content Include="Scripts\jqwidgets\globalization\globalize.culture.zh-Hans.js" />
     <Content Include="Views\Home\View.cshtml" />
     <Content Include="Views\shared\_main_wrap.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\web.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
