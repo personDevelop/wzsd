@@ -1340,6 +1340,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Scripts\jqwidgets\globalization\globalize.culture.zh-Hans.js" />
+    <Content Include="Views\Home\View.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
