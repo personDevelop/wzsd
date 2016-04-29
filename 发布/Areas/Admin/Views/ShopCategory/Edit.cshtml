@@ -67,7 +67,10 @@
     @HelperExtend.ImageUpLoad("BigLogo", "大图标", Model.RecordStatus == Sharp.Common.StatusType.add, defaultval: Model.BigLogo, maxLength: 1)
     @HelperExtend.TextArea("PriceArea", "价格范围", defaultval: Model.PriceArea, hint: "<br/>多个之间用换行间隔，格式如0-100，100-200，200- 最后一个可以为空例如200-")
     @HelperExtend.RadioGroup("IsShow", "首页显示", "false,true", "否,是", defaultval: Model.IsShow,hint:"首页会显示该分类的推荐商品")
-    @HelperExtend.RadioGroup("IsEnable", "启用", "false,true", "否,是", defaultval: Model.IsEnable)
+    @HelperExtend.TextBox("GroupNo", "分组号", defaultval: Model.GroupNo, hint: "如果分组号不为空，且同级别中包含同类分组的，则在分类导航中作为一组显示")
+     @HelperExtend.RadioGroup("HasIndex", "单独分类页", "false,true", "否,是", defaultval: Model.HasIndex)
+    @HelperExtend.TextBox("IndexUrl", "分类首页地址", defaultval: Model.IndexUrl, hint: "*注意url中要包含{0} 以替换分类标识")
+      @HelperExtend.RadioGroup("IsEnable", "启用", "false,true", "否,是", defaultval: Model.IsEnable)
     @HelperExtend.Number("OrderNo", "显示顺序", defaultval: Model.OrderNo)
     @HelperExtend.TextArea("Note", "备注", defaultval: Model.Note)
 </div>

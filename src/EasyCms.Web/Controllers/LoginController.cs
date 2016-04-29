@@ -6,12 +6,12 @@ using System.Web.Mvc;
 
 namespace EasyCms.Web.Controllers
 {
-    public class DefaultController : Controller
+    public class LoginController : Controller
     {
-        // GET: Default
+        // GET: Login
         public ActionResult Index()
         {
-            return View("index2");
+            return View();
         }
     }
 }

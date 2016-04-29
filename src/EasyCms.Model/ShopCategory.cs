@@ -64,6 +64,12 @@ namespace EasyCms.Model
 
         private string _PriceArea;
 
+        private bool _HasIndex;
+
+        private string _IndexUrl;
+
+        private string _GroupNo;
+
         #endregion
 
         #region 属性
@@ -449,6 +455,63 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  是否启用分类首页,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "HasIndex", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public bool HasIndex
+        {
+            get
+            {
+                return this._HasIndex;
+            }
+            set
+            {
+                this.OnPropertyChanged("HasIndex", this._HasIndex, value);
+                this._HasIndex = value;
+            }
+        }
+
+        /// <summary>
+        ///  分类首页URL,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "IndexUrl", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 500, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string IndexUrl
+        {
+            get
+            {
+                return this._IndexUrl;
+            }
+            set
+            {
+                this.OnPropertyChanged("IndexUrl", this._IndexUrl, value);
+                this._IndexUrl = value;
+            }
+        }
+
+        /// <summary>
+        ///  分组号,如果分组号不为空，且同级别中包含同类分组的，则在分类导航中作为一组显示
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "GroupNo", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string GroupNo
+        {
+            get
+            {
+                return this._GroupNo;
+            }
+            set
+            {
+                this.OnPropertyChanged("GroupNo", this._GroupNo, value);
+                this._GroupNo = value;
+            }
+        }
+
         #endregion
 
         #region 列定义 
@@ -496,6 +559,12 @@ namespace EasyCms.Model
                 IsShow = new PropertyItem("IsShow", tableName);
 
                 PriceArea = new PropertyItem("PriceArea", tableName);
+
+                HasIndex = new PropertyItem("HasIndex", tableName);
+
+                IndexUrl = new PropertyItem("IndexUrl", tableName);
+
+                GroupNo = new PropertyItem("GroupNo", tableName);
 
 
             }
@@ -579,9 +648,22 @@ namespace EasyCms.Model
             /// 价格范围,多个之间用换行间隔，格式如0-100，100-200，200-
             /// </summary> 
             public PropertyItem PriceArea = null;
+            /// <summary>
+            /// 是否启用分类首页,
+            /// </summary> 
+            public PropertyItem HasIndex = null;
+            /// <summary>
+            /// 分类首页URL,
+            /// </summary> 
+            public PropertyItem IndexUrl = null;
+            /// <summary>
+            /// 分组号,如果分组号不为空，且同级别中包含同类分组的，则在分类导航中作为一组显示
+            /// </summary> 
+            public PropertyItem GroupNo = null;
         }
         #endregion
     }
+
 
     public partial class ShopCategory
     {

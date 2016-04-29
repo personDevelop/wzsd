@@ -16,7 +16,10 @@ namespace EasyCms
 
     public static class CmsSessionExtend
     {
-
+        static CmsSessionExtend()
+        { 
+            webSite=  new WebSiteSetBll().GetEntity(); 
+        }
 
         public static string GetUserID(this HttpSessionStateBase session)
         {
@@ -260,6 +263,11 @@ namespace EasyCms
             return result;
         }
 
-
+        private static WebSiteSet webSite;
+        public static WebSiteSet  WebSite {
+            
+            get{ return webSite; }
+            
+            }
     }
 }

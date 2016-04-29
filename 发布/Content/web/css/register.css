@@ -1,0 +1,116 @@
+
+.top{
+	border-bottom: 1px solid rgba(0,0,0,.15);box-shadow: 0 6px 12px #EEEEEE;
+}
+.w {
+	width: 990px;margin: 0 auto;
+}
+.top .logotxt{
+	margin: 10px 0 0;height: 90px;position:relative;
+}
+.top .logotxt span{
+	position: absolute;top:32px;left: 220px;font-weight: 400;font-size:24px;font-family: 微软雅黑;color: #5b5b5b;height: 35px;line-height: 35px;
+}
+
+.main{height: 500px;background-color: #fbfaf8;padding-top: 20px;}
+.main input{outline: none;}
+.register .banner{float:right;width:480px;margin-right:20px;}
+.register{ width: 990px;margin: 0 auto;background-color: #FFF;padding: 20px; }
+.register .title{padding:20px;font-size: 18px;}
+.register .title h3{margin-left: 80px;}
+.register .text {
+		    width: 100%;
+		    height: 70px;
+}
+.register .text label {
+	float: left;
+	width: 94px;
+	height: 40px;
+	line-height: 40px;
+		    text-align: right;
+		    font-size: 14px;
+		}
+		.register .right {
+		    float: left;
+		}
+		
+		.register .text input {
+		    height: 38px;
+		    width: 302px;
+		    padding-left: 30px;
+		    border: 1px solid #ccc;
+		    box-sizing: border-box;
+		}
+		.register .text span {
+		    /* position: absolute; */
+		    color: #ff4000;
+		    font-size: 12px;
+		    display: block;
+		    /* margin-left: -303px; */
+		    margin-top: 6px;
+		}
+		.register .phone label:after {
+		    content: "";
+		    position: absolute;
+		    background: url(images/icon_03.png) no-repeat;
+		    width: 16px;
+		    height: 22px;
+		    margin-left: 10px;
+		    margin-top: 10px;
+		}
+		.register .pwd label:after {
+		    content: "";
+		    position: absolute;
+		    background: url(images/icon_06.png) no-repeat;
+		    width: 16px;
+		    height: 19px;
+		    margin-left: 10px;
+		    margin-top: 10px;
+		}
+		.register .verify input {
+		    width: 118px;
+		    padding-left: 0;
+		    text-align: center;
+		}
+		.register .sec {
+		    width: 80px;
+		    margin: 0 10px;
+		    vertical-align: middle;
+		}
+		.register .submit .btn { 
+		    border: 1px solid #e85356;
+		    background-color: #e4393c;
+		    color: #ffffff;
+		    height: 44px;
+		    padding-left: 0;
+		    font-size: 16px;
+		    font-family: 微软雅黑;
+		}
+		.register .protocol {
+		    margin-bottom: 15px;
+		    padding-left: 94px;
+		}
+		.register .protocol label {
+		    display: inline-block;
+		    text-align: center;
+		    font-size: 12px;
+		    /* line-height: 40px; */
+		}
+		.register .protocol .pro {
+		    color: #2f60a9;
+		}
+		.register b.pass_icon {
+		    display: inline-block;
+		    background: url(images/icon_03_03.png) no-repeat;
+		    width: 18px;
+		    height: 18px;
+		    margin: 12px 0 0 10px;
+		}
+		.register input[type='checkbox'] {
+		    margin-right: 16px;
+		    vertical-align: middle;
+		}
+
+		.hide{
+			display: none;
+		}

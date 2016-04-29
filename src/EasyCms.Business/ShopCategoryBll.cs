@@ -28,6 +28,10 @@ namespace EasyCms.Business
         {
             return Dal.GetList(IsForSelected);
         }
+        public List<ShopCategory> GetListWithNavi(string parentID, int maxLayer = 3)
+        {
+            return Dal.GetListWithNavi(  parentID,   maxLayer);
+        }
         public DataTable GetList(int pagenum, int pagesize, ref int recordCount, bool IsForSelected = false)
         {
             return Dal.GetList(pagenum, pagesize, ref   recordCount, IsForSelected);
@@ -37,7 +41,7 @@ namespace EasyCms.Business
             return Dal.Exit(ID, ParentID, RecordStatus, val, IsCode);
 
         }
-
+        
         public DataTable GetListByParentId(string parentId)
         {
             return Dal.GetListByParentId(parentId);

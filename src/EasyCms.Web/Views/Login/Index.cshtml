@@ -1,0 +1,88 @@
+﻿@{
+    Layout = null;
+} 
+@using EasyCms.Model
+@using EasyCms
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link href="http://localhost:7161/Content/web/css/main.css" rel="stylesheet" />
+    <link href="http://localhost:7161/Content/web/css/login.css" rel="stylesheet" /> 
+</head> 
+<body>
+    <div style=" width 990px;margin 0 auto;">
+        <div id='topbar' style=" margin 10px 0 0;height 90px;position:relative;">
+            <image src='css/images/logo.jpg' style=''>
+                <span style="position: absolute;top:32px;left: 220px;font-weight: 400;font-size:24px;font-family: 微软雅黑;">欢迎登录</span>
+        </div>
+    </div>
+    <div id='mainbanner' style="background-color: #FB3E35;height: 480px;">
+        <div style="width: 990px;margin: 0 auto;position: relative;">
+            <div style="float: left;">
+                <image src='css/images/banner.png' style='width:640px;position: absolute;top:80px;'>
+            </div>
+        </div>
+        <div style="width: 990px;margin: 0 auto;position:relative;">
+            <div class="login-form">
+                <div class="login-box">
+                    <div class="mt">
+                        <h1>会员登录</h1>
+                        <div class="extra-r">
+                            <div class="regist-link"><a href="#" target="_blank"><b></b>立即注册</a></div>
+                        </div>
+                    </div>
+                    <div class="msg-wrap">
+                        <div class="msg-warn"><b></b>欢迎登录@(CmsSessionExtend.WebSite.Name)！</div>
+                        <div class="msg-error" style='display: none;'><b></b>请输入验证码</div>
+
+                    </div>
+                    <div class="mc">
+                        <div class="form">
+                            <form id="formlogin" method="post" onsubmit="return false;">
+                                <div class="item item-fore1 item-focus">
+                                    <label for="loginname" class="login-label name-label"></label>
+                                    <input id="loginname" type="text" class="itxt" name="loginname" tabindex="1" autocomplete="off" placeholder="邮箱/用户名/已验证手机">
+                                    <span class="clear-btn" style="display: inline;"></span>
+                                </div>
+                                <div id="entry" class="item item-fore2">
+                                    <label class="login-label pwd-label" for="nloginpwd"></label>
+                                    <input type="password" id="nloginpwd" name="nloginpwd" class="itxt itxt-error" tabindex="2" autocomplete="off" placeholder="密码">
+                                    <span class="clear-btn"></span>
+                                    <span class="capslock" style="display: none;"><b></b>大小写锁定已打开</span>
+                                </div>
+                                <div class="item item-fore3">
+                                    <div class="safe">
+                                        <span>
+                                            <input id="autoLogin" name="chkRememberMe" type="checkbox" class="jdcheckbox" tabindex="3">
+                                            <label for="">自动登录</label>
+                                        </span>
+                                        <span class="forget-pw-safe">
+                                            <a href="@Url.Action("FindPwd")" class="" target="_blank">忘记密码?</a>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div id="o-authcode" class="item item-vcode item-fore4  hide " >
+                                    <input id="authcode" type="text" class="itxt itxt02" name="authcode" tabindex="5">
+                                    <img id="JD_Verification1" class="verify-code" src2="https://authcode.jd.com/verify/image?a=1&amp;acid=5756ac3c-2a2a-43d7-8257-8ff36b9fee02&amp;uid=5756ac3c-2a2a-43d7-8257-8ff36b9fee02" onclick="this.src= document.location.protocol +'//authcode.jd.com/verify/image?a=1&amp;acid=5756ac3c-2a2a-43d7-8257-8ff36b9fee02&amp;uid=5756ac3c-2a2a-43d7-8257-8ff36b9fee02&amp;yys='+new Date().getTime();$('#authcode').val('');">
+                                    <a href="javascript:void(0)" onclick="$('#JD_Verification1').click();">看不清楚换一张</a>
+                                </div>
+                                <div class="item item-fore5">
+                                    <div class="login-btn">
+                                        <a href="javascript:;" class="btn-img btn-entry" id="loginsubmit" tabindex="6">登&nbsp;&nbsp;&nbsp;&nbsp;录</a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+    <div id='footer'>
+    </div>
+</body>
+</html> 

@@ -34,6 +34,23 @@ namespace EasyCms.Dal
             else
                 return Dal.From<ShopCategory>().OrderBy(ShopCategory._.OrderNo).ToDataTable();
         }
+
+        public List<ShopCategory> GetListWithNavi(string parentID, int maxLayer)
+        {
+            WhereClip where = null;
+            if (string.IsNullOrWhiteSpace(parentID))
+            {
+                where = ShopCategory._.Depth < 3;
+            } else
+            {
+                ShopCategory current = Dal.From<ShopCategory>().Where(ShopCategory._.ID == parentID).Select(ShopCategory._.Depth,ShopCategory._.ClassCode).ToFirst<ShopCategory>();
+                maxLayer += current.Depth;
+                where =ShopCategory._.ClassCode.StartsWith(current.ClassCode)&& ShopCategory._.Depth< maxLayer;
+            }
+
+         return    Dal.From<ShopCategory>().Where(where).OrderBy(ShopCategory._.OrderNo).List<ShopCategory>();
+        }
+
         public bool Exit(string ID, string parentID, string RecordStatus, string val, bool IsCode)
         {
             WhereClip where = null;

@@ -420,4 +420,14 @@ namespace EasyCms.Model
         }
         #endregion
     }
+
+
+    public partial class WebSiteSet
+    {
+        [NotDbCol]
+        public string LogoUrl { get; set; }
+        
+
+    }
 }
+
