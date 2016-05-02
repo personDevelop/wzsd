@@ -1,0 +1,279 @@
+.cart-main .cart-header  {
+    display: inline-block;
+    display: block;
+    height: 32px;
+    line-height: 32px;
+    margin: 0 0 10px;
+    padding: 5px 0;
+    background: #f3f3f3;
+    border: 1px solid #e9e9e9;
+    border-top: 0;
+    margin-top: 10px;
+}
+.cart-main .cart-header .column{
+	float: left;
+}
+.cart-main .cart-header .checkbox{
+	height: 18px;
+    line-height: 18px;
+    padding-top: 7px;
+    width: 122px;
+    padding-left: 11px;
+}
+.cart-main .cart-header .goods{
+	    width: 208px;
+}
+.cart-main .cart-header .props{
+	        width: 140px;
+	            height: 32px;
+    padding: 0 20px;
+}
+.cart-main .cart-header .price{
+	        width: 120px;
+    padding-right: 40px;
+    text-align: right;
+}
+.cart-main .cart-header .quantity{
+	       width: 80px;
+    text-align: center;
+}
+.cart-main .cart-header .sum{
+	  width: 100px;
+    padding-right: 40px;
+    text-align: right;
+}
+.cart-main .cart-header .action{
+	        width: 75px;
+}
+.cart-main .cart-header .cart-checkbox input[type="checkbox"]{
+	    margin: 3px 3px 3px 4px;
+}
+
+.cart-main .cart-header .cart-checkbox{
+	position: relative;
+    z-index: 3;
+    float: left;
+    margin-right: 5px;
+}
+.cart-tbody 
+{
+    position: relative;
+    padding: 0 10px 1px 40px;
+    border-top: 1px solid #c5c5c5;
+    line-height: 20px;
+    _height: 116px;
+    background: #fff;
+    overflow: auto;
+
+}
+.cart-tbody .item-item .cell {
+    float: left;
+    padding: 15px 0 10px;
+}
+.cart-tbody .item-item .p-checkbox {
+    position: absolute;
+    z-index: 3;
+    left: 10px;
+    top: 0;
+    width: 30px;
+    min-height: 10px;
+    _height: 10px;
+}
+.cart-tbody .item-item .p-goods {
+    width: 300px;
+}
+.cart-tbody .item-item .goods-item .p-img {
+    float: left;
+    width: 80px;
+    height: 80px;
+    border: 1px solid #eee;
+    margin-right: 10px;
+    background: #fff;
+    padding: 0;
+    text-align: center;
+    overflow: hidden;
+}.cart-tbody .item-item .goods-item .p-name {
+    height: 40px;
+    line-height: 20px;
+    overflow: hidden;
+}
+
+.cart-tbody .item-item .goods-item .p-name a {
+    color: #333;
+}
+.cart-tbody .item-item .p-props-new {
+    width: 100px;
+    height: 80px;
+    line-height: 20px;
+    overflow: hidden;
+    padding: 15px 10px 0;
+}
+.cart-tbody .item-item .p-props-new, .cart-main-new .cart-tbody .item-item .p-props-new .props-txt {
+    width: 160px;
+}
+.cart-tbody .item-item .p-price {
+    width: 120px;
+    padding-right: 40px;
+    font-family: verdana;
+    text-align: right;
+}
+.cart-tbody .item-item .p-price strong {
+    display: block;
+    color: #333;
+    font-weight: 400;
+}
+.cart-tbody .item-item .p-quantity {
+    width: 80px;
+}
+.cart-tbody .item-item .p-sum {
+    width: 100px;
+    padding-right: 40px;
+    text-align: right;
+    font-family: verdana;
+}
+.cart-tbody .item-item .p-ops {
+    width: 75px;
+}
+.cart-tbody .item-item .p-sum strong {
+    color: #E4393C;
+    font-weight: 700;
+}
+
+.cart-tbody .item-item .p-quantity .quantity-form {
+    position: relative;
+    overflow: hidden;
+    height: 22px;
+    width: 80px;
+}
+
+
+.cart-tbody .item-item .p-quantity .decrement, .cart-tbody .item-item .p-quantity .increment {
+    border: 1px solid #cacbcb;
+    border-right: 0;
+    height: 18px;
+    line-height: 18px;
+    padding: 1px 0;
+    width: 16px;
+    text-align: center;
+    color: #666;
+    margin: 0;
+    background: #fff;
+}
+.cart-tbody .item-item .p-quantity .increment {
+    float: right;
+    border: 1px solid #cacbcb;
+    border-left: 0;
+    color: #666;
+}
+.cart-tbody .item-item .p-quantity .decrement {
+    float: left;
+}
+.cart-tbody .item-item .p-quantity .itxt {
+    position: absolute;
+    left: 17px;
+    top: 0;
+    border: 1px solid #cacbcb;
+    width: 42px;
+    height: 18px;
+    line-height: 18px;
+    text-align: center;
+    padding: 1px;
+    margin: 0;
+    font-size: 12px;
+    font-family: verdana;
+    color: #333;
+    -webkit-appearance: none;
+}
+.ac {
+    text-align: center;
+}
+
+
+.cart-toolbar {
+    height: 50px;
+    border: 1px solid #f0f0f0;
+    background: #fff;
+    position: relative;
+}
+.select-all {
+    float: left;
+    height: 18px;
+    line-height: 18px;
+    padding: 16px 0 16px 9px;
+    white-space: nowrap;
+}
+.cart-checkbox {
+    position: relative;
+    z-index: 3;
+    float: left;
+    margin-right: 5px;
+}
+.cart-checkbox .jdcheckbox {
+    position: relative;
+    float: none;
+    vertical-align: middle;
+    _vertical-align: -1px;
+    margin: 0 3px 0 0;
+    padding: 0;
+}
+.toolbar-wrap .operation {
+    float: left;
+    height: 50px;
+    width: 210px;
+    line-height: 50px;
+}
+.toolbar-wrap .operation a {
+    float: left;
+    margin-left: 25px;
+    color: #666;
+}
+.toolbar-wrap .toolbar-right {
+    position: absolute;
+    height: 52px;
+    right: 0;
+    top: -1px;
+    width: 710px;
+}
+.toolbar-wrap .price-sum {
+    float: right;
+    height: 43px;
+    line-height: 20px;
+    margin: 7px 20px 0 10px;
+    color: #666;
+    width: auto;
+}
+.toolbar-wrap .price-sum .txt {
+    float: left;
+    width: 110px;
+    text-align: right;
+    color: #999;
+}
+.toolbar-wrap .price-sum .price {
+    display: inline-block;
+    text-align: right;
+    font-family: verdana;
+}
+.toolbar-wrap .price-sum .price em {
+    font-size: 16px;
+    color: #e4393c;
+    font-weight: 700;
+}
+.toolbar-wrap .btn-area {
+    float: right;
+}
+.toolbar-wrap .btn-area .submit-btn {
+    display: block;
+    position: relative;
+    width: 96px;
+    height: 52px;
+    line-height: 52px;
+    color: #fff;
+    text-align: center;
+    font-size: 18px;
+    font-family: '\5fae\8f6f\96c5\9ed1';
+    background: #e54346;
+    overflow: hidden;
+}
+.item-list{
+    clear: both;
+}
