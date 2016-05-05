@@ -25,8 +25,7 @@ namespace EasyCms.Business
             return Dal.Save(item);
         }
 
-        public string Regist(ManagerUserInfo item)
-        { return string.Empty; }
+       
 
         public ManagerUserInfo Login(string code, string pwd, out string error)
         {
@@ -48,14 +47,20 @@ namespace EasyCms.Business
             }
             else if (pwd.EncryptSHA1() != item.Pwd)
             {
-
+                if (string.IsNullOrWhiteSpace(item.Pwd))
+                {
+                    item.Pwd = pwd.EncryptSHA1();
+                    Dal.Save(item);
+                }else
+                { 
                 error = "密码不正确！";
                 item = null;
+                }
             }
-            else if (item.Status != 1)
+            else if (item.Status != UserStatus.正常)
             {
 
-                error = "账号状态异常，不允许登陆！";
+                error = "账号状态["+ item.Status + "]，不允许登陆！";
                 item = null;
             }
             else if (isManager && !item.IsManager)
@@ -88,6 +93,11 @@ namespace EasyCms.Business
                 }
             }
             return item;
+        }
+
+        public AccountRange GetAccountRange(string userID)
+        {
+            return Dal.GetAccountRange(  userID);
         }
 
         public DataTable GetList(bool IsForSelected = false)
@@ -128,7 +138,7 @@ namespace EasyCms.Business
             return Dal.GetListForAccount(pagenum, pagesize, where, ref   recordCount);
         }
 
-        public string ChangeStatus(string id, int status)
+        public string ChangeStatus(string id, UserStatus status)
         {
             return Dal.ChangeStatus(id, status);
         }
@@ -147,6 +157,12 @@ namespace EasyCms.Business
         {
             return Dal.GetRole(userid);
         }
+
+        public bool CheckRepeat(string val, bool isCode)
+        {
+            return Dal.CheckRepeat(val,   isCode);
+        }
+
         public ManagerUserInfo GeUserWithCodeOrTelOrEmail(string usercodeOrTelOrEmail)
         {
             return Dal.GeUserWithCodeOrTelOrEmail(usercodeOrTelOrEmail);

@@ -679,4 +679,34 @@ namespace EasyCms.Model
         固定日期, 天, 周
     }
 
+    public enum AdType
+    {
+       图片, flash, 文字,代码 
+    }
+
+    public enum AdLinkType
+    {
+        商品,
+        新闻,
+        公告,
+        自定义
+    }
+    public enum AdShowType
+    {
+        轮询, 即时,跑马灯
+    }
+
+    public enum OpEvent
+    {
+
+        充值,
+        提现,
+        购物,
+        退款
+    }
+
+    public enum OpStatus
+    {
+        未处理=0, 处理中=1, 成功=2, 失败=99
+    }
 }

@@ -1,4 +1,4 @@
-@charset "utf-8";
+﻿@charset "utf-8";
 
 
 *{
@@ -643,3 +643,11 @@ a:hover {
 dd {
     line-height: 20px;
 }
+.error,.field-validation-error{ 
+		    /* position: absolute; */
+		    color: #ff4000;
+		    font-size: 12px;
+		    
+		    /* margin-left: -303px; */
+		    margin-top: 6px;
+		 }

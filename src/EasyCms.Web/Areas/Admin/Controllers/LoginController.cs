@@ -14,7 +14,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         // GET: /Admin/Login/
         public ActionResult Index()
         {
-            LoginViewModel p = new LoginViewModel()  ;
+            LoginModel p = new LoginModel()  ;
             return View(p);
         }
 

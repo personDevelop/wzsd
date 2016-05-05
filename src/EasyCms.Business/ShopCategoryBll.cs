@@ -23,7 +23,10 @@ namespace EasyCms.Business
         {
             return Dal.Save(item);
         }
-
+        public List<ShopCategory> GetShowIndex(string host)
+        {
+            return Dal.GetShowIndex(host );
+        }
         public DataTable GetList(bool IsForSelected = false)
         {
             return Dal.GetList(IsForSelected);
@@ -72,7 +75,7 @@ namespace EasyCms.Business
 
         }
 
-        public string GetClassCode(string categoryID)
+        public string[] GetClassCode(string categoryID)
         {
             return Dal.GetClassCode(categoryID);
         }

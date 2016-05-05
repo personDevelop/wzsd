@@ -79,25 +79,34 @@ namespace EasyCms.Dal
 
         public string Regist(RegistModel registModel)
         {
-            if (Dal.Exists<ManagerUserInfo>(ManagerUserInfo._.Code == registModel.TelPhone))
+            ManagerUserInfo user = user = new ManagerUserInfo()
             {
-                return "当前手机号已注册过";
+                ID = Guid.NewGuid().ToString(),
+                Code = registModel.UserNo,
+                Name = registModel.UserNo,
+               
+                NickyName = registModel.UserNo,
+                Pwd = registModel.Pwd.EncryptSHA1(),
+                CreateDate = DateTime.Now,
+                LastModifyDate = DateTime.Now,
+                StatusChangeDate = DateTime.Now,
+                Status = UserStatus.正常
+            };
+            if (registModel.IsPc)
+            {
+                user.Email = registModel.Email; 
             }
             else
             {
-                ManagerUserInfo user = new ManagerUserInfo()
-                {
-                    ID = Guid.NewGuid().ToString(),
-                    Code = registModel.TelPhone,
-                    Name = registModel.TelPhone,
-                    ContactPhone = registModel.TelPhone,
-                    NickyName = registModel.NiceName,
-                    Pwd = registModel.Pwd.EncryptSHA1(),
-                    CreateDate = DateTime.Now,
-                    LastModifyDate = DateTime.Now,
-                    StatusChangeDate = DateTime.Now,
-                    Status = 1
-                };
+                user.ContactPhone = registModel.TelPhone;
+            }
+            if (Dal.Exists<ManagerUserInfo>(ManagerUserInfo._.Code == registModel.UserNo))
+            {
+                return "当前账号已注册过";
+            }
+            else
+            {
+
                 try
                 {
                     Dal.Submit(user);
@@ -114,7 +123,7 @@ namespace EasyCms.Dal
 
                     }
 
-                    return "注册成功";
+                    return string.Empty;
                 }
                 catch (Exception ex)
                 {
@@ -123,6 +132,13 @@ namespace EasyCms.Dal
                 }
 
             }
+        }
+
+        public AccountRange GetAccountRange(string userID)
+        {
+            AccountRange ar = Dal.Find<AccountRange>(AccountRange._.AccountID == userID);
+            ar.RangDict = Dal.Find<RangeDict>(RangeDict._.ID == ar.RangeID);
+            return ar;
         }
 
         public DataTable GetListForAccount(int pagenum, int pagesize, WhereClip where, ref int recordCount)
@@ -137,7 +153,19 @@ namespace EasyCms.Dal
 
         }
 
-        public string ChangeStatus(string id, int status)
+        public bool CheckRepeat(string val, bool isCode)
+        {
+            if (isCode)
+            {
+                return !(val.ToLower()=="root"|| Dal.Exists<ManagerUserInfo>(ManagerUserInfo._.Code == val));
+            }
+            else
+            {
+                return !Dal.Exists<ManagerUserInfo>(ManagerUserInfo._.Email == val);
+            }
+        }
+
+        public string ChangeStatus(string id, UserStatus status)
         {
             ManagerUserInfo user = new ManagerUserInfo() { RecordStatus = StatusType.update, ID = id, Status = status };
             Dal.Submit(user);
@@ -547,7 +575,7 @@ namespace EasyCms.Dal
                 .Select(ManagerUserInfo._.DeviceNo, ManagerUserInfo._.ClientType).ToDataTable();
         }
 
-        public DataTable  GetDeviceWithBuyCount(int MinBuyCount, int MaxBuyCount)
+        public DataTable GetDeviceWithBuyCount(int MinBuyCount, int MaxBuyCount)
         {
             DataTable dt = Dal.From<ShopOrder>().Where(!ShopOrder._.DeviceNo.IsNullOrEmpty() && ShopOrder._.OrderStatus != (int)OrderStatus.拒收 &&
                 ShopOrder._.OrderStatus != (int)OrderStatus.取消订单

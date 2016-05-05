@@ -70,5 +70,44 @@ namespace ImportData
                 MessageBox.Show(ex.GetExceptionMsg());
             }
         }
+
+        private void simpleButton7_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                new frmAdPosition().Show();
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.GetExceptionMsg());
+            }
+        }
+
+        private void simpleButton8_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                new frmAd ().Show();
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.GetExceptionMsg());
+            }
+        }
+
+        private void simpleButton9_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                new frmCheckImg().Show();
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.GetExceptionMsg());
+            }
+        }
     }
 }

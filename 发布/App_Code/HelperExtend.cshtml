@@ -120,7 +120,15 @@ string ctrlID = "DropDownList" + code;
                        datatype: "json",
                        datafields: [
                            { name: '@downInfo.ValueMember' },
-                           { name: '@downInfo.DisplayMember' }
+                           { name: '@downInfo.DisplayMember' },
+                           @if (!string.IsNullOrWhiteSpace(downInfo.OtherField)) {
+
+                               string[] fields = downInfo.OtherField.Split(',');
+                               foreach (var item in fields)
+                               {
+                                   @: { name: '@item' }, 
+                               }
+                           }
                        ],
                        url: '@downInfo.Url',
                        root:"@downInfo.JsonDataRoor",

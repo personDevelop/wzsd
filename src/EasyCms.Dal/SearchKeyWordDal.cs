@@ -40,6 +40,15 @@ namespace EasyCms.Dal
 
             return !Dal.Exists<SearchKeyWord>(where);
         }
+
+        public  string[] GetKeyList(bool isHot=true)
+        {
+            WhereClip where = SearchKeyWord._.IsHot == isHot;
+
+            return  Dal.From<SearchKeyWord>().Where(where).OrderBy(SearchKeyWord._.OrderNo,SearchKeyWord._.SearchCount)
+                .Select(SearchKeyWord._.SKey).ToSinglePropertyArray();
+        }
+
         public DataTable GetList(int pagenum, int pagesize, ref int recordCount, bool IsForSelected = false)
         {
             int pageCount = 0;

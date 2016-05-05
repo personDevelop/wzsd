@@ -88,11 +88,29 @@
     <Compile Include="Form3.Designer.cs">
       <DependentUpon>Form3.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmCheckImg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCheckImg.Designer.cs">
+      <DependentUpon>frmCheckImg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmAdPosition.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAdPosition.Designer.cs">
+      <DependentUpon>frmAdPosition.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmAttr.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="frmAttr.Designer.cs">
       <DependentUpon>frmAttr.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmAd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAd.Designer.cs">
+      <DependentUpon>frmAd.cs</DependentUpon>
     </Compile>
     <Compile Include="frmProduct.cs">
       <SubType>Form</SubType>
@@ -112,6 +130,7 @@
     <Compile Include="frmBrand.Designer.cs">
       <DependentUpon>frmBrand.cs</DependentUpon>
     </Compile>
+    <Compile Include="OldEntity\h7_ad_manage.cs" />
     <Compile Include="OldEntity\h7_brand.cs" />
     <Compile Include="OldEntity\h7_category.cs" />
     <Compile Include="OldEntity\h7_goods.cs" />
@@ -127,8 +146,17 @@
     <EmbeddedResource Include="Form3.resx">
       <DependentUpon>Form3.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmCheckImg.resx">
+      <DependentUpon>frmCheckImg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmAdPosition.resx">
+      <DependentUpon>frmAdPosition.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmAttr.resx">
       <DependentUpon>frmAttr.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmAd.resx">
+      <DependentUpon>frmAd.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmProduct.resx">
       <DependentUpon>frmProduct.cs</DependentUpon>
@@ -162,10 +190,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\01-WinFramework-新架构\Sharp.Common\Sharp.Common.csproj">
-      <Project>{a4e6aa2c-40ba-44e4-8ff8-e51d54745c32}</Project>
-      <Name>Sharp.Common</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\..\01-WinFramework-新架构\Sharp.Data\Sharp.Data.csproj">
       <Project>{ee66c4ff-659f-4c29-a6b7-68d014f7755e}</Project>
       <Name>Sharp.Data</Name>

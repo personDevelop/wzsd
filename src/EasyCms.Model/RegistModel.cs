@@ -3,47 +3,80 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Sharp.Common;
+using Sharp.Common; 
+using System.ComponentModel;
 
 namespace EasyCms.Model
 {
     public class RegistModel
     {
         /// <summary>
-        /// 昵称
+        /// 手机号  客户端注册要求填写手机号 以方便接收验证码
         /// </summary>
-        public string NiceName { get; set; }
-        /// <summary>
-        /// 手机号
-        /// </summary>
+        [DisplayName("手机号")]
         public string TelPhone { get; set; }
+        /// <summary>
+        /// 网站用户注册需要填写邮箱
+        /// </summary>
+        [DisplayName("Email")]
+        public string Email { get; set; }
+
+        /// <summary>
+        /// 用户名
+        /// </summary>
+        [DisplayName("用户名")]
+        public string UserNo { get; set; }
+
+
         /// <summary>
         /// 密码
         /// </summary>
+        [DisplayName("密码")]
         public string Pwd { get; set; }
 
         /// <summary>
         /// 确认密码
         /// </summary>
+        [DisplayName("确认密码")]
         public string ComfirmPwd { get; set; }
 
-        /// <summary>
-        /// 验证码
-        /// </summary>
-        public string TelVaiCode { get; set; }
-    }
 
+        /// <summary>
+        /// 验证码  手机端注册是手机短信验证码  网站注册是图片验证码
+        /// </summary>
+        [DisplayName("验证码")]
+        public string VaryCode { get; set; }
+
+        /// <summary>
+        /// 是否同意用户协议
+        /// </summary>
+        [DisplayName("是否同意用户协议")]
+        public bool IsAgree { get; set; }
+
+
+        public  bool IsPc { get; set; }
+    }
+    
     public class LoginModel
     {
 
         /// <summary>
-        /// 手机号
+        /// 用户名
         /// </summary>
+        [DisplayName("用户名")]
         public string Account { get; set; }
         /// <summary>
         /// 密码
         /// </summary>
+        [DisplayName("密码")] 
         public string Pwd { get; set; }
+
+        [DisplayName("自动登录")]
+        public bool RememberMe { get; set; }
+        public bool IsPc { get; set; }
+
+        [DisplayName("验证码")]
+        public string VaryCode { get; set; }
 
         /// <summary>
         /// 登陆时间戳
@@ -123,8 +156,5 @@ namespace EasyCms.Model
         }
     }
 
-    //public class Class1
-    //{
-    //    public static List<String> list = new List<string>();
-    //}
+   
 }

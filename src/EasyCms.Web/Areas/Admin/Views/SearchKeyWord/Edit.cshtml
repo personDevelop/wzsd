@@ -1,0 +1,67 @@
+﻿@model SearchKeyWord
+@{
+    ViewBag.Title = "编辑搜索关键字";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEdit.cshtml";
+}
+
+ 
+@using EasyCms.Model
+<!--内容-->
+<div id="floatHead" class="content-tab-wrap">
+    <div class="content-tab">
+        <div class="content-tab-ul-wrap">
+            <ul>
+                <li><a class="selected" href="javascript:;">基本信息</a></li> 
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="tab-content">
+
+
+    @HelperExtend.HiddenFor("ID", Model.ID)
+    @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString()) 
+    @Html.ValidationSummary()
+   @HelperExtend.TextBox("SKey", "关键字", defaultval: Model.SKey, hint: "")
+
+@HelperExtend.RadioGroup("IsHot", "是否热门", defaultval: Model.IsHot, vals: "false,true",texts:"否,是")
+    @HelperExtend.Number("OrderNo", "顺序", defaultval: Model.OrderNo, hint: "")
+
+    @HelperExtend.HiddenFor( "搜索次数",  Model.SearchCount.ToString())
+    @HelperExtend.HiddenFor("最后搜索时间", Model.LastTime.HasValue?Model.LastTime.Value.ToString("yyyy-MM-dd HH:ss"):"") 
+
+ </div>
+ 
+@section  scripts{
+
+
+    <script type="text/javascript">
+
+        $(function () {
+         
+            //初始化表单验证
+            $("form").validate({
+                ignore: "",
+                rules: {
+                    
+                    SKey: {
+                        required: true,
+                        maxlength: 50 
+                    } 
+                },
+                messages: { 
+                    SKey: {
+                        required: "请输入名称",
+                        maxlength: $.validator.format("名称长度不能大于{0}个字符") 
+                    }
+                },
+                errorPlacement: errorPlace,
+                showErrors: function (errorMap, errorList) {
+                    $('#jqxLoader').jqxLoader('close');
+                    this.defaultShowErrors();
+                }
+
+            });
+        })
+    </script> 
+}

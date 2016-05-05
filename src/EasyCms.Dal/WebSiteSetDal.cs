@@ -28,11 +28,25 @@ namespace EasyCms.Dal
         public WebSiteSet GetEntity()
         {
 
-            WebSiteSet asp = Dal.From<WebSiteSet>()
+            WebSiteSet asp = Dal.From<WebSiteSet>().Join<AttachFile>(WebSiteSet._.Logo==AttachFile._.RefID,JoinType.leftJoin)
+                .Select(WebSiteSet._.ID.All,AttachFile.GetFilePath("","LogoUrl"))
               .ToFirst<WebSiteSet>();
             if (asp == null)
             {
                 asp = new WebSiteSet() { ID = Guid.NewGuid().ToString() };
+            }
+            if (!string.IsNullOrWhiteSpace(asp.WeiXinImg))
+            {
+                asp.WeiXinImgUrl= Dal.From<AttachFile>().Where(AttachFile._.RefID == asp.WeiXinImg).Select(AttachFile.GetFilePath("", "WeiXinImgUrl")).ToScalar() as string;
+
+            }
+            if (!string.IsNullOrWhiteSpace(asp.AndroidImg))
+            {
+                asp.AndroidImgUrl = Dal.From<AttachFile>().Where(AttachFile._.RefID == asp.AndroidImg).Select(AttachFile.GetFilePath("", "AndroidImgUrl")).ToScalar() as string;
+            }
+            if (!string.IsNullOrWhiteSpace(asp.IosImg))
+            {
+                asp.IosImgUrl = Dal.From<AttachFile>().Where(AttachFile._.RefID == asp.IosImg).Select(AttachFile.GetFilePath("", "IosImgUrl")).ToScalar() as string;
             }
             return asp;
 

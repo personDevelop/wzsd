@@ -58,13 +58,15 @@ namespace EasyCms.Model
 
         private DateTime _StatusChangeDate;
 
-        private int _Status;
+        private UserStatus _Status;
 
         private string _Note;
 
         private int _ClientType;
 
         private string _DeviceNo;
+
+        private decimal _Balance;
 
         #endregion
 
@@ -400,7 +402,7 @@ namespace EasyCms.Model
 
         [DbProperty(MapingColumnName = "Status", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public int Status
+        public UserStatus Status
         {
             get
             {
@@ -470,9 +472,28 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  余额,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "Balance", DbTypeString = "decimal", ColumnIsNull = false, IsUnique = false, ColumnLength = 15, ColumnJingDu = 2, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public decimal Balance
+        {
+            get
+            {
+                return this._Balance;
+            }
+            set
+            {
+                this.OnPropertyChanged("Balance", this._Balance, value);
+                this._Balance = value;
+            }
+        }
+
         #endregion
 
-        #region 列定义
+        #region 列定义 
         public class Column
         {
             public Column(string tableName)
@@ -519,6 +540,8 @@ namespace EasyCms.Model
                 ClientType = new PropertyItem("ClientType", tableName);
 
                 DeviceNo = new PropertyItem("DeviceNo", tableName);
+
+                Balance = new PropertyItem("Balance", tableName);
 
 
             }
@@ -606,6 +629,10 @@ namespace EasyCms.Model
             /// 用户设备号,
             /// </summary> 
             public PropertyItem DeviceNo = null;
+            /// <summary>
+            /// 余额,
+            /// </summary> 
+            public PropertyItem Balance = null;
         }
         #endregion
     }

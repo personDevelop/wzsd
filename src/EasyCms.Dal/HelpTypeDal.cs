@@ -55,6 +55,12 @@ namespace EasyCms.Dal
             return !Dal.Exists<HelpType>(where);
         }
 
+        public List<HelpType> GetFootList()
+        {
+            return Dal.From<HelpType>().Where(HelpType._.IsShowButtom == true && HelpType._.ParentID.IsNullOrEmpty())
+                 .Select(HelpType._.ID, HelpType._.Name).List<HelpType>();
+        }
+
         public DataTable GetListByParentId(string parentId)
         {
             return Dal.From<HelpType>().Where(HelpType._.ParentID == parentId).OrderBy(HelpType._.OrderNo).ToDataTable();

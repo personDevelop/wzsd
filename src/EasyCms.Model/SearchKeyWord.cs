@@ -32,7 +32,7 @@ namespace EasyCms.Model
 
         private int _SearchCount;
 
-        private DateTime _LastTime;
+        private DateTime? _LastTime;
 
         private int _OrderNo;
 
@@ -121,9 +121,9 @@ namespace EasyCms.Model
         ///  最后搜索时间,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "LastTime", DbTypeString = "datetime", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "LastTime", DbTypeString = "datetime", ColumnIsNull = true, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public DateTime LastTime
+        public DateTime? LastTime
         {
             get
             {
@@ -204,4 +204,5 @@ namespace EasyCms.Model
         }
         #endregion
     }
+
 }

@@ -24,7 +24,14 @@ namespace EasyCms.Dal
             return CommonDal.UpdatePath<ShopCategory>(Dal, item, ShopCategory._.ID, ShopCategory._.ParentID, ShopCategory._.ClassCode, ShopCategory._.OrderNo, ShopCategory._.Depth, ShopCategory._.IsMx);
 
         }
-     
+
+        public List<ShopCategory> GetShowIndex(string host)
+        {
+     return       Dal.From<ShopCategory>().Join<AttachFile>(ShopCategory._.BigLogo == AttachFile._.RefID, JoinType.leftJoin)
+                .Select(ShopCategory._.ID, ShopCategory._.Name, AttachFile.GetCompressionfilePath(host, "LogoUrl")).Where(ShopCategory._.Depth == 0 && ShopCategory._.IsShow == true)
+                .OrderBy(ShopCategory._.OrderNo).List<ShopCategory>();
+        }
+
         public DataTable GetList(bool IsForSelected = false)
         {
             if (IsForSelected)
@@ -139,9 +146,10 @@ namespace EasyCms.Dal
                 .OrderBy(ShopCategory._.OrderNo).ToDataTable();
             return dt;
         }
-        public string GetClassCode(string categoryID)
+        public string[] GetClassCode(string categoryID)
         {
-            return Dal.From<ShopCategory>().Where(ShopCategory._.ID == categoryID).Select(ShopCategory._.ClassCode).ToScalar() as string;
+            string s= Dal.From<ShopCategory>().Where(ShopCategory._.ID == categoryID).Select(ShopCategory._.ClassCode).ToScalar() as string;
+         return    Dal.From<ShopCategory>().Where(ShopCategory._.ClassCode.StartsWith(s)).Select(ShopCategory._.ID).ToSinglePropertyArray();
         }
     }
 

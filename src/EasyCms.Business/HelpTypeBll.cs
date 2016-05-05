@@ -45,7 +45,8 @@ namespace EasyCms.Business
             return Dal.GetEntity(id);
         }
 
- 
+        public List<HelpType> GetFootList()
+        { return Dal.GetFootList( ); }
 
     }
 }

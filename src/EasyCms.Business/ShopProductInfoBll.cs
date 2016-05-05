@@ -98,13 +98,13 @@ namespace EasyCms.Business
             return Dal.SaveStation(s);
         }
 
-        public DataTable GetProductsByStation(int id, int pageIndex, int pageSize, string host, ref int pagecount, ref int recordCount)
+        public DataTable GetProductsByStation(int id,  int pageIndex, int pageSize, string host, ref int pagecount, ref int recordCount)
         {
             return Dal.GetProductsByStation(id, pageIndex, pageSize, host, ref   pagecount, ref   recordCount);
         }
-        public DataTable GetProductsByStation(string categoryid, int pageIndex, int pageSize, string host, ref int pagecount, ref int recordCount)
+        public DataTable GetProductsByStation(string categoryid, StationMode stationMode, int pageIndex, int pageSize, string host, ref int pagecount, ref int recordCount)
         {
-            return Dal.GetProductsByStation(categoryid, pageIndex, pageSize, host, ref   pagecount, ref   recordCount);
+            return Dal.GetProductsByStation(categoryid, stationMode, pageIndex, pageSize, host, ref   pagecount, ref   recordCount);
         }
         public int DeleteStation(string StationID)
         {

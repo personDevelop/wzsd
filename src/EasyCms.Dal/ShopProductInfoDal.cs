@@ -123,8 +123,8 @@ namespace EasyCms.Dal
             QuerySection qry = Dal.From<ShopProductInfo>();
             if (!string.IsNullOrWhiteSpace(categoryID))
             {
-                string ClassCode = new ShopCategoryDal().GetClassCode(categoryID);
-                string[] classcode = ClassCode.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                
+                string[] classcode = new ShopCategoryDal().GetClassCode(categoryID);
                 where = where&& ShopProductCategory._.CategoryID.In(classcode);
                 qry.Join<ShopProductCategory>(ShopProductInfo._.ID == ShopProductCategory._.ProductID);
             }
@@ -157,8 +157,7 @@ namespace EasyCms.Dal
 
             if (!string.IsNullOrWhiteSpace(categoryID))
             {
-                string ClassCode = new ShopCategoryDal().GetClassCode(categoryID);
-                string[] classcode = ClassCode.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                string[] classcode = new ShopCategoryDal().GetClassCode(categoryID);
                 where = ShopProductCategory._.CategoryID.In(classcode);
                 qry.Join<ShopProductCategory>(ShopProductInfo._.ID == ShopProductCategory._.ProductID);
             }
@@ -506,12 +505,18 @@ namespace EasyCms.Dal
                .ToDataTable(pageSize, pageIndex, ref pagecount, ref recordCount);
         }
 
-        public DataTable GetProductsByStation(string cateogryid, int pageIndex, int pageSize, string host, ref int pagecount, ref int recordCount)
+        public DataTable GetProductsByStation(string cateogryid, StationMode stationMode, int pageIndex, int pageSize, string host, ref int pagecount, ref int recordCount)
         {
             return
                Dal.From<ShopProductInfo>().Join<ShopProductStationMode>(ShopProductInfo._.ID == ShopProductStationMode._.ProductID)
+               .Join<ShopProductCategory>(ShopProductInfo._.ID== ShopProductCategory._.ProductID)
                .Join<AttachFile>(AttachFile._.RefID == ShopProductInfo._.ID && AttachFile._.OrderNo == 1)
-               .Where(ShopProductStationMode._.StationMode == (int)StationMode.分类首页推荐 && ShopProductCategory._.CategoryID.In(getCategorys(cateogryid))).Select(ShopProductStationMode._.ID.Alias("StationID"), ShopProductInfo._.ID, ShopProductStationMode._.OrderNo, ShopProductInfo._.Code, ShopProductInfo._.Name, ShopProductInfo._.SalePrice, ShopProductInfo._.MarketPrice, AttachFile.GetCompressionfilePath(host))
+               .Where(ShopProductStationMode._.StationMode == (int)stationMode && ShopProductCategory._.CategoryID.In(getCategorys(cateogryid)))
+               .Distinct()
+               .Select(ShopProductStationMode._.ID.Alias("StationID"),
+
+               ShopProductInfo._.ID, ShopProductStationMode._.OrderNo, ShopProductInfo._.Code, 
+               ShopProductInfo._.Name, ShopProductInfo._.SalePrice, ShopProductInfo._.MarketPrice, AttachFile.GetCompressionfilePath(host))
                .OrderBy(ShopProductStationMode._.OrderNo.Desc)
                .ToDataTable(pageSize, pageIndex, ref pagecount, ref recordCount);
         }

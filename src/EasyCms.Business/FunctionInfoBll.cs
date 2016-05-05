@@ -96,8 +96,11 @@ namespace EasyCms.Business
         }
 
 
+        public   List<FunctionInfo> GetNavigation()
+        {
+            return new FunctionInfoDal().GetNavigation();
+        }
 
-      
 
         public static void WriteLog(string userid, string area, string controler, string action)
         {

@@ -39,7 +39,12 @@ namespace EasyCms.Business
             return Dal.GetEntity(id);
         }
 
- 
+        public string[] GetKeyList(bool isHot=true)
+        {
+            return Dal.GetKeyList(isHot);
+        }
+
+
 
 
     }

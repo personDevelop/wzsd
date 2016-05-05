@@ -50,9 +50,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountRange.cs" />
+    <Compile Include="AccuontMoneyLog.cs" />
     <Compile Include="AccuountRangeChange.cs" />
     <Compile Include="AddExtendModel.cs" />
+    <Compile Include="AdManage.cs" />
     <Compile Include="AdministrativeRegions.cs" />
+    <Compile Include="AdPositon.cs" />
     <Compile Include="Ali\Alipay.cs" />
     <Compile Include="Ali\AsynchNotifyLog.cs" />
     <Compile Include="Ali\Core.cs" />
@@ -105,6 +108,7 @@
     <Compile Include="ShopOrder.cs" />
     <Compile Include="ShopOrderAction.cs" />
     <Compile Include="ShopOrderItem.cs" />
+    <Compile Include="ShopReceipt.cs" />
     <Compile Include="ShopRegionFright.cs" />
     <Compile Include="ShopReturnOrder.cs" />
     <Compile Include="ShopReturnOrderItem.cs" />

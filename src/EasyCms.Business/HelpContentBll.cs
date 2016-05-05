@@ -26,7 +26,7 @@ namespace EasyCms.Business
 
         public DataTable GetList( )
         {
-            return Dal.GetList( );
+            return Dal.GetTreeList( );
         }
        
        
@@ -36,8 +36,11 @@ namespace EasyCms.Business
         }
 
 
-      
-
+        public List<HelpContent> GetFootList()
+        {
+            return Dal.GetFootList();
+        }
+        
 
     }
 }

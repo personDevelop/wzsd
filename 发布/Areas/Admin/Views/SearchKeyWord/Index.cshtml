@@ -1,0 +1,66 @@
+﻿@using MVCExtention;
+@{
+    ViewBag.Title = "搜索关键字";
+}
+
+<!--工具栏-->
+<div id="floatHead" class="toolbar-wrap">
+    <div class="toolbar">
+        <div class="box-wrap">
+            <a class="menu-btn"></a>
+            <div class="l-list">
+                <ul class="icon-list">
+                    <li><a class="add" href="@Url.Action("Edit")"><i></i><span>新增</span></a></li>
+                    <li><a class="edit" href="javascript:;" onclick="EditGrid('jqxgrid', '@Url.Action("Edit")');"><i></i><span>修改</span></a></li>
+                    <li><a class="del" href="javascript:;" onclick="DelGrid('jqxgrid', '@Url.Action("Delete")');"><i></i><span>删除</span></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/工具栏-->
+<!--列表-->
+<div class="table-container">
+    <div id="jqxgrid"></div>
+</div>
+<!--/列表-->
+@section  scripts{
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var url = "@Url.Action("GetList")";
+            var datafields = [
+
+{ name: 'ID' },
+{ name: 'SKey' },
+{ name: 'IsHot' },
+{ name: 'SearchCount' },
+{ name: 'LastTime' },
+{ name: 'OrderNo' }
+
+
+            ];
+            var columns = [
+
+
+  { text: '关键字', dataField: 'SKey', cellsalign: "left", width: 200 },
+
+  { text: '是否热门', dataField: 'IsHot', width: 80,@HelperExtend.Parsebool() },
+
+  { text: '搜索次数', dataField: 'SearchCount', cellsalign: "right", width: 80 },
+
+  { text: '最后搜索时间', dataField: 'LastTime'  },
+
+  { text: '顺序', dataField: 'OrderNo', cellsalign: "right", width: 80 }
+
+
+            ];
+
+            CreateGrid("jqxgrid", url, datafields, columns, { isMutilSelect: true });
+
+        });
+    </script>
+
+
+}

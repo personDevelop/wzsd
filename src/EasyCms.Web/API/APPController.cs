@@ -188,8 +188,7 @@ namespace EasyCms.Web.API
             WhereClip where = new WhereClip();
             if (!string.IsNullOrWhiteSpace(categoryID))
             {
-                string ClassCode = new ShopCategoryBll().GetClassCode(categoryID);
-                string[] classcode = ClassCode.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                string[] classcode = new ShopCategoryBll().GetClassCode(categoryID);
 
 
                 where = ShopProductCategory._.CategoryID.In(classcode);
@@ -283,7 +282,33 @@ namespace EasyCms.Web.API
                 return "分类不能为空".FormatError();
             }
             int pagecount = 0, recordCount = 0;
-            DataTable dt = new ShopProductInfoBll().GetProductsByStation(id, pageIndex.PhrasePageIndex(false), other, host, ref pagecount, ref recordCount);
+            DataTable dt = new ShopProductInfoBll().GetProductsByStation(id, StationMode.分类首页推荐, pageIndex.PhrasePageIndex(false), other, host, ref pagecount, ref recordCount);
+
+            return new { PageIndex = pageIndex, RecordCount = dt.Rows.Count, TotalPageCount = pagecount, TotalRecourdCount = recordCount, Data = dt }.FormatObj();
+
+        }
+        public HttpResponseMessage GetRecomendByCategory(string id, int pageIndex = 1, int other = 8)
+        {
+
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return "分类不能为空".FormatError();
+            }
+            int pagecount = 0, recordCount = 0;
+            DataTable dt = new ShopProductInfoBll().GetProductsByStation(id, StationMode.首页Bar轮询, pageIndex.PhrasePageIndex(false), other, host, ref pagecount, ref recordCount);
+
+            return new { PageIndex = pageIndex, RecordCount = dt.Rows.Count, TotalPageCount = pagecount, TotalRecourdCount = recordCount, Data = dt }.FormatObj();
+
+        }
+        public HttpResponseMessage GetHotProductsByCategoryid(string id, int pageIndex = 1, int other = 5)
+        {
+
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return "分类不能为空".FormatError();
+            }
+            int pagecount = 0, recordCount = 0;
+            DataTable dt = new ShopProductInfoBll().GetProductsByStation(id, StationMode.热卖商品, pageIndex.PhrasePageIndex(false), other, host, ref pagecount, ref recordCount);
 
             return new { PageIndex = pageIndex, RecordCount = dt.Rows.Count, TotalPageCount = pagecount, TotalRecourdCount = recordCount, Data = dt }.FormatObj();
 

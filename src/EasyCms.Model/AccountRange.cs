@@ -206,5 +206,9 @@ namespace EasyCms.Model
         #endregion
     }
 
-
+    public partial class AccountRange
+    {
+        [NotDbCol]
+        public RangeDict RangDict { get; set; }
+    }
 }

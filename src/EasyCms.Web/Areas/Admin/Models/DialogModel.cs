@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Linq;
 using System.Web;
@@ -8,6 +9,7 @@ namespace EasyCms.Web
 {
     public class DialogModel
     {
+       
         public string DialogID { get; set; }
         public string Title { get; set; }
         public int Height { get; set; }
@@ -44,6 +46,8 @@ namespace EasyCms.Web
         public string Url { get; set; }
         public string ValueMember { get; set; }
         public string DisplayMember { get; set; }
+
+        public string OtherField { get; set; }
         public string select { get; set; }
         public string unselect { get; set; }
         public string change { get; set; }
@@ -54,6 +58,9 @@ namespace EasyCms.Web
         public DataTable InnitData { get; set; }
 
         public string JsonDataRoor { get; set; }
+
+
+        
     }
 
 

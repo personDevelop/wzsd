@@ -11,7 +11,7 @@ namespace EasyCms.Web.Controllers
         // GET: Default
         public ActionResult Index()
         {
-            return View("index2");
+            return View();
         }
     }
 }

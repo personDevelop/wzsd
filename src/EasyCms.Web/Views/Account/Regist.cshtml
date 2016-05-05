@@ -1,0 +1,209 @@
+﻿@model EasyCms.Model.RegistModel
+@using EasyCms.Model
+@using EasyCms
+@{
+    Layout = null;
+    ViewBag.Title = "注册新用户-"+CmsSessionExtend.WebSite.Name;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/bundles/webcss")
+    @Styles.Render("~/bundles/registercss")
+   @Scripts.Render("~/bundles/onlyjquery")
+    @Scripts.Render("~/bundles/jqueryval") 
+   @Scripts.Render("~/bundles/jqueryAjax")
+</head>
+<body>
+    <div class='top' style=''>
+        <div class="w">
+            <div class="logotxt" style="">
+                <image src='@(CmsSessionExtend.WebSite.LogoUrl)'>
+                    <span style="">注册新用户</span>
+
+            </div>
+        </div>
+    </div>
+    <div class='main' style="">
+        <div class='register'>
+            <img src="@HelperExtend.imgUrl("reg_banner.jpg")" class="banner">
+            <div class="title">
+                <h3>注册新用户</h3>
+            </div>
+          @using (Html.BeginForm("Regist", null,   new { id = "form1" }))
+          {
+              @Html.AntiForgeryToken()
+            @Html.ValidationMessage("All")
+                <div class="phone text">
+                    <label>Email：</label>
+                    <div class="right">
+                        @Html.TextBoxFor(Model => Model.Email, new
+                   {
+                       placeholder = "请输入正确的电子邮箱",
+                       maxlength = "50",
+                       autocomplete = "off",
+                       tabindex = "0"
+                   })
+                        @Html.ValidationMessageFor(Model => Model.Email)
+                        <span class="error" ></span>
+                    </div>
+                </div>
+                <div class="phone text">
+                    <label>登录账号：</label>
+                    <div class="right">
+                        @Html.TextBoxFor(Model => Model.UserNo, new
+                   {
+                       placeholder = "用户名必须包含6到20个字母或数字",
+                       maxlength = "20",
+                       autocomplete = "off",
+                       tabindex = "1"
+                   })  @Html.ValidationMessageFor(Model => Model.UserNo)
+                        <span class="error"></span>
+                    </div>
+                </div> 
+                <div class="pwd text">
+                    <label>登录密码：</label>
+                    <div class="right">
+                        @Html.PasswordFor(Model => Model.Pwd, new
+                   {
+                       placeholder = "密码必须包含8到20个字母和数字",
+                       maxlength = "20",
+                       autocomplete = "off",
+                       tabindex = "2"
+                   }) 
+                         @Html.ValidationMessageFor(Model => Model.Pwd)
+                        <span class="error"></span>
+                        <div style="clear:both"></div>
+
+                    </div>
+                    
+                </div>
+                <div class="pwd text">
+                    <label>确认密码：</label>
+                    <div class="right">
+                        @Html.PasswordFor(Model => Model.ComfirmPwd, new
+                   {
+                       placeholder = "密码必须包含8到20个字母和数字",
+                       maxlength = "20",
+                       autocomplete = "off",
+                       tabindex = "3"
+                   })
+                        @Html.ValidationMessageFor(Model => Model.ComfirmPwd)
+                        <span class="error"></span>
+                        <div style="clear:both"></div>
+
+                    </div>
+                   
+                </div>
+                <div class="protocol">
+                    <label>
+                        
+                        @Html.CheckBoxFor(Model => Model.IsAgree,new {tabindex = "4" })  同意<a href="@Url.Action("Contact")" class="pro" target="_blank">《用户注册协议》</a> 
+                        @Html.ValidationMessageFor(Model => Model.IsAgree)
+                        <span class="error"></span>
+                    </label>
+                  
+                </div>
+                <div class="verify text" id="imgcodegroup">
+                    <label>图形验证码：</label>
+                    <div class="right">
+                        @Html.TextBoxFor(Model => Model.VaryCode, new { tabindex = "5" })
+                        <img id="JD_Verification1" class="verify-code" src="@Url.Action("", "VarifyCode")">
+                        <a href="javascript:void(0)" onclick="$('#JD_Verification1').click();">看不清楚换一张</a>
+                        @Html.ValidationMessageFor(Model => Model.VaryCode)
+                        <span class="error"></span>
+                    </div>
+                </div>
+                <div class="submit text">
+                    <label>&nbsp;</label><input type="submit" id="submit" tabindex = "6" class="btn" value="立刻注册">
+                    
+                </div>
+          }
+        </div>
+
+    </div>
+    <div id='footer'>
+    </div>
+    <script type="text/javascript">
+       
+       
+        $(function () {
+            
+
+          //初始化表单验证
+            $("form").validate({
+                ignore: "",
+                rules: {
+                    Email: {
+                        required: true,
+                        maxlength: 50,
+                        email: true,
+                        remote: {
+                            url: '@Url.Action("CheckRepeat")',
+                            data: {
+                                val: function () { return $("#Email").val(); },
+                                IsCode: false
+                            }
+                        }
+                    },
+                    UserNo: {
+                        required: true,
+                        maxlength: 20,
+                        remote: {
+                            url: '@Url.Action("CheckRepeat")',
+                            data: {
+                                val: function () { return $("#UserNo").val(); },
+                                IsCode: true
+                            }
+                        }
+                    },
+                    VaryCode: {
+                        required: true
+                    },
+                    Pwd: { required: true },
+                    ComfirmPwd: {
+                        required: true,
+                        equalTo: "#Pwd"
+                    },
+                    IsAgree: {
+                        required: true,
+                    }
+                },
+                messages: {
+                    Email: {
+                        required: "请输入邮箱",
+                        maxlength: $.validator.format("邮箱长度不能大于{0}个字符"),
+                        email: "请输入正确的邮箱格式",
+                        remote: "当前邮箱已被注册",
+                    },
+                    UserNo: {
+                        required: "请输入登录账号",
+                        maxlength: $.validator.format("登录账号长度不能大于{0}个字符"),
+                        remote: "当前登录账号已被注册",
+                    },
+                    VaryCode: {
+                        required: "请输入验证码"
+                    },
+                    Pwd: { required: "请输入密码" },
+                    ComfirmPwd: {
+                        required: "请再次输入密码",
+                        equalTo: "两次输入密码不一致"
+                    },
+                    IsAgree: {
+                        required: "请勾选同意《用户注册协议》",
+                    }
+                }, success: function (element) {
+                    element.parent().find(".error").text("")
+                },
+                errorPlacement: function (error, element) {
+                    element.parent().find(".error").text(error.text())
+                }
+
+            }); 
+        })
+    </script>
+    
+</body>
+</html> 

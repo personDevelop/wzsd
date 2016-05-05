@@ -12,7 +12,7 @@
 	position: absolute;top:32px;left: 220px;font-weight: 400;font-size:24px;font-family: 微软雅黑;color: #5b5b5b;height: 35px;line-height: 35px;
 }
 
-.main{height: 500px;background-color: #fbfaf8;padding-top: 20px;}
+.main{height: 470px;background-color: #fbfaf8;padding-top: 20px;}
 .main input{outline: none;}
 .register .banner{float:right;width:480px;margin-right:20px;}
 .register{ width: 990px;margin: 0 auto;background-color: #FFF;padding: 20px; }

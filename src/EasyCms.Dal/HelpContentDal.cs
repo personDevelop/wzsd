@@ -26,7 +26,7 @@ namespace EasyCms.Dal
             return Dal.Submit (  item); 
         }
 
-        public DataTable GetList( )
+        public DataTable GetTreeList( )
         {
             DataTable dt= Dal.From<HelpType>().Select(HelpType._.ID, HelpType._.Code, HelpType._.Name,
                 HelpType._.IsShowButtom, HelpType._.IsShowNavi, HelpType._.OrderNo, HelpType._.ParentID
@@ -42,9 +42,13 @@ namespace EasyCms.Dal
             return dt ;
             
         }
-       
-    
-      
+
+        public List<HelpContent> GetFootList()
+        {
+            return Dal.From<HelpContent>().Join<HelpType>(HelpType._.ID == HelpContent._.CategoryID && HelpType._.IsShowButtom == true)
+               .Select(HelpContent._.ID, HelpContent._.Name, HelpContent._.CategoryID, HelpContent._.OrderNo).OrderBy(HelpContent._.OrderNo).List<HelpContent>();
+        }
+
         public HelpContent GetEntity(string id)
         {
            

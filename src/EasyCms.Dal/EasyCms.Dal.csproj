@@ -52,7 +52,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdManageDal.cs" />
     <Compile Include="AdministrativeRegionsDal.cs" />
+    <Compile Include="AdPositonDal.cs" />
     <Compile Include="AppSetDal.cs" />
     <Compile Include="AsynchNotifyLogDal.cs" />
     <Compile Include="AttachFileDal.cs" />

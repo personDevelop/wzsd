@@ -48,7 +48,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdManageBll.cs" />
     <Compile Include="AdministrativeRegionsBll.cs" />
+    <Compile Include="AdPositonBll.cs" />
     <Compile Include="AppSetBll.cs" />
     <Compile Include="AsynchNotifyLogBll.cs" />
     <Compile Include="AttachFileBll.cs" />

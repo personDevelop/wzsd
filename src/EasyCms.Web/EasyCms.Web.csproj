@@ -226,6 +226,8 @@
     <Compile Include="API\ShopProductApiController.cs" />
     <Compile Include="API\UserApiController.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdManageController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdPositonController.cs" />
     <Compile Include="Areas\Admin\Controllers\AppSetController.cs" />
     <Compile Include="Areas\Admin\Controllers\AttributeTypeController.cs" />
     <Compile Include="Areas\Admin\Controllers\CouponRuleController.cs" />
@@ -276,7 +278,6 @@
     <Compile Include="Areas\Admin\Controllers\SystemBrandInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\WebSiteParaSetController.cs" />
     <Compile Include="Areas\Admin\Controllers\WebSiteSetController.cs" />
-    <Compile Include="Areas\Admin\Models\LoginModel.cs" />
     <Compile Include="Common\CmsSession.cs" />
     <Compile Include="App_Start\AuthConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -319,10 +320,17 @@
     <Compile Include="Common\UEFileUpLoad\UploadHandler.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controllers\CardController.cs" />
+    <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\DefaultController.cs" />
+    <Compile Include="Controllers\HelpController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\SearchController.cs" />
+    <Compile Include="Controllers\SiteMapController.cs" />
     <Compile Include="Controllers\UpLoadController.cs" />
+    <Compile Include="Controllers\VarifyCodeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -351,6 +359,10 @@
     <Content Include="Content\artdialog\ui-dialog.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Images\banner.png" />
+    <Content Include="Content\Images\close_black.png" />
+    <Content Include="Content\Images\reg_banner.jpg" />
+    <Content Include="Content\Images\search_lg.png" />
     <Content Include="Content\skin\default\bg_state.jpg" />
     <Content Include="Content\Images\help.png" />
     <Content Include="Content\Images\icon-1.gif" />
@@ -736,7 +748,9 @@
     <Content Include="Content\web\css\login.css" />
     <Content Include="Content\web\css\main.css" />
     <Content Include="Content\web\css\product.css" />
+    <Content Include="Content\web\regController.js" />
     <Content Include="Content\web\css\register.css" />
+    <Content Include="Content\web\reg.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -892,6 +906,12 @@
     <Content Include="Areas\Admin\Views\NewsComment\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_HelpEditProductCategory.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_HelpEditProductType.cshtml" />
+    <Content Include="Areas\Admin\Views\SearchKeyWord\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\SearchKeyWord\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\AdPositon\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\AdPositon\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\AdManage\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\AdManage\Index.cshtml" />
     <None Include="Properties\PublishProfiles\publish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\EshopAdminControl.js" />
@@ -1357,15 +1377,23 @@
     <Content Include="Views\Shared\_Footer.cshtml" />
     <Content Include="Views\Default\Index.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Login\Index.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Default\Index2.cshtml" />
+    <Content Include="Views\Category\Index.cshtml" />
+    <Content Include="Views\Product\Index.cshtml" />
+    <Content Include="Views\Account\Regist.cshtml" />
+    <Content Include="Views\Account\Contact.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Views\Error\" />
-    <Folder Include="Areas\Admin\Views\SearchKeyWord\" />
     <Folder Include="Scripts\jGui\" />
     <Folder Include="Upload\Export\" />
+    <Folder Include="Views\Card\" />
+    <Folder Include="Views\Help\" />
+    <Folder Include="Views\Search\" />
+    <Folder Include="Views\SiteMap\" />
+    <Folder Include="Views\VarifyCode\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

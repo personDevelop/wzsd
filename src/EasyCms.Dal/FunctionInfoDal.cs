@@ -140,6 +140,18 @@ namespace EasyCms.Dal
                     Where(FunctionInfo._.Enable == true).List<FunctionInfo>();
             return list;
         }
-    }
 
+        public List<FunctionInfo> GetNavigation()
+        {
+            List<FunctionInfo> list =
+             Dal.From<FunctionInfo>().
+                    Select(  FunctionInfo._.Name,
+                    FunctionInfo._.CallArea, FunctionInfo._.CallControler, FunctionInfo._.CallAction,  FunctionInfo._.URL,FunctionInfo._.AccessType).
+                    Where(FunctionInfo._.FuncType== (int)FunctionType.商城导航&& FunctionInfo._.Js == 2&& FunctionInfo._.Enable == true)
+                    .OrderBy(FunctionInfo._.OrderNo)
+                    .List<FunctionInfo>();
+            return list;
+        }
+    }
+ 
 }

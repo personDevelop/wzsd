@@ -46,9 +46,13 @@
 @HelperExtend.TextBox("Address", "地址", defaultval: Model.Address, hint: "")
 
 
-   
+    @HelperExtend.TextBox("WeiXinNum", "微信公众号", defaultval: Model.WeiXinNum, hint: "")
 
- 
+    @HelperExtend.ImageUpLoad("WeiXinImg", "微信二维码", Model.RecordStatus == Sharp.Common.StatusType.add, defaultval: Model.WeiXinImg, maxLength: 1)
+
+    @HelperExtend.ImageUpLoad("AndroidImg", "安卓客户端二维码", Model.RecordStatus == Sharp.Common.StatusType.add, defaultval: Model.AndroidImg, maxLength: 1)
+    @HelperExtend.ImageUpLoad("IosImg", "苹果端二维码", Model.RecordStatus == Sharp.Common.StatusType.add, defaultval: Model.IosImg, maxLength: 1)
+     
 </div>
 
 <div class="tab-content" style="display:none">

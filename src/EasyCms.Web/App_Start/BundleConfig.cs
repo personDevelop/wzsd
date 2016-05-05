@@ -15,9 +15,13 @@ namespace EasyCms.Web
               "~/Scripts/jqwidgets/styles/jqx.base.css",
              "~/Scripts/jqwidgets/styles/jqx.metro.css",
              "~/Scripts/jqwidgets/styles/jqx.orange.css"));
+            bundles.Add(new StyleBundle("~/bundles/webcss").Include(
+                "~/Content/web/css/main.css"));
 
-
-
+            bundles.Add(new StyleBundle("~/bundles/logincss").Include(
+             "~/Content/web/css/login.css"));
+            bundles.Add(new StyleBundle("~/bundles/registercss").Include(
+               "~/Content/web/css/register.css"));
             bundles.Add(new StyleBundle("~/bundles/upimgcss").Include(
             "~/Content/ueditor/third-party/webuploader/webuploader.css",
              "~/Content/upload/Customrwebuploader.css",
@@ -25,7 +29,10 @@ namespace EasyCms.Web
             #endregion
 
             #region javascript
-
+            bundles.Add(new ScriptBundle("~/bundles/register").Include(
+                      "~/Content/web/regController.js"));
+            bundles.Add(new ScriptBundle("~/bundles/onlyjquery").Include(
+           "~/Scripts/jquery-1.10.2.js"));
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-1.10.2.js" ,
                         "~/Content/jquery/jquery.nicescroll.js",

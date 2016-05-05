@@ -52,6 +52,20 @@ namespace EasyCms.Model
 
         private string _BeiAN;
 
+        private string _WeiXinNum;
+
+        private string _WeiXinImg;
+
+        private string _AndroidImg;
+
+        private string _IosImg;
+
+        private string _WeiXinImgUrl;
+
+        private string _AndroidImgUrl;
+
+        private string _IosImgUrl;
+
         #endregion
 
         #region 属性
@@ -323,6 +337,142 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  微信公众号,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "WeiXinNum", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string WeiXinNum
+        {
+            get
+            {
+                return this._WeiXinNum;
+            }
+            set
+            {
+                this.OnPropertyChanged("WeiXinNum", this._WeiXinNum, value);
+                this._WeiXinNum = value;
+            }
+        }
+
+        /// <summary>
+        ///  微信二维码,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "WeiXinImg", DbTypeString = "varchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string WeiXinImg
+        {
+            get
+            {
+                return this._WeiXinImg;
+            }
+            set
+            {
+                this.OnPropertyChanged("WeiXinImg", this._WeiXinImg, value);
+                this._WeiXinImg = value;
+            }
+        }
+
+        /// <summary>
+        ///  安卓端二维码,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "AndroidImg", DbTypeString = "varchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string AndroidImg
+        {
+            get
+            {
+                return this._AndroidImg;
+            }
+            set
+            {
+                this.OnPropertyChanged("AndroidImg", this._AndroidImg, value);
+                this._AndroidImg = value;
+            }
+        }
+
+        /// <summary>
+        ///  苹果端二维码,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "IosImg", DbTypeString = "varchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string IosImg
+        {
+            get
+            {
+                return this._IosImg;
+            }
+            set
+            {
+                this.OnPropertyChanged("IosImg", this._IosImg, value);
+                this._IosImg = value;
+            }
+        }
+
+        /// <summary>
+        ///  微信二维码Url,
+        /// </summary>
+        [NotDbCol]
+
+        [DbProperty(MapingColumnName = "WeiXinImgUrl", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string WeiXinImgUrl
+        {
+            get
+            {
+                return this._WeiXinImgUrl;
+            }
+            set
+            {
+                this.OnPropertyChanged("WeiXinImgUrl", this._WeiXinImgUrl, value);
+                this._WeiXinImgUrl = value;
+            }
+        }
+
+        /// <summary>
+        ///  安卓端二维码Url,
+        /// </summary>
+        [NotDbCol]
+
+        [DbProperty(MapingColumnName = "AndroidImgUrl", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string AndroidImgUrl
+        {
+            get
+            {
+                return this._AndroidImgUrl;
+            }
+            set
+            {
+                this.OnPropertyChanged("AndroidImgUrl", this._AndroidImgUrl, value);
+                this._AndroidImgUrl = value;
+            }
+        }
+
+        /// <summary>
+        ///  苹果端二维码Url,
+        /// </summary>
+        [NotDbCol]
+
+        [DbProperty(MapingColumnName = "IosImgUrl", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string IosImgUrl
+        {
+            get
+            {
+                return this._IosImgUrl;
+            }
+            set
+            {
+                this.OnPropertyChanged("IosImgUrl", this._IosImgUrl, value);
+                this._IosImgUrl = value;
+            }
+        }
+
         #endregion
 
         #region 列定义 
@@ -358,6 +508,20 @@ namespace EasyCms.Model
                 Description = new PropertyItem("Description", tableName);
 
                 BeiAN = new PropertyItem("BeiAN", tableName);
+
+                WeiXinNum = new PropertyItem("WeiXinNum", tableName);
+
+                WeiXinImg = new PropertyItem("WeiXinImg", tableName);
+
+                AndroidImg = new PropertyItem("AndroidImg", tableName);
+
+                IosImg = new PropertyItem("IosImg", tableName);
+
+                WeiXinImgUrl = new PropertyItem("WeiXinImgUrl", tableName);
+
+                AndroidImgUrl = new PropertyItem("AndroidImgUrl", tableName);
+
+                IosImgUrl = new PropertyItem("IosImgUrl", tableName);
 
 
             }
@@ -417,9 +581,38 @@ namespace EasyCms.Model
             /// 备案信息,
             /// </summary> 
             public PropertyItem BeiAN = null;
+            /// <summary>
+            /// 微信公众号,
+            /// </summary> 
+            public PropertyItem WeiXinNum = null;
+            /// <summary>
+            /// 微信二维码,
+            /// </summary> 
+            public PropertyItem WeiXinImg = null;
+            /// <summary>
+            /// 安卓端二维码,
+            /// </summary> 
+            public PropertyItem AndroidImg = null;
+            /// <summary>
+            /// 苹果端二维码,
+            /// </summary> 
+            public PropertyItem IosImg = null;
+            /// <summary>
+            /// 微信二维码Url,
+            /// </summary> 
+            public PropertyItem WeiXinImgUrl = null;
+            /// <summary>
+            /// 安卓端二维码Url,
+            /// </summary> 
+            public PropertyItem AndroidImgUrl = null;
+            /// <summary>
+            /// 苹果端二维码Url,
+            /// </summary> 
+            public PropertyItem IosImgUrl = null;
         }
         #endregion
     }
+
 
 
     public partial class WebSiteSet

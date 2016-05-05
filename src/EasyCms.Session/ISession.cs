@@ -86,10 +86,20 @@ namespace EasyCms.Session
             }
             Session[UserInfoKey] = user;
             Session[RoleInfoKey] = role;
-            Session[UserIDKey] = user.ID;
-            Session[RoleIDKey] = role.ID; 
+            Session[UserIDKey] = user.ID; 
             Session[UserNameKey] = user.Name;
-            Session[RoleNameKey] = role.Name;
+            if (role is AccountRange)
+            {
+                Session[RoleIDKey] = (role as AccountRange).RangeID;
+                Session[RoleNameKey] = (role as AccountRange).RangDict.Name;
+            }
+            else if (role is SysRoleInfo)
+            {
+                Session[RoleIDKey] = role.ID;
+                Session[RoleNameKey] = role.Name;
+             
+            }
+           
             
         }
 

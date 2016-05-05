@@ -1,0 +1,67 @@
+﻿@using MVCExtention;
+@using EasyCms.Model
+@{
+    ViewBag.Title = "广告位置表";
+}
+
+
+<!--工具栏-->
+<div id="floatHead" class="toolbar-wrap">
+    <div class="toolbar">
+        <div class="box-wrap">
+            <a class="menu-btn"></a>
+            <div class="l-list">
+                <ul class="icon-list">
+                    <li><a class="add" href="@Url.Action("Edit")"><i></i><span>新增</span></a></li>
+                    <li><a class="edit" href="javascript:;" onclick="EditGrid('jqxgrid', '@Url.Action("Edit")');"><i></i><span>修改</span></a></li>
+                    <li><a class="del" href="javascript:;" onclick="DelGrid('jqxgrid', '@Url.Action("Delete")');"><i></i><span>删除</span></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/工具栏-->
+<!--列表-->
+<div class="table-container">
+    <div id="jqxgrid">
+    </div>
+</div>
+<!--/列表-->
+@section  scripts{
+
+    <script type="text/javascript">
+    $(document).ready(function () {
+        var url = "@Url.Action("GetList")";
+        var datafields = [{ name: 'ID' },
+  { name: 'Code' },
+  { name: 'Name' },
+  { name: 'Width' },
+  { name: 'Height' },
+  { name: 'AdType' },
+  { name: 'ShowType' },
+  { name: 'IsEnable' },
+  { name: 'ShowNums' },
+  { name: 'Note' },
+  { name: 'CallCode' } 
+        ];
+        var columns = [
+  { text: '编号', dataField: 'Code', cellsalign: "left", width: 80 },
+
+  { text: '名称', dataField: 'Name', cellsalign: "left", width: 200 },
+
+  { text: '宽度', dataField: 'Width', cellsalign: "left", width: 80 },
+
+  { text: '高度', dataField: 'Height', cellsalign: "left", width: 80 },
+
+  { text: '广告类型', dataField: 'AdType', width: 80,@HelperExtend.ParseEnum(typeof(AdType)) },
+
+  { text: '显示方式', dataField: 'ShowType',   width: 80,@HelperExtend.ParseEnum(typeof(AdShowType)) },
+
+  { text: '开启', dataField: 'IsEnable',  width: 50,@HelperExtend.ParseEnable() },
+
+  { text: '显示数量', dataField: 'ShowNums', cellsalign: "right", width: 80 } ];
+        CreateGrid("jqxgrid", url, datafields, columns  );
+
+    });
+    </script>
+}

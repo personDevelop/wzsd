@@ -206,6 +206,11 @@ namespace EasyCms.Web.API
             //检验验证码是否正确，
 
             string msg = string.Empty;
+            if (string.IsNullOrWhiteSpace(registModel.UserNo))
+            {
+                msg = "用户名不能为空";
+            }
+            else
             if (string.IsNullOrWhiteSpace(registModel.Pwd))
             {
                 msg = "密码不能为空";
@@ -226,9 +231,9 @@ namespace EasyCms.Web.API
                             msg = "手机号不能为空";
                         }
                         else
-                            if (string.IsNullOrWhiteSpace(registModel.TelVaiCode))
+                            if (string.IsNullOrWhiteSpace(registModel.VaryCode))
                             {
-                                msg = "手机验证码不能为空";
+                                msg = "短信验证码不能为空";
                             }
                             else
                                 if (!Sharp.Common.CacheContainer.Contains(registModel.TelPhone + ValidCode.注册))
@@ -236,20 +241,21 @@ namespace EasyCms.Web.API
                                     msg = "请先获取手机验证码";
                                 }
                                 else
-                                    if (!Sharp.Common.CacheContainer.GetCache(registModel.TelPhone + ValidCode.注册).Equals(registModel.TelVaiCode))
+                                    if (!Sharp.Common.CacheContainer.GetCache(registModel.TelPhone + ValidCode.注册).Equals(registModel.VaryCode))
                                     {
                                         msg = "验证码不正确";
                                     }
                                     else
                                     {
-                                        if (string.IsNullOrWhiteSpace(registModel.NiceName))
-                                        {
-                                            registModel.NiceName = registModel.TelPhone;
-                                        }
+                                        
                                         msg = new ManagerUserInfoBll().Regist(registModel);
                                     }
 
+            if (string.IsNullOrWhiteSpace(msg))
+            {
+                return "注册成功".FormatSuccess();
 
+            }else
             return msg.FormatError();
 
 
