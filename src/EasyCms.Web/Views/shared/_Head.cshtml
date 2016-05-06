@@ -107,16 +107,18 @@
 <div id='focus'>
     <div id='topnav' style="">
 
-        <div style="height: 44px;float: left; position: relative; z-index: 10; width: 210px;">
+        <div class="nav" style="float: left; position: relative; z-index: 10; width: 210px;">
             <div class="allcat">
-                <a href="//www.jd.com/allSort.aspx" target="_blank">全部商品分类
-                <i class="ci-right"><s>◇</s></i></a>
+                <a href="//www.jd.com/allSort.aspx" target="_blank">
+                    全部商品分类
+                    <i class="ci-right"><s>◇</s></i>
+                </a>
             </div>
             <div class="dd" style="display: none;"> </div>
-               @*<div class="allcat">
+            @*<div class="allcat">
                 <a target="_blank" href="@Url.Action("","SiteMap")">全部商品分类</a>
                 <i class="ci-right"><s>◇</s></i>
-              
+
             </div>*@
             <div class="dd-inner">
                 @{
@@ -129,32 +131,32 @@
                         index++;
                         if (string.IsNullOrWhiteSpace(item.GroupNo))
                         {
-                            
+
                             <div class="@(index == 1?"font-item":"fore-" + index)">
 
                                 <div class="item @("fore"+index)">
                                     <h3>
                                         @if (item.HasIndex)
-                            {
-                            <a href="@(string.Format(item.IndexUrl, item.ID))">@item.Name</a>
-                            }
-                            else
-                            {
-                            <a href="@Url.Action("index", "Category",new { id=item.ID})">@item.Name</a>
-                            }
+                                        {
+                                            <a href="@(string.Format(item.IndexUrl, item.ID))">@item.Name</a>
+                                        }
+                                        else
+                                        {
+                                            <a href="@Url.Action("index", "Category",new { id=item.ID})">@item.Name</a>
+                                        }
                                     </h3>
                                     <i>&gt;</i>
                                 </div>
-                                <div class="font-item1"> 
+                                <div class="font-item1">
                                     <div class="font-lefty">
                                         @{
-                                            IEnumerable<ShopCategory> second = list.Where(p => p.ParentID == item.ID);
-                                            foreach (var secondItem in second)
-                                            {
-                                                <dl class="fore1">
-                                                    <dt>
-                                                        @if (secondItem.HasIndex)
-                        {
+                                        IEnumerable<ShopCategory> second = list.Where(p => p.ParentID == item.ID);
+                                        foreach (var secondItem in second)
+                                        {
+                                            <dl class="fore1">
+                                                <dt>
+                                                    @if (secondItem.HasIndex)
+                                                    {
                                                         <a href="@(string.Format(secondItem.IndexUrl, secondItem.ID))">@secondItem.Name <i>&gt;</i></a>
                                                     }
                                                     else
@@ -163,40 +165,42 @@
                                                     }
                                                 <dd>
                                                     @{
-                                                        IEnumerable<ShopCategory> third = list.Where(p => p.ParentID == secondItem.ID);
-                                                        foreach (var thirdItem in third)
-                                                        {
+                                                    IEnumerable<ShopCategory> third = list.Where(p => p.ParentID == secondItem.ID);
+                                                    foreach (var thirdItem in third)
+                                                    {
 
-                                                            if (thirdItem.HasIndex)
-                                                            {
-                                                                <a href="@(string.Format(thirdItem.IndexUrl, thirdItem.ID))">@thirdItem.Name</a>
-                                                            }
-                                                            else
-                                                            {
-                                                                <a href="@Url.Action("index", "Category",new { id=thirdItem.ID})">@thirdItem.Name</a>
-                                                            }
+                                                        if (thirdItem.HasIndex)
+                                                        {
+                                                            <a href="@(string.Format(thirdItem.IndexUrl, thirdItem.ID))">@thirdItem.Name</a>
                                                         }
+                                                        else
+                                                        {
+                                                            <a href="@Url.Action("index", "Category",new { id=thirdItem.ID})">@thirdItem.Name</a>
+                                                        }
+                                                    }
                                                     }
 
                                                 </dd>
                                             </dl>
-                                                        }
                                         }
-                                    </div> 
+                                        }
+                                    </div>
                                 </div>
 
                             </div>
-                                                            }
-                                                            else if (GroupNum[item.GroupNo].Count > 1)
-                                                            {
+                        }
+                        else if (GroupNum[item.GroupNo].Count > 1)
+                        {
 
-                                                            }
-                                                        }
+                        }
+                    }
 
-                } 
+                }
 
             </div>
         </div>
+
+
 
         <div class="focus-b">
             <ul>
