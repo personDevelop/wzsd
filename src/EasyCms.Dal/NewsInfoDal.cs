@@ -46,7 +46,14 @@ namespace EasyCms.Dal
                     .ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
         }
 
+        public DataTable GetNews(int pagenum, int pagesize, ref int recordCount, ref int pageCount)
+        {
+           
+           
+                return Dal.From<NewsInfo>().Select(NewsInfo._.ID,NewsInfo._.NewsTitle,NewsInfo._.CreatedDate.ConvertDate( ConvertDateType.十位年月日短横线分割).Alias("CreatedDate") ).OrderBy(NewsInfo._.Sequence)
 
+                    .ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
+        }
         public NewsInfo GetEntity(string id, string host)
         {
             NewsInfo news = GetEntity(id);

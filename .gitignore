@@ -204,3 +204,6 @@ src/EasyCms.Web/bin/MVCExtention.dll
 src/EasyCms.Web/Config/System/DataBaseConnect.xml
 src/EasyCms.Web/bin/Config/System/DataBaseConnect.xml
 src/EasyCms.Web/Upload/
+src/EasyCms.Web/bin/
+src/AliNotify.Web/bin/
+src/AliNotify.Web/bin

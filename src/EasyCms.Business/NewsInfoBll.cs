@@ -34,7 +34,10 @@ namespace EasyCms.Business
         {
             return Dal.GetList(pagenum, pagesize, ref   recordCount, IsForSelected);
         }
-
+        public DataTable GetNews(int pagenum, int pagesize, ref int recordCount, ref int pageCount)
+        {
+            return Dal.GetNews(pagenum, pagesize, ref recordCount, ref pageCount);
+        }
 
         public NewsInfo GetEntity(string id, string host)
         {

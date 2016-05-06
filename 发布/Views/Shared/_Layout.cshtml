@@ -4,6 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,initial-scale=1.0,user-scalable=no" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link REL="Shortcut Icon" href="/Content/Images/favicon.ico">  
     <title>@ViewBag.Title</title> 
     @Styles.Render("~/bundles/webcss") 
     @Styles.Render("~/bundles/jqxcss")
@@ -15,10 +16,11 @@
     <!--头部-->
     @Html.Partial("_Head")
     <!--头部--> 
-    @RenderBody() 
-    @RenderSection("scripts", required: false)
+    @RenderBody()  
     <!--底部-->
     @Html.Partial("_Footer")
     <!--底部-->
+
+    @RenderSection("scripts", required: false)
 </body>
 </html>

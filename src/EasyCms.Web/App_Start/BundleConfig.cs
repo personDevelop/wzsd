@@ -20,6 +20,8 @@ namespace EasyCms.Web
 
             bundles.Add(new StyleBundle("~/bundles/logincss").Include(
              "~/Content/web/css/login.css"));
+            bundles.Add(new StyleBundle("~/bundles/newscss").Include(
+           "~/Content/web/css/news.css"));
             bundles.Add(new StyleBundle("~/bundles/registercss").Include(
                "~/Content/web/css/register.css"));
             bundles.Add(new StyleBundle("~/bundles/productcss").Include(

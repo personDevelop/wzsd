@@ -1,0 +1,213 @@
+#news-wrap{
+		float: left;
+    	width: 980px;
+    	margin-left: 10px;
+    	margin-top: 4px;
+	}
+	#news-wrap .mt{
+		height: 28px;
+    	line-height: 28px;
+    	border: 1px solid #ddd;
+    	background-color: #f7f7f7;
+	}
+	#news-wrap .mt h2 {
+	    font-size: 14px;
+	    color: #666;
+	    padding: 0 8px;
+	}
+	#news-wrap .mc {
+	    border: 1px solid #ddd;
+	    border-top: none;
+	}
+
+	#news-wrap li div {
+	    float: left;
+	    margin-right: 5px;
+	}
+	#news-wrap li span {
+	    float: right;
+	    margin-left: 5px;
+	    color: #999;
+	    font-family: Verdana;
+	}
+	#news-wrap li {
+	    padding: 3px 0;
+	    height: 24px;
+	    line-height: 24px;
+	    overflow: hidden;
+	    zoom: 1;
+	    border-bottom: 1px dotted #ddd;
+	}
+	#news-wrap  ul {
+	    padding: 15px 10px 20px;
+	}
+
+	.p-wrap {
+	    float: right;
+	}
+	 .p-num {
+    float: left;
+}
+.p-num a, .page .p-num b {
+    float: left;
+    height: 36px;
+    line-height: 36px;
+    padding: 0 14px;
+    margin-right: 5px;
+    font-size: 14px;
+}
+.p-num a {
+    color: #333;
+    border: 1px solid #ddd;
+    background-color: #f7f7f7;
+    background-repeat: repeat-x;
+    background-image: -moz-linear-gradient(top,#f7f7f7,#f2f2f2);
+    background-image: -webkit-linear-gradient(top,#f7f7f7,#f2f2f2);
+    background-image: -o-linear-gradient(top,#f7f7f7,#f2f2f2);
+    background-image: linear-gradient(top,#f7f7f7,#f2f2f2);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f7f7f7', endColorstr='#f2f2f2', GradientType=0);
+}
+.p-num .pn-next.disabled, .p-num .pn-prev.disabled {
+    background: 0 0;
+    background: #fff;
+    cursor: default;
+}
+.p-num a.curr {
+    border: 0 none;
+    padding: 1px 15px;
+    background: 0 0;
+    filter: none;
+    color: #e4393c;
+    cursor: default;
+}
+.p-num a, .p-num b {
+    float: left;
+    height: 36px;
+    line-height: 36px;
+    padding: 0 14px;
+    margin-right: 5px;
+    font-size: 14px;
+}
+ .p-skip {
+    float: left;
+    margin-left: 20px;
+}
+.p-skip em {
+    float: left;
+    line-height: 38px;
+    font-size: 14px;
+}
+.p-skip .input-txt {
+    float: left;
+    width: 30px;
+    height: 30px;
+    margin: 0 3px;
+    line-height: 30px;
+    font-size: 14px;
+    text-align: center;
+}
+.btn-default {
+    border: 1px solid #DDD;
+    padding: 4px 13px 5px;
+    color: #666;
+    background-color: #f7f7f7;
+    background-repeat: repeat-x;
+    background-image: -moz-linear-gradient(top,#f7f7f7,#f2f2f2);
+    background-image: -webkit-linear-gradient(top,#f7f7f7,#f2f2f2);
+    background-image: -o-linear-gradient(top,#f7f7f7,#f2f2f2);
+    background-image: linear-gradient(top,#f7f7f7,#f2f2f2);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f7f7f7', endColorstr='#f2f2f2', GradientType=0);
+}
+.p-skip .btn {
+    float: left;
+    height: 27px;
+    margin-left: 10px;
+    font-size: 14px;
+    line-height: 27px;
+}
+em, i, u {
+    font-style: normal;
+}
+.pagecenter {
+       float: right;
+    margin-right: 10px;
+}.pagination {
+    display: inline-block;
+    padding-left: 0;
+    margin: 20px 0;
+    border-radius: 4px;
+}a, a *, ul li, dl dd, ol li {
+    -webkit-transition: all .2s ease-out;
+    -moz-transition: all .2s ease-out;
+    -o-transition: all .2s ease-out;
+    -ms-transition: all .2s ease-out;
+    transition: all .2s ease-out;
+}
+.pagination > li {
+    display: inline;
+}
+.pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > li {
+    display: block;
+    float: left;
+}
+.pagination > li > a, .pagination > li > span {
+    position: relative;
+    float: left;
+    padding: 6px 12px;
+    margin-left: -1px;
+    line-height: 1.42857143;
+    color: #3498db;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+.pagination > li > a, .pagination > li > span {
+    padding: 6px 20px;
+    color: #333;
+}
+.pagination > li.disabled a, .pagination > li.disabled a:hover {
+    color: #999!important;
+    backgorund: #eee!important;
+    cursor: not-allowed;
+}
+.pagination > li:first-child > a, .pagination > li:first-child > span {
+    margin-left: 0;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+.pagination > .disabled > span, .pagination > .disabled > span:hover, .pagination > .disabled > span:focus, .pagination > .disabled > a, .pagination > .disabled > a:hover, .pagination > .disabled > a:focus {
+    color: #777;
+    cursor: not-allowed;
+    background-color: #fff;
+    border-color: #ddd;
+}
+li.pagebox {
+    display: block;
+    float: left;
+}
+.pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
+    z-index: 2;
+    color: #fff;
+    cursor: default;
+    background-color: #3498db;
+    border-color: #3498db;
+}
+
+.pagination > li > a:hover, .pagination > li > span:hover, .pagination > li > a:focus, .pagination > li > span:focus {
+    color: #23527c;
+    background-color: #eee;
+    border-color: #ddd;
+}.pagination > li > a.pagejump label input, .pagination > li > span.pagejump label input {
+    border: 1px #d1d1d1 solid;
+     
+    margin-top: -1px;
+}
+.pagination > li > a.pagejump input, .pagination > li > span.pagejump input {
+    max-width: 30px;
+}.pagination > li > a.pagejump, .pagination > li > span.pagejump {
+    padding: 6px 10px;
+}
+.pagination > li:last-child > a, .pagination > li:last-child > span {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}

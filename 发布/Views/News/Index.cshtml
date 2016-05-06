@@ -1,0 +1,33 @@
+﻿@model EasyCms.Model.ShopProductInfo
+@using EasyCms.Business
+@using EasyCms.Model
+@{
+    ViewBag.Title = Model.Name + EasyCms.CmsSessionExtend.WebSite.Name;
+
+
+}
+@Styles.Render("~/bundles/newscss")
+@section  scripts{
+
+    <script type="text/javascript">
+
+        $(function () {
+
+
+            $.ajax(
+                {
+                    url: "@Url.Action("Get","")",
+                    data: {}
+
+
+
+
+                });
+
+
+        });
+
+
+    </script>
+
+}

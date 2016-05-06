@@ -16,10 +16,11 @@
     <!--头部-->
     @Html.Partial("_Head")
     <!--头部--> 
-    @RenderBody() 
-    @RenderSection("scripts", required: false)
+    @RenderBody()  
     <!--底部-->
     @Html.Partial("_Footer")
     <!--底部-->
+
+    @RenderSection("scripts", required: false)
 </body>
 </html>

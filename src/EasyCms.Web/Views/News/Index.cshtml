@@ -1,0 +1,115 @@
+﻿@model EasyCms.Model.ShopProductInfo
+@using EasyCms.Business
+@using EasyCms.Model
+@{
+    ViewBag.Title = "新闻资讯" + EasyCms.CmsSessionExtend.WebSite.Name;
+
+
+}
+@Styles.Render("~/bundles/newscss")
+<div class="floor">
+    @Html.Partial("_RecomendShop")
+
+    <div id='news-wrap'>
+        <div class="mt">
+            <h2>
+                新闻资讯
+            </h2>
+        </div>
+        <div class="mc">
+            <ul>
+                <li>
+                    <div>
+                        <a href="news.html?id=28516"><font class="skcolor_ljg"></font>婚酒干一杯 满199减100 </a>
+                    </div>
+                    <span>2016-04-14 17:38:41</span>
+                    <div class="line"></div>
+                </li>
+                <li>
+                    <div>
+                        <a href="news.html?id=28516"><font class="skcolor_ljg"></font>婚酒干一杯 满199减100 </a>
+                    </div>
+                    <span>2016-04-14 17:38:41</span>
+                    <div class="line"></div>
+                </li>
+                <li>
+                    <div>
+                        <a href="news.html?id=28516"><font class="skcolor_ljg"></font>婚酒干一杯 满199减100 </a>
+                    </div>
+                    <span>2016-04-14 17:38:41</span>
+                    <div class="line"></div>
+                </li>
+                <li>
+                    <div>
+                        <a href="news.html?id=28516"><font class="skcolor_ljg"></font>婚酒干一杯 满199减100 </a>
+                    </div>
+                    <span>2016-04-14 17:38:41</span>
+                    <div class="line"></div>
+                </li>
+
+                <li>
+                    <div>
+                        <a href="news.html?id=28516"><font class="skcolor_ljg"></font>婚酒干一杯 满199减100 </a>
+                    </div>
+                    <span>2016-04-14 17:38:41</span>
+                    <div class="line"></div>
+                </li>
+            </ul>
+        </div>
+
+
+
+
+    </div>
+    <div class="pagebar pagecenter cl" data-pages="675">
+        <ul class="pagination-media pagination pagination-md cl">
+            <li class="firstpage disabled"><a href="javascript:;" class="first" rel="nofollow">首页</a></li>
+            <li class="prevpage disabled"><a href="javascript:;" class="prev" rel="nofollow">上一页</a></li>
+            <li class="pagebox active"><span>1</span></li>
+            <li class="pagebox"><a href="feed/index/page/2.html">2</a></li>
+            <li class="pagebox"><a href="feed/index/page/3.html">3</a></li>
+            <li class="pagebox"><a href="feed/index/page/4.html">4</a></li>
+            <li class="pagebox"><a href="feed/index/page/5.html">5</a></li>
+            <li class="pagejumpbox">
+                <span class="pagejump">
+                    <label>
+                        <input type="text" name="custompage" size="3" title="输入页码，按回车快速跳转" value="1" data-hash="">
+                        <a href="feed/index/page/.html" class="pagejump_link hide"></a>
+                        <span title="共 675 页"> / 675 页</span>
+                    </label>
+                </span>
+            </li>
+            <li class="nextpage"><a href="feed/index/page/2.html" class="nxt">下一页</a></li>
+            <li class="lastpage"><a href="feed/index/page/675.html" class="last">尾页</a></li>
+        </ul>
+    </div>
+</div>
+
+
+
+<div class="space20"></div>
+@section  scripts{
+
+    <script type="text/javascript">
+
+        $(function () {
+
+
+            $.ajax(
+                {
+                    url: "@Url.Action("GetNews")",
+                    data: {pageNum:1,   pageSize:20},
+                    success: function (result)
+                    {
+
+
+                    } 
+                });
+
+
+        });
+
+
+    </script>
+
+}

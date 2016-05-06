@@ -326,6 +326,7 @@
     <Compile Include="Controllers\HelpController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\NewsController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\SiteMapController.cs" />
@@ -748,6 +749,7 @@
     <Content Include="Content\web\css\list.css" />
     <Content Include="Content\web\css\login.css" />
     <Content Include="Content\web\css\main.css" />
+    <Content Include="Content\web\css\news.css" />
     <Content Include="Content\web\css\product.css" />
     <Content Include="Content\web\regController.js" />
     <Content Include="Content\web\css\register.css" />
@@ -1384,6 +1386,10 @@
     <Content Include="Views\Product\Index.cshtml" />
     <Content Include="Views\Account\Regist.cshtml" />
     <Content Include="Views\Account\Contact.cshtml" />
+    <Content Include="Views\News\Index.cshtml" />
+    <Content Include="Views\News\Detail.cshtml" />
+    <Content Include="Views\Shared\_RecomendShop.cshtml" />
+    <Content Include="Views\News\Index - 复制.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

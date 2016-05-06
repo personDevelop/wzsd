@@ -1,7 +1,7 @@
 ﻿ @using EasyCms.Business
 @using EasyCms.Model
 @{
-
+    ViewBag.Title = EasyCms.CmsSessionExtend.WebSite.Name;
     AdPositon position = null;
     List<AdManage> adList = new AdManageBll().GetAdByPositon("01", 0, ref position);
 
@@ -64,8 +64,8 @@
                                 {
                                     var item=data.data.Data[i];
 
-                                    $("#guessyou").find("ul").append("<li class='fore"+i+"'>  <div class='p-img'> <a width='130' height='130' href='@Url.Action("", "Product")"+"/"+item.ID+"' target='_blank'>  <img src='"
-                                        +item.FilePath+"' width='130' height='130' title='"+item.Name+"'> </a></div> <div class='p-info'><div class='p-name'><a href='@Url.Action("", "Product")"+"/"+item.ID+"' target='_blank'>"
+                                    $("#guessyou").find("ul").append("<li class='fore"+i+"'>  <div class='p-img'> <a width='130' height='130' href='@Url.Action("index", "Product")"+"/"+item.ID+"' target='_blank'>  <img src='"
+                                        +item.FilePath+"' width='130' height='130' title='"+item.Name+"'> </a></div> <div class='p-info'><div class='p-name'><a href='@Url.Action("index", "Product")"+"/"+item.ID+"' target='_blank'>"
                             +item.Name+"</a></div><div class='p-price'>惊喜价<i>¥</i>"+item.SalePrice
                             +" </div></div </li>");
                                 }
@@ -124,8 +124,8 @@
                {
                    var item=data.data.Data[i];
 
-                   cateogry.find("ul").append("<li class='fore"+i+"'>  <div class='p-img'> <a width='130' height='130' href='@Url.Action("", "Product")"+"/"+item.ID+"' target='_blank'>  <img src='"
-                       +item.FilePath+"' width='125' height='125' title='"+item.Name+"'> </a></div> <div class='p-info'><div class='p-name'><a href='@Url.Action("", "Product")"+"/"+item.ID+"' target='_blank'>"
+                   cateogry.find("ul").append("<li class='fore"+i+"'>  <div class='p-img'> <a width='130' height='130' href='@Url.Action("index", "Product")"+"/"+item.ID+"' target='_blank'>  <img src='"
+                       +item.FilePath+"' width='125' height='125' title='"+item.Name+"'> </a></div> <div class='p-info'><div class='p-name'><a href='@Url.Action("index", "Product")"+"/"+item.ID+"' target='_blank'>"
            +item.Name+"</a></div><div class='p-price'><i>¥</i>"+item.SalePrice
            +" </div></div </li>");
                }});});
@@ -141,7 +141,7 @@
                        {
                            var item=data.data.Data[i];
 
-                           cateogry.append("<li class='current'><a href='@Url.Action("", "Product")"+"/"+item.ID+"'><img src='"+item.FilePath+"' width='58' height='58' title='热度：4491'></a> <a href='@Url.Action("", "Product")"+"/"+item.ID+"'>"+item.Name+"</a> <b>￥"+item.SalePrice
+                           cateogry.append("<li class='current'><a href='@Url.Action("index", "Product")"+"/"+item.ID+"'><img src='"+item.FilePath+"' width='58' height='58' title='热度：4491'></a> <a href='@Url.Action("index", "Product")"+"/"+item.ID+"'>"+item.Name+"</a> <b>￥"+item.SalePrice
                          +"</b></li>");
                        }
                    });
