@@ -1,7 +1,7 @@
 ﻿@using EasyCms.Model
 @using EasyCms
 @using EasyCms.Business
- @using EasyCms.Session
+@using EasyCms.Session
 <div id='header'>
     <div class='main'>
         <ul class="fl topleft">
@@ -9,21 +9,21 @@
             @if (string.IsNullOrWhiteSpace(CmsSession.GetUserID()))
             {
 
-            <li class="xuan">
-                <div class="erwei"></div>
-                <a href="@Url.Action("Login", "Account", new { area = string.Empty })" class="aa">
-                    登录
-                </a>
+                <li class="xuan">
+                    <div class="erwei"></div>
+                    <a href="@Url.Action("Login", "Account", new { area = string.Empty })" class="aa">
+                        登录
+                    </a>
 
-            </li>
-            <li>|</li>
-            <li class="xuan">
-                <div class="erwei"></div>
-                <a href="@Url.Action("Regist", "Account", new { area = string.Empty })" class="aa">
-                    注册
-                </a>
+                </li>
+                <li>|</li>
+                <li class="xuan">
+                    <div class="erwei"></div>
+                    <a href="@Url.Action("Regist", "Account", new { area = string.Empty })" class="aa">
+                        注册
+                    </a>
 
-            </li>}
+                </li>}
             else
             {
                 <li class="xuan">
@@ -43,7 +43,7 @@
                 <i class="ci-right ">
                     <s class="jt">◇</s>
                 </i>
-                <div class="guanzhu1"><img src="@(CmsSessionExtend.WebSite.WeiXinImgUrl)" ></div>
+                <div class="guanzhu1"><img src="@(CmsSessionExtend.WebSite.WeiXinImgUrl)"></div>
             </li>
             <li class="" style='padding-left:30px;padding-right: 5px;'>
                 <i class="ci-left-cart"></i>
@@ -59,14 +59,14 @@
 </div>
 <div id='top-banner' style='display: none;'>
     <div class="top-ba" style='width:1210px;margin: 0 auto;'>
-        
-                
-            
+
+
+
     </div>
 
 </div>
 <div id='search-wrap'>
-    <div class="logo"><a href=""><img src="@(CmsSessionExtend.WebSite.LogoUrl)" width="210" height="83"></a></div>
+    <div class="logo"><a href="@Url.Action("", "")"><img src="@(CmsSessionExtend.WebSite.LogoUrl)" width="210" height="83"></a></div>
     <div class="search">
         <input type="text" value="" class="text" id="searchText">
         <button class="button" id="btnSearch">搜索</button>
@@ -76,10 +76,10 @@
 
             $("#btnSearch").click(function () {
 
-                var url="@Url.Action("index", "search")";
-                var searchText=$("#searchText").val();
+                var url = "@Url.Action("index", "search")";
+                var searchText = $("#searchText").val();
                 if (searchText) {
-                    window.location=url+"/"+searchText;
+                    window.location = url + "/" + searchText;
                 }
 
             });
@@ -87,11 +87,11 @@
     </script>
     <div style="float: right;">
         @{
-            AdManage ad400 = new AdManageBll().GetOnAdByPosition("14"); 
-                <img src="@ad400.AdImgUrl">
-            
+            AdManage ad400 = new AdManageBll().GetOnAdByPosition("14");
+            <img src="@ad400.AdImgUrl">
+
         }
-    </div> 
+    </div>
     <div class="hotwords">
         @{
             string[] keylist = new SearchKeyWordBll().GetKeyList(true);
@@ -100,26 +100,27 @@
                 <a href="@Url.Action("index","search",new { id=item})">@item</a>
             }
 
-        } 
+        }
     </div>
     <span class="clr"></span>
 </div>
 <div id='focus'>
-    <div id='topnav' style="">
+    <div id='topnav' class="topnav" style="">
 
         <div class="nav" style="float: left; position:absolute; z-index: 10; width: 210px;">
             <div class="allcat">
-                <a href="//www.jd.com/allSort.aspx" target="_blank">
-                    全部商品分类
-                    <i class="ci-right"><s>◇</s></i>
-                </a>
-            </div>
-            <div class="dd" style="display: none;"> </div>
-            @*<div class="allcat">
                 <a target="_blank" href="@Url.Action("","SiteMap")">全部商品分类</a>
-                <i class="ci-right"><s>◇</s></i>
+@if (ViewBag.IsStaticNav == null || string.IsNullOrWhiteSpace(ViewBag.IsStaticNav as string))
+{
+                @:<i class="ci-right"><s>◇</s></i>
+}
 
-            </div>*@
+            </div>
+            @if (ViewBag.IsStaticNav == null || string.IsNullOrWhiteSpace(ViewBag.IsStaticNav as string))
+            {
+                @:<div class="dd">
+           }
+
             <div class="dd-inner">
                 @{
                     List<ShopCategory> list = new EasyCms.Business.ShopCategoryBll().GetListWithNavi(null, 3);
@@ -132,79 +133,83 @@
                         if (string.IsNullOrWhiteSpace(item.GroupNo))
                         {
 
-                            <div class="@(index == 1?"font-item":"fore-" + index)">
+                        <div class="@(index == 1?"font-item":"fore-" + index)">
 
-                                <div class="item @("fore"+index)">
-                                    <h3>
-                                        @if (item.HasIndex)
-                                        {
-                                            <a href="@(string.Format(item.IndexUrl, item.ID))">@item.Name</a>
-                                        }
-                                        else
-                                        {
-                                            <a href="@Url.Action("index", "Category",new { id=item.ID})">@item.Name</a>
-                                        }
-                                    </h3>
-                                    <i>&gt;</i>
-                                </div>
-                                <div class="font-item1">
-                                    <div class="font-lefty">
-                                        @{
-                                        IEnumerable<ShopCategory> second = list.Where(p => p.ParentID == item.ID);
-                                        foreach (var secondItem in second)
-                                        {
-                                            <dl class="fore1">
-                                                <dt>
-                                                    @if (secondItem.HasIndex)
-                                                    {
-                                                        <a href="@(string.Format(secondItem.IndexUrl, secondItem.ID))">@secondItem.Name <i>&gt;</i></a>
-                                                    }
-                                                    else
-                                                    {
-                                                        <a href="@Url.Action("index", "Category",new { id=secondItem.ID})">@secondItem.Name <i>&gt;</i></a>
-                                                    }
-                                                <dd>
-                                                    @{
-                                                    IEnumerable<ShopCategory> third = list.Where(p => p.ParentID == secondItem.ID);
-                                                    foreach (var thirdItem in third)
-                                                    {
-
-                                                        if (thirdItem.HasIndex)
-                                                        {
-                                                            <a href="@(string.Format(thirdItem.IndexUrl, thirdItem.ID))">@thirdItem.Name</a>
-                                                        }
-                                                        else
-                                                        {
-                                                            <a href="@Url.Action("index", "Category",new { id=thirdItem.ID})">@thirdItem.Name</a>
-                                                        }
-                                                    }
-                                                    }
-
-                                                </dd>
-                                            </dl>
-                                        }
-                                        }
-                                    </div>
-                                </div>
-
+                            <div class="item @("fore"+index)">
+                                <h3>
+                                    @if (item.HasIndex)
+                                            {
+                                <a href="@(string.Format(item.IndexUrl, item.ID))">@item.Name</a>
+                                            }
+                                            else
+                                            {
+                                <a href="@Url.Action("index", "Category",new { id=item.ID})">@item.Name</a>
+                                            }
+                                </h3>
+                                <i>&gt;</i>
                             </div>
-                        }
-                        else if (GroupNum[item.GroupNo].Count > 1)
-                        {
+                            <div class="font-item1">
+                                <div class="font-lefty">
+                                    @{
+                                                IEnumerable<ShopCategory> second = list.Where(p => p.ParentID == item.ID);
+                                                foreach (var secondItem in second)
+                                                {
+                                <dl class="fore1">
+                                    <dt>
+                                        @if (secondItem.HasIndex)
+                                                            {
+                                                    <a href="@(string.Format(secondItem.IndexUrl, secondItem.ID))">@secondItem.Name <i>&gt;</i></a>
+                                                            }
+                                                            else
+                                                            {
+                                                    <a href="@Url.Action("index", "Category",new { id=secondItem.ID})">@secondItem.Name <i>&gt;</i></a>
+                                                            }
+                                    <dd>
+                                        @{
+                                                                IEnumerable<ShopCategory> third = list.Where(p => p.ParentID == secondItem.ID);
+                                                                foreach (var thirdItem in third)
+                                                                {
 
-                        }
-                    }
+                                                                    if (thirdItem.HasIndex)
+                                                                    {
+                                                    <a href="@(string.Format(thirdItem.IndexUrl, thirdItem.ID))">@thirdItem.Name</a>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                    <a href="@Url.Action("index", "Category",new { id=thirdItem.ID})">@thirdItem.Name</a>
+                                                                    }
+                                                                }
+                                        }
+
+                                    </dd>
+                                </dl>
+                                                                }
+                                    }
+                                </div>
+                            </div>
+
+                        </div>
+                                                                    }
+                                                                    else if (GroupNum[item.GroupNo].Count > 1)
+                                                                    {
+
+                                                                    }
+                                                                }
 
                 }
 
             </div>
+            @if (ViewBag.IsStaticNav == null || string.IsNullOrWhiteSpace(ViewBag.IsStaticNav as string))
+            {
+                @:  </div>
+                    }
         </div>
 
 
 
         <div class="focus-b">
             <ul>
-                <li><a href="">首页</a></li>
+                <li><a href="@Url.Action("", "")">首页</a></li>
                 @{
 
                     //获取导航菜单
@@ -229,10 +234,11 @@
                             default:
                                 break;
                         }
+                        
                         <li><a href="@url">@item.Name</a></li>
                     }
 
-                } 
+                }
             </ul>
         </div>
 

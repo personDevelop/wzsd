@@ -11,6 +11,7 @@ namespace EasyCms.Web.Controllers
         // GET: Default
         public ActionResult Index()
         {
+            ViewBag.IsStaticNav = "1";
             return View();
         }
     }

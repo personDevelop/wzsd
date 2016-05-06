@@ -12,7 +12,7 @@ using Sharp.Common;
 using NPOI.SS.Util;
 using System.Text.RegularExpressions;
 
-namespace EasyCms.Web.Common
+namespace EasyCms.Web 
 {
     /// <summary>
     /// 两种方式  

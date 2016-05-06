@@ -1,4 +1,5 @@
 ﻿using EasyCms.Business;
+using EasyCms.Model;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -26,16 +27,14 @@ namespace EasyCms.Web.Controllers
         /// <param name="pageNum">页号从1开始</param>
         /// <param name="pageSize">每页显示个数 默认20</param>
         /// <returns></returns>
-        public JsonResult GetNews(int pageNum = 1, int pageSize = 20)
+        public string GetNews(int pageNum = 1, int pageSize = 20)
         { 
             int recourdCount = 0, pageCount = 0;
             //新闻id，定标题，简介，缩略图，新闻url 
             DataTable dt = new NewsInfoBll().GetNews(pageNum, pageSize, ref recourdCount,ref pageCount);
-            JsonResult result = new JsonResult()
-            {
-                Data = new
-                { recourdCount = recourdCount, pageCount = pageCount, data = dt }
-            };
+
+           
+            string result = JsonWithDataTable.Serialize(new {pageNum=pageNum, recourdCount = recourdCount, pageCount = pageCount, data = dt });
             return result;
             
 

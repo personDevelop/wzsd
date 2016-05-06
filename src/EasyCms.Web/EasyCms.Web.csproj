@@ -1389,7 +1389,6 @@
     <Content Include="Views\News\Index.cshtml" />
     <Content Include="Views\News\Detail.cshtml" />
     <Content Include="Views\Shared\_RecomendShop.cshtml" />
-    <Content Include="Views\News\Index - 复制.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

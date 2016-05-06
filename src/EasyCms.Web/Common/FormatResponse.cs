@@ -10,7 +10,7 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
-namespace EasyCms.Web.Common
+namespace EasyCms.Web 
 {
     public static class FormatResponse
     {

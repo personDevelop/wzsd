@@ -221,10 +221,10 @@ a:hover {
     display: block;
     position: absolute;
 }
-#topnav .nav:hover .dd-inner {
+#topnav .nav:hover .dd {
     display:block;
 }
-#topnav .dd-inner {
+#topnav .dd {
     display:none;
 }
 #top-banner {
