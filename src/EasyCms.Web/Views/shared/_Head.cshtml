@@ -76,7 +76,7 @@
 
             $("#btnSearch").click(function () {
 
-                var url="@Url.Action("", "search")";
+                var url="@Url.Action("index", "search")";
                 var searchText=$("#searchText").val();
                 if (searchText) {
                     window.location=url+"/"+searchText;
@@ -97,7 +97,7 @@
             string[] keylist = new SearchKeyWordBll().GetKeyList(true);
             foreach (var item in keylist)
             {
-                <a href="@Url.Action("","search",new { id=item})">@item</a>
+                <a href="@Url.Action("index","search",new { id=item})">@item</a>
             }
 
         } 
@@ -109,8 +109,15 @@
 
         <div style="height: 44px;float: left; position: relative; z-index: 10; width: 210px;">
             <div class="allcat">
-                <a target="_blank" href="@Url.Action("","SiteMap")">全部商品分类</a>
+                <a href="//www.jd.com/allSort.aspx" target="_blank">全部商品分类
+                <i class="ci-right"><s>◇</s></i></a>
             </div>
+            <div class="dd" style="display: none;"> </div>
+               @*<div class="allcat">
+                <a target="_blank" href="@Url.Action("","SiteMap")">全部商品分类</a>
+                <i class="ci-right"><s>◇</s></i>
+              
+            </div>*@
             <div class="dd-inner">
                 @{
                     List<ShopCategory> list = new EasyCms.Business.ShopCategoryBll().GetListWithNavi(null, 3);
@@ -133,7 +140,7 @@
                             }
                             else
                             {
-                            <a href="@Url.Action("", "Category",new { id=item.ID})">@item.Name</a>
+                            <a href="@Url.Action("index", "Category",new { id=item.ID})">@item.Name</a>
                             }
                                     </h3>
                                     <i>&gt;</i>
@@ -152,7 +159,7 @@
                                                     }
                                                     else
                                                     {
-                                                        <a href="@Url.Action("", "Category",new { id=secondItem.ID})">@secondItem.Name <i>&gt;</i></a>
+                                                        <a href="@Url.Action("index", "Category",new { id=secondItem.ID})">@secondItem.Name <i>&gt;</i></a>
                                                     }
                                                 <dd>
                                                     @{
@@ -166,7 +173,7 @@
                                                             }
                                                             else
                                                             {
-                                                                <a href="@Url.Action("", "Category",new { id=thirdItem.ID})">@thirdItem.Name</a>
+                                                                <a href="@Url.Action("index", "Category",new { id=thirdItem.ID})">@thirdItem.Name</a>
                                                             }
                                                         }
                                                     }

@@ -361,6 +361,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Images\banner.png" />
     <Content Include="Content\Images\close_black.png" />
+    <Content Include="Content\Images\favicon.ico" />
     <Content Include="Content\Images\reg_banner.jpg" />
     <Content Include="Content\Images\search_lg.png" />
     <Content Include="Content\skin\default\bg_state.jpg" />
