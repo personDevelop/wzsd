@@ -1,7 +1,7 @@
 ﻿ @using EasyCms.Business
 @using EasyCms.Model
 @{
-
+    ViewBag.Title = EasyCms.CmsSessionExtend.WebSite.Name;
     AdPositon position = null;
     List<AdManage> adList = new AdManageBll().GetAdByPositon("01", 0, ref position);
 

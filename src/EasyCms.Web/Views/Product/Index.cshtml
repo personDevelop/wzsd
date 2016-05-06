@@ -1,391 +1,208 @@
-﻿<script src="http://localhost:7161/Scripts/jquery-1.10.2.min.js"></script>
-<script src="http://localhost:7161/Scripts/jqwidgets/jqx-all.js"></script>
-<link href="http://localhost:7161/Scripts/jqwidgets/styles/jqx.base.css" rel="stylesheet" />
-<link href="http://localhost:7161/Scripts/jqwidgets/styles/jqx.metro.css" rel="stylesheet" />
+﻿@model EasyCms.Model.ShopProductInfo
 @using EasyCms.Business
 @using EasyCms.Model
 @{
+  ViewBag.Title = Model.Name+ EasyCms.CmsSessionExtend.WebSite.Name;
 
-    AdPositon position = null;
-    List<AdManage> adList = new AdManageBll().GetAdByPositon("01", 0, ref position);
 
-    <style type="text/css">
-        .photo {
-            width: @(position.Width + "px");
-            height:@(position.Height + "px");
-            background-color: #000;
-            background-position: center;
-            background-repeat: no-repeat;
-        }
-    </style>
-
-    <script type="text/javascript">
-        $(function () {
-            $('#photoGallery').jqxScrollView({ width: @position.Width, height:  @position.Height, buttonsOffset: [0, 0], theme: "metro", slideShow: true });
-        });
-    </script>
-    <div id="secnav" style='height: 430px;'>
-        <div id="photoGallery" style='position:absolute;left:220px;top:10px;width: @(position.Width + "px");height:@(position.Height + "px");'>
-            @foreach (AdManage ad in adList)
-            {
-                <div><a href="@ad.LinkUrl"><img class="photo" alt="@ad.Note" src="@ad.AdImgUrl"></a></div>
-
-            }
-         </div>
-       @{
-           List<AdManage> rightAdList = new AdManageBll().GetAdByPositon("7", 2, ref position);
-           for (int i = 0; i < 2; i++)
-           {
-               AdManage at = rightAdList[i];
-               if (i == 0)
-               {
-                <a href="@at.LinkUrl"><img style='position:absolute;right:0px;top:10px;width: 230px;height: 170px' src="@at.AdImgUrl" /></a>
-               }
-               else { <a href="@at.LinkUrl">
-            <img style='position:absolute;right:0px;top:200px;width: 230px;height: 218px' src="@at.AdImgUrl" />
-        </a> }
-           }
-
-    }
-
-</div>
 }
- 
-<div class='lazyblock'>
-    <div id="guessyou">
-        <div class="mt"><h2>猜你喜欢</h2><a href="javascript:;" class="extra" clstag="0">换一批</a></div>
-        <div class='mc'>
-            <div class="spacer"><i></i></div>
-            <ul>
-                <!--首页推荐商品循环begin-->
-                <script type="text/javascript">
-                    $(function(){
-                    
-                        $.getJSON("@Url.RouteUrl("ApiWithWeb", new { controller = "APP", action = "GetProductsByStation" })"+"?StationMode=1",
-                            function(data){
-                                $("#guessyou").find("ul").empty();
-                                for (var i = 0; i < data.data.Data.length; i++)
-                                {
-                                    var item=data.data.Data[i];
-                                  
-                                    $("#guessyou").find("ul").append("<li class='fore"+i+"'>  <div class='p-img'> <a width='130' height='130' href='"+item.ID+"' target='_blank'>  <img src='"
-                                        +item.FilePath+"' width='130' height='130' title='"+item.Name+"'> </a></div> <div class='p-info'><div class='p-name'><a href='"+item.ID+"' target='_blank'>"
-                            +item.Name+"</a></div><div class='p-price'>惊喜价<i>¥</i>"+item.SalePrice
-                            +" </div></div </li>"); 
-                                }
-                               
-      }); });
+@Styles.Render("~/bundles/productcss")
+<div id="root-nav" class="floor">
+    <div class="w">
+        <div class="breadcrumb">
+            @{
+                //获取商品的分类路径
+                List<ShopCategory> catLocaList = new ShopProductInfoBll().GetLocationCateogry(Model.ID);
+                for (int i = 0; i < catLocaList.Count; i++)
+                {
+                    ShopCategory c = catLocaList[i];
+                    if (i == 0)
+                    {
+                        <strong><a href="//book.jd.com" clstag="shangpin|keycount|product|mbNav-1">@c.Name</a></strong>
+                    }
+                    else
+                    {
+                        if (i == 1)
+                        {
+                            @:<span>
+                        }
+                        @: &nbsp; &gt; &nbsp;<a href="//channel.jd.com/1713-3263.html" clstag="shangpin|keycount|product|mbNav-2">@c.Name</a>
 
-                </script>
-               
-                
-            
+
+
+
+                        if (i == catLocaList.Count - 1)
+                        {
+                            @:&nbsp;&gt;&nbsp;</span>
+                        }
+                    }
+
+
+                }
+                @:<span><a href="//item.jd.com/11868592.html">@Model.Name</a></span>
+            } 
+        </div>
+    </div>
+</div>
+<div id="p-box" class="floor">
+    <!--商品预览图-->
+    <div id='preview'>
+        <div id="spec-n1" class="jqzoom">
+            <img data-img="1" width="350" height="350" src="http://img12.360buyimg.com/n1/jfs/t2191/152/1468963854/144941/55334042/56a9b058N3623ec1a.jpg" alt="">
+            <div class="jqZoomPup" style="width: 175px; height: 175px; visibility: visible; top: 80.5px; left: 139.5px;">&nbsp;</div>
+        </div>
+        <div id="spec-list">
+            <a href="javascript:;" class="spec-control disabled" id="spec-forward"></a>
+            <a href="javascript:;" class="spec-control disabled" id="spec-backward"></a>
+            <div class="spec-items">
+                <ul class="lh">
+                    <li>
+                        <img class="img-hover" src="http://img12.360buyimg.com/n5/jfs/t2191/152/1468963854/144941/55334042/56a9b058N3623ec1a.jpg" width="50" height="50">
+                    </li>
+                    <li>
+                        <img src="http://img12.360buyimg.com/n5/jfs/t2125/183/2059398761/249079/a37d1994/56a977e3N8b681586.jpg" width="50" height="50">
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--商品基本信息-->
+    <div id='itemInfo'>
+        <div id="name">
+            <h1>@Model.Name </h1>
+        </div>
+        <div style="border-top:1px dashed #DDD;"></div>
+
+        <div id='summary'>
+            <ul class="summary">
+                <li>
+                    <span class="f_r light_gray">
+                        商品编号：
+                        <label id="data_goodsNo">@Model.Code</label>
+                    </span>
+                    品牌：@Model.BrandName
+                </li>
+                <li id="priceLi">
+                    红七价：
+                    <b class="price red2"><span class="f30" id="real_price">￥@Model.SalePrice</span></b>
+                </li>
+                <li>
+                    市场价：<s id="data_marketPrice">￥@Model.MarketPrice</s>
+                </li>
+                <li>
+                    <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&amp;uin=1623591032&amp;site=qq&amp;menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=1:1623591032:7" alt="QQ客服红小七"></a>
+                    <a target="_blank" href="http://www.taobao.com/webww/ww.php?ver=3&amp;touid=红小七2014&amp;siteid=cntaobao&amp;status=1&amp;charset=utf-8"><img border="0" src="http://amos.alicdn.com/realonline.aw?v=2&amp;uid=红小七2014&amp;site=cntaobao&amp;s=1&amp;charset=utf-8" alt="点击这里给我发消息"></a>
+                </li>
+                <li>
+                    库存：现货<span>(<label id="data_storeNums">@Model.Stock</label>)</span>
+                    <a class="favorite" onclick="favorite_add(this);" href="javascript:void(0)">收藏此商品</a>
+                </li>
+
+                <li>顾客评分：<span class="grade"><i style="width:70px;">@Model.CommentCount</i></span>(已有<text>@Model.CommentCount</text>人评价)</li>
+
+                <li>送积分：单件送<text>@Model.Points</text>分</li>
+
+                <li class="relative" style="z-index:2">
+                    至
+                    <a class="sel_area blue" href="javascript:;">山东</a>：
+                    <span id="deliveInfo">
+                        货到付款：<b class="orange">0.00</b>（仅限现金）
+                        &nbsp;&nbsp;
+
+                        在线支付：<b class="orange">0.00</b>（顺丰/海红物流）
+                        &nbsp;&nbsp;
+                    </span>
+                    <div class="area_box" style="display: none;">
+
+                    </div>
+                </li>
             </ul>
+
+        </div>
+
+        <div id='choose' class="p-choose-wrap">
+            <div id="choose-version" class="li p-choose">
+                <div class="dt">选择尺码：</div>
+                <div class="dd">
+                    <div class="item disabled"><b style="display: none;"></b><a href="javascript:;" title="所选颜色该尺码商品在该地区无货">35</a></div>
+                    <div class="item disabled"><b style="display: none;"></b><a href="javascript:;" title="所选颜色该尺码商品在该地区无货">36</a></div>
+                    <div class="item disabled"><b style="display: none;"></b><a href="javascript:;" title="所选颜色该尺码商品在该地区无货">37</a></div>
+                    <div class="item disabled"><b style="display: none;"></b><a href="javascript:;" title="所选颜色该尺码商品在该地区无货">38</a></div>
+                    <div class="item  selected"><b></b><a href="javascript:;" title="39" clstag="shangpin|keycount|product|banben-39">39</a></div>
+                    <div class="item"><b></b><a href="javascript:;" title="40">40</a></div>
+                    <div class="item"><b></b><a href="javascript:;" title="41">41</a></div>
+                    <div class="item"><b></b><a href="javascript:;" title="42">42</a></div>
+                    <div class="item"><b></b><a href="javascript:;" title="43">43</a></div>
+                    <div class="item"><b></b><a href="javascript:;" title="44">44</a></div>
+                </div>
+            </div>
+        </div>
+
+        <div id='choose-btns' style="clear: both;">
+            <div class="choose-amount fl ">
+                <div class="wrap-input">
+                    <a class="btn-reduce" href="javascript:;" onclick="setAmount.reduce('#buy-num')">-</a>
+                    <a class="btn-add" href="javascript:;" onclick="setAmount.add('#buy-num')">+</a>
+                    <input class="text" id="buy-num" value="1" onkeyup="setAmount.modify('#buy-num');">
+                </div>
+            </div>
+            <div class="btn" id="choose-btn-append">
+                <a class="btn-append " id="InitCartUrl" href="//cart.jd.com/gate.action?pid=11868341&amp;pcount=1&amp;ptype=1">加入购物车<b></b></a>
+            </div>
+            <div class="btn buy">
+                <a class="btn-append " href="//cart.jd.com/gate.action?pid=11868341&amp;pcount=1&amp;ptype=1">立即购买<b></b></a>
+            </div>
         </div>
     </div>
 </div>
-@{
 
-        List<ShopCategory> calist = new ShopCategoryBll().GetShowIndex();
-        int i = 0;
-        foreach (ShopCategory item in calist)
-        {
-            i++;
-        <div class='floor'>
-            <div class="title mt mg-10">
-                <h2><i>@(i+"F")</i>@item.Name</h2>
-
-            </div>
-            <div style="border:1px solid #DDD;overflow: hidden;height: 448px;">
-                <div class='leftads'>
-                    <a href="@item.ID"><img src="@item.LogoUrl" width="211" height="448"></a>
-                </div>
-                <div class='midads'>
-                    <ul>
-                        <li class="fore1">
-                            <div class='p-img'>
-                                <a width="130" height="130">
-                                    <img src="http://www.hong7.tv/runtime/default/upload/2015/03/24/20150324051251899_125_125.jpg" width="125" height="125" title=" ">
-                                </a>
-                            </div>
-                            <div class='p-info'>
-                                <div class='p-name'>
-                                    <a href="http://item.jd.com/1602202307.html" target="_blank" title=" ">杰克琼斯JackJones春装风衣夹克防风男装商务连帽合体风衣夹克E|215321011 120杏色 185/104A/XL</a>
-                                </div>
-                                <div class='p-price'>
-                                    <i>¥</i>359.00
-                                </div>
-                            </div>
-                        </li>
-                        <li class="fore1">
-                            <div class='p-img'>
-                                <a width="130" height="130">
-                                    <img src="http://www.hong7.tv/runtime/default/upload/2015/03/24/20150324051251899_125_125.jpg" width="125" height="125" title=" ">
-                                </a>
-                            </div>
-                            <div class='p-info'>
-                                <div class='p-name'>
-                                    <a href="http://item.jd.com/1602202307.html" target="_blank" title=" ">杰克琼斯JackJones春装风衣夹克防风男装商务连帽合体风衣夹克E|215321011 120杏色 185/104A/XL</a>
-                                </div>
-                                <div class='p-price'>
-                                    <i>¥</i>359.00
-                                </div>
-                            </div>
-                        </li>
-                        <li class="fore1">
-                            <div class='p-img'>
-                                <a width="130" height="130">
-                                    <img src="http://www.hong7.tv/runtime/default/upload/2015/03/24/20150324051251899_125_125.jpg" width="125" height="125" title=" ">
-                                </a>
-                            </div>
-                            <div class='p-info'>
-                                <div class='p-name'>
-                                    <a href="http://item.jd.com/1602202307.html" target="_blank" title=" ">杰克琼斯JackJones春装风衣夹克防风男装商务连帽合体风衣夹克E|215321011 120杏色 185/104A/XL</a>
-                                </div>
-                                <div class='p-price'>
-                                    <i>¥</i>359.00
-                                </div>
-                            </div>
-                        </li>
-                        <li class="fore1">
-                            <div class='p-img'>
-                                <a width="130" height="130">
-                                    <img src="http://www.hong7.tv/runtime/default/upload/2015/03/24/20150324051251899_125_125.jpg" width="125" height="125" title=" ">
-                                </a>
-                            </div>
-                            <div class='p-info'>
-                                <div class='p-name'>
-                                    <a href="http://item.jd.com/1602202307.html" target="_blank" title=" ">杰克琼斯JackJones春装风衣夹克防风男装商务连帽合体风衣夹克E|215321011 120杏色 185/104A/XL</a>
-                                </div>
-                                <div class='p-price'>
-                                    <i>¥</i>359.00
-                                </div>
-                            </div>
-                        </li>
-                        <li class="fore1">
-                            <div class='p-img'>
-                                <a width="130" height="130">
-                                    <img src="http://www.hong7.tv/runtime/default/upload/2015/03/24/20150324051251899_125_125.jpg" width="125" height="125" title=" ">
-                                </a>
-                            </div>
-                            <div class='p-info'>
-                                <div class='p-name'>
-                                    <a href="http://item.jd.com/1602202307.html" target="_blank" title=" ">杰克琼斯JackJones春装风衣夹克防风男装商务连帽合体风衣夹克E|215321011 120杏色 185/104A/XL</a>
-                                </div>
-                                <div class='p-price'>
-                                    <i>¥</i>359.00
-                                </div>
-                            </div>
-                        </li>
-                        <li class="fore1">
-                            <div class='p-img'>
-                                <a width="130" height="130">
-                                    <img src="http://www.hong7.tv/runtime/default/upload/2015/03/24/20150324051251899_125_125.jpg" width="125" height="125" title=" ">
-                                </a>
-                            </div>
-                            <div class='p-info'>
-                                <div class='p-name'>
-                                    <a href="http://item.jd.com/1602202307.html" target="_blank" title=" ">杰克琼斯JackJones春装风衣夹克防风男装商务连帽合体风衣夹克E|215321011 120杏色 185/104A/XL</a>
-                                </div>
-                                <div class='p-price'>
-                                    <i>¥</i>359.00
-                                </div>
-                            </div>
-                        </li>
-                        <li class="fore1">
-                            <div class='p-img'>
-                                <a width="130" height="130">
-                                    <img src="http://www.hong7.tv/runtime/default/upload/2015/03/24/20150324051251899_125_125.jpg" width="125" height="125" title=" ">
-                                </a>
-                            </div>
-                            <div class='p-info'>
-                                <div class='p-name'>
-                                    <a href="http://item.jd.com/1602202307.html" target="_blank" title=" ">杰克琼斯JackJones春装风衣夹克防风男装商务连帽合体风衣夹克E|215321011 120杏色 185/104A/XL</a>
-                                </div>
-                                <div class='p-price'>
-                                    <i>¥</i>359.00
-                                </div>
-                            </div>
-                        </li>
-                        <li class="fore1">
-                            <div class='p-img'>
-                                <a width="130" height="130">
-                                    <img src="http://www.hong7.tv/runtime/default/upload/2015/03/24/20150324051251899_125_125.jpg" width="125" height="125" title=" ">
-                                </a>
-                            </div>
-                            <div class='p-info'>
-                                <div class='p-name'>
-                                    <a href="http://item.jd.com/1602202307.html" target="_blank" title=" ">杰克琼斯JackJones春装风衣夹克防风男装商务连帽合体风衣夹克E|215321011 120杏色 185/104A/XL</a>
-                                </div>
-                                <div class='p-price'>
-                                    <i>¥</i>359.00
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div class='rightads'>
-                    <div class="mt"><h2>热门商品</h2> </div>
-                    <ul class="ranklist">
-                        <li class="current"><a href="/index.php?controller=site&amp;action=products&amp;id=91"><img src="http://www.hong7.tv/runtime/default/upload/2014/12/10/20141210112642708_58_58.jpg" width="58" height="58" title="热度：4491"></a> <a href="/index.php?controller=site&amp;action=products&amp;id=91">库肯卡波恩男士皮鞋超值组合三双赠送腰带+钥匙包</a> <b>￥398.00</b></li>
-                        <li class="current"><a href="/index.php?controller=site&amp;action=products&amp;id=91"><img src="http://www.hong7.tv/runtime/default/upload/2014/12/10/20141210112642708_58_58.jpg" width="58" height="58" title="热度：4491"></a> <a href="/index.php?controller=site&amp;action=products&amp;id=91">库肯卡波恩男士皮鞋超值组合三双赠送腰带+钥匙包</a> <b>￥398.00</b></li>
-                        <li class="current"><a href="/index.php?controller=site&amp;action=products&amp;id=91"><img src="http://www.hong7.tv/runtime/default/upload/2014/12/10/20141210112642708_58_58.jpg" width="58" height="58" title="热度：4491"></a> <a href="/index.php?controller=site&amp;action=products&amp;id=91">库肯卡波恩男士皮鞋超值组合三双赠送腰带+钥匙包</a> <b>￥398.00</b></li>
-                        <li class="current"><a href="/index.php?controller=site&amp;action=products&amp;id=91"><img src="http://www.hong7.tv/runtime/default/upload/2014/12/10/20141210112642708_58_58.jpg" width="58" height="58" title="热度：4491"></a> <a href="/index.php?controller=site&amp;action=products&amp;id=91">库肯卡波恩男士皮鞋超值组合三双赠送腰带+钥匙包</a> <b>￥398.00</b></li>
-                        <li class="current"><a href="/index.php?controller=site&amp;action=products&amp;id=91"><img src="http://www.hong7.tv/runtime/default/upload/2014/12/10/20141210112642708_58_58.jpg" width="58" height="58" title="热度：4491"></a> <a href="/index.php?controller=site&amp;action=products&amp;id=91">库肯卡波恩男士皮鞋超值组合三双赠送腰带+钥匙包</a> <b>￥398.00</b></li>
-
-
-
-                    </ul>
-                </div>
-            </div>
+<div id='' class="floor" style="margin-bottom: 10px;overflow: auto;">
+    <div id='view-buy'>
+        <div class="mt">
+            <h2>
+                达人选购
+            </h2>
         </div>
-    }
-
-}
-<div class='floor'>
-    <div class="title mt mg-10">
-        <h2><i>1F</i>TV热卖</h2>
-
-    </div>
-    <div style="border:1px solid #DDD;overflow: hidden;height: 448px;">
-        <div class='leftads'>
-            <a href="/index.php?controller=site&amp;action=pro_list&amp;cat=44"><img src="http://www.hong7.tv/editgg/attached/file/20140825/20140825092202_38495.jpg" width="211" height="448"></a>
-        </div>
-        <div class='midads'>
+        <div class="mc">
             <ul>
                 <li class="fore1">
-                    <div class='p-img'>
-                        <a width="130" height="130">
-                            <img src="http://www.hong7.tv/runtime/default/upload/2015/03/24/20150324051251899_125_125.jpg" width="125" height="125" title=" ">
+                    <div class="p-img">
+                        <a target="_blank" href="//item.jd.com/1777837.html">
+                            <img height="100" width="100" src="http://img12.360buyimg.com/n4/jfs/t2776/197/120408794/126655/69d0a6b6/5703f34bN3884f143.jpg"
+                                 class="">
                         </a>
                     </div>
-                    <div class='p-info'>
-                        <div class='p-name'>
-                            <a href="http://item.jd.com/1602202307.html" target="_blank" title=" ">杰克琼斯JackJones春装风衣夹克防风男装商务连帽合体风衣夹克E|215321011 120杏色 185/104A/XL</a>
-                        </div>
-                        <div class='p-price'>
-                            <i>¥</i>359.00
-                        </div>
-                    </div>
-                </li>
-                <li class="fore1">
-                    <div class='p-img'>
-                        <a width="130" height="130">
-                            <img src="http://www.hong7.tv/runtime/default/upload/2015/03/24/20150324051251899_125_125.jpg" width="125" height="125" title=" ">
+                    <div class="p-name">
+                        <a target="_blank" href="//item.jd.com/1777837.html">
+                            海信（Hisense）LED55EC520UA 55英寸 VIDAA3 14核 炫彩4K智能电视(黑色)
                         </a>
                     </div>
-                    <div class='p-info'>
-                        <div class='p-name'>
-                            <a href="http://item.jd.com/1602202307.html" target="_blank" title=" ">杰克琼斯JackJones春装风衣夹克防风男装商务连帽合体风衣夹克E|215321011 120杏色 185/104A/XL</a>
-                        </div>
-                        <div class='p-price'>
-                            <i>¥</i>359.00
-                        </div>
-                    </div>
-                </li>
-                <li class="fore1">
-                    <div class='p-img'>
-                        <a width="130" height="130">
-                            <img src="http://www.hong7.tv/runtime/default/upload/2015/03/24/20150324051251899_125_125.jpg" width="125" height="125" title=" ">
-                        </a>
-                    </div>
-                    <div class='p-info'>
-                        <div class='p-name'>
-                            <a href="http://item.jd.com/1602202307.html" target="_blank" title=" ">杰克琼斯JackJones春装风衣夹克防风男装商务连帽合体风衣夹克E|215321011 120杏色 185/104A/XL</a>
-                        </div>
-                        <div class='p-price'>
-                            <i>¥</i>359.00
-                        </div>
-                    </div>
-                </li>
-                <li class="fore1">
-                    <div class='p-img'>
-                        <a width="130" height="130">
-                            <img src="http://www.hong7.tv/runtime/default/upload/2015/03/24/20150324051251899_125_125.jpg" width="125" height="125" title=" ">
-                        </a>
-                    </div>
-                    <div class='p-info'>
-                        <div class='p-name'>
-                            <a href="http://item.jd.com/1602202307.html" target="_blank" title=" ">杰克琼斯JackJones春装风衣夹克防风男装商务连帽合体风衣夹克E|215321011 120杏色 185/104A/XL</a>
-                        </div>
-                        <div class='p-price'>
-                            <i>¥</i>359.00
-                        </div>
-                    </div>
-                </li>
-                <li class="fore1">
-                    <div class='p-img'>
-                        <a width="130" height="130">
-                            <img src="http://www.hong7.tv/runtime/default/upload/2015/03/24/20150324051251899_125_125.jpg" width="125" height="125" title=" ">
-                        </a>
-                    </div>
-                    <div class='p-info'>
-                        <div class='p-name'>
-                            <a href="http://item.jd.com/1602202307.html" target="_blank" title=" ">杰克琼斯JackJones春装风衣夹克防风男装商务连帽合体风衣夹克E|215321011 120杏色 185/104A/XL</a>
-                        </div>
-                        <div class='p-price'>
-                            <i>¥</i>359.00
-                        </div>
-                    </div>
-                </li>
-                <li class="fore1">
-                    <div class='p-img'>
-                        <a width="130" height="130">
-                            <img src="http://www.hong7.tv/runtime/default/upload/2015/03/24/20150324051251899_125_125.jpg" width="125" height="125" title=" ">
-                        </a>
-                    </div>
-                    <div class='p-info'>
-                        <div class='p-name'>
-                            <a href="http://item.jd.com/1602202307.html" target="_blank" title=" ">杰克琼斯JackJones春装风衣夹克防风男装商务连帽合体风衣夹克E|215321011 120杏色 185/104A/XL</a>
-                        </div>
-                        <div class='p-price'>
-                            <i>¥</i>359.00
-                        </div>
-                    </div>
-                </li>
-                <li class="fore1">
-                    <div class='p-img'>
-                        <a width="130" height="130">
-                            <img src="http://www.hong7.tv/runtime/default/upload/2015/03/24/20150324051251899_125_125.jpg" width="125" height="125" title=" ">
-                        </a>
-                    </div>
-                    <div class='p-info'>
-                        <div class='p-name'>
-                            <a href="http://item.jd.com/1602202307.html" target="_blank" title=" ">杰克琼斯JackJones春装风衣夹克防风男装商务连帽合体风衣夹克E|215321011 120杏色 185/104A/XL</a>
-                        </div>
-                        <div class='p-price'>
-                            <i>¥</i>359.00
-                        </div>
-                    </div>
-                </li>
-                <li class="fore1">
-                    <div class='p-img'>
-                        <a width="130" height="130">
-                            <img src="http://www.hong7.tv/runtime/default/upload/2015/03/24/20150324051251899_125_125.jpg" width="125" height="125" title=" ">
-                        </a>
-                    </div>
-                    <div class='p-info'>
-                        <div class='p-name'>
-                            <a href="http://item.jd.com/1602202307.html" target="_blank" title=" ">杰克琼斯JackJones春装风衣夹克防风男装商务连帽合体风衣夹克E|215321011 120杏色 185/104A/XL</a>
-                        </div>
-                        <div class='p-price'>
-                            <i>¥</i>359.00
-                        </div>
+                    <div class="p-price">
+                        <strong class="J-p-1777837">￥3599.00</strong>
                     </div>
                 </li>
             </ul>
         </div>
-        <div class='rightads'>
-            <div class="mt"><h2>热门商品</h2> </div>
-            <ul class="ranklist">
-                <li class="current"><a href="/index.php?controller=site&amp;action=products&amp;id=91"><img src="http://www.hong7.tv/runtime/default/upload/2014/12/10/20141210112642708_58_58.jpg" width="58" height="58" title="热度：4491"></a> <a href="/index.php?controller=site&amp;action=products&amp;id=91">库肯卡波恩男士皮鞋超值组合三双赠送腰带+钥匙包</a> <b>￥398.00</b></li>
-                <li class="current"><a href="/index.php?controller=site&amp;action=products&amp;id=91"><img src="http://www.hong7.tv/runtime/default/upload/2014/12/10/20141210112642708_58_58.jpg" width="58" height="58" title="热度：4491"></a> <a href="/index.php?controller=site&amp;action=products&amp;id=91">库肯卡波恩男士皮鞋超值组合三双赠送腰带+钥匙包</a> <b>￥398.00</b></li>
-                <li class="current"><a href="/index.php?controller=site&amp;action=products&amp;id=91"><img src="http://www.hong7.tv/runtime/default/upload/2014/12/10/20141210112642708_58_58.jpg" width="58" height="58" title="热度：4491"></a> <a href="/index.php?controller=site&amp;action=products&amp;id=91">库肯卡波恩男士皮鞋超值组合三双赠送腰带+钥匙包</a> <b>￥398.00</b></li>
-                <li class="current"><a href="/index.php?controller=site&amp;action=products&amp;id=91"><img src="http://www.hong7.tv/runtime/default/upload/2014/12/10/20141210112642708_58_58.jpg" width="58" height="58" title="热度：4491"></a> <a href="/index.php?controller=site&amp;action=products&amp;id=91">库肯卡波恩男士皮鞋超值组合三双赠送腰带+钥匙包</a> <b>￥398.00</b></li>
-                <li class="current"><a href="/index.php?controller=site&amp;action=products&amp;id=91"><img src="http://www.hong7.tv/runtime/default/upload/2014/12/10/20141210112642708_58_58.jpg" width="58" height="58" title="热度：4491"></a> <a href="/index.php?controller=site&amp;action=products&amp;id=91">库肯卡波恩男士皮鞋超值组合三双赠送腰带+钥匙包</a> <b>￥398.00</b></li>
+    </div>
+    <div id='prd-detail'>
+        <div class="m-tab-trigger-wrap">
+            <ul class="m-tab-trigger">
+                <li id="detail-tab-intro" class="ui-switchable-item trig-item curr">
+                    <a href="javascript:;">商品详情</a>
+                </li>
 
-
-
+                <li id="detail-tab-list" class="ui-switchable-item trig-item ">
+                    <a href="javascript:;">购买记录</a>
+                </li>
+                <li id="detail-tab-comm" class="ui-switchable-item trig-item">
+                    <a href="#comment">商品评价<em class="hl_blue hide" style="display: inline;">(14231)</em></a>
+                </li>
+                <li id="detail-tab-prom" class="ui-switchable-item trig-item">
+                    <a href="javascript:;">售后服务</a>
+                </li>
+                <li id="detail-tab-yb" class="ui-switchable-item trig-item hide">
+                    <a href="javascript:;">支付方式</a>
+                </li>
             </ul>
         </div>
     </div>

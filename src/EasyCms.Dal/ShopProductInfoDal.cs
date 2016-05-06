@@ -145,6 +145,14 @@ namespace EasyCms.Dal
                 .ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
         }
 
+        public List<ShopCategory> GetLocationCateogry(string productID)
+        {
+           string categoryID= Dal.From<ShopProductCategory>().Where(ShopProductCategory._.ProductID == productID).Select(ShopProductCategory._.CategoryID).ToScalar() as string;
+           string classcode=Dal.From<ShopCategory>().Where(ShopCategory._.ID == categoryID).Select(ShopCategory._.ClassCode).ToScalar() as string;
+            string[] classcodeArray = classcode.Split(';');
+       return      Dal.From<ShopCategory>().Where(ShopCategory._.ID.In(classcodeArray)).OrderBy(ShopCategory._.Depth).List<ShopCategory>();
+        }
+
         public DataTable GetRelationList(string productID, bool IsHasRelation, string categoryID, string Name, int pagenum, int pagesize, ref int recordCount)
         {
             QuerySection qry = Dal.From<ShopProductInfo>();

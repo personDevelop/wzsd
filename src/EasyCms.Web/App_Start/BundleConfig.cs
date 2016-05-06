@@ -22,6 +22,8 @@ namespace EasyCms.Web
              "~/Content/web/css/login.css"));
             bundles.Add(new StyleBundle("~/bundles/registercss").Include(
                "~/Content/web/css/register.css"));
+            bundles.Add(new StyleBundle("~/bundles/productcss").Include(
+             "~/Content/web/css/product.css"));
             bundles.Add(new StyleBundle("~/bundles/upimgcss").Include(
             "~/Content/ueditor/third-party/webuploader/webuploader.css",
              "~/Content/upload/Customrwebuploader.css",

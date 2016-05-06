@@ -1,4 +1,6 @@
-﻿using System;
+﻿using EasyCms.Business;
+using EasyCms.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -9,9 +11,16 @@ namespace EasyCms.Web.Controllers
     public class ProductController : Controller
     {
         // GET: Product
-        public ActionResult Index(string id)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="other">商品SKUid</param>
+        /// <returns></returns>
+        public ActionResult Index(string id,string other)
         {
-            return View();
+            ShopProductInfo p = new ShopProductInfoBll().GetEntity(id);
+            return View(p);
         }
     }
 }

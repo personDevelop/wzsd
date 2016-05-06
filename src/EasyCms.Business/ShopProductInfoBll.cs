@@ -166,5 +166,11 @@ namespace EasyCms.Business
         {
             throw new NotImplementedException();
         }
+        public List<ShopCategory> GetLocationCateogry(string productID)
+        {
+            return Dal.GetLocationCateogry(productID);
+        }
+
+        
     }
 }
