@@ -73,7 +73,7 @@
 .cart-tbody .item-item .p-checkbox {
     position: absolute;
     z-index: 3;
-    left: 10px;
+    left: -25px;
     top: 0;
     width: 30px;
     min-height: 10px;
@@ -276,4 +276,5 @@
 }
 .item-list{
     clear: both;
+    position:relative;
 }
