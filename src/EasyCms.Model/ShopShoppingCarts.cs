@@ -512,7 +512,7 @@ namespace EasyCms.Model
     {
          
         #region 属性
-         
+         public string ID { get; set; }
         public ShopBuyType BuyType
         {
             get;
@@ -584,7 +584,7 @@ namespace EasyCms.Model
     {
 
         #region 属性
-        
+        public string ID { get; set; }
         public ShopBuyType BuyType
         {
             get;

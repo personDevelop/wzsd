@@ -12,11 +12,11 @@ namespace EasyCms.Dal
 {
     public class ShopShoppingCartsDal : Sharp.Data.BaseManager
     {
-        public string Delete(string id)
+        public string Delete(string[] ids)
         {
 
             string error = "";
-            Dal.Delete("ShopShoppingCarts", "ID", id, out error);
+            Dal.Delete<ShopShoppingCarts>(ShopShoppingCarts._.ID.In(ids));
             return error;
         }
 
@@ -68,7 +68,7 @@ namespace EasyCms.Dal
            
             foreach (var item in list)
             {
-                ShopCardInfo sc = new ShopCardInfo() { ActivityID=item.ActivityID, AddTime=item.AddTime.ToString("yyyy-MM-dd HH:mm:ss"),
+                ShopCardInfo sc = new ShopCardInfo() {ID=item.ID, ActivityID=item.ActivityID, AddTime=item.AddTime.ToString("yyyy-MM-dd HH:mm:ss"),
                  BuyType=item.ItemType,  Name=item.Name, ProductId=item.ProductId, Quantity=item.Quantity,
                  SalePrice= item.SellPrice, SKU=item.SKU};
 
@@ -83,6 +83,7 @@ namespace EasyCms.Dal
                 sc.Stock = p.Stock;
                 sc.IsSale = p.SaleStatus == 1;
                 sc.Name = p.Name;
+              
                 sc.SalePrice = p.SalePrice;
                 if (!string.IsNullOrWhiteSpace(item.SKU))
                 {

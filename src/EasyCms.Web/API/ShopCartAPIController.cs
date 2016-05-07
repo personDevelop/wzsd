@@ -104,7 +104,7 @@ namespace EasyCms.Web.API
         public HttpResponseMessage Delete(string id)
         {
             
-                return new ShopShoppingCartsBll().Delete(id).FormatError();
+                return new ShopShoppingCartsBll().Delete(new string[] { id }).FormatError();
 
             
         }

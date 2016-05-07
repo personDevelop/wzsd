@@ -13,10 +13,10 @@ namespace EasyCms.Business
     public class ShopShoppingCartsBll
     {
         ShopShoppingCartsDal Dal = new ShopShoppingCartsDal();
-        public string Delete(string id)
+        public string Delete(string[] ids)
         {
 
-            return Dal.Delete(id);
+            return Dal.Delete(ids);
         }
 
         public int Save(ShopShoppingCarts item)

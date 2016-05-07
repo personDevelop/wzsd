@@ -18,7 +18,7 @@ namespace EasyCms.Model
         public const string RegistAgreementID = "60544642-c2dd-411b-acdf-5ba2ca6c92b9";
 
         /// <summary>
-        /// 用户注册协议ID
+        /// 购物车cookie名称
         /// </summary>
         public const string CardCookieName = "cardinfo";
         public static string GeneratoRandom()

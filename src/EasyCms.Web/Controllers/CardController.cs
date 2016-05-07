@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
@@ -34,7 +35,8 @@ namespace EasyCms.Web.Controllers
                 } 
                 if (isHasCookie)
                 {
-                    list = JsonWithDataTable.Deserialize(cookieValue, typeof(CookieCard)) as List<CookieCard>;
+                    cookieValue= HttpUtility.UrlDecode(cookieValue, Encoding.UTF8);
+                    list = JsonWithDataTable.Deserialize(cookieValue, typeof(List<CookieCard>)) as List<CookieCard>;
                     ShopProductInfoBll bll = new ShopProductInfoBll();
                     foreach (var item in list)
                     {
@@ -48,7 +50,8 @@ namespace EasyCms.Web.Controllers
                                 sc.AddTime = item.AddTime;
                                 sc.ActivityID = item.ActivityID;
                                 sc.BuyType = item.BuyType; 
-                                sc.Quantity = item.Quantity; 
+                                sc.Quantity = item.Quantity;
+                                sc.ID = item.ID;
                                 break;
                             case ShopBuyType.套餐:
                                 //暂时未实现套餐功能，可以用新建商品的方式 临时弄成套餐
@@ -82,7 +85,7 @@ namespace EasyCms.Web.Controllers
         }
 
 
-        public ActionResult Add(ShopBuyType buyType, string ActivityID, string ProductId, string SKU, decimal Quantity)
+        public JsonResult Add(ShopBuyType buyType, string ActivityID, string ProductId, string SKU, decimal Quantity)
         {
             string userID = Session.GetUserID();
             if (string.IsNullOrWhiteSpace(userID))
@@ -104,7 +107,8 @@ namespace EasyCms.Web.Controllers
                 bool isEist = false;
                 if (isHasCookie)
                 {
-                    list = JsonWithDataTable.Deserialize(cookieValue, typeof(CookieCard)) as List<CookieCard>;
+                    cookieValue = HttpUtility.UrlDecode(cookieValue, Encoding.UTF8);
+                    list = JsonWithDataTable.Deserialize(cookieValue, typeof(List<CookieCard>)) as List<CookieCard>;
 
                     foreach (var item in list)
                     {
@@ -121,12 +125,12 @@ namespace EasyCms.Web.Controllers
                 if (!isEist)
                 {
                     //直接添加cookie
-                    CookieCard cc = new CookieCard() { ActivityID = ActivityID, BuyType = buyType, ProductId = ProductId, SKU = SKU, Quantity = Quantity, AddTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") };
+                    CookieCard cc = new CookieCard() { ID = Guid.NewGuid().ToString(), ActivityID = ActivityID, BuyType = buyType, ProductId = ProductId, SKU = SKU, Quantity = Quantity, AddTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") };
                     list.Add(cc);
                 }
                 cookieValue = JsonWithDataTable.Serialize(list);
                 HttpCookie hc = new HttpCookie(StaticValue.CardCookieName, cookieValue);
-                Request.Cookies.Add(hc);
+                Response.Cookies.Add(hc);
 
             }
             else
@@ -147,7 +151,73 @@ namespace EasyCms.Web.Controllers
                 }
                 bll.Save(card);
             }
-            return View();
+            return new JsonResult() { JsonRequestBehavior=JsonRequestBehavior.AllowGet,Data=new { IsSuccess =true,msg= "添加到购物车" } };
         }
+
+        public JsonResult DeleteCard(string[] ids)
+        {
+            string msg = string.Empty;
+            string userID = Session.GetUserID();
+            if (string.IsNullOrWhiteSpace(userID))
+            {
+                //还没有登录,从cookie里删除去
+                List<CookieCard> list = new List<CookieCard>();
+                bool isHasCookie = false;
+                string cookieValue = string.Empty;
+                //先判断cookie里是否已有该商品，如果有则数量加1，
+                foreach (string item in Request.Cookies.Keys)
+                {
+                    if (item == StaticValue.CardCookieName)
+                    {
+                        isHasCookie = true;
+                        cookieValue = Request.Cookies[item].Value;
+                        break;
+                    }
+                }
+                
+                if (isHasCookie)
+                {
+                    cookieValue = HttpUtility.UrlDecode(cookieValue, Encoding.UTF8);
+                    List<CookieCard>   Oldlist = JsonWithDataTable.Deserialize(cookieValue, typeof(List<CookieCard>)) as List<CookieCard>;
+
+                    foreach (var item in Oldlist)
+                    {
+                        if (!ids.Contains( item.ID ))
+                        {
+                            list.Add(item);
+                        }
+                    }
+
+                }
+                HttpCookie hc = null;
+                if (list.Count > 0)
+                {
+                    cookieValue = JsonWithDataTable.Serialize(list);
+                      hc = new HttpCookie(StaticValue.CardCookieName, cookieValue);
+                    
+                }
+                else
+                {
+                    
+                    hc = new HttpCookie(StaticValue.CardCookieName, "");
+                    hc.Expires = DateTime.Now.AddDays(-1);
+                }
+                Response.Cookies.Add(hc);
+
+            }
+            else
+            {
+
+                ShopShoppingCartsBll bll = new ShopShoppingCartsBll();
+                msg = bll.Delete(ids) ;
+               
+            }
+            return new JsonResult() {  JsonRequestBehavior= JsonRequestBehavior.AllowGet,
+                 Data=new { IsSuccess=true,data=ids,msg=msg } 
+
+            };
+
+        }
+
     }
 }
