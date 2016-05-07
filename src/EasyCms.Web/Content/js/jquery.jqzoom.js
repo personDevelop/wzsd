@@ -179,7 +179,7 @@
 
             $(this).each(function () {
 
-                var imagetopreload = $(this).children("img").attr("jqimg");
+                var imagetopreload = $(this).children("img").attr("jqsrc");
 
                 var content = jQuery('div.jqPreload' + count + '').html();
 
