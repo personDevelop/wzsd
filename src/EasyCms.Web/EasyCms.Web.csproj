@@ -365,6 +365,8 @@
     <Content Include="Content\Images\favicon.ico" />
     <Content Include="Content\Images\reg_banner.jpg" />
     <Content Include="Content\Images\search_lg.png" />
+    <Content Include="Content\js\jquery.jqzoom.js" />
+    <Content Include="Content\js\Product.js" />
     <Content Include="Content\skin\default\bg_state.jpg" />
     <Content Include="Content\Images\help.png" />
     <Content Include="Content\Images\icon-1.gif" />

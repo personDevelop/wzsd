@@ -88,7 +88,10 @@ namespace EasyCms.Web
               "~/Scripts/WindowDialog.js"));
 
 
-             
+            bundles.Add(new ScriptBundle("~/bundles/product").Include(
+                     "~/Content/js/jquery.jqzoom.js",
+                     "~/Content/js/Product.js"
+                 ));
 
             #endregion
 

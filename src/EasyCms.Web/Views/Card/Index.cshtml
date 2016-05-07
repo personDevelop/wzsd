@@ -63,17 +63,17 @@
                                     
                                 </div>
 
-                                <div class="cell p-price"><strong>299.00</strong></div>
+                                <div class="cell p-price" ><strong>@cardItem.SalePrice</strong></div>
                                 <div class="cell p-quantity">
-                                    <div class="quantity-form">
+                                    <div class="quantity-form" value="@cardItem.SalePrice">
                                         <a href="javascript:void(0);" class="decrement ">-</a>
                                         <input autocomplete="off" type="text" class="itxt" value="@cardItem.Quantity">
                                         <a href="javascript:void(0);" class="increment">+</a>
                                     </div>
                                     <div class="ac ftx-03 quantity-txt" _stock="stock_1616043020">@(cardItem.Stock>0?"有货":"无货")</div>
                                 </div>
-                                <div class="cell p-sum">
-                                    <strong>@cardItem.SalePrice</strong>
+                                <div class="cell p-sum" value="@(cardItem.SalePrice*cardItem.Quantity)">
+                                    <strong>@(cardItem.SalePrice * cardItem.Quantity)</strong>
                                 </div>
                                 <div class="cell p-ops">
                                     @*<a class="cart-remove" val="@cardItem.ID" href="javascript:void(0);">删除</a>*@
@@ -123,7 +123,7 @@
                                 </div>
                                 <div class="ac ftx-03 quantity-txt" _stock="stock_1616043020">有货</div>
                             </div>
-                            <div class="cell p-sum">
+                            <div class="cell p-sum" value="1495">
                                 <strong>1495.00</strong>
                             </div>
                             <div class="cell p-ops">
@@ -168,7 +168,7 @@
                                 </div>
                                 <div class="ac ftx-03 quantity-txt" _stock="stock_1616043020">有货</div>
                             </div>
-                            <div class="cell p-sum">
+                            <div class="cell p-sum"  value="1495">
                                 <strong>1495.00</strong>
                             </div>
                             <div class="cell p-ops">
@@ -177,6 +177,52 @@
                         </div>
                     </div>
                 </div>
+                <div class="item-list">
+                    <div class="item-single  item-item ">
+                        <div class="item-form">
+                            <div class="cell p-checkbox">
+                                <div class="cart-checkbox">
+                                    <input type="checkbox" name="checkItem" class="jdcheckbox" />
+
+                                    <span class="line-circle"></span>
+                                </div>
+                            </div>
+                            <div class="cell p-goods">
+                                <div class="goods-item">
+                                    <div class="p-img">
+                                        <a href="http://item.jd.com/1616043020.html" target="_blank"><img src="http://img10.360buyimg.com/cms/s80x80_jfs/t1585/77/1355422030/217136/bb380bc5/55ee416aN2218124e.jpg"></a>
+                                    </div>
+                                    <div class="item-msg">
+                                        <div class="p-name">
+                                            <a href="http://item.jd.com/1616043020.html" target="_blank">骆驼牌冰雪系列冲锋衣 男 三合一两件套 秋冬季防风保暖抓绒内胆情侣款登山服 宝蓝/深蓝男款 L</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="cell p-props p-props-new">
+                                <div class="props-txt" title="宝蓝/深蓝男款">颜色：宝蓝/深蓝男款</div>
+                                <div class="props-txt" title="L">尺码：L</div>
+                            </div>
+
+                            <div class="cell p-price"><strong>299.00</strong></div>
+                            <div class="cell p-quantity">
+                                <div class="quantity-form">
+                                    <a href="javascript:void(0);" class="decrement ">-</a>
+                                    <input autocomplete="off" type="text" class="itxt" value="5">
+                                    <a href="javascript:void(0);" class="increment">+</a>
+                                </div>
+                                <div class="ac ftx-03 quantity-txt" _stock="stock_1616043020">有货</div>
+                            </div>
+                            <div class="cell p-sum"  value="1495">
+                                <strong>1495.00</strong>
+                            </div>
+                            <div class="cell p-ops">
+                                <a class="cart-remove" val="1" href="javascript:void(0);">删除</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
             </div>
 
             <div class="cart-toolbar" style="width: 988px; height: 50px;">
@@ -260,6 +306,19 @@
             array.push(cardID);
         }
     }
+    function computeJe() {
+
+        //获取所有选中的
+        //删除选中的
+        var totalSum = 0;
+        var totalRePrice = 0;
+        $(".item-form .jdcheckbox:checked").each(function (i) {
+
+            totalSum += $(this).parent().parent().parent().find(".p-sum").attr("value") * 1;
+        });
+        $(".sumPrice").html("<em>￥" + totalSum + "</em>");
+        $(".totalRePrice").html("<em>-￥" + totalRePrice + "</em>");
+    }
     $(function () {
         $(".deleteSelecte").click(function () {
             deleteCard(true);
@@ -271,18 +330,31 @@
         
         $(".decrement").click(function () {
             var val = $(this).next(".itxt").val()*1;
-            if (val>0) {
-                $(this).next(".itxt").val(val-1);
+            if (val>1) {
+               
+                val = val - 1;
+                $(this).next(".itxt").val(val);
+                var price = $(this).parent().attr("value") * 1;
+                var psum = price * val;
+                $(this).parent().parent().next(".p-sum").attr("value", psum);
+                $(this).parent().parent().next(".p-sum").children().text(psum);
             } 
         });
         $(".increment").click(function () {
             var val = $(this).prev(".itxt").val() * 1;
-            $(this).prev(".itxt").val(val + 1);
-            
+            val = val + 1;
+            $(this).prev(".itxt").val(val);
+           var price= $(this).parent().attr("value") * 1;
+           var psum = price * val;
+           $(this).parent().parent().next(".p-sum").attr("value", psum);
+           $(this).parent().parent().next(".p-sum").children().text(psu); 
         });
 
         $(".CheckBoxALL").change(function () {
             $(".item-form .jdcheckbox").prop("checked", $("#toggle-checkboxes_up").prop("checked")); 
+        });
+        $(".item-form .jdcheckbox").change(function () {
+            computeJe();
         });
 
     });

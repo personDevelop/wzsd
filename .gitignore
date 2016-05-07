@@ -209,3 +209,6 @@ src/AliNotify.Web/bin/
 src/AliNotify.Web/bin
 src/AliNotify.Web/bin/*.dll
 src/AliNotify.Web/bin/EasyCms.Dal.dll
+src/AliNotify.Web/bin/EasyCms.Business.dll
+src/AliNotify.Web/bin/EasyCms.Business.dll
+*.dll
