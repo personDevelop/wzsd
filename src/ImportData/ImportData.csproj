@@ -53,6 +53,10 @@
       <HintPath>..\refdll\NPOI.OpenXml4Net.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
+    <Reference Include="Sharp.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\refdll\Sharp.Common.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -112,6 +116,12 @@
     <Compile Include="frmAd.Designer.cs">
       <DependentUpon>frmAd.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmGetDetailImgPath.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmGetDetailImgPath.Designer.cs">
+      <DependentUpon>frmGetDetailImgPath.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmProduct.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -157,6 +167,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmAd.resx">
       <DependentUpon>frmAd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmGetDetailImgPath.resx">
+      <DependentUpon>frmGetDetailImgPath.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmProduct.resx">
       <DependentUpon>frmProduct.cs</DependentUpon>
