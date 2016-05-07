@@ -1,17 +1,21 @@
 ﻿@model EasyCms.Model.ShopProductInfo
 @using EasyCms.Business
 @using EasyCms.Model
+@using System.Data;
 @{
   ViewBag.Title = Model.Name+ EasyCms.CmsSessionExtend.WebSite.Name;
 
 
 }
 @Styles.Render("~/bundles/productcss")
+@Scripts.Render("~/bundles/product");
 <div id="root-nav" class="floor">
     <div class="w">
         <div class="breadcrumb">
+          
             @{
                 //获取商品的分类路径
+                
                 List<ShopCategory> catLocaList = new ShopProductInfoBll().GetLocationCateogry(Model.ID);
                 for (int i = 0; i < catLocaList.Count; i++)
                 {
@@ -48,21 +52,38 @@
     <!--商品预览图-->
     <div id='preview'>
         <div id="spec-n1" class="jqzoom">
-            <img data-img="1" jqsrc='css/images/b3.jpg' width="350" height="350" src="http://img12.360buyimg.com/n1/jfs/t2191/152/1468963854/144941/55334042/56a9b058N3623ec1a.jpg" alt="">
+            @{
+    ShopSaleProductInfo modelimgs = new ShopProductInfoBll().GetSaleEntity(Model.ID, "");
+    int ccc = 0;
+    foreach (DataRow row in modelimgs.dtImg.Rows)
+    {
+        if (ccc == 0)
+        {
+            <img data-img="1" jqsrc='@row["filepath"].ToString()' width="350" height="350" src=" @row["filepath"].ToString() " alt=" ">
 
+        }
+        ccc++;
+    }
+}
+            
         </div>
         <div id="spec-list">
             <a href="javascript:;" class="spec-control" id="spec-forward"></a>
             <a href="javascript:;" class="spec-control" id="spec-backward"></a>
             <div class="spec-items" style="position: absolute;width: 310px;height: 54px;overflow: hidden;">
                 <ul class="lh" style="position: absolute;width: 999999px;">
-                    <li><img alt="佳能" bimg="images/b1.jpg" src="images/s1.jpg" onmousemove="preview(this);"></li>
-                    <li><img alt="佳能" bimg="images/b2.jpg" src="images/s2.jpg" onmousemove="preview(this);"></li>
-                    <li><img alt="佳能" bimg="images/b3.jpg" src="images/s3.jpg" onmousemove="preview(this);"></li>
-                    <li><img alt="佳能" bimg="images/b1.jpg" src="images/s1.jpg" onmousemove="preview(this);"></li>
-                    <li><img alt="佳能" bimg="images/b3.jpg" src="images/s3.jpg" onmousemove="preview(this);"></li>
-                    <li><img alt="佳能" bimg="images/b1.jpg" src="images/s1.jpg" onmousemove="preview(this);"></li>
-                    <li><img alt="佳能" bimg="images/b2.jpg" src="images/s2.jpg" onmousemove="preview(this);"></li>
+                    @{
+                        var imglistcount=0;
+                        foreach (DataRow row in modelimgs.dtImg.Rows)
+                        {
+                            var classname="";
+                            if (imglistcount == 0) {
+                                classname = "img-hover";
+                            }
+                            <li><img class="@classname" bimg="@row["filepath"].ToString()" src="@row["filepath"].ToString()" onmousemove="preview(this);"></li>
+                        }
+                    }
+                    
                 </ul>
             </div>
         </div>
@@ -208,7 +229,8 @@
         </div>
 
         <div class="ui-switchable-panel" id='product-detail-1'>
-            1
+             @(new HtmlString(Model.PCDescription.Replace("\\\"", "\"").Replace("\\r\\n","")))
+
         </div>
         <div class="ui-switchable-panel" style="display: none;" id='product-detail-2'>
             2
