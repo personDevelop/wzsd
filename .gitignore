@@ -207,3 +207,5 @@ src/EasyCms.Web/Upload/
 src/EasyCms.Web/bin/
 src/AliNotify.Web/bin/
 src/AliNotify.Web/bin
+src/AliNotify.Web/bin/*.dll
+src/AliNotify.Web/bin/EasyCms.Dal.dll
