@@ -68,7 +68,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                     {
                         p.ID = Guid.NewGuid().ToString();
                     }
-                    p.CreatedUserID = Session.GetUserID();
+                    p.CreatedUserID = Session.GetUserID() ?? "root";
                 }
                 bll.Save(p);
                 if (TempData.ContainsKey("IsSuccess"))

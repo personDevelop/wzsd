@@ -150,11 +150,8 @@
                             var item = result.data[i];
                             var newsID = item.ID;
                             var newsTitle = item.NewsTitle;
-                            var newsDate = item.CreatedDate;
-
-                            @{
-
-                                  <text>
+                            var newsDate = item.CreatedDate; 
+                            @{  <text>
                             $("#news-wrap>.mc").find("ul").append("<li><div><a href='@Url.Action("Detail")" + "/" + newsID + "'><font class='skcolor_ljg'></font>" + newsTitle
                             + "</a></div><span>" + newsDate + "</span> <div class='line'></div> </li>"); </text>
 

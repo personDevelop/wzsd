@@ -135,7 +135,7 @@
     width: 75px;
 }
 .cart-tbody .item-item .p-sum strong {
-    color: #333;
+    color: #E4393C;
     font-weight: 700;
 }
 
@@ -273,4 +273,7 @@
     font-family: '\5fae\8f6f\96c5\9ed1';
     background: #e54346;
     overflow: hidden;
+}
+.item-list{
+    clear: both;
 }

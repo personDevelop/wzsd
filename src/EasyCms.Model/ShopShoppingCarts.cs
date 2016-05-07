@@ -26,7 +26,9 @@ namespace EasyCms.Model
 
         private string _ID;
 
-        private int _ItemType;
+        private ShopBuyType _ItemType;
+
+        private string _ActivityID;
 
         private string _UserId;
 
@@ -65,7 +67,7 @@ namespace EasyCms.Model
         /// </summary>
 
         [PrimaryKey]
-        [DbProperty(MapingColumnName = "ID", DbTypeString = "char", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ID", DbTypeString = "varchar", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string ID
         {
@@ -81,12 +83,12 @@ namespace EasyCms.Model
         }
 
         /// <summary>
-        ///  类型,0无，1 普通购物，2，赠品,3.套餐，4，团购，5 秒杀
+        ///  类型,0 普通购物，1，赠品,2.套餐，3，团购，4 秒杀
         /// </summary>
 
         [DbProperty(MapingColumnName = "ItemType", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "((1))")]
 
-        public int ItemType
+        public ShopBuyType ItemType
         {
             get
             {
@@ -100,11 +102,30 @@ namespace EasyCms.Model
         }
 
         /// <summary>
+        ///  活动ID,促销活动的id 或者团购的id或者秒杀的id
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "ActivityID", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string ActivityID
+        {
+            get
+            {
+                return this._ActivityID;
+            }
+            set
+            {
+                this.OnPropertyChanged("ActivityID", this._ActivityID, value);
+                this._ActivityID = value;
+            }
+        }
+
+        /// <summary>
         ///  会员ID,
         /// </summary>
 
         [PrimaryKey]
-        [DbProperty(MapingColumnName = "UserId", DbTypeString = "char", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "UserId", DbTypeString = "varchar", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string UserId
         {
@@ -123,7 +144,7 @@ namespace EasyCms.Model
         ///  商品ID,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "ProductId", DbTypeString = "char", ColumnIsNull = false, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ProductId", DbTypeString = "varchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string ProductId
         {
@@ -369,7 +390,7 @@ namespace EasyCms.Model
 
         #endregion
 
-        #region 列定义
+        #region 列定义 
         public class Column
         {
             public Column(string tableName)
@@ -378,6 +399,8 @@ namespace EasyCms.Model
                 ID = new PropertyItem("ID", tableName);
 
                 ItemType = new PropertyItem("ItemType", tableName);
+
+                ActivityID = new PropertyItem("ActivityID", tableName);
 
                 UserId = new PropertyItem("UserId", tableName);
 
@@ -417,6 +440,10 @@ namespace EasyCms.Model
             /// 类型,0 普通购物，1，赠品,2.套餐，3，团购，4 秒杀
             /// </summary> 
             public PropertyItem ItemType = null;
+            /// <summary>
+            /// 活动ID,促销活动的id 或者团购的id或者秒杀的id
+            /// </summary> 
+            public PropertyItem ActivityID = null;
             /// <summary>
             /// 会员ID,
             /// </summary> 
@@ -477,5 +504,187 @@ namespace EasyCms.Model
         #endregion
     }
 
-     
+    /// <summary>
+    /// Cookie里存贮的购物车信息
+    /// </summary>  
+    [JsonObject]
+    public partial class CookieCard 
+    {
+         
+        #region 属性
+         
+        public ShopBuyType BuyType
+        {
+            get;
+
+            set;
+        }
+
+        /// <summary>
+        ///  活动ID,促销活动的id 或者团购的id或者秒杀的id
+        /// </summary>
+ 
+        public string ActivityID
+        {
+            get;
+
+            set;
+        }
+
+         
+
+        /// <summary>
+        ///  商品ID,
+        /// </summary>
+ 
+        public string ProductId
+        {
+            get;
+
+            set;
+        }
+
+        /// <summary>
+        ///  SKU,
+        /// </summary>
+
+          public string SKU
+        {
+            get;
+
+            set;
+        }
+
+         
+        public decimal Quantity
+        {
+            get;
+
+            set;
+        } 
+
+        /// <summary>
+        ///  添加时间,格式为 yyyy-MM-dd HH:mm:ss
+        /// </summary>
+ 
+        public string AddTime
+        {
+            get;
+
+            set;
+        }
+ 
+
+        #endregion
+         
+    }
+
+
+    public partial class ShopCardInfo
+    {
+
+        #region 属性
+        
+        public ShopBuyType BuyType
+        {
+            get;
+
+            set;
+        }
+
+        /// <summary>
+        ///  活动ID,促销活动的id 或者团购的id或者秒杀的id
+        /// </summary>
+
+        public string ActivityID
+        {
+            get;
+
+            set;
+        }
+
+
+
+        /// <summary>
+        ///  商品ID,
+        /// </summary>
+
+       
+        public string ProductId
+        {
+            get;
+
+            set;
+        }
+
+        /// <summary>
+        ///  SKU,
+        /// </summary>
+
+        
+        public string SKU
+        {
+            get;
+
+            set;
+        }
+
+
+        public decimal Quantity
+        {
+            get;
+
+            set;
+        }
+
+        /// <summary>
+        ///  添加时间,格式为 yyyy-MM-dd HH:mm:ss
+        /// </summary>
+
+        public string AddTime
+        {
+            get;
+
+            set;
+        }
+        public string Name
+        {
+            get;
+
+            set;
+        }
+
+        public string GuiGeInfo
+        {
+            get;
+
+            set;
+        }
+        public string ThumbImgUrl
+        {
+            get;
+
+            set;
+        }
+        public decimal Stock
+        {
+            get;
+
+            set;
+        }
+        public decimal SalePrice
+        {
+            get;
+
+            set;
+        }
+        public bool IsSale
+        {
+            get;
+
+            set;
+        }
+        #endregion
+
+    }
 }

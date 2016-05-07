@@ -26,6 +26,8 @@ namespace EasyCms.Web
                "~/Content/web/css/register.css"));
             bundles.Add(new StyleBundle("~/bundles/productcss").Include(
              "~/Content/web/css/product.css"));
+            bundles.Add(new StyleBundle("~/bundles/cardcss").Include(
+             "~/Content/web/css/cart.css"));
             bundles.Add(new StyleBundle("~/bundles/upimgcss").Include(
             "~/Content/ueditor/third-party/webuploader/webuploader.css",
              "~/Content/upload/Customrwebuploader.css",
@@ -36,7 +38,8 @@ namespace EasyCms.Web
             bundles.Add(new ScriptBundle("~/bundles/register").Include(
                       "~/Content/web/regController.js"));
             bundles.Add(new ScriptBundle("~/bundles/onlyjquery").Include(
-           "~/Scripts/jquery-1.10.2.js"));
+           "~/Scripts/jquery-1.10.2.js", "~/Scripts/jquery.cookie.js"));
+           
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-1.10.2.js" ,
                         "~/Content/jquery/jquery.nicescroll.js",

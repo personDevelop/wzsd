@@ -116,7 +116,32 @@ namespace EasyCms.Dal
 
         }
 
-        
+        public ShopCardInfo GetProduct(string productId, string sKU)
+        {
+            ShopCardInfo sc = new ShopCardInfo();
+            ShopProductInfo p = Dal.From<ShopProductInfo>().Where(ShopProductInfo._.ID == productId)
+                .Join<AttachFile>(AttachFile._.RefID == ShopProductInfo._.ID && AttachFile._.OrderNo == 0, JoinType.leftJoin)
+
+                .Select(ShopProductInfo._.ID, ShopProductInfo._.SaleStatus ,ShopProductInfo._.Stock,   ShopProductInfo._.SalePrice, ShopProductInfo._.Name, AttachFile.GetThumbnaifilePath("", "ThumbImgUrl")).ToFirst<ShopProductInfo>();
+            sc.ProductId = productId;
+            sc.ThumbImgUrl = p.ThumbImgUrl;
+            sc.Stock = p.Stock;
+            sc.IsSale = p.SaleStatus == 1;
+            sc.Name = p.Name;
+            sc.SalePrice = p.SalePrice;
+            if (!string.IsNullOrWhiteSpace(sKU))
+            {
+                ShopProductSKUInfo skup = Dal.From<ShopProductSKUInfo>().Where(ShopProductSKUInfo._.ID == sKU).Select(ShopProductSKUInfo._.ID, ShopProductSKUInfo._.SalePrice, ShopProductSKUInfo._.Stock, ShopProductSKUInfo._.IsSale, ShopProductSKUInfo._.Name).ToFirst<ShopProductSKUInfo>();
+
+                sc.GuiGeInfo = skup.Name;
+                sc.SKU = sKU;
+                sc.Stock = skup.Stock;
+                sc.IsSale = skup.IsSale;
+                sc.SalePrice = skup.SalePrice;
+            }
+            return sc;
+        }
+
         public DataTable GetList(string categoryID, string Name, int pagenum, int pagesize, ref int recordCount)
         {
             WhereClip where = ShopProductInfo._.Name.Contains(Name) || ShopProductInfo._.Code.Contains(Name);

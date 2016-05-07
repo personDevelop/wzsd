@@ -1218,6 +1218,10 @@ namespace EasyCms.Model
         
         [NotDbCol]
         public string ShopCategoryID { get; set; }
+
+
+        [NotDbCol]
+        public string ThumbImgUrl { get; set; }
         protected override void OnCreate()
         {
             AddedDate = DateTime.Now;
@@ -1507,5 +1511,7 @@ namespace EasyCms.Model
         /// </summary>
         public string VideoImg { get; set; }
     }
+
+
 
 }

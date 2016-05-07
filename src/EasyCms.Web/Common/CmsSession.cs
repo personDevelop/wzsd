@@ -24,12 +24,12 @@ namespace EasyCms
         public static string GetUserID(this HttpSessionStateBase session)
         {
             string userid = session[CmsSession.UserIDKey] as string;
-            return userid ?? "root";
+            return userid ;
         }
         public static string GetUserID(this HttpSessionState session)
         {
             string userid = session[CmsSession.UserIDKey] as string;
-            return userid ?? "root";
+            return userid  ;
         }
         public static string GetRoleID(this HttpSessionStateBase session)
         {

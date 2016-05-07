@@ -66,6 +66,8 @@ namespace EasyCms.Model
 
         private string _IosImgUrl;
 
+        private string _LogoUrl;
+
         #endregion
 
         #region 属性
@@ -86,6 +88,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("ID", this._ID, value);
+
+
                 this._ID = value;
             }
         }
@@ -105,6 +109,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("WebSiteUrl", this._WebSiteUrl, value);
+
+
                 this._WebSiteUrl = value;
             }
         }
@@ -124,6 +130,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("Name", this._Name, value);
+
+
                 this._Name = value;
             }
         }
@@ -143,6 +151,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("Logo", this._Logo, value);
+
+
                 this._Logo = value;
             }
         }
@@ -162,6 +172,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("Contactor", this._Contactor, value);
+
+
                 this._Contactor = value;
             }
         }
@@ -181,6 +193,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("QQ", this._QQ, value);
+
+
                 this._QQ = value;
             }
         }
@@ -200,6 +214,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("Email", this._Email, value);
+
+
                 this._Email = value;
             }
         }
@@ -219,6 +235,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("Telphone", this._Telphone, value);
+
+
                 this._Telphone = value;
             }
         }
@@ -238,6 +256,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("CallNum", this._CallNum, value);
+
+
                 this._CallNum = value;
             }
         }
@@ -257,6 +277,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("Address", this._Address, value);
+
+
                 this._Address = value;
             }
         }
@@ -276,6 +298,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("titlePix", this._titlePix, value);
+
+
                 this._titlePix = value;
             }
         }
@@ -295,6 +319,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("Keywords", this._Keywords, value);
+
+
                 this._Keywords = value;
             }
         }
@@ -314,6 +340,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("Description", this._Description, value);
+
+
                 this._Description = value;
             }
         }
@@ -333,6 +361,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("BeiAN", this._BeiAN, value);
+
+
                 this._BeiAN = value;
             }
         }
@@ -352,6 +382,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("WeiXinNum", this._WeiXinNum, value);
+
+
                 this._WeiXinNum = value;
             }
         }
@@ -371,6 +403,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("WeiXinImg", this._WeiXinImg, value);
+
+
                 this._WeiXinImg = value;
             }
         }
@@ -390,6 +424,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("AndroidImg", this._AndroidImg, value);
+
+
                 this._AndroidImg = value;
             }
         }
@@ -409,6 +445,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("IosImg", this._IosImg, value);
+
+
                 this._IosImg = value;
             }
         }
@@ -428,7 +466,6 @@ namespace EasyCms.Model
             }
             set
             {
-                this.OnPropertyChanged("WeiXinImgUrl", this._WeiXinImgUrl, value);
                 this._WeiXinImgUrl = value;
             }
         }
@@ -448,7 +485,6 @@ namespace EasyCms.Model
             }
             set
             {
-                this.OnPropertyChanged("AndroidImgUrl", this._AndroidImgUrl, value);
                 this._AndroidImgUrl = value;
             }
         }
@@ -468,8 +504,26 @@ namespace EasyCms.Model
             }
             set
             {
-                this.OnPropertyChanged("IosImgUrl", this._IosImgUrl, value);
                 this._IosImgUrl = value;
+            }
+        }
+
+        /// <summary>
+        ///  LogoUrl,
+        /// </summary>
+        [NotDbCol]
+
+        [DbProperty(MapingColumnName = "LogoUrl", DbTypeString = "nvarchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string LogoUrl
+        {
+            get
+            {
+                return this._LogoUrl;
+            }
+            set
+            {
+                this._LogoUrl = value;
             }
         }
 
@@ -522,6 +576,8 @@ namespace EasyCms.Model
                 AndroidImgUrl = new PropertyItem("AndroidImgUrl", tableName);
 
                 IosImgUrl = new PropertyItem("IosImgUrl", tableName);
+
+                LogoUrl = new PropertyItem("LogoUrl", tableName);
 
 
             }
@@ -609,18 +665,11 @@ namespace EasyCms.Model
             /// 苹果端二维码Url,
             /// </summary> 
             public PropertyItem IosImgUrl = null;
+            /// <summary>
+            /// LogoUrl,
+            /// </summary> 
+            public PropertyItem LogoUrl = null;
         }
         #endregion
     }
-
-
-
-    public partial class WebSiteSet
-    {
-        [NotDbCol]
-        public string LogoUrl { get; set; }
-        
-
-    }
 }
-

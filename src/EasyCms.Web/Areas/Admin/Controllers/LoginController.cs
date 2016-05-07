@@ -18,19 +18,19 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             return View(p);
         }
 
-        public ActionResult Login(string UserName, string Password)
+        public ActionResult Login(string Account, string Pwd)
         {
             string error = string.Empty;
             ManagerUserInfo user = null; SysRoleInfo role = null;
-            if (UserName == "root" && Password == "aaaaaa")
+            if (Account == "root" && Pwd == "aaaaaa")
             {
-                user = new ManagerUserInfo() { ID = UserName, Name = "超级管理员" };
-                role = new SysRoleInfo() { ID = UserName, Name = "超级管理员" };
+                user = new ManagerUserInfo() { ID = Account, Name = "超级管理员" };
+                role = new SysRoleInfo() { ID = Account, Name = "超级管理员" };
             }
             if (user == null)
             { 
                 ManagerUserInfoBll bll = new ManagerUserInfoBll();
-                user = bll.LoginManager(UserName, Password, out error);
+                user = bll.LoginManager(Account, Pwd, out error);
                 if (user != null)
                 {
                     role = bll.GetRole(user.ID);

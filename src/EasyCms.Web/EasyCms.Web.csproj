@@ -852,6 +852,7 @@
     <Content Include="App_Code\HelperSmart.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_Loading.cshtml" />
     <Content Include="Areas\Admin\Views\SysMsgInterSet\ViewLog.cshtml" />
+    <Content Include="Scripts\jquery.cookie.js" />
     <Content Include="Scripts\jqwidgets\jqxbargauge.js" />
     <Content Include="Scripts\jqwidgets\jqxkanban.js" />
     <Content Include="Scripts\jqwidgets\jqxknob.js" />
@@ -1389,13 +1390,14 @@
     <Content Include="Views\News\Index.cshtml" />
     <Content Include="Views\News\Detail.cshtml" />
     <Content Include="Views\Shared\_RecomendShop.cshtml" />
+    <Content Include="Views\Card\Index.cshtml" />
+    <Content Include="Views\Card\Index - 复制.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Views\Error\" />
     <Folder Include="Scripts\jGui\" />
     <Folder Include="Upload\Export\" />
-    <Folder Include="Views\Card\" />
     <Folder Include="Views\Help\" />
     <Folder Include="Views\Search\" />
     <Folder Include="Views\SiteMap\" />

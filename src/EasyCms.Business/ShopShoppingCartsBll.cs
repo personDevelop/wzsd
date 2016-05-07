@@ -44,5 +44,15 @@ namespace EasyCms.Business
 
             return Dal.GetCardInfo( productIDS,  SKUIDS,   host);
         }
+
+        public ShopShoppingCarts GetEntity(WhereClip whereClip)
+        {
+            return Dal.GetEntity(whereClip);
+        }
+
+        public List<ShopCardInfo> GetMyCards(string userID)
+        {
+            return Dal.GetMyCards(userID);
+        }
     }
 }

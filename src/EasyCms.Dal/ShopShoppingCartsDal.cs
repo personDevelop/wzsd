@@ -58,6 +58,52 @@ namespace EasyCms.Dal
                 .Where( where )
                 .ToDataTable();
         }
+
+        public List<ShopCardInfo> GetMyCards(string userID)
+        {
+            List<ShopCardInfo> resultList = new List<ShopCardInfo>();
+            List<ShopShoppingCarts> list= Dal.From<ShopShoppingCarts>().Where(ShopShoppingCarts._.UserId == userID)
+                .OrderBy(ShopShoppingCarts._.AddTime)
+                .List<ShopShoppingCarts>();
+           
+            foreach (var item in list)
+            {
+                ShopCardInfo sc = new ShopCardInfo() { ActivityID=item.ActivityID, AddTime=item.AddTime.ToString("yyyy-MM-dd HH:mm:ss"),
+                 BuyType=item.ItemType,  Name=item.Name, ProductId=item.ProductId, Quantity=item.Quantity,
+                 SalePrice= item.SellPrice, SKU=item.SKU};
+
+
+                
+                ShopProductInfo p = Dal.From<ShopProductInfo>().Where(ShopProductInfo._.ID == item.ProductId)
+                    .Join<AttachFile>(AttachFile._.RefID == ShopProductInfo._.ID && AttachFile._.OrderNo == 0, JoinType.leftJoin)
+
+                    .Select(  ShopProductInfo._.SaleStatus, ShopProductInfo._.Stock, ShopProductInfo._.SalePrice, AttachFile.GetThumbnaifilePath("", "ThumbImgUrl")).ToFirst<ShopProductInfo>();
+               
+                sc.ThumbImgUrl = p.ThumbImgUrl;
+                sc.Stock = p.Stock;
+                sc.IsSale = p.SaleStatus == 1;
+                sc.Name = p.Name;
+                sc.SalePrice = p.SalePrice;
+                if (!string.IsNullOrWhiteSpace(item.SKU))
+                {
+                    ShopProductSKUInfo skup = Dal.From<ShopProductSKUInfo>().Where(ShopProductSKUInfo._.ID == item.SKU).Select(ShopProductSKUInfo._.ID, ShopProductSKUInfo._.SalePrice, ShopProductSKUInfo._.Stock, ShopProductSKUInfo._.IsSale, ShopProductSKUInfo._.Name).ToFirst<ShopProductSKUInfo>();
+
+                    sc.GuiGeInfo = skup.Name;
+                    
+                    sc.Stock = skup.Stock;
+                    sc.IsSale = skup.IsSale;
+                    sc.SalePrice = skup.SalePrice;
+                } 
+                resultList.Add(sc);
+            }
+
+            return resultList;
+        }
+
+        public ShopShoppingCarts GetEntity(WhereClip whereClip)
+        {
+            return Dal.Find<ShopShoppingCarts>(whereClip);
+        }
     }
 
 }

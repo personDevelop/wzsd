@@ -1,4 +1,4 @@
-﻿@model EasyCms.Web.LoginViewModel
+﻿@model EasyCms.Model.LoginModel
 @{
     Layout = null;
     ViewBag.Title = "登录";
@@ -46,14 +46,14 @@
                     <li>
                         <p>管理账号:</p>
 
-                        @Html.TextBoxFor(m => m.UserName)
-                        @Html.ValidationMessageFor(m => m.UserName)
+                        @Html.TextBoxFor(m => m.Account)
+                        @Html.ValidationMessageFor(m => m.Account)
 
                     </li>
                     <li>
                         <p>密码:</p>
-                        @Html.PasswordFor(m => m.Password)
-                        @Html.ValidationMessageFor(m => m.Password)
+                        @Html.PasswordFor(m => m.Pwd )
+                        @Html.ValidationMessageFor(m => m.Pwd)
 
 
                     </li>
