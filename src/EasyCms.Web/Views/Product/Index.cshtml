@@ -48,20 +48,21 @@
     <!--商品预览图-->
     <div id='preview'>
         <div id="spec-n1" class="jqzoom">
-            <img data-img="1" width="350" height="350" src="http://img12.360buyimg.com/n1/jfs/t2191/152/1468963854/144941/55334042/56a9b058N3623ec1a.jpg" alt="">
-            <div class="jqZoomPup" style="width: 175px; height: 175px; visibility: visible; top: 80.5px; left: 139.5px;">&nbsp;</div>
+            <img data-img="1" jqsrc='css/images/b3.jpg' width="350" height="350" src="http://img12.360buyimg.com/n1/jfs/t2191/152/1468963854/144941/55334042/56a9b058N3623ec1a.jpg" alt="">
+
         </div>
         <div id="spec-list">
-            <a href="javascript:;" class="spec-control disabled" id="spec-forward"></a>
-            <a href="javascript:;" class="spec-control disabled" id="spec-backward"></a>
-            <div class="spec-items">
-                <ul class="lh">
-                    <li>
-                        <img class="img-hover" src="http://img12.360buyimg.com/n5/jfs/t2191/152/1468963854/144941/55334042/56a9b058N3623ec1a.jpg" width="50" height="50">
-                    </li>
-                    <li>
-                        <img src="http://img12.360buyimg.com/n5/jfs/t2125/183/2059398761/249079/a37d1994/56a977e3N8b681586.jpg" width="50" height="50">
-                    </li>
+            <a href="javascript:;" class="spec-control" id="spec-forward"></a>
+            <a href="javascript:;" class="spec-control" id="spec-backward"></a>
+            <div class="spec-items" style="position: absolute;width: 310px;height: 54px;overflow: hidden;">
+                <ul class="lh" style="position: absolute;width: 999999px;">
+                    <li><img alt="佳能" bimg="images/b1.jpg" src="images/s1.jpg" onmousemove="preview(this);"></li>
+                    <li><img alt="佳能" bimg="images/b2.jpg" src="images/s2.jpg" onmousemove="preview(this);"></li>
+                    <li><img alt="佳能" bimg="images/b3.jpg" src="images/s3.jpg" onmousemove="preview(this);"></li>
+                    <li><img alt="佳能" bimg="images/b1.jpg" src="images/s1.jpg" onmousemove="preview(this);"></li>
+                    <li><img alt="佳能" bimg="images/b3.jpg" src="images/s3.jpg" onmousemove="preview(this);"></li>
+                    <li><img alt="佳能" bimg="images/b1.jpg" src="images/s1.jpg" onmousemove="preview(this);"></li>
+                    <li><img alt="佳能" bimg="images/b2.jpg" src="images/s2.jpg" onmousemove="preview(this);"></li>
                 </ul>
             </div>
         </div>
@@ -156,11 +157,11 @@
     </div>
 </div>
 
-<div id='' class="floor" style="margin-bottom: 10px;overflow: auto;">
+ <div id='' class="floor" style="margin-bottom: 10px;overflow: auto;">
     <div id='view-buy'>
         <div class="mt">
             <h2>
-                达人选购
+                热门推荐
             </h2>
         </div>
         <div class="mc">
@@ -204,6 +205,22 @@
                     <a href="javascript:;">支付方式</a>
                 </li>
             </ul>
+        </div>
+
+        <div class="ui-switchable-panel" id='product-detail-1'>
+            1
+        </div>
+        <div class="ui-switchable-panel" style="display: none;" id='product-detail-2'>
+            2
+        </div>
+        <div class="ui-switchable-panel" style="display: none;" id='product-detail-3'>
+            3
+        </div>
+        <div class="ui-switchable-panel" style="display: none;" id='product-detail-4'>
+            4
+        </div>
+        <div class="ui-switchable-panel" style="display: none;" id='product-detail-5'>
+            5
         </div>
     </div>
 </div>
