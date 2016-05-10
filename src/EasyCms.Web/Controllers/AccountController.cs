@@ -12,14 +12,31 @@ namespace EasyCms.Web.Controllers
     public class AccountController : Controller
     {
         // GET: Login
-        public ActionResult Login(string msg,string returnUrl)
+        public ActionResult Login(string msg, string returnUrl)
         {
-            LoginModel model = new LoginModel() {  IsPc=true};
-            ViewResult vr =   View(model);
+            LoginModel model = new LoginModel() { IsPc = true };
+            ViewResult vr = View(model);
             ViewBag.Msg = msg;
             return vr;
         }
 
+        // GET: Login
+        public ActionResult LoginBox(string msg, string returnUrl)
+        {
+            LoginModel model = new LoginModel() { IsPc = true };
+            ViewResult vr = View(model);
+            ViewBag.Msg = msg;
+            return vr;
+        }
+        // GET: Login
+        public ActionResult Dialog
+            (string msg, string returnUrl)
+        {
+            LoginModel model = new LoginModel() { IsPc = true };
+            ViewResult vr = View(model);
+            ViewBag.Msg = msg;
+            return vr;
+        }
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -33,7 +50,7 @@ namespace EasyCms.Web.Controllers
             {
                 ModelState.AddModelError("UserNo", "请输入登录账号.");
             }
-            
+
             if (string.IsNullOrWhiteSpace(model.Pwd))
             {
                 ModelState.AddModelError("Password", "请输入密码.");
@@ -67,7 +84,7 @@ namespace EasyCms.Web.Controllers
 
             // 如果我们进行到这一步时某个地方出错，则重新显示表单
 
-            return View(  model);
+            return View(model);
         }
 
         public ActionResult LogOut(string returnUrl)
@@ -120,9 +137,9 @@ namespace EasyCms.Web.Controllers
                 }
                 else
                     if (!bll.CheckRepeat(model.Email, false))
-                {
-                    ModelState.AddModelError("Email", "当前邮箱已被注册.");
-                }
+                    {
+                        ModelState.AddModelError("Email", "当前邮箱已被注册.");
+                    }
             }
             if (string.IsNullOrWhiteSpace(model.UserNo))
             {
@@ -143,18 +160,18 @@ namespace EasyCms.Web.Controllers
             {
                 ModelState.AddModelError("ConfrimPwd", "请再次输入密码.");
             }
-            if (!string.IsNullOrWhiteSpace(model.Pwd) && model.Pwd!=model.ComfirmPwd)
+            if (!string.IsNullOrWhiteSpace(model.Pwd) && model.Pwd != model.ComfirmPwd)
             {
 
                 ModelState.AddModelError("ConfrimPwd", "两次输入密码不一致.");
             }
             if (ModelState.IsValid)
             {
-                string error = bll.Regist(model );
-                if ( string.IsNullOrWhiteSpace(error))
+                string error = bll.Regist(model);
+                if (string.IsNullOrWhiteSpace(error))
                 {
-                  
-                    return RedirectToAction("Login",new { msg="1"});
+
+                    return RedirectToAction("Login", new { msg = "1" });
                 }
                 else
                 {
@@ -164,19 +181,19 @@ namespace EasyCms.Web.Controllers
 
             // 如果我们进行到这一步时某个地方出错，则重新显示表单
 
-            return View(  model);
+            return View(model);
         }
 
 
 
         public ActionResult Regist(string returnUrl)
         {
-            return View(new RegistModel() {  IsAgree=true, IsPc=true});
+            return View(new RegistModel() { IsAgree = true, IsPc = true });
         }
 
         public string CheckRepeat(string val, bool IsCode)
         {
-            string result= new ManagerUserInfoBll().CheckRepeat(val, IsCode).ToString().ToLower();
+            string result = new ManagerUserInfoBll().CheckRepeat(val, IsCode).ToString().ToLower();
             return result;
 
         }
@@ -185,7 +202,7 @@ namespace EasyCms.Web.Controllers
 
             return View();
         }
-        
-        
+
+
     }
 }

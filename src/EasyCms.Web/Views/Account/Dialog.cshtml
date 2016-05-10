@@ -1,0 +1,23 @@
+﻿@model EasyCms.Model.LoginModel
+@{
+    Layout = null;
+    ViewBag.Title = "用户登录-" + CmsSessionExtend.WebSite.Name;
+}
+@using EasyCms.Model
+@using EasyCms
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/bundles/webcss")
+    @Styles.Render("~/bundles/logincss")
+    @Scripts.Render("~/bundles/onlyjquery")
+    @Scripts.Render("~/bundles/account")
+</head>
+<body>
+    <div>
+         
+    </div>
+</body>
+</html>

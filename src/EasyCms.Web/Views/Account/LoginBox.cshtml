@@ -1,0 +1,144 @@
+﻿@model EasyCms.Model.LoginModel
+@{
+    Layout = null;
+    ViewBag.Title = "用户登录-" + CmsSessionExtend.WebSite.Name;
+}
+@using EasyCms.Model
+@using EasyCms
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/bundles/webcss")
+    @Styles.Render("~/bundles/logincss")
+    @Scripts.Render("~/bundles/onlyjquery")
+</head>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+</head>
+<body>
+    <div>
+        <div class="login-form" style="position: relative;margin:0 auto;top: 10px;">
+            <div class="login-box">
+                <div class="mt">
+                    <h1>会员登录</h1>
+                    <div class="extra-r">
+                        <div class="regist-link"><a href="#" target="_blank"><b></b>立即注册</a></div>
+                    </div>
+                </div>
+                <div class="msg-wrap">
+                    <div class="msg-warn"><b></b>欢迎登录@(CmsSessionExtend.WebSite.Name)！</div>
+                    <div class="msg-error" style='display: none;'><b></b>>@Html.ValidationSummary()</div>
+                </div>
+                <div class="mc">
+                    <div class="form">
+                        @if (ViewBag.Msg != null && ViewBag.Msg == "1")
+                        {
+                            <span class="error">注册成功，请登录系统</span>
+
+                        }
+
+                        @using (Html.BeginForm("Login", "Account", new { ReturnUrl = "" }, FormMethod.Post, new { id = "formlogin" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="item item-fore1">
+                                <label for="loginname" class="login-label name-label"></label>
+                                @Html.TextBoxFor(Model => Model.Account, new { @class = "itxt", tabindex = "1", autocomplete = "off", placeholder = "请输入邮箱/用户名/已验证手机" })
+                                @Html.ValidationMessageFor(Model => Model.Account)
+                                <span class="clear-btn" style="display: inline;"></span>
+                            </div>
+                            <div id="entry" class="item item-fore2">
+                                <label class="login-label pwd-label" for="nloginpwd"></label>
+                                @Html.PasswordFor(Model => Model.Pwd, new { @class = "itxt itxt-error", tabindex = "2", autocomplete = "off", placeholder = "请输入密码" })
+                                @Html.ValidationMessageFor(Model => Model.Pwd)
+                                <span class="clear-btn" style="display: inline;"></span>
+                            </div>
+                            <div id="o-authcode" class="item item-vcode item-fore4  hide ">
+
+                                @Html.TextBoxFor(Model => Model.VaryCode, new { @class = "itxt itxt02", tabindex = "3" })
+
+
+                                <img id="JD_Verification1" class="verify-code" src="@Url.Action("","VarifyCode")">
+                                <a href="javascript:void(0)" onclick="$('#JD_Verification1').click();">看不清楚换一张</a>
+                            </div>
+                            <div class="item item-fore3">
+                                <div class="safe">
+                                    <span>
+                                        @Html.CheckBoxFor(Model => Model.RememberMe, new { @class = "jdcheckbox", tabindex = "4" })
+                                        @Html.LabelFor(Model => Model.RememberMe)
+                                    </span>
+                                    <span class="forget-pw-safe">
+                                        <a href="@Url.Action("FindPwd")" class="" target="_blank">忘记密码?</a>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="item item-fore5">
+                                <div class="login-btn">
+                                    <a href="javascript:;" class="btn-img btn-entry" id="loginsubmit" tabindex="6">登&nbsp;&nbsp;&nbsp;&nbsp;录</a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            if ($(".msg-error").text() && $.trim($(".msg-error").text()) != ">") {
+                $(".msg-error").html("<b></b>" + $(".msg-error").text());
+                $(".msg-error").show();
+            } else {
+                $(".msg-error").hide();
+            }
+            $("#JD_Verification1").click(function () {
+
+                $('#VaryCode').val('');
+                $("#JD_Verification1").attr("src", "@Url.Action("", "VarifyCode")" + "/Index/" + new Date().getTime());
+
+            });
+
+            $(".clear-btn").click(function () {
+
+                $(this).prev().val('');
+
+            });
+
+            $("#loginsubmit").click(function () {
+
+                var name = $.trim($("#Account").val());
+                var pwd = $.trim($("#Pwd").val());
+                var varycode = $.trim($("#VaryCode").val());
+
+                var error = "";
+                if (!name) {
+                    error = "用户名不能为空";
+                } else if (!pwd) {
+                    error = "密码不能为空";
+                } else if (!varycode) {
+                    error = "验证码不能为空";
+                }
+                if (error) {
+                    $(".msg-error").html("<b></b>" + error);
+                    $(".msg-error").show();
+                    $(".msg-warn").hide();
+                    return false;
+                } else {
+
+                    $("#formlogin").submit();
+                }
+
+            });
+
+        });
+
+    </script>
+</body>
+</html>

@@ -365,6 +365,7 @@
     <Content Include="Content\Images\favicon.ico" />
     <Content Include="Content\Images\reg_banner.jpg" />
     <Content Include="Content\Images\search_lg.png" />
+    <Content Include="Content\js\account.js" />
     <Content Include="Content\js\jquery.jqzoom.js" />
     <Content Include="Content\js\Product.js" />
     <Content Include="Content\skin\default\bg_state.jpg" />
@@ -1394,6 +1395,8 @@
     <Content Include="Views\Shared\_RecomendShop.cshtml" />
     <Content Include="Views\Card\Index.cshtml" />
     <Content Include="Views\Card\Index - 复制.cshtml" />
+    <Content Include="Views\Account\LoginBox.cshtml" />
+    <Content Include="Views\Account\Dialog.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
