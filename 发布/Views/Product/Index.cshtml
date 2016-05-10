@@ -1,17 +1,21 @@
 ﻿@model EasyCms.Model.ShopProductInfo
 @using EasyCms.Business
 @using EasyCms.Model
+@using System.Data;
 @{
   ViewBag.Title = Model.Name+ EasyCms.CmsSessionExtend.WebSite.Name;
 
 
 }
 @Styles.Render("~/bundles/productcss")
+@Scripts.Render("~/bundles/product");
 <div id="root-nav" class="floor">
     <div class="w">
         <div class="breadcrumb">
+          
             @{
                 //获取商品的分类路径
+                
                 List<ShopCategory> catLocaList = new ShopProductInfoBll().GetLocationCateogry(Model.ID);
                 for (int i = 0; i < catLocaList.Count; i++)
                 {
@@ -48,20 +52,38 @@
     <!--商品预览图-->
     <div id='preview'>
         <div id="spec-n1" class="jqzoom">
-            <img data-img="1" width="350" height="350" src="http://img12.360buyimg.com/n1/jfs/t2191/152/1468963854/144941/55334042/56a9b058N3623ec1a.jpg" alt="">
-            <div class="jqZoomPup" style="width: 175px; height: 175px; visibility: visible; top: 80.5px; left: 139.5px;">&nbsp;</div>
+            @{
+    ShopSaleProductInfo modelimgs = new ShopProductInfoBll().GetSaleEntity(Model.ID, "");
+    int ccc = 0;
+    foreach (DataRow row in modelimgs.dtImg.Rows)
+    {
+        if (ccc == 0)
+        {
+            <img data-img="1" jqsrc='@row["filepath"].ToString()' width="350" height="350" src=" @row["filepath"].ToString() " alt=" ">
+
+        }
+        ccc++;
+    }
+}
+            
         </div>
         <div id="spec-list">
-            <a href="javascript:;" class="spec-control disabled" id="spec-forward"></a>
-            <a href="javascript:;" class="spec-control disabled" id="spec-backward"></a>
-            <div class="spec-items">
-                <ul class="lh">
-                    <li>
-                        <img class="img-hover" src="http://img12.360buyimg.com/n5/jfs/t2191/152/1468963854/144941/55334042/56a9b058N3623ec1a.jpg" width="50" height="50">
-                    </li>
-                    <li>
-                        <img src="http://img12.360buyimg.com/n5/jfs/t2125/183/2059398761/249079/a37d1994/56a977e3N8b681586.jpg" width="50" height="50">
-                    </li>
+            <a href="javascript:;" class="spec-control" id="spec-forward"></a>
+            <a href="javascript:;" class="spec-control" id="spec-backward"></a>
+            <div class="spec-items" style="position: absolute;width: 310px;height: 54px;overflow: hidden;">
+                <ul class="lh" style="position: absolute;width: 999999px;">
+                    @{
+                        var imglistcount=0;
+                        foreach (DataRow row in modelimgs.dtImg.Rows)
+                        {
+                            var classname="";
+                            if (imglistcount == 0) {
+                                classname = "img-hover";
+                            }
+                            <li><img class="@classname" bimg="@row["filepath"].ToString()" src="@row["filepath"].ToString()" onmousemove="preview(this);"></li>
+                        }
+                    }
+                    
                 </ul>
             </div>
         </div>
@@ -98,7 +120,7 @@
                     <a class="favorite" onclick="favorite_add(this);" href="javascript:void(0)">收藏此商品</a>
                 </li>
 
-                <li>顾客评分：<span class="grade"><i style="width:70px;">@Model.CommentCount</i></span>(已有<text>@Model.CommentCount</text>人评价)</li>
+                <li>顾客评分： <div id="star" data-score="@Model.StarCount"/> (已有<text>@Model.CommentCount</text>人评价)</li>
 
                 <li>送积分：单件送<text>@Model.Points</text>分</li>
 
@@ -147,7 +169,7 @@
                 </div>
             </div>
             <div class="btn" id="choose-btn-append">
-                <a class="btn-append " id="InitCartUrl" href="//cart.jd.com/gate.action?pid=11868341&amp;pcount=1&amp;ptype=1">加入购物车<b></b></a>
+                <a class="btn-append " id="InitCartUrl" href="javascript:void(0);">加入购物车<b></b></a>
             </div>
             <div class="btn buy">
                 <a class="btn-append " href="//cart.jd.com/gate.action?pid=11868341&amp;pcount=1&amp;ptype=1">立即购买<b></b></a>
@@ -156,11 +178,11 @@
     </div>
 </div>
 
-<div id='' class="floor" style="margin-bottom: 10px;overflow: auto;">
+ <div id='' class="floor" style="margin-bottom: 10px;overflow: auto;">
     <div id='view-buy'>
         <div class="mt">
             <h2>
-                达人选购
+                热门推荐
             </h2>
         </div>
         <div class="mc">
@@ -205,5 +227,56 @@
                 </li>
             </ul>
         </div>
+
+        <div class="ui-switchable-panel" id='product-detail-1'>
+             @(new HtmlString(Model.PCDescription.Replace("\\\"", "\"").Replace("\\r\\n","")))
+
+        </div>
+        <div class="ui-switchable-panel" style="display: none;" id='product-detail-2'>
+            2
+        </div>
+        <div class="ui-switchable-panel" style="display: none;" id='product-detail-3'>
+            3
+        </div>
+        <div class="ui-switchable-panel" style="display: none;" id='product-detail-4'>
+            @(new HtmlString(new HelpContentBll().GetContentByParaID(StaticValue.SaleServiceDescripbe)))
+        </div>
+        <div class="ui-switchable-panel" style="display: none;" id='product-detail-5'>
+            @(new HtmlString(new HelpContentBll().GetContentByParaID(StaticValue.PayTypeDescripbe)))
+        </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    $(function () {
+        $('#star').raty({
+            score: function () {
+                return $(this).attr('data-score');
+            }
+        });
+        $("#InitCartUrl").click(function () {
+            var data = { buyType: 0, ActivityID:"",ProductId: "@Model.ID",SKU:"", Quantity: 1 };
+            //删除数据库
+            $.ajax({
+
+                url:"@Url.Action("Add", "Card")",
+                data: data,
+                dataType: "json",
+                success:function(result){ 
+                    if (result.IsSuccess) {
+                        alert("添加购物车成功")
+                    }else
+                    {
+                        alert(result.msg);
+                    }
+                }
+
+
+            });
+
+
+        });
+    });
+
+
+</script>

@@ -180,6 +180,16 @@ namespace EasyCms.Model
         public const string Traval = "eb79e9eb-e08a-47e3-9239-8bd460c6ca47";
 
         /// <summary>
+        /// 支付方式说明对应的参数ID，从该参数中获取其对应的ID
+        /// </summary>
+        public const string PayTypeDescripbe = "8d11a908-8bd2-4f84-b941-dc67db91a10b";
+
+        /// <summary>
+        /// 售后方式对应的参数ID，从该参数中获取其对应的ID
+        /// </summary>
+        public const string SaleServiceDescripbe = "52f02a2f-6478-42d3-a5eb-026504e28dbc";
+
+        /// <summary>
         /// 没有找到对应功能时是否记录日志 1记录 0不记录
         /// </summary>
         public const string IsRecordNotFundFunc = "1e1b4608-94a9-41b8-9488-1d3f0a84e073";

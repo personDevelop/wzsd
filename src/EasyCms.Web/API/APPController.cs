@@ -449,8 +449,16 @@ namespace EasyCms.Web.API
             }
         }
 
-
-
+        public HttpResponseMessage GetPayTypeDescribe()
+        {
+            string RA = new HelpContentBll().GetContentByParaID(StaticValue.PayTypeDescripbe);
+            return RA.FormatSuccess();
+        }
+        public HttpResponseMessage GetSaleServiceDescripbe()
+        {
+            string RA = new HelpContentBll().GetContentByParaID(StaticValue.SaleServiceDescripbe);
+            return RA.FormatSuccess();
+        }
         public HttpResponseMessage GetBrand(int id= (int)BrandType.旅游频道,int pageIndex=5)
         {
            

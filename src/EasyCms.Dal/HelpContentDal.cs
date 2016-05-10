@@ -43,6 +43,11 @@ namespace EasyCms.Dal
             
         }
 
+        public string GetContentID(string id)
+        {
+            return Dal.From<HelpContent>().Where(HelpContent._.ID==id).Select(HelpContent._.ContentHtml).ToScalar() as string;
+        }
+
         public List<HelpContent> GetFootList()
         {
             return Dal.From<HelpContent>().Join<HelpType>(HelpType._.ID == HelpContent._.CategoryID && HelpType._.IsShowButtom == true)

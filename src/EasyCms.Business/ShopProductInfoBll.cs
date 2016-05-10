@@ -177,6 +177,9 @@ namespace EasyCms.Business
             return Dal.GetLocationCateogry(productID);
         }
 
-        
+        public ShopProductInfo GetWebEntity(string id, string sku, out string error)
+        { return Dal.GetWebEntity(id,   sku, out   error); }
+
+
     }
 }

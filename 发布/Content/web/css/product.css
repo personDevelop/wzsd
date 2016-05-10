@@ -358,7 +358,7 @@ a.orange, .orange {
     margin-top: 4px;
 }
 #p-box{
-    overflow: auto;
+    overflow: visible;
 }
 #view-buy .mt{
     font: 14px/30px 'microsoft yahei';
@@ -449,3 +449,5 @@ a.orange, .orange {
     border-right: 1px solid #DEDFDE;
     background-color: #fff;
 }
+
+.zoomdiv{z-index:100;position:absolute;top:0px;left:0px;width:350px;height:350px;background:#ffffff;border:1px solid #CCCCCC;display:none;text-align:center;overflow:hidden;}

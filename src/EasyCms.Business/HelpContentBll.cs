@@ -40,7 +40,11 @@ namespace EasyCms.Business
         {
             return Dal.GetFootList();
         }
-        
 
+        public string GetContentByParaID(string payTypeDescripbe)
+        {
+         string id=   new ParameterInfoBll().GetValue(payTypeDescripbe);
+            return Dal.GetContentID(id);
+        }
     }
 }

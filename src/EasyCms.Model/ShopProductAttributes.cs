@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 namespace EasyCms.Model
 {
     /// <summary>
-    /// 商品属性值
+    /// 商品属性值(是供设置规格时，加载已经勾选的时候用)
     /// </summary>  
     [JsonObject]
     public partial class ShopProductAttributes : BaseEntity

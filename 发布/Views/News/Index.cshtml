@@ -2,11 +2,133 @@
 @using EasyCms.Business
 @using EasyCms.Model
 @{
-    ViewBag.Title = Model.Name + EasyCms.CmsSessionExtend.WebSite.Name;
+    ViewBag.Title = "新闻资讯--" + EasyCms.CmsSessionExtend.WebSite.Name;
 
 
 }
+@Styles.Render("~/bundles/productcss")
 @Styles.Render("~/bundles/newscss")
+<div class="floor">
+    @*@Html.Partial("_RecomendShop")*@
+    <div id="view-buy">
+        <div class="mt">
+            <h2>
+                推荐商品
+            </h2>
+        </div>
+        <div class="mc">
+            <ul>
+                <li class="fore1">
+                    <div class="p-img">
+                        <a target="_blank" href="//item.jd.com/1777837.html">
+                            <img height="100" width="100" src="http://img12.360buyimg.com/n4/jfs/t2776/197/120408794/126655/69d0a6b6/5703f34bN3884f143.jpg" class="">
+                        </a>
+                    </div>
+                    <div class="p-name">
+                        <a target="_blank" href="//item.jd.com/1777837.html">
+                            海信（Hisense）LED55EC520UA 55英寸 VIDAA3 14核 炫彩4K智能电视(黑色)
+                        </a>
+                    </div>
+                    <div class="p-price">
+                        <strong class="J-p-1777837">￥3599.00</strong>
+                    </div>
+                </li>
+                <li class="fore1">
+                    <div class="p-img">
+                        <a target="_blank" href="//item.jd.com/1777837.html">
+                            <img height="100" width="100" src="http://img12.360buyimg.com/n4/jfs/t2776/197/120408794/126655/69d0a6b6/5703f34bN3884f143.jpg" class="">
+                        </a>
+                    </div>
+                    <div class="p-name">
+                        <a target="_blank" href="//item.jd.com/1777837.html">
+                            海信（Hisense）LED55EC520UA 55英寸 VIDAA3 14核 炫彩4K智能电视(黑色)
+                        </a>
+                    </div>
+                    <div class="p-price">
+                        <strong class="J-p-1777837">￥3599.00</strong>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div id='news-wrap'>
+        <div class="mt">
+            <h2>
+                新闻资讯
+            </h2>
+        </div>
+        <div class="mc">
+            <ul>
+                <li>
+                    <div>
+                        <a href="news.html?id=28516"><font class="skcolor_ljg"></font>婚酒干一杯 满199减100 </a>
+                    </div>
+                    <span>2016-04-14 17:38:41</span>
+                    <div class="line"></div>
+                </li>
+                <li>
+                    <div>
+                        <a href="news.html?id=28516"><font class="skcolor_ljg"></font>婚酒干一杯 满199减100 </a>
+                    </div>
+                    <span>2016-04-14 17:38:41</span>
+                    <div class="line"></div>
+                </li>
+                <li>
+                    <div>
+                        <a href="news.html?id=28516"><font class="skcolor_ljg"></font>婚酒干一杯 满199减100 </a>
+                    </div>
+                    <span>2016-04-14 17:38:41</span>
+                    <div class="line"></div>
+                </li>
+                <li>
+                    <div>
+                        <a href="news.html?id=28516"><font class="skcolor_ljg"></font>婚酒干一杯 满199减100 </a>
+                    </div>
+                    <span>2016-04-14 17:38:41</span>
+                    <div class="line"></div>
+                </li>
+
+                <li>
+                    <div>
+                        <a href="news.html?id=28516"><font class="skcolor_ljg"></font>婚酒干一杯 满199减100 </a>
+                    </div>
+                    <span>2016-04-14 17:38:41</span>
+                    <div class="line"></div>
+                </li>
+            </ul>
+        </div>
+
+
+
+
+    </div>
+    <div class="pagebar pagecenter cl" data-pages="675">
+        <ul class="pagination-media pagination pagination-md cl">
+            <li class="firstpage disabled"><a href="javascript:;" class="first" rel="nofollow">首页</a></li>
+            <li class="prevpage disabled"><a href="javascript:;" class="prev" rel="nofollow">上一页</a></li>
+            <li class="pagebox active"><span>1</span></li>
+            <li class="pagebox"><a href="feed/index/page/2.html">2</a></li>
+            <li class="pagebox"><a href="feed/index/page/3.html">3</a></li>
+            <li class="pagebox"><a href="feed/index/page/4.html">4</a></li>
+            <li class="pagebox"><a href="feed/index/page/5.html">5</a></li>
+            <li class="pagejumpbox">
+                <span class="pagejump">
+                    <label>
+                        <input type="text" name="custompage" size="3" title="输入页码，按回车快速跳转" value="1" data-hash="">
+                        <a href="feed/index/page/.html" class="pagejump_link hide"></a>
+                        <span title="共 675 页"> / 675 页</span>
+                    </label>
+                </span>
+            </li>
+            <li class="nextpage"><a href="feed/index/page/2.html" class="nxt">下一页</a></li>
+            <li class="lastpage"><a href="feed/index/page/675.html" class="last">尾页</a></li>
+        </ul>
+    </div>
+</div>
+
+
+
+<div class="space20"></div>
 @section  scripts{
 
     <script type="text/javascript">
@@ -16,12 +138,34 @@
 
             $.ajax(
                 {
-                    url: "@Url.Action("Get","")",
-                    data: {}
+                    url: "@Url.Action("GetNews")",
+                    data: { pageNum: 1, pageSize: 20 },
+                    dataType: "json",
+                    success: function (result) {
+                        var pageNum = result.pageNum;//当前页号从1开始计数
+                        var totalPageCount = result.pageCount;//总页数
+                        var totalRecordCount = result.recourdCount;//总记录数
+                        $("#news-wrap>.mc").find("ul").empty();//先清空现有数据
+                        for (var i = 0; i < result.data.length; i++) {
+                            var item = result.data[i];
+                            var newsID = item.ID;
+                            var newsTitle = item.NewsTitle;
+                            var newsDate = item.CreatedDate; 
+                            @{  <text>
+                            $("#news-wrap>.mc").find("ul").append("<li><div><a href='@Url.Action("Detail")" + "/" + newsID + "'><font class='skcolor_ljg'></font>" + newsTitle
+                            + "</a></div><span>" + newsDate + "</span> <div class='line'></div> </li>"); </text>
 
+                            }
 
+                        }
 
+                        if (totalPageCount < 2) {
+                            $(".pagebar").hide();//只有1页时隐藏
+                        } else {
+                            $(".pagebar").show();//有多页时显示页数 并控制该显示那些页数
+                        }
 
+                    }
                 });
 
 

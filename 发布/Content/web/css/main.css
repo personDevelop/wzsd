@@ -204,9 +204,29 @@ a:hover {
     -webkit-transform: rotate(180deg);
     -moz-transform: rotate(180deg);
 }
-
-
-
+#topnav .nav:hover  .ci-right {
+    transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    _top: 17px;
+}
+#topnav  .ci-right {
+    top: 20px;
+    right: 7px;
+    height: 7px;
+    overflow: hidden;
+    font: 700 20px/16px simsun;
+    color: #fff;
+    transition: transform .1s ease-in 0s;
+    -webkit-transition: -webkit-transform .1s ease-in 0s;
+    display: block;
+    position: absolute;
+}
+#topnav .nav:hover .dd {
+    display:block;
+}
+#topnav .dd {
+    display:none;
+}
 #top-banner {
     clear: both;
     width: 100%;

@@ -867,6 +867,87 @@ namespace EasyCms.Dal
             }
             return p;
         }
+
+
+        public ShopProductInfo GetWebEntity(string id, string sku,out string error)
+        {
+            error = string.Empty;
+            ShopProductInfo p = Dal.From<ShopProductInfo>()
+                .Join<ShopBrandInfo>(ShopProductInfo._.BrandId == ShopBrandInfo._.ID, JoinType.leftJoin)
+                .Select(ShopProductInfo._.ID, ShopProductInfo._.Code, ShopProductInfo._.Name, ShopProductInfo._.MarketPrice, ShopProductInfo._.SalePrice, ShopProductInfo._.SaleStatus
+                , ShopProductInfo._.Stock, ShopProductInfo._.Points, ShopProductInfo._.PCDescription, ShopProductInfo._.Weight
+               , ShopProductInfo._.SaleDate, ShopProductInfo._.Unit
+               , ShopProductInfo._.GoodCount, ShopProductInfo._.MiddleCount, ShopProductInfo._.BadCount, ShopProductInfo._.IsEnableSku
+               , ShopBrandInfo._.Name.Alias("BrandName"))
+                .Where(ShopProductInfo._.ID == id).ToFirst<ShopProductInfo>();
+            if (p==null )
+            {
+                error = "商品不存在";
+
+            }
+            else if (p.SaleStatus!=1)
+            {
+                error = "商品已下架";
+            }
+            else
+            {
+
+                //获取其图像
+                p.ImgPath = Dal.From<AttachFile>().Where(AttachFile._.RefID == p.ID).Select(AttachFile.GetFilePath("")).OrderBy(AttachFile._.OrderNo).ToSinglePropertyArray();
+                //获取其扩张属性
+                //获取其价格
+                if (p.IsEnableSku)
+                {
+                    p.ShopProductSKU = Dal.
+                     From<ShopProductSKU>().
+
+                     Join<ShopExtendInfo>(ShopProductSKU._.AttributeId == ShopExtendInfo._.ID)
+                     .Join<ShopExtendInfoValue>(ShopProductSKU._.ValueId == ShopExtendInfoValue._.ID)
+                     .Where(ShopProductSKU._.ProductId == id)
+                      .Select(
+                        ShopProductSKU._.ID.Alias("SKUID"),
+                        ShopProductSKU._.AttributeId,
+                       ShopExtendInfo._.Name.Alias("AttrName"),
+                       ShopExtendInfo._.UseAttrImg,
+                       ShopProductSKU._.ValueId,
+                       ShopExtendInfoValue._.ValueStr, ShopExtendInfoValue._.DisplaySequence).ToDataTable().ToList<ShopExtendAttr>();
+
+                    List<ShopProductSKUInfo> SKUInfolist = Dal.From<ShopProductSKUInfo>()
+                        .Select(ShopProductSKUInfo._.ID, ShopProductSKUInfo._.IsDefault, ShopProductSKUInfo._.Weight
+                        , ShopProductSKUInfo._.Stock, ShopProductSKUInfo._.MarketPrice, ShopProductSKUInfo._.SalePrice, ShopProductSKUInfo._.IsSale
+                         , ShopProductSKUInfo._.IsDefault).Where(ShopProductSKUInfo._.ProductId == id).List<ShopProductSKUInfo>();
+
+                    p.SKUInfolist = SKUInfolist;
+                    decimal maxPrice = SKUInfolist.Max(par => par.SalePrice);
+                    decimal minPrice = SKUInfolist.Min(par => par.SalePrice);
+                    if (maxPrice != minPrice)
+                    {
+                        p.SalePriceRange = string.Format("{0}-￥{1}", minPrice, maxPrice);
+                    }
+                    else
+                        p.SalePriceRange = maxPrice + string.Empty;
+                    maxPrice = SKUInfolist.Max(par => par.MarketPrice);
+                    minPrice = SKUInfolist.Min(par => par.MarketPrice);
+                    if (maxPrice != minPrice)
+                    {
+                        p.MarketPriceRange = string.Format("{0}-￥{1}", minPrice, maxPrice);
+                    }
+                    else
+                        p.MarketPriceRange = maxPrice + string.Empty;
+
+                }
+                else
+                {
+                    p.SalePriceRange =p.SalePrice + string.Empty;
+                    p.MarketPriceRange = p.MarketPrice + string.Empty;
+                    p.SKUInfolist = new List<ShopProductSKUInfo>();
+                    p.ShopProductSKU = new List<ShopExtendAttr>();
+                }
+                 
+                 
+            }
+            return p;
+        }
     }
 
 

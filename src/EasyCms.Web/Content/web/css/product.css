@@ -290,11 +290,8 @@ a.orange, .orange {
     float: left;
 }
 #choose .dt {
-    float: left;
-    width: 72px;
-   
-    display: inline;
-    
+    float: left; 
+    display: inline; 
     font-family: simsun;
 }
 #choose-suit .dt, #choose-type .dt, #choose-version .dt {

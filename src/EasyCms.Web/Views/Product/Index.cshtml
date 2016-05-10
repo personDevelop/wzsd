@@ -52,38 +52,24 @@
     <!--商品预览图-->
     <div id='preview'>
         <div id="spec-n1" class="jqzoom">
-            @{
-    ShopSaleProductInfo modelimgs = new ShopProductInfoBll().GetSaleEntity(Model.ID, "");
-    int ccc = 0;
-    foreach (DataRow row in modelimgs.dtImg.Rows)
-    {
-        if (ccc == 0)
-        {
-            <img data-img="1" jqsrc='@row["filepath"].ToString()' width="350" height="350" src=" @row["filepath"].ToString() " alt=" ">
-
-        }
-        ccc++;
-    }
-}
-            
+            @if (Model.ImgPath != null && Model.ImgPath.Length > 0)
+            {
+                <img data-img="1" jqsrc='@Model.ImgPath[0]' width="350" height="350" src="@Model.ImgPath[0]" />
+            } 
         </div>
         <div id="spec-list">
             <a href="javascript:;" class="spec-control" id="spec-forward"></a>
             <a href="javascript:;" class="spec-control" id="spec-backward"></a>
             <div class="spec-items" style="position: absolute;width: 310px;height: 54px;overflow: hidden;">
                 <ul class="lh" style="position: absolute;width: 999999px;">
-                    @{
-                        var imglistcount=0;
-                        foreach (DataRow row in modelimgs.dtImg.Rows)
-                        {
-                            var classname="";
-                            if (imglistcount == 0) {
-                                classname = "img-hover";
-                            }
-                            <li><img class="@classname" bimg="@row["filepath"].ToString()" src="@row["filepath"].ToString()" onmousemove="preview(this);"></li>
+                    @if (Model.ImgPath != null && Model.ImgPath.Length > 0)
+                    {
+                       
+                        foreach (var item in Model.ImgPath)
+                        { 
+                            <li><img   bimg="@item" src="@item" onmousemove="preview(this);"></li> 
                         }
-                    }
-                    
+                    }  
                 </ul>
             </div>
         </div>
@@ -106,10 +92,10 @@
                 </li>
                 <li id="priceLi">
                     红七价：
-                    <b class="price red2"><span class="f30" id="real_price">￥@Model.SalePrice</span></b>
+                    <b class="price red2"><span class="f30" id="real_price">￥@Model.SalePriceRange</span></b>
                 </li>
                 <li>
-                    市场价：<s id="data_marketPrice">￥@Model.MarketPrice</s>
+                    市场价：<s id="data_marketPrice">￥@Model.MarketPriceRange</s>
                 </li>
                 <li>
                     <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&amp;uin=1623591032&amp;site=qq&amp;menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=1:1623591032:7" alt="QQ客服红小七"></a>
@@ -120,7 +106,7 @@
                     <a class="favorite" onclick="favorite_add(this);" href="javascript:void(0)">收藏此商品</a>
                 </li>
 
-                <li>顾客评分：<span class="grade"><i style="width:70px;">@Model.CommentCount</i></span>(已有<text>@Model.CommentCount</text>人评价)</li>
+                <li>顾客评分： <div id="star" data-score="@Model.StarCount"/> (已有<text>@Model.CommentCount</text>人评价)</li>
 
                 <li>送积分：单件送<text>@Model.Points</text>分</li>
 
@@ -141,25 +127,31 @@
             </ul>
 
         </div>
-
-        <div id='choose' class="p-choose-wrap">
-            <div id="choose-version" class="li p-choose">
-                <div class="dt">选择尺码：</div>
-                <div class="dd">
-                    <div class="item disabled"><b style="display: none;"></b><a href="javascript:;" title="所选颜色该尺码商品在该地区无货">35</a></div>
-                    <div class="item disabled"><b style="display: none;"></b><a href="javascript:;" title="所选颜色该尺码商品在该地区无货">36</a></div>
-                    <div class="item disabled"><b style="display: none;"></b><a href="javascript:;" title="所选颜色该尺码商品在该地区无货">37</a></div>
-                    <div class="item disabled"><b style="display: none;"></b><a href="javascript:;" title="所选颜色该尺码商品在该地区无货">38</a></div>
-                    <div class="item  selected"><b></b><a href="javascript:;" title="39" clstag="shangpin|keycount|product|banben-39">39</a></div>
-                    <div class="item"><b></b><a href="javascript:;" title="40">40</a></div>
-                    <div class="item"><b></b><a href="javascript:;" title="41">41</a></div>
-                    <div class="item"><b></b><a href="javascript:;" title="42">42</a></div>
-                    <div class="item"><b></b><a href="javascript:;" title="43">43</a></div>
-                    <div class="item"><b></b><a href="javascript:;" title="44">44</a></div>
+        @{
+            IEnumerable<IGrouping<string, ShopExtendAttr>> query = Model.ShopProductSKU.GroupBy(pet => pet.AttributeId, pet => pet);
+            foreach (IGrouping<string, ShopExtendAttr> info in query)
+            {
+                List<ShopExtendAttr> sl = info.ToList<ShopExtendAttr>();//分组后的集合
+                <div id='choose' class="p-choose-wrap">
+                    <div id="choose-version" class="li p-choose">
+                        <div class="dt" val="@sl[0].AttributeId">@sl[0].AttrName：</div>
+                        <div class="dd"> 
+                            @foreach (var item in sl)
+                            {
+                                if (item.IsSelected)
+                                {
+                                    <div class="item  selected"><b></b><a href="javascript:;" title="@item.ValueStr" >@item.ValueStr</a></div>
+                                }
+                                else
+                                {  <div class="item"><b></b><a href="javascript:;" title="@item.ValueStr">@item.ValueStr</a></div>}
+                            }
+          
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-
+                
+            } 
+        } 
         <div id='choose-btns' style="clear: both;">
             <div class="choose-amount fl ">
                 <div class="wrap-input">
@@ -172,7 +164,7 @@
                 <a class="btn-append " id="InitCartUrl" href="javascript:void(0);">加入购物车<b></b></a>
             </div>
             <div class="btn buy">
-                <a class="btn-append " href="//cart.jd.com/gate.action?pid=11868341&amp;pcount=1&amp;ptype=1">立即购买<b></b></a>
+                <a class="btn-append " id="NowBuy" href="javascript:void(0);">立即购买<b></b></a>
             </div>
         </div>
     </div>
@@ -229,7 +221,7 @@
         </div>
 
         <div class="ui-switchable-panel" id='product-detail-1'>
-             @(new HtmlString(Model.PCDescription.Replace("\\\"", "\"").Replace("\\r\\n","")))
+             @(new HtmlString(Model.PCDescription.Replace("\\r\\n","")))
 
         </div>
         <div class="ui-switchable-panel" style="display: none;" id='product-detail-2'>
@@ -239,16 +231,21 @@
             3
         </div>
         <div class="ui-switchable-panel" style="display: none;" id='product-detail-4'>
-            4
+            @(new HtmlString(new HelpContentBll().GetContentByParaID(StaticValue.SaleServiceDescripbe)))
         </div>
         <div class="ui-switchable-panel" style="display: none;" id='product-detail-5'>
-            5
+            @(new HtmlString(new HelpContentBll().GetContentByParaID(StaticValue.PayTypeDescripbe)))
         </div>
     </div>
 </div>
 
 <script type="text/javascript">
     $(function () {
+        $('#star').raty({
+            score: function () {
+                return $(this).attr('data-score');
+            }
+        });
         $("#InitCartUrl").click(function () {
             var data = { buyType: 0, ActivityID:"",ProductId: "@Model.ID",SKU:"", Quantity: 1 };
             //删除数据库

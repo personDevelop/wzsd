@@ -19,8 +19,15 @@ namespace EasyCms.Web.Controllers
         /// <returns></returns>
         public ActionResult Index(string id,string other)
         {
-            ShopProductInfo p = new ShopProductInfoBll().GetEntity(id);
-            return View(p);
+            string error;
+            ShopProductInfo p = new ShopProductInfoBll().GetWebEntity(id, other, out   error);
+            if (string.IsNullOrWhiteSpace(error))
+            {
+                return View(p);
+
+            }
+
+            return View("NotFindSp",error);
         }
     }
 }

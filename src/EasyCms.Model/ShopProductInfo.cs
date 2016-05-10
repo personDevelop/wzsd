@@ -1221,6 +1221,34 @@ namespace EasyCms.Model
 
 
         [NotDbCol]
+        public string[] ImgPath { get; set; }
+        [NotDbCol]
+        public string SalePriceRange { get; set; }
+        [NotDbCol]
+        public string MarketPriceRange { get; set; }
+        /// <summary>
+        /// 顾客评分星级个数
+        /// 好评个数，中评个数，差评个数
+        /// </summary>
+        [NotDbCol]
+        public decimal  StarCount { get{
+
+                return 1;
+            }
+        }
+        [NotDbCol]
+        public List<ShopExtendAttr> ShopProductSKU
+        {
+            get;set;
+        }
+        [NotDbCol]
+        public List<ShopProductSKUInfo> SKUInfolist
+        {
+            get; set;
+        }
+        [NotDbCol]
+        public string DefaultSkuID { get; set; }
+        [NotDbCol]
         public string ThumbImgUrl { get; set; }
         protected override void OnCreate()
         {
@@ -1233,7 +1261,20 @@ namespace EasyCms.Model
         }
 
     }
+    public class ShopExtendAttr {
+        public string AttributeId { get; set; }
+        public string AttrName { get; set; }
 
+        public string ValueId { get; set; }
+
+        public string ValueStr { get; set; }
+
+        public int DisplaySequence { get; set; }
+
+        public bool UseAttrImg { get; set; }
+
+        public bool IsSelected { get; set; }
+    }
     /// <summary>
     /// 供接口使用，传递给前台
     /// </summary>
