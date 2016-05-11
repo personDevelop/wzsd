@@ -532,7 +532,7 @@
         function OnSelecting() {
             
             var state = $("#SaleStatus").val();
-            if (state == "1") {
+            if (state == "1" && $("#RecordStatus").val() != "add") {
                 ErrorMsg("已上架的商品不允许修改商品类型");
                 return false;
             }  
@@ -542,7 +542,7 @@
         function OnClearing() {
             
             var state = $("#SaleStatus").val();
-            if (state == "1") {
+            if (state == "1" && $("#RecordStatus").val() != "add") {
                 ErrorMsg("已上架的商品不允许修改商品类型");
                 return false;
             }

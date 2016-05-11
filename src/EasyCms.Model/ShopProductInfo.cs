@@ -1237,6 +1237,11 @@ namespace EasyCms.Model
             }
         }
         [NotDbCol]
+        public List<ShopProductAttributes> ShopProductAttr
+        {
+            get; set;
+        }
+        [NotDbCol]
         public List<ShopExtendAttr> ShopProductSKU
         {
             get;set;
@@ -1274,6 +1279,8 @@ namespace EasyCms.Model
         public bool UseAttrImg { get; set; }
 
         public bool IsSelected { get; set; }
+
+        public string SKUID { get; set; }
     }
     /// <summary>
     /// 供接口使用，传递给前台

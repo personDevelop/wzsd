@@ -155,5 +155,14 @@ namespace EasyCms.Model
     {
         [NotDbCol]
         public string ValueStr { get; set; }
+        [NotDbCol]
+        public string AttrName { get; set; }
+
+
+        [NotDbCol]
+        public string FilePath { get; set; }
+
+
+
     }
 }

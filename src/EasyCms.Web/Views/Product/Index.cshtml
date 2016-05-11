@@ -3,7 +3,7 @@
 @using EasyCms.Model
 @using System.Data;
 @{
-  ViewBag.Title = Model.Name+ EasyCms.CmsSessionExtend.WebSite.Name;
+    ViewBag.Title = Model.Name + EasyCms.CmsSessionExtend.WebSite.Name;
 
 
 }
@@ -15,7 +15,7 @@
           
             @{
                 //获取商品的分类路径
-                
+
                 List<ShopCategory> catLocaList = new ShopProductInfoBll().GetLocationCateogry(Model.ID);
                 for (int i = 0; i < catLocaList.Count; i++)
                 {
@@ -64,9 +64,9 @@
                 <ul class="lh" style="position: absolute;width: 999999px;">
                     @if (Model.ImgPath != null && Model.ImgPath.Length > 0)
                     {
-                       
+
                         foreach (var item in Model.ImgPath)
-                        { 
+                        {
                             <li><img   bimg="@item" src="@item" onmousemove="preview(this);"></li> 
                         }
                     }  
@@ -128,6 +128,7 @@
 
         </div>
         @{
+            
             IEnumerable<IGrouping<string, ShopExtendAttr>> query = Model.ShopProductSKU.GroupBy(pet => pet.AttributeId, pet => pet);
             foreach (IGrouping<string, ShopExtendAttr> info in query)
             {
@@ -137,20 +138,16 @@
                         <div class="dt" val="@sl[0].AttributeId">@sl[0].AttrName：</div>
                         <div class="dd"> 
                             @foreach (var item in sl)
-                            {
-                                if (item.IsSelected)
-                                {
-                                    <div class="item  selected"><b></b><a href="javascript:;" title="@item.ValueStr" >@item.ValueStr</a></div>
-                                }
-                                else
-                                {  <div class="item"><b></b><a href="javascript:;" title="@item.ValueStr">@item.ValueStr</a></div>}
+                            { 
+                                    <div class="item"><b></b><a href="javascript:;" title="@item.ValueStr" >@item.ValueStr</a></div>
+                                
                             }
           
                         </div>
                     </div>
                 </div>
-                
-            } 
+
+            }
         } 
         <div id='choose-btns' style="clear: both;">
             <div class="choose-amount fl ">
@@ -221,7 +218,7 @@
         </div>
 
         <div class="ui-switchable-panel" id='product-detail-1'>
-             @(new HtmlString(Model.PCDescription.Replace("\\r\\n","")))
+             @(new HtmlString(Model.PCDescription.Replace("\\r\\n", "")))
 
         </div>
         <div class="ui-switchable-panel" style="display: none;" id='product-detail-2'>
@@ -240,35 +237,40 @@
 </div>
 
 <script type="text/javascript">
+    var guigeInfo=@Html.Raw( JsonWithDataTable.Serialize(Model.ShopProductSKU)) 
+        ;
+    var sku=@Html.Raw( JsonWithDataTable.Serialize(Model.SKUInfolist))
+        ;
     $(function () {
         $('#star').raty({
-            score: function () {
-                return $(this).attr('data-score');
-            }
-        });
+                score: function () {
+                        return $(this).attr('data-score');
+                    }
+                });
+       
         $("#InitCartUrl").click(function () {
-            var data = { buyType: 0, ActivityID:"",ProductId: "@Model.ID",SKU:"", Quantity: 1 };
+                    var data = { buyType: 0, ActivityID:"",ProductId: "@Model.ID",SKU:"", Quantity: 1 };
             //删除数据库
             $.ajax({
 
                 url:"@Url.Action("Add", "Card")",
                 data: data,
                 dataType: "json",
-                success:function(result){ 
-                    if (result.IsSuccess) {
-                        alert("添加购物车成功")
-                    }else
-                    {
-                        alert(result.msg);
+                success:function(result){
+                        if (result.IsSuccess) {
+                            alert("添加购物车成功")
+                        }else
+                        {
+                            alert(result.msg);
+                        }
                     }
-                }
+
+
+                });
 
 
             });
-
-
         });
-    });
 
 
 </script>

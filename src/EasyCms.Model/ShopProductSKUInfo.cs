@@ -448,4 +448,11 @@ namespace EasyCms.Model
         #endregion
     }
 
+
+    public partial class ShopProductSKUInfo
+    {
+        [NotDbCol]
+        public string Valueids { get; set; }
+    }
+
 }

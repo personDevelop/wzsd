@@ -898,25 +898,58 @@ namespace EasyCms.Dal
                 //获取其价格
                 if (p.IsEnableSku)
                 {
+                    p.ShopProductAttr = Dal.From<ShopProductAttributes>().Join<ShopExtendInfo>(ShopExtendInfo._.ID == ShopProductAttributes._.AttributeId)
+                           .Join<ShopExtendInfoValue>(ShopProductAttributes._.ValueId == ShopExtendInfoValue._.ID&& ShopProductAttributes._.ProductId==id)
+                           .Join<AttachFile>(!ShopExtendInfoValue._.ImageID.IsNullOrEmpty() &&AttachFile._.RefID== ShopExtendInfoValue._.ImageID, JoinType.leftJoin)
+                           .Select(ShopProductAttributes._.ID.All,ShopExtendInfo._.Name.Alias("AttrName"),
+                           AttachFile.GetThumbnaifilePath(""), ShopExtendInfoValue._.ValueStr 
+                           ).List<ShopProductAttributes>();
                     p.ShopProductSKU = Dal.
                      From<ShopProductSKU>().
 
                      Join<ShopExtendInfo>(ShopProductSKU._.AttributeId == ShopExtendInfo._.ID)
-                     .Join<ShopExtendInfoValue>(ShopProductSKU._.ValueId == ShopExtendInfoValue._.ID)
+                     .Join<ShopExtendInfoValue>(ShopExtendInfoValue._.AttributeId == ShopExtendInfo._.ID&& ShopProductSKU._.ValueId== ShopExtendInfoValue._.ID)
                      .Where(ShopProductSKU._.ProductId == id)
                       .Select(
-                        ShopProductSKU._.ID.Alias("SKUID"),
-                        ShopProductSKU._.AttributeId,
+                        //ShopProductSKU._.ID.Alias("SKUID"),
+                        ShopExtendInfo._.ID.Alias("AttributeId"),
                        ShopExtendInfo._.Name.Alias("AttrName"),
                        ShopExtendInfo._.UseAttrImg,
-                       ShopProductSKU._.ValueId,
-                       ShopExtendInfoValue._.ValueStr, ShopExtendInfoValue._.DisplaySequence).ToDataTable().ToList<ShopExtendAttr>();
+                       ShopProductSKU._.ValueId, ShopExtendInfo._.DisplayOrder,
+                       ShopExtendInfoValue._.ValueStr, ShopExtendInfoValue._.DisplaySequence)
+                       .OrderBy(ShopExtendInfo._.DisplayOrder,ShopExtendInfo._.ID)
+                       .Distinct().ToDataTable().ToList<ShopExtendAttr>();
 
                     List<ShopProductSKUInfo> SKUInfolist = Dal.From<ShopProductSKUInfo>()
-                        .Select(ShopProductSKUInfo._.ID, ShopProductSKUInfo._.IsDefault, ShopProductSKUInfo._.Weight
-                        , ShopProductSKUInfo._.Stock, ShopProductSKUInfo._.MarketPrice, ShopProductSKUInfo._.SalePrice, ShopProductSKUInfo._.IsSale
-                         , ShopProductSKUInfo._.IsDefault).Where(ShopProductSKUInfo._.ProductId == id).List<ShopProductSKUInfo>();
+                        .Select(ShopProductSKUInfo._.ID, ShopProductSKUInfo._.IsDefault,
+                        ShopProductSKUInfo._.Weight, ShopProductSKUInfo._.SKURelationID
+                        , ShopProductSKUInfo._.Stock, ShopProductSKUInfo._.MarketPrice,
+                        ShopProductSKUInfo._.SalePrice, ShopProductSKUInfo._.IsSale
+                         ).Where(ShopProductSKUInfo._.ProductId == id).List<ShopProductSKUInfo>();
+                    
+                   List< ShopExtendAttr> valueList=      Dal.
+                     From<ShopProductSKU>().
 
+                     Join<ShopExtendInfo>(ShopProductSKU._.AttributeId == ShopExtendInfo._.ID)
+                     .Join<ShopExtendInfoValue>(ShopExtendInfoValue._.AttributeId == ShopExtendInfo._.ID && 
+                     ShopProductSKU._.ValueId == ShopExtendInfoValue._.ID)
+                     .Where(ShopProductSKU._.ProductId == id)
+                      .Select(
+                         ShopProductSKU._.ID.Alias("SKUID"),
+                        ShopProductSKU._.AttributeId, 
+                       ShopProductSKU._.ValueId )
+                       .OrderBy(ShopExtendInfo._.DisplayOrder, ShopExtendInfo._.ID)
+                      .ToDataTable().ToList<ShopExtendAttr>();
+                    foreach (var item in SKUInfolist)
+                    {
+                        IEnumerable<ShopExtendAttr> attlist = valueList.Where(pp => pp.SKUID == item.SKURelationID);
+                        string tem = string.Empty;
+                        foreach (var dd in attlist)
+                        {
+                            tem += dd.ValueId + ";";
+                        }
+                        item.Valueids = tem;
+                    }
                     p.SKUInfolist = SKUInfolist;
                     decimal maxPrice = SKUInfolist.Max(par => par.SalePrice);
                     decimal minPrice = SKUInfolist.Min(par => par.SalePrice);
