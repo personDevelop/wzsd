@@ -1,5 +1,6 @@
 ﻿
 var DialogCtrl = {
+    closeBtn:null,
     init: function (opts) {
         this.initconfig(opts);
         var mask = $("<div id='hui-overlay-mask'></div>");
@@ -8,6 +9,7 @@ var DialogCtrl = {
         mask.width(obj.x);
         var contenthtmlarr = [];
         var $closebtn = $("<a class='hui-dialog-close' title='关闭'><span class='hui-icon hui-icon-delete'></span></a>");
+        this.closeBtn = $closebtn;
         contenthtmlarr.push("<div class='hui-dialog' style='width:" + this.opts.width + "px'>");
         contenthtmlarr.push("<div class='hui-dialog-title'><span>" + this.opts.title + "</span></div>");
         contenthtmlarr.push("<div class='hui-dialog-content' style='height:" + this.opts.height + "px;padding: 10px;background: #fff;overflow: hidden;'>");
@@ -25,10 +27,10 @@ var DialogCtrl = {
         });
         this.setPosition(content);
     },
-    showLogin: function () {
+    showFormurl: function (url) {
         this.init({
             "type": "url",
-            "url": "loginbox",
+            "url": url,
             "height": 400
         });
     },
@@ -46,7 +48,6 @@ var DialogCtrl = {
             var iconclass = this.opts.infotype == "success" ? "success-icon" : "warn-icon";
             var iconthtml = "<div class='info'><span class='" + iconclass + " m-icon'></span><div class='infomes'>" + this.opts.info + "</div></div>";
             html.push(iconthtml);
-            //var mes = info = "";
         }
         return html.join("");
     },
@@ -93,6 +94,7 @@ var DialogCtrl = {
             y: h
         };
     },
+    closeDialog: function () { this.closeBtn.click(); },
     bindEvent: function () {
     }
 };
@@ -100,25 +102,25 @@ $(function () {
 
 });
 
-function openlogin() {
-    //DialogCtrl.init({
-    //    "type": "url",
-    //    "url": "loginbox",
-    //    "height": 400
-    //});
+function showFormurl(url) {
 
-    DialogCtrl.showLogin();
+    DialogCtrl.showFormurl(url);
+}
+function closeDialog(callback) {
+
+    DialogCtrl.closeDialog();
+    if (callback && $.isFunction(callback)) {
+        callback();
+    }
+
+}
+function openTips(msg) {
+
+    DialogCtrl.showSuccess(msg);
 }
 
-function openTips() {
-    //DialogCtrl.init({ "mes": "请选中一个商品" });
+function openTipsWrong(msg) {
 
-    DialogCtrl.showSuccess("去死吧");
-}
-
-function openTipsWrong() {
-    //DialogCtrl.init({ "mes": "请选中一个商品" });
-
-    DialogCtrl.showError("去死吧");
+    DialogCtrl.showError(msg);
 }
 

@@ -41,20 +41,24 @@ namespace EasyCms.Web.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult Login(LoginModel model, string returnUrl)
+        public ActionResult Login(LoginModel model, string returnUrl, bool isJson = false)
         {
+            string jsonerror = string.Empty;
             if (model.VaryCode.ToLower() != Session["ValidateCode"].ToString().ToLower())
             {
+                jsonerror = "验证码不正确.";
                 ModelState.AddModelError("", "验证码不正确.");
             }
             if (string.IsNullOrWhiteSpace(model.Account))
             {
                 ModelState.AddModelError("UserNo", "请输入登录账号.");
+                jsonerror += "<br/>请输入登录账号.";
             }
 
             if (string.IsNullOrWhiteSpace(model.Pwd))
             {
                 ModelState.AddModelError("Password", "请输入密码.");
+                jsonerror += "<br/>请输入密码.";
             }
 
             if (ModelState.IsValid)
@@ -67,25 +71,42 @@ namespace EasyCms.Web.Controllers
                     //SignInAsync(user, model.RememberMe);
                     AccountRange role = bll.GetAccountRange(user.ID);
                     EasyCms.Session.CmsSession.AddUser(user, role);
-                    if (!string.IsNullOrWhiteSpace(returnUrl))
+                    if (!isJson)
                     {
-                        return Redirect(returnUrl);
-                    }
-                    else
-                    {
-                        return RedirectToAction("", "default");
 
+                        if (!string.IsNullOrWhiteSpace(returnUrl))
+                        {
+                            return Redirect(returnUrl);
+                        }
+                        else
+                        {
+                            return RedirectToAction("", "default");
+
+                        }
                     }
                 }
                 else
                 {
+                    jsonerror += "<br/>"+ error;
                     ModelState.AddModelError("", error);
                 }
             }
 
             // 如果我们进行到这一步时某个地方出错，则重新显示表单
-
-            return View(model);
+            if (isJson)
+            {
+                if (ModelState.IsValid)
+                { 
+                    return Json(new { result = true, Msg = jsonerror });
+                }
+                else
+                {
+                    return Json( new { result = false, Msg = jsonerror });
+                    
+                }
+            }
+            else
+                return View(model);
         }
 
         public ActionResult LogOut(string returnUrl)
@@ -138,9 +159,9 @@ namespace EasyCms.Web.Controllers
                 }
                 else
                     if (!bll.CheckRepeat(model.Email, false))
-                    {
-                        ModelState.AddModelError("Email", "当前邮箱已被注册.");
-                    }
+                {
+                    ModelState.AddModelError("Email", "当前邮箱已被注册.");
+                }
             }
             if (string.IsNullOrWhiteSpace(model.UserNo))
             {
@@ -206,7 +227,7 @@ namespace EasyCms.Web.Controllers
         /// <returns></returns>
         public JsonResult GetUserIsLogin()
         {
-           string userid= CmsSession.GetUserID();
+            string userid = CmsSession.GetUserID();
             if (string.IsNullOrWhiteSpace(userid))
             {
                 return new JsonResult()

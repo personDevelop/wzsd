@@ -13,6 +13,8 @@
     @Styles.Render("~/bundles/webcss")
     @Styles.Render("~/bundles/logincss")
     @Scripts.Render("~/bundles/onlyjquery")
+    @Scripts.Render("~/bundles/jqueryAjax")
+    @Scripts.Render("~/bundles/account")
 </head>
 <head>
     <meta name="viewport" content="width=device-width" />
@@ -34,17 +36,14 @@
                 </div>
                 <div class="mc">
                     <div class="form">
-                        @if (ViewBag.Msg != null && ViewBag.Msg == "1")
-                        {
-                            <span class="error">注册成功，请登录系统</span>
 
-                        }
-
-                        @using (Html.BeginForm("Login", "Account", new { ReturnUrl = "" }, FormMethod.Post, new { id = "formlogin" }))
+                        @using (Ajax.BeginForm("Login", "Account", new AjaxOptions() {  AllowCache = false, OnSuccess = "OnSuccess", OnFailure = "OnFail" }, new { id = "formlogin" }))
                         {
                             @Html.AntiForgeryToken()
+
                             <div class="item item-fore1">
                                 <label for="loginname" class="login-label name-label"></label>
+                                @Html.Hidden("isJson", true)
                                 @Html.TextBoxFor(Model => Model.Account, new { @class = "itxt", tabindex = "1", autocomplete = "off", placeholder = "请输入邮箱/用户名/已验证手机" })
                                 @Html.ValidationMessageFor(Model => Model.Account)
                                 <span class="clear-btn" style="display: inline;"></span>
@@ -91,6 +90,29 @@
 
     </div>
     <script type="text/javascript">
+        function OnSuccess(result) {
+
+            if (!result.result) {
+                $(".msg-error").html("<b></b>" + result.Msg);
+                $(".msg-error").show();
+                $(".msg-warn").hide();
+                return false;
+            }
+            closeDialog();
+            alert(result);
+        }
+        function OnFail(result) {
+
+            if (result) {
+                $(".msg-error").html("<b></b>" + result);
+                $(".msg-error").show();
+                $(".msg-warn").hide();
+                return false;
+            }  
+
+            
+        }
+
         $(function () {
             if ($(".msg-error").text() && $.trim($(".msg-error").text()) != ">") {
                 $(".msg-error").html("<b></b>" + $(".msg-error").text());
