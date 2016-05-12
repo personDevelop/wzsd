@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Sharp.Common;
+using EasyCms.Model.ViewModel;
 
 namespace EasyCms.Business
 {
@@ -179,7 +180,11 @@ namespace EasyCms.Business
 
         public ShopProductInfo GetWebEntity(string id, string sku, out string error)
         { return Dal.GetWebEntity(id,   sku, out   error); }
+        public List<ListProduct> GetStationProductByProductID(StationMode station, string productID)
+        {
+            return Dal.GetStationProductByProductID(  station, productID);
+        }
 
-
+        
     }
 }

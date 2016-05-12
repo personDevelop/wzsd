@@ -852,7 +852,6 @@
     <Content Include="Areas\Admin\Views\SendMsgInfo\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ShopProductInfo\SelectProduct.cshtml" />
     <Content Include="Areas\Admin\Views\ManagerUserInfo\SearchAccount.cshtml" />
-    <Content Include="App_Code\HelperSmart.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_Loading.cshtml" />
     <Content Include="Areas\Admin\Views\SysMsgInterSet\ViewLog.cshtml" />
     <Content Include="Scripts\jquery.cookie.js" />
@@ -919,6 +918,7 @@
     <Content Include="Areas\Admin\Views\AdPositon\Index.cshtml" />
     <Content Include="Areas\Admin\Views\AdManage\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\AdManage\Index.cshtml" />
+    <Content Include="App_Code\FunctionExtend.cshtml" />
     <None Include="Properties\PublishProfiles\publish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\EshopAdminControl.js" />

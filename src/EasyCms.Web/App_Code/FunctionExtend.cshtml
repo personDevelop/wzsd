@@ -1,0 +1,16 @@
+﻿@using System.Web.Mvc
+@using System.Web.Mvc.Html
+@using MVCExtention
+@using EasyCms.Business
+@using  EasyCms.Model
+@functions {
+    public static IHtmlString HotProduct(StationMode station,string productID =null)
+    {
+        EasyCms.Model.ViewModel.RecomandModel rm = new EasyCms.Model.ViewModel.RecomandModel() { Title = "热门推荐" };
+
+        rm.DataList=   new ShopProductInfoBll().GetStationProductByProductID(station, productID);
+
+        return MVCExtention.ExtendHtmlInput.MvcHelper.Partial("_RecomendShop", rm);
+    }
+}
+

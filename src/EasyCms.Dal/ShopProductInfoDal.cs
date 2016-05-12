@@ -7,6 +7,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EasyCms.Model.ViewModel;
 
 namespace EasyCms.Dal
 {
@@ -122,7 +123,7 @@ namespace EasyCms.Dal
             ShopProductInfo p = Dal.From<ShopProductInfo>().Where(ShopProductInfo._.ID == productId)
                 .Join<AttachFile>(AttachFile._.RefID == ShopProductInfo._.ID && AttachFile._.OrderNo == 0, JoinType.leftJoin)
 
-                .Select(ShopProductInfo._.ID, ShopProductInfo._.SaleStatus ,ShopProductInfo._.Stock,   ShopProductInfo._.SalePrice, ShopProductInfo._.Name, AttachFile.GetThumbnaifilePath("", "ThumbImgUrl")).ToFirst<ShopProductInfo>();
+                .Select(ShopProductInfo._.ID, ShopProductInfo._.SaleStatus, ShopProductInfo._.Stock, ShopProductInfo._.SalePrice, ShopProductInfo._.Name, AttachFile.GetThumbnaifilePath("", "ThumbImgUrl")).ToFirst<ShopProductInfo>();
             sc.ProductId = productId;
             sc.ThumbImgUrl = p.ThumbImgUrl;
             sc.Stock = p.Stock;
@@ -148,9 +149,9 @@ namespace EasyCms.Dal
             QuerySection qry = Dal.From<ShopProductInfo>();
             if (!string.IsNullOrWhiteSpace(categoryID))
             {
-                
+
                 string[] classcode = new ShopCategoryDal().GetClassCode(categoryID);
-                where = where&& ShopProductCategory._.CategoryID.In(classcode);
+                where = where && ShopProductCategory._.CategoryID.In(classcode);
                 qry.Join<ShopProductCategory>(ShopProductInfo._.ID == ShopProductCategory._.ProductID);
             }
             int pageCount = 0;
@@ -170,19 +171,73 @@ namespace EasyCms.Dal
                 .ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
         }
 
+        public List<ListProduct> GetStationProductByProductID(StationMode station, string productID, int top = 5)
+        {
+            List<ListProduct> result = new List<ListProduct>();
+            DataTable dt = null;
+            WhereClip where = ShopProductStationMode._.StationMode == (int)station;
+            if (!string.IsNullOrWhiteSpace(productID))
+            {
+                //获取其分类
+                string classcode = Dal.From<ShopCategory>().Join<ShopProductCategory>(ShopCategory._.ID == ShopProductCategory._.CategoryID &&
+                     ShopProductCategory._.ProductID == productID).Select(ShopCategory._.ClassCode).ToScalar() as string;
+                if (!string.IsNullOrWhiteSpace(classcode))
+                {
+                    string[] cateotryID = Dal.From<ShopCategory>().Where(ShopCategory._.ClassCode.StartsWith(classcode)).Select(ShopCategory._.ID)
+                        .ToSinglePropertyArray();
+                    dt = Dal.From<ShopProductStationMode>().Join<ShopProductInfo>(ShopProductStationMode._.ProductID == ShopProductInfo._.ID)
+                            .Join<ShopProductCategory>(ShopProductCategory._.ProductID == productID)
+                            .Join<AttachFile>(AttachFile._.RefID == ShopProductInfo._.ID && AttachFile._.OrderNo == 0)
+                        .Where(ShopProductStationMode._.StationMode == (int)station && ShopProductCategory._.CategoryID.In(cateotryID))
+                        .Select(ShopProductInfo._.ID, ShopProductInfo._.Name, ShopProductInfo._.SalePrice,
+                       AttachFile.GetFilePath(""))
+                       .Distinct()
+                        .ToDataTable(top);
+                    result = dt.ToList<ListProduct>();
+                }
+            }
+            int hasCount = 0;
+            if (dt != null)
+            {
+                hasCount = dt.Rows.Count;
+            }
+            int sycount = top - hasCount;
+            if (sycount > 0)
+            {
+                if (result.Count > 0)
+                {
+                    where = where && !ShopProductInfo._.ID.In(result.Select(p => p.ID));
+                }
+                DataTable dt1 = Dal.From<ShopProductStationMode>().Join<ShopProductInfo>(ShopProductStationMode._.ProductID == ShopProductInfo._.ID)
+
+                           .Join<AttachFile>(AttachFile._.RefID == ShopProductInfo._.ID && AttachFile._.OrderNo == 0)
+                       .Where(where)
+                       .Select(ShopProductInfo._.ID, ShopProductInfo._.Name, ShopProductInfo._.SalePrice,
+                      AttachFile.GetFilePath(""))
+                      .Distinct()
+                       .ToDataTable(sycount);
+                if (dt1 != null && dt1.Rows.Count > 0)
+                {
+                    result.AddRange(dt1.ToList<ListProduct>());
+                }
+            }
+            return result;
+
+        }
+
         public List<ShopCategory> GetLocationCateogry(string productID)
         {
-           string categoryID= Dal.From<ShopProductCategory>().Where(ShopProductCategory._.ProductID == productID).Select(ShopProductCategory._.CategoryID).ToScalar() as string;
-           string classcode=Dal.From<ShopCategory>().Where(ShopCategory._.ID == categoryID).Select(ShopCategory._.ClassCode).ToScalar() as string;
+            string categoryID = Dal.From<ShopProductCategory>().Where(ShopProductCategory._.ProductID == productID).Select(ShopProductCategory._.CategoryID).ToScalar() as string;
+            string classcode = Dal.From<ShopCategory>().Where(ShopCategory._.ID == categoryID).Select(ShopCategory._.ClassCode).ToScalar() as string;
             string[] classcodeArray = classcode.Split(';');
-       return      Dal.From<ShopCategory>().Where(ShopCategory._.ID.In(classcodeArray)).OrderBy(ShopCategory._.Depth).List<ShopCategory>();
+            return Dal.From<ShopCategory>().Where(ShopCategory._.ID.In(classcodeArray)).OrderBy(ShopCategory._.Depth).List<ShopCategory>();
         }
 
         public DataTable GetRelationList(string productID, bool IsHasRelation, string categoryID, string Name, int pagenum, int pagesize, ref int recordCount)
         {
             QuerySection qry = Dal.From<ShopProductInfo>();
 
-            WhereClip where = ShopProductInfo._.ID!=productID&& ShopProductInfo._.Name.Contains(Name) || ShopProductInfo._.Code.Contains(Name);
+            WhereClip where = ShopProductInfo._.ID != productID && ShopProductInfo._.Name.Contains(Name) || ShopProductInfo._.Code.Contains(Name);
             string isNotStr = " not ";
             if (IsHasRelation) isNotStr = string.Empty;
             where = where && new WhereClip(string.Format(" {1} exists(SELECT 1 FROM ShopRalationProduct WHERE ProductID='{0}' AND RlationProductID=ShopProductInfo.ID)", productID, isNotStr));
@@ -217,7 +272,7 @@ namespace EasyCms.Dal
             string[] ralationProductID = RlationProductIDs.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var item in ralationProductID)
             {
-                ShopRalationProduct pdelete = new ShopRalationProduct() {  RecordStatus= StatusType.delete,Where= ShopRalationProduct ._.ProductID==productID&& ShopRalationProduct._.RlationProductID==item  };
+                ShopRalationProduct pdelete = new ShopRalationProduct() { RecordStatus = StatusType.delete, Where = ShopRalationProduct._.ProductID == productID && ShopRalationProduct._.RlationProductID == item };
                 ShopRalationProduct p = new ShopRalationProduct() { ID = Guid.NewGuid().ToString(), ProductID = productID, RlationProductID = item };
                 list.Add(pdelete);
                 list.Add(p);
@@ -227,32 +282,35 @@ namespace EasyCms.Dal
                     list.Add(p1delete);
                     ShopRalationProduct p1 = new ShopRalationProduct() { ID = Guid.NewGuid().ToString(), ProductID = item, RlationProductID = productID };
                     list.Add(p1);
-                } 
+                }
             }
             Dal.Submit(list);
             return string.Empty;
         }
 
-        public string RemoveRelation(string productID, string RlationProductIDs )
+        public string RemoveRelation(string productID, string RlationProductIDs)
         {
             string[] ralationProductID = RlationProductIDs.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-            ShopRalationProduct deletera = new ShopRalationProduct() { RecordStatus= StatusType.delete,
-             Where= ShopRalationProduct._.ProductID==productID&& ShopRalationProduct._.RlationProductID.In(ralationProductID)}; 
+            ShopRalationProduct deletera = new ShopRalationProduct()
+            {
+                RecordStatus = StatusType.delete,
+                Where = ShopRalationProduct._.ProductID == productID && ShopRalationProduct._.RlationProductID.In(ralationProductID)
+            };
             Dal.Submit(deletera);
             return string.Empty;
         }
 
         public ShopProductInfo GetEntity(string id)
         {
-            ShopProductInfo p = Dal.From<ShopProductInfo>( )
+            ShopProductInfo p = Dal.From<ShopProductInfo>()
                  .Join<ShopBrandInfo>(ShopProductInfo._.BrandId == ShopBrandInfo._.ID, JoinType.leftJoin)
                    .Join<ShopProductType>(ShopProductInfo._.TypeId == ShopProductType._.ID, JoinType.leftJoin)
-                   .Select(ShopProductInfo._.ID.All,ShopBrandInfo._.Name.Alias("BrandName"), ShopProductType._.Name.Alias("TypeName"))
-                   .Where(ShopProductInfo._.ID==id)
+                   .Select(ShopProductInfo._.ID.All, ShopBrandInfo._.Name.Alias("BrandName"), ShopProductType._.Name.Alias("TypeName"))
+                   .Where(ShopProductInfo._.ID == id)
                    .ToFirst<ShopProductInfo>();
             List<ShopCategory> list = Dal.From<ShopCategory>().
                 Join<ShopProductCategory>(ShopCategory._.ID == ShopProductCategory._.CategoryID && ShopProductCategory._.ProductID == p.ID)
-               
+
                    .Select(ShopCategory._.ID, ShopCategory._.Name).List<ShopCategory>();
             foreach (ShopCategory item in list)
             {
@@ -319,7 +377,7 @@ namespace EasyCms.Dal
             DataSet ds =
               Dal.From<ShopExtendInfo>().Join<ShopExtendInfoValue>(ShopExtendInfo._.ID == ShopExtendInfoValue._.AttributeId, JoinType.leftJoin)
                 .Join<ShopProductSKU>(ShopExtendInfoValue._.ID == ShopProductSKU._.ValueId && ShopProductSKU._.ProductId == productID, JoinType.leftJoin)
-             .Select(ShopExtendInfo._.ID,ShopExtendInfo._.CategoryID, ShopExtendInfo._.DisplayOrder, ShopExtendInfo._.FullName, ShopExtendInfo._.Name, ShopExtendInfo._.ShowType, ShopExtendInfo._.UnitText, ShopExtendInfo._.UsageMode, ShopExtendInfo._.UseAttrImg, ShopExtendInfo._.UseDefineImg,
+             .Select(ShopExtendInfo._.ID, ShopExtendInfo._.CategoryID, ShopExtendInfo._.DisplayOrder, ShopExtendInfo._.FullName, ShopExtendInfo._.Name, ShopExtendInfo._.ShowType, ShopExtendInfo._.UnitText, ShopExtendInfo._.UsageMode, ShopExtendInfo._.UseAttrImg, ShopExtendInfo._.UseDefineImg,
               ShopExtendInfoValue._.ID.Alias("ExtendInfoValueID"), ShopExtendInfoValue._.ValueStr, ShopExtendInfoValue._.DisplaySequence, ShopExtendInfoValue._.ImageID, ShopExtendInfoValue._.Note,
                new ExpressionClip(" case when ShopProductSKU.ID is null then 0 else 1 end HasValue"))
                .Join<ShopExtendAndType>(ShopExtendInfo._.ID == ShopExtendAndType._.ExtendID)
@@ -542,13 +600,13 @@ namespace EasyCms.Dal
         {
             return
                Dal.From<ShopProductInfo>().Join<ShopProductStationMode>(ShopProductInfo._.ID == ShopProductStationMode._.ProductID)
-               .Join<ShopProductCategory>(ShopProductInfo._.ID== ShopProductCategory._.ProductID)
+               .Join<ShopProductCategory>(ShopProductInfo._.ID == ShopProductCategory._.ProductID)
                .Join<AttachFile>(AttachFile._.RefID == ShopProductInfo._.ID && AttachFile._.OrderNo == 1)
                .Where(ShopProductStationMode._.StationMode == (int)stationMode && ShopProductCategory._.CategoryID.In(getCategorys(cateogryid)))
                .Distinct()
                .Select(ShopProductStationMode._.ID.Alias("StationID"),
 
-               ShopProductInfo._.ID, ShopProductStationMode._.OrderNo, ShopProductInfo._.Code, 
+               ShopProductInfo._.ID, ShopProductStationMode._.OrderNo, ShopProductInfo._.Code,
                ShopProductInfo._.Name, ShopProductInfo._.SalePrice, ShopProductInfo._.MarketPrice, AttachFile.GetCompressionfilePath(host))
                .OrderBy(ShopProductStationMode._.OrderNo.Desc)
                .ToDataTable(pageSize, pageIndex, ref pagecount, ref recordCount);
@@ -869,7 +927,7 @@ namespace EasyCms.Dal
         }
 
 
-        public ShopProductInfo GetWebEntity(string id, string sku,out string error)
+        public ShopProductInfo GetWebEntity(string id, string sku, out string error)
         {
             error = string.Empty;
             ShopProductInfo p = Dal.From<ShopProductInfo>()
@@ -880,12 +938,12 @@ namespace EasyCms.Dal
                , ShopProductInfo._.GoodCount, ShopProductInfo._.MiddleCount, ShopProductInfo._.BadCount, ShopProductInfo._.IsEnableSku
                , ShopBrandInfo._.Name.Alias("BrandName"))
                 .Where(ShopProductInfo._.ID == id).ToFirst<ShopProductInfo>();
-            if (p==null )
+            if (p == null)
             {
                 error = "商品不存在";
 
             }
-            else if (p.SaleStatus!=1)
+            else if (p.SaleStatus != 1)
             {
                 error = "商品已下架";
             }
@@ -899,16 +957,17 @@ namespace EasyCms.Dal
                 if (p.IsEnableSku)
                 {
                     p.ShopProductAttr = Dal.From<ShopProductAttributes>().Join<ShopExtendInfo>(ShopExtendInfo._.ID == ShopProductAttributes._.AttributeId)
-                           .Join<ShopExtendInfoValue>(ShopProductAttributes._.ValueId == ShopExtendInfoValue._.ID&& ShopProductAttributes._.ProductId==id)
-                           .Join<AttachFile>(!ShopExtendInfoValue._.ImageID.IsNullOrEmpty() &&AttachFile._.RefID== ShopExtendInfoValue._.ImageID, JoinType.leftJoin)
-                           .Select(ShopProductAttributes._.ID.All,ShopExtendInfo._.Name.Alias("AttrName"),
-                           AttachFile.GetThumbnaifilePath(""), ShopExtendInfoValue._.ValueStr 
+                           .Join<ShopExtendInfoValue>(ShopProductAttributes._.ValueId == ShopExtendInfoValue._.ID && ShopProductAttributes._.ProductId == id)
+                           .Join<AttachFile>(!ShopExtendInfoValue._.ImageID.IsNullOrEmpty() && AttachFile._.RefID == ShopExtendInfoValue._.ImageID, JoinType.leftJoin)
+                           .Select(ShopProductAttributes._.ID.All, ShopExtendInfo._.Name.Alias("AttrName"),
+                           AttachFile.GetThumbnaifilePath(""), ShopExtendInfoValue._.ValueStr
                            ).List<ShopProductAttributes>();
                     p.ShopProductSKU = Dal.
                      From<ShopProductSKU>().
 
                      Join<ShopExtendInfo>(ShopProductSKU._.AttributeId == ShopExtendInfo._.ID)
-                     .Join<ShopExtendInfoValue>(ShopExtendInfoValue._.AttributeId == ShopExtendInfo._.ID&& ShopProductSKU._.ValueId== ShopExtendInfoValue._.ID)
+                     .Join<ShopExtendInfoValue>(ShopExtendInfoValue._.AttributeId == ShopExtendInfo._.ID && ShopProductSKU._.ValueId == ShopExtendInfoValue._.ID)
+                    .Join<AttachFile>(!ShopExtendInfoValue._.ImageID.IsNullOrEmpty() && AttachFile._.RefID == ShopExtendInfoValue._.ImageID, JoinType.leftJoin)
                      .Where(ShopProductSKU._.ProductId == id)
                       .Select(
                         //ShopProductSKU._.ID.Alias("SKUID"),
@@ -916,8 +975,9 @@ namespace EasyCms.Dal
                        ShopExtendInfo._.Name.Alias("AttrName"),
                        ShopExtendInfo._.UseAttrImg,
                        ShopProductSKU._.ValueId, ShopExtendInfo._.DisplayOrder,
+                   AttachFile.GetThumbnaifilePath(""),
                        ShopExtendInfoValue._.ValueStr, ShopExtendInfoValue._.DisplaySequence)
-                       .OrderBy(ShopExtendInfo._.DisplayOrder,ShopExtendInfo._.ID)
+                       .OrderBy(ShopExtendInfo._.DisplayOrder, ShopExtendInfo._.ID, ShopExtendInfoValue._.DisplaySequence)
                        .Distinct().ToDataTable().ToList<ShopExtendAttr>();
 
                     List<ShopProductSKUInfo> SKUInfolist = Dal.From<ShopProductSKUInfo>()
@@ -926,22 +986,27 @@ namespace EasyCms.Dal
                         , ShopProductSKUInfo._.Stock, ShopProductSKUInfo._.MarketPrice,
                         ShopProductSKUInfo._.SalePrice, ShopProductSKUInfo._.IsSale
                          ).Where(ShopProductSKUInfo._.ProductId == id).List<ShopProductSKUInfo>();
-                    
-                   List< ShopExtendAttr> valueList=      Dal.
-                     From<ShopProductSKU>().
 
-                     Join<ShopExtendInfo>(ShopProductSKU._.AttributeId == ShopExtendInfo._.ID)
-                     .Join<ShopExtendInfoValue>(ShopExtendInfoValue._.AttributeId == ShopExtendInfo._.ID && 
-                     ShopProductSKU._.ValueId == ShopExtendInfoValue._.ID)
-                     .Where(ShopProductSKU._.ProductId == id)
-                      .Select(
-                         ShopProductSKU._.ID.Alias("SKUID"),
-                        ShopProductSKU._.AttributeId, 
-                       ShopProductSKU._.ValueId )
-                       .OrderBy(ShopExtendInfo._.DisplayOrder, ShopExtendInfo._.ID)
-                      .ToDataTable().ToList<ShopExtendAttr>();
+                    List<ShopExtendAttr> valueList = Dal.
+                      From<ShopProductSKU>().
+
+                      Join<ShopExtendInfo>(ShopProductSKU._.AttributeId == ShopExtendInfo._.ID)
+                      .Join<ShopExtendInfoValue>(ShopExtendInfoValue._.AttributeId == ShopExtendInfo._.ID &&
+                      ShopProductSKU._.ValueId == ShopExtendInfoValue._.ID)
+                      .Where(ShopProductSKU._.ProductId == id)
+                       .Select(
+                          ShopProductSKU._.ID.Alias("SKUID"),
+                         ShopProductSKU._.AttributeId,
+                        ShopProductSKU._.ValueId)
+                        .OrderBy(ShopExtendInfo._.DisplayOrder, ShopExtendInfo._.ID)
+                       .ToDataTable().ToList<ShopExtendAttr>();
                     foreach (var item in SKUInfolist)
                     {
+                        if (!string.IsNullOrWhiteSpace(sku) && item.ID == sku)
+                        {
+                            SKUInfolist.Find(pd => pd.IsDefault).IsDefault = false;
+                            item.IsDefault = true;
+                        }
                         IEnumerable<ShopExtendAttr> attlist = valueList.Where(pp => pp.SKUID == item.SKURelationID);
                         string tem = string.Empty;
                         foreach (var dd in attlist)
@@ -971,13 +1036,13 @@ namespace EasyCms.Dal
                 }
                 else
                 {
-                    p.SalePriceRange =p.SalePrice + string.Empty;
+                    p.SalePriceRange = p.SalePrice + string.Empty;
                     p.MarketPriceRange = p.MarketPrice + string.Empty;
                     p.SKUInfolist = new List<ShopProductSKUInfo>();
                     p.ShopProductSKU = new List<ShopExtendAttr>();
                 }
-                 
-                 
+
+
             }
             return p;
         }

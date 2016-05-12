@@ -125,6 +125,7 @@
     <Compile Include="ViewModel\ChangePwdModel.cs" />
     <Compile Include="ViewModel\PublishToLogistic.cs" />
     <Compile Include="ViewModel\ReciveForm.cs" />
+    <Compile Include="ViewModel\RecomandModel.cs" />
     <Compile Include="ViewModel\ReplyComment.cs" />
     <Compile Include="ViewModel\SaveModel.cs" />
     <Compile Include="ViewModel\ShopOrderModel.cs" />

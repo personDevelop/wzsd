@@ -1281,6 +1281,8 @@ namespace EasyCms.Model
         public bool IsSelected { get; set; }
 
         public string SKUID { get; set; }
+
+        public string FilePath { get; set; }
     }
     /// <summary>
     /// 供接口使用，传递给前台

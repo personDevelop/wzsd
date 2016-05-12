@@ -39,7 +39,7 @@
     position: relative;
 }
 #itemInfo{
-    width: 810px;
+    width: 800px;
     float: left;
     height: 400px;
     
@@ -294,7 +294,7 @@ a.orange, .orange {
     display: inline; 
     font-family: simsun;
 }
-#choose-suit .dt, #choose-type .dt, #choose-version .dt {
+#choose-suit .dt, #choose-type .dt, .choose-version .dt {
     margin-top: 8px;
 }
 
