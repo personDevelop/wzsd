@@ -1,5 +1,6 @@
 ﻿using EasyCms.Business;
 using EasyCms.Model;
+using EasyCms.Session;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -196,6 +197,32 @@ namespace EasyCms.Web.Controllers
             string result = new ManagerUserInfoBll().CheckRepeat(val, IsCode).ToString().ToLower();
             return result;
 
+        }
+
+
+        /// <summary>
+        /// 判断用户是否已登录 web版本
+        /// </summary>
+        /// <returns></returns>
+        public JsonResult GetUserIsLogin()
+        {
+           string userid= CmsSession.GetUserID();
+            if (string.IsNullOrWhiteSpace(userid))
+            {
+                return new JsonResult()
+                {
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                    Data = false
+                };
+            }
+            else
+            {
+                return new JsonResult()
+                {
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                    Data = true
+                };
+            }
         }
         public ActionResult Contact()
         {

@@ -234,7 +234,7 @@
         </div>
 
         <div class="ui-switchable-panel" id='product-detail-1'>
-            @(new HtmlString(Model.PCDescription.Replace("\\r\\n", "")))
+            @(new HtmlString(Model.PCDescription.Replace("\\\"", "\"").Replace("\\r\\n", "")))
 
         </div>
         <div class="ui-switchable-panel" style="display: none;" id='product-detail-2'>
