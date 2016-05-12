@@ -23,7 +23,14 @@ var commonCtrl = {
         });
     },
     gethtml: function () {
-
+    },
+    initconfig: function () {
+        //宽高 iframe or 提示类型 内容 title
+    },
+    setPosition:function(){
+    },
+    getPosition: function () {
+        //获取位置信息
     },
     getSize: function () {
         var h = $(document.body).height();
