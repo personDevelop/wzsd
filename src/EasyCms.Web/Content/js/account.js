@@ -24,7 +24,11 @@ var commonCtrl = {
     },
     gethtml: function () {
     },
-    initconfig: function () {
+    initconfig: function (opts) {
+        this.width = opts.width || 400;
+        this.height = opts.height || 300;
+        this.type = opts.type || "content";
+        this.title = opts.title || "提示";
         //宽高 iframe or 提示类型 内容 title
     },
     setPosition:function(){
@@ -41,6 +45,8 @@ var commonCtrl = {
             x: $(document.body).width(),
             y: h
         };
+    },
+    bindEvent: function () {
     }
 };
 $(function () {
