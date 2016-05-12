@@ -327,6 +327,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\NewsController.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\SiteMapController.cs" />
@@ -749,11 +750,13 @@
     <Content Include="Content\upload\Customrwebuploader.css" />
     <Content Include="Content\upload\upload - 复制.css" />
     <Content Include="Content\upload\upload.css" />
+    <Content Include="Content\web\common.js" />
     <Content Include="Content\web\css\cart.css" />
     <Content Include="Content\web\css\list.css" />
     <Content Include="Content\web\css\login.css" />
     <Content Include="Content\web\css\main.css" />
     <Content Include="Content\web\css\news.css" />
+    <Content Include="Content\web\css\order.css" />
     <Content Include="Content\web\css\product.css" />
     <Content Include="Content\web\regController.js" />
     <Content Include="Content\web\css\register.css" />
@@ -1399,6 +1402,7 @@
     <Content Include="Views\Account\LoginBox.cshtml" />
     <Content Include="Views\Account\Dialog.cshtml" />
     <Content Include="Views\Category\List.cshtml" />
+    <Content Include="Views\Order\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
