@@ -28,6 +28,9 @@ namespace EasyCms.Web
              "~/Content/web/css/product.css"));
             bundles.Add(new StyleBundle("~/bundles/cardcss").Include(
              "~/Content/web/css/cart.css"));
+
+            bundles.Add(new StyleBundle("~/bundles/listcss").Include(
+             "~/Content/web/css/list.css"));
             bundles.Add(new StyleBundle("~/bundles/upimgcss").Include(
             "~/Content/ueditor/third-party/webuploader/webuploader.css",
              "~/Content/upload/Customrwebuploader.css",
@@ -39,11 +42,11 @@ namespace EasyCms.Web
                       "~/Content/web/regController.js"));
             bundles.Add(new ScriptBundle("~/bundles/onlyjquery").Include(
            "~/Scripts/jquery-1.10.2.js", "~/Scripts/jquery.cookie.js"));
-           
+
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Scripts/jquery-1.10.2.js" ,
+                        "~/Scripts/jquery-1.10.2.js",
                         "~/Content/jquery/jquery.nicescroll.js",
-            //"~/Content/artdialog/dialog-plus-min.js",   
+                //"~/Content/artdialog/dialog-plus-min.js",   
             "~/Content/js/layindex.js",
                "~/Content/js/common.js",
                "~/Content/js/laymain.js"
@@ -71,7 +74,7 @@ namespace EasyCms.Web
             bundles.Add(new ScriptBundle("~/bundles/jqx").Include(
                     "~/Scripts/jqwidgets/jqx-all.js",
                      "~/Scripts/jqwidgets/globalization/globalize.js",
-             "~/Scripts/jqwidgets/globalization/globalize.culture.zh-Hans.js")); 
+             "~/Scripts/jqwidgets/globalization/globalize.culture.zh-Hans.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/ueditor").Include(
                  "~/Content/ueditor/ueditor.config.js",
@@ -92,7 +95,10 @@ namespace EasyCms.Web
                      "~/Content/js/jquery.jqzoom.js",
                      "~/Content/js/Product.js"
                  ));
+            bundles.Add(new ScriptBundle("~/bundles/account").Include(
 
+                    "~/Content/js/account.js"
+                ));
             #endregion
 
 

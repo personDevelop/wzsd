@@ -13,5 +13,12 @@ namespace EasyCms.Web.Controllers
         {
             return View();
         }
+         // GET: Category
+        public ActionResult List()
+        {
+            return View();
+        }
+
+        
     }
 }

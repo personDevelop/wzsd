@@ -367,6 +367,7 @@
     <Content Include="Content\Images\search_lg.png" />
     <Content Include="Content\js\account.js" />
     <Content Include="Content\js\jquery.jqzoom.js" />
+    <Content Include="Content\js\List.js" />
     <Content Include="Content\js\Product.js" />
     <Content Include="Content\skin\default\bg_state.jpg" />
     <Content Include="Content\Images\help.png" />
@@ -1397,6 +1398,7 @@
     <Content Include="Views\Card\Index - 复制.cshtml" />
     <Content Include="Views\Account\LoginBox.cshtml" />
     <Content Include="Views\Account\Dialog.cshtml" />
+    <Content Include="Views\Category\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
