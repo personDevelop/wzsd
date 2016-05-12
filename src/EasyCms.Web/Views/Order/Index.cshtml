@@ -1,0 +1,167 @@
+﻿@model EasyCms.Model.ShopOrderModel
+@using EasyCms.Model
+@using EasyCms
+@{
+    ViewBag.Title = "提交订单-" + CmsSessionExtend.WebSite.Name;
+}
+@Styles.Render("~/bundles/cardcss")
+@Styles.Render("~/bundles/ordercss") 
+    <div class="floor" style="width: 990px;">
+        <div class="checkout-tit">
+            <span class="tit-txt">填写并核对订单信息</span>
+        </div>
+        <div>
+            <div class="checkout-steps">
+                <div class="step-tit">
+                    <h3>收货人信息</h3>
+                    <div class="extra-r">
+                        <a href="#none" class="ftx-05" onclick="use_NewConsignee()">新增收货地址</a>
+                    </div>
+                </div>
+
+                <div class="step-cont">
+                    <div class="step-add-scroll">
+                        <ul id="consignee-list">
+                            <li class="li li-hover">
+                                <div class="consignee-item item-selected">
+                                    <span limit="8" title="李伟龙">李伟龙 山东</span>
+                                    <b></b>
+                                </div>
+                                <div class="addr-detail">
+                                    <span class="addr-name">李伟龙</span>
+                                    <span class="addr-info">
+                                        山东 济南市 历下区
+                                        高新区浪潮路1036号浪潮集团s01楼
+                                    </span>
+                                    <span class="addr-tel">186****6428</span>
+                                    <span class="addr-default">默认地址</span>
+                                </div>
+                                <div class="op-btns">
+                                    <span></span>
+                                    <a href="#none" class="ftx-05 edit-consignee">编辑</a>
+                                    <a href="#none" class="ftx-05 del-consignee">删除</a>
+                                </div>
+                            </li>
+                            <li class="li ">
+                                <div class="consignee-item ">
+                                    <span limit="8" title="李伟龙">李伟龙 山东</span>
+                                    <b></b>
+                                </div>
+                                <div class="addr-detail">
+                                    <span class="addr-name">李伟龙</span>
+                                    <span class="addr-info">
+                                        山东 济南市 历下区
+                                        高新区浪潮路1036号浪潮集团s01楼
+                                    </span>
+                                    <span class="addr-tel">186****6428</span>
+                                    <span class="addr-default">默认地址</span>
+                                </div>
+                                <div class="op-btns">
+                                    <span></span>
+                                    <a href="#none" class="ftx-05 edit-consignee">编辑</a>
+                                    <a href="#none" class="ftx-05 del-consignee">删除</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="hr"></div>
+
+                <div class="step-tit">
+                    <h3>商品清单</h3>
+                </div>
+                <div class="step-goods">
+                    <div class='step-goods-header'>
+                        <div class="column checkbox"></div>
+                        <div class="column goods">商品</div>
+                        <div class="column props"></div>
+                        <div class="column price">单价(元)</div>
+                        <div class="column quantity">数量</div>
+                        <div class="column sum">小计(元)</div>
+
+                    </div>
+                    <div class="step-goods-body">
+                        <div class="item-list">
+                            <div class="item-single  item-item ">
+                                <div class="item-form">
+
+                                    <div class="cell p-goods">
+                                        <div class="goods-item">
+                                            <div class="p-img">
+                                                <a href="#"><img src="http://img10.360buyimg.com/cms/s80x80_jfs/t1585/77/1355422030/217136/bb380bc5/55ee416aN2218124e.jpg"></a>
+                                            </div>
+                                            <div class="item-msg">
+                                                <div class="p-name">
+                                                    <a href="http://item.jd.com/1616043020.html" target="_blank">骆驼牌冰雪系列冲锋衣 男 三合一两件套 秋冬季防风保暖抓绒内胆情侣款登山服 宝蓝/深蓝男款 L</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="cell p-props p-props-new">
+                                        <div class="props-txt" title="宝蓝/深蓝男款">颜色：宝蓝/深蓝男款</div>
+                                        <div class="props-txt" title="L">尺码：L</div>
+                                    </div>
+
+                                    <div class="cell p-price"><strong>299.00</strong></div>
+                                    <div class="cell p-quantity">
+
+                                        <div class="ac ftx-03 quantity-txt" _stock="stock_1616043020">X1</div>
+                                    </div>
+                                    <div class="cell p-sum">
+                                        <strong>1495.00</strong>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item-list">
+                            <div class="item-single  item-item ">
+                                <div class="item-form">
+
+                                    <div class="cell p-goods">
+                                        <div class="goods-item">
+                                            <div class="p-img">
+                                                <a href="#"><img src="http://img10.360buyimg.com/cms/s80x80_jfs/t1585/77/1355422030/217136/bb380bc5/55ee416aN2218124e.jpg"></a>
+                                            </div>
+                                            <div class="item-msg">
+                                                <div class="p-name">
+                                                    <a href="http://item.jd.com/1616043020.html" target="_blank">骆驼牌冰雪系列冲锋衣 男 三合一两件套 秋冬季防风保暖抓绒内胆情侣款登山服 宝蓝/深蓝男款 L</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="cell p-props p-props-new">
+                                        <div class="props-txt" title="宝蓝/深蓝男款">颜色：宝蓝/深蓝男款</div>
+                                        <div class="props-txt" title="L">尺码：L</div>
+                                    </div>
+
+                                    <div class="cell p-price"><strong>299.00</strong></div>
+                                    <div class="cell p-quantity">
+
+                                        <div class="ac ftx-03 quantity-txt" _stock="stock_1616043020">X1</div>
+                                    </div>
+                                    <div class="cell p-sum">
+                                        <strong>1495.00</strong>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="trade-foot">
+            <div class="trade-foot-detail-com">
+                <div class="fc-price-info">
+                    <span class="price-tit">应付总额：</span>
+                    <span class="price-num" id="sumPayPriceId">￥4519.40</span>
+                </div>
+                <div class="fc-consignee-info"><span class="mr20">寄送至：山东 济南市 历下区 文化单元102</span><span>收货人：李伟龙 186****6428</span></div>
+            </div>
+
+        </div>
+        <button type="submit" class="checkout-submit" id="order-submit" onclick="javascript:submit_Order();" clstag="pageclick|keycount|trade_201602181|25">
+            提交订单<b></b>
+        </button>
+    </div> 
