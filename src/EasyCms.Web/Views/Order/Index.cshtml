@@ -4,59 +4,8 @@
 @{
     ViewBag.Title = "提交订单-" + CmsSessionExtend.WebSite.Name;
 }
-
-<!doctype html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <link href="css/main.css" type="text/css" rel="stylesheet">
-    <link href="css/cart.css" type="text/css" rel="stylesheet">
-    <link href="css/order.css" type="text/css" rel="stylesheet">
-</head>
-<body>
-    <div id='header'>
-        <div class='main'>
-            <ul class="fl topleft">
-                <li><div class="xing"></div><a href="">您好，欢迎您来到红七商城购物！</a></li>
-                <li class="xuan">
-                    <div class="erwei"></div>
-                    <a href="" class="aa">
-                        登录
-                    </a>
-
-                </li>
-                <li>|</li>
-                <li class="xuan">
-                    <div class="erwei"></div>
-                    <a href="" class="aa">
-                        注册
-                    </a>
-
-                </li>
-            </ul>
-
-            <ul class="fr topright">
-                <li class="guanzhu bj">
-                    <i class="ci-left"></i>
-                    <a href="#">关注红七</a>
-                    <i class="ci-right ">
-                        <s class="jt">◇</s>
-                    </i>
-                    <div class="guanzhu1"><img src="css/images/54c84f72Ncc1a02a2.jpg"></div>
-                </li>
-                <li class="" style='padding-left:30px;padding-right: 5px;'>
-                    <i class="ci-left-cart"></i>
-                    <a href="#">我的购物车</a>
-
-
-                </li>
-                <li class="guanzhu " style='padding-left:10px;'>
-                    <a href="#">购物帮助</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-
+@Styles.Render("~/bundles/cardcss")
+@Styles.Render("~/bundles/ordercss") 
     <div class="floor" style="width: 990px;">
         <div class="checkout-tit">
             <span class="tit-txt">填写并核对订单信息</span>
@@ -215,7 +164,4 @@
         <button type="submit" class="checkout-submit" id="order-submit" onclick="javascript:submit_Order();" clstag="pageclick|keycount|trade_201602181|25">
             提交订单<b></b>
         </button>
-    </div>
-
-</body>
-</html>
+    </div> 

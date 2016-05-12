@@ -28,6 +28,8 @@ namespace EasyCms.Web
              "~/Content/web/css/product.css"));
             bundles.Add(new StyleBundle("~/bundles/cardcss").Include(
              "~/Content/web/css/cart.css"));
+            bundles.Add(new StyleBundle("~/bundles/ordercss").Include(
+            "~/Content/web/css/order.css"));
             bundles.Add(new StyleBundle("~/bundles/upimgcss").Include(
             "~/Content/ueditor/third-party/webuploader/webuploader.css",
              "~/Content/upload/Customrwebuploader.css",
