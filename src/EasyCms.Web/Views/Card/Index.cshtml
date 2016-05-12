@@ -6,7 +6,7 @@
 }
 
 @Styles.Render("~/bundles/cardcss")
-
+<script src="http://localhost:7161/Content/web/common.js"></script>
 <div class="floor" style="width:990px;">
     <div class="cart-main">
         <div class="cart-filter-bar">
@@ -37,7 +37,7 @@
             else
             {
 
-                using (Html.BeginForm("Index", "Order", new { ReturnUrl = "" }, FormMethod.Post, new { id = "formlogin" }))
+                using (Html.BeginForm("Index", "Order", new { ReturnUrl = "" }, FormMethod.Post, new { id = "formCard" }))
                 {
                     @Html.AntiForgeryToken()
                     int index = 0;
@@ -48,15 +48,16 @@
                                 <div class="item-form">
                                     <div class="cell p-checkbox">
                                         <div class="cart-checkbox">
-                                            <input type="checkbox" val="@cardItem.ID" name="@("OrderItem["+index+"].IsSelected")" checked="checked" class="jdcheckbox" />
+                                            @Html.Hidden("cardItem[" + index + "]", cardItem.ID)
+                                            <input type="checkbox" val="@cardItem.ID" name="@("order.OrderItems["+index+"].IsSelected")" checked="checked" class="jdcheckbox" />
                                             <span class="line-circle"></span>
                                         </div>
                                     </div>
                                     <div class="cell p-goods">
                                         <div class="goods-item">
                                             <div class="p-img">
-                                                @Html.Hidden("OrderItem["+index+ "].ProductID", cardItem.ProductId)
-                                                @Html.Hidden("OrderItem[" + index + "].SKU", cardItem.SKU)
+                                                @Html.Hidden("order.OrderItems["+index+ "].ProductID", cardItem.ProductId)
+                                                @Html.Hidden("order.OrderItems[" + index + "].SKU", cardItem.SKU)
                                                 <a href="@Url.Action("index", "Product", new { id = cardItem.ProductId, other = cardItem.SKU })" target="_blank"><img width="100" height="100" src="@cardItem.ThumbImgUrl"></a>
                                             </div>
                                             <div class="item-msg">
@@ -75,7 +76,7 @@
                                     <div class="cell p-quantity">
                                         <div class="quantity-form" value="@cardItem.SalePrice">
                                             <a href="javascript:void(0);" class="decrement ">-</a>
-                                            <input autocomplete="off" type="text" class="itxt" name="@("OrderItem["+index+"].BuyCount")" value="@cardItem.Quantity">
+                                            <input autocomplete="off" type="text" class="itxt" name="@("order.OrderItems["+(index++)+"].BuyCount")" value="@cardItem.Quantity">
                                             <a href="javascript:void(0);" class="increment">+</a>
                                         </div>
                                         <div class="ac ftx-03 quantity-txt" _stock="stock_1616043020">@(cardItem.Stock > 0 ? "有货" : "无货")</div>
@@ -89,6 +90,7 @@
                                 </div>
                             </div>
                         </div>
+                       
                     }
                 }
             }
@@ -250,8 +252,24 @@
             //先判断有没有选择商品
             if ($(".item-form .jdcheckbox:checked").length > 0) {
                 //在判断有没有登录
+                var status = GetUserStauts("@Url.Action("GetUserIsLogin", "Account")");
+                
 
-                //然后根据返回的信息
+                status = true;
+                if (status) {
+                    $(".item-form .jdcheckbox").each(function () {
+                        if (!$(this).prop("checked")) {
+                            $(this).parent().parent().parent().find("input").remove();
+                        } 
+                });
+                    $("#formCard").submit();
+                    
+
+                } else {
+                    //让登录
+
+                }
+                
             } 
             else
             {
