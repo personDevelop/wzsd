@@ -752,6 +752,7 @@
     <Content Include="Content\upload\upload.css" />
     <Content Include="Content\web\common.js" />
     <Content Include="Content\web\css\cart.css" />
+    <Content Include="Content\web\css\images\ico.png" />
     <Content Include="Content\web\css\list.css" />
     <Content Include="Content\web\css\login.css" />
     <Content Include="Content\web\css\main.css" />

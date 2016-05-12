@@ -1028,13 +1028,13 @@ dd {
     border-radius: 5px;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
-    width: 410px;
+    min-width: 100px;
     position: fixed;
     z-index: 10000;
     display: block;
     overflow: hidden;
-    top: 80px;
-    left: 465.5px;
+    /*top: 80px;
+    left: 465.5px;*/
 }
 
 .hui-dialog-title {
@@ -1061,4 +1061,36 @@ dd {
     background: url(http://misc.360buyimg.com/jdf/1.0.0/ui/dialog/1.0.0/dialog.png) no-repeat;
     font-size: 0;
 }
+.hui-dialog-content{
+    position:relative;
+    padding:10px;
+}
+.hui-dialog-content .info{
+    position:relative;
+    margin:10px 30px;
+}
+.hui-dialog-content .infomes {
+    margin-left:58px;
+    font-family:微软雅黑;
+    word-break:break-all;
+    padding-top: 10px;
+    max-width: 300px;
+    font-size:14px;
+}
+ .m-icon {
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50px;
+    height: 50px; 
+    background: url(images/ico.png) no-repeat;
+}
+.success-icon {
+    background-position:0 -120px;
+}
+.warn-icon {
+    background-position:0 -170px;
+}
+ 
 /*dialog弹窗end*/
