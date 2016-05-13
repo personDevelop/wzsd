@@ -1,6 +1,4 @@
-﻿@{
-    Layout = null;
-}
+﻿
 
 <!DOCTYPE html>
 
@@ -9,9 +7,103 @@
     <meta name="viewport" content="width=device-width" />
     <title></title>
 </head>
+@Styles.Render("~/bundles/listcss");
+
 <body>
-    <div>
-    爱撒旦法萨芬的
+    <div class="floor">
+        <div class="m-list">
+            <div class="m-list-wrap">
+                <div id="J_filter" class="filter">
+                    <div class="f-line top">
+                        <div class="f-sort">
+                            <a href="javascript:;" id="sort_all" class="sort">综合排序<i></i></a>
+                            <a href="javascript:;" id="sort_sales" class="sort curr down">销量<i></i></a>
+                            <a href="javascript:;" id="sort_price" class="sort">价格<i></i></a>
+                            <a href="javascript:;" id="sort_comment" class="sort">评论数<i></i></a>
+                        </div>
+
+                        <div id="J_topPage" class="f-pager">
+                            <span class="fp-text"><b>1</b><em>/</em><i>100</i></span>
+                            <a class="fp-prev disabled" href="javascript:;">&lt;</a>
+                            <a class="fp-next" href="javascript:;">&gt;</a>
+                        </div>
+                        <div class="f-result-sum">共<span id="J_resCount" class="num">5.0万</span>件商品</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="J_goodsList" class="goods-list-v1 ">
+                <ul id="J_goodsList_ul"></ul>
+            </div>
+        </div>
     </div>
+    <script>
+        $(function () {
+
+            $(".f-sort .sort").click(function () {
+                $(".f-sort .sort").removeClass("curr");
+                $(this).addClass("curr");
+                if ($(this).hasClass("down")) {
+                    $(this).removeClass("down");
+                    $(this).addClass("up");
+                }
+                else if ($(this).hasClass("up")) {
+                    $(this).removeClass("up");
+                    $(this).addClass("down");
+                }
+            });
+            var data = getData();
+            var ul = $("#J_goodsList_ul");
+            $("#J_goodsList_ul").delegate("li", "mouseenter", function () {
+                $(this).addClass("hover");
+            }).delegate("li", "mouseleave", function () {
+                $(this).removeClass("hover");
+            });
+
+            for (var item in data.data.Data) {
+                ul.append(getItem(data.data.Data[item]));
+            }
+
+
+        });
+
+
+        function getItem(obj) {
+            var res = [];
+            res.push(" <li class='gl-item '>");
+            res.push("<div class='gl-i-wrap'>");
+            res.push("<div class='p-img'><a target='_blank' title='' href='/Product/Index/" + obj.ID + "'> <img width='220' height='220' class='err-product' src='" + obj.FilePath + " '> </a> </div>");
+            res.push("<div class='p-price'><strong><em>￥</em><i>" + obj.SalePrice + "</i></strong><div class='p-icons'><i class='goods-icons-s1' title=''>" + obj.TypeName + "</i></div> </div>");
+            res.push("<div class='p-name p-name-type-2'>");
+            res.push("<a target='_blank' title='' href='/Product/Index/" + obj.ID + "'> <em>  " + obj.Name + "  </em>");
+            res.push("<i class='promo-words'> </i> </a></div>");
+            res.push("<div class='p-commit'><strong>已有<a target='_blank' href=''>6929</a>人评价</strong> </div>");
+
+            res.push("<div class='p-operate'><a class='p-o-btn contrast J_contrast'  target='_blank' href='/Product/Index/" + obj.ID + "'><i></i>看看</a>");
+            res.push("<a class='p-o-btn focus J_focus'  href='javascript:;'><i></i>关注</a>");
+            res.push("<a class='p-o-btn addcart' href='#'  target='_blank'><i></i>加入购物车</a></div>");
+            res.push("</div> </li>");
+            return res.join('');
+        }
+        function getData() {
+            var reobj;
+            $.ajax({
+                url: "/api/app/GetProductsByCategory/0048996c-99a4-46b2-b1fe-7aa041db4aa5/",
+                type: "get",
+                data: {},
+                dataType: "json",
+                async: false,
+                success: function (reval) {
+
+                    reobj = reval;
+                },
+                error: function (err) {
+                    throw err.responseText;
+                    return false;
+                }
+            });
+            return reobj;
+        }
+    </script>
 </body>
 </html>
