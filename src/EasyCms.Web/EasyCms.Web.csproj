@@ -750,7 +750,6 @@
     <Content Include="Content\upload\Customrwebuploader.css" />
     <Content Include="Content\upload\upload - 复制.css" />
     <Content Include="Content\upload\upload.css" />
-    <Content Include="Content\web\common.js" />
     <Content Include="Content\web\css\cart.css" />
     <Content Include="Content\web\css\images\618-tips-01.png" />
     <Content Include="Content\web\css\images\618-tips-arrow.png" />
@@ -808,7 +807,7 @@
     <Content Include="Content\web\css\order - 复制.css" />
     <Content Include="Content\web\css\order.css" />
     <Content Include="Content\web\css\product.css" />
-    <Content Include="Content\web\order.js" />
+    <Content Include="Content\js\order.js" />
     <Content Include="Content\web\regController.js" />
     <Content Include="Content\web\css\register.css" />
     <Content Include="Content\web\reg.js" />
