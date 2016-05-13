@@ -410,7 +410,10 @@ input::-ms-reveal {
 .w #service-2013 {
     border-top: 0;
 }
-
+.w {
+    width: 990px;
+    margin: 0 auto;
+}
 #container {
     padding-bottom: 20px;
 }

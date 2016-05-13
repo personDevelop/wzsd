@@ -28,6 +28,13 @@
             {
                 <li class="xuan">
                     <div class="erwei"></div>
+                    @if (CmsSession.GetUser().IsManager)
+                    {
+                        <a href="@Url.Action("index", "index", new { area = "admin" })" class="aa">
+                            管理后台
+                        </a>
+                    }
+                 
                     <a href="@Url.Action("LogOut", "Account", new { area = string.Empty })" class="aa">
                         退出
                     </a>
