@@ -97,9 +97,11 @@
                 $(".msg-error").show();
                 $(".msg-warn").hide();
                 return false;
+            } else {
+                setResult(result)
+                closeDialog(); 
             }
-            closeDialog();
-            alert(result);
+           
         }
         function OnFail(result) {
 

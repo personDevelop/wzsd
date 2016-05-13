@@ -100,6 +100,10 @@ namespace EasyCms.Web
 
                     "~/Content/js/account.js"
                 ));
+            bundles.Add(new ScriptBundle("~/bundles/orderjs").Include(
+
+              "~/Content/web/orderjs.js"
+          ));
             #endregion
 
 

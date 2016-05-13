@@ -1,7 +1,7 @@
 ﻿@model EasyCms.Model.LoginModel
 @{
     Layout = null;
-    ViewBag.Title = "用户登录-" + CmsSessionExtend.WebSite.Name;
+    ViewBag.Title = "360"  ;
 }
 @using EasyCms.Model
 @using EasyCms
@@ -17,11 +17,19 @@
 </head>
 <body>
     <div>
-        <input type="button" value="打开登录" onclick="showFormurl('@Url.Action("LoginBox","Account")')" />
+        <input type="button" value="打开登录" onclick="showFormurl('@Url.Action("LoginBox","Account")',onclosedialog)" />
         <input type="button" value="打开正确提示" onclick="openTips()" />
         <input type="button" value="打开错误提示" onclick="openTipsWrong()" />
         
+        <script type="text/javascript">
 
+            function onclosedialog(result) {
+                alert(result);
+                alert("关闭0");
+                alert("关闭");
+                alert("关闭1");
+            }
+        </script>
     </div>
 </body>
 </html>

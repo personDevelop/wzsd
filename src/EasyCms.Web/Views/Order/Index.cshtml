@@ -1,167 +1,521 @@
 ﻿@model EasyCms.Model.ShopOrderModel
 @using EasyCms.Model
 @using EasyCms
+@using EasyCms.Business
+@using Sharp.Common
+
 @{
-    ViewBag.Title = "提交订单-" + CmsSessionExtend.WebSite.Name;
+    ViewBag.Title = "订单结算页-" + CmsSessionExtend.WebSite.Name;
 }
 @Styles.Render("~/bundles/cardcss")
-@Styles.Render("~/bundles/ordercss") 
-    <div class="floor" style="width: 990px;">
-        <div class="checkout-tit">
-            <span class="tit-txt">填写并核对订单信息</span>
-        </div>
-        <div>
-            <div class="checkout-steps">
-                <div class="step-tit">
-                    <h3>收货人信息</h3>
-                    <div class="extra-r">
-                        <a href="#none" class="ftx-05" onclick="use_NewConsignee()">新增收货地址</a>
-                    </div>
+@Styles.Render("~/bundles/ordercss")
+@Scripts.Render("~/bundles/orderjs")
+<div class="floor" style="width: 990px;">
+    <div class="checkout-tit">
+        <span class="tit-txt">填写并核对订单信息</span>
+    </div>
+    <div>
+        <div class="checkout-steps">
+            <div class="step-tit">
+                <h3>收货人信息</h3>
+                <div class="extra-r">
+                    <a href="#none" class="ftx-05" onclick="use_NewConsignee()">新增收货地址</a>
                 </div>
-
-                <div class="step-cont">
-                    <div class="step-add-scroll">
-                        <ul id="consignee-list">
-                            <li class="li li-hover">
-                                <div class="consignee-item item-selected">
-                                    <span limit="8" title="李伟龙">李伟龙 山东</span>
-                                    <b></b>
-                                </div>
-                                <div class="addr-detail">
-                                    <span class="addr-name">李伟龙</span>
-                                    <span class="addr-info">
-                                        山东 济南市 历下区
-                                        高新区浪潮路1036号浪潮集团s01楼
-                                    </span>
-                                    <span class="addr-tel">186****6428</span>
-                                    <span class="addr-default">默认地址</span>
-                                </div>
-                                <div class="op-btns">
-                                    <span></span>
-                                    <a href="#none" class="ftx-05 edit-consignee">编辑</a>
-                                    <a href="#none" class="ftx-05 del-consignee">删除</a>
-                                </div>
-                            </li>
-                            <li class="li ">
-                                <div class="consignee-item ">
-                                    <span limit="8" title="李伟龙">李伟龙 山东</span>
-                                    <b></b>
-                                </div>
-                                <div class="addr-detail">
-                                    <span class="addr-name">李伟龙</span>
-                                    <span class="addr-info">
-                                        山东 济南市 历下区
-                                        高新区浪潮路1036号浪潮集团s01楼
-                                    </span>
-                                    <span class="addr-tel">186****6428</span>
-                                    <span class="addr-default">默认地址</span>
-                                </div>
-                                <div class="op-btns">
-                                    <span></span>
-                                    <a href="#none" class="ftx-05 edit-consignee">编辑</a>
-                                    <a href="#none" class="ftx-05 del-consignee">删除</a>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="hr"></div>
-
-                <div class="step-tit">
-                    <h3>商品清单</h3>
-                </div>
-                <div class="step-goods">
-                    <div class='step-goods-header'>
-                        <div class="column checkbox"></div>
-                        <div class="column goods">商品</div>
-                        <div class="column props"></div>
-                        <div class="column price">单价(元)</div>
-                        <div class="column quantity">数量</div>
-                        <div class="column sum">小计(元)</div>
-
-                    </div>
-                    <div class="step-goods-body">
-                        <div class="item-list">
-                            <div class="item-single  item-item ">
-                                <div class="item-form">
-
-                                    <div class="cell p-goods">
-                                        <div class="goods-item">
-                                            <div class="p-img">
-                                                <a href="#"><img src="http://img10.360buyimg.com/cms/s80x80_jfs/t1585/77/1355422030/217136/bb380bc5/55ee416aN2218124e.jpg"></a>
-                                            </div>
-                                            <div class="item-msg">
-                                                <div class="p-name">
-                                                    <a href="http://item.jd.com/1616043020.html" target="_blank">骆驼牌冰雪系列冲锋衣 男 三合一两件套 秋冬季防风保暖抓绒内胆情侣款登山服 宝蓝/深蓝男款 L</a>
-                                                </div>
-                                            </div>
+            </div>
+            <div class="step-cont">
+                <div class="consignee-content" id="consignee-addr">
+                    <div class="consignee-scrollbar">
+                        <div class="ui-scrollbar-main">
+                            <div class="consignee-scroll">
+                                <div class="consignee-cont" id="consignee1" style="height: 42px;">
+                                    <ul id="consignee-list">
+                                        <!---->
+                                        <!--
+                                <li class="ui-switchable-panel" id="consignee_index_138098253" selected="selected" style="cursor: pointer;">
+                                    <div class="consignee-item item-selected" consigneeId="138098253" id="consignee_index_div_138098253">
+                                        <b></b>
+                                        <div class="user-name">
+                                            <div class="fl"><strong limit="4">卢永列</strong>&nbsp;&nbsp;收</div>
+                                            <div class="fr">135****1431</div>
+                                            <div class="clr"></div>
+                                        </div>
+                                        <div class="mt10" limit="15">天津 塘沽区 全境 </div>
+                                        <div class="adr-m" limit="30">新港叁佰间14号中间一航局一公司</div>
+                                        <div class="op-btns ar">
+                                                            <span class='mr10'>默认地址</span>
+                                                                    <a href="#none" class="ftx-05 mr10 edit-consignee" fid="138098253">编辑</a>
+                                            <a href="#none" class="ftx-05 del-consignee hide" fid="138098253">删除</a>
                                         </div>
                                     </div>
-                                    <div class="cell p-props p-props-new">
-                                        <div class="props-txt" title="宝蓝/深蓝男款">颜色：宝蓝/深蓝男款</div>
-                                        <div class="props-txt" title="L">尺码：L</div>
-                                    </div>
-
-                                    <div class="cell p-price"><strong>299.00</strong></div>
-                                    <div class="cell p-quantity">
-
-                                        <div class="ac ftx-03 quantity-txt" _stock="stock_1616043020">X1</div>
-                                    </div>
-                                    <div class="cell p-sum">
-                                        <strong>1495.00</strong>
-                                    </div>
-
+                                </li>
+                                -->
+                                        <li class="ui-switchable-panel ui-switchable-panel-selected" id="consignee_index_138098253" style="display: list-item;" selected="selected">
+                                            <div class="consignee-item item-selected" id="consignee_index_div_138098253" clstag="pageclick|keycount|trade_201602181|1" consigneeid="138098253">
+                                                <span title="卢永列" limit="8">卢永列</span><b></b>
+                                            </div>
+                                            <div class="addr-detail">
+                                                <!--yanwenqi 全球购添加idcard 不是国际购的要不要显示？ -->
+                                                <span title="卢永列" class="addr-name" limit="6">卢永列</span>
+                                                <span title="天津 塘沽区 全境 新港叁佰间14号中间一航局一公司" class="addr-info" limit="45">天津 塘沽区 全境 新港叁佰间14号中间一航局一公司</span>
+                                                <span class="addr-tel">135****1431</span>
+                                                <span class="addr-default">默认地址</span>
+                                            </div>
+                                            <div class="op-btns" consigneeid="138098253">
+                                                <span></span>				<a class="ftx-05 edit-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|6" fid="138098253">编辑</a>
+                                                <a class="ftx-05 del-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|5" fid="138098253">删除</a>
+                                            </div>
+                                        </li>
+                                        <!---->
+                                        <input id="hidden_consignees_size" style="display: none;" type="hidden" value="15">
+                                        <li class="ui-switchable-panel ui-switchable-panel-selected" id="consignee_index_138131741" style="display: none;">
+                                            <div class="consignee-item" id="consignee_index_div_138131741" clstag="pageclick|keycount|trade_201602181|1" consigneeid="138131741">
+                                                <span title="横永海 山东" limit="8">横永海 山东</span><b></b>
+                                            </div>
+                                            <div class="addr-detail">
+                                                <!--yanwenqi 全球购添加idcard 不是国际购的要不要显示？ -->
+                                                <span title="横永海" class="addr-name" limit="6">横永海</span>
+                                                <span title="山东 枣庄市 峄城区 峨山镇左庄乡左庄村" class="addr-info" limit="45">山东 枣庄市 峄城区 峨山镇左庄乡左庄村</span>
+                                                <span class="addr-tel">182****1559</span>
+                                            </div>
+                                            <div class="op-btns" consigneeid="138131741">
+                                                <a class="ftx-05 setdefault-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|4" fid="138131741">设为默认地址</a>      <a class="ftx-05 edit-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|6" fid="138131741">编辑</a>
+                                                <a class="ftx-05 del-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|5" fid="138131741">删除</a>
+                                            </div>
+                                        </li>
+                                        <li class="ui-switchable-panel ui-switchable-panel-selected" id="consignee_index_137895397" style="display: none;">
+                                            <div class="consignee-item" id="consignee_index_div_137895397" clstag="pageclick|keycount|trade_201602181|1" consigneeid="137895397">
+                                                <span title="卢永列" limit="8">卢永列</span><b></b>
+                                            </div>
+                                            <div class="addr-detail">
+                                                <!--yanwenqi 全球购添加idcard 不是国际购的要不要显示？ -->
+                                                <span title="卢永列" class="addr-name" limit="6">卢永列</span>
+                                                <span title="山东 济南市 高新区 经十东路唐冶新区凤凰城3号楼2单元3002" class="addr-info" limit="45">山东 济南市 高新区 经十东路唐冶新区凤凰城3号楼2单元3002</span>
+                                                <span class="addr-tel">135****1431</span>
+                                            </div>
+                                            <div class="op-btns" consigneeid="137895397">
+                                                <a class="ftx-05 setdefault-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|4" fid="137895397">设为默认地址</a>      <a class="ftx-05 edit-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|6" fid="137895397">编辑</a>
+                                                <a class="ftx-05 del-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|5" fid="137895397">删除</a>
+                                            </div>
+                                        </li>
+                                        <li class="ui-switchable-panel ui-switchable-panel-selected" id="consignee_index_137893241" style="display: none;">
+                                            <div class="consignee-item" id="consignee_index_div_137893241" clstag="pageclick|keycount|trade_201602181|1" consigneeid="137893241">
+                                                <span title="卢永列" limit="8">卢永列 山东</span><b></b>
+                                            </div>
+                                            <div class="addr-detail">
+                                                <!--yanwenqi 全球购添加idcard 不是国际购的要不要显示？ -->
+                                                <span title="卢永列" class="addr-name" limit="6">卢永列</span>
+                                                <span title="山东 济南市 历城区 城区飞跃大道中建八局家属院101" class="addr-info" limit="45">山东 济南市 历城区 城区飞跃大道中建八局家属院101</span>
+                                                <span class="addr-tel">135****1431</span>
+                                            </div>
+                                            <div class="op-btns" consigneeid="137893241">
+                                                <a class="ftx-05 setdefault-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|4" fid="137893241">设为默认地址</a>      <a class="ftx-05 edit-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|6" fid="137893241">编辑</a>
+                                                <a class="ftx-05 del-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|5" fid="137893241">删除</a>
+                                            </div>
+                                        </li>
+                                        <li class="ui-switchable-panel ui-switchable-panel-selected" id="consignee_index_137597757" style="display: none;">
+                                            <div class="consignee-item" id="consignee_index_div_137597757" clstag="pageclick|keycount|trade_201602181|1" consigneeid="137597757">
+                                                <span title="卢振交" limit="8">卢振交 山东</span><b></b>
+                                            </div>
+                                            <div class="addr-detail">
+                                                <!--yanwenqi 全球购添加idcard 不是国际购的要不要显示？ -->
+                                                <span title="卢振交" class="addr-name" limit="6">卢振交</span>
+                                                <span title="山东 日照市 莒县 小店镇卢家孟宴村" class="addr-info" limit="45">山东 日照市 莒县 小店镇卢家孟宴村</span>
+                                                <span class="addr-tel">135****1431</span>
+                                            </div>
+                                            <div class="op-btns" consigneeid="137597757">
+                                                <a class="ftx-05 setdefault-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|4" fid="137597757">设为默认地址</a>      <a class="ftx-05 edit-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|6" fid="137597757">编辑</a>
+                                                <a class="ftx-05 del-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|5" fid="137597757">删除</a>
+                                            </div>
+                                        </li>
+                                        <li class="ui-switchable-panel ui-switchable-panel-selected" id="consignee_index_137582598" style="display: none;">
+                                            <div class="consignee-item" id="consignee_index_div_137582598" clstag="pageclick|keycount|trade_201602181|1" consigneeid="137582598">
+                                                <span title="卢永列" limit="8">卢永列 北京</span><b></b>
+                                            </div>
+                                            <div class="addr-detail">
+                                                <!--yanwenqi 全球购添加idcard 不是国际购的要不要显示？ -->
+                                                <span title="卢永列" class="addr-name" limit="6">卢永列</span>
+                                                <span title="北京 丰台区 二环到三环 太平桥街道莲花池南里24号中盐大厦西塔7楼1704" class="addr-info" limit="45">北京 丰台区 二环到三环 太平桥街道莲花池南里24号中盐大厦西塔7楼1704</span>
+                                                <span class="addr-tel">135****1431</span>
+                                            </div>
+                                            <div class="op-btns" consigneeid="137582598">
+                                                <a class="ftx-05 setdefault-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|4" fid="137582598">设为默认地址</a>      <a class="ftx-05 edit-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|6" fid="137582598">编辑</a>
+                                                <a class="ftx-05 del-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|5" fid="137582598">删除</a>
+                                            </div>
+                                        </li>
+                                        <li class="ui-switchable-panel ui-switchable-panel-selected" id="consignee_index_137576577" style="display: none;">
+                                            <div class="consignee-item" id="consignee_index_div_137576577" clstag="pageclick|keycount|trade_201602181|1" consigneeid="137576577">
+                                                <span title="李菊安" limit="8">李菊安 山东</span><b></b>
+                                            </div>
+                                            <div class="addr-detail">
+                                                <!--yanwenqi 全球购添加idcard 不是国际购的要不要显示？ -->
+                                                <span title="李菊安" class="addr-name" limit="6">李菊安</span>
+                                                <span title="山东 日照市 莒县 夏庄镇新天地服饰广场" class="addr-info" limit="45">山东 日照市 莒县 夏庄镇新天地服饰广场</span>
+                                                <span class="addr-tel">156****0610</span>
+                                            </div>
+                                            <div class="op-btns" consigneeid="137576577">
+                                                <a class="ftx-05 setdefault-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|4" fid="137576577">设为默认地址</a>      <a class="ftx-05 edit-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|6" fid="137576577">编辑</a>
+                                                <a class="ftx-05 del-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|5" fid="137576577">删除</a>
+                                            </div>
+                                        </li>
+                                        <li class="ui-switchable-panel ui-switchable-panel-selected" id="consignee_index_137570213" style="display: none;">
+                                            <div class="consignee-item" id="consignee_index_div_137570213" clstag="pageclick|keycount|trade_201602181|1" consigneeid="137570213">
+                                                <span title="卢永列" limit="8">卢永列 山东</span><b></b>
+                                            </div>
+                                            <div class="addr-detail">
+                                                <!--yanwenqi 全球购添加idcard 不是国际购的要不要显示？ -->
+                                                <span title="卢永列" class="addr-name" limit="6">卢永列</span>
+                                                <span title="山东 济南市 历城区 城区殷陈飞跃大道中建八局宿舍楼1号楼2单元101" class="addr-info" limit="45">山东 济南市 历城区 城区殷陈飞跃大道中建八局宿舍楼1号楼2单元101</span>
+                                                <span class="addr-tel">135****1431</span>
+                                            </div>
+                                            <div class="op-btns" consigneeid="137570213">
+                                                <a class="ftx-05 setdefault-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|4" fid="137570213">设为默认地址</a>      <a class="ftx-05 edit-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|6" fid="137570213">编辑</a>
+                                                <a class="ftx-05 del-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|5" fid="137570213">删除</a>
+                                            </div>
+                                        </li>
+                                        <li class="ui-switchable-panel ui-switchable-panel-selected" id="consignee_index_136059933" style="display: none;">
+                                            <div class="consignee-item" id="consignee_index_div_136059933" clstag="pageclick|keycount|trade_201602181|1" consigneeid="136059933">
+                                                <span title="刘强" limit="8">刘强 山东</span><b></b>
+                                            </div>
+                                            <div class="addr-detail">
+                                                <!--yanwenqi 全球购添加idcard 不是国际购的要不要显示？ -->
+                                                <span title="刘强" class="addr-name" limit="6">刘强</span>
+                                                <span title="山东 济南市 历城区 殷陈飞跃大道中建八局宿舍楼1号楼2单元101" class="addr-info" limit="45">山东 济南市 历城区 殷陈飞跃大道中建八局宿舍楼1号楼2单元101</span>
+                                                <span class="addr-tel">150****3397</span>
+                                            </div>
+                                            <div class="op-btns" consigneeid="136059933">
+                                                <a class="ftx-05 setdefault-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|4" fid="136059933">设为默认地址</a>      <a class="ftx-05 edit-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|6" fid="136059933">编辑</a>
+                                                <a class="ftx-05 del-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|5" fid="136059933">删除</a>
+                                            </div>
+                                        </li>
+                                        <li class="ui-switchable-panel ui-switchable-panel-selected" id="consignee_index_79087611" style="display: none;">
+                                            <div class="consignee-item" id="consignee_index_div_79087611" clstag="pageclick|keycount|trade_201602181|1" consigneeid="79087611">
+                                                <span title="杜丽" limit="8">杜丽 山东</span><b></b>
+                                            </div>
+                                            <div class="addr-detail">
+                                                <!--yanwenqi 全球购添加idcard 不是国际购的要不要显示？ -->
+                                                <span title="杜丽" class="addr-name" limit="6">杜丽</span>
+                                                <span title="山东 临沂市 苍山县 矿坑镇楼山沟村" class="addr-info" limit="45">山东 临沂市 苍山县 矿坑镇楼山沟村</span>
+                                                <span class="addr-tel">152****4303</span>
+                                            </div>
+                                            <div class="op-btns" consigneeid="79087611">
+                                                <a class="ftx-05 setdefault-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|4" fid="79087611">设为默认地址</a>      <a class="ftx-05 edit-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|6" fid="79087611">编辑</a>
+                                                <a class="ftx-05 del-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|5" fid="79087611">删除</a>
+                                            </div>
+                                        </li>
+                                        <li class="ui-switchable-panel ui-switchable-panel-selected" id="consignee_index_59843218" style="display: none;">
+                                            <div class="consignee-item" id="consignee_index_div_59843218" clstag="pageclick|keycount|trade_201602181|1" consigneeid="59843218">
+                                                <span title="崔田静" limit="8">崔田静 山东</span><b></b>
+                                            </div>
+                                            <div class="addr-detail">
+                                                <!--yanwenqi 全球购添加idcard 不是国际购的要不要显示？ -->
+                                                <span title="崔田静" class="addr-name" limit="6">崔田静</span>
+                                                <span title="山东 日照市 莒县 城区莒县一中家属院六号楼五单元301" class="addr-info" limit="45">山东 日照市 莒县 城区莒县一中家属院六号楼五单元301</span>
+                                                <span class="addr-tel">135****9238</span>
+                                            </div>
+                                            <div class="op-btns" consigneeid="59843218">
+                                                <a class="ftx-05 setdefault-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|4" fid="59843218">设为默认地址</a>      <a class="ftx-05 edit-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|6" fid="59843218">编辑</a>
+                                                <a class="ftx-05 del-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|5" fid="59843218">删除</a>
+                                            </div>
+                                        </li>
+                                        <li class="ui-switchable-panel ui-switchable-panel-selected" id="consignee_index_28860732" style="display: none;">
+                                            <div class="consignee-item" id="consignee_index_div_28860732" clstag="pageclick|keycount|trade_201602181|1" consigneeid="28860732">
+                                                <span title="卢永列" limit="8">卢永列 山东</span><b></b>
+                                            </div>
+                                            <div class="addr-detail">
+                                                <!--yanwenqi 全球购添加idcard 不是国际购的要不要显示？ -->
+                                                <span title="卢永列" class="addr-name" limit="6">卢永列</span>
+                                                <span title="山东 济南市 历城区 殷陈飞跃大道中建八局宿舍楼1号楼2单元101" class="addr-info" limit="45">山东 济南市 历城区 殷陈飞跃大道中建八局宿舍楼1号楼2单元101</span>
+                                                <span class="addr-tel">135****1431</span>
+                                            </div>
+                                            <div class="op-btns" consigneeid="28860732">
+                                                <a class="ftx-05 setdefault-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|4" fid="28860732">设为默认地址</a>      <a class="ftx-05 edit-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|6" fid="28860732">编辑</a>
+                                                <a class="ftx-05 del-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|5" fid="28860732">删除</a>
+                                            </div>
+                                        </li>
+                                        <li class="ui-switchable-panel ui-switchable-panel-selected" id="consignee_index_25216220" style="display: none;">
+                                            <div class="consignee-item" id="consignee_index_div_25216220" clstag="pageclick|keycount|trade_201602181|1" consigneeid="25216220">
+                                                <span title="卢永列" limit="8">卢永列</span><b></b>
+                                            </div>
+                                            <div class="addr-detail">
+                                                <!--yanwenqi 全球购添加idcard 不是国际购的要不要显示？ -->
+                                                <span title="卢永列" class="addr-name" limit="6">卢永列</span>
+                                                <span title="山东 济南市 高新区 浪潮路1036号   浪潮科技园s05楼" class="addr-info" limit="45">山东 济南市 高新区 浪潮路1036号   浪潮科技园s05楼</span>
+                                                <span class="addr-tel">135****1431</span>
+                                            </div>
+                                            <div class="op-btns" consigneeid="25216220">
+                                                <a class="ftx-05 setdefault-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|4" fid="25216220">设为默认地址</a>      <a class="ftx-05 edit-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|6" fid="25216220">编辑</a>
+                                                <a class="ftx-05 del-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|5" fid="25216220">删除</a>
+                                            </div>
+                                        </li>
+                                        <li class="ui-switchable-panel ui-switchable-panel-selected" id="consignee_index_13562325" style="display: none;">
+                                            <div class="consignee-item" id="consignee_index_div_13562325" clstag="pageclick|keycount|trade_201602181|1" consigneeid="13562325">
+                                                <span title="卢永列" limit="8">卢永列 天津</span><b></b>
+                                            </div>
+                                            <div class="addr-detail">
+                                                <!--yanwenqi 全球购添加idcard 不是国际购的要不要显示？ -->
+                                                <span title="卢永列" class="addr-name" limit="6">卢永列</span>
+                                                <span title="天津 天津市 塘沽区 天津港航运中心跃进路9号天航局大厦3楼0307室" class="addr-info" limit="45">天津 天津市 塘沽区 天津港航运中心跃进路9号天航局大厦3楼0307室</span>
+                                                <span class="addr-tel">135****1431</span>
+                                            </div>
+                                            <div class="op-btns" consigneeid="13562325">
+                                                <a class="ftx-05 setdefault-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|4" fid="13562325">设为默认地址</a>      <a class="ftx-05 edit-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|6" fid="13562325">编辑</a>
+                                                <a class="ftx-05 del-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|5" fid="13562325">删除</a>
+                                            </div>
+                                        </li>
+                                        <li class="ui-switchable-panel ui-switchable-panel-selected" id="consignee_index_10222204" style="display: none;">
+                                            <div class="consignee-item" id="consignee_index_div_10222204" clstag="pageclick|keycount|trade_201602181|1" consigneeid="10222204">
+                                                <span title="卢永列" limit="8">卢永列 山东</span><b></b>
+                                            </div>
+                                            <div class="addr-detail">
+                                                <!--yanwenqi 全球购添加idcard 不是国际购的要不要显示？ -->
+                                                <span title="卢永列" class="addr-name" limit="6">卢永列</span>
+                                                <span title="山东 济南市 历城区（二环外） 化纤厂路丁家庄656号" class="addr-info" limit="45">山东 济南市 历城区（二环外） 化纤厂路丁家庄656号</span>
+                                                <span class="addr-tel">135****1431</span>
+                                            </div>
+                                            <div class="op-btns" consigneeid="10222204">
+                                                <a class="ftx-05 setdefault-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|4" fid="10222204">设为默认地址</a>      <a class="ftx-05 edit-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|6" fid="10222204">编辑</a>
+                                                <a class="ftx-05 del-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|5" fid="10222204">删除</a>
+                                            </div>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
-                        <div class="item-list">
-                            <div class="item-single  item-item ">
-                                <div class="item-form">
+                    </div>
+                </div>
+                <div class="addr-switch switch-on" id="consigneeItemAllClick" onclick="show_ConsigneeAll()" clstag="pageclick|keycount|trade_201602181|2">
+                    <span>更多地址</span><b></b>
+                </div>
+                <div class="addr-switch switch-off hide" id="consigneeItemHideClick" onclick="hide_ConsigneeAll()">
+                    <span>收起地址</span><b></b>
+                </div>
+                <input id="consigneeList_giftSenderConsigneeMobile" type="hidden" value="">
+                <input id="consigneeList_giftSenderConsigneeName" type="hidden" value="">
+            </div>
+            <div class="step-cont">
+                <div class="consignee-content" id="consignee-addr">
+                    <div class="consignee-scrollbar">
+                        <div class="ui-scrollbar-main">
+                            <div class="consignee-scroll">
+                                <div class="consignee-cont" id="consignee1" style="height: 42px;">
+                                    <ul id="consignee-list">
+                                        <!---->
+                                        @{
 
-                                    <div class="cell p-goods">
-                                        <div class="goods-item">
-                                            <div class="p-img">
-                                                <a href="#"><img src="http://img10.360buyimg.com/cms/s80x80_jfs/t1585/77/1355422030/217136/bb380bc5/55ee416aN2218124e.jpg"></a>
-                                            </div>
-                                            <div class="item-msg">
-                                                <div class="p-name">
-                                                    <a href="http://item.jd.com/1616043020.html" target="_blank">骆驼牌冰雪系列冲锋衣 男 三合一两件套 秋冬季防风保暖抓绒内胆情侣款登山服 宝蓝/深蓝男款 L</a>
-                                                </div>
+                                            //获取当前人的所有地址
+                                            List<ShopShippingAddress> list = new ShopShippingAddressBll().GetList(Session.GetUserID(), false).ToList<ShopShippingAddress>();
+                                            if (list.Count > 0)
+                                            {
+
+
+                                                ShopShippingAddress defaultAddr = null;
+                                                if (list.Exists(p => p.IsDefault))
+                                                {
+                                                    defaultAddr = list.Find(p => p.IsDefault);
+                                                }
+                                                else
+                                                { defaultAddr = list[0]; }
+
+                                                <li class="ui-switchable-panel ui-switchable-panel-selected" style="display: list-item;" selected="selected">
+                                                    <div class="consignee-item item-selected" consigneeid="@defaultAddr.ID">
+                                                        <span title="@defaultAddr.ShipName">@defaultAddr.ShipName</span><b></b>
+                                                    </div>
+                                                    <div class="addr-detail">
+                                                        <span title="@defaultAddr.ShipName" class="addr-name">@defaultAddr.ShipName</span>
+                                                        <span title="@defaultAddr.Address" class="addr-info">@defaultAddr.Address</span>
+                                                        <span class="addr-tel">@defaultAddr.CelPhone</span>
+                                                        <span class="addr-default">默认地址</span>
+                                                    </div>
+                                                    <div class="op-btns">
+                                                        <span></span><a class="ftx-05 edit-consignee" href="#none" clstag="pageclick|keycount|trade_201602181|6" fid="@defaultAddr.ID">编辑</a>
+                                                        <a class="ftx-05 del-consignee" href="#none" fid="@defaultAddr.ID">删除</a>
+                                                    </div>
+                                                </li>
+                                                   foreach (var item in list)
+                                                    {
+                                                        if (item.ID == defaultAddr.ID)
+                                                        {
+                                                            continue;
+                                                        }
+                                                        <li class="ui-switchable-panel ui-switchable-panel-selected" style="display: none;">
+                                                            <div class="consignee-item" consigneeid="@item.ID">
+                                                                <span title="@item.ShipName" limit="8">@item.ShipName</span><b></b>
+                                                            </div>
+                                                            <div class="addr-detail">
+                                                                <span title="@item.ShipName" class="addr-name">@item.ShipName</span>
+                                                                <span title="@item.Address" class="addr-info">@item.Address</span>
+                                                                <span class="addr-tel">@item.CelPhone</span>
+                                                            </div>
+                                                            <div class="op-btns">
+                                                                <a class="ftx-05 setdefault-consignee" href="#none" consigneeid="@item.ID">设为默认地址</a>
+                                                                <a class="ftx-05 edit-consignee" href="#none" consigneeid="@item.ID">编辑</a>
+                                                                <a class="ftx-05 del-consignee" href="#none" consigneeid="@item.ID">删除</a>
+                                                            </div>
+                                                        </li>
+                                                    }
+
+                                            }
+
+
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="addr-switch switch-on" id="consigneeItemAllClick" onclick="show_ConsigneeAll()" clstag="pageclick|keycount|trade_201602181|2">
+                    <span>更多地址</span><b></b>
+                </div>
+                <div class="addr-switch switch-off hide" id="consigneeItemHideClick" onclick="hide_ConsigneeAll()">
+                    <span>收起地址</span><b></b>
+                </div>
+                <input id="consigneeList_giftSenderConsigneeMobile" type="hidden" value="">
+                <input id="consigneeList_giftSenderConsigneeName" type="hidden" value="">
+            </div>
+            <div class="step-cont">
+                <div class="step-add-scroll">
+                    <ul id="consignee-list">
+                        <li class="li li-hover">
+                            <div class="consignee-item item-selected">
+                                <span limit="8" title="李伟龙">李伟龙 山东</span>
+                                <b></b>
+                            </div>
+                            <div class="addr-detail">
+                                <span class="addr-name">李伟龙</span>
+                                <span class="addr-info">
+                                    山东 济南市 历下区
+                                    高新区浪潮路1036号浪潮集团s01楼
+                                </span>
+                                <span class="addr-tel">186****6428</span>
+                                <span class="addr-default">默认地址</span>
+                            </div>
+                            <div class="op-btns">
+                                <span></span>
+                                <a href="#none" class="ftx-05 edit-consignee">编辑</a>
+                                <a href="#none" class="ftx-05 del-consignee">删除</a>
+                            </div>
+                        </li>
+                        <li class="li ">
+                            <div class="consignee-item ">
+                                <span limit="8" title="李伟龙">李伟龙 山东</span>
+                                <b></b>
+                            </div>
+                            <div class="addr-detail">
+                                <span class="addr-name">李伟龙</span>
+                                <span class="addr-info">
+                                    山东 济南市 历下区
+                                    高新区浪潮路1036号浪潮集团s01楼
+                                </span>
+                                <span class="addr-tel">186****6428</span>
+                                <span class="addr-default">默认地址</span>
+                            </div>
+                            <div class="op-btns">
+                                <span></span>
+                                <a href="#none" class="ftx-05 edit-consignee">编辑</a>
+                                <a href="#none" class="ftx-05 del-consignee">删除</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="hr"></div>
+
+            <div class="step-tit">
+                <h3>商品清单</h3>
+            </div>
+            <div class="step-goods">
+                <div class='step-goods-header'>
+                    <div class="column checkbox"></div>
+                    <div class="column goods">商品</div>
+                    <div class="column props"></div>
+                    <div class="column price">单价(元)</div>
+                    <div class="column quantity">数量</div>
+                    <div class="column sum">小计(元)</div>
+
+                </div>
+                <div class="step-goods-body">
+                    <div class="item-list">
+                        <div class="item-single  item-item ">
+                            <div class="item-form">
+
+                                <div class="cell p-goods">
+                                    <div class="goods-item">
+                                        <div class="p-img">
+                                            <a href="#"><img src="http://img10.360buyimg.com/cms/s80x80_jfs/t1585/77/1355422030/217136/bb380bc5/55ee416aN2218124e.jpg"></a>
+                                        </div>
+                                        <div class="item-msg">
+                                            <div class="p-name">
+                                                <a href="http://item.jd.com/1616043020.html" target="_blank">骆驼牌冰雪系列冲锋衣 男 三合一两件套 秋冬季防风保暖抓绒内胆情侣款登山服 宝蓝/深蓝男款 L</a>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="cell p-props p-props-new">
-                                        <div class="props-txt" title="宝蓝/深蓝男款">颜色：宝蓝/深蓝男款</div>
-                                        <div class="props-txt" title="L">尺码：L</div>
-                                    </div>
-
-                                    <div class="cell p-price"><strong>299.00</strong></div>
-                                    <div class="cell p-quantity">
-
-                                        <div class="ac ftx-03 quantity-txt" _stock="stock_1616043020">X1</div>
-                                    </div>
-                                    <div class="cell p-sum">
-                                        <strong>1495.00</strong>
-                                    </div>
-
                                 </div>
+                                <div class="cell p-props p-props-new">
+                                    <div class="props-txt" title="宝蓝/深蓝男款">颜色：宝蓝/深蓝男款</div>
+                                    <div class="props-txt" title="L">尺码：L</div>
+                                </div>
+
+                                <div class="cell p-price"><strong>299.00</strong></div>
+                                <div class="cell p-quantity">
+
+                                    <div class="ac ftx-03 quantity-txt" _stock="stock_1616043020">X1</div>
+                                </div>
+                                <div class="cell p-sum">
+                                    <strong>1495.00</strong>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item-list">
+                        <div class="item-single  item-item ">
+                            <div class="item-form">
+
+                                <div class="cell p-goods">
+                                    <div class="goods-item">
+                                        <div class="p-img">
+                                            <a href="#"><img src="http://img10.360buyimg.com/cms/s80x80_jfs/t1585/77/1355422030/217136/bb380bc5/55ee416aN2218124e.jpg"></a>
+                                        </div>
+                                        <div class="item-msg">
+                                            <div class="p-name">
+                                                <a href="http://item.jd.com/1616043020.html" target="_blank">骆驼牌冰雪系列冲锋衣 男 三合一两件套 秋冬季防风保暖抓绒内胆情侣款登山服 宝蓝/深蓝男款 L</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="cell p-props p-props-new">
+                                    <div class="props-txt" title="宝蓝/深蓝男款">颜色：宝蓝/深蓝男款</div>
+                                    <div class="props-txt" title="L">尺码：L</div>
+                                </div>
+
+                                <div class="cell p-price"><strong>299.00</strong></div>
+                                <div class="cell p-quantity">
+
+                                    <div class="ac ftx-03 quantity-txt" _stock="stock_1616043020">X1</div>
+                                </div>
+                                <div class="cell p-sum">
+                                    <strong>1495.00</strong>
+                                </div>
+
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="trade-foot">
-            <div class="trade-foot-detail-com">
-                <div class="fc-price-info">
-                    <span class="price-tit">应付总额：</span>
-                    <span class="price-num" id="sumPayPriceId">￥4519.40</span>
-                </div>
-                <div class="fc-consignee-info"><span class="mr20">寄送至：山东 济南市 历下区 文化单元102</span><span>收货人：李伟龙 186****6428</span></div>
+    </div>
+    <div class="trade-foot">
+        <div class="trade-foot-detail-com">
+            <div class="fc-price-info">
+                <span class="price-tit">应付总额：</span>
+                <span class="price-num" id="sumPayPriceId">￥4519.40</span>
             </div>
-
+            <div class="fc-consignee-info"><span class="mr20">寄送至：山东 济南市 历下区 文化单元102</span><span>收货人：李伟龙 186****6428</span></div>
         </div>
-        <button type="submit" class="checkout-submit" id="order-submit" onclick="javascript:submit_Order();" clstag="pageclick|keycount|trade_201602181|25">
-            提交订单<b></b>
-        </button>
-    </div> 
+
+    </div>
+    <button type="submit" class="checkout-submit" id="order-submit" onclick="javascript:submit_Order();" clstag="pageclick|keycount|trade_201602181|25">
+        提交订单<b></b>
+    </button>
+</div> 
