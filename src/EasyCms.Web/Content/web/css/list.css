@@ -784,6 +784,23 @@ em, i, u {
         margin: 3px;
     }
 
+    .lb .lb-item {
+        overflow: auto;
+        border-bottom: 1px dashed #DDD;
+    }
+
+        .lb .lb-item:last-child {
+            border-bottom: 0;
+        }
+
+    .lb .lb-title {
+        padding: 10px 5px;
+        font-weight: bold;
+        font-size: 14px;
+        color: #E4393C;
+        font-family: 微软雅黑;
+    }
+
 .mt h3 {
     font-family: "microsoft yahei";
     font-size: 14px;

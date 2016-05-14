@@ -1,5 +1,7 @@
-﻿
-
+﻿@model EasyCms.Model.ShopCategory
+@using EasyCms.Business
+@using EasyCms.Model
+@using System.Data;
 <!DOCTYPE html>
 
 <html>
@@ -47,12 +49,47 @@
                     </h3>
                 </div>
                 <div class="lb">
-                    <ul>
-                        <li><a href="#" class="curr">冲锋衣</a></li>
-                        <li><a href="#">冲锋衣</a></li>
-                        <li><a href="#">冲锋衣</a></li>
-                        <li><a href="#">冲锋衣</a></li>
-                    </ul>
+
+                    @{
+
+                        List<ShopCategory> list = new EasyCms.Business.ShopCategoryBll().GetListWithNavi(null, 3);
+                        IEnumerable<ShopCategory> first = list.Where(p => p.ParentID == Model.ID);
+
+                        if (Model.Depth == 1)
+                        {
+                            first = list.Where(p => p.ID == Model.ID);
+                        }
+                        if (Model.Depth == 2)
+                        {
+                            first = list.Where(p => p.ID == Model.ParentID);
+                        }
+                        foreach (var item in first)
+                        {
+                            <div class="lb-item">
+                                <div class="lb-title">@item.Name</div>
+
+
+                                <ul>
+                                    @{
+                            IEnumerable<ShopCategory> second = list.Where(p => p.ParentID == item.ID);
+                            foreach (var sitem in second)
+                            {
+                                string classname = sitem.ID == Model.ID ? "curr" : "";
+
+                                <li><a href="@sitem.ID" class="@classname">@sitem.Name</a></li>
+                            }
+                                    }
+                                </ul>
+                            </div>
+
+
+                        }
+
+                    }
+
+
+
+
                 </div>
             </div>
         </div>
@@ -136,7 +173,7 @@
         function getData(sortype, page) {
             var reobj;
             $.ajax({
-                url: "/api/app/GetProductsByCategory/0048996c-99a4-46b2-b1fe-7aa041db4aa5/" + page + "/" + sortype,
+                url: "/api/app/GetProductsByCategory/@Model.ID/" + page + "/" + sortype,
                 type: "get",
                 data: {},
                 dataType: "json",
