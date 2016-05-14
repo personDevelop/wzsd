@@ -1,5 +1,7 @@
-﻿
-
+﻿@model EasyCms.Model.ShopCategory
+@using EasyCms.Business
+@using EasyCms.Model
+@using System.Data;
 <!DOCTYPE html>
 
 <html>
@@ -11,15 +13,17 @@
 
 <body>
     <div class="floor">
-        <div class="m-list">
+
+
+        <div class="m-list" style="margin-left:210px;">
             <div class="m-list-wrap">
                 <div id="J_filter" class="filter">
                     <div class="f-line top">
                         <div class="f-sort">
-                            <a href="javascript:;" id="sort_all" class="sort">综合排序<i></i></a>
-                            <a href="javascript:;" id="sort_sales" class="sort curr down">销量<i></i></a>
-                            <a href="javascript:;" id="sort_price" class="sort">价格<i></i></a>
-                            <a href="javascript:;" id="sort_comment" class="sort">评论数<i></i></a>
+                            <a href="javascript:;" id="sort_all" data-sort="" class="sort curr">综合排序<i></i></a>
+                            <a href="javascript:;" id="sort_sales" data-sort='' class="sort">销量<i></i></a>
+                            <a href="javascript:;" id="sort_price" data-sort='SalePrice desc' class="sort">价格<i></i></a>
+                            <a href="javascript:;" id="sort_comment" data-sort='' class="sort">评论数<i></i></a>
                         </div>
 
                         <div id="J_topPage" class="f-pager">
@@ -36,37 +40,116 @@
                 <ul id="J_goodsList_ul"></ul>
             </div>
         </div>
+
+        <div class="side-list" style="height: 100px; width: 210px;  position: absolute; top: 0;">
+            <div id="side-cat-list" style=" border: 1px solid #ddd; margin-bottom: 10px; margin-right: 10px;">
+                <div class="mt">
+                    <h3>
+                        商品类别
+                    </h3>
+                </div>
+                <div class="lb">
+
+                    @{
+
+                        List<ShopCategory> list = new EasyCms.Business.ShopCategoryBll().GetListWithNavi(null, 3);
+                        IEnumerable<ShopCategory> first = list.Where(p => p.ParentID == Model.ID);
+
+                        if (Model.Depth == 1)
+                        {
+                            first = list.Where(p => p.ID == Model.ID);
+                        }
+                        if (Model.Depth == 2)
+                        {
+                            first = list.Where(p => p.ID == Model.ParentID);
+                        }
+                        foreach (var item in first)
+                        {
+                            <div class="lb-item">
+                                <div class="lb-title">@item.Name</div>
+
+
+                                <ul>
+                                    @{
+                            IEnumerable<ShopCategory> second = list.Where(p => p.ParentID == item.ID);
+                            foreach (var sitem in second)
+                            {
+                                string classname = sitem.ID == Model.ID ? "curr" : "";
+
+                                <li><a href="@sitem.ID" class="@classname">@sitem.Name</a></li>
+                            }
+                                    }
+                                </ul>
+                            </div>
+
+
+                        }
+
+                    }
+
+
+
+
+                </div>
+            </div>
+        </div>
     </div>
     <script>
+        var sortmodel = "";
+        function getSortAttr() {
+            var sortinfo = $(".f-sort .curr").attr("data-sort");
+
+            return sortinfo;
+        }
+
+
         $(function () {
 
             $(".f-sort .sort").click(function () {
+                if ($(this).hasClass("curr") && $(this).attr("id") != "sort_sales") {
+                    return;
+                }
                 $(".f-sort .sort").removeClass("curr");
                 $(this).addClass("curr");
                 if ($(this).hasClass("down")) {
                     $(this).removeClass("down");
                     $(this).addClass("up");
+                    $(this).attr("data-sort", "SaleCounts desc");
                 }
                 else if ($(this).hasClass("up")) {
                     $(this).removeClass("up");
                     $(this).addClass("down");
+                    $(this).attr("data-sort", "SaleCounts");
+                } else if ($(this).attr("id") == "sort_sales") {
+                    $(this).addClass("up");//高到低
+                    $(this).attr("data-sort", "SaleCounts desc");
+                } else {
+                    $(".f-sort .sort").removeClass("up");
+                    $(".f-sort .sort").removeClass("down");
                 }
+                getSortAttr();
+                initWrap();
             });
-            var data = getData();
-            var ul = $("#J_goodsList_ul");
+
+
             $("#J_goodsList_ul").delegate("li", "mouseenter", function () {
                 $(this).addClass("hover");
             }).delegate("li", "mouseleave", function () {
                 $(this).removeClass("hover");
             });
 
-            for (var item in data.data.Data) {
-                ul.append(getItem(data.data.Data[item]));
-            }
+            initWrap();
 
 
         });
-
+        function initWrap() {
+            var data = getData(getSortAttr(), "1");
+            var ul = $("#J_goodsList_ul");
+            ul.empty();
+            for (var item in data.data.Data) {
+                ul.append(getItem(data.data.Data[item]));
+            }
+        }
 
         function getItem(obj) {
             var res = [];
@@ -85,10 +168,12 @@
             res.push("</div> </li>");
             return res.join('');
         }
-        function getData() {
+
+
+        function getData(sortype, page) {
             var reobj;
             $.ajax({
-                url: "/api/app/GetProductsByCategory/0048996c-99a4-46b2-b1fe-7aa041db4aa5/",
+                url: "/api/app/GetProductsByCategory/@Model.ID/" + page + "/" + sortype,
                 type: "get",
                 data: {},
                 dataType: "json",
