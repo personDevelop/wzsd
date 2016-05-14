@@ -10,7 +10,70 @@
     <title></title>
 </head>
 @Styles.Render("~/bundles/listcss");
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
 
+    a {
+        text-decoration: none;
+    }
+
+        a:hover {
+            text-decoration: none;
+        }
+
+    #tcdPageCode {
+        padding: 15px 20px;
+        text-align: right;
+        color: #ccc;
+    }
+
+        #tcdPageCode a {
+            display: inline-block;
+            color: #428bca;
+            display: inline-block;
+            height: 25px;
+            line-height: 25px;
+            padding: 0 10px;
+            border: 1px solid #ddd;
+            margin: 0 2px;
+            vertical-align: middle;
+            -webkit-transition: all .2s ease-out;
+        }
+
+            #tcdPageCode a:hover {
+                text-decoration: none;
+                border: 1px solid #428bca;
+            }
+
+        #tcdPageCode span.current {
+            display: inline-block;
+            height: 25px;
+            line-height: 25px;
+            padding: 0 10px;
+            margin: 0 2px;
+            color: #fff;
+            background-color: #428bca;
+            border: 1px solid #428bca;
+            vertical-align: middle;
+        }
+
+        #tcdPageCode span.disabled {
+            display: inline-block;
+            height: 25px;
+            line-height: 25px;
+            padding: 0 10px;
+            margin: 0 2px;
+            color: #bfbfbf;
+            border: 1px solid #bfbfbf;
+            cursor: not-allowed;
+            vertical-align: middle;
+        }
+</style>
+<script src="http://www.lanrenzhijia.com/ajaxjs/jquery.page.js"></script>
 <body>
     <div class="floor">
 
@@ -40,7 +103,7 @@
                 <ul id="J_goodsList_ul"></ul>
             </div>
         </div>
-
+        <div id="tcdPageCode"></div>
         <div class="side-list" style="height: 100px; width: 210px;  position: absolute; top: 0;">
             <div id="side-cat-list" style=" border: 1px solid #ddd; margin-bottom: 10px; margin-right: 10px;">
                 <div class="mt">
@@ -102,7 +165,8 @@
             return sortinfo;
         }
 
-
+        var page = 1;
+        
         $(function () {
 
             $(".f-sort .sort").click(function () {
@@ -142,9 +206,26 @@
 
 
         });
+
+        var p = false;
         function initWrap() {
-            var data = getData(getSortAttr(), "1");
+            var data = getData(getSortAttr(), page);
             var ul = $("#J_goodsList_ul");
+            if (!p) {
+                $("#tcdPageCode").createPage({
+                    pageCount: data.data.TotalPageCount,
+                    current: data.data.PageIndex,
+                    backFn: function (p) {
+                        console.log(p);
+                        page = p;
+                        initWrap();
+                    }
+                });
+                p = true;
+            }
+            $("#J_resCount").html(data.data.TotalRecourdCount);
+            $(".fp-text b").html(data.data.PageIndex);
+            $(".fp-text i").html(data.data.TotalPageCount);
             ul.empty();
             for (var item in data.data.Data) {
                 ul.append(getItem(data.data.Data[item]));
