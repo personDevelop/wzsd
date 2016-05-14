@@ -24,7 +24,7 @@
                     <div class="step-tit">
                         <h3>收货人信息</h3>
                         <div class="extra-r">
-                            <a class="ftx-05" onclick="use_NewConsignee()" href="#none" >新增收货地址</a>
+                            <a class="ftx-05" onclick="AddAddr('@Url.Action("index","addr")')" href="#none" >新增收货地址</a>
                             <input id="del_consignee_type" type="hidden" value="0">
                         </div>
                     </div>
@@ -35,14 +35,11 @@
                                     <div class="consignee-scroll">
                                         <div class="consignee-cont" id="consignee1" style="height: 42px;">
                                             <ul id="consignee-list">
-                                                @{
-
+                                                @{ 
                                                     //获取当前人的所有地址
                                                     List<ShopShippingAddress> list = new ShopShippingAddressBll().GetList(Session.GetUserID(), false).ToList<ShopShippingAddress>();
                                                     if (list.Count > 0)
                                                     {
-
-
                                                         ShopShippingAddress defaultAddr = null;
                                                         if (list.Exists(p => p.IsDefault))
                                                         {
@@ -350,6 +347,10 @@
                                 <div class="payment-list">
                                     <div class="list-cont">
                                         <ul id="payment-list">
+                                            @{ 
+                                                //获取支付方式
+
+                                            }
                                             <input id="instalmentPlan" type="hidden" value="false">
 
 

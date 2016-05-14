@@ -30,6 +30,10 @@ namespace EasyCms.Web
              "~/Content/web/css/cart.css"));
             bundles.Add(new StyleBundle("~/bundles/ordercss").Include(
            "~/Content/web/css/order.css"));
+            bundles.Add(new StyleBundle("~/bundles/areacss").Include(
+                  "~/Content/web/css/service.css",
+                    "~/Content/web/css/backpanel.css",
+         "~/Content/web/css/area.css"));
             bundles.Add(new StyleBundle("~/bundles/listcss").Include(
              "~/Content/web/css/list.css"));
             bundles.Add(new StyleBundle("~/bundles/upimgcss").Include(
@@ -102,8 +106,11 @@ namespace EasyCms.Web
                 ));
             bundles.Add(new ScriptBundle("~/bundles/orderjs").Include(
 
-              "~/Content/js/orderjs.js"
+              "~/Content/js/order.js" 
           ));
+            bundles.Add(new ScriptBundle("~/bundles/addrjs").Include(
+                  "~/Content/js/basePatch.js" 
+         ));
             #endregion
 
 

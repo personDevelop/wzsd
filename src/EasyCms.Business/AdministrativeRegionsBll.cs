@@ -73,5 +73,11 @@ namespace EasyCms.Business
         {
             throw new NotImplementedException();
         }
+
+
+        public List<AdministrativeRegions> GetRegionPathWithNotRoot(int regeonID)
+        {
+            return Dal.GetRegionPathWithNotRoot(regeonID);
+        }
     }
 }

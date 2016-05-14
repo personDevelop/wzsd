@@ -5,8 +5,7 @@
     ViewBag.Title = "购物车--" + EasyCms.CmsSessionExtend.WebSite.Name;
 }
 
-@Styles.Render("~/bundles/cardcss")
-<script src="http://localhost:7161/Content/web/common.js"></script>
+@Styles.Render("~/bundles/cardcss") 
 <div class="floor" style="width:990px;">
     <div class="cart-main">
         <div class="cart-filter-bar">
@@ -264,7 +263,7 @@
 
                 } else {
                     //让登录
-                    showFormurl('@Url.Action("LoginBox","Account")', function (result) {
+                    showFormurl("会员登录",'@Url.Action("LoginBox","Account")', function (result) {
                         if (result.result) {
                             $("#btnSumbit").trigger("click");
                         }
@@ -276,7 +275,7 @@
 
             }
             else {
-                alert("请至少选中一件商品！");
+                openTipsWrong("请至少选中一件商品！");
 
             }
 

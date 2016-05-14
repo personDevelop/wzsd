@@ -402,5 +402,12 @@ namespace EasyCms.Model
         /// </summary>
         [NotDbCol]
         public string FullPath { get; set; }
+
+        /// <summary>
+        /// 地址路径的父子名称  格式 父名称|子名称
+        /// </summary>
+        [NotDbCol]
+        public string Path { get; set; }
+
     }
 }

@@ -9,12 +9,13 @@ using System.Xml.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace 接口测试
 {
-    public partial class Form2 : Form
+    public partial class Formaddrjson : Form
     {
-        public Form2()
+        public Formaddrjson()
         {
             InitializeComponent();
         }
@@ -29,20 +30,20 @@ namespace 接口测试
             jbname = textBox2.Text.Split(new char[] { ' ', ',', ';', '，', '；' }, StringSplitOptions.RemoveEmptyEntries);
             if (jbname.Length == (endjb - startjb + 1))
             {
-
-                sb = new StringBuilder("<root>");
+                sb = new StringBuilder();
+                sb.Append("{");
                 list = Sharp.Data.SessionFactory.Default.From<AdministrativeRegions>().Where(AdministrativeRegions._.Jb >= startjb && AdministrativeRegions._.Jb <= endjb).List<AdministrativeRegions>();
                 int jb = 0;
+                sb.AppendFormat("\"{0}\":[", jbname[0]);
                 foreach (AdministrativeRegions item in list.Where(p => p.Jb == startjb))
-                {
-                    jb = 0;
-                    Generateor(item, jb);
+                { 
+                    Generateor(item, startjb, jb+1);
 
                 }
-                sb.Append("</root>");
+                sb.Append("]}");
                 if (saveFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    XDocument.Parse(sb.ToString()).Save(saveFileDialog1.FileName);
+                    File.WriteAllText(saveFileDialog1.FileName, sb.ToString());
                 }
             }
             else
@@ -51,18 +52,27 @@ namespace 接口测试
             }
         }
 
-        private void Generateor(AdministrativeRegions item, int jb)
+        private void Generateor(AdministrativeRegions item, int jb, int nameindex)
         {
-            sb.AppendFormat("<{2} id=\"{0}\" name=\"{1}\">", item.ID, item.Name, jbname[jb]);
-            //获取其子
-            foreach (AdministrativeRegions child in list.Where(p => p.ParentID == item.ID))
+            if (sb[sb.Length-1]=='}')
             {
-                Generateor(child, jb + 1);
+                sb.Append(",");
             }
-            sb.AppendFormat("</{0}>", jbname[jb]);
+            sb.Append("{");
+            sb.AppendFormat("\"id\":\"{0}\", \"name\":\"{1}\",\"jb\":\"{2}\"", item.ID, item.Name, jb);
+            if (list.Exists(p => p.ParentID == item.ID))
+            {
+                sb.AppendFormat(",\"{0}\":[", jbname[nameindex]);
+                foreach (AdministrativeRegions child in list.Where(p => p.ParentID == item.ID))
+                { 
+                    Generateor(child, jb + 1, nameindex + 1);
+                }
+                sb.Append("]");
+            }
 
+            sb.Append("}");
         }
 
-          
+
     }
 }

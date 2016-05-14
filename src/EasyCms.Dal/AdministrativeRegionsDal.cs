@@ -79,6 +79,20 @@ namespace EasyCms.Dal
 
         }
 
+        public List<AdministrativeRegions> GetRegionPathWithNotRoot(int regeonID)
+        {
+            AdministrativeRegions curent= Dal.From<AdministrativeRegions>().Where(AdministrativeRegions._.ID == regeonID).Select(AdministrativeRegions._.FullPath, AdministrativeRegions._.Jb).ToFirst<AdministrativeRegions>();
+            string fullpath = curent.FullPath;
+           fullpath=fullpath.Substring( fullpath.IndexOf('|', 2));
+            List<AdministrativeRegions> list= Dal.From<AdministrativeRegions>().Where(AdministrativeRegions._.FullPath.StartsWith(fullpath)&& AdministrativeRegions._.Jb<=curent.Jb)
+            .Select  (AdministrativeRegions._.ID, AdministrativeRegions._.Code, AdministrativeRegions._.Name, AdministrativeRegions._.ParentID, AdministrativeRegions._.Path, AdministrativeRegions._.FullPath)
+                    
+                    .OrderBy(AdministrativeRegions._.Code).List<AdministrativeRegions>();
+            return list;
+
+
+        }
+
         public bool Exit(int ID, int parentID, string RecordStatus, string val, bool IsCode)
         {
             WhereClip where = null;
@@ -105,7 +119,7 @@ namespace EasyCms.Dal
             if (IsForSelected)
             {
                 return Dal.From<AdministrativeRegions>().
-                    Select(AdministrativeRegions._.ID, AdministrativeRegions._.Code, AdministrativeRegions._.Name, AdministrativeRegions._.ParentID, AdministrativeRegions._.Path)
+                    Select(AdministrativeRegions._.ID, AdministrativeRegions._.Code, AdministrativeRegions._.Name, AdministrativeRegions._.ParentID, AdministrativeRegions._.Path, AdministrativeRegions._.FullPath)
                     .Where(AdministrativeRegions._.ParentID == parentID)
                     .OrderBy(AdministrativeRegions._.Code).ToDataTable();
             }

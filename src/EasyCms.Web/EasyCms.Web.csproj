@@ -320,6 +320,7 @@
     <Compile Include="Common\UEFileUpLoad\UploadHandler.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controllers\AddrController.cs" />
     <Compile Include="Controllers\CardController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\DefaultController.cs" />
@@ -367,6 +368,7 @@
     <Content Include="Content\Images\reg_banner.jpg" />
     <Content Include="Content\Images\search_lg.png" />
     <Content Include="Content\js\account.js" />
+    <Content Include="Content\js\addr.js" />
     <Content Include="Content\js\jquery.jqzoom.js" />
     <Content Include="Content\js\List.js" />
     <Content Include="Content\js\Product.js" />
@@ -750,6 +752,9 @@
     <Content Include="Content\upload\Customrwebuploader.css" />
     <Content Include="Content\upload\upload - 复制.css" />
     <Content Include="Content\upload\upload.css" />
+    <Content Include="Content\web\css\backpanel.css" />
+    <Content Include="Content\web\css\service.css" />
+    <Content Include="Content\web\css\area.css" />
     <Content Include="Content\web\css\cart.css" />
     <Content Include="Content\web\css\images\618-tips-01.png" />
     <Content Include="Content\web\css\images\618-tips-arrow.png" />
@@ -804,7 +809,6 @@
     <Content Include="Content\web\css\login.css" />
     <Content Include="Content\web\css\main.css" />
     <Content Include="Content\web\css\news.css" />
-    <Content Include="Content\web\css\order - 复制.css" />
     <Content Include="Content\web\css\order.css" />
     <Content Include="Content\web\css\product.css" />
     <Content Include="Content\js\order.js" />
@@ -1453,6 +1457,7 @@
     <Content Include="Views\Account\Dialog.cshtml" />
     <Content Include="Views\Category\List.cshtml" />
     <Content Include="Views\Order\Index.cshtml" />
+    <Content Include="Views\Addr\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

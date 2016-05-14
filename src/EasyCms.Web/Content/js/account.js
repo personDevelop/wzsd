@@ -33,13 +33,16 @@ var DialogCtrl = {
         });
         this.setPosition(content);
     },
-    showFormurl: function (url, closeCallBack) {
-        this.init({
+    showFormurl: function (title, url, closeCallBack, opts) {
+        opts = opts||{};
+        opts = $.extend(opts, {
+            "title": title,
             "type": "url",
             "url": url,
             "height": 400,
             onClose: closeCallBack
         });
+        this.init(opts);
     },
     showError: function (mes) {
         this.init({ "mes": mes, "infotype": "warn" });
@@ -125,9 +128,9 @@ function setResult(data, closeelement) {
     parent.$(closeelement, parent.document).data("dialogResult", data);
 
 }
-function showFormurl(url,closeCallBack) {
+function showFormurl(title,url,closeCallBack,opts) {
 
-    DialogCtrl.showFormurl(url, closeCallBack);
+    DialogCtrl.showFormurl(title, url, closeCallBack, opts);
 }
 
 function openTips(msg) {
