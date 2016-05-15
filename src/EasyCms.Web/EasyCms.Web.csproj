@@ -370,6 +370,7 @@
     <Content Include="Content\js\account.js" />
     <Content Include="Content\js\addr.js" />
     <Content Include="Content\js\jquery.jqzoom.js" />
+    <Content Include="Content\js\jquery.page.js" />
     <Content Include="Content\js\List.js" />
     <Content Include="Content\js\Product.js" />
     <Content Include="Content\skin\default\bg_state.jpg" />
@@ -1458,6 +1459,8 @@
     <Content Include="Views\Category\List.cshtml" />
     <Content Include="Views\Order\Index.cshtml" />
     <Content Include="Views\Addr\Index.cshtml" />
+    <Content Include="Views\Account\User.cshtml" />
+    <Content Include="Views\Account\Order.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
