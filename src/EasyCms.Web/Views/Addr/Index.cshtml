@@ -13,17 +13,17 @@
     @Scripts.Render("~/bundles/onlyjquery") 
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/jqueryAjax")
-
+    @Scripts.Render("~/bundles/account")
 </head>
 <body id="consignee_body" marginwidth="0" marginheight="0">
-    @using (Ajax.BeginForm("Save", "Addr", new AjaxOptions() { AllowCache = false, OnSuccess = "OnSuccess", OnFailure = "OnFail" }, new { id = "formaddr" }))
+    @using (Ajax.BeginForm("Save", "Addr", new AjaxOptions() { AllowCache = false, OnBegin="showloading", OnComplete="closeloading", OnSuccess = "OnSuccess", OnFailure = "OnFail" }, new { id = "formaddr" }))
     {
         @Html.AntiForgeryToken()
         <div class="form" id="consignee-form" name="consignee-form">
            
             
             @Html.Hidden("ID", Model.ID)
-            @Html.Hidden("RecordStatus" ,Model.RecordStatus.ToString())
+            @Html.Hidden("RecordStatus", Model.RecordStatus.ToString())
           
             @Html.ValidationSummary()
             <div class="item" id="name_div">
@@ -37,6 +37,7 @@
                 <span class="label"><span style="color:red">*</span>&nbsp;所在地区：</span>
               
                 @Html.Hidden("RegionId", Model.RegionId)
+                
                 <div class="fl">
                     <!-- 新版地址选择 Start -->
                     <div id="selectRegionId">
@@ -54,27 +55,27 @@
                 <span class="label" id="address_div"><span style="color:red">*</span>&nbsp;详细地址：</span>
                 <div class="fl">
                     <!--span id="areaNameTxt"></span-->
-                    @Html.TextBoxFor(m => m.Address, new { @class = "itxt itxt02", maxlength = "50", onblur = "check_Consignee('address_div')" })
+                    @Html.TextBoxFor(m => m.Address, new { @class = "itxt itxt02", maxlength = "50", })
                     <span class="error-msg" id="address_div_error"></span>
                 </div>
             </div>
             <div class="item" id="call_div">
                 <span class="label"><span style="color:red">*</span>&nbsp;手机号码：</span>
                 <div class="fl">
-                    @Html.TextBoxFor(m => m.CelPhone, new { @class = "itxt", onblur = "check_Consignee('call_mobile_div')", onfocus = "if(value == defaultValue){value='';}", maxlength = "11" })
-
+                    @Html.TextBoxFor(m => m.CelPhone, new { @class = "itxt",  maxlength = "11" })
+                    <span class="error-msg" id="call_div_error"></span>
 
                 </div>
                 <div class="fl">
                     <span class="label">固定电话：</span>
-                    @Html.TextBoxFor(m => m.TelPhone, new { @class = "itxt", onblur = "check_Consignee('call_phone_div')", onfocus = "if(value == defaultValue){value='';}", maxlength = "20" })
+                    @Html.TextBoxFor(m => m.TelPhone, new { @class = "itxt",   maxlength = "20" })
                 </div>
                 <span class="error-msg" id="call_div_error"></span>
             </div>
             <div class="item" id="email_div">
                 <span class="label">邮箱：</span>
                 <div class="fl">
-                    @Html.TextBoxFor(m => m.EmailAddress, new { @class = "itxt", onblur = "check_Consignee('email_div')", onfocus = "if(value == defaultValue){value='';}", maxlength = "50" })
+                    @Html.TextBoxFor(m => m.EmailAddress, new { @class = "itxt",   maxlength = "50" })
 
                     <span class="error-msg" id="email_div_error"></span>
                     <div class="ftx-03">用来接收订单提醒邮件，便于您及时了解订单状态</div>
@@ -83,7 +84,7 @@
             <div class="item" id="alias_div">
                 <span class="label">地址别名：</span>
                 <div class="fl">
-                    @Html.TextBoxFor(m => m.Remark, new { @class = "itxt", onblur = "check_Consignee('alias_div')", onfocus = "if(value == defaultValue){value='';}", maxlength = "20" })
+                    @Html.TextBoxFor(m => m.Remark, new { @class = "itxt",    maxlength = "20" })
 
                     <span class="error-msg" id="alias_div_error"></span>
                     <span class="consignee-tag-info">建议填写常用名称</span>
@@ -93,6 +94,13 @@
                     <span onclick="javascript: setEditAddressAilas(this);" id="parentHome">父母家</span>
                     <span onclick="javascript: setEditAddressAilas(this);" id="company">公司</span>
                 </div>
+            </div>
+            <div class="item">
+                <span class="label">&nbsp;</span>
+                <div class="fl">
+                    <span id="addNumLimitNote" class="status error" style="display:none"></span>
+                </div>
+                <div style="display:none"><input id="consignee_form_reset" name="" type="reset"></div>
             </div>
             <div class="item">
                 <span class="label">&nbsp;</span>
@@ -107,508 +115,82 @@
             <!--yanwenqi 全球购添加身份证号下面-->
             <!--end-->
         </div>
-        <span id="addNumLimitNote" class="status error" style="display:none">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 当前地址数量已达上限，若要继续添加新地址，请先删除部分收货地址。</span>
+        
                                     }
 
     <script type="text/javascript">
         $("#consignee_name").focus();
        
-       
-
-
-     
-          
-        function setEditAddressAilas(elemnt) {
-            $("#Remark").val($(elemnt).text());
+        function showloading( )
+        { 
+            $(".loading").show(); 
+              
+        } function closeloading()
+        { 
+            $(".loading").hide(); 
+              
         }
-        function check_Consignee(divId) {
-            var errorFlag = false;
-            var errorMessage = null;
-            var value = null;
-            var consignee_id = $("#consignee_form_id").val();
-
-            var flowType = parent.$("#flowType").val();
-
-            if (divId == "alias_div") {
-                value = $("#consignee_addressName").val();
-                if (isEmpty(value)) {
-                    //errorFlag = true;
-                    //errorMessage = "请您填写地址别名";
-                } else if (value.length > 20) {
-                    errorFlag = true;
-                    errorMessage = "地址别名不能大于20位";
-                }
-                else if (!is_forbid(value)) {
-                    errorFlag = true;
-                    errorMessage = "地址别名中含有非法字符";
-                }
-            }
-                // 验证收货人名称
-            else if (divId == "name_div") {
-                value = $("#consignee_name").val();
-                if (isEmpty(value)) {
-                    errorFlag = true;
-                    errorMessage = "请您填写收货人姓名";
-                }
-                if (flowType == 10) {
-                    if (!/^([\u4e00-\u9fa5])([\u4e00-\u9fa5·]){0,23}([\u4e00-\u9fa5])$/i.test(value)) {
-                        errorFlag = true;
-                    } else {
-                        if (value.search(/·{2,}/) > -1) {
-                            errorFlag = true;
-                        }
-                    }
-                    if (errorFlag) {
-                        errorMessage = "收件人姓名仅支持简体中文，长度不超过25个字";
-                    }
-                } else {
-                    if (value.length > 25) {
-                        errorFlag = true;
-                        errorMessage = "收货人姓名不能大于25位";
-                    }
-                    if (!is_forbid(value)) {
-                        errorFlag = true;
-                        errorMessage = "收货人姓名中含有非法字符";
-                    }
-                }
-            }
-                // 验证邮箱格式
-            else if (divId == "email_div") {
-                value = $("#consignee_email").val();
-                if (!isEmpty(value)) {
-                    if (value.length > 50) {
-                        errorFlag = true;
-                        errorMessage = "邮箱长度不能大于50位";
-                    }
-                    if (!check_email_new(value)) {
-                        errorFlag = true;
-                        errorMessage = "邮箱格式不正确";
-                    }
-                    if (consignee_id == "") {
-                        if (value.indexOf("*") > -1) {
-                            errorFlag = true;
-                            errorMessage = "邮箱格式不正确";
-                        }
-                    }
-                }
-            }
-                // 验证地区是否完整
-            else if (divId == "area_div") {
-                var provinceId = $("#consignee_province").find("option:selected").val();
-                var cityId = $("#consignee_city").find("option:selected").val();
-                var countyId = $("#consignee_county").find("option:selected").val();
-                var townId = $("#consignee_town").find("option:selected").val();
-                // 验证地区是否正确
-                if (isEmpty(provinceId) || isEmpty(cityId) || isEmpty(countyId)
-                        || ($("#span_town").html() != null && $("#span_town").html() != "" && !$("#span_town").is(":hidden") && isEmpty(townId))) {
-                    errorFlag = true;
-                    errorMessage = "请您填写完整的地区信息";
-                }
-            }
-                // 验证地区是否完整
-            else if (divId == "jd_area_tab") {
-                var provinceId = consigneeArea.provinceId;
-                var cityId = consigneeArea.cityId;
-                var countyId = consigneeArea.countyId;
-                var townId = consigneeArea.townId;
-                // 验证地区是否正确
-                if ("0" == provinceId || "0" == cityId || "0" == countyId
-                        || 0 == provinceId || 0 == cityId || 0 == countyId) {
-                    errorFlag = true;
-                    errorMessage = "请您填写完整的地区信息";
-                }
-            }
-                // 验证收货人地址
-            else if (divId == "address_div") {
-                value = $("#consignee_address").val();
-                if (isEmpty(value)) {
-                    errorFlag = true;
-                    errorMessage = "请您填写收货人详细地址";
-                }
-                if (!is_forbid(value)) {
-                    errorFlag = true;
-                    errorMessage = "收货人详细地址中含有非法字符";
-                }
-                if (value.length > 50) {
-                    errorFlag = true;
-                    errorMessage = "收货人详细地址过长";
-                }
-            }
-                // 验证手机号码
-            else if (divId == "call_mobile_div") {
-                value = $("#consignee_mobile").val();
-                divId = "call_div";
-                if (isEmpty(value)) {
-                    errorFlag = true;
-                    errorMessage = "请您填写收货人手机号码";
-                } else {
-                    if (!check_mobile_new(value)) {
-                        errorFlag = true;
-                        errorMessage = "手机号码格式不正确";
-                    }
-                    if (consignee_id == "" && value.indexOf("*") > -1) {
-                        errorFlag = true;
-                        errorMessage = "手机号码格式不正确";
-                    }
-                }
-
-                if (!errorFlag) {
-                    value = $("#consignee_phone").val();
-                    if (!isEmpty(value)) {
-                        if (!is_forbid_new(value)) {
-                            errorFlag = true;
-                            errorMessage = "固定电话号码中含有非法字符";
-                        }
-                        if (!checkPhoneNew($("#consignee_mobile").val(), value)) {
-                            errorFlag = true;
-                            errorMessage = "固定电话号码格式不正确";
-                        }
-                        if (consignee_id == "" && value.indexOf("*") > -1) {
-                            errorFlag = true;
-                            errorMessage = "固定电话号码格式不正确";
-                        }
-                    }
-                }
-            }
-                //end
-                // 验证电话号码
-            else if (divId == "call_phone_div") {
-                value = $("#consignee_phone").val();
-                divId = "call_div";
-                if (!isEmpty(value)) {
-                    if (!is_forbid_new(value)) {
-                        errorFlag = true;
-                        errorMessage = "固定电话号码中含有非法字符";
-                    }
-                    if (!checkPhoneNew($("#consignee_mobile").val(), value)) {
-                        errorFlag = true;
-                        errorMessage = "固定电话号码格式不正确";
-                    }
-                    if (consignee_id == "" && value.indexOf("*") > -1) {
-                        errorFlag = true;
-                        errorMessage = "固定电话号码格式不正确";
-                    }
-                }
-                if (true) {
-                    value = $("#consignee_mobile").val();
-                    if (isEmpty(value)) {
-                        errorFlag = true;
-                        errorMessage = "请您填写收货人手机号码";
-                    } else {
-                        if (!check_mobile_new(value)) {
-                            errorFlag = true;
-                            errorMessage = "手机号码格式不正确";
-                        }
-                        if (consignee_id == "" && value.indexOf("*") > -1) {
-                            errorFlag = true;
-                            errorMessage = "手机号码格式不正确";
-                        }
-                    }
-                }
-            }
-
-            if (errorFlag) {
-                $("#" + divId + "_error").html(errorMessage);
-                $("#" + divId + "_error").addClass("message");
+        function OnSuccess(result)
+        {
+            if (!result.result) {
+                $(".error").html("<b></b>" + result.Msg);
+                $(".error").show(); 
                 return false;
             } else {
-                $("#" + divId + "_error").removeClass("message");
-                $("#" + divId + "_error").html("");
+                setResult(result)
+                closeDialog();
             }
-            return true;
         }
+        function OnFail(result)
+        {
+            if (result) {
+                $(".error").html("<b></b>" + result);
+                $(".error").show(); 
+                return false;
+            }
+        }
+        function setEditAddressAilas(elemnt) {
+            $("#Remark").val($(elemnt).text());
+        } 
         function save_Consignee() {
-
-
-            // 四级地址使用地区选择tab的情况
-            consignee_provinceId = consigneeArea.provinceId;
-            consignee_cityId = consigneeArea.cityId;
-            consignee_countyId = consigneeArea.countyId;
-            consignee_townId = consigneeArea.townId;
-            consignee_provinceName = consigneeArea.provinceName;
-            consignee_cityName = consigneeArea.cityName;
-            consignee_countyName = consigneeArea.countyName;
-            consignee_townName = consigneeArea.townName;
-
-            var checkConsignee = true;
-            // 验证收货人信息是否正确
-            if (!check_Consignee("name_div"))
-                checkConsignee = false;
-
-            // 验证地区是否正确
-            // 四级地址使用地区选择tab的情况
-            if (1 == consigneeArea.isAreaTab) {
-                if (!check_Consignee("jd_area_tab"))
-                    checkConsignee = false;
-                // 四级地址使用下拉菜单的情况
-            } else {
-                if (!check_Consignee("area_div"))
-                    checkConsignee = false;
-            }
-            // 验证收货人地址是否正确
-            if (!check_Consignee("address_div"))
-                checkConsignee = false;
-            // 验证手机号码是否正确
-            if (!check_Consignee("call_mobile_div"))
-                checkConsignee = false;
-
-            // yanwenqi 全球购增加身份证号 验证身份证号
-            if (!check_Consignee("idCard_div"))
-                checkConsignee = false;
-            //end
-
-            // 验证电话是否正确
-            if (!check_Consignee("call_phone_div"))
-                checkConsignee = false;
-            // 验证邮箱是否正确
-            if (!check_Consignee("email_div"))
-                checkConsignee = false;
-            //验证地址别名是否正确
-            if (!check_Consignee("alias_div"))
-                checkConsignee = false;
-
-            if (!checkConsignee)
-                return;
-            var areaName = null;
-
-            // 四级地址使用地区选择tab的情况
-            if (1 == consigneeArea.isAreaTab) {
-                areaName = consignee_provinceName + " " + consignee_cityName + " " + consignee_countyName + " " + consignee_townName;
-
-                // 四级地址使用下拉菜单的情况
-            } else {
-                consignee_provinceName = consignee_provinceName.replace("*", "");
-                consignee_cityName = consignee_cityName.replace("*", "");
-                consignee_countyName = consignee_countyName.replace("*", "");
-                areaName = consignee_provinceName + " " + consignee_cityName + " " + consignee_countyName + " ";
-                if (consignee_townName != null && consignee_townName != "")
-                    areaName = areaName + consignee_townName.replace("*", "");
-                // 如果使用常用联系人列表，则不对四级地址进行显示判断
-                if (isEmpty(consignee_townId) || $("#span_town").is(":hidden"))
-                    consignee_townId = 0;
-            }
-
-            if (consignee_type == "")
-                consignee_type = 1;
-            addressName = $("#consignee_addressName").val();
-            if (isEmpty(addressName)) {
-                addressName = consignee_name + " " + consignee_provinceName;
-            }
-            var param = "consigneeParam.id=" + consignee_id + "&consigneeParam.type=" + consignee_type
-                + "&consigneeParam.name=" + consignee_name + "&consigneeParam.provinceId=" + consignee_provinceId
-                + "&consigneeParam.cityId=" + consignee_cityId + "&consigneeParam.countyId=" + consignee_countyId
-                + "&consigneeParam.townId=" + consignee_townId + "&consigneeParam.address=" + consignee_address
-                + "&consigneeParam.mobile=" + consignee_mobile + "&consigneeParam.email=" + consignee_email
-                + "&consigneeParam.phone=" + consignee_phone + "&consigneeParam.provinceName=" + consignee_provinceName
-                + "&consigneeParam.cityName=" + consignee_cityName + "&consigneeParam.countyName=" + consignee_countyName
-                + "&consigneeParam.townName=" + consignee_townName + "&consigneeParam.commonConsigneeSize=" + consignee_commons_size
-                + "&consigneeParam.isUpdateCommonAddress=" + isUpdateCommonAddress + "&consigneeParam.giftSenderConsigneeName=" + giftSender_consignee_name
-                + "&consigneeParam.giftSendeConsigneeMobile=" + giftSender_consignee_mobile + "&consigneeParam.noteGiftSender=" + noteGiftSender
-                + "&consignee_ceshi1=" + consignee_ceshi1 + "&consigneeParam.idCard=" + consignee_idCard + "&consigneeParam.addressName=" + addressName;
-            param = parent.addFlowTypeParam(param);
-            var actionUrl = OrderAppConfig.DynamicDomain + "/consignee/saveConsignee.action";
-            jQuery.ajax({
-                type: "POST",
-                dataType: "json",
-                url: actionUrl,
-                data: param,
-                cache: false,
-                success: function (consigneeResult, textStatus) {
-                    if (parent.isUserNotLogin(consigneeResult)) {
-                        parent.goToLogin();
-                        return;
-                    }
-                    if (consigneeResult.success) {
-                        parent.$("#beforePickName").val('');
-                        parent.$("#beforePickSiteId").val('');
-                        parent.$("#beforePickDate").val('');
-                        parent.$("#beforePickSiteNum").val('');
-                        parent.$("#beforePickRegionId").val('-1');
-                        parent.$("#beforePickSelRegionid").val('');
-                        var invoiceHtml = parent.$("#part-inv").html();
-                        if (consigneeResult.restInvoiceByAddress == 22) {
-                            parent.$("#part-inv").html(invoiceHtml.replace("办公用品", "办公用品（附购物清单）"));
-                        }
-                        if (consigneeResult.restInvoiceByAddress == 2) {
-                            parent.$("#part-inv").html(invoiceHtml.replace("（附购物清单）", ""));
-                        }
-                        if (consigneeResult.supportElectro) {
-                            if (null != consigneeResult.restInvoiceCompanyName) {
-                                parent.$("#part-inv").html("<span class='mr10'>普通发票（纸质）&nbsp; </span><span class='mr10'> " + consigneeResult.restInvoiceCompanyName + "&nbsp; </span><span class='mr10'>明细&nbsp; </span><a onclick='edit_Invoice()' class='ftx-05 invoice-edit' href='#none'>修改</a>");
-                            } else {
-                                parent.$("#part-inv").html("<span class='mr10'>普通发票（纸质）&nbsp; </span><span class='mr10'> 个人&nbsp; </span><span class='mr10'>明细&nbsp; </span><a onclick='edit_Invoice()' class='ftx-05 invoice-edit' href='#none'>修改</a>");
-                            }
-                        }
-                        if (consigneeResult.defaultElectro) {
-                            parent.$("#part-inv").html("<span class='mr10'>普通发票（电子）&nbsp; </span><span class='mr10'> 个人&nbsp; </span><span class='mr10'>明细&nbsp; </span><a onclick='edit_Invoice()' class='ftx-05 invoice-edit' href='#none'>修改</a>");
-                        }
-
-                        parent.$("#isNeedOpenInvoice").val(consigneeResult.openInvoice); // 隐藏域，判断修改地址后，是否需要修改发票信息，广州机构比较特殊
-                        if (consigneeResult.resultCode == "isRefreshArea") {
-                            show_ConsigneeDetail(consignee_id);
-                        } else {
-                            consignee_mobile = consigneeResult.consigneeShowView.mobile;
-                            var areaIds = consigneeResult.consigneeShowView.provinceId + "-" + consigneeResult.consigneeShowView.cityId + "-" + consigneeResult.consigneeShowView.countyId + "-" + consigneeResult.consigneeShowView.townId;
-                            // 弹出对应提示
-                            parent.$("#consignee-ret").html(consigneeResult.consigneeHtml);
-                            parent.$('#consignee_id').val(consigneeResult.consigneeShowView.id);
-                            parent.$('#hideAreaIds').val(areaIds);
-                            if (parent.isBigItemChange())
-                                parent.bigItemChangeArea();
-                            // 预售电话修改
-                            if (parent.$("#isPresale").val() == "true") {
-                                parent.$("#hiddenUserMobileByPresale").val(consignee_mobile);
-                                if (parent.$("#presaleMobile input").size() > 0) {
-                                    parent.$("#presaleMobile input").val(consignee_mobile);
-                                } else if (parent.$("#userMobileByPresale").size() > 0) {
-                                    parent.$("#userMobileByPresale").html(consignee_mobile);
-                                }
-                            }
-                            if (parent.hasTang9())
-                                parent.tang9ChangeArea();
-                            var commonConsigeeSize = parent.$("#hidden_consignees_size").val();
-                            var consigneeSize = parseInt(!commonConsigeeSize ? 0 : commonConsigeeSize);
-                            if (consignee_id == "") {
-                                consignee_id = parent.$("#consignee_id").val();
-                                var liHtml = "<li class='ui-switchable-panel' style='display: list-item;'  id='consignee_index_" + consignee_id + "' style='cursor: pointer;'>" +
-                                                    "<div class='consignee-item item-selected' consigneeId='" + consignee_id + "' clstag='pageclick|keycount|trade_201602181|1'>" +
-                                                        "<span limit='8'>" + addressName + "</span><b></b>" +
-                                                    "</div>" +
-                                                    "<div class='addr-detail'>" +
-                                                        "<span class='addr-name' limit='6'>" + consignee_name + "</span>" +
-                                                        "<span class='addr-info' limit='45'>" + areaName + consignee_address + "</span>" +
-                                                        "<span class='addr-tel'>" + consignee_mobile + "</span>" +
-                                                    "</div>" +
-                                                    "<div class='op-btns' consigneeId='" + consignee_id + "'>" +
-                                                        "<a href='#none' class='ftx-05 setdefault-consignee' fid='" + consignee_id + "'>设为默认地址</a>" +
-                                                        "<a href='#none' class='ftx-05 edit-consignee' fid='" + consignee_id + "'>编辑</a>" +
-                                                        "<a href='#none' class='ftx-05 del-consignee " + ((consigneeSize == 0 || consigneeSize == 1) ? " hide" : "") + "' fid='" + consignee_id + "'>删除</a>" +
-                                                    "</div>" +
-                                                "</li>";
-                                //yanwenqi 全球购添加身份证号
-                                if (parent.$("#flowType").val() == 10) {
-                                    if (consignee_idCard == "undefined" || consignee_idCard == null || consignee_idCard == "") {
-                                        liHtml = "<li class='ui-switchable-panel' style='display: list-item;'  id='consignee_index_" + consignee_id + "' style='cursor: pointer;'>" +
-                                        "<div class='consignee-item item-selected' consigneeId='" + consignee_id + "' clstag='pageclick|keycount|trade_201602181|1'>" +
-                                            "<span limit='8'>" + addressName + "</span><b></b>" +
-                                        "</div>" +
-                                        "<div class='addr-detail'>" +
-                                            "<span class='addr-name' limit='6'>" + consignee_name + "</span>" +
-                                            "<span class='addr-info' limit='32'>" + areaName + consignee_address + "</span>" +
-                                            "<span class='addr-tel'>" + consignee_mobile + "</span>" +
-                                            "<span class='addr-idCard'>未完善身份证信息</span>" +
-                                        "</div>" +
-                                        "<div class='op-btns' consigneeId='" + consignee_id + "'>" +
-                                            "<a href='#none' class='ftx-05 setdefault-consignee' fid='" + consignee_id + "'>设为默认地址</a>" +
-                                            "<a href='#none' class='ftx-05 edit-consignee' fid='" + consignee_id + "'>编辑</a>" +
-                                            "<a href='#none' class='ftx-05 del-consignee " + ((consigneeSize == 0 || consigneeSize == 1) ? " hide" : "") + "' fid='" + consignee_id + "'>删除</a>" +
-                                        "</div>" +
-                                    "</li>";
-                                    }
-                                }
-                                //end
-                                parent.$("#consignee-list .consignee-item").removeClass("item-selected");
-                                // update by lilong 产品经理zhaojingjing确认，如果当前页面有默认地址，新增地址在默认地址之后
-                                var first_li = parent.$(".consignee-item").parents("li").last();//当前列表第一项
-                                //						var _tempstr = first_li.find("div span").first().html();
-                                var _tempstr = first_li.find("div span").find(".addr-default").html();
-                                if (_tempstr && _tempstr.indexOf("默认地址") > -1) {
-                                    $(liHtml).insertAfter(first_li);// 1.插入在默认地址之后
-                                } else {
-                                    $(liHtml).insertBefore(first_li);// 2.插入在地址列表第一位
-                                }
-                                parent.$("#hidden_consignees_size").val("" + (consigneeSize = consigneeSize + 1));
-                                if (parent.$("#isNull").val() == "-1")
-                                    parent.goOrder();
-                                if (consigneeSize > 1) {
-                                    var selectDiv = parent.$(".consignee-item").next().next();
-                                    selectDiv.find(".del-consignee").removeClass("hide");
-                                    selectDiv.find(".setdefault-consignee").removeClass("hide");
-                                    parent.$("#consigneeItemAllClick").addClass("hide");
-                                    parent.$("#consigneeItemHideClick").removeClass("hide");
-                                }
-                                if (parent.checkIsNewUser()) {
-                                    parent.$("#isOpenConsignee").val("0");
-                                }
-                                //重新加载优惠券列表
-                                parent.reloadCoupon(consigneeResult.reloadCoupon);
-                                $("#del_consignee_type").val("0");
-                                parent.window.show_ConsigneeAll(1);
-                            } else {
-                                var defAddress = "<a href='#none' class='ftx-05 setdefault-consignee " + ((consigneeSize == 0 || consigneeSize == 1) ? " hide" : "") + "' fid='" + consignee_id + "'>设为默认地址</a>";
-                                if (parent.$("#consignee_index_" + consignee_id).find(".op-btns").find("a").size() == 2)
-                                    defAddress = "<span></span>";
-                                var divHtml = "<div class='consignee-item item-selected' consigneeId='" + consignee_id + "' clstag='pageclick|keycount|trade_201602181|1'>" +
-                                                "<span limit='8'>" + addressName + "</span><b></b>" +
-                                            "</div>" +
-                                            "<div class='addr-detail'>" +
-                                                "<span class='addr-name' limit='6'>" + consignee_name + "</span>" +
-                                                "<span class='addr-info' limit='45'>" + areaName + consignee_address + "</span>" +
-                                                "<span class='addr-tel'>" + consignee_mobile + "</span>" +
-                                                (defAddress.indexOf("span") > -1 ? "<span class='addr-default'>" + "默认地址" + "</span>" : "") +
-                                            "</div>" +
-                                            "<div class='op-btns' consigneeId='" + consignee_id + "'>" + defAddress +
-                                                "<a href='#none' class='ftx-05 edit-consignee' fid='" + consignee_id + "'>编辑</a>" +
-                                                "<a href='#none' class='ftx-05 del-consignee " + ((consigneeSize == 0 || consigneeSize == 1) ? " hide" : "") + "' fid='" + consignee_id + "'>删除</a>" +
-                                            "</div>";
-                                //yanwenqi 全球购添加身份证号
-
-                                //end
-                                parent.$("#consignee-list .consignee-item").removeClass("item-selected");
-                                if (consignee_id == "-1")
-                                    parent.$(".consignee-item").first().html(divHtml);
-                                else
-                                    parent.$("#consignee_index_" + consignee_id).html(divHtml);
-                            }
-                            // 新用户保存后将值写回
-                            parent.setResetFlag(0, '1');
-                            parent.save_Pay();
-                            parent.$("#isOpenConsignee").val("0");
-                            parent.$("#isRefreshArea").val("0");
-                            parent.subStrConsignee();
-                            parent.consigneeInfo();
-                            //重新加载优惠券列表
-                            parent.reloadCoupon(consigneeResult.reloadCoupon);
-
-                        }
-
-                    } else {
-                        if (consigneeResult.message != null && consigneeResult.message != "") {
-                            parent.showMessageWarn(consigneeResult.message);
-                        }
-                    }
-                    //非新用户
-                    if (consignee_id != "") {
-                        //地址别名修改埋点
-                        var addressNameBef = $("#consignee_addressName_old").val();
-                        if (addressName != addressNameBef) {
-                            parent.log('changgouy', 'click', "jsydizhibieming");
-                        }
-                    }
-                    //yanwenqi 自提地址项目 编辑完之更改推荐自提
-                    parent.window.showRecommendSelfPickAddress();
-
-                    setTimeout(function () {
-                        window.location.href = "about:blank";
-                        parent.$.closeDialog();
-                    });
-                },
-                error: function (XMLHttpResponse) {
-                    parent.$.closeDialog();
-                }
-            });
-
+            
+                $("form").submit();
+            
         }
 
         $(function () {
+            
+
+        @{ 
+            int defalutprovID = 16;
+            int defaultcityID = 172;
+            int defaultdistID = 0;
+            if (Model.RegionId>0)
+            {
+                int[] IdS=   new AdministrativeRegionsBll().GetParentIDByChildID(Model.RegionId);
+                if (IdS.Length>0)
+                {
+                    defalutprovID = IdS[0];
+                }
+                if (IdS.Length > 1)
+                {
+                    defaultcityID = IdS[1];
+                }
+                if (IdS.Length > 2)
+                {
+                    defaultdistID = IdS[2];
+                }
+            }
+
+        }
             $("#selectRegionId").citySelect({
-                prov: "湖南",
-                city: "长沙"
+                prov: "@defalutprovID",
+                city: "@defaultcityID",
+                dist:"@defaultdistID",
+
             });
             
-            $('#jd_area').bind('click', function () {
-                $(this).toggleClass('ui-area-hover');
-            });
+          
              //初始化表单验证
             $("form").validate({
                 ignore: "",
@@ -651,11 +233,17 @@
                         maxlength: $.validator.format("长度不能大于{0}个字符")
                     }
                 }
-                , success: function (element) {
-                    element.parent().find(".error-msg").text("")
+                ,
+                success: function (element) {
+                 
+                    for (var i = 0; i < element.length; i++) {
+                        $(element[i].control).parent().find(".error-msg").hide();
+                    }
+                    
                 },
                 errorPlacement: function (error, element) {
-                    element.parent().find(".error-msg").text(error.text())
+                    
+                    element.parent().find(".error-msg").text(error.text()).show();
                 }
 
             });
@@ -684,12 +272,12 @@ required:必选项
 
                 // 默认值
                 settings = $.extend({
-                    url: "Content/js/addr.js",
+                    url: "/Content/js/addr.js",
                     prov: null,
                     city: null,
                     dist: null,
                     nodata: null,
-                    required: true
+                    required: false
                 }, settings);
 
                 var box_obj = this;
@@ -788,11 +376,16 @@ required:必选项
                     // 选择省份时发生事件
                     prov_obj.bind("change", function () {
                         cityStart();
+                        $("#RegionId").val(prov_obj.val());
                     });
 
                     // 选择市级时发生事件
                     city_obj.bind("change", function () {
                         distStart();
+                        $("#RegionId").val(city_obj.val());
+                    });
+                    dist_obj.bind("change", function () { 
+                        $("#RegionId").val(dist_obj.val());
                     });
                 };
 

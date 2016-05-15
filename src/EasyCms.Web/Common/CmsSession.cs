@@ -21,20 +21,20 @@ namespace EasyCms
             webSite=  new WebSiteSetBll().GetEntity(); 
         }
 
-        public static string GetUserID(this HttpSessionStateBase session)
-        {
-            string userid = session[CmsSession.UserIDKey] as string;
-            return userid ;
-        }
-        public static string GetUserID(this HttpSessionState session)
-        {
-            string userid = session[CmsSession.UserIDKey] as string;
-            return userid  ;
-        }
-        public static string GetRoleID(this HttpSessionStateBase session)
-        {
-            return session[CmsSession.RoleIDKey] as string;
-        }
+        //public static string GetUserID(this HttpSessionStateBase session)
+        //{
+        //    string userid = session[CmsSession.UserIDKey] as string;
+        //    return userid ;
+        //}
+        //public static string GetUserID(this HttpSessionState session)
+        //{
+        //    string userid = session[CmsSession.UserIDKey] as string;
+        //    return userid  ;
+        //}
+        //public static string GetRoleID(this HttpSessionStateBase session)
+        //{
+        //    return session[CmsSession.RoleIDKey] as string;
+        //}
         public static string MapPathCms(this HttpServerUtility server, string path)
         {
             if (!path.StartsWith("/") && !path.StartsWith("~"))

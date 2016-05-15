@@ -50,6 +50,8 @@ namespace EasyCms.Model
 
         private string _Remark;
 
+        private bool _IsDelete;
+
         #endregion
 
         #region 属性
@@ -59,7 +61,7 @@ namespace EasyCms.Model
         /// </summary>
 
         [PrimaryKey]
-        [DbProperty(MapingColumnName = "ID", DbTypeString = "char", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 1, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ID", DbTypeString = "varchar", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 1, ColumnDefaultValue = "")]
 
         public string ID
         {
@@ -70,6 +72,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("ID", this._ID, value);
+
+
                 this._ID = value;
             }
         }
@@ -89,6 +93,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("RegionId", this._RegionId, value);
+
+
                 this._RegionId = value;
             }
         }
@@ -97,7 +103,7 @@ namespace EasyCms.Model
         ///  用户ID,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "UserId", DbTypeString = "char", ColumnIsNull = false, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "UserId", DbTypeString = "varchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string UserId
         {
@@ -108,6 +114,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("UserId", this._UserId, value);
+
+
                 this._UserId = value;
             }
         }
@@ -127,6 +135,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("ShipName", this._ShipName, value);
+
+
                 this._ShipName = value;
             }
         }
@@ -146,6 +156,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("Address", this._Address, value);
+
+
                 this._Address = value;
             }
         }
@@ -165,6 +177,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("Zipcode", this._Zipcode, value);
+
+
                 this._Zipcode = value;
             }
         }
@@ -184,12 +198,14 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("EmailAddress", this._EmailAddress, value);
+
+
                 this._EmailAddress = value;
             }
         }
 
         /// <summary>
-        ///  下单人电话,
+        ///  固定电话,
         /// </summary>
 
         [DbProperty(MapingColumnName = "TelPhone", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 100, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
@@ -203,6 +219,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("TelPhone", this._TelPhone, value);
+
+
                 this._TelPhone = value;
             }
         }
@@ -222,6 +240,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("CelPhone", this._CelPhone, value);
+
+
                 this._CelPhone = value;
             }
         }
@@ -241,6 +261,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("IsDefault", this._IsDefault, value);
+
+
                 this._IsDefault = value;
             }
         }
@@ -260,6 +282,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("Latitude", this._Latitude, value);
+
+
                 this._Latitude = value;
             }
         }
@@ -279,6 +303,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("Longitude", this._Longitude, value);
+
+
                 this._Longitude = value;
             }
         }
@@ -298,13 +324,36 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("Remark", this._Remark, value);
+
+
                 this._Remark = value;
+            }
+        }
+
+        /// <summary>
+        ///  是否删除,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "IsDelete", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public bool IsDelete
+        {
+            get
+            {
+                return this._IsDelete;
+            }
+            set
+            {
+                this.OnPropertyChanged("IsDelete", this._IsDelete, value);
+
+
+                this._IsDelete = value;
             }
         }
 
         #endregion
 
-        #region 列定义
+        #region 列定义 
         public class Column
         {
             public Column(string tableName)
@@ -335,6 +384,8 @@ namespace EasyCms.Model
                 Longitude = new PropertyItem("Longitude", tableName);
 
                 Remark = new PropertyItem("Remark", tableName);
+
+                IsDelete = new PropertyItem("IsDelete", tableName);
 
 
             }
@@ -367,7 +418,7 @@ namespace EasyCms.Model
             /// </summary> 
             public PropertyItem EmailAddress = null;
             /// <summary>
-            /// 下单人电话,
+            /// 固定电话,
             /// </summary> 
             public PropertyItem TelPhone = null;
             /// <summary>
@@ -390,6 +441,10 @@ namespace EasyCms.Model
             /// 备注,
             /// </summary> 
             public PropertyItem Remark = null;
+            /// <summary>
+            /// 是否删除,
+            /// </summary> 
+            public PropertyItem IsDelete = null;
         }
         #endregion
     }
@@ -407,7 +462,7 @@ namespace EasyCms.Model
         /// 地址路径的父子名称  格式 父名称|子名称
         /// </summary>
         [NotDbCol]
-        public string Path { get; set; }
+        public string PathName { get; set; }
 
     }
 }

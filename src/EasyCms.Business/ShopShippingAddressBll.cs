@@ -13,7 +13,7 @@ namespace EasyCms.Business
     public class ShopShippingAddressBll
     {
         ShopShippingAddressDal Dal = new ShopShippingAddressDal();
-        public string Delete(string id)
+        public bool Delete(string id)
         {
 
             return Dal.Delete(id);
@@ -28,7 +28,10 @@ namespace EasyCms.Business
         {
             return Dal.GetList(userID, IsDefault);
         }
-
+        public DataTable GetWebList(string userID)
+        {
+            return Dal.GetWebList(userID);
+        }
         public ShopShippingAddress GetEntity(string id)
         {
             return Dal.GetEntity(id);

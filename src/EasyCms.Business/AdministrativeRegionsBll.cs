@@ -79,5 +79,14 @@ namespace EasyCms.Business
         {
             return Dal.GetRegionPathWithNotRoot(regeonID);
         }
+        public int[] GetParentIDByChildID(int regeonID)
+        {
+            return Dal.GetParentIDByChildID(regeonID);
+        }
+
+        public string GetPathByID(int regionId)
+        {
+            return Dal.GetPathByID(regionId);
+        }
     }
 }

@@ -12,12 +12,12 @@ namespace EasyCms.Dal
 {
     public class ShopShippingAddressDal : Sharp.Data.BaseManager
     {
-        public string Delete(string id)
+        public bool Delete(string id)
         {
-
-            string error = "";
-            Dal.Delete("ShopShippingAddress", "ID", id, out error);
-            return error;
+            ShopShippingAddress delete = new ShopShippingAddress() {  Where=ShopShippingAddress._.ID==id, RecordStatus= StatusType.update,
+             IsDelete=true, IsDefault=false};
+            return Dal.Submit(delete) > 0;
+            
         }
 
         public string Save(ShopShippingAddress item)
@@ -63,13 +63,23 @@ namespace EasyCms.Dal
         {
             if (IsDefault)
             {
-                return Dal.From<ShopShippingAddress>().Where(ShopShippingAddress._.UserId == userID && ShopShippingAddress._.IsDefault == IsDefault).ToDataTable(1);
+                return Dal.From<ShopShippingAddress>().Where(ShopShippingAddress._.UserId == userID && ShopShippingAddress._.IsDefault == IsDefault && ShopShippingAddress._.IsDelete == false).ToDataTable(1);
             }
             else
-                return Dal.From<ShopShippingAddress>().Where(ShopShippingAddress._.UserId == userID).ToDataTable();
+                return Dal.From<ShopShippingAddress>().Where(ShopShippingAddress._.UserId == userID && ShopShippingAddress._.IsDelete == false).ToDataTable();
 
         }
+        public DataTable GetWebList(string userID )
+        {
+            
+                return Dal.From<ShopShippingAddress>()
+                
+                .Join<AdministrativeRegions>(ShopShippingAddress._.RegionId==AdministrativeRegions._.ID)
+                .Select(ShopShippingAddress._.ID.All,AdministrativeRegions.PathName)
+                .Where(ShopShippingAddress._.UserId == userID && ShopShippingAddress._.IsDelete == false).ToDataTable();
+            
 
+        }
         public DataTable GetShopAddressForShow(string userID, bool IsDefault)
         {
             if (IsDefault)
@@ -83,7 +93,7 @@ namespace EasyCms.Dal
                         ShopShippingAddress._.IsDefault,
                         AdministrativeRegions._.FullPath,
                      new ExpressionClip("replace (path,'/','') + Address").Alias("Address"))
-                    .Where(ShopShippingAddress._.UserId == userID && ShopShippingAddress._.IsDefault == IsDefault).ToDataTable(1);
+                    .Where(ShopShippingAddress._.UserId == userID && ShopShippingAddress._.IsDefault == IsDefault && ShopShippingAddress._.IsDelete == false).ToDataTable(1);
             }
             else
                 return Dal.From<ShopShippingAddress>()
@@ -95,7 +105,7 @@ namespace EasyCms.Dal
                         ShopShippingAddress._.IsDefault,
                           AdministrativeRegions._.FullPath,
                      new ExpressionClip("replace (path,'/','') + Address").Alias("Address"))
-                    .Where(ShopShippingAddress._.UserId == userID).ToDataTable();
+                    .Where(ShopShippingAddress._.UserId == userID && ShopShippingAddress._.IsDelete == false).ToDataTable();
 
         }
         public ShopShippingAddress GetEntity(string id)
@@ -115,12 +125,9 @@ namespace EasyCms.Dal
             try
             {
                 ShopShippingAddress s = GetEntity(id);
-                s.Where = ShopShippingAddress._.UserId == s.UserId;
+                s.Where = ShopShippingAddress._.UserId == s.UserId&& ShopShippingAddress._.IsDefault == true;
                 s.IsDefault = false;
-                ShopShippingAddress setdefalt = new ShopShippingAddress();
-                setdefalt.ID = id;
-                setdefalt.RecordStatus = StatusType.update;
-                setdefalt.IsDefault = true;
+                ShopShippingAddress setdefalt = new ShopShippingAddress() { ID = id, RecordStatus = StatusType.update, IsDefault = true };
 
                 tr = Dal.BeginTransaction(out dal);
                 dal.SubmitNew(tr, ref dal, s, setdefalt);

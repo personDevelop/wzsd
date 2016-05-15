@@ -17,7 +17,7 @@ namespace EasyCms.Web.API
         {
 
            
-                DataTable dt = new ShopPaymentTypesBll().GetPayType();
+                DataTable dt = new ShopPaymentTypesBll().GetPayType(1);
                 return dt.Format();
                
            

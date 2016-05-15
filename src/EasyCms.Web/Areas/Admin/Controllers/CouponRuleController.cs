@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using Sharp.Common;
 using EasyCms.Web.Common;
+using EasyCms.Session;
 
 namespace EasyCms.Web.Areas.Admin.Controllers
 {
@@ -75,7 +76,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                     {
                         p.ID = Guid.NewGuid().ToString();
                     }
-                    p.Createor = Session.GetUserID()??"root";
+                    p.Createor = CmsSession.GetUserID()??"root";
                 }
                 bll.Save(p);
                 if (TempData.ContainsKey("IsSuccess"))

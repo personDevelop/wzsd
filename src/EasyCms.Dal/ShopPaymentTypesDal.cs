@@ -68,13 +68,11 @@ namespace EasyCms.Dal
                 .Select(ShopPaymentTypes._.ID, ShopPaymentTypes._.Gateway,  ShopPaymentTypes._.ShortName, ShopShippingPayment._.ID.Alias("RalationID")).ToDataTable() ;
         }
 
-        public DataTable GetPayType()
+        public DataTable GetPayType(int payType)
         {
-            return Dal.From<ShopPaymentTypes>().Where(ShopPaymentTypes._.IsEnable == true && ShopPaymentTypes._.DrivePath.Contains("1"))
+            return Dal.From<ShopPaymentTypes>().Where(ShopPaymentTypes._.IsEnable == true && ShopPaymentTypes._.DrivePath.Contains(payType.ToString()))
                 .OrderBy(ShopPaymentTypes._.DisplaySequence)
-                .Select(ShopPaymentTypes._.ID, ShopPaymentTypes._.Gateway, ShopPaymentTypes._.MerchantCode,
-               ShopPaymentTypes._.SecretKey, ShopPaymentTypes._.Partner,
-                ShopPaymentTypes._.ShortName).ToDataTable();
+                .Select(ShopPaymentTypes._.ID, ShopPaymentTypes._.IsDefault,   ShopPaymentTypes._.ShortName).ToDataTable();
         }
 
         internal string GetPayTypeName(string payTypeID, bool isCashOnDelivery)

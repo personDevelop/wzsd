@@ -42,8 +42,8 @@ namespace EasyCms.Web.API
         {
 
 
-            string result = new ShopShippingAddressBll().Delete(id);
-            return result.FormatError();
+            bool result = new ShopShippingAddressBll().Delete(id);
+            return "删除成功".FormatError();
 
 
         }

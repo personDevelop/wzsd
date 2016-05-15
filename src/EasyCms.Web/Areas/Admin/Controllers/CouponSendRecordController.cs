@@ -63,7 +63,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
                         p.ID = Guid.NewGuid().ToString();
                         p.CreateTime = DateTime.Now;
                     }
-                    p.SendUserID = Session.GetUserID() ?? "root";
+                    p.SendUserID = CmsSession.GetUserID() ?? "root";
                     p.SendUserName = CmsSession.GetUserName();
                 }
                 bll.SaveSendRecord(p);

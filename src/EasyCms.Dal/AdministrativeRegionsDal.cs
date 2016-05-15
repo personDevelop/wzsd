@@ -79,6 +79,24 @@ namespace EasyCms.Dal
 
         }
 
+        public string GetPathByID(int regeonID)
+        {
+            return Dal.From<AdministrativeRegions>().Where(AdministrativeRegions._.ID == regeonID).Select(AdministrativeRegions.PathName).ToScalar() as string;
+        }
+
+        public int[] GetParentIDByChildID(int regeonID)
+        {
+           string fullPath= Dal.From<AdministrativeRegions>().Where(AdministrativeRegions._.ID == regeonID).Select(AdministrativeRegions._.FullPath).ToScalar() as string;
+
+            string[] fullPaths = fullPath.Split('|');
+            int[] results = new int[fullPaths.Length-1];
+            for (int i = 1; i < fullPaths.Length; i++)
+            {
+                results[i - 1] = int.Parse(fullPaths[i]);
+            }
+            return results;
+        }
+
         public List<AdministrativeRegions> GetRegionPathWithNotRoot(int regeonID)
         {
             AdministrativeRegions curent= Dal.From<AdministrativeRegions>().Where(AdministrativeRegions._.ID == regeonID).Select(AdministrativeRegions._.FullPath, AdministrativeRegions._.Jb).ToFirst<AdministrativeRegions>();

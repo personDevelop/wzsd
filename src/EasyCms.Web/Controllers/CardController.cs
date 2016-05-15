@@ -1,5 +1,6 @@
 ﻿using EasyCms.Business;
 using EasyCms.Model;
+using EasyCms.Session;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -15,7 +16,7 @@ namespace EasyCms.Web.Controllers
         // GET: Card
         public ActionResult Index()
         {
-            string userID = Session.GetUserID();
+            string userID = CmsSession.GetUserID();
             List<ShopCardInfo> cardList = new List<ShopCardInfo>();
             if (string.IsNullOrWhiteSpace(userID))
             {
@@ -87,7 +88,7 @@ namespace EasyCms.Web.Controllers
 
         public JsonResult Add(ShopBuyType buyType, string ActivityID, string ProductId, string SKU, decimal Quantity)
         {
-            string userID = Session.GetUserID();
+            string userID = CmsSession.GetUserID();
             if (string.IsNullOrWhiteSpace(userID))
             {
                 //还没有登录，写到cookie里去
@@ -157,7 +158,7 @@ namespace EasyCms.Web.Controllers
         public JsonResult DeleteCard(string[] ids)
         {
             string msg = string.Empty;
-            string userID = Session.GetUserID();
+            string userID = CmsSession.GetUserID();
             if (string.IsNullOrWhiteSpace(userID))
             {
                 //还没有登录,从cookie里删除去

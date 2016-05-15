@@ -1,4 +1,4 @@
-/* user-purchase/2.0.0 common.css Date:2016-05-12 15:22:15 */
+﻿/* user-purchase/2.0.0 common.css Date:2016-05-12 15:22:15 */
 @charset "UTF-8";
 
 .i-code, .i-mobile, .i-share {
@@ -2750,7 +2750,7 @@ div#browsers-thickbox {
     }
 
 .consignee-content {
-    overflow: hidden;
+    overflow:  scroll;
     max-height: 168px;
 }
 

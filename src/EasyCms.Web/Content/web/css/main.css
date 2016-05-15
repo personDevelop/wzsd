@@ -168,8 +168,7 @@ a {
     top: 5px;
     left: 7px;
     width: 15px;
-    height: 20px;
-    background: url(images/jd2015img.png) 0 0 no-repeat;
+    height: 20px; 
     position: absolute;
     display: block;
 }
@@ -182,8 +181,7 @@ a {
     top: 5px;
     left: 7px;
     width: 20px;
-    height: 20px;
-    background: url(images/jd2015img.png) 0 -56px no-repeat;
+    height: 20px; 
     position: absolute;
     display: block;
 }

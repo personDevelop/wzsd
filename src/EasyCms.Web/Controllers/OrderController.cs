@@ -1,5 +1,6 @@
 ﻿using EasyCms.Business;
 using EasyCms.Model;
+using EasyCms.Session;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,7 @@ namespace EasyCms.Web.Controllers
             }
             else
             { 
-                string userid =Session.GetUserID();
+                string userid = CmsSession.GetUserID();
                 order = new ShopOrderBll().CreateOrder(order, "", userid, out error);
                 if (string.IsNullOrWhiteSpace(error))
                 { 
