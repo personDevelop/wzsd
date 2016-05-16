@@ -152,6 +152,8 @@ namespace EasyCms.Model
 
         private string _DeviceNo;
 
+        private decimal _UserBalance;
+
         #endregion
 
         #region 属性
@@ -172,6 +174,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("ID", this._ID, value);
+
+
                 this._ID = value;
             }
         }
@@ -191,6 +195,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("OrderType", this._OrderType, value);
+
+
                 this._OrderType = value;
             }
         }
@@ -210,6 +216,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("OrderResId", this._OrderResId, value);
+
+
                 this._OrderResId = value;
             }
         }
@@ -229,6 +237,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("ParentID", this._ParentID, value);
+
+
                 this._ParentID = value;
             }
         }
@@ -248,6 +258,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("HasChildren", this._HasChildren, value);
+
+
                 this._HasChildren = value;
             }
         }
@@ -267,6 +279,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("MemberID", this._MemberID, value);
+
+
                 this._MemberID = value;
             }
         }
@@ -286,6 +300,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("MemberName", this._MemberName, value);
+
+
                 this._MemberName = value;
             }
         }
@@ -305,6 +321,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("MemberEmail", this._MemberEmail, value);
+
+
                 this._MemberEmail = value;
             }
         }
@@ -324,6 +342,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("MemberCallPhone", this._MemberCallPhone, value);
+
+
                 this._MemberCallPhone = value;
             }
         }
@@ -343,6 +363,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("RegionID", this._RegionID, value);
+
+
                 this._RegionID = value;
             }
         }
@@ -362,6 +384,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("ShipRegion", this._ShipRegion, value);
+
+
                 this._ShipRegion = value;
             }
         }
@@ -381,6 +405,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("ShipAddress", this._ShipAddress, value);
+
+
                 this._ShipAddress = value;
             }
         }
@@ -400,6 +426,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("ShipZip", this._ShipZip, value);
+
+
                 this._ShipZip = value;
             }
         }
@@ -419,6 +447,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("ShipName", this._ShipName, value);
+
+
                 this._ShipName = value;
             }
         }
@@ -438,6 +468,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("ShipTel", this._ShipTel, value);
+
+
                 this._ShipTel = value;
             }
         }
@@ -457,6 +489,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("ShipEmail", this._ShipEmail, value);
+
+
                 this._ShipEmail = value;
             }
         }
@@ -476,6 +510,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("ShipModeID", this._ShipModeID, value);
+
+
                 this._ShipModeID = value;
             }
         }
@@ -495,6 +531,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("ShipModeName", this._ShipModeName, value);
+
+
                 this._ShipModeName = value;
             }
         }
@@ -514,6 +552,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("PayTypeID", this._PayTypeID, value);
+
+
                 this._PayTypeID = value;
             }
         }
@@ -533,6 +573,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("PayTypeName", this._PayTypeName, value);
+
+
                 this._PayTypeName = value;
             }
         }
@@ -552,6 +594,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("PayTypeGateWay", this._PayTypeGateWay, value);
+
+
                 this._PayTypeGateWay = value;
             }
         }
@@ -571,6 +615,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("ExpressCompanyID", this._ExpressCompanyID, value);
+
+
                 this._ExpressCompanyID = value;
             }
         }
@@ -590,6 +636,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("ExpressCompanyName", this._ExpressCompanyName, value);
+
+
                 this._ExpressCompanyName = value;
             }
         }
@@ -609,6 +657,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("ShipOrderNum", this._ShipOrderNum, value);
+
+
                 this._ShipOrderNum = value;
             }
         }
@@ -628,6 +678,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("IsFreeShiping", this._IsFreeShiping, value);
+
+
                 this._IsFreeShiping = value;
             }
         }
@@ -647,6 +699,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("Freight", this._Freight, value);
+
+
                 this._Freight = value;
             }
         }
@@ -666,6 +720,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("FreightAdjust", this._FreightAdjust, value);
+
+
                 this._FreightAdjust = value;
             }
         }
@@ -685,6 +741,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("FreightActual", this._FreightActual, value);
+
+
                 this._FreightActual = value;
             }
         }
@@ -704,6 +762,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("Weight", this._Weight, value);
+
+
                 this._Weight = value;
             }
         }
@@ -723,6 +783,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("CostPrice", this._CostPrice, value);
+
+
                 this._CostPrice = value;
             }
         }
@@ -742,6 +804,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("Discount", this._Discount, value);
+
+
                 this._Discount = value;
             }
         }
@@ -761,6 +825,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("TotalPrice", this._TotalPrice, value);
+
+
                 this._TotalPrice = value;
             }
         }
@@ -780,6 +846,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("PayMoney", this._PayMoney, value);
+
+
                 this._PayMoney = value;
             }
         }
@@ -799,6 +867,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("Remark", this._Remark, value);
+
+
                 this._Remark = value;
             }
         }
@@ -818,6 +888,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("OrderPoint", this._OrderPoint, value);
+
+
                 this._OrderPoint = value;
             }
         }
@@ -837,6 +909,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("ShipStatus", this._ShipStatus, value);
+
+
                 this._ShipStatus = value;
             }
         }
@@ -856,6 +930,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("PayStatus", this._PayStatus, value);
+
+
                 this._PayStatus = value;
             }
         }
@@ -875,6 +951,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("OrderStatus", this._OrderStatus, value);
+
+
                 this._OrderStatus = value;
             }
         }
@@ -894,6 +972,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("HasReturn", this._HasReturn, value);
+
+
                 this._HasReturn = value;
             }
         }
@@ -913,6 +993,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("ReturnMoney", this._ReturnMoney, value);
+
+
                 this._ReturnMoney = value;
             }
         }
@@ -932,6 +1014,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("RefundStatus", this._RefundStatus, value);
+
+
                 this._RefundStatus = value;
             }
         }
@@ -951,6 +1035,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("IsInvoice", this._IsInvoice, value);
+
+
                 this._IsInvoice = value;
             }
         }
@@ -970,6 +1056,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("InvoiceInfo", this._InvoiceInfo, value);
+
+
                 this._InvoiceInfo = value;
             }
         }
@@ -989,6 +1077,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("SellerID", this._SellerID, value);
+
+
                 this._SellerID = value;
             }
         }
@@ -1008,6 +1098,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("SellerName", this._SellerName, value);
+
+
                 this._SellerName = value;
             }
         }
@@ -1027,6 +1119,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("SellerEmail", this._SellerEmail, value);
+
+
                 this._SellerEmail = value;
             }
         }
@@ -1046,6 +1140,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("SellerPhone", this._SellerPhone, value);
+
+
                 this._SellerPhone = value;
             }
         }
@@ -1065,6 +1161,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("SupplierID", this._SupplierID, value);
+
+
                 this._SupplierID = value;
             }
         }
@@ -1084,6 +1182,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("SupplierName", this._SupplierName, value);
+
+
                 this._SupplierName = value;
             }
         }
@@ -1103,6 +1203,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("OrderIP", this._OrderIP, value);
+
+
                 this._OrderIP = value;
             }
         }
@@ -1122,6 +1224,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("CommentStatus", this._CommentStatus, value);
+
+
                 this._CommentStatus = value;
             }
         }
@@ -1141,6 +1245,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("DeliveryTime", this._DeliveryTime, value);
+
+
                 this._DeliveryTime = value;
             }
         }
@@ -1160,6 +1266,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("SpecifiedDate", this._SpecifiedDate, value);
+
+
                 this._SpecifiedDate = value;
             }
         }
@@ -1179,6 +1287,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("ExportCount", this._ExportCount, value);
+
+
                 this._ExportCount = value;
             }
         }
@@ -1198,6 +1308,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("CreateDate", this._CreateDate, value);
+
+
                 this._CreateDate = value;
             }
         }
@@ -1217,6 +1329,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("UpdateDate", this._UpdateDate, value);
+
+
                 this._UpdateDate = value;
             }
         }
@@ -1236,6 +1350,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("HasDelete", this._HasDelete, value);
+
+
                 this._HasDelete = value;
             }
         }
@@ -1255,6 +1371,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("ClientType", this._ClientType, value);
+
+
                 this._ClientType = value;
             }
         }
@@ -1274,6 +1392,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("InvoiceNote", this._InvoiceNote, value);
+
+
                 this._InvoiceNote = value;
             }
         }
@@ -1293,6 +1413,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("PublishDateTime", this._PublishDateTime, value);
+
+
                 this._PublishDateTime = value;
             }
         }
@@ -1312,6 +1434,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("IsReqCancle", this._IsReqCancle, value);
+
+
                 this._IsReqCancle = value;
             }
         }
@@ -1331,6 +1455,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("HasReqCancled", this._HasReqCancled, value);
+
+
                 this._HasReqCancled = value;
             }
         }
@@ -1350,6 +1476,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("ReqCancleOrderStatus", this._ReqCancleOrderStatus, value);
+
+
                 this._ReqCancleOrderStatus = value;
             }
         }
@@ -1369,13 +1497,36 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("DeviceNo", this._DeviceNo, value);
+
+
                 this._DeviceNo = value;
+            }
+        }
+
+        /// <summary>
+        ///  使用余额,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "UserBalance", DbTypeString = "decimal", ColumnIsNull = false, IsUnique = false, ColumnLength = 15, ColumnJingDu = 2, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public decimal UserBalance
+        {
+            get
+            {
+                return this._UserBalance;
+            }
+            set
+            {
+                this.OnPropertyChanged("UserBalance", this._UserBalance, value);
+
+
+                this._UserBalance = value;
             }
         }
 
         #endregion
 
-        #region 列定义
+        #region 列定义 
         public class Column
         {
             public Column(string tableName)
@@ -1508,6 +1659,8 @@ namespace EasyCms.Model
                 ReqCancleOrderStatus = new PropertyItem("ReqCancleOrderStatus", tableName);
 
                 DeviceNo = new PropertyItem("DeviceNo", tableName);
+
+                UserBalance = new PropertyItem("UserBalance", tableName);
 
 
             }
@@ -1767,9 +1920,14 @@ namespace EasyCms.Model
             /// 客户端标识,
             /// </summary> 
             public PropertyItem DeviceNo = null;
+            /// <summary>
+            /// 使用余额,
+            /// </summary> 
+            public PropertyItem UserBalance = null;
         }
         #endregion
     }
+
 
 
     public partial class ShopOrder

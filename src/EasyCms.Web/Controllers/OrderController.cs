@@ -49,5 +49,45 @@ namespace EasyCms.Web.Controllers
             }
           
         }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SubmitOrder(ShopOrderModel order)
+        {
+            string Msg = string.Empty;
+            if (order.OrderItems == null || order.OrderItems.Count == 0)
+            {
+                Msg = "请选择要购买的商品";
+            }
+            else
+            {
+               
+                ManagerUserInfo user = EasyCms.Session.CmsSession.GetUser();
+
+                bool mustGenerSign;
+                try
+                {
+                    string orderID = new ShopOrderBll().Submit(order, user, out mustGenerSign, out Msg);
+
+                    if (string.IsNullOrWhiteSpace(Msg))
+                    { 
+                        if (mustGenerSign)
+                        {
+                            bool isSucess = new ShopPaymentTypesBll().GenerPayPara(orderID, out Msg);
+                            Redirect("");//去支付
+                             
+                        }
+                        
+
+                    }
+                }
+                catch (Exception e)
+                {
+                    
+                }
+            }
+            return View("index",Msg);
+        }
     }
 }

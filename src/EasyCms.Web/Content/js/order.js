@@ -109,6 +109,45 @@ function onclosedialog(result,isedit) {
 
 }
 
+
+function vertualHidOrShow() {
+    if ($("#virtualdiv").hasClass("step-toggle-off")) {
+        vertualhide();
+    } else {
+        vertualShow();
+    }
+}
+//隐藏虚拟资产div
+function vertualhide() {
+    $(".order-virtual").css("display", "none");
+    $("#virtualdiv").removeClass("step-toggle-off");
+    $("#virtualdiv").addClass("step-toggle-on");
+}
+//展开虚拟资产div
+function vertualShow() {
+    $(".order-virtual").css("display", "block");
+    $("#virtualdiv").removeClass("step-toggle-on");
+    $("#virtualdiv").addClass("step-toggle-off");
+   
+}
+function showCouponItem(flag) {
+    if (flag) {
+        $("#couponitem").html('<span>优惠券</span><i></i>');
+        $("#bestCouponDiv").css("display", "block");
+        $("#couponsplit").css("display", "block");
+    } else {
+        $("#couponitem").html('<span>优惠券</span><i style="display: none"></i>');
+        $("#bestCouponDiv").css("display", "none");
+        $("#couponsplit").css("display", "none");
+    }
+} window.showCouponItem = showCouponItem;
+function showBalanceItem(flag) {
+    if (flag) {
+        $("#balanceitem").html('<span>余额</span><i></i>');
+    } else {
+        $("#balanceitem").html('<span>余额</span><i style="display: none"></i>');
+    }
+} window.showBalanceItem = showBalanceItem;
 $(function () {
     $("#consignee-list").delegate(".consignee-item", "click", function () {
        
@@ -119,7 +158,13 @@ $(function () {
             $(this).addClass("item-selected");
         }
     });
-    
+    $("#payment-list").delegate(".payment-item", "click", function () {
+
+        if (!$(this).hasClass("item-selected")) { 
+            $("#payment-list").find(".item-selected").removeClass("item-selected"); 
+            $(this).addClass("item-selected");
+        }
+    });
     $("#consignee-list").delegate(".setdefault-consignee", "click", function () {
         var addrid = $(this).attr("consigneeid");
         var self = this;

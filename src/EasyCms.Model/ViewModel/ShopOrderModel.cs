@@ -52,7 +52,10 @@ namespace EasyCms.Model
         /// 运费
         /// </summary>
         public decimal Freight { get; set; } 
-
+        /// <summary>
+        /// 使用余额数
+        /// </summary>
+        public decimal UserBalance { get; set; }
         /// <summary>
         /// 总价格   (商品总价格-优惠券金额) 不包含运费
         /// </summary>
