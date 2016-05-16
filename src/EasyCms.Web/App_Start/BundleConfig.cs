@@ -106,11 +106,16 @@ namespace EasyCms.Web
                 ));
             bundles.Add(new ScriptBundle("~/bundles/orderjs").Include(
 
-              "~/Content/js/order.js" 
+              "~/Content/js/order.js"
           ));
             bundles.Add(new ScriptBundle("~/bundles/addrjs").Include(
-                  "~/Content/js/basePatch.js" 
+                  "~/Content/js/basePatch.js"
          ));
+
+
+            bundles.Add(new ScriptBundle("~/bundles/jqpage").Include(
+                 "~/Content/js/jquery.page.js"
+        ));
             #endregion
 
 
