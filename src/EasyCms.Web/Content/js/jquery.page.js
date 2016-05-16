@@ -89,7 +89,7 @@
 		}
 	}
 	$.fn.setPageStatus = function(index,count){
-		ms.fillHtml(obj,{"current":index,"pageCount":count});
+		ms.fillHtml(this,{"current":index,"pageCount":count});
 	}
 	$.fn.createPage = function(options){
 		var args = $.extend({

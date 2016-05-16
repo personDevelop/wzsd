@@ -10,6 +10,7 @@
     <title></title>
 </head>
 @Styles.Render("~/bundles/listcss");
+@Scripts.Render("~/bundles/jqpage");
 <style>
     * {
         margin: 0;
@@ -73,7 +74,7 @@
             vertical-align: middle;
         }
 </style>
-<script src="http://www.lanrenzhijia.com/ajaxjs/jquery.page.js"></script>
+
 <body>
     <div class="floor">
 
@@ -166,9 +167,34 @@
         }
 
         var page = 1;
-        
+        var total = 0;
+        function setPagerStatus() {
+            if (page == 1) {
+                $(".fp-prev").addClass("disabled");
+            } else {
+                $(".fp-prev").removeClass("disabled");
+            }
+            if (page >= total) {
+                $(".fp-next").addClass("disabled");
+            } else {
+                $(".fp-next").removeClass("disabled");
+            }
+        }
         $(function () {
-
+            $(".fp-next").on("click", function () {
+                if ($(this).hasClass("disabled"))
+                    return;
+                page += 1;
+                initWrap();
+                setPagerStatus();
+            });
+            $(".fp-prev").on("click", function () {
+                if ($(this).hasClass("disabled"))
+                    return;
+                page -= 1;
+                initWrap();
+                setPagerStatus();
+            });
             $(".f-sort .sort").click(function () {
                 if ($(this).hasClass("curr") && $(this).attr("id") != "sort_sales") {
                     return;
@@ -191,6 +217,7 @@
                     $(".f-sort .sort").removeClass("up");
                     $(".f-sort .sort").removeClass("down");
                 }
+                page = 1;
                 getSortAttr();
                 initWrap();
             });
@@ -206,7 +233,7 @@
 
 
         });
-
+        $("#tcdPageCode").setPageStatus();
         var p = false;
         function initWrap() {
             var data = getData(getSortAttr(), page);
@@ -225,6 +252,12 @@
             }
             $("#J_resCount").html(data.data.TotalRecourdCount);
             $(".fp-text b").html(data.data.PageIndex);
+
+
+            page = data.data.PageIndex;
+            total = data.data.TotalPageCount;
+
+            $("#tcdPageCode").setPageStatus(page, total);
             $(".fp-text i").html(data.data.TotalPageCount);
             ul.empty();
             for (var item in data.data.Data) {
