@@ -168,7 +168,7 @@ a {
     top: 5px;
     left: 7px;
     width: 15px;
-    height: 20px; 
+    height: 20px;
     position: absolute;
     display: block;
 }
@@ -181,7 +181,7 @@ a {
     top: 5px;
     left: 7px;
     width: 20px;
-    height: 20px; 
+    height: 20px;
     position: absolute;
     display: block;
 }
@@ -1059,36 +1059,140 @@ dd {
     background: url(http://misc.360buyimg.com/jdf/1.0.0/ui/dialog/1.0.0/dialog.png) no-repeat;
     font-size: 0;
 }
-.hui-dialog-content{
-    position:relative;
-    padding:10px;
+
+.hui-dialog-content {
+    position: relative;
+    padding: 10px;
 }
-.hui-dialog-content .info{
-    position:relative;
-    margin:10px 30px;
-}
-.hui-dialog-content .infomes {
-    margin-left:58px;
-    font-family:微软雅黑;
-    word-break:break-all;
-    padding-top: 10px;
-    max-width: 300px;
-    font-size:14px;
-}
- .m-icon {
+
+    .hui-dialog-content .info {
+        position: relative;
+        margin: 10px 30px;
+    }
+
+    .hui-dialog-content .infomes {
+        margin-left: 58px;
+        font-family: 微软雅黑;
+        word-break: break-all;
+        padding-top: 10px;
+        max-width: 300px;
+        font-size: 14px;
+    }
+
+.m-icon {
     display: inline-block;
     position: absolute;
     top: 0;
     left: 0;
     width: 50px;
-    height: 50px; 
+    height: 50px;
     background: url(images/ico.png) no-repeat;
 }
+
 .success-icon {
-    background-position:0 -120px;
+    background-position: 0 -120px;
 }
+
 .warn-icon {
-    background-position:0 -170px;
+    background-position: 0 -170px;
 }
- 
+
 /*dialog弹窗end*/
+
+
+/*信息提示begin*/
+.alert-info {
+    border: 1px solid #d5f1fd;
+    background-color: #eaf8fe;
+}
+
+.alert-error {
+    border: 1px solid #fdc;
+    background-color: #ffeee6;
+}
+
+.alert-warning {
+    border: 1px solid #fec;
+    background-color: #fff7e6;
+}
+
+.alert-success {
+    border: 1px solid #F3FAF0;
+    background-color: #f3faf0;
+}
+
+.alert-with-description {
+    font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,SimSun,sans-serif;
+    padding: 16px 16px 16px 69px;
+    position: relative;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    color: #666;
+    line-height: 1.5;
+}
+
+    .alert-with-description .alert-message {
+        font-size: 14px;
+        color: #666;
+        font-weight: bold;
+        display: block;
+    }
+
+.alert-icon {
+    display: block;
+    height: 50px;
+    width: 50px;
+    background: url(images/icon48.png) 0px -5px;
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    margin-top: -20px;
+}
+
+.alert-with-description .success {
+    background-position: 0 -5px;
+}
+
+.alert-with-description .error {
+    background-position: 98px -5px;
+}
+
+.alert-with-description .info {
+    background-position: 49px 0px;
+}
+/*信息提示end*/
+
+
+.btn-group .btn {
+    display: inline-block;
+    height: 34px;
+    line-height: 36px;
+    font-size: 16px;
+    vertical-align: middle;
+}
+
+.btn-group .btn-tobback {
+    padding: 0 30px;
+    margin-right: 10px;
+    background: #fff;
+    color: #e4393c;
+    border: 1px solid #e4393c;
+}
+
+.btn-group .btn-addtocart {
+    position: relative;
+    width: 136px;
+    padding-left: 30px;
+    background: #e4393c;
+    border: 1px solid #e4393c;
+    color: #fff;
+}
+
+.btn-group .btn-tobback:hover {
+    border: 1px solid #e4393c;
+}
+
+.btn-group .btn-addtocart:hover {
+    background: #c91623;
+    color: #FFF;
+}
