@@ -17,7 +17,11 @@ ShopOrderModel order
           IsInvoice    是否要发票
 	  InvoiceInfo  发票抬头
 	  InvoiceNote  发票说明
-          Remark       订单说明	 
+          Remark       订单说明	
+
+    	<--新增加->
+         UserBalance          使用余额
+ 	<--新增加结束->
                     
 1.促销信息集合  Promotion （纯展示，仅仅返回那些没有设置到具体商品的促销信息，且满足促销活动的条件的促销活动集合,）
                每条包含的属性

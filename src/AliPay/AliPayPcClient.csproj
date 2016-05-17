@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BBBB0376-1004-43EB-A1A4-ACD0CD850180}</ProjectGuid>
+    <ProjectGuid>{F009739D-D3E8-448A-9B3B-BA100CE94CB1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ImsgInterface</RootNamespace>
-    <AssemblyName>ImsgInterface</AssemblyName>
+    <RootNamespace>AliPayPcClient</RootNamespace>
+    <AssemblyName>AliPayPcClient</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -34,8 +34,8 @@
       <HintPath>..\refdll\Sharp.Common.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -43,18 +43,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ISendMsg.cs" />
-    <Compile Include="MsgFactory.cs" />
+    <Compile Include="AlipayPC.cs" />
+    <Compile Include="AlipaySubmit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RSA.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EasyCms.Business\EasyCms.Business.csproj">
-      <Project>{fe0b2d82-5664-4ecb-afb3-c336ce499207}</Project>
-      <Name>EasyCms.Business</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\EasyCms.Model\EasyCms.Model.csproj">
-      <Project>{5bf70ea8-ae93-4ed9-be80-a1be82b795fa}</Project>
-      <Name>EasyCms.Model</Name>
+    <ProjectReference Include="..\AliPayCommon\AliPayCommon.csproj">
+      <Project>{768e8575-1ca0-42ee-8902-bfbe02d40e53}</Project>
+      <Name>AliPayCommon</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

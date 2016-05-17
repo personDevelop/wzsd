@@ -107,6 +107,11 @@ namespace EasyCms.Model
         /// </summary>
         public string it_b_pay { get { return it_pay; } set { it_pay = value; } }
 
+        /// <summary>
+        /// // 页面跳转同步通知页面路径，需http://格式的完整路径，不能加?id=123这类自定义参数，必须外网可以正常访问
+        /// = "http://商户网关地址/create_direct_pay_by_user-CSHARP-UTF-8/return_url.aspx";
+        /// </summary>
+        public static string return_url { get { return "m.alipay.com"; }  } 
 
         /// <summary>
         /// 授权令牌  可空
@@ -131,7 +136,7 @@ namespace EasyCms.Model
             list.Add(string.Format("total_fee=\"{0}\"", total_fee));
             list.Add(string.Format("it_b_pay=\"{0}\"", it_b_pay));
             list.Add(string.Format("body=\"{0}\"", body));
-            list.Add(string.Format("return_url=\"{0}\"", "m.alipay.com"));
+            list.Add(string.Format("return_url=\"{0}\"", return_url));
             string result = string.Empty;
             for (int i = 0; i < list.Count; i++)
             {

@@ -334,6 +334,7 @@
     <Compile Include="Controllers\SiteMapController.cs" />
     <Compile Include="Controllers\UpLoadController.cs" />
     <Compile Include="Controllers\VarifyCodeController.cs" />
+    <Compile Include="Controllers\WebAliPayController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -1471,6 +1472,7 @@
     <Folder Include="Views\Search\" />
     <Folder Include="Views\SiteMap\" />
     <Folder Include="Views\VarifyCode\" />
+    <Folder Include="Views\WebAliPay\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -1480,6 +1482,10 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AliPay\AliPayPcClient.csproj">
+      <Project>{f009739d-d3e8-448a-9b3b-ba100ce94cb1}</Project>
+      <Name>AliPayPcClient</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EasyCms.Business\EasyCms.Business.csproj">
       <Project>{fe0b2d82-5664-4ecb-afb3-c336ce499207}</Project>
       <Name>EasyCms.Business</Name>

@@ -56,11 +56,7 @@
     <Compile Include="AdManage.cs" />
     <Compile Include="AdministrativeRegions.cs" />
     <Compile Include="AdPositon.cs" />
-    <Compile Include="Ali\Alipay.cs" />
-    <Compile Include="Ali\AsynchNotifyLog.cs" />
-    <Compile Include="Ali\Core.cs" />
     <Compile Include="Ali\PayPara.cs" />
-    <Compile Include="Ali\RSAFromPkcs8.cs" />
     <Compile Include="AppSet.cs" />
     <Compile Include="AttachFile.cs" />
     <Compile Include="AttributeType.cs" />
