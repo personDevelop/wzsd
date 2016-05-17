@@ -5,7 +5,7 @@
 @using Sharp.Common
 @using System.Data
 @{
-
+    ShopShippingAddress defaultAddr = null;
     ViewBag.Title = "订单结算页-" + CmsSessionExtend.WebSite.Name;
 }
 @Styles.Render("~/bundles/cardcss")
@@ -39,7 +39,7 @@
                                             <div class="consignee-cont" id="consignee1" style="height: 42px;">
                                                 <ul id="consignee-list">
                                                     @{
-                                                        ShopShippingAddress defaultAddr = null;
+                                                       
                                                         //获取当前人的所有地址
                                                         List<ShopShippingAddress> list = new ShopShippingAddressBll().GetWebList(EasyCms.Session.CmsSession.GetUserID()).ToList<ShopShippingAddress>();
                                                         if (list.Count > 0)
@@ -441,8 +441,17 @@
                 </label>
 
                 <div class="fc-consignee-info">
-                    <span class="mr20">寄送至： 天津 塘沽区 全境   新港叁佰间14号中间一航局一公司</span>
-                    <span>收货人：卢永列 135****1431</span>
+                    @if (defaultAddr == null)
+                    {
+                        <span class="mr20">寄送至：</span>
+                        <span>收件人：</span>
+                    }
+                    else
+                    {
+                        <span class="mr20">寄送至： @(defaultAddr.PathName.Replace("/", "") + defaultAddr.Address)</span>
+                        <span>收件人：@defaultAddr.ShipName @defaultAddr.CelPhone</span>
+                    }
+                   
                 </div>
             </div>
 

@@ -178,7 +178,15 @@ $(function () {
             $("#consignee-list").find(".item-selected").removeClass("item-selected");
             $(this).parent().addClass("ui-switchable-panel-selected").attr("selected", "selected");
             $(this).addClass("item-selected");
-            $("").val();
+            var addressid = $(this).attr("consigneeid");
+            $("#AddressID").val(addressid);
+
+            var name = $(this).parent().find(".addr-name").text();
+            var addr = $(this).parent().find(".addr-info").text();
+            var tel = $(this).parent().find(".addr-tel").text();
+            $(".trade-foot-detail-com").find(".fc-consignee-info > span").first().text("寄送至： " + addr);
+            $(".trade-foot-detail-com").find(".fc-consignee-info > span").last().text("收件人："+name +"   "+ tel);
+
         }
     });
     $(".coupons").delegate("li", "click", function () {
