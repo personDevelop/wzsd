@@ -84,5 +84,10 @@ namespace EasyCms.Business
         {
             return Dal.GetMyCoupon(host, status, pageIndex, accountID);
         }
+        public DataTable GetMyCanEnableCoupon( string accountID)
+        {
+            return Dal.GetMyCanEnableCoupon( accountID);
+        }
+        
     }
 }

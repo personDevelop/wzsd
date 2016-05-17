@@ -110,6 +110,18 @@
     <Compile Include="WebSiteSetDal.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AliPayCommon\AliPayCommon.csproj">
+      <Project>{768e8575-1ca0-42ee-8902-bfbe02d40e53}</Project>
+      <Name>AliPayCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AliPayMobile\AliPayMobileClient.csproj">
+      <Project>{81baf155-6ba9-4a29-ad27-b107b8d6d172}</Project>
+      <Name>AliPayMobileClient</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AliPay\AliPayPcClient.csproj">
+      <Project>{f009739d-d3e8-448a-9b3b-ba100ce94cb1}</Project>
+      <Name>AliPayPcClient</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EasyCms.Model\EasyCms.Model.csproj">
       <Project>{5bf70ea8-ae93-4ed9-be80-a1be82b795fa}</Project>
       <Name>EasyCms.Model</Name>

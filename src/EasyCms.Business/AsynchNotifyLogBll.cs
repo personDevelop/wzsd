@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Sharp.Common;
+using AliPayCommon;
 
 namespace EasyCms.Business
 {

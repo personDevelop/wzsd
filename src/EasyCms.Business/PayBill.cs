@@ -1,4 +1,5 @@
-﻿using EasyCms.Dal;
+﻿using AliPayCommon;
+using EasyCms.Dal;
 using EasyCms.Model;
 using System;
 using System.Collections.Generic;

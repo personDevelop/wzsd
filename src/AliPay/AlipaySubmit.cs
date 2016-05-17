@@ -33,9 +33,9 @@ namespace AliPayPcClient
 
         static AlipaySubmit()
         {
-            _private_key = AlipayConfig.private_key;
-            //_input_charset = AlipayConfig.input_charset.Trim().ToLower();
-            _sign_type = AlipayConfig.sign_type.Trim().ToUpper();
+            //_private_key = AlipayConfig.private_key;
+            ////_input_charset = AlipayConfig.input_charset.Trim().ToLower();
+            //_sign_type = AlipayConfig.sign_type.Trim().ToUpper();
         }
 
         /// <summary>
@@ -46,14 +46,14 @@ namespace AliPayPcClient
         private static string BuildRequestMysign(Dictionary<string, string> sPara)
         {
             //把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
-            string prestr = AlipayCore.CreateLinkString(sPara);
+            string prestr = ""; ;// AlipayCore.CreateLinkString(sPara);
 
             //把最终的字符串签名，获得签名结果
             string mysign = "";
             switch (_sign_type)
             {
                 case "RSA":
-                    mysign = RSAFromPkcs8.sign(prestr, _private_key, _input_charset);
+                    mysign = "";//RSAFromPkcs8.sign(prestr, _private_key, _input_charset);
                     break;
                 default:
                     mysign = "";
@@ -76,7 +76,7 @@ namespace AliPayPcClient
             string mysign = "";
 
             //过滤签名参数数组
-            sPara = AlipayCore.FilterPara(sParaTemp);
+            sPara = null;// AlipayCore.FilterPara(sParaTemp);
 
             //获得签名结果
             mysign = BuildRequestMysign(sPara);
@@ -101,7 +101,7 @@ namespace AliPayPcClient
             sPara = BuildRequestPara(sParaTemp);
 
             //把参数组中所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串，并对参数值做urlencode
-            string strRequestData = AlipayCore.CreateLinkStringUrlencode(sPara, code);
+            string strRequestData = "";// AlipayCore.CreateLinkStringUrlencode(sPara, code);
 
             return strRequestData;
         }

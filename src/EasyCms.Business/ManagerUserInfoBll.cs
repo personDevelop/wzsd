@@ -232,5 +232,11 @@ namespace EasyCms.Business
             return Dal.GetDeviceWithBuyCount(MinBuyCount, MaxBuyCount);
 
         }
+
+        public decimal GetMyBalance(string userid)
+        {
+            return Dal.GetMyBalance(userid);
+
+        }
     }
 }

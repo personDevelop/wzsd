@@ -104,6 +104,10 @@
     <Compile Include="WebSiteSetBll.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AliPayCommon\AliPayCommon.csproj">
+      <Project>{768e8575-1ca0-42ee-8902-bfbe02d40e53}</Project>
+      <Name>AliPayCommon</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EasyCms.Dal\EasyCms.Dal.csproj">
       <Project>{1d0f5e84-d7cc-413a-a552-0aa17b44bec4}</Project>
       <Name>EasyCms.Dal</Name>

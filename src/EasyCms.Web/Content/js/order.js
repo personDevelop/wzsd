@@ -12,11 +12,7 @@ function show_ConsigneeAll() {
      
 } window.show_ConsigneeAll = show_ConsigneeAll;
 
-/**
- * update by lilong 20150511
- * ！！！注意：仅供前台更新收货人列表位置使用，不更新服务端数据不更新缓存
- * 点击【收起地址】功能，自动将选中追加至默认地址后第二位，如果没有默认地址则自动排在第一位
- */
+ 
 function hide_ConsigneeAll() {
     $("#consigneeItemAllClick").removeClass("hide");
     $("#consigneeItemHideClick").addClass("hide");
@@ -117,13 +113,13 @@ function vertualHidOrShow() {
         vertualShow();
     }
 }
-//隐藏虚拟资产div
+ 
 function vertualhide() {
     $(".order-virtual").css("display", "none");
     $("#virtualdiv").removeClass("step-toggle-off");
     $("#virtualdiv").addClass("step-toggle-on");
 }
-//展开虚拟资产div
+ 
 function vertualShow() {
     $(".order-virtual").css("display", "block");
     $("#virtualdiv").removeClass("step-toggle-on");
@@ -132,13 +128,15 @@ function vertualShow() {
 }
 function showCouponItem(flag) {
     if (flag) {
-        $("#couponitem").html('<span>优惠券</span><i></i>');
-        $("#bestCouponDiv").css("display", "block");
-        $("#couponsplit").css("display", "block");
+        $(".coupon-main").show();
+        $(".balance-main").hide();
+        $("#couponitem").addClass("curr");
+        $("#balanceitem").removeClass("curr");
     } else {
-        $("#couponitem").html('<span>优惠券</span><i style="display: none"></i>');
-        $("#bestCouponDiv").css("display", "none");
-        $("#couponsplit").css("display", "none");
+        $(".coupon-main").hide();
+        $(".balance-main").show();
+        $("#balanceitem").addClass("curr");
+        $("#couponitem").removeClass("curr");
     }
 } window.showCouponItem = showCouponItem;
 function showBalanceItem(flag) {
@@ -148,6 +146,30 @@ function showBalanceItem(flag) {
         $("#balanceitem").html('<span>余额</span><i style="display: none"></i>');
     }
 } window.showBalanceItem = showBalanceItem;
+
+function useOrCancelBalance(elelment)
+{
+
+    if ($(elelment).prop("checked")) {
+        var PayMoney = $("#PayMoney").val() * 1;
+        var balance = $("#canUsedBalanceId").find(".ftx-01").text() * 1;
+        if (balance > PayMoney) {
+            $("#UserBalance").val(PayMoney);
+        } else {
+            $("#UserBalance").val(balance);
+        }
+        if (balance == 0) {
+            $("#UserBalance").attr("readonly", "readonly");
+        } else {
+            $("#UserBalance").removeAttr("readonly");
+        }
+      
+    } else {
+
+        $("#UserBalance").attr("readonly", "readonly");
+        $("#UserBalance").val(0);
+    }
+}
 $(function () {
     $("#consignee-list").delegate(".consignee-item", "click", function () {
        
@@ -156,8 +178,17 @@ $(function () {
             $("#consignee-list").find(".item-selected").removeClass("item-selected");
             $(this).parent().addClass("ui-switchable-panel-selected").attr("selected", "selected");
             $(this).addClass("item-selected");
+            $("").val();
         }
     });
+    $(".coupons").delegate("li", "click", function () {
+
+        if (!$(this).hasClass("selected")) {
+            $(".coupons").find(".selected").removeClass("selected");
+            $(this).addClass("selected");
+        }
+    });
+  
     $("#payment-list").delegate(".payment-item", "click", function () {
 
         if (!$(this).hasClass("item-selected")) { 

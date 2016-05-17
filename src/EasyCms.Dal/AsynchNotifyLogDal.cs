@@ -1,4 +1,5 @@
-﻿using EasyCms.Model;
+﻿using AliPayCommon;
+using EasyCms.Model;
 using Sharp.Common;
 using Sharp.Data;
 using System;

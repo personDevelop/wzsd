@@ -233,7 +233,17 @@ namespace EasyCms.Dal
             Dal.Submit(list);
         }
 
+        public decimal GetMyBalance(string userid)
+        {
+            decimal result = 0;
+            object o= Dal.From<ManagerUserInfo>().Where(ManagerUserInfo._.ID == userid).Select(ManagerUserInfo._.Balance).ToScalar();
+            if (o!=null && o!=DBNull.Value)
+            {
+                result = Convert.ToDecimal(o);
+            }
+            return result;
 
+        }
 
         public Model.ViewModel.AccountModel GetMySelf(string userid, string host, out string err)
         {

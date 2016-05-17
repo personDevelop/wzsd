@@ -1,4 +1,5 @@
-﻿using EasyCms.Model;
+﻿using AliPayMobileClient;
+using EasyCms.Model;
 using EasyCms.Model.Ali;
 using Sharp.Common;
 using Sharp.Data;
@@ -111,7 +112,7 @@ namespace EasyCms.Dal
                     body = "购物";
                 }
                 else body = body.Remove(body.Length - 1);
-                Alipay apy = new Alipay()
+                AlipayMob apy = new AlipayMob()
                 {
                     partner = spay.Partner,
                     notify_url = spay.NotifyUrl,
@@ -186,7 +187,7 @@ namespace EasyCms.Dal
                             body = "购物";
                         }
                         else body = body.Remove(body.Length - 1);
-                        Alipay apy = new Alipay()
+                        AlipayMob apy = new AlipayMob()
                         {
                             partner = spay.Partner,
                             notify_url = spay.NotifyUrl,

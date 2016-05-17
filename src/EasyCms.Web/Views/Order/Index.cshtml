@@ -20,354 +20,381 @@
                 <span class="tit-txt">填写并核对订单信息</span>
             </div>
             <div class="mc">
-                @using (Html.BeginForm("SubmitOrder","Order"))
+                @using (Html.BeginForm("SubmitOrder", "Order"))
                 {
                     @Html.AntiForgeryToken()
-                     <div class="checkout-steps">
-                   
-                    <div class="step-tit">
-                        <h3>收货人信息</h3>
-                        <div class="extra-r">
-                            <a class="ftx-05" onclick="AddAddr('@Url.Action("index","addr")')" href="#none">新增收货地址</a> 
+                    <div class="checkout-steps">
+
+                        <div class="step-tit">
+                            <h3>收货人信息</h3>
+                            <div class="extra-r">
+                                <a class="ftx-05" onclick="AddAddr('@Url.Action("index", "addr")')" href="#none">新增收货地址</a>
+                            </div>
                         </div>
-                    </div>
-                    <div class="step-cont">
-                        <div class="consignee-content" id="consignee-addr">
-                            <div class="consignee-scrollbar">
-                                <div class="ui-scrollbar-main">
-                                    <div class="consignee-scroll">
-                                        <div class="consignee-cont" id="consignee1" style="height: 42px;">
-                                            <ul id="consignee-list">
-                                                @{
-                                                    ShopShippingAddress defaultAddr = null;
-                                                    //获取当前人的所有地址
-                                                    List<ShopShippingAddress> list = new ShopShippingAddressBll().GetWebList(EasyCms.Session.CmsSession.GetUserID()).ToList<ShopShippingAddress>();
-                                                    if (list.Count > 0)
-                                                    { 
-                                                        if (list.Exists(p => p.IsDefault))
+                        <div class="step-cont">
+                            <div class="consignee-content" id="consignee-addr">
+                                <div class="consignee-scrollbar">
+                                    <div class="ui-scrollbar-main">
+                                        <div class="consignee-scroll">
+                                            <div class="consignee-cont" id="consignee1" style="height: 42px;">
+                                                <ul id="consignee-list">
+                                                    @{
+                                                        ShopShippingAddress defaultAddr = null;
+                                                        //获取当前人的所有地址
+                                                        List<ShopShippingAddress> list = new ShopShippingAddressBll().GetWebList(EasyCms.Session.CmsSession.GetUserID()).ToList<ShopShippingAddress>();
+                                                        if (list.Count > 0)
                                                         {
-                                                            defaultAddr = list.Find(p => p.IsDefault);
-                                                        }
-                                                        else
-                                                        { defaultAddr = list[0]; }
-                                                <li class="ui-switchable-panel ui-switchable-panel-selected" style="display: list-item;" selected="selected">
-                                                    <div class="consignee-item item-selected" consigneeid="@defaultAddr.ID">
-                                                        <span title="@defaultAddr.ShipName">@defaultAddr.ShipName</span><b></b>
-                                                    </div>
-                                                    <div class="addr-detail">
-
-                                                        <span title="@defaultAddr.ShipName" class="addr-name">@defaultAddr.ShipName</span>
-                                                        <span title="@(defaultAddr.PathName.Replace("/","")+ defaultAddr.Address)" class="addr-info">@(defaultAddr.PathName.Replace("/","")+ defaultAddr.Address)</span>
-                                                        <span class="addr-tel">@defaultAddr.CelPhone</span>
-                                                        <span class="addr-default">默认地址</span>
-                                                    </div>
-                                                    <div class="op-btns" consigneeid="@defaultAddr.ID">
-                                                        <span></span>				<a class="ftx-05 edit-consignee" href="#none" consigneeid="@defaultAddr.ID">编辑</a>
-                                                        <a class="ftx-05 del-consignee" href="#none" consigneeid="@defaultAddr.ID">删除</a>
-                                                    </div>
-                                                </li>
-
-                                                        foreach (var item in list)
-                                                        {
-                                                            if (item.ID == defaultAddr.ID)
+                                                            if (list.Exists(p => p.IsDefault))
                                                             {
-                                                                continue;
+                                                                defaultAddr = list.Find(p => p.IsDefault);
                                                             }
-                                                <li class="ui-switchable-panel ui-switchable-panel-selected" style="display: none;">
-                                                    <div class="consignee-item" consigneeid="@item.ID">
-                                                        <span title="@item.ShipName" limit="8">@item.ShipName</span><b></b>
-                                                    </div>
-                                                    <div class="addr-detail">
+                                                            else
+                                                            { defaultAddr = list[0]; }
+                                                            <li class="ui-switchable-panel ui-switchable-panel-selected" style="display: list-item;" selected="selected">
+                                                                <div class="consignee-item item-selected" consigneeid="@defaultAddr.ID">
+                                                                    <span title="@defaultAddr.ShipName">@defaultAddr.ShipName</span><b></b>
+                                                                </div>
+                                                                <div class="addr-detail">
 
-                                                        <span title="@item.ShipName" class="addr-name">@item.ShipName</span>
-                                                        <span title="@(item.PathName.Replace("/","")+ item.Address)" class="addr-info">@(item.PathName.Replace("/","")+ item.Address)</span>
-                                                        <span class="addr-tel">@item.CelPhone</span>
-                                                    </div>
-                                                    <div class="op-btns" consigneeid="@item.ID">
-                                                        <a class="ftx-05 setdefault-consignee" href="#none" consigneeid="@item.ID">设为默认地址</a>
-                                                        <a class="ftx-05 edit-consignee" href="#none" consigneeid="@item.ID">编辑</a>
-                                                        <a class="ftx-05 del-consignee" href="#none" consigneeid="@item.ID">删除</a>
+                                                                    <span title="@defaultAddr.ShipName" class="addr-name">@defaultAddr.ShipName</span>
+                                                                    <span title="@(defaultAddr.PathName.Replace("/", "") + defaultAddr.Address)" class="addr-info">@(defaultAddr.PathName.Replace("/", "") + defaultAddr.Address)</span>
+                                                                    <span class="addr-tel">@defaultAddr.CelPhone</span>
+                                                                    <span class="addr-default">默认地址</span>
+                                                                </div>
+                                                                <div class="op-btns" consigneeid="@defaultAddr.ID">
+                                                                    <span></span>				<a class="ftx-05 edit-consignee" href="#none" consigneeid="@defaultAddr.ID">编辑</a>
+                                                                    <a class="ftx-05 del-consignee" href="#none" consigneeid="@defaultAddr.ID">删除</a>
+                                                                </div>
+                                                            </li>
+
+                                                            foreach (var item in list)
+                                                            {
+                                                                if (item.ID == defaultAddr.ID)
+                                                                {
+                                                                    continue;
+                                                                }
+                                                                <li class="ui-switchable-panel ui-switchable-panel-selected" style="display: none;">
+                                                                    <div class="consignee-item" consigneeid="@item.ID">
+                                                                        <span title="@item.ShipName" limit="8">@item.ShipName</span><b></b>
+                                                                    </div>
+                                                                    <div class="addr-detail">
+
+                                                                        <span title="@item.ShipName" class="addr-name">@item.ShipName</span>
+                                                                        <span title="@(item.PathName.Replace("/", "") + item.Address)" class="addr-info">@(item.PathName.Replace("/", "") + item.Address)</span>
+                                                                        <span class="addr-tel">@item.CelPhone</span>
+                                                                    </div>
+                                                                    <div class="op-btns" consigneeid="@item.ID">
+                                                                        <a class="ftx-05 setdefault-consignee" href="#none" consigneeid="@item.ID">设为默认地址</a>
+                                                                        <a class="ftx-05 edit-consignee" href="#none" consigneeid="@item.ID">编辑</a>
+                                                                        <a class="ftx-05 del-consignee" href="#none" consigneeid="@item.ID">删除</a>
+                                                                    </div>
+                                                                </li>
+                                                            }
+
+                                                        }
+
+
+                                                    }
+                                                </ul>
+
+                                                @Html.Hidden("AddressID", defaultAddr == null ? "" : defaultAddr.ID)
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="addr-switch switch-on" id="consigneeItemAllClick" onclick="show_ConsigneeAll()">
+                                <span>更多地址</span><b></b>
+                            </div>
+                            <div class="addr-switch switch-off hide" id="consigneeItemHideClick" onclick="hide_ConsigneeAll()">
+                                <span>收起地址</span><b></b>
+                            </div>
+                            <input id="consigneeList_giftSenderConsigneeMobile" type="hidden" value="">
+                            <input id="consigneeList_giftSenderConsigneeName" type="hidden" value="">
+                        </div>
+
+                        <div class="hr"></div>
+
+                        <div id="shipAndSkuInfo">
+                            <div id="payShipAndSkuInfo">
+                                <div class="step-tit">
+                                    <h3>支付方式</h3>
+                                </div>
+                                <div class="step-cont">
+                                    <div class="payment-list">
+                                        <div class="list-cont">
+                                            <ul id="payment-list">
+                                                <li style="cursor: pointer;">
+                                                    <div class="payment-item item-selected  online-payment" onlinepaytype="0" payid="0" payname="货到付款">
+                                                        <b></b>
+                                                        货到付款(仅支持现金)
                                                     </div>
                                                 </li>
-                                                        }
 
+                                                @{
+                                                    DataTable pdt = new ShopPaymentTypesBll().GetPayType(2);
+                                                    foreach (DataRow item in pdt.Rows)
+                                                    {
+                                                        <li style="cursor: pointer;">
+                                                            <div class="payment-item  online-payment" onlinepaytype="1" payid="@item["ID"]" payname="@item["ShortName"]">
+                                                                <b></b>
+                                                                @item["ShortName"]                    													                                								<span class="qmark-icon qmark-tip" data-tips="绑定银行卡，支付更快捷 <a href='//help.jd.com/user/issue/list-173-228.html' target='_blank' class='ftx-05'>了解京东支付</a>"></span>
+                                                            </div>
+                                                        </li>
                                                     }
-
-
                                                 }
+                                                <li class="hide" id="payment-less">
+                                                    <div class="payment-item-on">
+                                                        <span>收起</span><b></b>
+                                                    </div>
+                                                </li>
+                                                <li id="payment-more">
+                                                    <div class="payment-item-off">
+                                                        <span>更多</span><b></b>
+                                                    </div>
+                                                </li>
+                                                @Html.Hidden("PayTypeID", Model.PayTypeID)
+                                                <script>
+                                                    $('.online-payment')
+                                                    .hover(function () {
+                                                        $(this).addClass('payment-item-hover');
+                                                    }, function () {
+                                                        $(this).removeClass('payment-item-hover');
+                                                    });
+                                                    if ($("#payment-list li").length <= 7) {
+                                                        $('#payment-less').hide();
+                                                        $('#payment-more').hide();
+                                                        var payid = [5, 2, 8];
+                                                        for (var i in payid) {
+                                                            $("#payment-list div[payid=" + payid[i] + "]").show();
+                                                        }
+                                                    }
+                                                    $('.payment-item-on').click(function () {
+                                                        $('#payment-less').hide();
+                                                        $('#payment-more').show();
+                                                        var payid = [5, 2, 8];
+                                                        for (var i in payid) {
+                                                            var payment = $("#payment-list div[payid=" + payid[i] + "]");
+                                                            if (!payment.hasClass("item-selected")) {
+                                                                payment.hide(100);
+                                                            }
+                                                        }
+                                                    });
+                                                    $('.payment-item-off').click(function () {
+                                                        $('#payment-less').show();
+                                                        $('#payment-more').hide();
+                                                        var payid = [5, 2, 8];
+                                                        for (var i in payid) {
+                                                            var payment = $("#payment-list div[payid=" + payid[i] + "]");
+                                                            if (!payment.hasClass("item-selected")) {
+                                                                payment.show(100);
+                                                            }
+                                                        }
+                                                    });
+                                                </script>
                                             </ul>
-
-                                            @Html.Hidden("AddressID", defaultAddr==null?"": defaultAddr.ID)
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="addr-switch switch-on" id="consigneeItemAllClick" onclick="show_ConsigneeAll()" >
-                            <span>更多地址</span><b></b>
-                        </div>
-                        <div class="addr-switch switch-off hide" id="consigneeItemHideClick" onclick="hide_ConsigneeAll()">
-                            <span>收起地址</span><b></b>
-                        </div>
-                        <input id="consigneeList_giftSenderConsigneeMobile" type="hidden" value="">
-                        <input id="consigneeList_giftSenderConsigneeName" type="hidden" value="">
-                    </div>
-                    
-                    <div class="hr"></div>
-                   
-                    <div id="shipAndSkuInfo">
-                        <div id="payShipAndSkuInfo">
-                            <div class="step-tit">
-                                <h3>支付方式</h3>
-                            </div>
-                            <div class="step-cont">
-                                <div class="payment-list">
-                                    <div class="list-cont">
-                                        <ul id="payment-list"> 
-                                            <li style="cursor: pointer;">
-                                                <div class="payment-item item-selected  online-payment" onlinepaytype="0" payid="0" payname="货到付款">
-                                                    <b></b>
-                                                    货到付款(仅支持现金)
-                                                </div>
-                                            </li>
+                                <div class="hr"></div>
+                                <!--/ /widget/payment-step/payment-step.tpl -->
+                                <div class="step-tit">
+                                    <h3>送货清单</h3>
+                                    <div class="extra-r">
+                                        <a class="return-edit ftx-05" id="cartRetureUrl" href="@Url.Action("index", "card")">返回修改购物车</a>
+                                    </div>
+                                </div>
+                                <div class="step-cont" id="skuPayAndShipment-cont">
+                                    <!--添加商品清单  zhuqingjie -->
 
-                                            @{
-                                                DataTable pdt = new ShopPaymentTypesBll().GetPayType(2);
-                                                foreach (DataRow item in pdt.Rows)
+                                    <div class="cart-tbody">
+                                        @{ 
+                                                int producntIndex = 0;
+                                                foreach (OrderItem producntItem in Model.OrderItems)
                                                 {
-                                            <li style="cursor: pointer;">
-                                                <div class="payment-item  online-payment" onlinepaytype="1" payid="@item["ID"]" payname="@item["ShortName"]">
-                                                    <b></b>
-                                                    @item["ShortName"]                    													                                								<span class="qmark-icon qmark-tip" data-tips="绑定银行卡，支付更快捷 <a href='//help.jd.com/user/issue/list-173-228.html' target='_blank' class='ftx-05'>了解京东支付</a>"></span>
+                                        <div class="item-list">
+                                            <div class="item-single  item-item ">
+                                                <div class="item-form">
+                                                    
+                                                    <div class="cell p-goods">
+                                                        <div class="goods-item">
+                                                            <div class="p-img">
+                                                                @Html.Hidden("order.OrderItems[" + producntIndex + "].ProductID", producntItem.ProductID )
+                                                                @Html.Hidden("order.OrderItems[" + producntIndex + "].SKU", producntItem.Sku )
+                                                                <a href="@Url.Action("index", "Product", new { id = producntItem.ProductID, other = producntItem.Sku })" target="_blank"><img width="100" height="100" src="@producntItem.ImgPath"></a>
+                                                            </div>
+                                                            <div class="item-msg">
+                                                                <div class="p-name">
+                                                                    <a href="@Url.Action("index", "Product", new { id = producntItem.ProductID, other = producntItem.Sku })" target="_blank">@producntItem.ProductName</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div> 
+                                                    <div class="cell p-price"><strong>@producntItem.SalePrice</strong></div>
+                                                  
+                                                    <div class="cell "><strong>@producntItem.BuyCount</strong></div>
+                                                    <div class="cell p-sum">
+                                                        <strong>@(producntItem.BuyCount* producntItem.SalePrice)</strong>
+                                                    </div>
                                                 </div>
-                                            </li>
-                                                }
+                                            </div>
+                                        </div>
+
                                             }
-                                            <li class="hide" id="payment-less">
-                                                <div class="payment-item-on" >
-                                                    <span>收起</span><b></b>
-                                                </div>
-                                            </li>
-                                            <li id="payment-more">
-                                                <div class="payment-item-off" >
-                                                    <span>更多</span><b></b>
-                                                </div>
-                                            </li>
-                                            @Html.Hidden("PayTypeID", Model.PayTypeID)
-                                            <script>
-                                                $('.online-payment')
-                                                .hover(function(){
-                                                    $(this).addClass('payment-item-hover');
-                                                },function(){
-                                                    $(this).removeClass('payment-item-hover');
-                                                });
-                                                if($("#payment-list li").length<=7){
-                                                    $('#payment-less').hide();
-                                                    $('#payment-more').hide();
-                                                    var payid=[5,2,8];
-                                                    for(var i in payid){
-                                                        $("#payment-list div[payid="+payid[i]+"]").show();
-                                                    }
-                                                }
-                                                $('.payment-item-on').click(function(){
-                                                    $('#payment-less').hide();
-                                                    $('#payment-more').show();
-                                                    var payid=[5,2,8];
-                                                    for(var i in payid){
-                                                        var payment = $("#payment-list div[payid="+payid[i]+"]");
-                                                        if(!payment.hasClass("item-selected")){
-                                                            payment.hide(100);
-                                                        }
-                                                    }
-                                                });
-                                                $('.payment-item-off').click(function(){
-                                                    $('#payment-less').show();
-                                                    $('#payment-more').hide();
-                                                    var payid=[5,2,8];
-                                                    for(var i in payid){
-                                                        var payment = $("#payment-list div[payid="+payid[i]+"]");
-                                                        if(!payment.hasClass("item-selected")){
-                                                            payment.show(100);
-                                                        }
-                                                    }
-                                                });
-                                            </script>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="hr"></div>
-                            <!--/ /widget/payment-step/payment-step.tpl -->
-                            <div class="step-tit">
-                                <h3>送货清单</h3>
-                                <div class="extra-r">
-                                    <a class="return-edit ftx-05" id="cartRetureUrl" href="@Url.Action("index","card")" >返回修改购物车</a>
-                                </div>
-                            </div>
-                            <div class="step-cont" id="skuPayAndShipment-cont">
-                                <!--添加商品清单  zhuqingjie -->
-
-                                <div class="cart-tbody">
-                                    <div class="item-list">
-                                        <div class="item-single  item-item ">
-                                            <div class="item-form">
-
-                                                <div class="cell p-goods">
-                                                    <div class="goods-item">
-                                                        <div class="p-img">
-                                                            <a href="http://item.jd.com/1616043020.html" target="_blank"><img src="http://img10.360buyimg.com/cms/s80x80_jfs/t1585/77/1355422030/217136/bb380bc5/55ee416aN2218124e.jpg"></a>
-                                                        </div>
-                                                        <div class="item-msg">
-                                                            <div class="p-name">
-                                                                <a href="http://item.jd.com/1616043020.html" target="_blank">骆驼牌冰雪系列冲锋衣 男 三合一两件套 秋冬季防风保暖抓绒内胆情侣款登山服 宝蓝/深蓝男款 L</a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="cell p-props p-props-new">
-                                                    <div class="props-txt" title="宝蓝/深蓝男款">颜色：宝蓝/深蓝男款</div>
-                                                    <div class="props-txt" title="L">尺码：L</div>
-                                                </div>
-
-                                                <div class="cell p-price"><strong>299.00</strong></div>
-                                                <div class="cell "><strong>5</strong></div>
-                                                <div class="cell p-sum">
-                                                    <strong>1495.00</strong>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="item-list">
-                                        <div class="item-single  item-item ">
-                                            <div class="item-form">
-
-                                                <div class="cell p-goods">
-                                                    <div class="goods-item">
-                                                        <div class="p-img">
-                                                            <a href="http://item.jd.com/1616043020.html" target="_blank"><img src="http://img10.360buyimg.com/cms/s80x80_jfs/t1585/77/1355422030/217136/bb380bc5/55ee416aN2218124e.jpg"></a>
-                                                        </div>
-                                                        <div class="item-msg">
-                                                            <div class="p-name">
-                                                                <a href="http://item.jd.com/1616043020.html" target="_blank">骆驼牌冰雪系列冲锋衣 男 三合一两件套 秋冬季防风保暖抓绒内胆情侣款登山服 宝蓝/深蓝男款 L</a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="cell p-props p-props-new">
-                                                    <div class="props-txt" title="宝蓝/深蓝男款">颜色：宝蓝/深蓝男款</div>
-                                                    <div class="props-txt" title="L">尺码：L</div>
-                                                </div>
-
-                                                <div class="cell p-price"><strong>299.00</strong></div>
-                                                <div class="cell "><strong>5</strong></div>
-                                                <div class="cell p-sum">
-                                                    <strong>1495.00</strong>
-                                                </div>
-
-                                            </div>
-                                        </div>
+                                        }
+                                    
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                  
-                    <div class="hr"></div>
-                   
-                    <div class="step-tit step-toggle-on" id="virtualdiv" onclick="vertualHidOrShow()" >
-                        <h3>使用优惠/抵用</h3>
-                        <i></i>
-                    </div>
-                    <div class="step-cont order-virtual" style="display: none;">
-                        <div class="order-virtual-tabs">
-                            <ul>
-                                <li class="ui-switchable-item curr" id="couponitem" onclick="showCouponItem(true);"  ><span>优惠券</span><i style="display: none"></i></li>
-                                <li class="ui-switchable-item" id="balanceitem" onclick="showCouponItem(false);"><span>余额</span><i style="display: none"></i></li>
-                            </ul>
+
+                        <div class="hr"></div>
+
+                        <div class="step-tit step-toggle-on" id="virtualdiv" onclick="vertualHidOrShow()">
+                            <h3>使用优惠/抵用</h3>
+                            <i></i>
                         </div>
-                        <div class="ui-switchable-panel-main">
-
-                            <!-- coupon -->
-                            <div class="coupon-main ui-switchable-panel ui-switchable-panel-selected" style="display: block;">
-                                <div class="coupon-optimal ml20" id="bestCouponDiv"  >
-                                    <label >
-                                        <input id="bestCouponCheck" onclick="getBastCouponList(this)" type="checkbox">
-                                        <span id="bestCoupon">使用最优组合</span>
-                                    </label>
-                                </div>
-                                <div class="hr" id="couponsplit"></div>
-                                <div class="coupon-cont">
-
-                                    <div class="coupon-tab-panel-main ml20" id="coupons">
-
-                                        <div class="coupon-tab-panel ui-switchable-panel-selected" style="display: block;">
-                                            <div class="item-list">
-                                                <div class="item-single  item-item ">
-                                                    <div class="item-form">
-                                                        <div class="cell p-checkbox">
-                                                            <div class="cart-checkbox">
-                                                                <input type="checkbox" name="checkItem" lass="jdcheckbox" />
-
-                                                                <span class="line-circle"></span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="cell p-goods">
-                                                           
-                                                        </div>
-                                                       
-
-                                                        <div class="cell p-price"><strong>299.00</strong></div>
-                                                      
-                                                        <div class="cell p-sum">
-                                                            <strong>1495.00</strong>
-                                                        </div>
-                                                       
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <script id="tooltip-box04" type="text/temp">
-                                            <div class="tooltip-goods">
-                                                <div class="coupon-goods">
-                                                    <div class="coupon-tit">
-
-                                                    </div>
-                                                    <div class="coupon-con" id="v-goods">
-                                                        <div class="loading">
-                                                            <i></i>加载中...
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </script>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- balance -->
-                            <div class="balance-main ui-switchable-panel">
-                                <div class="form v-balance ml20" id="jdBalance"  > 
-                                    <input class="jdcheckbox" id="selectOrderBalance" onclick="useOrCancelBalance(this)" type="checkbox" value="">
-                                    <label id="canUsedBalanceId" for="selectOrderBalance">&nbsp;使用余额（账户当前余额：<span class="ftx-01">0.00</span>元）</label>
-
-                                </div>
-                            </div>
-                            <div class="virtual-usedcont">
-                                <span class="virtual-usedcont-price">金额抵用<em id="total">￥0.00</em></span>
+                        <div class="step-cont order-virtual" style="display: none;">
+                            <div class="order-virtual-tabs">
                                 <ul>
-                                    <li id="couponTotalShow">使用优惠券<em></em>张，优惠<em></em>元 </li>
-
-                                    <li id="balanceShow">| 使用余额，抵用<em>@Html.TextBox("UserBalance", Model.UserBalance)</em>元</li>
+                                    <li class="ui-switchable-item curr" id="couponitem" onclick="showCouponItem(true);"><span>优惠券</span><i style="display: none"></i></li>
+                                    <li class="ui-switchable-item" id="balanceitem" onclick="showCouponItem(false);"><span>余额</span><i style="display: none"></i></li>
                                 </ul>
                             </div>
+                            <div class="ui-switchable-panel-main">
+
+                                <!-- coupon -->
+                                <div class="coupon-main ui-switchable-panel">
+
+                                    <div class="hr" id="couponsplit"></div>
+                                    <div class="coupon-cont">
+
+                                        <div class="coupon-tab-panel-main ml20" id="coupons">
+
+                                            <div class="coupon-tab-panel ui-switchable-panel-selected" style="display: block;">
+                                                <style>
+                                                    .coupons .coupon-items {
+                                                        width: 200px;
+                                                        float: left;
+                                                        cursor: pointer;
+                                                        position: relative;
+                                                        color: #FFF;
+                                                        margin-right: 5px;
+                                                    }
+
+                                                        .coupons .coupon-items .item {
+                                                            background-color: #fa9899;
+                                                        }
+
+                                                    .coupons .disabled .item {
+                                                        background-color: #C5C3C3;
+                                                    }
+
+                                                    .coupons .coupon-items .c-type-bottom {
+                                                        height: 3px;
+                                                        width: 100%;
+                                                        background: #fff url(http://misc.360buyimg.com/user/purchase/2.0.0/css/i/virtual-spite.png) -36px -9px no-repeat;
+                                                    }
+
+                                                    .coupons .coupon-items .item .title {
+                                                        font: 24px Arial,Verdana,'Microsoft YaHei',SimSun;
+                                                    }
+
+                                                    .coupons .coupon-items .info {
+                                                        color: #000;
+                                                        border: 1px solid #DDD;
+                                                        background-color: #FFF;
+                                                        padding: 5px;
+                                                    }
+
+                                                    .coupons .selected .info {
+                                                        border: 1px solid #E4393C;
+                                                    }
+
+                                                        .coupons .selected .info b {
+                                                            display: block;
+                                                            position: absolute;
+                                                            right: 0;
+                                                            bottom: 0;
+                                                            width: 12px;
+                                                            height: 12px;
+                                                            overflow: hidden;
+                                                            background: url(http://misc.360buyimg.com/user/purchase/2.0.0/css/i/selected-icon.png) no-repeat;
+                                                        }
+                                                </style>
+                                                <div>
+                                                    <ul class='coupons'>
+                                                        @{
+                                                            //获取可用优惠券
+                                                            DataTable dt = new CouponRuleBll().GetMyCanEnableCoupon(EasyCms.Session.CmsSession.GetUserID());
+                                                            if (dt.Rows.Count == 0)
+                                                            {
+                                                                <text>
+                                                                    <label>（没有可用优惠券）</label></text>
+                                                            }
+                                                            foreach (DataRow item in dt.Rows)
+                                                            {
+                                                                <li class='coupon-items' value="@item["ID"]">
+                                                                    <div class='item'>
+
+                                                                        <div style='padding:10px;'>
+                                                                            <div class='title'>@item["CardValue"]元</div>
+                                                                            <div>@item["Name"]</div>
+                                                                        </div>
+
+
+                                                                    </div>
+                                                                    <div class='info'>
+                                                                        <div>@item["Code"]</div>
+                                                                        <div>有效期:@item["EndDate"]</div>
+                                                                        <b></b>
+                                                                    </div>
+                                                                </li>
+                                                            }
+                                                        }
+
+
+
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- balance -->
+                                <div class="balance-main ui-switchable-panel" style="display:none">
+                                    <div class="form v-balance ml20" id="jdBalance">
+                                        @{
+                                            decimal balance = new ManagerUserInfoBll().GetMyBalance(EasyCms.Session.CmsSession.GetUserID());
+                                            if (balance > 0)
+                                            {
+                                                <input class="jdcheckbox" id="selectOrderBalance" onclick="useOrCancelBalance(this)" type="checkbox" value="">
+                                                <label id="canUsedBalanceId" for="selectOrderBalance">&nbsp;使用余额（账户当前余额：<span class="ftx-01">0.00</span>元）</label>
+                                                @Html.TextBox("UserBalance", Model.UserBalance)
+                                            }
+                                            else
+                                            {
+                                                <label id="canUsedBalanceId" for="selectOrderBalance">（账户当前余额：<span class="ftx-01">0.00</span>元）</label>
+                                            }
+                                        }
+
+                                    </div>
+                                </div>
+                                <div class="virtual-usedcont">
+                                    <span class="virtual-usedcont-price">金额抵用<em id="total">￥0.00</em></span>
+                                    <ul>
+                                        <li id="couponTotalShow">使用优惠券<em></em>张，优惠<em></em>元 </li>
+
+                                        <li id="balanceShow">| 使用余额，抵用<em></em>元</li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
+
                     </div>
-                   
-                </div>
-                } 
-               </div>
+                                            }
+            </div>
         </div>
         <!--  /widget/order-summary/order-summary.tpl -->
         <div class="order-summary">
@@ -389,11 +416,11 @@
                     <input id="couponPriceNum" type="hidden" value="0">
                     <input id="couponPricehidden" type="hidden" value="0">
                     <span>商品优惠：</span><em class="price" id="couponPriceId" style="display: none;">-￥0.00</em>
-                </div> 
-                <div class="list" id="showUsedOrderBalance" style="display: none;"> 
+                </div>
+                <div class="list" id="showUsedOrderBalance" style="display: none;">
                     <span>余额：</span><em class="price" id="usedBalanceId">-￥0.00</em>
                 </div>
-                
+
             </div>
             <div class="clr"></div>
         </div>
@@ -403,10 +430,11 @@
             <div class="trade-foot-detail-com">
                 <div class="fc-price-info">
                     <span class="price-tit">应付总额：</span>
+                    @Html.Hidden("PayMoney", Model.PayMoney)
                     <span class="price-num" id="sumPayPriceId">￥35.90</span>
                 </div>
                 <div class="fc-baitiao-info" style="display: none;">
-                    <span>白条支付：<em>30天免息</em>（不使用优惠）<i class="bt-edit-icon" onclick="javascript:btDetail();" ></i></span>
+                    <span>白条支付：<em>30天免息</em>（不使用优惠）<i class="bt-edit-icon" onclick="javascript:btDetail();"></i></span>
                 </div>
                 <label class="noShowMoney hide" id="giftBuyHidePriceDiv">
                     <input id="giftBuyHidePrice" type="checkbox" checked="">包装内不显示礼品价格
@@ -426,7 +454,7 @@
                     </div>
                     <div class="sticky-wrap">
                         <div class="inner">
-                            <button class="checkout-submit" id="order-submit" onclick="javascript:submit_Order();" type="submit" >
+                            <button class="checkout-submit" id="order-submit" onclick="javascript:submit_Order();" type="submit">
                                 提交订单<b></b>
                             </button>
 

@@ -63,7 +63,7 @@ namespace AliPayPcClient
                 }
                 result += list[i];
             }
-            string sign = RSAFromPkcs8.sign(result, privatkey, _input_charset);
+            string sign =new RSAFromPkcs8ForMoblie().sign(result, privatkey, _input_charset);
             sign = System.Web.HttpUtility.UrlEncode(sign, Encoding.UTF8);
             result = result + "&sign=\"" + sign + "\"&sign_type=\"RSA\"";
             result = result.EncryptDEC();//加密

@@ -65,15 +65,14 @@ namespace EasyCms.Dal
 
         public CouponRule GetEntity(string id)
         {
-            CouponRule d= Dal.From<CouponRule>().Join<ShopCategory>(!CouponRule._.CategoryId.IsNullOrEmpty() && CouponRule._.CategoryId == ShopCategory._.ID, JoinType.leftJoin)
+            CouponRule d = Dal.From<CouponRule>().Join<ShopCategory>(!CouponRule._.CategoryId.IsNullOrEmpty() && CouponRule._.CategoryId == ShopCategory._.ID, JoinType.leftJoin)
                 .Join<ShopProductInfo>(!CouponRule._.ProductId.IsNullOrEmpty() && CouponRule._.ProductId == ShopProductInfo._.ID)
                 .Join<ShopProductSKUInfo>(!CouponRule._.ProductSku.IsNullOrEmpty() && CouponRule._.ProductSku == ShopProductSKUInfo._.ID)
                 .Select(CouponRule._.ID.All, ShopCategory._.Name.Alias("ShopCategoryName"), ShopProductInfo._.Name.Alias("ShopName")
-                , ShopProductSKUInfo._.SKU.Alias("ShopSkuCode")).Where(CouponRule._.ID == id).ToFirst<CouponRule>( );
-         
+                , ShopProductSKUInfo._.SKU.Alias("ShopSkuCode")).Where(CouponRule._.ID == id).ToFirst<CouponRule>();
+
             return d;
         }
-
 
 
 
@@ -482,7 +481,21 @@ namespace EasyCms.Dal
             }
         }
 
+        public DataTable GetMyCanEnableCoupon(string accountID)
+        {
+            UpdateCoupon();
 
+
+
+            DataTable dt = Dal.From<CusomerAndCoupon>().Join<CouponRule>(CouponRule._.ID == CusomerAndCoupon._.CouponID)
+                   .Where(CusomerAndCoupon._.CustomerID == accountID && CusomerAndCoupon._.IsOutDate == false&& CusomerAndCoupon._.HaveCount>0).Select(
+                   CusomerAndCoupon._.ID, CusomerAndCoupon._.HaveCount, CusomerAndCoupon._.Code,
+                    CusomerAndCoupon._.EndDate, CusomerAndCoupon._.CardValue, CouponRule._.Name
+                   ).OrderBy(CusomerAndCoupon._.HasDate).ToDataTable();
+
+            return dt;
+
+        }
     }
 
 

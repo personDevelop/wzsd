@@ -61,6 +61,12 @@ namespace EasyCms.Model
         /// </summary>
         public decimal TotalPrice { get; set; }
 
+
+        /// <summary>
+        /// 实际需要支付的金额
+        /// </summary>
+        public decimal PayMoney { get; set; }
+
         public List<OrderItem> OrderItems { get; set; }
 
         /// <summary>

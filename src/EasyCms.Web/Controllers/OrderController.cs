@@ -1,4 +1,4 @@
-﻿using AliPay;
+﻿ 
 using EasyCms.Business;
 using EasyCms.Model;
 using EasyCms.Session;
@@ -120,8 +120,8 @@ namespace EasyCms.Web.Controllers
             //sParaTemp.Add("payment_type", AlipayConfig.payment_type);
             //sParaTemp.Add("notify_url", AlipayConfig.notify_url);
             //sParaTemp.Add("return_url", AlipayConfig.return_url);
-            sParaTemp.Add("anti_phishing_key", AlipayConfig.anti_phishing_key);
-            sParaTemp.Add("exter_invoke_ip", AlipayConfig.exter_invoke_ip);
+            //sParaTemp.Add("anti_phishing_key", AlipayConfig.anti_phishing_key);
+            //sParaTemp.Add("exter_invoke_ip", AlipayConfig.exter_invoke_ip);
             sParaTemp.Add("out_trade_no", out_trade_no);
             sParaTemp.Add("subject", subject);
             sParaTemp.Add("total_fee", total_fee);
@@ -130,7 +130,7 @@ namespace EasyCms.Web.Controllers
             //如sParaTemp.Add("参数名","参数值");
 
             //建立请求
-            string sHtmlText = AlipaySubmit.BuildRequest(sParaTemp, "get", "确认");
+            //string sHtmlText = AlipaySubmit.BuildRequest(sParaTemp, "get", "确认");
             return View();
         }
     }
