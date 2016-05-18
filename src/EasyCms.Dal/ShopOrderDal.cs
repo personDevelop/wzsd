@@ -202,7 +202,7 @@ namespace EasyCms.Dal
                 //获取可用优惠券
                 order.Coupon = new CouponRuleDal().GetValidCouponList(list, accuontID);
             }
-
+            order.TotalPrice = order.PayMoney = order.OrderItems.Sum(p => p.SalePrice * p.BuyCount);
             return order;
 
         }

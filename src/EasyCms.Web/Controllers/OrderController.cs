@@ -85,10 +85,19 @@ namespace EasyCms.Web.Controllers
                 }
                 catch (Exception e)
                 {
-                    
+                    Msg = "系统繁忙,请稍后再试";
                 }
             }
-            return View("index",Msg);
+            if (string.IsNullOrWhiteSpace(Msg))
+            {
+                return View("", "");
+            }
+            else
+            {
+                ViewBag.Msg = Msg;
+                return View("index", order);
+            }
+            
         }
 
         
