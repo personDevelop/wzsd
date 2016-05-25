@@ -14,13 +14,9 @@ namespace EasyCms.Web.Controllers
         public ActionResult Index(string id)
         {
             ShopCategory p = new ShopCategoryBll().GetEntity(id);
-            return View("List", p);
+            return View( p);
         }
-        // GET: Category
-        public ActionResult List()
-        {
-            return View();
-        }
+        
 
 
     }

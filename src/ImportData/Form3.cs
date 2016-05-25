@@ -109,5 +109,32 @@ namespace ImportData
                 MessageBox.Show(ex.GetExceptionMsg());
             }
         }
+
+        private void simpleButton4_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                new frmAccout().Show();
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.GetExceptionMsg());
+            }
+        }
+
+        private void simpleButton5_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                new frmOrder().Show();
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.GetExceptionMsg());
+            }
+        }
     }
 }

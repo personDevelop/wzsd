@@ -68,6 +68,14 @@ namespace EasyCms.Model
 
         private string _LogoUrl;
 
+        private string _EmailServer;
+
+        private int _EmailPort;
+
+        private string _EmailUser;
+
+        private string _EmailPwd;
+
         #endregion
 
         #region 属性
@@ -527,6 +535,90 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  邮箱服务器,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "EmailServer", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string EmailServer
+        {
+            get
+            {
+                return this._EmailServer;
+            }
+            set
+            {
+                this.OnPropertyChanged("EmailServer", this._EmailServer, value);
+
+
+                this._EmailServer = value;
+            }
+        }
+
+        /// <summary>
+        ///  邮箱端口,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "EmailPort", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public int EmailPort
+        {
+            get
+            {
+                return this._EmailPort;
+            }
+            set
+            {
+                this.OnPropertyChanged("EmailPort", this._EmailPort, value);
+
+
+                this._EmailPort = value;
+            }
+        }
+
+        /// <summary>
+        ///  用户名,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "EmailUser", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string EmailUser
+        {
+            get
+            {
+                return this._EmailUser;
+            }
+            set
+            {
+                this.OnPropertyChanged("EmailUser", this._EmailUser, value);
+
+
+                this._EmailUser = value;
+            }
+        }
+
+        /// <summary>
+        ///  邮箱密码,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "EmailPwd", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string EmailPwd
+        {
+            get
+            {
+                return this._EmailPwd;
+            }
+            set
+            {
+                this.OnPropertyChanged("EmailPwd", this._EmailPwd, value);
+
+
+                this._EmailPwd = value;
+            }
+        }
+
         #endregion
 
         #region 列定义 
@@ -578,6 +670,14 @@ namespace EasyCms.Model
                 IosImgUrl = new PropertyItem("IosImgUrl", tableName);
 
                 LogoUrl = new PropertyItem("LogoUrl", tableName);
+
+                EmailServer = new PropertyItem("EmailServer", tableName);
+
+                EmailPort = new PropertyItem("EmailPort", tableName);
+
+                EmailUser = new PropertyItem("EmailUser", tableName);
+
+                EmailPwd = new PropertyItem("EmailPwd", tableName);
 
 
             }
@@ -669,7 +769,45 @@ namespace EasyCms.Model
             /// LogoUrl,
             /// </summary> 
             public PropertyItem LogoUrl = null;
+            /// <summary>
+            /// 邮箱服务器,
+            /// </summary> 
+            public PropertyItem EmailServer = null;
+            /// <summary>
+            /// 邮箱端口,
+            /// </summary> 
+            public PropertyItem EmailPort = null;
+            /// <summary>
+            /// 用户名,
+            /// </summary> 
+            public PropertyItem EmailUser = null;
+            /// <summary>
+            /// 邮箱密码,
+            /// </summary> 
+            public PropertyItem EmailPwd = null;
         }
         #endregion
     }
+    public partial class WebSiteSet
+    {
+        [NotDbCol]
+        public string WebSiteUrlWithHttp { get {
+                string result = WebSiteUrl;
+                if (!string.IsNullOrWhiteSpace(result))
+                {
+                    result = result.ToLower();
+                    if (!result.StartsWith("http://"))
+                    {
+                        result = "http://" + result;
+                    }
+                    if (result.EndsWith("/"))
+                    {
+                        result = result.Remove(result.Length - 1, 1);
+                    }
+                }
+                return result;
+
+            } }
+    }
 }
+ 

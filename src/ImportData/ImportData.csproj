@@ -53,10 +53,6 @@
       <HintPath>..\refdll\NPOI.OpenXml4Net.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
-    <Reference Include="Sharp.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\refdll\Sharp.Common.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -92,6 +88,18 @@
     <Compile Include="Form3.Designer.cs">
       <DependentUpon>Form3.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmaddress.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmaddress.Designer.cs">
+      <DependentUpon>frmaddress.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmOrder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmOrder.Designer.cs">
+      <DependentUpon>frmOrder.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmCheckImg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -122,6 +130,12 @@
     <Compile Include="frmGetDetailImgPath.Designer.cs">
       <DependentUpon>frmGetDetailImgPath.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmAccout.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAccout.Designer.cs">
+      <DependentUpon>frmAccout.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmProduct.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -140,11 +154,19 @@
     <Compile Include="frmBrand.Designer.cs">
       <DependentUpon>frmBrand.cs</DependentUpon>
     </Compile>
+    <Compile Include="OldEntity\h7_address.cs" />
     <Compile Include="OldEntity\h7_ad_manage.cs" />
+    <Compile Include="OldEntity\h7_areas.cs" />
     <Compile Include="OldEntity\h7_brand.cs" />
     <Compile Include="OldEntity\h7_category.cs" />
     <Compile Include="OldEntity\h7_goods.cs" />
+    <Compile Include="OldEntity\h7_member.cs" />
+    <Compile Include="OldEntity\h7_order.cs" />
+    <Compile Include="OldEntity\h7_order_goods.cs" />
     <Compile Include="OldEntity\h7_spec.cs" />
+    <Compile Include="OldEntity\h7_user.cs" />
+    <Compile Include="OldEntity\NewAndOldRalation.cs" />
+    <Compile Include="OldEntity\OldUser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
@@ -155,6 +177,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form3.resx">
       <DependentUpon>Form3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmaddress.resx">
+      <DependentUpon>frmaddress.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmOrder.resx">
+      <DependentUpon>frmOrder.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmCheckImg.resx">
       <DependentUpon>frmCheckImg.cs</DependentUpon>
@@ -170,6 +198,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmGetDetailImgPath.resx">
       <DependentUpon>frmGetDetailImgPath.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmAccout.resx">
+      <DependentUpon>frmAccout.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmProduct.resx">
       <DependentUpon>frmProduct.cs</DependentUpon>
@@ -203,10 +234,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\01-WinFramework-新架构\Sharp.Data\Sharp.Data.csproj">
-      <Project>{ee66c4ff-659f-4c29-a6b7-68d014f7755e}</Project>
-      <Name>Sharp.Data</Name>
-    </ProjectReference>
     <ProjectReference Include="..\EasyCms.Model\EasyCms.Model.csproj">
       <Project>{5bf70ea8-ae93-4ed9-be80-a1be82b795fa}</Project>
       <Name>EasyCms.Model</Name>

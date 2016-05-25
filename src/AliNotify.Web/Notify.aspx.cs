@@ -1,4 +1,5 @@
-﻿using EasyCms.Business;
+﻿using AliPayCommon;
+using EasyCms.Business;
 using EasyCms.Model;
 using System;
 using System.Collections.Generic;
@@ -74,7 +75,7 @@ namespace AliNotify.Web
                                         case AliTradeStatus.TRADE_SUCCESS:
                                             //付款成功
                                             //更新订单的付款状态 和操作日志记录，并发送短信或系统内通知
-                                            new ShopOrderBll().PaySuccess(notify.out_trade_no, notify.total_fee);
+                                            new ShopOrderBll().PaySuccess(notify.out_trade_no, notify.total_fee,false);
                                             Result = "付款成功";
                                             break;
                                     }

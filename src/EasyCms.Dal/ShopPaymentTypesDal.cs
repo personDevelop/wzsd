@@ -1,4 +1,5 @@
 ﻿using AliPayMobileClient;
+using AliPayPcClient;
 using EasyCms.Model;
 using EasyCms.Model.Ali;
 using Sharp.Common;
@@ -59,6 +60,7 @@ namespace EasyCms.Dal
             return Dal.Find<ShopPaymentTypes>(id);
         }
 
+       
 
         public DataTable GetPayTypeForSelecte(string ShippingModeId)
         {
@@ -128,6 +130,50 @@ namespace EasyCms.Dal
 
             return result;
 
+        }
+
+
+        public string PayByPc(string orderID, out string error)
+        {
+           error = string.Empty;
+            string result = string.Empty;
+            ShopPaymentTypes spay = Dal.From<ShopPaymentTypes>().Join<ShopOrder>(ShopPaymentTypes._.ID == ShopOrder._.PayTypeID).Where(ShopOrder._.ID == orderID)
+                     .Select(ShopPaymentTypes._.ID.All).ToFirst<ShopPaymentTypes>();
+
+            if (spay == null)
+            {
+                error = "当前订单没有支付方式" + orderID; 
+            }
+            else
+            {
+                ShopOrder order = Dal.From<ShopOrder>().Where(ShopOrder._.ID == orderID).Select(ShopOrder._.PayMoney).ToFirst<ShopOrder>();
+                List<ShopOrderItem> list = Dal.From<ShopOrderItem>().Select(ShopOrderItem._.ProductName).Where(ShopOrderItem._.OrderID == orderID).List<ShopOrderItem>();
+                string body = string.Empty;
+                foreach (var item in list)
+                {
+                    body += item.ProductName + ";";
+                }
+                if (string.IsNullOrWhiteSpace(body))
+                {
+                    body = "购物";
+                }
+                else body = body.Remove(body.Length - 1);
+                AlipayPC apy = new AlipayPC()
+                {
+                    partner = spay.Partner,
+                    notify_url = spay.NotifyUrl,
+                     return_url=spay.ReturnUrl, 
+                    out_trade_no = orderID,
+                    subject = "红七商城订单支付"+ orderID,
+                    seller_id = spay.MerchantCode,
+                    total_fee = order.PayMoney.ToString(),
+                    body = body
+                };
+                result = apy.GenerSign(spay.SecretKey);
+            }
+
+
+            return result;
         }
 
         public bool GenerPayPara(PayPara payPara, out string error)

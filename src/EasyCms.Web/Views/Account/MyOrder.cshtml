@@ -1,0 +1,1064 @@
+﻿@using EasyCms
+@using EasyCms.Model
+@{
+    Layout = "~/Views/Shared/_UserCenter.cshtml";
+    ViewBag.Title = "会员中心-" + CmsSessionExtend.WebSite.Name;
+} 
+<style type="text/css">
+    
+    .order-tb {
+        width: 100%;
+    }
+
+        .order-tb thead th {
+            height: 32px;
+            line-height: 32px;
+            text-align: center;
+            background: #f5f5f5;
+            color: #666;
+            font-weight: 400;
+        }
+
+    table {
+        border-spacing: 0;
+    }
+
+    table {
+        border-collapse: collapse;
+    }
+
+    .order-tb tbody td {
+        border: 1px solid #e5e5e5;
+    }
+
+    .order-tb .tr-th td {
+        border-bottom-color: #f5f5f5;
+    }
+
+    .order-tb .deal-state-cont {
+        position: relative;
+        z-index: 10;
+        width: 98px;
+        cursor: pointer;
+    }
+
+        .order-tb .deal-state-cont .state-txt {
+            position: relative;
+            height: 30px;
+            line-height: 30px;
+            text-align: left;
+            padding-left: 20px;
+            padding-right: 12px;
+            border: 1px solid #f5f5f5;
+        }
+
+            .order-tb .deal-state-cont .state-txt b {
+                position: absolute;
+                width: 7px;
+                height: 4px;
+                right: 18px;
+                top: 13px;
+                overflow: hidden;
+                vertical-align: middle;
+                background: url(http://misc.360buyimg.com/user/myjd-2015/css/i/order-icon20150916.png) -37px -207px no-repeat;
+            }
+
+        .order-tb .deal-state-cont .state-list {
+            position: absolute;
+            left: 0;
+            top: 30px;
+            z-index: 2;
+            display: none;
+            width: 96px;
+            background: #fff;
+            border: 1px solid #f5f5f5;
+            border-top: 0;
+        }
+
+            .order-tb .deal-state-cont .state-list li {
+                height: 30px;
+                line-height: 30px;
+                text-align: left;
+            }
+
+                .order-tb .deal-state-cont .state-list li a {
+                    display: block;
+                    position: relative;
+                    color: #666;
+                    height: 30px;
+                    line-height: 30px;
+                    padding-left: 20px;
+                }
+
+                    .order-tb .deal-state-cont .state-list li a:hover {
+                        background: #f5f5f5;
+                        color: #e4393c;
+                    }
+
+                    .order-tb .deal-state-cont .state-list li a b {
+                        display: block;
+                        position: absolute;
+                        left: 5px;
+                        top: 10px;
+                        width: 10px;
+                        height: 7px;
+                        vertical-align: middle;
+                        overflow: hidden;
+                    }
+
+                    .order-tb .deal-state-cont .state-list li a.curr {
+                        color: #e4393c;
+                    }
+
+                        .order-tb .deal-state-cont .state-list li a.curr b {
+                            background: url(http:http://misc.360buyimg.com/user/myjd-2015/css/i/order-icon20150916.png) 0 -207px;
+                        }
+
+    .order-tb .deal-state-hover .state-txt {
+        background: #fff;
+        -webkit-box-shadow: 0 0 10px rgba(0,0,0,.12);
+        -moz-box-shadow: 0 0 10px rgba(0,0,0,.12);
+        box-shadow: 0 0 10px rgba(0,0,0,.12);
+    }
+
+        .order-tb .deal-state-hover .state-txt b {
+            background-position: -20px -207px;
+        }
+
+        .order-tb .deal-state-hover .state-txt .blank {
+            display: block;
+            position: absolute;
+            height: 10px;
+            width: 96px;
+            top: 21px;
+            left: 0;
+            background: #fff;
+            z-index: 3;
+        }
+
+    .order-tb .deal-state-hover .state-list {
+        display: block;
+        -webkit-box-shadow: 0 0 10px rgba(0,0,0,.12);
+        -moz-box-shadow: 0 0 10px rgba(0,0,0,.12);
+        box-shadow: 0 0 10px rgba(0,0,0,.12);
+    }
+
+    .order-tb .ordertime-cont {
+        position: relative;
+        float: left;
+        z-index: 10;
+        width: 138px;
+        cursor: pointer;
+    }
+
+        .order-tb .ordertime-cont .time-txt {
+            position: relative;
+            height: 30px;
+            line-height: 30px;
+            text-align: left;
+            padding-left: 20px;
+            padding-right: 12px;
+            border: 1px solid #f5f5f5;
+        }
+
+            .order-tb .ordertime-cont .time-txt b {
+                position: absolute;
+                width: 7px;
+                height: 4px;
+                right: 18px;
+                top: 13px;
+                overflow: hidden;
+                vertical-align: middle;
+                background: url(http://misc.360buyimg.com/user/myjd-2015/css/i/order-icon20150916.png) -37px -207px no-repeat;
+            }
+
+        .order-tb .ordertime-cont .time-list {
+            position: absolute;
+            left: 0;
+            top: 30px;
+            z-index: 2;
+            display: none;
+            width: 136px;
+            background: #fff;
+            border: 1px solid #f5f5f5;
+            border-top: 0;
+        }
+
+            .order-tb .ordertime-cont .time-list li {
+                height: 30px;
+                line-height: 30px;
+                text-align: left;
+            }
+
+                .order-tb .ordertime-cont .time-list li a {
+                    display: block;
+                    position: relative;
+                    color: #666;
+                    height: 30px;
+                    line-height: 30px;
+                    padding-left: 20px;
+                }
+
+                    .order-tb .ordertime-cont .time-list li a:hover {
+                        background: #f5f5f5;
+                        color: #e4393c;
+                    }
+
+                    .order-tb .ordertime-cont .time-list li a b {
+                        display: block;
+                        position: absolute;
+                        left: 5px;
+                        top: 10px;
+                        width: 10px;
+                        height: 7px;
+                        vertical-align: middle;
+                        overflow: hidden;
+                    }
+
+                    .order-tb .ordertime-cont .time-list li a.curr {
+                        color: #e4393c;
+                    }
+
+                        .order-tb .ordertime-cont .time-list li a.curr b {
+                            background: url(http://misc.360buyimg.com/user/myjd-2015/css/i/order-icon20150916.png) 0 -207px;
+                        }
+
+    .order-tb .ordertime-hover .time-txt {
+        background: #fff;
+        -webkit-box-shadow: 0 0 10px rgba(0,0,0,.12);
+        -moz-box-shadow: 0 0 10px rgba(0,0,0,.12);
+        box-shadow: 0 0 10px rgba(0,0,0,.12);
+    }
+
+        .order-tb .ordertime-hover .time-txt b {
+            background-position: -20px -207px;
+        }
+
+        .order-tb .ordertime-hover .time-txt .blank {
+            display: block;
+            position: absolute;
+            height: 10px;
+            width: 136px;
+            top: 21px;
+            left: 0;
+            background: #fff;
+            z-index: 3;
+        }
+
+    .order-tb .ordertime-hover .time-list {
+        display: block;
+        -webkit-box-shadow: 0 0 10px rgba(0,0,0,.12);
+        -moz-box-shadow: 0 0 10px rgba(0,0,0,.12);
+        box-shadow: 0 0 10px rgba(0,0,0,.12);
+    }
+
+    .order-tb .order-detail-txt {
+        display: inline-block;
+        *display: inline;
+        *zoom: 1;
+        vertical-align: middle;
+    }
+
+    .order-tb .sep-row {
+        height: 20px;
+    }
+
+        .order-tb .sep-row td {
+            border: 0;
+        }
+
+    .order-tb .tr-th {
+        background: #f5f5f5;
+        height: 31px;
+        line-height: 31px;
+        color: #aaa;
+        overflow: hidden;
+    }
+
+        .order-tb .tr-th td {
+            border-bottom-color: #f5f5f5;
+        }
+
+        .order-tb .tr-th span {
+            float: left;
+            height: 18px;
+            line-height: 18px;
+            padding: 2px 0 0;
+            _display: inline;
+        }
+
+            .order-tb .tr-th span.shop-txt {
+                padding: 0;
+            }
+
+        .order-tb .tr-th .gap {
+            width: 14px;
+        }
+
+        .order-tb .tr-th .dealtime {
+            margin-right: 30px;
+            _margin-right: 15px;
+            font-family: verdana;
+        }
+
+        .order-tb .tr-th .number {
+            width: 226px;
+            font-family: verdana;
+        }
+
+        .order-tb .tr-th .jd-baina {
+            margin-left: 5px;
+        }
+
+        .order-tb .tr-th a {
+            color: #333;
+        }
+
+            .order-tb .tr-th a:hover {
+                color: #e4393c;
+            }
+
+        .order-tb .tr-th .order-shop {
+            width: 178px;
+        }
+
+            .order-tb .tr-th .order-shop .shop-txt {
+                display: inline-block;
+                *display: inline;
+                *zoom: 1;
+                vertical-align: middle;
+                max-width: 153px;
+                overflow: hidden;
+                margin: 0;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+
+        .order-tb .tr-th .btn-im, .order-tb .tr-th .btn-im-off {
+            display: inline-block;
+            *display: inline;
+            *zoom: 1;
+            width: 16px;
+            height: 16px;
+            margin: 0 0 0 5px;
+            overflow: hidden;
+            background: url(//misc.360buyimg.com/user/myjd-2015/css/i/sprite-im.png) -26px 0 no-repeat;
+            vertical-align: middle;
+        }
+
+        .order-tb .tr-th .btn-im-jd {
+            background-position: 0 0;
+        }
+
+        .order-tb .tr-th .btn-im-off {
+            background-position: -52px 0;
+        }
+
+        .order-tb .tr-th .tr-operate {
+            float: right;
+            position: relative;
+            margin-right: 15px;
+            width: 397px;
+            height: 23px;
+            overflow: hidden;
+        }
+
+        .order-tb .tr-th .order-del {
+            position: absolute;
+            right: 0;
+            top: 6px;
+            display: none;
+            width: 13px;
+            height: 13px;
+            font-size: 0;
+            overflow: hidden;
+            vertical-align: middle;
+            background: url(http://misc.360buyimg.com/user/myjd-2015/css/i/order-icon20150916.png) -23px -132px no-repeat;
+        }
+
+            .order-tb .tr-th .order-del:hover {
+                background-position: 0 -132px;
+            }
+
+        .order-tb .tr-th .tel {
+            width: 180px;
+            color: #aaa;
+            font-family: verdana;
+        }
+
+            .order-tb .tr-th .tel .tel-icon {
+                display: inline-block;
+                *display: inline;
+                *zoom: 1;
+                width: 19px;
+                height: 19px;
+                margin-right: 3px;
+                overflow: hidden;
+                vertical-align: middle;
+                background: url(http://misc.360buyimg.com/user/myjd-2015/css/i/order-icon20150916.png) -75px -55px;
+            }
+
+    .order-tb .tr-th-02 {
+        background: #fff;
+    }
+
+    .order-tb .tr-bd {
+        text-align: center;
+        vertical-align: top;
+    }
+
+        .order-tb .tr-bd td {
+            padding: 14px 0;
+        }
+
+    .order-tb tbody.split-tbody .tr-th td {
+        border-width: 0 1px;
+    }
+
+    .order-tb tbody.split-tbody .tr-bd td {
+        border-width: 0 1px;
+        background: url(http://misc.360buyimg.com/user/myjd-2015/css/i/split-line.png) -14px 0 no-repeat;
+    }
+
+        .order-tb tbody.split-tbody .tr-bd td.first {
+            background-position: 0 0;
+        }
+
+        .order-tb tbody.split-tbody .tr-bd td.last {
+            background: url(http://misc.360buyimg.com/user/myjd-2015/css/i/split-line.png) right top no-repeat;
+        }
+
+    .order-tb tbody.split-tbody .sep-tr-bd {
+        height: 1px;
+        overflow: hidden;
+    }
+
+        .order-tb tbody.split-tbody .sep-tr-bd td {
+            padding: 0;
+        }
+
+    .order-tb tbody.split-tbody-last .tr-bd td {
+        border-width: 0 1px 1px;
+    }
+
+    .order-tb .tr-th-split td {
+        border-bottom: none;
+    }
+
+    .order-tb .tr-th-split .split-row {
+        position: relative;
+        top: 1px;
+        padding: 11px 0;
+        height: 18px;
+        margin: 1px 0 0;
+        border-bottom: 1px solid #e5e5e5;
+    }
+
+    .order-tb .tr-th-split .split-row02 {
+        position: relative;
+        color: #393941;
+    }
+
+    .order-tb .tr-th-split span.fr {
+        float: right;
+    }
+
+    .order-tb .tr-th-split .order-consignee {
+        width: 128px;
+        margin-right: 38px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    .order-tb .tr-th-split .order-count em {
+        font-family: verdana;
+    }
+
+    .order-tb .tr-th-split .order-pay {
+        width: 178px;
+    }
+
+    .order-tb .tr-th-split .top-arr {
+        position: absolute;
+        width: 17px;
+        height: 10px;
+        left: 180px;
+        top: -10px;
+        background: url(http://misc.360buyimg.com/user/myjd-2015/css/i/split-arr.png) no-repeat;
+        overflow: hidden;
+    }
+
+    .order-tb .tr-th-split .split-tip {
+        width: 100%;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        cursor: default;
+    }
+
+    .order-tb .goods-item {
+        display: inline-block;
+        display: block;
+        float: left;
+        width: 255px;
+        margin-right: 10px;
+    }
+
+        .order-tb .goods-item:after {
+            content: ".";
+            display: block;
+            height: 0;
+            clear: both;
+            visibility: hidden;
+        }
+
+    * html .order-tb .goods-item {
+        height: 1%;
+    }
+
+    * + html .order-tb .goods-item {
+        min-height: 1%;
+    }
+
+        .order-tb .goods-item .p-img {
+            float: left;
+            width: 60px;
+            height: 60px;
+            border: 1px solid #efefef;
+            margin: 0 14px;
+            _display: inline;
+        }
+
+        .order-tb .goods-item .p-msg {
+            float: left;
+            width: 160px;
+        }
+
+        .order-tb .goods-item .p-name {
+            height: 36px;
+            line-height: 18px;
+            overflow: hidden;
+            color: #333;
+            text-align: left;
+        }
+
+            .order-tb .goods-item .p-name a {
+                color: #333;
+                *zoom: 1;
+            }
+
+                .order-tb .goods-item .p-name a:hover {
+                    color: #e4393c;
+                }
+
+        .order-tb .goods-item .p-extra {
+            color: #aaa;
+            text-align: left;
+        }
+
+        .order-tb .goods-item .o-info {
+            text-align: left;
+            color: #aaa;
+        }
+
+        .order-tb .goods-item .o-match, .order-tb .goods-item .o-similar {
+            display: inline-block;
+            vertical-align: top;
+            cursor: pointer;
+        }
+
+            .order-tb .goods-item .o-match i, .order-tb .goods-item .o-similar i {
+                width: 16px;
+                height: 16px;
+                margin-right: 5px;
+                vertical-align: top;
+            }
+
+            .order-tb .goods-item .o-match em, .order-tb .goods-item .o-similar em {
+                display: inline-block;
+                vertical-align: top;
+            }
+
+            .order-tb .goods-item .o-similar i {
+                margin-top: 2px;
+                background-position: -31px 0;
+            }
+
+            .order-tb .goods-item .o-match i {
+                background-position: -56px 0;
+            }
+
+    .order-tb .goods-number {
+        float: left;
+        width: 40px;
+        text-align: left;
+        color: #aaa;
+        font-family: verdana;
+    }
+
+    .order-tb .goods-repair {
+        float: right;
+        width: 84px;
+        text-align: center;
+    }
+
+        .order-tb .goods-repair .btn-resell {
+            display: inline-block;
+            *display: inline;
+            *zoom: 1;
+            position: relative;
+            width: 44px;
+            padding: 2px 0 3px 30px;
+            margin: 5px 0 0;
+            background: #fff;
+            border: 1px solid #ddd;
+            color: #999;
+            -webkit-border-radius: 1px;
+            -moz-border-radius: 1px;
+            border-radius: 1px;
+        }
+
+            .order-tb .goods-repair .btn-resell b {
+                position: absolute;
+                display: block;
+                top: 0;
+                left: 9px;
+                width: 21px;
+                height: 23px;
+                margin-right: 5px;
+                background: url(http://misc.360buyimg.com/user/myjd-2015/css/i/resell-icons.png) 0 0 no-repeat;
+            }
+
+            .order-tb .goods-repair .btn-resell:hover {
+                background: #fff;
+                border-color: #e4393c;
+                color: #e4393c;
+            }
+
+                .order-tb .goods-repair .btn-resell:hover b {
+                    background-position: 0 -43px;
+                }
+
+    .order-tb .consignee {
+        color: #333;
+    }
+
+        .order-tb .consignee .txt {
+            display: inline-block;
+            *display: inline;
+            *zoom: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            max-width: 72px;
+            text-overflow: ellipsis;
+            vertical-align: middle;
+        }
+
+        .order-tb .consignee b {
+            display: inline-block;
+            *display: inline;
+            *zoom: 1;
+            width: 14px;
+            height: 16px;
+            background: url(http://misc.360buyimg.com/user/myjd-2015/css/i/order-icon20150916.png) 0 -24px;
+            vertical-align: middle;
+            margin: 0 0 0 5px;
+        }
+
+    .order-tb .amount {
+        color: #AAA;
+    }
+
+        .order-tb .amount strong {
+            font-family: verdana;
+            color: #333;
+        }
+
+        .order-tb .amount .ftx-13 {
+            display: block;
+            margin: 0 8px;
+            margin-top: 5px;
+            padding-top: 1px;
+            border-top: solid 1px #E5E5E5;
+            line-height: 19px;
+            height: 19px;
+            overflow: hidden;
+        }
+
+    .order-tb .cellphone-icon {
+        display: inline-block;
+        *display: inline;
+        *zoom: 1;
+        width: 56px;
+        height: 14px;
+        overflow: hidden;
+        background: url(http://misc.360buyimg.com/user/myjd-2015/css/i/order-icon20150916.png) 0 0 no-repeat;
+    }
+
+    .order-tb .operate {
+        line-height: 22px;
+    }
+
+        .order-tb .operate a.a-link {
+            color: #333;
+        }
+
+            .order-tb .operate a.a-link:hover {
+                color: #e4393c;
+            }
+
+        .order-tb .operate .a-baitiao {
+            position: relative;
+            display: inline-block;
+            color: #e4393c;
+        }
+
+            .order-tb .operate .a-baitiao .tag {
+                position: absolute;
+                right: -35px;
+                top: -2px;
+                display: inline-block;
+                width: 30px;
+                height: 15px;
+                line-height: 15px;
+                text-align: center;
+                background: #e4393c;
+                color: #fff;
+            }
+
+            .order-tb .operate .a-baitiao .arrow {
+                position: absolute;
+                left: -4px;
+                top: 3px;
+                width: 0;
+                height: 0;
+                border-width: 3px;
+                border-color: transparent #e4393c #e4393c transparent;
+                border-style: dashed solid solid dashed;
+                overflow: hidden;
+            }
+
+    .order-tb .count-time {
+        display: none;
+        color: #999;
+    }
+
+        .order-tb .count-time .time-icon {
+            display: inline-block;
+            *display: inline;
+            *zoom: 1;
+            width: 15px;
+            height: 16px;
+            margin: 0 3px 0 0;
+            overflow: hidden;
+            background: url(http://misc.360buyimg.com/user/myjd-2015/css/i/order-icon20150916.png) -23px -24px no-repeat;
+            vertical-align: middle;
+        }
+
+    .order-tb .count-time-red {
+        color: #e4393c;
+    }
+
+        .order-tb .count-time-red .time-icon {
+            background-position: -80px -24px;
+        }
+
+    .order-tb .status {
+        position: relative;
+        z-index: 5;
+        color: #333;
+        line-height: 22px;
+    }
+
+        .order-tb .status a {
+            color: #333;
+        }
+
+            .order-tb .status .bean-tips, .order-tb .status a:hover {
+                color: #e4393c;
+            }
+
+    .order-tb .bean-icon {
+        display: inline-block;
+        *display: inline;
+        *zoom: 1;
+        width: 18px;
+        height: 18px;
+        margin: 0 3px 0 0;
+        overflow: hidden;
+        background: url(http://misc.360buyimg.com/user/myjd-2015/css/i/order-icon20150916.png) -43px -180px no-repeat;
+        vertical-align: middle;
+    }
+
+    .order-tb .tooltip {
+        position: relative;
+        width: 100px;
+        margin: 0 auto;
+        z-index: 2;
+        cursor: pointer;
+    }
+
+        .order-tb .tooltip .auto-icon {
+            display: inline-block;
+            *display: inline;
+            *zoom: 1;
+            width: 22px;
+            height: 16px;
+            margin: 0 3px 0 0;
+            overflow: hidden;
+            background: url(http://misc.360buyimg.com/user/myjd-2015/css/i/order-icon20150916.png) -48px -24px no-repeat;
+            vertical-align: middle;
+        }
+
+        .order-tb .tooltip .circle-icon {
+            display: inline-block;
+            *display: inline;
+            *zoom: 1;
+            width: 7px;
+            height: 7px;
+            margin: 0 0 0 3px;
+            overflow: hidden;
+            background: url(http://misc.360buyimg.com/user/myjd-2015/css/i/order-icon20150916.png) 0 -115px no-repeat;
+            vertical-align: middle;
+        }
+
+        .order-tb .tooltip .prompt-01 {
+            position: absolute;
+            z-index: 1;
+            width: 400px;
+            right: 90px;
+            top: -22px;
+            padding: 9px 9px 0;
+            display: none;
+            cursor: auto;
+        }
+
+            .order-tb .tooltip .prompt-01 .pc {
+                min-height: 235px;
+            }
+
+        .order-tb .tooltip .prompt-02 {
+            position: absolute;
+            z-index: 1;
+            width: 220px;
+            right: 90px;
+            top: -22px;
+            padding: 20px;
+            display: none;
+            color: #666;
+            line-height: 22px;
+        }
+
+            .order-tb .tooltip .prompt-02 .pc {
+                min-height: 0;
+            }
+
+    a.btn-again {
+        display: inline-block;
+        *display: inline;
+        *zoom: 1;
+        padding: 2px 0 3px;
+        background: #f5f5f5;
+        border: 1px solid #ddd;
+        color: #333;
+        -webkit-border-radius: 2px;
+        -moz-border-radius: 2px;
+        border-radius: 2px;
+        width: 85px;
+        text-align: center;
+    }
+
+        a.btn-again b {
+            display: inline-block;
+            *display: inline;
+            *zoom: 1;
+            vertical-align: middle;
+            width: 12px;
+            height: 17px;
+            margin-right: 5px;
+            background: url(http://misc.360buyimg.com/user/myjd-2015/css/i/order-icon20150212.png) -22px -180px no-repeat;
+        }
+
+        a.btn-again:hover {
+            background: #fff;
+            border-color: #e4393c;
+            color: #e4393c;
+        }
+
+            a.btn-again:hover b {
+                background-position: 0 -180px;
+            }
+</style>
+
+<div class="content">
+    <div class="mainbox mine">
+        <table  class="td-void order-tb">
+            <colgroup>
+                <col class="number-col">
+                <col class="consignee-col">
+                <col class="amount-col">
+                <col class="status-col">
+                <col class="operate-col">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>
+                        <div class="ordertime-cont" value="0">
+                            <div class="time-txt">
+                                <span>近三个月订单</span><b></b><span class="blank"></span>
+                            </div>
+                            <div class="time-list">
+                                <ul> 
+                                    <li><a href="javascript:void(0);"  value="0" class="curr"><b></b>近三个月订单</a></li>
+                                    <li><a href="javascript:void(0);" value="@DateTime.Now.Year"><b></b>今年订单</a></li>
+                                    @{
+                                        int year = DateTime.Now.Year;
+                                        for (int i = 0; i < 3; i++)
+                                        {
+                                            year--;
+                                            <li><a href="javascript:void(0);" value="@year"><b></b>@(year)年订单</a></li>
+                                        }
+                                    } 
+                                    
+                                    <li><a href="javascript:void(0);" value="<@year"><b></b>@(year)年以前订单</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="order-detail-txt ac">
+                            订单详情
+                        </div>
+                    </th>
+                    <th>
+                        收货人
+                    </th>
+                    <th>
+                        金额
+                    </th>
+                    <th>
+                        <div class="deal-state-cont " id="orderState" value="-1">
+                            <div class="state-txt ">
+                                <span>全部状态</span><b></b><span class="blank"></span>
+                            </div>
+                            <div class="state-list">
+                                <ul>
+                                    <li value="-1"><a href="javascript:void(0);" class="curr"><b></b>全部状态</a> </li>
+                                    <li value="@((int)QryOrderStatus.等待付款)"><a href="javascript:void(0);"><b></b>等待付款</a> </li>
+                                    <li value="@((int)QryOrderStatus.等待商家发货)"><a href="javascript:void(0);"><b></b>等待收货</a> </li>
+                                    <li value="@((int)QryOrderStatus.完成)"><a href="javascript:void(0);"><b></b>已完成</a> </li>
+                                    <li value="@((int)QryOrderStatus.取消订单)"><a href="javascript:void(0);"><b></b>已取消</a> </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </th>
+                    <th>
+                        操作
+                    </th>
+                </tr>
+            </thead>
+           
+        </table>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function initWrap() {
+        var data = getData();
+        var ul = $(".order-tb"); 
+        ul.find("tbody").empty();
+        for (var item in data) {
+            ul.append(getItem(data[item]));
+        }
+    }
+
+    function getItem(obj) {
+        var res = [];
+        res.push('<tbody><tr class="sep-row"><td colspan="5"></td></tr><tr class="tr-th"><td colspan="5"><span class="gap"></span><span class="dealtime">' + obj.CreateDateStr + '</span>');
+        res.push('<span class="number">订单号：<a name="orderIdLinks" target="_blank" href="@Url.Action("Info","order")/' + obj.ID + '">' + obj.ID + '</a></span>');
+        res.push('<div class="tr-operate"><span class="order-shop"><span class="shop-txt">联系QQ客服红小七</span> <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&amp;uin=1623591032&amp;site=qq&amp;menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=1:1623591032:7" alt="QQ客服红小七"></a></span>');
+        res.push('<a href="javacritp:void(0);" click="deleteOrder(\'' + obj.ID + '\')" class="order-del" title="删除"  style="display: inline;"></a> </div></td></tr>');
+        res.push(' <tr class="tr-bd"> <td> ');
+        for (var i = 0; i < obj.OrderItems.length; i++) {
+            var product = obj.OrderItems[i];
+            res.push('<div class="goods-item"><div class="p-img"><a href="@Url.Action("Index", "Product")/' + product.ProductID + '/' + product.ProductSKU + '" target="_blank">');
+            res.push('<img src="' + product.ProductThumb + '"  width="60" height="60"> </a> </div><div class="p-msg"><div class="p-name">');
+            res.push('<a href="@Url.Action("Index", "Product")/' + product.ProductID + '/' + product.ProductSKU + '" class="a-link" target="_blank">');
+            res.push(product.ProductName);
+            res.push('</a></div></div></div><div class="goods-number">x' + product.Count + '</div><div class="goods-repair"></div> <div class="clr"></div>');
+        }
+        res.push('</td> <td rowspan="1"><div class="consignee tooltip"><span class="txt">' + obj.ShipName + '</span><b></b><div class="prompt-01 prompt-02">div class="pc">');
+        res.push(' <strong>' + obj.ShipName + '</strong><p>' + obj.ShipAddress);
+        res.push('</p> <p>' + obj.ShipTel + '</p></div><div class="p-arrow p-arrow-left"></div></div></div> </td> <td rowspan="1"><div class="amount">');
+        res.push(' <span>总额 ¥' + obj.TotalPrice + '</span><br/><span class="ftx-13">' + obj.PayTypeName + '</span> </div></td> <td rowspan="1">');
+        res.push('<div class="status"><span class="order-status ftx-03">' + obj.OrderStatusStr + '</span><br/>');
+        res.push('<a href="@Url.Action("Info", "order")/' + obj.ID + '" target="_blank">订单详情</a> </div></td><td rowspan="1"><div class="operate"><div></div>');
+        res.push('<a href="javascript:void(0);" click="addCard(\'' + product.ProductID + '\',\'' + product.ProductSKU + '\')" class="btn-again" ><b></b>加入购物车</a><br></div> </td></tr></tbody>');
+        return res.join('');
+    }
+
+
+    function getData() { 
+        $.ajax({
+            url: "@Url.Action("GetMyOrder", "Order")",
+            type: "get",
+            data: { date: $(".ordertime-cont").attr("value"), status: $(".deal-state-cont").attr("value") },
+            dataType: "json",
+            async: false,
+            success: function (reval) {
+
+                reobj = reval;
+            },
+            error: function (err) {
+                throw err.responseText;
+                return false;
+            }
+        });
+        return reobj;
+    }
+    $(function () {
+
+        $(".ordertime-cont .time-txt b").on("click", function () {
+            if ($(".ordertime-cont").hasClass("ordertime-hover")) {
+                $(".ordertime-cont").removeClass("ordertime-hover");
+            } else {
+                $(".ordertime-cont").addClass("ordertime-hover");
+
+            } 
+        });
+        $(".ordertime-cont a").click(function () {
+
+            if (!$(this).hasClass("curr")) {
+                $(".ordertime-cont a").removeClass("curr");
+                $(this).addClass("curr");
+                $(".ordertime-cont .time-txt span").first().text($(this).text());
+                $(".ordertime-cont").removeClass("ordertime-hover");
+                $(".ordertime-cont").attr("value", $(this).attr("value"));
+                initWrap();
+            }
+        });
+        $(".deal-state-cont .state-txt b").on("click", function () {
+            if ($(".deal-state-cont").hasClass("deal-state-hover")) {
+                $(".deal-state-cont").removeClass("deal-state-hover");
+            } else {
+                $(".deal-state-cont").addClass("deal-state-hover");
+
+            }
+        });
+        $(".deal-state-cont li").click(function () {
+
+            if (!$(this).hasClass("curr")) {
+                $(".deal-state-cont a").removeClass("curr");
+                $(this).addClass("curr");
+                $(".deal-state-cont .state-txt span").first().text($(this).text());
+                $(".deal-state-cont").removeClass("deal-state-hover");
+                $(".deal-state-cont").attr("value", $(this).attr("value"));
+                initWrap();
+            }
+        });
+
+
+        initWrap();
+
+    });
+
+</script>

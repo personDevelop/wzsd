@@ -156,5 +156,38 @@ namespace EasyCms.Model
         }
     }
 
-   
+    public class FindPwdModel
+    { 
+        /// <summary>
+        /// 用户名
+        /// </summary>
+       
+        public string Account { get; set; }
+       
+       
+        public string VaryCode { get; set; }
+         
+    }
+
+    public class ResetPwdModelPC
+    {
+        /// <summary>
+        /// 用户名
+        /// </summary>
+
+        public string Account { get; set; }
+
+        public string Pwd { get; set; }
+
+        /// <summary>
+        /// 确认密码
+        /// </summary> 
+        public string ComfirmPwd { get; set; } 
+     
+        public string FindPwdID { get; set; }
+
+      
+        public string VaryCode { get; set; }
+
+    }
 }

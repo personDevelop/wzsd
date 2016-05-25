@@ -67,7 +67,7 @@
                                   
                                     @Html.TextBoxFor(Model => Model.VaryCode, new { @class = "itxt itxt02", tabindex = "3" })
 
-
+                                  
                                     <img id="JD_Verification1" class="verify-code" src="@Url.Action("","VarifyCode")">
                                     <a href="javascript:void(0)" onclick="$('#JD_Verification1').click();">看不清楚换一张</a>
                                 </div>
@@ -78,7 +78,7 @@
                                             @Html.LabelFor(Model => Model.RememberMe ) 
                                         </span>
                                         <span class="forget-pw-safe">
-                                            <a href="@Url.Action("FindPwd")" class="" target="_blank">忘记密码?</a>
+                                            <a href="@Url.Action("FindPwd","Account")" class="" target="_blank">忘记密码?</a>
                                         </span>
                                     </div>
                                 </div>
@@ -109,7 +109,7 @@
             $("#JD_Verification1").click(function () {
 
                 $('#VaryCode').val('');
-                $("#JD_Verification1").attr("src", "@Url.Action("", "VarifyCode")" + "/Index/" + new Date().getTime());
+                $("#JD_Verification1").attr("src", "@Url.Action("Index", "VarifyCode")" + "/" + new Date().getTime());
 
             });
 

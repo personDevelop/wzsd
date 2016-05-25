@@ -9,9 +9,10 @@ namespace EasyCms.Web.Controllers
     public class SearchController : Controller
     {
         // GET: Search
-        public ActionResult Index()
+        public ActionResult Index(string id)
         {
-            return View();
+            ViewBag.SearchText = id;
+            return View( );
         }
     }
 }

@@ -59,6 +59,11 @@ namespace EasyCms.Dal
                 .ToDataTable();
         }
 
+        public int Delete(WhereClip where)
+        {
+            return Dal.Delete<ShopShoppingCarts>(where);
+        }
+
         public List<ShopCardInfo> GetMyCards(string userID)
         {
             List<ShopCardInfo> resultList = new List<ShopCardInfo>();

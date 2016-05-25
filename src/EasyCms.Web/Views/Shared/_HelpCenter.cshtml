@@ -1,0 +1,172 @@
+﻿@model HelpContent
+@using EasyCms.Business
+@using EasyCms.Model
+@using Sharp.Common
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,initial-scale=1.0,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link REL="Shortcut Icon" href="/Content/Images/favicon.ico">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/bundles/webcss")
+    @Styles.Render("~/bundles/jqxcss")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/account")
+    <style type="text/css">
+        #usercenter .leftnav {
+            position: relative;
+            float: left;
+            width:210px;
+            min-height: 500px;
+            _height: 500px;
+            border: 1px solid #eee;
+            border-right: none;
+            background: #f9f9f9;
+            font-size: 14px;
+        }
+
+            #usercenter .leftnav a {
+                position: relative;
+                display: block;
+                padding: 5px 35px 5px 45px;
+                color: #666;
+            }
+
+            #usercenter .leftnav .current a {
+                position: relative;
+                background: #e45050;
+                color: #fff;
+            }
+
+            #usercenter .leftnav .header-item a {
+                padding: 15px 10px 10px 32px;
+            }
+
+            #usercenter .leftnav dd {
+                position: relative;
+                padding-bottom: 10px;
+            }
+
+                #usercenter .leftnav dd:after {
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    height: 1px;
+                    width: 159px;
+                    background: #eee;
+                    content: "";
+                }
+
+            #usercenter .leftnav .header-item {
+                height: 42px;
+            }
+
+                #usercenter .leftnav .header-item li {
+                    color: #2bb8aa;
+                    font-size: 14px;
+                }
+
+
+            #usercenter .leftnav li {
+                color: #dedede;
+                font-size: 12px;
+            }
+
+            #usercenter .leftnav dt {
+                padding: 10px 35px 7px;
+                border-top: 1px solid #fff;
+                color: #666;
+            }
+
+        #usercenter .content {
+            float: left;
+            width: 1020px;
+            _display: inline;
+            padding: 0;
+        }
+
+            #usercenter .content .mainbox {
+                background: #fff;
+                border: 1px solid #eee;
+                padding: 25px;
+                clear: both;
+                zoom: 1;
+                height: auto !important;
+                min-height: 400px;
+            }
+
+            #usercenter .content .mainbox {
+                padding-bottom: 50px;
+            }
+
+            #usercenter .content .mainbox {
+                padding: 20px;
+                border-color: #eee;
+                min-height: 687px;
+            }
+    </style>
+
+</head>
+
+<body id="mainframe">
+    <!--头部-->
+    @Html.Partial("_Head")
+    <!--头部-->
+    <div id='usercenter' class="floor">
+        <div class="leftnav">
+            <div class="leftnav-main">
+                <dl class="leftnav-list">
+                    <dd class="header-item">
+                        <ul>
+                            <li>
+                                <a href="#"><strong>帮助中心</strong></a>
+                            </li>
+                        </ul>
+                    </dd>
+                    @{
+                        
+                        List<HelpType> list = new HelpContentBll().GetList(HelpType._.IsShowNavi==true).ToList< HelpType>();
+                        IEnumerable<HelpType> level1 = list.Where(p =>string.IsNullOrWhiteSpace(p.ParentID));
+                        foreach (HelpType item in level1)
+                        {
+                            <dt class="first-item"><strong>@item.Name</strong></dt>
+                            <dd>
+                                <ul class="item-list">
+                                    @{
+                                        IEnumerable<HelpType> level2 = list.Where(p => p.ParentID == item.ID);
+                                        foreach (HelpType child in level2)
+                                        {
+                                            string cssClass = "class=current";
+
+                                            if ( Model.ID!=child.ID)
+                                            { 
+                                                cssClass = string.Empty;
+                                            }
+                                            <li @cssClass><a href="@Url.Action("index","help",new { id=child.ID} )">@child.Name</a></li>
+                                        }
+                                    }
+                                </ul>
+                            </dd>
+
+
+                                        }
+
+
+                    }
+
+
+                </dl>
+            </div>
+        </div>
+      
+    </div>
+    @RenderBody()
+    <!--底部-->
+    @Html.Partial("_Footer")
+    <!--底部-->
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

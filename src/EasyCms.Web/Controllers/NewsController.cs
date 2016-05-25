@@ -18,7 +18,12 @@ namespace EasyCms.Web.Controllers
         }
         public ActionResult Detail(string id)
         {
-            return View();
+            NewsInfo news=  new NewsInfoBll().GetEntity(id);
+            if (news==null)
+            {
+                return View("Error", new MessageModel("咨询不存在", "您要查看的咨询不存在", ShowMsgType.info));
+            }else
+            return View(news);
         }
 
         /// <summary>

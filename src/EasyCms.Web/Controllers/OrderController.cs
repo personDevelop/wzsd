@@ -1,9 +1,12 @@
-﻿ 
+﻿
+using AliPayCommon;
 using EasyCms.Business;
 using EasyCms.Model;
 using EasyCms.Session;
+using Sharp.Common;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -16,19 +19,27 @@ namespace EasyCms.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Index(ShopOrderModel order)
         {
-           
+            return CreateOrder(order);
+
+        }
+
+       private ActionResult CreateOrder(ShopOrderModel order,string viewname="index")
+        {
+            string guid = string.Format("SubmitCheck|{0}|{1}", Guid.NewGuid(), false);
+            Session[guid] = "0";
+            ViewBag.SubmitCheck = guid;
             string error = string.Empty;
             if (order.OrderItems == null || order.OrderItems.Count == 0)
             {
-                 
+
                 error = "请选择要购买的商品";
             }
             else
-            { 
+            {
                 string userid = CmsSession.GetUserID();
                 order = new ShopOrderBll().CreateOrder(order, "", userid, out error);
                 if (string.IsNullOrWhiteSpace(error))
-                { 
+                {
                     //获取默认地址
                     order.ShopAddress = new ShopShippingAddressBll().GetDefaultShopAddressForShow(userid);
                     //获取促销信息
@@ -36,111 +47,303 @@ namespace EasyCms.Web.Controllers
                     order.Freight = 0;
 
                     //获取配送信息  //先不获取了
-                    
+                    //默认货到付款的支付方式
+                    order.CashOnDelivery = true;
                 }
 
             }
             if (string.IsNullOrWhiteSpace(error))
             {
-                return View(order);
+                return View(viewname,order);
             }
             else
             {
-                return null;
+                return View("Error", new MessageModel("请重新下单", error, ShowMsgType.warning));
             }
-          
         }
+        public ActionResult Buy(string id,string other)
+        {
+            ShopOrderModel order = new ShopOrderModel() {  OrderItems= new List<OrderItem>()};
+            order.OrderItems.Add(new OrderItem() {  BuyCount=1, ProductID=id, Sku= other });
+            return CreateOrder(order);
 
-
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult SubmitOrder(ShopOrderModel order)
         {
+
             string Msg = string.Empty;
-            if (order.OrderItems == null || order.OrderItems.Count == 0)
+            string orderID = string.Empty;
+            string SubmitCheck = Request.Form["SubmitCheck"];
+            ViewBag.SubmitCheck = SubmitCheck;
+
+            ManagerUserInfo user = null;
+            if (string.IsNullOrWhiteSpace(Session[SubmitCheck] as string))
             {
-                Msg = "请选择要购买的商品";
+                Msg = "您的订单已失效，请重新到购物车里选择商品再提交订单";
+
             }
             else
-            {
-               
-                ManagerUserInfo user = EasyCms.Session.CmsSession.GetUser();
-
-                bool mustGenerSign;
-                try
+            { 
+                user = EasyCms.Session.CmsSession.GetUser();
+                if (user == null)
                 {
-                    string orderID = new ShopOrderBll().Submit(order, user, out mustGenerSign, out Msg);
+                    Msg = "请先登录红七商城";
+                }
+                else
+                if (order.OrderItems == null || order.OrderItems.Count == 0)
+                {
+                    Msg = "请选择要购买的商品";
+                }
+                else
+                { 
+                    bool mustGenerSign;
+                    try
+                    {
+                        orderID = new ShopOrderBll().Submit(order, user, out mustGenerSign, out Msg);
 
-                    if (string.IsNullOrWhiteSpace(Msg))
-                    { 
-                        if (mustGenerSign)
-                        {
-                            bool isSucess = new ShopPaymentTypesBll().GenerPayPara(orderID, out Msg);
-                            Redirect("");//去支付
-                             
+                        if (string.IsNullOrWhiteSpace(Msg))
+                        { 
+                            Session.Remove(SubmitCheck);
+                            //删除购物车中的商品
+                            WhereClip where = ShopShoppingCarts._.UserId == user.ID && new WhereClip("1=1");
+                            foreach (OrderItem item in order.OrderItems)
+                            {
+                                if (string.IsNullOrWhiteSpace(item.Sku))
+                                {
+                                    where = where || (ShopShoppingCarts._.ProductId == item.ProductID && ShopShoppingCarts._.SKU.IsNullOrEmpty());
+                                }
+                                else
+                                {
+                                    where = where || (ShopShoppingCarts._.ProductId == item.ProductID && ShopShoppingCarts._.SKU == item.Sku);
+                                }
+
+                            }
+                            new ShopShoppingCartsBll().Delete(where);
+                            if (mustGenerSign)
+                            {
+
+                                try
+                                {
+                                    string sHtmlText = new ShopPaymentTypesBll().PayByPc(orderID, out Msg);
+
+                                    if (string.IsNullOrWhiteSpace(Msg))
+                                    {
+                                        Response.Write(sHtmlText);
+                                        Response.End();
+                                    }
+                                    else
+                                    {
+                                        return View("Error", new MessageModel() { Msg = "订单支付失败,稍后请到我的订单里再次支付或联系我们的客服,给您带来不便,敬请谅解。", MsgType = ShowMsgType.error, Title = "订单在线支付失败：订单号：" + orderID });
+
+                                    }
+                                }
+                                catch (Exception ep)
+                                {
+                                    SharpLogService.LogClientInstance.WriteException(ep, user.ID, "", "订单支付失败:" + JsonWithDataTable.Serialize(order));
+                                    return View("Error", new MessageModel() { Msg = "订单支付失败,稍后请到我的订单里再次支付或联系我们的客服,给您带来不便,敬请谅解。", MsgType = ShowMsgType.error, Title = "订单在线支付失败：订单号：" + orderID });
+
+                                }
+
+                            }
+
+
                         }
-                        
-
+                    }
+                    catch (Exception ex)
+                    {
+                        SharpLogService.LogClientInstance.WriteException(ex, user.ID, "", "提交订单:" + JsonWithDataTable.Serialize(order));
+                        Msg = "系统繁忙,请稍后再试";
                     }
                 }
-                catch (Exception e)
-                {
-                    Msg = "系统繁忙,请稍后再试";
-                }
+
             }
             if (string.IsNullOrWhiteSpace(Msg))
             {
-                return View("", "");
+                
+                return View("Error", new MessageModel() { Msg = "订单提交成功,请您保持手机畅通，", MsgType = ShowMsgType.success, Title = "订单提交成功：订单号：" + orderID });
             }
             else
             {
                 ViewBag.Msg = Msg;
                 return View("index", order);
             }
-            
+
+
         }
 
-        
-         public ActionResult Pay()
+
+        public ActionResult PayReturn()
         {
-            //商户订单号，商户网站订单系统中唯一订单号，必填
-            string out_trade_no = "";
+            MessageModel model = new MessageModel();
 
-            //订单名称，必填
-            string subject = "";
+            string out_trade_no = Request.QueryString["out_trade_no"];
 
-            //付款金额，必填
-            string total_fee = "";
+            string trade_no = Request.QueryString["trade_no"];
+            string trade_status = Request.QueryString["trade_status"];
 
-            //商品描述，可空
-            string body = "";
+            if (trade_status == "TRADE_FINISHED" || trade_status == "TRADE_SUCCESS")
+            {
+                model.MsgType = ShowMsgType.success;
+                model.Msg = "订单支付成功";
+                model.Msg = "订单:" + out_trade_no + "支付成功,交易号：" + trade_no;
+                new ShopOrderBll().PaySuccess(out_trade_no, trade_no, true);
+            }
+            else
+            {
+                model.MsgType = ShowMsgType.error;
+                model.Msg = "订单支付失败";
+                model.Msg = "订单:" + out_trade_no + "支付失败,交易号：" + trade_no;
+            }
+            return View("Error", model);
+        }
+
+
+        public string Notify()
+        {
+            AliAsynchNotify notify = null;
+            string returnStr = "success";
+            string Result = "";
+            string content = "";
+            try
+            {
+                SortedDictionary<string, string> sPara = Core.GetRequestPost(Request, out notify, out content);
+                if (sPara.Count > 0)//判断是否有带返回参数
+                {
+                    //根据订单的订单编号 查找支付方式，然后再获取支付宝的配置参数
+                    //这里不能根据sellerid 获取 是因为支付宝的支付方式也分多种
+                    //商户订单号
+                    string orderID = notify.out_trade_no;
+                    if (string.IsNullOrWhiteSpace(orderID))
+                    {
+                        Result = returnStr = "无订单号";
+                        returnStr = "fail";
+                    }
+                    else
+                    {
+                        //先根据参数传递过来的值，或者支付宝的配置参数
+                        AliPayConfig aliNotify = new ShopShippingTypeBll().GetPayType(orderID, out Result);
+                        if (aliNotify == null)
+                        {
+                            returnStr = "fail";
+                        }
+                        else
+                        {
+                            bool verifyResult = Core.VarifySign(sPara, notify.notify_id, notify.sign, aliNotify);
+
+                            if (verifyResult)//验证成功
+                            {
+
+                                bool isEist = new AsynchNotifyLogBll().Exit(notify.notify_id, notify.trade_status);
+                                if (isEist)
+                                {
+                                    //处理过该状态  只记录日志 不再操作业务
+                                    Result = "处理过该状态";
+                                }
+                                else
+                                {
+                                    AliTradeStatus tradestatus = Sharp.Common.EnumPhrase.Phrase<AliTradeStatus>(notify.trade_status);
+                                    switch (tradestatus)
+                                    {
+                                        case AliTradeStatus.WAIT_BUYER_PAY:
+                                        case AliTradeStatus.TRADE_CLOSED:
+                                        case AliTradeStatus.TRADE_FINISHED:
+                                        default:
+                                            Result = tradestatus + "不处理";
+                                            break;
+                                        case AliTradeStatus.TRADE_SUCCESS:
+                                            //付款成功
+                                            //更新订单的付款状态 和操作日志记录，并发送短信或系统内通知
+                                            new ShopOrderBll().PaySuccess(notify.out_trade_no, notify.trade_no, false);
+                                            Result = "付款成功";
+                                            break;
+                                    }
+
+                                }
 
 
 
+                                //——请根据您的业务逻辑来编写程序（以上代码仅作参考）——
 
-            ////////////////////////////////////////////////////////////////////////////////////////////////
+                                returnStr = "success";  //请不要修改或删除
 
-            //把请求参数打包成数组
-            SortedDictionary<string, string> sParaTemp = new SortedDictionary<string, string>();
-            //sParaTemp.Add("service", AlipayConfig.service);
-            //sParaTemp.Add("partner", AlipayConfig.partner);
-            //sParaTemp.Add("seller_id", AlipayConfig.seller_id);
-            //sParaTemp.Add("_input_charset", AlipayConfig.input_charset.ToLower());
-            //sParaTemp.Add("payment_type", AlipayConfig.payment_type);
-            //sParaTemp.Add("notify_url", AlipayConfig.notify_url);
-            //sParaTemp.Add("return_url", AlipayConfig.return_url);
-            //sParaTemp.Add("anti_phishing_key", AlipayConfig.anti_phishing_key);
-            //sParaTemp.Add("exter_invoke_ip", AlipayConfig.exter_invoke_ip);
-            sParaTemp.Add("out_trade_no", out_trade_no);
-            sParaTemp.Add("subject", subject);
-            sParaTemp.Add("total_fee", total_fee);
-            sParaTemp.Add("body", body);
-            //其他业务参数根据在线开发文档，添加参数.文档地址:https://doc.open.alipay.com/doc2/detail.htm?spm=a219a.7629140.0.0.O9yorI&treeId=62&articleId=103740&docType=1
-            //如sParaTemp.Add("参数名","参数值");
+                                /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            }
+                            else//验证失败
+                            {
+                                returnStr = "fail";
+                            }
+                        }
+                    }
 
-            //建立请求
-            //string sHtmlText = AlipaySubmit.BuildRequest(sParaTemp, "get", "确认");
-            return View();
+                }
+                else
+                {
+                    Result = returnStr = "无通知参数";
+                }
+
+                //生成通知日志
+                AsynchNotifyLog Loga = new AsynchNotifyLog()
+                {
+                    ID = Guid.NewGuid().ToString(),
+                    Code = "alipaydirect",
+                    Name = "支付宝无线即时到账",
+                    CreateTime = DateTime.Now,
+                    TradeStatus = notify.trade_status,
+                    ResOrderID = notify.out_trade_no,
+                    TradeNo = notify.out_trade_no,
+                    NodifyID = notify.notify_id,
+                    NotifyContent = content,
+                    Body = notify.body,
+                    ReturnContent = returnStr,
+                    Result = Result,
+
+                };
+                new AsynchNotifyLogBll().Save(Loga);
+                Response.Write(returnStr);
+            }
+            catch (Exception ex)
+            {
+                new LogBll().WriteException(ex);
+                new LogBll().WriteException(content);
+                throw;
+            }
+            return "success";
+        }
+
+        public JsonResult GetMyOrder(string date,string status)
+        {
+            string err = null;
+            WhereClip where = null;
+            if (!string.IsNullOrWhiteSpace(date))
+            {
+                if (date == "0")
+                {
+                    where = ShopOrder._.CreateDate >= DateTime.Now.Date.AddMonths(-3);
+                }
+                else if (date.StartsWith("<"))
+                {
+                    int year = 0;
+                    if (int.TryParse(date.Substring(1), out year))
+                    {
+                        DateTime d = new DateTime(year, 1, 1);
+                        where = ShopOrder._.CreateDate < d;
+                    }
+                }
+                else
+                {
+                    int year = 0;
+                    if (int.TryParse(date , out year))
+                    {
+                        DateTime d = new DateTime(year, 1, 1);
+                        DateTime d2 = new DateTime(year + 1, 1, 1);
+                        where = ShopOrder._.CreateDate >= d && ShopOrder._.CreateDate < d2;
+                    } 
+                } 
+            }
+            List<ShopOrder> list = new ShopOrderBll().GetMyOrder("", CmsSession.GetUser(), 1, status, "", out err, where);
+            return new JsonResult() {  JsonRequestBehavior= JsonRequestBehavior.AllowGet, Data=list};
         }
     }
 }

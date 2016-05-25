@@ -143,6 +143,14 @@ namespace EasyCms.Dal
             return sc;
         }
 
+        public List<ShopCategory> GetLocationCateogryByCategoryID(string categoryID)
+        {
+            
+            string classcode = Dal.From<ShopCategory>().Where(ShopCategory._.ID == categoryID).Select(ShopCategory._.ClassCode).ToScalar() as string;
+            string[] classcodeArray = classcode.Split(';');
+            return Dal.From<ShopCategory>().Where(ShopCategory._.ID.In(classcodeArray)).OrderBy(ShopCategory._.Depth).List<ShopCategory>();
+        }
+
         public DataTable GetList(string categoryID, string Name, int pagenum, int pagesize, ref int recordCount)
         {
             WhereClip where = ShopProductInfo._.SaleStatus == 1 && ShopProductInfo._.Name.Contains(Name) || ShopProductInfo._.Code.Contains(Name);
@@ -228,9 +236,8 @@ namespace EasyCms.Dal
         public List<ShopCategory> GetLocationCateogry(string productID)
         {
             string categoryID = Dal.From<ShopProductCategory>().Where(ShopProductCategory._.ProductID == productID).Select(ShopProductCategory._.CategoryID).ToScalar() as string;
-            string classcode = Dal.From<ShopCategory>().Where(ShopCategory._.ID == categoryID).Select(ShopCategory._.ClassCode).ToScalar() as string;
-            string[] classcodeArray = classcode.Split(';');
-            return Dal.From<ShopCategory>().Where(ShopCategory._.ID.In(classcodeArray)).OrderBy(ShopCategory._.Depth).List<ShopCategory>();
+            return GetLocationCateogryByCategoryID(categoryID);
+            
         }
 
         public DataTable GetRelationList(string productID, bool IsHasRelation, string categoryID, string Name, int pagenum, int pagesize, ref int recordCount)
@@ -540,7 +547,7 @@ namespace EasyCms.Dal
          .Join<AttachFile>(AttachFile._.RefID == ShopProductInfo._.ID && AttachFile._.OrderNo == 1, JoinType.leftJoin)
          .Select(ShopProductInfo._.ID, ShopProductCategory._.CategoryID, ShopCategory._.Name.Alias("CategoryName"), ShopProductInfo._.BrandId, ShopProductInfo._.TypeId,
          ShopProductInfo._.Code, ShopProductInfo._.Name, ShopProductInfo._.SKU, ShopProductInfo._.SaleCounts,
-         ShopProductInfo._.GoodCount, ShopProductInfo._.MiddleCount, ShopProductInfo._.BadCount,
+         ShopProductInfo._.GoodCount, ShopProductInfo._.MiddleCount, ShopProductInfo._.BadCount, ShopProductInfo._.CommentCount,
          ShopProductInfo._.SalePrice, ShopProductInfo._.MarketPrice, ShopBrandInfo._.Name.Alias("BrandName"),
          ShopProductType._.Name.Alias("TypeName"), AttachFile.GetThumbnaifilePath(host))
          .OrderBy(orderby)
@@ -865,7 +872,7 @@ namespace EasyCms.Dal
          .Join<ShopBrandInfo>(ShopBrandInfo._.ID == ShopProductInfo._.BrandId, JoinType.leftJoin)
          .Join<ShopProductType>(ShopProductType._.ID == ShopProductInfo._.TypeId, JoinType.leftJoin)
          .Join<AttachFile>(AttachFile._.RefID == ShopProductInfo._.ID && AttachFile._.OrderNo == 1, JoinType.leftJoin)
-         .Select(ShopProductInfo._.ID, ShopProductCategory._.CategoryID, ShopCategory._.Name.Alias("CategoryName"), ShopProductInfo._.BrandId, ShopProductInfo._.TypeId, ShopProductInfo._.Code, ShopProductInfo._.Name, ShopProductInfo._.SKU, ShopProductInfo._.SaleCounts, ShopProductInfo._.SalePrice, ShopProductInfo._.MarketPrice, ShopBrandInfo._.Name.Alias("BrandName"), ShopProductType._.Name.Alias("TypeName"), AttachFile.GetThumbnaifilePath(host))
+         .Select(ShopProductInfo._.ID, ShopProductCategory._.CategoryID, ShopProductInfo._.CommentCount, ShopCategory._.Name.Alias("CategoryName"), ShopProductInfo._.BrandId, ShopProductInfo._.TypeId, ShopProductInfo._.Code, ShopProductInfo._.Name, ShopProductInfo._.SKU, ShopProductInfo._.SaleCounts, ShopProductInfo._.SalePrice, ShopProductInfo._.MarketPrice, ShopBrandInfo._.Name.Alias("BrandName"), ShopProductType._.Name.Alias("TypeName"), AttachFile.GetThumbnaifilePath(host))
          .OrderBy(orderby)
          .Where(searchWhere)
          .ToDataTable(20, pageIndex, ref pagecount, ref recordCount);

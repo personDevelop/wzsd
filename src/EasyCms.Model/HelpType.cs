@@ -344,6 +344,9 @@ namespace EasyCms.Model
     {
         [NotDbCol]
         public string ParentName { get; set; }
+
+        [NotDbCol]
+        public bool IsContent { get; set; }
     }
 }
 

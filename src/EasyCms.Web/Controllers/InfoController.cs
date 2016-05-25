@@ -12,6 +12,7 @@ namespace EasyCms.Web.Controllers
         // GET: /Info/
         public ActionResult Index()
         {
+            throw new HttpException();
             return View();
         }
 	}

@@ -62,7 +62,7 @@
                         @*<input id=loginBtn onclick=this.blur(); value=登录 type=submit>*@
                         @*<a id=regBtn href="" target=_blank>注册新账号</a>*@
                         <a class=highlight
-                           href="" target=_blank>忘记密码？</a>
+                           href="@Url.Action("findpwd","account")" target=_blank>忘记密码？</a>
                     </li>
                     <li>@Html.ValidationSummary()</li>
 

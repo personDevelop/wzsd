@@ -21,7 +21,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             return View();
         }
 
-        public string GetList()
+        public string GetList( )
         {
            
             System.Data.DataTable dt = bll.GetList(  );

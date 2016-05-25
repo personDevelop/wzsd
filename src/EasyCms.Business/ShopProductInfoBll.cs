@@ -148,9 +148,9 @@ namespace EasyCms.Business
             return Dal.GetProduct(pageIndex, pagesize, ref   pagecount, ref   recordCount);
         }
 
-        public DataTable GetProductsBySearchKey(string searchKey, int pageIndex, string other, string host, ref int pagecount, ref int recordCount)
+        public DataTable GetProductsBySearchKey(string searchKey, int pageIndex, string orderbystr, string host, ref int pagecount, ref int recordCount)
         {
-            return Dal.GetProductsBySearchKey(searchKey, pageIndex, other, host, ref   pagecount, ref   recordCount);
+            return Dal.GetProductsBySearchKey(searchKey, pageIndex, orderbystr, host, ref   pagecount, ref   recordCount);
         }
 
         public int AccCommentCount(string ProductId, int CommentCount)
@@ -177,6 +177,12 @@ namespace EasyCms.Business
         {
             return Dal.GetLocationCateogry(productID);
         }
+
+        public List<ShopCategory> GetLocationCateogryByCategoryID(string CategoryID)
+        {
+            return Dal.GetLocationCateogryByCategoryID(CategoryID);
+        }
+        
 
         public ShopProductInfo GetWebEntity(string id, string sku, out string error)
         { return Dal.GetWebEntity(id,   sku, out   error); }

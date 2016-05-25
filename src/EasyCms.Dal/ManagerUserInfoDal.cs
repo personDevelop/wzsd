@@ -198,7 +198,8 @@ namespace EasyCms.Dal
                     ID = Guid.NewGuid().ToString(),
                     ChangeTime = now,
                     CurrentRangeID = ar.RangeID,
-                    ChangedValue = growthValue
+                    ChangedValue = growthValue,
+                    UserID=id,
                 };
                 list.Add(arc);
             }
@@ -222,7 +223,8 @@ namespace EasyCms.Dal
                             PriRangeID = ar.RangeID,
                             CurrentRangeID = dict.ID,
                             ChangeingValue = ar.GrowthValue,
-                            ChangedValue = changeGrowth
+                            ChangedValue = changeGrowth,
+                             UserID = id,
                         };
                         list.Add(arc);
                     }
@@ -231,6 +233,33 @@ namespace EasyCms.Dal
             }
             list.Add(ar);
             Dal.Submit(list);
+        }
+
+        public FindPwd GetFindPwdRecord(string id)
+        {
+            return Dal.From<FindPwd>().Join<ManagerUserInfo>(FindPwd._.UserID== ManagerUserInfo._.ID).Select(FindPwd._.UserID,FindPwd._.EndTime,FindPwd._.ID,ManagerUserInfo._.Code).ToFirst<FindPwd>( );
+        }
+
+        public int Save(FindPwd m)
+        {
+            return Dal.Submit(m);
+        }
+
+        public ManagerUserInfo GetUserInfo(string account, out string error)
+        {
+            ManagerUserInfo result = null;
+            error = string.Empty;
+            result = Dal.From<ManagerUserInfo>().Where(ManagerUserInfo._.Code == account).Select(ManagerUserInfo._.ID, ManagerUserInfo._.Code, ManagerUserInfo._.Email).ToFirst<ManagerUserInfo>();
+            if (result==null)
+            {
+                result = Dal.From<ManagerUserInfo>().Where(ManagerUserInfo._.Email == account).Select(ManagerUserInfo._.ID, ManagerUserInfo._.Code, ManagerUserInfo._.Email).ToFirst<ManagerUserInfo>();
+
+            }
+            if (result==null)
+            {
+                error = "系统中不存在该会员账号或邮箱,请重新输入";
+            }
+            return result;
         }
 
         public decimal GetMyBalance(string userid)

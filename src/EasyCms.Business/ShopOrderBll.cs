@@ -47,9 +47,9 @@ namespace EasyCms.Business
             return Dal.Submit(order, accuont, out   mustGenerSign, out err);
         }
 
-        public List<ShopOrder> GetMyOrder(string host, ManagerUserInfo user, int queryPage, string queryStatus, string other, out string err)
+        public List<ShopOrder> GetMyOrder(string host, ManagerUserInfo user, int queryPage, string queryStatus, string other, out string err, WhereClip otherWhereClip = null)
         {
-            return Dal.GetMyOrder(host, user, queryPage, queryStatus, other, out err);
+            return Dal.GetMyOrder(host, user, queryPage, queryStatus, other, out err,   otherWhereClip );
         }
 
         public ShopOrder GetOrder(string host, string id, string userid, out string err)
@@ -72,9 +72,9 @@ namespace EasyCms.Business
             return Dal.GetOrderStatus(id, accountID, out   err);
         }
 
-        public void PaySuccess(string orderID, string payJe)
+        public void PaySuccess(string orderID, string traseNo, bool isTongBu)
         {
-            Dal.PaySuccess(orderID, payJe);
+            Dal.PaySuccess(  orderID,   traseNo,   isTongBu);
         }
 
         public int CancleOrder(string accountid, string orderid, out string error)

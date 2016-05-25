@@ -57,7 +57,7 @@
                 <script type="text/javascript">
                     $(function(){
 
-                        $.getJSON("@Url.RouteUrl("ApiWithWeb", new { controller = "APP", action = "GetProductsByStation" })"+"?StationMode=1",
+                        $.getJSON("@Url.RouteUrl("ApiWithWeb", new { controller = "APP", action = "GetProductsByStation" })"+"?StationMode=1&pagesize=6",
                             function(data){
                                 $("#guessyou").find("ul").empty();
                                 for (var i = 0; i < data.data.Data.length; i++)

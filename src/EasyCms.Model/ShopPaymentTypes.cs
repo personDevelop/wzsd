@@ -60,6 +60,8 @@ namespace EasyCms.Model
 
         private string _Description;
 
+        private string _ReturnUrl;
+
         private string _NotifyUrl;
 
         private string _PublicKey;
@@ -86,6 +88,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("ID", this._ID, value);
+
+
                 this._ID = value;
             }
         }
@@ -105,6 +109,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("ShortName", this._ShortName, value);
+
+
                 this._ShortName = value;
             }
         }
@@ -124,6 +130,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("Name", this._Name, value);
+
+
                 this._Name = value;
             }
         }
@@ -143,6 +151,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("DrivePath", this._DrivePath, value);
+
+
                 this._DrivePath = value;
             }
         }
@@ -162,6 +172,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("Gateway", this._Gateway, value);
+
+
                 this._Gateway = value;
             }
         }
@@ -181,6 +193,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("MerchantCode", this._MerchantCode, value);
+
+
                 this._MerchantCode = value;
             }
         }
@@ -200,6 +214,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("EmailAddress", this._EmailAddress, value);
+
+
                 this._EmailAddress = value;
             }
         }
@@ -219,6 +235,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("SecretKey", this._SecretKey, value);
+
+
                 this._SecretKey = value;
             }
         }
@@ -238,6 +256,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("SecondKey", this._SecondKey, value);
+
+
                 this._SecondKey = value;
             }
         }
@@ -257,6 +277,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("Password", this._Password, value);
+
+
                 this._Password = value;
             }
         }
@@ -276,6 +298,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("Partner", this._Partner, value);
+
+
                 this._Partner = value;
             }
         }
@@ -295,6 +319,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("IsEnable", this._IsEnable, value);
+
+
                 this._IsEnable = value;
             }
         }
@@ -314,6 +340,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("DisplaySequence", this._DisplaySequence, value);
+
+
                 this._DisplaySequence = value;
             }
         }
@@ -333,6 +361,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("Charge", this._Charge, value);
+
+
                 this._Charge = value;
             }
         }
@@ -352,6 +382,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("IsPercent", this._IsPercent, value);
+
+
                 this._IsPercent = value;
             }
         }
@@ -371,6 +403,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("AllowRecharge", this._AllowRecharge, value);
+
+
                 this._AllowRecharge = value;
             }
         }
@@ -390,6 +424,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("Logo", this._Logo, value);
+
+
                 this._Logo = value;
             }
         }
@@ -409,12 +445,35 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("Description", this._Description, value);
+
+
                 this._Description = value;
             }
         }
 
         /// <summary>
-        ///  通知Url,
+        ///  同步返回Url,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "ReturnUrl", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 200, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string ReturnUrl
+        {
+            get
+            {
+                return this._ReturnUrl;
+            }
+            set
+            {
+                this.OnPropertyChanged("ReturnUrl", this._ReturnUrl, value);
+
+
+                this._ReturnUrl = value;
+            }
+        }
+
+        /// <summary>
+        ///  异步通知Url,
         /// </summary>
 
         [DbProperty(MapingColumnName = "NotifyUrl", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 200, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
@@ -428,6 +487,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("NotifyUrl", this._NotifyUrl, value);
+
+
                 this._NotifyUrl = value;
             }
         }
@@ -447,6 +508,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("PublicKey", this._PublicKey, value);
+
+
                 this._PublicKey = value;
             }
         }
@@ -466,13 +529,15 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("IsDefault", this._IsDefault, value);
+
+
                 this._IsDefault = value;
             }
         }
 
         #endregion
 
-        #region 列定义
+        #region 列定义 
         public class Column
         {
             public Column(string tableName)
@@ -513,6 +578,8 @@ namespace EasyCms.Model
                 Logo = new PropertyItem("Logo", tableName);
 
                 Description = new PropertyItem("Description", tableName);
+
+                ReturnUrl = new PropertyItem("ReturnUrl", tableName);
 
                 NotifyUrl = new PropertyItem("NotifyUrl", tableName);
 
@@ -595,7 +662,11 @@ namespace EasyCms.Model
             /// </summary> 
             public PropertyItem Description = null;
             /// <summary>
-            /// 通知Url,
+            /// 同步返回Url,
+            /// </summary> 
+            public PropertyItem ReturnUrl = null;
+            /// <summary>
+            /// 异步通知Url,
             /// </summary> 
             public PropertyItem NotifyUrl = null;
             /// <summary>

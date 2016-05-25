@@ -238,5 +238,20 @@ namespace EasyCms.Business
             return Dal.GetMyBalance(userid);
 
         }
+
+        public ManagerUserInfo GetUserInfo(string account, out string error)
+        {
+            return Dal.GetUserInfo(account, out   error);
+        }
+
+        public int Save(FindPwd m)
+        {
+            return Dal.Save(m);
+        }
+
+        public FindPwd GetFindPwdRecord(string id)
+        {
+            return Dal.GetFindPwdRecord(id);
+        }
     }
 }

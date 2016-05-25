@@ -34,7 +34,7 @@ namespace AliPayCommon
             {
                 foreach (PropertyInfo pro in props)
                 {
-                    if (pro.Name == item.Key)
+                    if (pro.Name.ToLower()  == item.Key.ToLower())
                     {
                         pro.SetValue(notify, item.Value, null);
                         break;

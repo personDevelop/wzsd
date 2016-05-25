@@ -54,5 +54,10 @@ namespace EasyCms.Business
         {
             return Dal.GetMyCards(userID);
         }
+
+        public int Delete(WhereClip where)
+        {
+            return Dal.Delete(where);
+        }
     }
 }

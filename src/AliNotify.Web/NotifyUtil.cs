@@ -1,4 +1,5 @@
-﻿using EasyCms.Business;
+﻿using AliPayCommon;
+using EasyCms.Business;
 using EasyCms.Model;
 using EasyCms.Model.Ali;
 using System;

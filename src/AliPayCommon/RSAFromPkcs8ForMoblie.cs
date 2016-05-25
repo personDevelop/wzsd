@@ -62,8 +62,8 @@ namespace AliPayCommon
             SHA1 sh = new SHA1CryptoServiceProvider();
             result = rsaPub.VerifyData(Data, sh, data);
             return result;
-        }
-
+        } 
+       
         /// <summary>
         /// 用RSA解密
         /// </summary>

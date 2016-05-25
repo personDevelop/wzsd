@@ -27,7 +27,7 @@ namespace EasyCms.Web.Controllers
 
             }
 
-            return View("NotFindSp",error);
+            return View("Error",new MessageModel("商品不存在或已下架", error, ShowMsgType.info));
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using EasyCms.Business;
 using EasyCms.Model;
 using EasyCms.Session;
+using EmailService;
+using Sharp.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -87,7 +89,7 @@ namespace EasyCms.Web.Controllers
                 }
                 else
                 {
-                    jsonerror += "<br/>"+ error;
+                    jsonerror += "<br/>" + error;
                     ModelState.AddModelError("", error);
                 }
             }
@@ -96,13 +98,13 @@ namespace EasyCms.Web.Controllers
             if (isJson)
             {
                 if (ModelState.IsValid)
-                { 
+                {
                     return Json(new { result = true, Msg = jsonerror });
                 }
                 else
                 {
-                    return Json( new { result = false, Msg = jsonerror });
-                    
+                    return Json(new { result = false, Msg = jsonerror });
+
                 }
             }
             else
@@ -251,6 +253,229 @@ namespace EasyCms.Web.Controllers
             return View();
         }
 
+        public ActionResult FindPwd()
+        {
+            return View();
 
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult FindPwd(FindPwdModel model)
+        {
+            ManagerUserInfoBll bll = new ManagerUserInfoBll();
+            string sessionValidateCode = Session["ValidateCode"] as string;
+            if (string.IsNullOrWhiteSpace(sessionValidateCode))
+            {
+                ModelState.AddModelError("VaryCode", "验证码已失效，请重新获取.");
+            }
+            if (ModelState.IsValid&&model.VaryCode.ToLower() != sessionValidateCode)
+            {
+                ModelState.AddModelError("VaryCode", "验证码不正确.");
+            }
+
+            if (string.IsNullOrWhiteSpace(model.Account))
+            {
+                ModelState.AddModelError("Account", "请输入用户名或邮箱.");
+            }
+            else
+            {
+                string error = null;
+                ManagerUserInfo user = bll.GetUserInfo(model.Account, out error);
+                if (string.IsNullOrWhiteSpace(error))
+                {
+                    DateTime now = DateTime.Now;
+                    string varifyCode = Guid.NewGuid().ToString();
+                    string content = GetMsgInfo(now, varifyCode);
+                    SendEmail.SendMsg(CmsSessionExtend.WebSite.EmailServer,
+                        CmsSessionExtend.WebSite.EmailPort, CmsSessionExtend.WebSite.EmailUser, 
+                        CmsSessionExtend.WebSite.EmailPwd, user.Email, "红七商城找回密码", content, ref error);
+
+                    EasyCms.Model.FindPwd m = new Model.FindPwd()
+                    {
+                        ID = varifyCode,
+                        EmailOrTel = model.Account,
+                        SendTime = now,
+                        EndTime = now.AddMinutes(30),
+                        UserID = user.ID,
+                        Target = SendMsgType.找回密码,
+                        VariyCode = varifyCode,
+                        VaryType = ValidType.邮箱
+                    };
+                    bll.Save(m);
+                    return View("Error", new MessageModel("提交申请成功", "您的申请已成功受理，重置信息已发送到您注册时的邮箱中，请在30分钟内到邮箱激活重置密码", ShowMsgType.success));
+                }
+                else
+                {
+                    return View("Error", new MessageModel("提交申请失败", error, ShowMsgType.error));
+
+                }
+
+            }
+            // 如果我们进行到这一步时某个地方出错，则重新显示表单
+
+            return View(model);
+        }
+        private string GetMsgInfo(DateTime now, string varifyCode)
+        {
+
+            string url = CmsSessionExtend.WebSite.WebSiteUrlWithHttp + "/account/ResetPwd/" + varifyCode;
+            string content = @"<p style='text-align: left; text-indent: 0em;'>
+    <span style='font-family: 微软雅黑, &#39;Microsoft YaHei&#39;; font-size: 14px;'>尊敬的<span style='font-family: 微软雅黑, &#39;Microsoft YaHei&#39;; line-height: 16px;'>红七</span>商城会员,您好：&nbsp;<br/>&nbsp; &nbsp; &nbsp;<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;您于(<span style='font-family: 微软雅黑, &#39;Microsoft YaHei&#39;; line-height: 16px;'>" + now.ToString("yyyy-MM-dd HH:mm:ss") + @"</span>)通过</span><a href='" + CmsSessionExtend.WebSite.WebSiteUrlWithHttp + @"' target='_self' style='text-decoration: underline; font-family: 微软雅黑, &#39;Microsoft YaHei&#39;; font-size: 14px;'><span style='font-family: 微软雅黑, &#39;Microsoft YaHei&#39;; font-size: 14px;'>红七商城</span></a><span style='font-size: 14px;'><span style='font-family: 微软雅黑, &#39;Microsoft YaHei&#39;; font-size: 20px;'>，<span style='font-family: 微软雅黑, &#39;Microsoft YaHei&#39;; font-size: 14px;'>找回密码。<span style='font-family: 微软雅黑, &#39;Microsoft YaHei&#39;; line-height: 16px;'>&nbsp;本链接<span style='font-family: 微软雅黑, &#39;Microsoft YaHei&#39;; line-height: 16px; color: rgb(247, 150, 70);'><strong>30</strong>分钟</span>内有效</span></span><span style='font-size: 20px; font-family: 微软雅黑, &#39;Microsoft YaHei&#39;; line-height: 16px;'>。</span><br/><span style='font-size: 20px; font-family: 微软雅黑, &#39;Microsoft YaHei&#39;; line-height: 1em;'> &nbsp; &nbsp;<span style='font-family: 微软雅黑, &#39;Microsoft YaHei&#39;; line-height: 1em; font-size: 14px;'>&nbsp;请点击一下</span></span></span><span style='line-height: 1em; font-family: 微软雅黑, &#39;Microsoft YaHei&#39;; font-size: 16px;'><a href='" + url + @"' target='_self'>重置密码</a><span style='line-height: 1em; font-family: 微软雅黑, &#39;Microsoft YaHei&#39;;'>链接，重置您的密码！</span></span></span><br/>
+</p>
+<p style='text-align: left; text-indent: 0em;'>
+    <span style='font-family: 微软雅黑, &#39;Microsoft YaHei&#39;; font-size: 14px;'>&nbsp; &nbsp; &nbsp; &nbsp; 如果您的浏览器打不开此链接，请复制下面的网址到浏览器中打开</span>
+</p>
+<p style='text-align: left; text-indent: 0em;'>
+    <span style='font-family: 微软雅黑, &#39;Microsoft YaHei&#39;; font-size: 14px;'>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</span><a href='" + url + @"' target='_self' title='" + url + @"' style='line-height: 16px; white-space: normal; text-decoration: underline; font-family: 微软雅黑, &#39;Microsoft YaHei&#39;; font-size: 14px;'><span style='font-family: 微软雅黑, &#39;Microsoft YaHei&#39;; font-size: 14px;'>&nbsp;" + url + @"</span></a>
+</p>
+<p style='text-align: left; text-indent: 0em;'>
+    <span style='font-family: 微软雅黑, &#39;Microsoft YaHei&#39;; font-size: 14px;'>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span>
+</p>
+<p style='text-align: left; text-indent: 0em;'>
+    <span style='font-family: 微软雅黑, &#39;Microsoft YaHei&#39;; font-size: 14px;'>&nbsp; &nbsp; &nbsp; 本邮件是由系统发送，不需要回复&nbsp;</span>
+</p>
+<p>
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+</p>
+<p>
+    <span style='line-height: 16px;'>---------------------</span>--------------------------------------------------- &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+</p>
+<p>
+    <span style='font-size: 14px;'>红七商城</span>
+</p>
+<p>
+    <a href='" + CmsSessionExtend.WebSite.WebSiteUrlWithHttp + @"' target='_self' title='" + CmsSessionExtend.WebSite.WebSiteUrlWithHttp + @"' style='font-size: 14px; text-decoration: underline;'><span style='font-size: 14px;'>" + CmsSessionExtend.WebSite.WebSiteUrlWithHttp + @"</span></a><br/>
+</p>
+<p>
+    <span style='font-size: 14px;'>" + now.ToString("yyyy-MM-dd HH:mm:ss") + @"</span>
+</p>
+<p>
+    <br/>
+</p>";
+
+            return content;
+        }
+
+
+
+
+        [AllowAnonymous]
+        public ActionResult ResetPwd(string id)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return View("Error", new MessageModel("重置密码失败", "您好，您的重置密码链接已失效,请重新申请找回密码", ShowMsgType.error));
+            }
+            ManagerUserInfoBll bll = new ManagerUserInfoBll();
+
+            EasyCms.Model.FindPwd fp = bll.GetFindPwdRecord(id);
+            if (fp == null)
+            {
+                return View("Error", new MessageModel("重置密码失败", "您好，您的重置密码链接已失效,请重新申请找回密码。", ShowMsgType.error));
+            }
+            else
+            {
+                if (DateTime.Now > fp.EndTime)
+                {
+                    return View("Error", new MessageModel("重置密码失败", "您好，您的重置密码链接已失效,请重新申请找回密码,并在30分钟内重置密码。", ShowMsgType.error));
+                }
+                else
+                {
+                    return View(new ResetPwdModelPC() { FindPwdID = id });
+                }
+            }
+
+        }
+
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult ResetPwd(ResetPwdModelPC model)
+        {
+            ManagerUserInfoBll bll = new ManagerUserInfoBll();
+            if (model.VaryCode.ToLower() != Session["ValidateCode"].ToString().ToLower())
+            {
+                ModelState.AddModelError("VaryCode", "验证码不正确.");
+            }
+
+            if (string.IsNullOrWhiteSpace(model.Account))
+            {
+                ModelState.AddModelError("Account", "请输入用户名");
+            }
+            if (string.IsNullOrWhiteSpace(model.Pwd))
+            {
+                ModelState.AddModelError("Password", "请输入密码.");
+            }
+            if (string.IsNullOrWhiteSpace(model.ComfirmPwd))
+            {
+                ModelState.AddModelError("ConfrimPwd", "请再次输入密码.");
+            }
+            if (ModelState.IsValid && !string.IsNullOrWhiteSpace(model.Pwd) && model.Pwd != model.ComfirmPwd)
+            {
+                ModelState.AddModelError("ConfrimPwd", "两次输入密码不一致.");
+            }
+            if (ModelState.IsValid)
+            {
+                if (string.IsNullOrWhiteSpace(model.FindPwdID))
+                {
+                    return View("Error", new MessageModel("重置密码失败", "您好，您的重置密码链接已失效,请重新申请找回密码", ShowMsgType.error));
+
+                }
+                else
+                {
+                    EasyCms.Model.FindPwd fp = bll.GetFindPwdRecord(model.FindPwdID);
+                    if (fp == null)
+                    {
+                        return View("Error", new MessageModel("重置密码失败", "您好，您的重置密码链接已失效,请重新申请找回密码。", ShowMsgType.error));
+                    }
+                    else if (fp.Code.ToLower()!=model.Account.ToLower())
+                    {
+                        ModelState.AddModelError("Account", "用户名不正确");
+                    }
+                    else
+                    {
+                        if (DateTime.Now > fp.EndTime)
+                        {
+                            return View("Error", new MessageModel("重置密码失败", "您好，您的重置密码链接已失效,请重新申请找回密码,并在30分钟内重置密码。", ShowMsgType.error));
+                        }
+                        else
+                        {
+
+                            ManagerUserInfo user = new ManagerUserInfo()
+                            {
+                                ID = fp.UserID,
+                                RecordStatus = Sharp.Common.StatusType.update,
+                                Pwd = model.Pwd.EncryptSHA1()
+                            };
+                            bll.Save(user);
+
+                            return View("Error", new MessageModel("密码重置成功", "您的密码已重置成功,请用新密码登录商城", ShowMsgType.success));
+
+                        }
+                    }
+
+                }
+
+            }
+            return View(model);
+
+        }
+
+
+        public ActionResult MyOrder()
+        {
+            string userid = CmsSession.GetUserID();
+            if (string.IsNullOrWhiteSpace(userid))
+            {
+                return View("Login");
+            }
+            else
+            {
+                return View();
+            }
+        }
     }
 }

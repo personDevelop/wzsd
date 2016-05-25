@@ -1455,23 +1455,26 @@
     <Content Include="Views\News\Detail.cshtml" />
     <Content Include="Views\Shared\_RecomendShop.cshtml" />
     <Content Include="Views\Card\Index.cshtml" />
-    <Content Include="Views\Card\Index - 复制.cshtml" />
     <Content Include="Views\Account\LoginBox.cshtml" />
     <Content Include="Views\Account\Dialog.cshtml" />
-    <Content Include="Views\Category\List.cshtml" />
     <Content Include="Views\Order\Index.cshtml" />
     <Content Include="Views\Addr\Index.cshtml" />
-    <Content Include="Views\Account\User.cshtml" />
+    <Content Include="Views\Account\MyOrder.cshtml" />
     <Content Include="Views\Account\Order.cshtml" />
     <Content Include="Views\Info\Index.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Search\Index.cshtml" />
+    <Content Include="Views\Account\FindPwd.cshtml" />
+    <Content Include="Views\Account\ResetPwd.cshtml" />
+    <Content Include="Views\Shared\_UserCenter.cshtml" />
+    <Content Include="Views\Shared\_HelpCenter.cshtml" />
+    <Content Include="Views\Help\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Views\Error\" />
     <Folder Include="Scripts\jGui\" />
     <Folder Include="Upload\Export\" />
-    <Folder Include="Views\Help\" />
-    <Folder Include="Views\Search\" />
     <Folder Include="Views\SiteMap\" />
     <Folder Include="Views\VarifyCode\" />
     <Folder Include="Views\WebAliPay\" />
@@ -1484,6 +1487,14 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AliPayCommon\AliPayCommon.csproj">
+      <Project>{768e8575-1ca0-42ee-8902-bfbe02d40e53}</Project>
+      <Name>AliPayCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AliPayMobile\AliPayMobileClient.csproj">
+      <Project>{81baf155-6ba9-4a29-ad27-b107b8d6d172}</Project>
+      <Name>AliPayMobileClient</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AliPay\AliPayPcClient.csproj">
       <Project>{f009739d-d3e8-448a-9b3b-ba100ce94cb1}</Project>
       <Name>AliPayPcClient</Name>
@@ -1499,6 +1510,10 @@
     <ProjectReference Include="..\EasyCms.Session\EasyCms.Session.csproj">
       <Project>{44ce33d0-d419-4958-ba98-986a7a249ba0}</Project>
       <Name>EasyCms.Session</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EmailService\EmailService.csproj">
+      <Project>{f6762744-7b7c-4565-b201-e8929491a3fb}</Project>
+      <Name>EmailService</Name>
     </ProjectReference>
     <ProjectReference Include="..\ImsgInterface\ImsgInterface.csproj">
       <Project>{bbbb0376-1004-43eb-a1a4-acd0cd850180}</Project>

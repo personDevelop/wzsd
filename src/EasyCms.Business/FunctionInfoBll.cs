@@ -169,5 +169,11 @@ namespace EasyCms.Business
                     return null;
                 }
         }
+
+        public List<FunctionInfo> GetAccountFunction()
+        {
+            return new FunctionInfoDal().GetAccountFunction();
+        }
+          
     }
 }

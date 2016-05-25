@@ -14,6 +14,10 @@
     int producntIndex = 0;
     //获取可用优惠券
     DataTable dt = new CouponRuleBll().GetMyCanEnableCoupon(EasyCms.Session.CmsSession.GetUserID());
+    if (string.IsNullOrWhiteSpace(Model.PayTypeID))
+    {
+        Model.CashOnDelivery = true;
+    }
 }
 @Styles.Render("~/bundles/cardcss")
 @Styles.Render("~/bundles/ordercss")
@@ -22,11 +26,13 @@
 @using (Html.BeginForm("SubmitOrder", "Order"))
 {
     @Html.AntiForgeryToken()
+
     <div id="container">
         <div class="work" id="content">
             <div class="m">
                 <div class="checkout-tit">
                     <span class="tit-txt"> 填写并核对订单信息 </span>
+                   
                 </div>
                 <div class="mc">
                     <div class="checkout-steps">
@@ -48,15 +54,23 @@
                                                 <ul id="consignee-list">
                                                     @if (list.Count > 0)
                                                     {
-                                                        if (list.Exists(p => p.IsDefault))
+                                                        if (!string.IsNullOrWhiteSpace(Model.AddressID))
                                                         {
-                                                            defaultAddr = list.Find(p => p.IsDefault);
-                                                            Model.AddressID = defaultAddr.ID;
+                                                            defaultAddr = list.Find(p => p.ID == Model.AddressID);
                                                         }
-                                                        else
+                                                        if (defaultAddr == null)
                                                         {
-                                                            defaultAddr = list[0];
-                                                            Model.AddressID = defaultAddr.ID;
+
+                                                            if (list.Exists(p => p.IsDefault))
+                                                            {
+                                                                defaultAddr = list.Find(p => p.IsDefault);
+                                                                Model.AddressID = defaultAddr.ID;
+                                                            }
+                                                            else
+                                                            {
+                                                                defaultAddr = list[0];
+                                                                Model.AddressID = defaultAddr.ID;
+                                                            }
                                                         }
                                                         <li class="ui-switchable-panel ui-switchable-panel-selected" style="display: list-item;" selected="selected">
                                                             <div class="consignee-item item-selected" consigneeid="@defaultAddr.ID"> <span title="@defaultAddr.ShipName"> @defaultAddr.ShipName </span><b></b></div>
@@ -124,8 +138,9 @@
                                     <div class="payment-list">
                                         <div class="list-cont">
                                             <ul id="payment-list">
+                                                
                                                 <li style="cursor: pointer;">
-                                                    <div class="payment-item item-selected  online-payment" onlinepaytype="0" payid="" payname="货到付款">
+                                                    <div class="payment-item @(string.IsNullOrWhiteSpace(Model.PayTypeID)?"item-selected":"")  online-payment" onlinepaytype="0" payid="" payname="货到付款">
                                                         <b></b> 货到付款 (仅支持现金)
                                                     </div>
                                                 </li>
@@ -133,7 +148,7 @@
                                                 @foreach (DataRow item in pdt.Rows)
                                                 {
                                                     <li style="cursor: pointer;">
-                                                        <div class="payment-item  online-payment" onlinepaytype="1" payid="@item["ID"]" payname="@item["ShortName"]">
+                                                        <div class="payment-item @((item["ID"].ToString()==Model.PayTypeID)?"item-selected":"") online-payment" onlinepaytype="1" payid="@item["ID"]" payname="@item["ShortName"]">
                                                             <b></b>
                                                             @item["ShortName"]                    													                                								<span class="qmark-icon qmark-tip" data-tips="绑定银行卡，支付更快捷 <a href='/ / help.jd.com / user / issue / list - 173 - 228.html ' target='_blank ' class='ftx - 05 '>了解京东支付</a>"></span>
                                                         </div>
@@ -364,8 +379,8 @@
                                             <div class="form v-balance ml20" id="jdBalance">
                                                 @if (balance > 0)
                                                 {
-                                                    <input class="jdcheckbox" id="selectOrderBalance" onclick="useOrCancelBalance(this)" type="checkbox" value="">
-                                                    <label id="canUsedBalanceId" for="selectOrderBalance">&nbsp;使用余额（账户当前余额：<span id="hasye" class="ftx-01">0.00</span>元）</label>
+                                                    <input class="jdcheckbox" id="selectOrderBalance" onclick="useOrCancelBalance(this)" type="checkbox" @(Model.UserBalance>0?"checked=\"checked\"":"") />
+<label id="canUsedBalanceId" for="selectOrderBalance">&nbsp;使用余额（账户当前余额：<span id="hasye" class="ftx-01">0.00</span>元）</label>
                                                     @Html.TextBox("order.UserBalance", Model.UserBalance)
                                                 }
                                                 else
@@ -460,42 +475,40 @@
                                 <div class="sticky-placeholder hide" style="display: none;"></div>
                                 <div class="sticky-wrap">
                                     <div class="inner">
-                                        <button class="checkout-submit" id="order-submit" type="submit">
+                                        <button class="checkout-submit" onclick="javascript: $(this).attr('disabled', true); return true;" id="order-submit" type="submit">
                                             提交订单<b></b>
                                         </button>
                                     </div>
                                     @if (ViewBag != null && !string.IsNullOrWhiteSpace(ViewBag.Msg))
-                {
+                                    {
+                                        if ("请先登录红七商城" == ViewBag.Msg as string)
+                                        {
+                                            <script type="text/javascript">
+                                                $(function () { 
+                                                    showFormurl("会员登录", '@Url.Action("LoginBox","Account")'); 
+                                                });
+                                             
+
+                                            </script>
+                                        }
+                                        else
+                                        {
                                         <span class="submit-error" id="submit_message">@ViewBag.Msg</span>
+                                        }
                                     }
                                     <div class="submit-check-info" id="submit_check_info_message" style="display:none"></div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-
-                    <div id="backpanel">
-                        <div class="hide switchOn" id="backpanel-inner" style="right: 144px;">
-                            <div class="bp-item bp-item-survey">
-                                <a class="survey" href="" target="_blank">我要反馈</a>
-                            </div>
-                            <div class="bp-item bp-item-backtop" data-top="0">
-                                <a class="backtop" href="#none" target="_self">返回顶部</a>
-                            </div>
-                        </div>
-                    </div>
+                    </div> 
 
                 </div>
             </div>
             @Html.Hidden("order.AddressID", Model.AddressID)
     @Html.Hidden("order.PayTypeID", Model.PayTypeID)
-    @Html.Hidden("order.CashOnDelivery", true)
+    @Html.Hidden("order.CashOnDelivery", Model.CashOnDelivery)
     @Html.Hidden("order.Coupon[0].ID", "")
     @Html.Hidden("order.TotalPrice", Model.TotalPrice)
     @Html.Hidden("order.PayMoney", Model.PayMoney)
-   @*@Html.TextBox("order.UserBalance", Model.UserBalance)
-    @Html.CheckBox("order.IsInvoice", Model.IsInvoice)
-     @Html.TextBox("order.InvoiceInfo", Model.InvoiceInfo)
-    @Html.TextBox("order.Remark", Model.Remark)*@
+    @Html.Hidden("SubmitCheck", ViewBag.SubmitCheck as string) 
 }

@@ -61,11 +61,13 @@
     <Compile Include="AttachFile.cs" />
     <Compile Include="AttributeType.cs" />
     <Compile Include="CouponRule.cs" />
+    <Compile Include="FindPwd.cs" />
     <Compile Include="FriendlyLink.cs" />
     <Compile Include="FriendlyLinkType.cs" />
     <Compile Include="HelpContent.cs" />
     <Compile Include="HelpType.cs" />
     <Compile Include="Json.cs" />
+    <Compile Include="MessageModel.cs" />
     <Compile Include="MsgSendLog.cs" />
     <Compile Include="Notice.cs" />
     <Compile Include="OnLineUser.cs" />

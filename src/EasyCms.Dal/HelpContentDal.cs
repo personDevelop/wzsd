@@ -26,12 +26,23 @@ namespace EasyCms.Dal
             return Dal.Submit (  item); 
         }
 
-        public DataTable GetTreeList( )
+        public HelpContent GetFirst()
         {
+            return Dal.From<HelpContent>().ToDataTable(1).ToFirst<HelpContent>();
+        }
+
+        public DataTable GetTreeList(WhereClip wherepara = null)
+        {
+            WhereClip where = new WhereClip();
+            if (WhereClip.IsNullOrEmpty(wherepara))
+            {
+                where = wherepara;
+            }
+           
             DataTable dt= Dal.From<HelpType>().Select(HelpType._.ID, HelpType._.Code, HelpType._.Name,
                 HelpType._.IsShowButtom, HelpType._.IsShowNavi, HelpType._.OrderNo, HelpType._.ParentID
                 ,new ExpressionClip("CONVERT(bit,0)").Alias("IsContent")
-                )   .ToDataTable();
+                )  .Where(wherepara).ToDataTable();
                 
             DataTable dt1=Dal.From<HelpContent>().Join<HelpType>(HelpContent._.CategoryID==HelpType._.ID)
                 .Select(HelpContent._.ID, HelpContent._.Code, HelpContent._.Name, HelpType._.IsShowButtom, HelpType._.IsShowNavi,

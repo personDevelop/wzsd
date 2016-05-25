@@ -24,9 +24,14 @@ namespace EasyCms.Business
             return Dal.Save(item);
         }
 
-        public DataTable GetList( )
+        public HelpContent GetFirst()
         {
-            return Dal.GetTreeList( );
+            return Dal.GetFirst( );
+        }
+
+        public DataTable GetList(WhereClip where=null )
+        {
+            return Dal.GetTreeList(where);
         }
        
        

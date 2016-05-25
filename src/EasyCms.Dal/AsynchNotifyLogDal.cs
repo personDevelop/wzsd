@@ -28,7 +28,7 @@ namespace EasyCms.Dal
 
         public bool Exit(string notifyid, string tradeStatus)
         {
-            WhereClip where = AsynchNotifyLog._.TradeNo == notifyid && AsynchNotifyLog._.TradeStatus == tradeStatus; ;
+            WhereClip where = AsynchNotifyLog._.TradeNo == notifyid && AsynchNotifyLog._.TradeStatus == tradeStatus;
 
             return Dal.Exists<AsynchNotifyLog>(where);
         }

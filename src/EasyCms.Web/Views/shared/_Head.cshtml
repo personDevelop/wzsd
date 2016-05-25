@@ -2,6 +2,16 @@
 @using EasyCms
 @using EasyCms.Business
 @using EasyCms.Session
+@{
+    bool IsLogin=!string.IsNullOrWhiteSpace(CmsSession.GetUserID());
+    bool IsManager=false;
+    if (IsLogin)
+
+    {
+        IsManager = CmsSession.GetUser().IsManager;
+
+    }
+} 
 <div id='header'>
     <div class='main'>
         <ul class="fl topleft">
@@ -27,14 +37,7 @@
             else
             {
                 <li class="xuan">
-                    <div class="erwei"></div>
-                    @if (CmsSession.GetUser().IsManager)
-                    {
-                        <a href="@Url.Action("index", "index", new { area = "admin" })" class="aa">
-                            管理后台
-                        </a>
-                    }
-                 
+                    <div class="erwei"></div> 
                     <a href="@Url.Action("LogOut", "Account", new { area = string.Empty })" class="aa">
                         退出
                     </a>
@@ -52,6 +55,24 @@
                 </i>
                 <div class="guanzhu1"><img src="@(CmsSessionExtend.WebSite.WeiXinImgUrl)"></div>
             </li>
+            @if (IsLogin)
+            {
+                <li class="" style='padding-left:30px;padding-right: 5px;'>
+                    <i class="ci-left-cart"></i>
+                    <a href="@Url.Action("MyOrder","Account")">我的订单</a>
+
+
+                </li>
+            }
+            @if (IsManager)
+            {
+                <li class="" style='padding-left:30px;padding-right: 5px;'>
+                    <i class="ci-left-cart"></i>
+                    <a href="@Url.Action("index","index",new { area="admin"})">管理后台</a>
+
+
+                </li>
+            }
             <li class="" style='padding-left:30px;padding-right: 5px;'>
                 <i class="ci-left-cart"></i>
                 <a href="@Url.Action("","card")">我的购物车</a>
@@ -75,7 +96,7 @@
 <div id='search-wrap'>
     <div class="logo"><a href="@Url.Action("", "")"><img src="@(CmsSessionExtend.WebSite.LogoUrl)" width="210" height="83"></a></div>
     <div class="search">
-        <input type="text" value="" class="text" id="searchText">
+        <input type="text" value="@(ViewBag!=null ?ViewBag.SearchText:"")" class="text" id="searchText">
         <button class="button" id="btnSearch">搜索</button>
     </div>
     <script type="text/javascript">
@@ -83,10 +104,10 @@
 
             $("#btnSearch").click(function () {
 
-                var url = "@Url.Action("index", "search")";
+                var url = "@Url.Action("index", "search",new { id=""})";
                 var searchText = $("#searchText").val();
                 if (searchText) {
-                    window.location = url + "/" + searchText;
+                    window.location =   url + "/" + searchText;
                 }
 
             });

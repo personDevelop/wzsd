@@ -799,6 +799,7 @@ em, i, u {
         font-size: 14px;
         color: #E4393C;
         font-family: 微软雅黑;
+        clear:left;
     }
 
 .mt h3 {

@@ -7,14 +7,14 @@
     ShopProductSKUInfo defaultSku = null;
     if (Model.SKUInfolist.Count > 0 && Model.SKUInfolist.Exists(pm => pm.IsDefault))
     {
-        
+
         defaultSku = Model.SKUInfolist.Find(pm => pm.IsDefault);
     }
 
 }
 @Styles.Render("~/bundles/productcss")
 @Scripts.Render("~/bundles/product")
-<div id="root-nav" class="floor">
+<div class="floor root-nav">
     <div class="w">
         <div class="breadcrumb">
 
@@ -27,7 +27,7 @@
                     ShopCategory c = catLocaList[i];
                     if (i == 0)
                     {
-                        <strong><a href="//book.jd.com" clstag="shangpin|keycount|product|mbNav-1">@c.Name</a></strong>
+            <strong><a href="@Url.Action("index","category",new {id=c.ID })">@c.Name</a></strong>
                     }
                     else
                     {
@@ -35,18 +35,19 @@
                         {
                             Html.Raw("<span>");
                         }
-                        @: &nbsp; &gt; &nbsp;<a href="//channel.jd.com/1713-3263.html" clstag="shangpin|keycount|product|mbNav-2">@c.Name</a>
-                         
+            @: &nbsp; &gt; &nbsp;<a href="@Url.Action("index","category",new {id=c.ID })">@c.Name</a>
+
+
                         if (i == catLocaList.Count - 1)
                         {
-                            @:&nbsp;&gt;&nbsp;
+            @:&nbsp;&gt;&nbsp;
                              Html.Raw("</span>");
                         }
                     }
 
 
                 }
-                @:<span><a href="//item.jd.com/11868592.html">@Model.Name</a></span>
+            @:<span><a href="#">@Model.Name</a></span>
             }
         </div>
     </div>
@@ -57,7 +58,7 @@
         <div id="spec-n1" class="jqzoom">
             @if (Model.ImgPath != null && Model.ImgPath.Length > 0)
             {
-                <img data-img="1" jqsrc='@Model.ImgPath[0]' width="350" height="350" src="@Model.ImgPath[0]" />
+            <img data-img="1" jqsrc='@Model.ImgPath[0]' width="350" height="350" src="@Model.ImgPath[0]" />
             }
         </div>
         <div id="spec-list">
@@ -70,7 +71,7 @@
 
                         foreach (var item in Model.ImgPath)
                         {
-                            <li><img bimg="@item" src="@item" onmousemove="preview(this);"></li>
+                    <li><img bimg="@item" src="@item" onmousemove="preview(this);"></li>
                         }
                     }
                 </ul>
@@ -139,10 +140,10 @@
                 {
                     List<ShopExtendAttr> sl = info.ToList<ShopExtendAttr>();//分组后的集合
 
-                    <div val="@sl[0].AttributeId" class="li p-choose choose-version">
-                        <div class="dt">@sl[0].AttrName：</div>
-                        <div class="dd">
-                            @foreach (var item in sl)
+            <div val="@sl[0].AttributeId" class="li p-choose choose-version">
+                <div class="dt">@sl[0].AttrName：</div>
+                <div class="dd">
+                    @foreach (var item in sl)
                             {
                                 string classItem = "item";
                                 if (defaultSku != null && defaultSku.Valueids.Contains(item.ValueId))
@@ -152,24 +153,24 @@
                                 }
                                 if (string.IsNullOrWhiteSpace(item.FilePath))
                                 {
-                                    <div class="@classItem"><b></b><a value="@item.ValueId" href="javascript:;" title="@item.ValueStr">@item.ValueStr</a></div>
+                            <div class="@classItem"><b></b><a value="@item.ValueId" href="javascript:;" title="@item.ValueStr">@item.ValueStr</a></div>
                                 }
                                 else
                                 {
-                                    <div class="@classItem"><b></b><a href="javascript:;" value="@item.ValueId" title="@item.ValueStr"><img src="@item.FilePath" width="30px" height="30px"  alt="@item.ValueStr"/></a></div>
-                                } 
-                            } 
-                        </div>
-                    </div> 
+                            <div class="@classItem"><b></b><a href="javascript:;" value="@item.ValueId" title="@item.ValueStr"><img src="@item.FilePath" width="30px" height="30px" alt="@item.ValueStr" /></a></div>
+                                }
+                            }
+                </div>
+            </div>
                 }
             }
         </div>
         <div id='choose-btns' value="@(defaultSku!=null?defaultSku.ID:"")" style="clear: both;">
             <div class="choose-amount fl ">
                 <div class="wrap-input">
-                    <a class="btn-reduce" href="javascript:;" onclick="setAmount.reduce('#buy-num')">-</a>
-                    <a class="btn-add" href="javascript:;" onclick="setAmount.add('#buy-num')">+</a>
-                    <input class="text" id="buy-num" value="1" onkeyup="setAmount.modify('#buy-num');">
+                    <a class="btn-reduce" href="javascript:;" onclick="setAmount(0)">-</a>
+                    <a class="btn-add" href="javascript:;" onclick="setAmount(1)">+</a>
+                    <input class="text" id="buy-num" value="1">
                 </div>
             </div>
             <div class="btn" id="choose-btn-append">
@@ -183,34 +184,8 @@
 </div>
 
 <div id='' class="floor" style="margin-bottom: 10px;overflow: auto;">
-     @FunctionExtend.HotProduct(StationMode.热卖商品,Model.ID)
-    @*<div id='view-buy'>
-        <div class="mt">
-            <h2>
-                热门推荐
-            </h2>
-        </div>
-        <div class="mc">
-            <ul>
-                <li class="fore1">
-                    <div class="p-img">
-                        <a target="_blank" href="//item.jd.com/1777837.html">
-                            <img height="100" width="100" src="http://img12.360buyimg.com/n4/jfs/t2776/197/120408794/126655/69d0a6b6/5703f34bN3884f143.jpg"
-                                 class="">
-                        </a>
-                    </div>
-                    <div class="p-name">
-                        <a target="_blank" href="//item.jd.com/1777837.html">
-                            海信（Hisense）LED55EC520UA 55英寸 VIDAA3 14核 炫彩4K智能电视(黑色)
-                        </a>
-                    </div>
-                    <div class="p-price">
-                        <strong class="J-p-1777837">￥3599.00</strong>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </div>*@
+    @FunctionExtend.HotProduct(StationMode.热卖商品,Model.ID)
+
     <div id='prd-detail'>
         <div class="m-tab-trigger-wrap">
             <ul class="m-tab-trigger">
@@ -254,7 +229,7 @@
 
 <script type="text/javascript">
     var guigeInfo = [];
-    var sku =[];
+    var sku = [];
     @if (Model.ShopProductSKU.Count>0)
     {
         @Html.Raw(" guigeInfo ="+JsonWithDataTable.Serialize(Model.ShopProductSKU) + "; ")
@@ -274,8 +249,8 @@
         var isFind = false;
         $.each(sku, function (i, n) {
             if (n.Valueids == skuValue) {
-                $("#choose-btns").attr("value",n.ID);
-                 //设置编号  设置价格  库存 
+                $("#choose-btns").attr("value", n.ID);
+                //设置编号  设置价格  库存
                 $("#data_goodsNo").text(n.SKU);
                 $("#real_price").text(n.SalePrice);
                 $("#data_marketPrice").text(n.MarketPrice);
@@ -311,11 +286,11 @@
                     }
                     );
                 SetSku(skuidval);
-            } 
+            }
 
         });
         $("#InitCartUrl").click(function () {
-            var data = { buyType: 0, ActivityID: "", ProductId: "@Model.ID", SKU: $("#choose-btns").attr("value"), Quantity: 1 };
+            var data = { buyType: 0, ActivityID: "", ProductId: "@Model.ID", SKU: $("#choose-btns").attr("value"), Quantity: $("#buy-num").val() };
             //删除数据库
             $.ajax({
 
@@ -335,7 +310,45 @@
 
 
         });
+
+        $("#NowBuy").click(function () {
+            var url = "@Url.Action("buy", "Order",new {id=Model.ID })/";
+
+            var sku = $("#choose-btns").attr("value");
+            if (sku) {
+                url += sku;
+            }
+            var status = GetUserStauts("@Url.Action("GetUserIsLogin", "Account")");
+                 
+            if (status) {
+                location.href = url;
+
+
+            } else {
+                //让登录
+                showFormurl("会员登录",'@Url.Action("LoginBox","Account")', function (result) {
+                    if (result.result) {
+                        $("#NowBuy").trigger("click");
+                    } 
+
+                });
+            }
+
+
+        });
+
     });
 
+    function setAmount(isAdd) {
+        var oldValue = $("#buy-num").val() * 1;
+        if (isAdd) {
+            oldValue++;
+        } else {
 
+            if (oldValue > 1) {
+                oldValue--;
+            }
+        }
+        $("#buy-num").val(oldValue);
+    }
 </script>

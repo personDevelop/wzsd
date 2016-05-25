@@ -432,10 +432,10 @@ namespace EasyCms.Dal
 
             }
             //开始计算订单支付总额  支付总额计算方式是，商品总额-优惠券总额+运费
-            decimal totalPrice = productPrice - CouponPrice + order.Freight;
-            if (totalPrice != order.TotalPrice)
+            decimal totalPrice = productPrice - CouponPrice + order.Freight-order.UserBalance;
+            if (totalPrice != order.PayMoney)
             {
-                err = "订单的金额[" + order.TotalPrice + "]和实际的金额(商品总额-优惠券总额+运费)[" + totalPrice + "]不符,请重新选择本次购物要使用的优惠券";
+                err = "订单的支付金额[" + order.PayMoney + "]和实际的金额(商品总额-优惠券总额-预付款+运费)[" + totalPrice + "]不符,请重新选择本次购物要使用的优惠券";
                 return null;
             }
             #region 判断当前订单的优惠券金额是否超过系统设定的比例 ，只和订单金额比较，不算运费
@@ -631,7 +631,7 @@ namespace EasyCms.Dal
                         activeOrder.FreightActual = 0;
                     }
                 }
-                activeOrder.PayMoney = activeOrder.TotalPrice + activeOrder.Freight - activeOrder.Discount;
+                activeOrder.PayMoney = activeOrder.TotalPrice + activeOrder.Freight - activeOrder.Discount-order.UserBalance;
                 if (order.CashOnDelivery)
                 {
                     activeOrder.ShipStatus = (int)ShipStatus.等待商家发货;
@@ -681,6 +681,7 @@ namespace EasyCms.Dal
                 mainOrder.CostPrice = Orderlist.Sum(p => p.CostPrice);
                 mainOrder.FreightActual = Orderlist.Sum(p => p.FreightActual);
                 mainOrder.PayMoney = Orderlist.Sum(p => p.PayMoney);
+
                 if (order.CashOnDelivery)
                 {
                     mainOrder.ShipStatus = (int)ShipStatus.等待商家发货;
@@ -970,7 +971,7 @@ namespace EasyCms.Dal
                 ActivityID = activityid
             };
         }
-        public List<ShopOrder> GetMyOrder(string host, ManagerUserInfo user, int queryPage, string queryStatusStr, string otherWhere, out string err)
+        public List<ShopOrder> GetMyOrder(string host, ManagerUserInfo user, int queryPage, string queryStatusStr, string otherWhere, out string err,WhereClip otherWhereClip=null)
         {
             err = string.Empty;
             WhereClip where = ShopOrder._.MemberID == user.ID && ShopOrder._.HasDelete == false;
@@ -997,6 +998,11 @@ namespace EasyCms.Dal
             {
                 where = where && new WhereClip(otherWhere);
             }
+            if (!WhereClip.IsNullOrEmpty(otherWhereClip))
+            {
+                where = where && otherWhereClip;
+
+            }
             int recordcount = 0;
             int pageCount = 0;
             List<ShopOrder> list = Dal.From<ShopOrder>().Where(where)
@@ -1007,7 +1013,7 @@ namespace EasyCms.Dal
                 ShopOrder._.ShipOrderNum,
                 ShopOrder._.FreightActual,
                 ShopOrder._.ShipStatus,
-                ShopOrder._.PayStatus,
+                ShopOrder._.PayStatus, ShopOrder._.ShipName,
                 ShopOrder._.OrderStatus,
                 ShopOrder._.CommentStatus,
                 ShopOrder._.TotalPrice, ShopOrder._.CreateDate)
@@ -1611,10 +1617,10 @@ namespace EasyCms.Dal
             return Dal.From<ShopOrder>().Select(ShopOrder._.PayTypeID).Where(ShopOrder._.ID == orderID).ToFirst<ShopOrder>();
         }
 
-        public void PaySuccess(string orderID, string payJe)
+        public void PaySuccess(string orderID, string traseNo,bool isTongBu)
         {
 
-            ShopOrder order = Dal.From<ShopOrder>().Where(ShopOrder._.ID == orderID).Select(ShopOrder._.ID, ShopOrder._.PayStatus, ShopOrder._.PayMoney,
+            ShopOrder order = Dal.From<ShopOrder>().Where(ShopOrder._.ID == orderID).Select(ShopOrder._.ID, ShopOrder._.PayStatus, ShopOrder._.TraceNo,
                 ShopOrder._.OrderStatus).ToFirst<ShopOrder>();
             if (order.PayStatus == (int)PayStatus.未付款)
             {
@@ -1629,12 +1635,7 @@ namespace EasyCms.Dal
                     default:
                         break;
                 }
-
-                decimal payMoney = 0;
-                if (decimal.TryParse(payJe, out payMoney))
-                {
-                    order.PayMoney = payMoney;
-                }
+                order.TraceNo = traseNo; 
                 Dal.Submit(order);
                 //生成订单动作日志
                 ShopOrderAction orderAction = new ShopOrderAction()
@@ -1645,7 +1646,8 @@ namespace EasyCms.Dal
                     ActionName = ActionEnum.付款.ToString(),
                     Username = "支付宝",
                     OrderId = orderID,
-                    ActionDate = DateTime.Now
+                    ActionDate = DateTime.Now,
+                    Remark = traseNo + (isTongBu ? "同步付款" : "异步步付款") 
                 };
                 Dal.Submit(orderAction);
             }

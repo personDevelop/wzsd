@@ -154,6 +154,8 @@ namespace EasyCms.Model
 
         private decimal _UserBalance;
 
+        private string _TraceNo;
+
         #endregion
 
         #region 属性
@@ -1524,6 +1526,27 @@ namespace EasyCms.Model
             }
         }
 
+        /// <summary>
+        ///  交易号,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "TraceNo", DbTypeString = "nvarchar", ColumnIsNull = true, IsUnique = false, ColumnLength = 50, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string TraceNo
+        {
+            get
+            {
+                return this._TraceNo;
+            }
+            set
+            {
+                this.OnPropertyChanged("TraceNo", this._TraceNo, value);
+
+
+                this._TraceNo = value;
+            }
+        }
+
         #endregion
 
         #region 列定义 
@@ -1661,6 +1684,8 @@ namespace EasyCms.Model
                 DeviceNo = new PropertyItem("DeviceNo", tableName);
 
                 UserBalance = new PropertyItem("UserBalance", tableName);
+
+                TraceNo = new PropertyItem("TraceNo", tableName);
 
 
             }
@@ -1924,6 +1949,10 @@ namespace EasyCms.Model
             /// 使用余额,
             /// </summary> 
             public PropertyItem UserBalance = null;
+            /// <summary>
+            /// 交易号,
+            /// </summary> 
+            public PropertyItem TraceNo = null;
         }
         #endregion
     }
@@ -1997,6 +2026,9 @@ namespace EasyCms.Model
 
             }
         }
+
+        [NotDbCol]
+        public string CreateDateStr { get { return CreateDate.ToString("yyyy-MM-dd HH:mm:ss"); } }
 
     }
 }

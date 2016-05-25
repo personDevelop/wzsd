@@ -15,7 +15,7 @@ namespace ImportData
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new frmGetDetailImgPath());
+            Application.Run(new Form3());
         }
     }
 }

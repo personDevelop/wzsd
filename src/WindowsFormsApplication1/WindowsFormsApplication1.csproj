@@ -76,6 +76,8 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="json-schema1.json" />
+    <None Include="json1.json" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -87,6 +89,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="JavaScript1.js" />
     <Content Include="order.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

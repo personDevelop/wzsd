@@ -37,6 +37,8 @@ namespace EasyCms.Model
 
         private int _ChangedValue;
 
+        private string _UserID;
+
         #endregion
 
         #region 属性
@@ -57,6 +59,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("ID", this._ID, value);
+
+
                 this._ID = value;
             }
         }
@@ -76,6 +80,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("PriRangeID", this._PriRangeID, value);
+
+
                 this._PriRangeID = value;
             }
         }
@@ -95,6 +101,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("CurrentRangeID", this._CurrentRangeID, value);
+
+
                 this._CurrentRangeID = value;
             }
         }
@@ -114,6 +122,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("ChangeTime", this._ChangeTime, value);
+
+
                 this._ChangeTime = value;
             }
         }
@@ -133,6 +143,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("ChangeingValue", this._ChangeingValue, value);
+
+
                 this._ChangeingValue = value;
             }
         }
@@ -152,13 +164,36 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("ChangedValue", this._ChangedValue, value);
+
+
                 this._ChangedValue = value;
+            }
+        }
+
+        /// <summary>
+        ///  会员ID,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "UserID", DbTypeString = "varchar", ColumnIsNull = false, IsUnique = false, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public string UserID
+        {
+            get
+            {
+                return this._UserID;
+            }
+            set
+            {
+                this.OnPropertyChanged("UserID", this._UserID, value);
+
+
+                this._UserID = value;
             }
         }
 
         #endregion
 
-        #region 列定义
+        #region 列定义 
         public class Column
         {
             public Column(string tableName)
@@ -175,6 +210,8 @@ namespace EasyCms.Model
                 ChangeingValue = new PropertyItem("ChangeingValue", tableName);
 
                 ChangedValue = new PropertyItem("ChangedValue", tableName);
+
+                UserID = new PropertyItem("UserID", tableName);
 
 
             }
@@ -202,6 +239,10 @@ namespace EasyCms.Model
             /// 变化后的成长值,
             /// </summary> 
             public PropertyItem ChangedValue = null;
+            /// <summary>
+            /// 会员ID,
+            /// </summary> 
+            public PropertyItem UserID = null;
         }
         #endregion
     }

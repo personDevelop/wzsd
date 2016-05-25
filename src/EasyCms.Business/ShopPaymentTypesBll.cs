@@ -65,5 +65,10 @@ namespace EasyCms.Business
 
             return Dal.GenerPayPara(payPara, out   error);
         }
+
+        public string PayByPc(string orderID, out string msg)
+        {
+            return Dal.PayByPc(orderID, out msg);
+        }
     }
 }
