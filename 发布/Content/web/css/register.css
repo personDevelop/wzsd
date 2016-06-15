@@ -51,8 +51,7 @@
 		}
 		.register .phone label:after {
 		    content: "";
-		    position: absolute;
-		    background: url(images/icon_03.png) no-repeat;
+		    position: absolute; 
 		    width: 16px;
 		    height: 22px;
 		    margin-left: 10px;
@@ -60,8 +59,7 @@
 		}
 		.register .pwd label:after {
 		    content: "";
-		    position: absolute;
-		    background: url(images/icon_06.png) no-repeat;
+		    position: absolute; 
 		    width: 16px;
 		    height: 19px;
 		    margin-left: 10px;

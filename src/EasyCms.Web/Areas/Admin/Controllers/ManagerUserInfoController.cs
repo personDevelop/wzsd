@@ -7,6 +7,8 @@ using System.Web;
 using System.Web.Mvc;
 using Sharp.Common;
 using EasyCms.Web.Common;
+using EasyCms.Model.ViewModel;
+using EasyCms.Session;
 
 namespace EasyCms.Web.Areas.Admin.Controllers
 {
@@ -56,7 +58,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
 
             }
             where = where && ManagerUserInfo._.IsManager == true;
-            System.Data.DataTable dt = bll.GetListForAccount(pagenum.PhrasePageIndex(), pagesize, where, ref   recordCount);
+            System.Data.DataTable dt = bll.GetListForAccount(pagenum.PhrasePageIndex(), pagesize, where, ref recordCount);
 
             string result = JsonWithDataTable.Serialize(dt);
             result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
@@ -85,7 +87,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
 
             }
             where = where && ManagerUserInfo._.IsManager == false;
-            System.Data.DataTable dt = bll.GetListForAccount(pagenum.PhrasePageIndex(), pagesize, where, ref   recordCount);
+            System.Data.DataTable dt = bll.GetListForAccount(pagenum.PhrasePageIndex(), pagesize, where, ref recordCount);
 
             string result = JsonWithDataTable.Serialize(dt);
             result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
@@ -95,7 +97,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         public string GetListForSelecte(int pagenum, int pagesize)
         {
             int recordCount = 0;
-            System.Data.DataTable dt = bll.GetList(pagenum.PhrasePageIndex(), pagesize, ref   recordCount, true);
+            System.Data.DataTable dt = bll.GetList(pagenum.PhrasePageIndex(), pagesize, ref recordCount, true);
             string result = JsonWithDataTable.Serialize(dt);
             result = "{\"total\":\"" + recordCount.ToString() + "\",\"data\":" + result + "}";
             return result;
@@ -193,5 +195,77 @@ namespace EasyCms.Web.Areas.Admin.Controllers
 
             return View("SearchAccount");
         }
+        [HttpGet]
+        public ActionResult ModifyPwd()
+        {
+            return View(new ChangePwdModel());
+        }
+        [HttpPost]
+        public ActionResult ModifyPwd(ChangePwdModel pwd)
+        {
+            if (string.IsNullOrWhiteSpace(pwd.OldPwd))
+            {
+                ModelState.AddModelError("OldPwd", "旧密码不能为空");
+            }
+            if (string.IsNullOrWhiteSpace(pwd.NewPwd))
+            {
+                ModelState.AddModelError("NewPwd", "新密码不能为空");
+            }
+            if (string.IsNullOrWhiteSpace(pwd.ConfirmNewPwd))
+            {
+                ModelState.AddModelError("ConfirmNewPwd", "确认密码不能为空");
+            }
+            if (!pwd.ConfirmNewPwd.Equals(pwd.NewPwd))
+            {
+                ModelState.AddModelError("ConfirmNewPwd", "两次输入密码不一致");
+            }
+            if (ModelState.IsValid)
+            {
+                ManagerUserInfo user = CmsSession.GetUser() as ManagerUserInfo;
+                if (pwd.OldPwd.EncryptSHA1() != user.Pwd)
+                {
+                    ModelState.AddModelError("OldPwd", "旧密码不正确");
+
+                }
+                else
+                {
+                   
+                 string result=   bll.ChangePwd(user.ID, pwd);
+                    if (string.IsNullOrWhiteSpace(result))
+                    {
+                        user.Pwd = pwd.NewPwd.EncryptSHA1();
+                        if (TempData.ContainsKey("IsSuccess"))
+                        {
+                            TempData["IsSuccess"] = "修改成功";
+
+                        }
+                        else
+                        {
+                            TempData.Add("IsSuccess", "修改成功");
+                        }
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("OldPwd", result);
+                    }
+
+                }
+            }
+            if (!ModelState.IsValid)
+            {
+                if (TempData.ContainsKey("IsSuccess"))
+                {
+                    TempData["IsSuccess"] = "修改失败";
+
+                }
+                else
+                {
+                    TempData.Add("IsSuccess", "修改失败");
+                }
+            }
+            return View(pwd);
+        }
+
+
     }
 }

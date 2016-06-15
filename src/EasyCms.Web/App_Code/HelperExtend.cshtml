@@ -263,9 +263,9 @@ string ctrlID = "DropDownList" + code;
 
             </script>
 }
-@helper DropDownListCardEnum(string code, string name, object defaultval = null, Type enumType = null, string hint = "", int width = 150)
-{ string ctrlID = "DropDownListCardEnum" + code;
-
+@helper DropDownListCardEnum(string code, string name, object defaultval = null, Type enumType = null, string hint = "", int width = 150,string change=null)
+{  
+string ctrlID = "DropDownList" + code;
     <dl>
         <dt>
 
@@ -273,8 +273,8 @@ string ctrlID = "DropDownList" + code;
         </dt>
         <dd>
             <div id='@ctrlID'>
-            </div>
-            <input name="@code" id="@code" type="hidden" value="@(defaultval as string)" />
+            </div> 
+            <input type="hidden"  value="@defaultval" id="@code" name="@code"/>
             <span style="float: left; color: red">@MVCExtention.ExtendHtmlInput.MvcHelper.Raw(hint)</span>
         </dd>
     </dl>
@@ -312,18 +312,34 @@ string ctrlID = "DropDownList" + code;
             // Create a jqxDropDownList
             $("#@ctrlID").jqxDropDownList({
                 source: dataAdapter, displayMember: "Name",placeHolder: "请选择",  theme: "metro", valueMember: "ID", width: @width.ToString(),  height: 25 });
-            @if (defaultval!=null  ) {
+
+            $("#@ctrlID").on('select', function (event) {
+                var args = event.args;
+                if (args) {
+                    // index represents the item's index.
+                    var index = args.index;
+                    var item = args.item;
+                    $("#@code").val(item.value);
+                }else
+                {
+                    $("#@code").val("");
+                }
+
+            });
+            @if (!string.IsNullOrWhiteSpace(change))
+        {
+              @MVCExtention.ExtendHtmlInput.MvcHelper.Raw("$(\"#" + ctrlID + "\").on('change', function (event) { " + change + "(event); });");
+        }
+
+             @if (defaultval!=null && !string.IsNullOrWhiteSpace(defaultval.ToString())  ) {
 
                 string val = defaultval.ToString();
                 if (!string.IsNullOrWhiteSpace(val))
                 {
-                    @MVCExtention.ExtendHtmlInput.MvcHelper.Raw("var item =$(\"#" + code + "\").jqxDropDownList('getItemByValue', '" + val + "');$(\"#" + code + "\").jqxDropDownList('selectItem', item ); ");
+                    @MVCExtention.ExtendHtmlInput.MvcHelper.Raw("var item =$(\"#" + ctrlID + "\").jqxDropDownList('getItemByValue', '" + val + "');$(\"#" + ctrlID + "\").jqxDropDownList('selectItem', item ); ");
                 }
             }
-
         });
-
-
     </script>
 }
 @helper DropDownListEnum(string code, object defaultval = null, Type enumType = null, bool isContainAll = true, bool isMutilCheck = true, string otherClass = "", int width = 150)
@@ -375,6 +391,7 @@ string ctrlID = "DropDownList" + code;
                     @MVCExtention.ExtendHtmlInput.MvcHelper.Raw("var item =$(\"#" + code + "\").jqxDropDownList('getItemByValue', '" + val + "');$(\"#" + code + "\").jqxDropDownList('selectItem', item ); ");
                 }
             }
+            
 
         });
 
@@ -443,11 +460,12 @@ string serverUrl = vitualPath + "/api/controller.ashx";
             @if (string.IsNullOrWhiteSpace(mobliecode))
             {
             <script id="@pccode" type="text/plain" style="width:@EditorWidth.ToString()px;height:@editorHeight.ToString()px;">
+                @(new System.Web.HtmlString(defaultPcval as string))
             </script>
             <script type="text/javascript">
                     //实例化编辑器
                     //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
-                    UE.getEditor('@pccode', { textarea: "@pccode",initialContent:UE.utils.html( UE.utils.unhtml( "@defaultPcval" )),UEDITOR_HOME_URL:"@homeUrl",serverUrl:"@serverUrl" });
+                    UE.getEditor('@pccode', { textarea: "@pccode",UEDITOR_HOME_URL:"@homeUrl",serverUrl:"@serverUrl" });
             </script>
             }
             else
@@ -469,21 +487,23 @@ string serverUrl = vitualPath + "/api/controller.ashx";
                 </ul>
                 <div>
                     <script id="@pccode" type="text/plain" style="width:@EditorWidth.ToString()px;height:@editorHeight.ToString()px;">
+                        @(new System.Web.HtmlString(defaultPcval as string))
                     </script>
                     <script type="text/javascript">
                             //实例化编辑器
                             //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
-                            UE.getEditor('@pccode', { textarea: "@pccode",initialContent:UE.utils.html( UE.utils.unhtml( "@defaultPcval" )),UEDITOR_HOME_URL:"@homeUrl",serverUrl:"@serverUrl" });
+                            UE.getEditor('@pccode', { textarea: "@pccode",UEDITOR_HOME_URL:"@homeUrl",serverUrl:"@serverUrl" });
                     </script>
                 </div>
                 <div>
                     <div>
                         <script id="@mobliecode" type="text/plain" style="width:@MobileEditorWidth.ToString()px;height:@MobileeditorHeight.ToString()px;">
+                            @(new System.Web.HtmlString(defaultmoblieval as string ))
                         </script>
                         <script type="text/javascript">
                                 //实例化编辑器
                                 //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
-                                UE.getEditor('@mobliecode', { textarea: "@mobliecode",initialContent:UE.utils.html( UE.utils.unhtml( "@defaultmoblieval" )),UEDITOR_HOME_URL:"@homeUrl",serverUrl:"@serverUrl" });
+                                UE.getEditor('@mobliecode', { textarea: "@mobliecode",UEDITOR_HOME_URL:"@homeUrl",serverUrl:"@serverUrl" });
                         </script>
                     </div>
                 </div>

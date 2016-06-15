@@ -677,4 +677,15 @@ namespace EasyCms.Model
         public string LogoUrl { get; set; }
         public string SmallLogoUrl { get; set; }
     }
+
+
+
+    public   class ShopCategoryApp
+    {
+        public string ID { get; set; }
+        public string Code { get; set; }
+        public string Name { get; set; }
+        public string SmallLogo { get; set; }
+        public List<ShopCategoryApp> ChildList { get; set; }
+    }
 }

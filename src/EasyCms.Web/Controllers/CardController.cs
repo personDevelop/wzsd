@@ -140,9 +140,10 @@ namespace EasyCms.Web.Controllers
                 ShopShoppingCarts card= bll.GetEntity(ShopShoppingCarts._.UserId==userID&& ShopShoppingCarts._.ItemType == buyType && ShopShoppingCarts._.ActivityID == ActivityID && ShopShoppingCarts._.ProductId == ProductId && ShopShoppingCarts._.SKU == SKU);
                 if (card == null)
                 {
+                   
                     card = new ShopShoppingCarts() { ID = Guid.NewGuid().ToString(), ActivityID = ActivityID, ItemType = buyType, ProductId = ProductId,
                         SKU = SKU, Quantity = Quantity, AddTime = DateTime.Now, UserId = userID
-                    , Attributes = "", CostPrice = 0, Description = "", MarketPrice = 0, Name = "", SellPrice = 0, ThumbnailsUrl = "", Weight = 0 
+                    ,   CostPrice = 0,   MarketPrice = 0,   SellPrice = 0,   Weight = 0 
 
                     };
                 }

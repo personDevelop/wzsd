@@ -1,4 +1,5 @@
 ﻿@model ShopPromotion
+@using Sharp.Common
 @{
     ViewBag.Title = "编辑促销活动";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutEdit.cshtml";
@@ -15,7 +16,7 @@
         <div class="content-tab-ul-wrap">
             <ul>
                 <li><a class="selected" href="javascript:;">基本信息</a></li>
-               
+
             </ul>
         </div>
     </div>
@@ -28,24 +29,23 @@
 
 
     @Html.ValidationSummary()
+    @HelperExtend.DropDownListCardEnum("ActionType", "促销规则", (int)Model.ActionType, typeof(ActionType), change: "OnChangeRule")
+    @HelperExtend.RadioGroup("ActionPlatform", "对应平台", vals: typeof(ActionPlatform).GetEnumVal(),
+                  texts: typeof(ActionPlatform).GetEnumNamesStr(), defaultval: (int)Model.ActionPlatform, hint: "")
 
-    @HelperExtend.DropDownList("RuleID", "促销规则", defaultval: Model.RuleID, downInfo: new DropDownListInfo()
-{
-    Url = Url.Action("GetListForSelecte", "RedeemRules", new { area = "Admin" }),
-    change = "OnChangeRule"
-})
+    @HelperExtend.RadioGroup("ActionEvent", "触发时机", vals: typeof(ActionEvent).GetEnumVal(),
+                  texts: typeof(ActionEvent).GetEnumNamesStr(), defaultval: (int)Model.ActionEvent, hint: "其中注册、评价、评论的时候不能执行送商品、打折扣、免运费的规则")
 
-
-    
-    @HelperExtend.Number("BuyCount", "购买指定数量", defaultval: Model.BuyCount, hint: "")
-
+    @HelperExtend.Number("BuyCount", "购买指定数量", defaultval: Model.BuyCount, hint: "可以设置最低购买商品数量时才满足促销规则（0时不控制）")
+    @HelperExtend.Number("MinPrice", "限制最低金额", defaultval: Model.MinPrice, decimalDigits: 2, hint: "也可以通过设置最低金额的方式来限制促销方式，和指定数量不要都使用（0时不控制）")
     @Html.Partial("_HelpEditProduct", new HelpEditShopProductModel()
 {
-    DisplayField = "HandProductName", 
-    DisplayFieldValue = Model.HandProductName, 
+    DisplayField = "HandProductName",
+    DisplayFieldValue = Model.HandProductName,
     Lable = "赠送商品",
     ValueField = "HandsaleProductId",
-    ValueFieldValue = Model.HandsaleProductId
+    ValueFieldValue = Model.HandsaleProductId,
+    OnCreateCtrol= "OnChangeRule",
 })
 
     @Html.Partial("_HelpEdit", new HelpEditModel()
@@ -55,6 +55,7 @@
     Hint = "如果商品有启用规格，则必选",
     Lable = "赠送商品SKU",
     ValueField = "HandsaleProductSKUID",
+    OnCreateCtrol = "OnChangeRule",
     ValueFieldValue = Model.HandsaleProductSKUID,
     Columns = @"[
                    { text: 'SKU编号', dataField: 'SKU',   width: 100 },
@@ -79,15 +80,16 @@
     SearchField = "SKUName",
     Url = Url.RouteUrl("ApiWithWeb", new { controller = "ShopProductApi", action = "GetSkuByProductID" }),
     OtherSerchFieldFunction = "GetProductCondition",
-   
+
     OtherSet = "{ data:{root: 'data'}}",
 
 })
 
-   
 
 
-       
+
+
+
     @Html.Partial("_HelpEditCoupon", new HelpEditCouponModel()
 {
     DisplayField = "CouponName",
@@ -95,21 +97,23 @@
     Hint = "",
     Lable = "赠送优惠券",
     ValueField = "CouponID",
-    ValueFieldValue = Model.CouponID
+    ValueFieldValue = Model.CouponID,
+    OnCreateCtrol = "OnChangeRule",
 })
-    
 
-    @HelperExtend.Number("HandsaleCount", "赠送数量", defaultval: Model.HandsaleCount, hint: "")
-    @HelperExtend.Number("HandsaleMaxCount", "最多赠送数量", defaultval: Model.HandsaleMaxCount, hint: "送完为止",max:int.MaxValue) 
-    @HelperExtend.Number("MinPrice", "限制最低金额", defaultval: Model.MinPrice, decimalDigits: 2, hint: "")
 
-    @HelperExtend.Number("MaxPrice", "限制最高金额", defaultval: Model.MaxPrice, hint: "",decimalDigits:2, max: int.MaxValue)
 
+    @HelperExtend.Number("HandsaleCount", "赠送数量", defaultval: Model.HandsaleCount, hint: "如果是打折促销，这里请填写折扣，最大是10折，最小1折")
+
+    @HelperExtend.Number("HandsaleMaxCount", "最多赠送数量", defaultval: Model.HandsaleMaxCount, hint: "在赠送优惠券和赠送商品时，可以设置一个数字，表示可以赠送多少个会员（例如前5名），直到赠完为止")
+     
     @HelperExtend.DateTime("StartDate", "活动开始时间", defaultval: Model.StartDate, hint: "")
 
     @HelperExtend.DateTime("EndDate", "活动结束时间", defaultval: Model.EndDate, hint: "")
-
-    @HelperExtend.RadioGroup("IsEnable", "是否启用", "false,true", "否,是", defaultval: Model.IsEnable)
+    @HelperExtend.RadioGroup("ActionStatus", "活动状态", vals: typeof(AcitivyStatus).GetEnumVal(),
+                  texts: typeof(AcitivyStatus).GetEnumNamesStr(), defaultval: (int)Model.ActionStatus, hint: "")
+    
+    
     @Html.Partial("_HelpEditProductCategory", new HelpEditShopProductCategory()
 {
     DisplayField = "BuyCategoryName",
@@ -164,8 +168,9 @@
     OtherSet = "{ data:{root: 'data'}}",
 
 })
-      
-     
+
+
+
 
     @HelperExtend.TextArea("Note", "备注", defaultval: Model.Note, hint: "")
 
@@ -175,6 +180,7 @@
 
 
     <script type="text/javascript">
+        var loadHelpCount=0;
         function GetProductCondition(data) {
 
             data.id = $('#HandsaleProductId').val();
@@ -186,52 +192,66 @@
 
         }
         function OnChangeRule(event) {
-            var index;
-            if (!event) {
-                index = $('#DropDownListRuleID').jqxDropDownList('getSelectedIndex');
-            } else {
-                index = args.index;
+            if (loadHelpCount<3) {
+                loadHelpCount++;
+                return;
             }
+            var label = -1;
+            if (!event) {
+                label = @((int)Model.ActionType);
 
-            var source = $('#DropDownListRuleID').jqxDropDownList('source');
-            var dataarray = source.loadedData.Rows;
-            var data = dataarray[args.index];
-            var rtype = data.RuleTypeName;
-            $("#HandsaleProductId").closest("dl").hide();
+            } else {
+                var args = event.args;
+                if (args) {
+                    label = args.item.value * 1;
+                }
+            }
+             $("#HandsaleProductId").closest("dl").hide();
             $("#HandsaleProductSKUID").closest("dl").hide();
             $("#CouponID").closest("dl").hide();
             $("#HandsaleCount").closest("dl").show();
             $("#HandsaleMaxCount").closest("dl").show();
-            if (rtype.indexOf("送优惠券") > -1) {
-                $("#CouponID").closest("dl").show();
-
-            } else if (rtype.indexOf("免运费") > -1 || rtype.indexOf("包邮") > -1) {
-                $("#HandsaleCount").closest("dl").hide();
-                $("#HandsaleMaxCount").closest("dl").hide();
-
-            } else if (rtype.indexOf("赠品") > -1) {
-                $("#HandsaleProductId").closest("dl").show();
-                $("#HandsaleProductSKUID").closest("dl").show();
-
-            } else if (rtype.indexOf("送积分") > -1) {
+            
+            switch (label) {
+                case 0://送优惠券
+                    $("#CouponID").closest("dl").show();
+                    break;
+                case 1://送积分
+                    break;
+                case 2://送现金
+                    break;
+                case 3://送商品
+                  
+                    $("#HandsaleProductId").closest("dl").show()
+                    $("#HandsaleProductSKUID").closest("dl").show();
+                    break;
+                case 4://打折扣
+                    break;
+                case 5://免运费
+                    $("#HandsaleCount").closest("dl").hide();
+                    $("#HandsaleMaxCount").closest("dl").hide();
+                    break;
+                case 6://送经验值
+                    break;
+                default:
 
             }
 
         }
         $(function () {
 
-            OnChangeRule();
+             
             //初始化表单验证
             $("form").validate({
                 ignore: "",
                 rules: {
-                    "RuleID": {
+                    "ActionType": {
                         required: true
                     }
 
                 },
                 messages: {
-                    RuleID: {
+                    ActionType: {
                         required: "请选择促销规则"
                     }
                 },
@@ -245,8 +265,8 @@
         })
     </script>
 
-    
-     
-          
-   
+
+
+
+
 }

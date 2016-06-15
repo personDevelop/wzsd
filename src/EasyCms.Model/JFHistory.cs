@@ -43,7 +43,7 @@ namespace EasyCms.Model
 
         private DateTime _CreateDate;
 
-        private JFType _JFType;
+        private ActionType _JFType;
 
         private string _CouponID;
 
@@ -73,6 +73,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("ID", this._ID, value);
+
+
                 this._ID = value;
             }
         }
@@ -92,6 +94,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("MemberID", this._MemberID, value);
+
+
                 this._MemberID = value;
             }
         }
@@ -111,6 +115,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("FX", this._FX, value);
+
+
                 this._FX = value;
             }
         }
@@ -130,6 +136,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("JFSouce", this._JFSouce, value);
+
+
                 this._JFSouce = value;
             }
         }
@@ -149,6 +157,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("JFSouceMainID", this._JFSouceMainID, value);
+
+
                 this._JFSouceMainID = value;
             }
         }
@@ -168,6 +178,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("JFSouceSubID", this._JFSouceSubID, value);
+
+
                 this._JFSouceSubID = value;
             }
         }
@@ -187,6 +199,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("JFCount", this._JFCount, value);
+
+
                 this._JFCount = value;
             }
         }
@@ -206,6 +220,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("JFState", this._JFState, value);
+
+
                 this._JFState = value;
             }
         }
@@ -225,6 +241,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("CreateDate", this._CreateDate, value);
+
+
                 this._CreateDate = value;
             }
         }
@@ -235,7 +253,7 @@ namespace EasyCms.Model
 
         [DbProperty(MapingColumnName = "JFType", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public JFType JFType
+        public ActionType JFType
         {
             get
             {
@@ -244,6 +262,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("JFType", this._JFType, value);
+
+
                 this._JFType = value;
             }
         }
@@ -263,6 +283,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("CouponID", this._CouponID, value);
+
+
                 this._CouponID = value;
             }
         }
@@ -282,6 +304,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("UserCouponID", this._UserCouponID, value);
+
+
                 this._UserCouponID = value;
             }
         }
@@ -301,6 +325,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("ActivityID", this._ActivityID, value);
+
+
                 this._ActivityID = value;
             }
         }
@@ -320,13 +346,15 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("Remark", this._Remark, value);
+
+
                 this._Remark = value;
             }
         }
 
         #endregion
 
-        #region 列定义
+        #region 列定义 
         public class Column
         {
             public Column(string tableName)

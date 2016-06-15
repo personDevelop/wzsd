@@ -24,10 +24,10 @@
             @HelperExtend.DateTime("StaticDate", "活动日期", defaultval: Model.StaticDate)
             break;
         case LoopType.天:
-            @HelperExtend.Number("WeekOrDay", "天", defaultval: Model.WeekOrDay,hint:"每月的固定某一天，最大是28天",max:28 )
+            @HelperExtend.Number("WeekOrDay", "天", defaultval: Model.WeekOrDay,hint:"每月的固定某一天，最大是31天，如果次月没有31天，则此月无活动",max:31 )
             break;
         case LoopType.周:
-            @HelperExtend.Number("WeekOrDay", "星期", defaultval: Model.WeekOrDay, hint: "每周的固定某一天，最大是7天", max: 7)
+            @HelperExtend.Number("WeekOrDay", "星期", defaultval: Model.WeekOrDay, hint: "每周的固定某一天，最大是6天,0表示星期天", max: 6)
             break;
         default:
             break;

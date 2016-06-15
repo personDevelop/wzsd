@@ -12,7 +12,7 @@ namespace EasyCms.Model.ViewModel
 
         public string NewPwd { get; set; }
 
-
+        public string ConfirmNewPwd { get; set; }
         public string ValidCode { get; set; }
 
     }

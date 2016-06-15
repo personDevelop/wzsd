@@ -3,8 +3,9 @@
 
         HelpEditModel p = new HelpEditModel()
         {
-             OtherField=Model.OtherField,
-              ReturnOtherField= Model.ReturnOtherField,
+            OnCreateCtrol = "OnChangeRule",
+            OtherField =Model.OtherField,
+            ReturnOtherField= Model.ReturnOtherField,
             DisplayFieldValue = Model.DisplayFieldValue,
             ReturnValueField = "ID",
             ReturnDisplayField = "Name",
@@ -32,7 +33,7 @@
             IsMutiSelect = Model.IsMutiSelect,
             IsViewModel = Model.IsViewModel,
             OtherConditionView = "_SelectShopClass",
-            OtherSet = "{adapter: {  formatData: function (data) { data.CategoryID = $('#" + Model.ValueField + @"Category').val();   data.Name = $('#"+ Model.ValueField+"SearchText').val();  } }}" 
+            OtherSet = "{adapter: {  formatData: function (data) { data.CategoryID = $('#" + Model.ValueField + @"Category').val();   data.Name = $('#"+ Model.ValueField+"SearchText').val();  } }}"
 
         };
     }

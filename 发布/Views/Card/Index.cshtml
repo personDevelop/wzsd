@@ -5,8 +5,7 @@
     ViewBag.Title = "购物车--" + EasyCms.CmsSessionExtend.WebSite.Name;
 }
 
-@Styles.Render("~/bundles/cardcss")
-
+@Styles.Render("~/bundles/cardcss") 
 <div class="floor" style="width:990px;">
     <div class="cart-main">
         <div class="cart-filter-bar">
@@ -28,6 +27,7 @@
         </div>
 
         <div class="cart-tbody">
+
             @if (Model.Count == 0)
             {
                 <div class="item-list error"> 购物车里空空的，快去挑选商品吧</div>
@@ -35,58 +35,65 @@
             }
             else
             {
-                foreach (ShopCardInfo cardItem in Model)
+
+                using (Html.BeginForm("Index", "Order", new { ReturnUrl = "" }, FormMethod.Post, new { id = "formCard" }))
                 {
-                    <div class="item-list">
-                        <div class="item-single  item-item ">
-                            <div class="item-form">
-                                <div class="cell p-checkbox">
-                                    <div class="cart-checkbox">
-                                        <input type="checkbox" val="@cardItem.ID" name="checkItem" checked="checked" class="jdcheckbox" />
-                                        <span class="line-circle"></span>
-                                    </div>
-                                </div>
-                                <div class="cell p-goods">
-                                    <div class="goods-item">
-                                        <div class="p-img">
-                                            <a href="@Url.Action("index", "Product", new { id=cardItem.ProductId,other=cardItem.SKU})" target="_blank"><img width="100" height="100" src="@cardItem.ThumbImgUrl"></a>
+                    @Html.AntiForgeryToken()
+                    int index = 0;
+                    foreach (ShopCardInfo cardItem in Model)
+                    {
+                        <div class="item-list">
+                            <div class="item-single  item-item ">
+                                <div class="item-form">
+                                    <div class="cell p-checkbox">
+                                        <div class="cart-checkbox">
+                                            @Html.Hidden("cardItem[" + index + "]", cardItem.ID)
+                                            <input type="checkbox" val="@cardItem.ID" name="@("order.OrderItems["+index+"].IsSelected")" checked="checked" class="jdcheckbox" />
+                                            <span class="line-circle"></span>
                                         </div>
-                                        <div class="item-msg">
-                                            <div class="p-name">
-                                                <a href="@Url.Action("index", "Product", new { id=cardItem.ProductId,other=cardItem.SKU})" target="_blank">@cardItem.Name</a>
+                                    </div>
+                                    <div class="cell p-goods">
+                                        <div class="goods-item">
+                                            <div class="p-img">
+                                                @Html.Hidden("order.OrderItems["+index+ "].ProductID", cardItem.ProductId)
+                                                @Html.Hidden("order.OrderItems[" + index + "].SKU", cardItem.SKU)
+                                                <a href="@Url.Action("index", "Product", new { id = cardItem.ProductId, other = cardItem.SKU })" target="_blank"><img width="100" height="100" src="@cardItem.ThumbImgUrl"></a>
+                                            </div>
+                                            <div class="item-msg">
+                                                <div class="p-name">
+                                                    <a href="@Url.Action("index", "Product", new { id = cardItem.ProductId, other = cardItem.SKU })" target="_blank">@cardItem.Name</a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="cell p-props p-props-new">
-                                    <div class="props-txt" title="@cardItem.GuiGeInfo">@cardItem.GuiGeInfo</div>
+                                    <div class="cell p-props p-props-new">
+                                        <div class="props-txt" title="@cardItem.GuiGeInfo">@cardItem.GuiGeInfo</div>
 
-                                </div>
-
-                                <div class="cell p-price"><strong>@cardItem.SalePrice</strong></div>
-                                <div class="cell p-quantity">
-                                    <div class="quantity-form" value="@cardItem.SalePrice">
-                                        <a href="javascript:void(0);" class="decrement ">-</a>
-                                        <input autocomplete="off" type="text" class="itxt" value="@cardItem.Quantity">
-                                        <a href="javascript:void(0);" class="increment">+</a>
                                     </div>
-                                    <div class="ac ftx-03 quantity-txt" _stock="stock_1616043020">@(cardItem.Stock > 0 ? "有货" : "无货")</div>
-                                </div>
-                                <div class="cell p-sum" value="@(cardItem.SalePrice*cardItem.Quantity)">
-                                    <strong>@(cardItem.SalePrice * cardItem.Quantity)</strong>
-                                </div>
-                                <div class="cell p-ops">
-                                    <a class="cart-remove" val="@cardItem.ID" href="javascript:void(0);">删除</a>
+
+                                    <div class="cell p-price"><strong>@cardItem.SalePrice</strong></div>
+                                    <div class="cell p-quantity">
+                                        <div class="quantity-form" value="@cardItem.SalePrice">
+                                            <a href="javascript:void(0);" class="decrement ">-</a>
+                                            <input autocomplete="off" type="text" class="itxt" name="@("order.OrderItems["+(index++)+"].BuyCount")" value="@cardItem.Quantity">
+                                            <a href="javascript:void(0);" class="increment">+</a>
+                                        </div>
+                                        <div class="ac ftx-03 quantity-txt" _stock="stock_1616043020">@(cardItem.Stock > 0 ? "有货" : "无货")</div>
+                                    </div>
+                                    <div class="cell p-sum" value="@((cardItem.SalePrice * cardItem.Quantity).ToString("f2"))">
+                                        <strong>@((cardItem.SalePrice * cardItem.Quantity).ToString("f2"))</strong>
+                                    </div>
+                                    <div class="cell p-ops">
+                                        <a class="cart-remove" val="@cardItem.ID" href="javascript:void(0);">删除</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+
+                    }
                 }
-            }
+            } 
         </div>
-
-
-      
         @if (Model.Count > 0)
         {
             <div class="cart-toolbar" style="width: 988px; height: 50px;">
@@ -102,23 +109,27 @@
                     </div>
                     <div class="toolbar-right">
                         <div class="btn-area">
-                            <a href="javascript:void(0);" onclick="return false;" class="submit-btn" data-bind="1">
+                            <a href="javascript:void(0);" class="submit-btn" id="btnSumbit">
                                 去结算<b></b>
                             </a>
                         </div>
                         <div class="price-sum">
                             <div>
                                 <span class="txt">总价（不含运费）：</span>
-                                <span class="price sumPrice"><em>￥
-	@{
-        decimal totalSum = 0;
-        foreach (var item in Model)
-        {
-            totalSum += item.SalePrice * item.Quantity;
+                                <span class="price sumPrice">
+                                    <em>
+                                        ￥
+                                        @{
+                                            decimal totalSum = 0;
+                                            foreach (var item in Model)
+                                            {
+                                                totalSum += item.SalePrice * item.Quantity;
 
-        }
-        @totalSum
-    }</em></span>
+                                            }
+                                            @totalSum
+                                        }
+                                    </em>
+                                </span>
                                 <br>
                                 <span class="txt">已节省：</span>
                                 <span class="price totalRePrice">-￥0</span>
@@ -127,7 +138,7 @@
                     </div>
                 </div>
             </div>
-        }
+                                            }
 
     </div>
 
@@ -135,7 +146,7 @@
 
 <div class="space20"></div>
 <script>
-    function deleteCard(isSelected,cardID) {
+    function deleteCard(isSelected, cardID) {
         var array = new Array();
         if (isSelected) {
             //删除选中的
@@ -154,22 +165,21 @@
         //删除数据库
         $.ajax({
 
-            url:"@Url.Action("DeleteCard")",
+            url: "@Url.Action("DeleteCard")",
             data: _list,
             dataType: "json",
-            success:function(result){
+            success: function (result) {
                 if (result.IsSuccess) {
                     //删除选中的
 
                     $(".item-form .jdcheckbox").each(function (i) {
                         var val = $(this).attr("val");
-                        if ($.inArray(val, result.data)>-1  ) {
+                        if ($.inArray(val, result.data) > -1) {
                             $(this).parent().parent().parent().remove();
                         }
                     });
                     computeJe();
-                }else
-                {
+                } else {
                     alert(result.msg);
                 }
             }
@@ -188,7 +198,7 @@
         var totalRePrice = 0;
         $(".item-form .jdcheckbox:checked").each(function (i) {
 
-            totalSum += $(this).parent().parent().parent().find(".p-sum").attr("value") * 1;
+            totalSum += $(this).parent().parent().parent().find(".p-sum").attr("value") * 1.0;
         });
         $(".sumPrice").html("<em>￥" + totalSum + "</em>");
         $(".totalRePrice").html("<em>-￥" + totalRePrice + "</em>");
@@ -199,16 +209,16 @@
         });
         $(".cart-remove").click(function () {
             var val = $(this).attr("val");
-            deleteCard(false,val);
+            deleteCard(false, val);
         });
 
         $(".decrement").click(function () {
-            var val = $(this).next(".itxt").val()*1;
-            if (val>1) {
+            var val = $(this).next(".itxt").val() * 1;
+            if (val > 1) {
 
                 val = val - 1;
                 $(this).next(".itxt").val(val);
-                var price = $(this).parent().attr("value") * 1;
+                var price = $(this).parent().attr("value") * 1.0;
                 var psum = price * val;
                 $(this).parent().parent().next(".p-sum").attr("value", psum);
                 $(this).parent().parent().next(".p-sum").children().text(psum);
@@ -216,10 +226,10 @@
             }
         });
         $(".increment").click(function () {
-            var val = $(this).prev(".itxt").val() * 1;
+            var val = $(this).prev(".itxt").val() * 1.0;
             val = val + 1;
             $(this).prev(".itxt").val(val);
-            var price= $(this).parent().attr("value") * 1;
+            var price = $(this).parent().attr("value") * 1.0;
             var psum = price * val;
             $(this).parent().parent().next(".p-sum").attr("value", psum);
             $(this).parent().parent().next(".p-sum").children().text(psum);
@@ -232,6 +242,45 @@
         });
         $(".item-form .jdcheckbox").change(function () {
             computeJe();
+        });
+
+
+        $("#btnSumbit").click(function () {
+
+            //先判断有没有选择商品
+            if ($(".item-form .jdcheckbox:checked").length > 0) {
+                //在判断有没有登录
+                var status = GetUserStauts("@Url.Action("GetUserIsLogin", "Account")");
+                 
+                if (status) {
+                    $(".item-form .jdcheckbox").each(function () {
+                        if (!$(this).prop("checked")) {
+                            $(this).parent().parent().parent().find("input").remove();
+                        }
+                    });
+                    $("#formCard").submit();
+
+
+                } else {
+                    //让登录
+                    showFormurl("会员登录",'@Url.Action("LoginBox","Account")', function (result) {
+                        if (result.result) {
+                            $("#btnSumbit").trigger("click");
+                        }
+
+
+
+                    });
+                }
+
+            }
+            else {
+                openTipsWrong("请至少选中一件商品！");
+
+            }
+
+
+
         });
 
     });

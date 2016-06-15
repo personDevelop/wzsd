@@ -9,6 +9,7 @@
 <html>
 <head>
     <meta charset="utf-8">
+    <link REL="Shortcut Icon" href="/Content/Images/favicon.ico">  
     <title>@ViewBag.Title</title>
     @Styles.Render("~/bundles/webcss")
     @Styles.Render("~/bundles/registercss")
@@ -110,8 +111,11 @@
                     <label>图形验证码：</label>
                     <div class="right">
                         @Html.TextBoxFor(Model => Model.VaryCode, new { tabindex = "5" })
-                        <img id="JD_Verification1" class="verify-code" src="@Url.Action("", "VarifyCode")">
-                        <a href="javascript:void(0)" onclick="$('#JD_Verification1').click();">看不清楚换一张</a>
+                        
+                            <img style="cursor:pointer" id="JD_Verification1" class="verify-code" src="@Url.Action("", "VarifyCode")">
+                        <a href="javascript:void(0)" onclick="changeValidCode();">
+                            看不清楚换一张
+                        </a>
                         @Html.ValidationMessageFor(Model => Model.VaryCode)
                         <span class="error"></span>
                     </div>
@@ -127,10 +131,13 @@
     <div id='footer'>
     </div>
     <script type="text/javascript">
-       
+        function changeValidCode() {
+            $("#JD_Verification1").attr("src", "@Url.Action("", "VarifyCode")?s=" + Date.parse(new Date()));
+        }
        
         $(function () {
-            
+            $("#JD_Verification1").click(changeValidCode);
+            $("#JD_Verification1").click(changeValidCode);
 
           //初始化表单验证
             $("form").validate({

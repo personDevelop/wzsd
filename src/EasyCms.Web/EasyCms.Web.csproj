@@ -980,6 +980,8 @@
     <Content Include="Areas\Admin\Views\AdManage\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\AdManage\Index.cshtml" />
     <Content Include="App_Code\FunctionExtend.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopPromotion\Edit - 复制.cshtml" />
+    <Content Include="Areas\Admin\Views\ManagerUserInfo\ModifyPwd.cshtml" />
     <None Include="Properties\PublishProfiles\publish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\EshopAdminControl.js" />

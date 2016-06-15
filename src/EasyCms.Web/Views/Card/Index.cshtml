@@ -80,8 +80,8 @@
                                         </div>
                                         <div class="ac ftx-03 quantity-txt" _stock="stock_1616043020">@(cardItem.Stock > 0 ? "有货" : "无货")</div>
                                     </div>
-                                    <div class="cell p-sum" value="@(cardItem.SalePrice * cardItem.Quantity)">
-                                        <strong>@(cardItem.SalePrice * cardItem.Quantity)</strong>
+                                    <div class="cell p-sum" value="@((cardItem.SalePrice * cardItem.Quantity).ToString("f2"))">
+                                        <strong>@((cardItem.SalePrice * cardItem.Quantity).ToString("f2"))</strong>
                                     </div>
                                     <div class="cell p-ops">
                                         <a class="cart-remove" val="@cardItem.ID" href="javascript:void(0);">删除</a>
@@ -198,7 +198,7 @@
         var totalRePrice = 0;
         $(".item-form .jdcheckbox:checked").each(function (i) {
 
-            totalSum += $(this).parent().parent().parent().find(".p-sum").attr("value") * 1;
+            totalSum += $(this).parent().parent().parent().find(".p-sum").attr("value") * 1.0;
         });
         $(".sumPrice").html("<em>￥" + totalSum + "</em>");
         $(".totalRePrice").html("<em>-￥" + totalRePrice + "</em>");
@@ -218,7 +218,7 @@
 
                 val = val - 1;
                 $(this).next(".itxt").val(val);
-                var price = $(this).parent().attr("value") * 1;
+                var price = $(this).parent().attr("value") * 1.0;
                 var psum = price * val;
                 $(this).parent().parent().next(".p-sum").attr("value", psum);
                 $(this).parent().parent().next(".p-sum").children().text(psum);
@@ -226,10 +226,10 @@
             }
         });
         $(".increment").click(function () {
-            var val = $(this).prev(".itxt").val() * 1;
+            var val = $(this).prev(".itxt").val() * 1.0;
             val = val + 1;
             $(this).prev(".itxt").val(val);
-            var price = $(this).parent().attr("value") * 1;
+            var price = $(this).parent().attr("value") * 1.0;
             var psum = price * val;
             $(this).parent().parent().next(".p-sum").attr("value", psum);
             $(this).parent().parent().next(".p-sum").children().text(psum);

@@ -248,7 +248,7 @@ namespace EasyCms.Web.API
                                     else
                                     {
                                         
-                                        msg = new ManagerUserInfoBll().Regist(registModel);
+                                        msg = new ManagerUserInfoBll().Regist(registModel, ActionPlatform.APP客户端);
                                     }
 
             if (string.IsNullOrWhiteSpace(msg))
@@ -433,6 +433,18 @@ namespace EasyCms.Web.API
                 result = new ManagerUserInfoBll().ModifyInfo(user, out msg);
             }
             return msg.Format(result);
+
+        }
+
+
+        [HttpGet]
+        public HttpResponseMessage GetBalance()
+        {
+            //检验验证码是否正确，
+           
+                string ID = Request.GetAccountID();
+              decimal  result = new ManagerUserInfoBll().GetGetBalance(ID);
+            return result.FormatObj();
 
         }
 

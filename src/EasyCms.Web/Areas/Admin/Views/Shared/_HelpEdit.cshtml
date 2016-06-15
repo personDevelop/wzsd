@@ -48,6 +48,11 @@
 
         });
 
+        @if (!string.IsNullOrWhiteSpace(Model.OnCreateCtrol)) {
+    <text>@(Model.OnCreateCtrol+ "();")</text>
+
+        }
+
     });
 </script>
 <div id="@(Model.ValueField + "Dialog")">

@@ -69,8 +69,8 @@ namespace EasyCms.Web.API
         {
 
 
-            DataTable dt = new ShopCategoryBll().GetAppEntityList(id, host);
-            return dt.Format();
+            List<ShopCategoryApp> dt = new ShopCategoryBll().GetAppEntityList(id, host);
+            return dt.FormatObj();
 
 
         }
@@ -139,7 +139,7 @@ namespace EasyCms.Web.API
             var resp = new HttpResponseMessage(HttpStatusCode.OK);
 
              
-                pageIndex = pageIndex.PhrasePageIndex(false);
+           pageIndex = pageIndex.PhrasePageIndex(false);
             
             if (string.IsNullOrEmpty(id))
             {
@@ -181,7 +181,7 @@ namespace EasyCms.Web.API
             string productName = Request.GetQueryValue("ProductName");
             string pageNumStr = Request.GetQueryValue("pagenum");
             string stationMode = Request.GetQueryValue("stationMode");
-            int pageNum = pageNumStr.PhrasePageIndex(false);
+            int pageNum = pageNumStr.PhrasePageIndex( );
 
             
             

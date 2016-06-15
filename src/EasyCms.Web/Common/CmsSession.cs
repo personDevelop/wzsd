@@ -168,7 +168,7 @@ namespace EasyCms
                 else
                 {
 
-                    if (isApi)
+                    if (isApi  )
                     {
                         //先获取token,
                         ManagerUserInfo account = request.GetAccount(true);
@@ -186,12 +186,30 @@ namespace EasyCms
                     {
                         //再试着看看是否是后台管理员使用
                         roleid = CmsSession.GetRoleID();
+                        
+                    }
+                   
+                    if (string.IsNullOrWhiteSpace(roleid))
+                    {
+                        ManagerUserInfoBll bll = new ManagerUserInfoBll();
+                        string sessionid = CmsSession.Session.SessionID;
+                      
+                        ManagerUserInfo user = bll.GetSessionUserInfo(sessionid);
+                        if (user!=null)
+                        {
+                           
+                        SysRoleInfo role=    bll.GetRole(user.ID);
+                            CmsSession.AddUser(user, role);
+                            roleid = role.ID;
+                          
+                        }
+
                     }
                     //获取当前会员等级
                     if (string.IsNullOrWhiteSpace(roleid))
                     {
                         result = false;
-                        error = "您还没有登录,或登录信息过期，请重新登录";
+                        error = "您还没有登录,或登录信息过期，请重新登录" ;
                         if (isApi)
                         {
                             ////加载所有令牌信息

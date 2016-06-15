@@ -222,7 +222,7 @@ namespace EasyCms.Dal
 
                     if (string.IsNullOrWhiteSpace(result))
                     {
-                        entity.ActivityStatus = AcitivyStatus.开启;
+                        entity.ActivityStatus = AcitivyStatus.进行中;
                     }
                 }
                 else
@@ -235,7 +235,7 @@ namespace EasyCms.Dal
                 //当前状态是不是启动状态
                 //且当前状态是停止状态
 
-                if (entity.ActivityStatus == AcitivyStatus.开启)
+                if (entity.ActivityStatus == AcitivyStatus.进行中)
                 {
 
                     //然后判断当前活动有没有结束
@@ -276,7 +276,7 @@ namespace EasyCms.Dal
                         bool isexst = Dal.Exists<ShopCountProducnt>(ShopCountProducnt._.ActivityID == id);
                         if (isexst)
                         {
-                            entity.Status = AcitivyStatus.开启;
+                            entity.Status = AcitivyStatus.进行中;
                         }
                         else
                         {
@@ -294,7 +294,7 @@ namespace EasyCms.Dal
                 //当前状态是不是启动状态
                 //且当前状态是停止状态
 
-                if (entity.Status == AcitivyStatus.开启)
+                if (entity.Status == AcitivyStatus.进行中)
                 {
 
                     //然后判断当前活动有没有结束

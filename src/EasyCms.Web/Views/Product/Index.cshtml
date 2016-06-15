@@ -279,9 +279,9 @@
                 $(this).parent().addClass("selected");
                 //计算sku 的value值
                 var skuidval = "";
-                $("#choose").find("a[class*='selected']").each(
+                $("#choose").find("div[class*='selected']").each(
                     function () {
-                        skuidval += $(this).attr("value") + ";";
+                        skuidval += $(this).find("a").attr("value") + ";";
 
                     }
                     );

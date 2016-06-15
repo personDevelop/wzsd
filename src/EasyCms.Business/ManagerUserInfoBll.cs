@@ -125,9 +125,9 @@ namespace EasyCms.Business
 
 
 
-        public string Regist(RegistModel registModel)
+        public string Regist(RegistModel registModel, ActionPlatform plat)
         {
-            return Dal.Regist(registModel);
+            return Dal.Regist(registModel,   plat);
         }
 
 
@@ -211,7 +211,10 @@ namespace EasyCms.Business
         {
             return Dal.RemoveToken(token);
         }
-
+        public ManagerUserInfo GetSessionUserInfo(string token)
+        {
+            return Dal.GetSessionUserInfo(token);
+        }
         public ManagerUserInfo GetUserByToken(string token)
         {
             return Dal.GetUserByToken(token);
@@ -252,6 +255,11 @@ namespace EasyCms.Business
         public FindPwd GetFindPwdRecord(string id)
         {
             return Dal.GetFindPwdRecord(id);
+        }
+
+        public decimal GetGetBalance(string id)
+        {
+            return Dal.GetGetBalance(id);
         }
     }
 }

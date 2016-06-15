@@ -37,7 +37,7 @@ namespace EasyCms.Web.Controllers
             else
             {
                 string userid = CmsSession.GetUserID();
-                order = new ShopOrderBll().CreateOrder(order, "", userid, out error);
+                order = new ShopOrderBll().CreateOrder(order, "", userid, ActionPlatform.商城网站, out error);
                 if (string.IsNullOrWhiteSpace(error))
                 {
                     //获取默认地址
@@ -101,7 +101,7 @@ namespace EasyCms.Web.Controllers
                     bool mustGenerSign;
                     try
                     {
-                        orderID = new ShopOrderBll().Submit(order, user, out mustGenerSign, out Msg);
+                        orderID = new ShopOrderBll().Submit(order, user, ActionPlatform.商城网站, out mustGenerSign, out Msg);
 
                         if (string.IsNullOrWhiteSpace(Msg))
                         { 

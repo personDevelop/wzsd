@@ -1,0 +1,115 @@
+﻿@model ChangePwdModel
+@{
+    ViewBag.Title = "修改密码";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEditNoForm.cshtml";
+}
+
+@Styles.Render("~/bundles/upimgcss")
+ 
+ 
+
+@using EasyCms.Model.ViewModel
+@using Sharp.Common
+<!--内容-->
+<div id="floatHead" class="content-tab-wrap">
+    <div class="content-tab">
+        <div class="content-tab-ul-wrap">
+            <ul>
+                <li><a class="selected" href="javascript:;">修改密码</a></li>
+
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="tab-content">
+    @using (Html.BeginForm("ModifyPwd", null))
+    {
+
+        <dl>
+            <dt>
+                旧密码
+            </dt>
+            <dd>
+
+                @Html.Password("OldPwd", Model.OldPwd, new { @class = "input normal ", width = 200 })
+            </dd>
+        </dl>
+
+        <dl>
+            <dt>
+                新密码
+            </dt>
+            <dd>
+
+                @Html.Password("NewPwd", Model.NewPwd, new { @class = "input normal ", width = 200 })
+            </dd>
+        </dl>
+        <dl>
+            <dt>
+                确认密码
+            </dt>
+            <dd>
+
+                @Html.Password("ConfirmNewPwd", Model.ConfirmNewPwd, new { @class = "input normal ", width = 200 })
+                <span style="color:red">请再输入一遍新密码</span>
+            </dd>
+        </dl>
+    <!--工具栏-->
+        <div class="page-footer">
+            <div class="btn-wrap">
+                
+                <input type="submit" onclick="$('#jqxLoader').jqxLoader('open');$('#IsContinueAdd').val(0)" value="提交" class="btn" />
+                <input name="btnReturn" type="button" value="返回上一页" class="btn yellow" onclick="javascript:   window.location.href ='@Url.Action("index", new { id=ViewBag.Other})';" />
+            </div>
+        </div>
+    <!--/工具栏-->
+
+    }
+    @Html.ValidationSummary() 
+  
+    
+
+</div>
+
+@section  scripts{
+
+
+    <script type="text/javascript">
+
+        $(function () {
+
+
+            //初始化表单验证
+            $("form").validate({
+                ignore: "",
+                rules: {
+                    "OldPwd": {
+                        required: true 
+                    },
+                    NewPwd: {
+                        required: true 
+                    },
+                    ConfirmNewPwd: { required: true }, 
+                },
+                messages: {
+                    OldPwd: {
+                        required: "请输入旧密码" 
+                    },
+                    NewPwd: {
+                        required: "请输入新密码"
+                    }
+                    ,
+                    NewPwd: {
+                        required: "请再次输入新密码"
+                    }
+                },
+                errorPlacement: errorPlace,
+                showErrors: function (errorMap, errorList) {
+                    $('#jqxLoader').jqxLoader('close');
+                    this.defaultShowErrors();
+                }
+
+            });
+        })
+    </script> 
+}

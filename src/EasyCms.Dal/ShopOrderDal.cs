@@ -1,4 +1,5 @@
-﻿using EasyCms.Model;
+﻿using EasyCms.Dal.PromotionRule;
+using EasyCms.Model;
 using Sharp.Common;
 using Sharp.Data;
 using System;
@@ -83,18 +84,133 @@ namespace EasyCms.Dal
 
 
 
-        public ShopOrderModel CreateOrder(ShopOrderModel order, string host, string accuontID, out string err)
+        public ShopOrderModel CreateOrder(ShopOrderModel order, string host, string accuontID, ActionPlatform plat, out string err)
         {
             List<OrderItem> list = order.OrderItems;
             err = string.Empty;
             List<OrderItem> listActivty = list.Where(p => p.OrderType > 0 && !string.IsNullOrWhiteSpace(p.OrderResId)).ToList();
+            DateTime now = DateTime.Now;
             foreach (var item in listActivty)
             {
+
+                ShopCountDown scd = Dal.Find<ShopCountDown>(item);
+                if (scd == null)
+                {
+                    ShopGroupBuy sgb = Dal.Find<ShopGroupBuy>(item);
+                    if (sgb == null || sgb.Status != AcitivyStatus.进行中)
+                    {
+                        err = "您选择的活动已经过期了或者不存在";
+                        return null;
+                    }
+                    else
+                    {
+                        if (sgb.StartDate <= now.Date && sgb.EndDate <= sgb.EndDate)
+                        {
+
+                            if (sgb.BuyCount >= sgb.MaxCount)
+                            {
+                                err = "您选择的活动" + sgb.ActivityName + "已经完成了规定团购数量";
+                                return null;
+                            }
+
+                        }
+                        else
+                        {
+                            err = "您选择的活动" + sgb.ActivityName + "已经过期了或者不到时间";
+                            return null;
+                        }
+
+                    }
+                }
+                else
+
+                {
+                    if (scd.ActivityStatus != AcitivyStatus.进行中)
+                    {
+                        err = "您选择的限时活动" + scd.ActivityName + "已过期或还未到时间";
+                        return null;
+                    }
+                    else
+                    {
+                        //获取当前活动的时间节点
+                        List<ShopCountDownTime> scdtime = Dal.From<ShopCountDownTime>().Where(ShopCountDownTime._.ActivityID == item).List<ShopCountDownTime>();
+                        if (scdtime.Count > 0)
+                        {
+
+                            bool isSuccess = false;
+                            foreach (var time in scdtime)
+                            {
+                                if (isSuccess == true)
+                                {
+                                    break;
+                                }
+                                switch (time.LoopType)
+                                {
+                                    case LoopType.固定日期:
+                                        if (time.StaticDate.Value.Date == now.Date)
+                                        {
+                                            string nowstr = now.ToString("HH:mm:ss");
+                                            if (nowstr.CompareTo(time.StartDate.ToString("HH:mm:ss")) >= 0
+
+                                                && nowstr.CompareTo(time.EndDate.ToString("HH:mm:ss")) <= 0
+                                                )
+                                            {
+                                                isSuccess = true;
+                                                break;
+                                            }
+                                        }
+                                        break;
+                                    case LoopType.天:
+                                        if (now.Day == time.WeekOrDay)
+                                        {
+                                            string nowstr = now.ToString("HH:mm:ss");
+                                            if (nowstr.CompareTo(time.StartDate.ToString("HH:mm:ss")) >= 0
+
+                                                && nowstr.CompareTo(time.EndDate.ToString("HH:mm:ss")) <= 0
+                                                )
+                                            {
+                                                isSuccess = true;
+                                                break;
+                                            }
+                                        }
+
+                                        break;
+                                    case LoopType.周:
+                                        if ((int)now.DayOfWeek == time.WeekOrDay)
+                                        {
+                                            string nowstr = now.ToString("HH:mm:ss");
+                                            if (nowstr.CompareTo(time.StartDate.ToString("HH:mm:ss")) >= 0
+
+                                                && nowstr.CompareTo(time.EndDate.ToString("HH:mm:ss")) <= 0
+                                                )
+                                            {
+                                                isSuccess = true;
+                                                break;
+                                            }
+                                        }
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+                            if (!isSuccess)
+                            {
+                                err = "您选择的限时活动" + scd.ActivityName + "已过期或还未到时间";
+                                return null;
+                            }
+                        }
+                        else
+                        {
+                            err = "您选择的限时活动" + scd.ActivityName + "已过期或还未到时间";
+                            return null;
+                        }
+                    }
+                }
                 //对应参与活动的商品 查看其是否已过期,后续做完商品促销活动后再补充
                 throw new Exception("还没有设置团购功能");
             }
             //获取商品较详细信息 
-            GetProductWithOrder(order, host, accuontID, out err);
+            GetProductWithOrder(order, host, accuontID, plat, out err);
 
             return order;
 
@@ -104,7 +220,7 @@ namespace EasyCms.Dal
         /// </summary>
         /// <param name="list"></param>
         /// <returns></returns>
-        private ShopOrderModel GetProductWithOrder(ShopOrderModel order, string host, string accuontID, out string err)
+        private ShopOrderModel GetProductWithOrder(ShopOrderModel order, string host, string accuontID, ActionPlatform plat, out string err)
         {
             err = string.Empty;
             List<OrderItem> list = order.OrderItems;
@@ -197,8 +313,9 @@ namespace EasyCms.Dal
 
             }
             else
-            {  //获取可用促销活动
-                order.Promotion = new ShopPromotionDal().GetValidPromotionList(list, accuontID);
+            {
+                //获取可用促销活动
+                order.Promotion = new BaseRule() { Context = order }.GetValidPromotionList(plat, ActionEvent.购物);
                 //获取可用优惠券
                 order.Coupon = new CouponRuleDal().GetValidCouponList(list, accuontID);
             }
@@ -216,13 +333,28 @@ namespace EasyCms.Dal
         /// <param name="accuontID"></param>
         /// <param name="err"></param>
         /// <returns></returns>
-        public string Submit(ShopOrderModel order, ManagerUserInfo accuont, out bool mustGenerSign, out string err)
+        public string Submit(ShopOrderModel order, ManagerUserInfo accuont, ActionPlatform plat, out bool mustGenerSign, out string err)
         {
-            #region MyRegion
-            //前台传过来的订单总价格 实际是实际支付金额，不是订单总金额
             mustGenerSign = false;
-
             err = string.Empty;
+            #region MyRegion
+            //前台传过来的总价格 和实际支付金额， 
+
+            //判断是否使用余额
+            if (order.UserBalance>0)
+            {
+                decimal blacnse = Convert.ToDecimal(Sharp.Data.SessionFactory.Default.From<ManagerUserInfo>().Where(ManagerUserInfo._.ID == accuont.ID).Select(ManagerUserInfo._.Balance).ToScalar());
+                if (blacnse< order.UserBalance)
+                {
+                    err = "余额不足，请重新输入使用的余额数";
+                    return null;
+                }
+            } 
+
+
+         
+
+          
             #region 判断是否满足货到付款
             if (!order.CashOnDelivery && string.IsNullOrWhiteSpace(order.PayTypeID))
             {
@@ -281,9 +413,9 @@ namespace EasyCms.Dal
                 }
                 else
                     if (!activeID.ContainsKey(item.OrderResId))
-                    {
-                        activeID.Add(item.OrderResId, item.OrderType);
-                    }
+                {
+                    activeID.Add(item.OrderResId, item.OrderType);
+                }
                 #region 废弃
                 //if (item.Coupon != null)
                 //{
@@ -432,7 +564,7 @@ namespace EasyCms.Dal
 
             }
             //开始计算订单支付总额  支付总额计算方式是，商品总额-优惠券总额+运费
-            decimal totalPrice = productPrice - CouponPrice + order.Freight-order.UserBalance;
+            decimal totalPrice = productPrice - CouponPrice + order.Freight - order.UserBalance;
             if (totalPrice != order.PayMoney)
             {
                 err = "订单的支付金额[" + order.PayMoney + "]和实际的金额(商品总额-优惠券总额-预付款+运费)[" + totalPrice + "]不符,请重新选择本次购物要使用的优惠券";
@@ -486,37 +618,36 @@ namespace EasyCms.Dal
 
                 }
                 ShopOrder activeOrder = new ShopOrder()
-                      {
-                          ID = (OrderCount.ToString()).PadLeft(2, '0'),
-                          OrderType = val,
-                          OrderResId = item,
-                          MemberID = accuont.ID,
-                          MemberName = accuont.Name,
-                          MemberEmail = accuont.Email,
-                          MemberCallPhone = accuont.ContactPhone,
-                          PayTypeID = order.PayTypeID,
-                          PayTypeName = new ShopPaymentTypesDal().GetPayTypeName(order.PayTypeID, order.CashOnDelivery),
-                          IsFreeShiping = order.Freight == 0,
-                          Freight = order.Freight,
-                          FreightAdjust = 0,
-                          FreightActual = order.Freight,
-                          Remark = order.Remark,
-                          IsInvoice = order.IsInvoice,
-                          InvoiceInfo = order.InvoiceInfo,
-                          CreateDate = now,
-                          UpdateDate = now,
-                          ClientType = accuont.ClientType,
-                          InvoiceNote = order.InvoiceNote
-                      };
-
-
-                activeOrder.RegionID = address.RegionId;
-                activeOrder.ShipName = address.ShipName;
-                activeOrder.ShipAddress = address.Address;
-                activeOrder.ShipZip = address.Zipcode;
-                activeOrder.ShipEmail = address.EmailAddress;
-                activeOrder.ShipTel = address.CelPhone;
-                activeOrder.ShipRegion = ShipRegion;
+                {
+                    ID = (OrderCount.ToString()).PadLeft(2, '0'),
+                    OrderType = val,
+                    OrderResId = item,
+                    MemberID = accuont.ID,
+                    MemberName = accuont.Name,
+                    MemberEmail = accuont.Email,
+                    MemberCallPhone = accuont.ContactPhone,
+                    PayTypeID = order.PayTypeID,
+                    PayTypeName = new ShopPaymentTypesDal().GetPayTypeName(order.PayTypeID, order.CashOnDelivery),
+                    IsFreeShiping = order.Freight == 0,
+                    Freight = order.Freight,
+                    FreightAdjust = 0,
+                    FreightActual = order.Freight,
+                    Remark = order.Remark,
+                    IsInvoice = order.IsInvoice,
+                    InvoiceInfo = order.InvoiceInfo,
+                    CreateDate = now,
+                    UpdateDate = now,
+                    ClientType = accuont.ClientType,
+                    InvoiceNote = order.InvoiceNote,
+                    RegionID = address.RegionId,
+                    ShipName = address.ShipName,
+                    ShipAddress = address.Address,
+                    ShipZip = address.Zipcode,
+                    ShipEmail = address.EmailAddress,
+                    ShipTel = address.CelPhone,
+                    ShipRegion = ShipRegion,
+                     UserBalance= order.UserBalance
+                };
                 #endregion
                 #region 判断是否拆分
                 if (IsCf)
@@ -534,7 +665,7 @@ namespace EasyCms.Dal
                 List<OrderItem> OrderResList = list.Where(p => p.OrderResId == item).ToList<OrderItem>();
                 int orderItemNum = 1;
                 decimal totalCostPrice = 0, totalmarketPrice = 0, totalsalePrice = 0;
-                List<ShopOrderItem> handsales = new List<ShopOrderItem>();
+                 
                 int i = 0;
                 foreach (var productVar in OrderResList)
                 {
@@ -548,42 +679,42 @@ namespace EasyCms.Dal
                     }
 
                     ShopOrderItem product = new ShopOrderItem()
-                               {
-                                   ID = Guid.NewGuid().ToString(),
-                                   OrderID = activeOrder.ID,
-                                   ProductID = productItem.ID,
-                                   ProductSKU = productItem.SKUID,
-                                   ProductType = productItem.TypeId,
-                                   ProductCode = productItem.Code,
-                                   ProductName = productItem.Name,
-                                   AttributeVal = productItem.SKUName,
-                                   ProductThumb = productItem.FilePath,
-                                   Unit = productItem.Unit,
-                                   Count = productVar.BuyCount,
-                                   IsHandsel = false,
-                                   HandselCount = 0,
-                                   ReturnCount = 0,
-                                   ReturnMoney = 0,
-                                   UseJf = 0,
-                                   ProductTypeName = productItem.ProductTypeName,
-                                   BrandName = productItem.BrandName,
-                                   ShortDescription = productItem.ShortDescription,
-                                   Weight = productItem.Weight,
-                                   IsVirtualProduct = productItem.IsVirtualProduct,
-                                   Point = productItem.Points
+                    {
+                        ID = Guid.NewGuid().ToString(),
+                        OrderID = activeOrder.ID,
+                        ProductID = productItem.ID,
+                        ProductSKU = productItem.SKUID,
+                        ProductType = productItem.TypeId,
+                        ProductCode = productItem.Code,
+                        ProductName = productItem.Name,
+                        AttributeVal = productItem.SKUName,
+                        ProductThumb = productItem.FilePath,
+                        Unit = productItem.Unit,
+                        Count = productVar.BuyCount,
+                        IsHandsel = false,
+                        HandselCount = 0,
+                        ReturnCount = 0,
+                        ReturnMoney = 0,
+                        UseJf = 0,
+                        ProductTypeName = productItem.ProductTypeName,
+                        BrandName = productItem.BrandName,
+                        ShortDescription = productItem.ShortDescription,
+                        Weight = productItem.Weight,
+                        IsVirtualProduct = productItem.IsVirtualProduct,
+                        Point = productItem.Points
 
-                               };
+                    };
 
                     if (product.Point > 0)
                     {
 
-                        JFHistory jh = CreateJfHistory(accuont.ID, now, JFType.积分, RuleType.满额送积分, product.Point, activeOrder.ID,
-                            product.ID, null, null);
-                        Savelist.Add(jh);
+                         JFHistory jh = CreateJfHistory(accuont.ID, now,  ActionType.积分 , RuleType.购物, product.Point, activeOrder.ID,
+                        product.ID, null, null);
+                         Savelist.Add(jh);
                     }
 
                     #endregion
-                    IsFirst = CoumputeRule(accuont.ID, Savelist, now, IsFirst, activeOrder, handsales, productVar.Promotion, product.ID);
+                    //IsFirst = CoumputeRule(accuont.ID, Savelist, now, IsFirst, activeOrder, handsales, productVar.Promotion, product.ID);
                     product.CostPrice = productItem.CostPrice;
                     product.MarketPrice = productItem.MarketPrice;
                     product.Price = productItem.SalePrice;
@@ -596,12 +727,18 @@ namespace EasyCms.Dal
                     orderItemNum++;
                 }
                 //计算订单促销规则
-                IsFirst = CoumputeRule(accuont.ID, Savelist, now, IsFirst, activeOrder, handsales, order.Promotion);
-                foreach (var handItem in handsales)
+                BaseRule br = new BaseRule() { Context = activeOrder, UserInfo = accuont, OtherPara = order.Promotion, OtherPara2 = Savelist };
+                IsFirst = br.Run(plat, ActionEvent.购物);// CoumputeRule(accuont.ID, Savelist, now, IsFirst, activeOrder, handsales, order.Promotion);
+                List<ShopOrderItem> handsales = br.ReturnResult as   List<ShopOrderItem> ;
+                if (handsales!=null)
                 {
-                    handItem.Sequence = orderItemNum++;
-                    Savelist.Add(handItem);
+                    foreach (var handItem in handsales)
+                    {
+                        handItem.Sequence = orderItemNum++;
+                        Savelist.Add(handItem);
+                    }
                 }
+               
                 activeOrder.CostPrice = totalCostPrice;
                 activeOrder.TotalPrice = totalsalePrice;
 
@@ -621,7 +758,7 @@ namespace EasyCms.Dal
                     foreach (string CouponAccountID in listCoupon)
                     {
 
-                        Savelist.Add(CreateJfHistory(accuont.ID, now, JFType.优惠券, RuleType.使用优惠券, 1, activeOrder.ID, null, CouponAccountID, null, AddOrRemove.减少));
+                       Savelist.Add(CreateJfHistory(accuont.ID, now,  ActionType.优惠券, RuleType.使用优惠券, 1, activeOrder.ID, null, CouponAccountID, null, AddOrRemove.减少));
                     }
                 }
                 if (IsCf)
@@ -631,7 +768,7 @@ namespace EasyCms.Dal
                         activeOrder.FreightActual = 0;
                     }
                 }
-                activeOrder.PayMoney = activeOrder.TotalPrice + activeOrder.Freight - activeOrder.Discount-order.UserBalance;
+                activeOrder.PayMoney = activeOrder.TotalPrice + activeOrder.Freight - activeOrder.Discount - order.UserBalance;
                 if (order.CashOnDelivery)
                 {
                     activeOrder.ShipStatus = (int)ShipStatus.等待商家发货;
@@ -716,6 +853,30 @@ namespace EasyCms.Dal
                 Savelist.Add(orderAction);
 
             }
+            if (order.UserBalance>0)
+            {
+                decimal blacnse = Convert.ToDecimal(Dal.From<ManagerUserInfo>().Where(ManagerUserInfo._.ID == accuont.ID).Select(ManagerUserInfo._.Balance).ToScalar());
+               accuont.Balance  -= order.UserBalance;
+                AccuontMoneyLog ml = new AccuontMoneyLog()
+                {
+                    Amount = order.UserBalance,
+                    Balance = accuont.Balance,
+                    ID = Guid.NewGuid().ToString(),
+                    Note = plat.ToString() + ActionEvent.购物 + ActionType.现金,
+                    OpMoneyEvent = OpEvent.购物,
+                    OpStatus = OpStatus.成功,
+                    OpTime = DateTime.Now,
+                    OpType = AddOrRemove.减少,
+                    OpUserID = accuont.ID,
+                    UserID = accuont.ID
+                };
+                Savelist.Add(ml);
+                if (!Savelist.Contains(accuont))
+                {
+                    Savelist.Add(accuont);
+                }
+              
+            }
             SessionFactory dal;
             IDbTransaction tr = Dal.BeginTransaction(out dal);
             try
@@ -735,224 +896,225 @@ namespace EasyCms.Dal
 
         private bool? CoumputeRule(string accuontID, List<BaseEntity> Orderlist, DateTime now, bool? IsFirst, ShopOrder realOrder, List<ShopOrderItem> handsales, List<ShopPromotionSimpal> PromotionList, string jFSouceSubID = null)
         {
-            if (PromotionList != null&& PromotionList.Count>0)
-            {
-                List<ShopPromotion> listPromotion = new ShopPromotionDal().GetList(ShopPromotion._.ID.In(PromotionList.Select(p => p.ID).ToList()));
-                //计算活动规则
+            return true;
+            ////卢永列注销if (PromotionList != null&& PromotionList.Count>0)
+            //{
+            //    List<ShopPromotion> listPromotion = new ShopPromotionDal().GetList(ShopPromotion._.ID.In(PromotionList.Select(p => p.ID).ToList()));
+            //    //计算活动规则
 
-                foreach (var pro in listPromotion)
-                {
-                    RuleType rt = pro.RuleTypeName.Phrase<RuleType>();
-                    int sendCount = (int)pro.HandsaleCount;
+            //    foreach (var pro in listPromotion)
+            //    {
+            //        RuleType rt = pro.RuleTypeName.Phrase<RuleType>();
+            //        int sendCount = (int)pro.HandsaleCount;
 
-                    if (rt != RuleType.首单免运费)
-                    {
-                        int hasSendCount = (int)pro.HasSendCount + sendCount;
-                        if (pro.HandsaleMaxCount > 0)
-                        {
-                            if (hasSendCount > pro.HandsaleMaxCount)
-                            {
-                                sendCount = (int)pro.HandsaleMaxCount - hasSendCount;
-                                if (sendCount == 0)
-                                {
-                                    sendCount = 1;//只要大于0就行，方便下面做一次性判断
-                                }
-                            }
-                            else
-                            {
-                                sendCount = 0;
-                            }
-                        }
-                        else
-                        {
-                            if (sendCount == 0)
-                            {
-                                sendCount = 1;//只要大于0就行，方便下面做一次性判断
-                            }
+            //        if (rt != RuleType.首单免运费)
+            //        {
+            //            int hasSendCount = (int)pro.HasSendCount + sendCount;
+            //            if (pro.HandsaleMaxCount > 0)
+            //            {
+            //                if (hasSendCount > pro.HandsaleMaxCount)
+            //                {
+            //                    sendCount = (int)pro.HandsaleMaxCount - hasSendCount;
+            //                    if (sendCount == 0)
+            //                    {
+            //                        sendCount = 1;//只要大于0就行，方便下面做一次性判断
+            //                    }
+            //                }
+            //                else
+            //                {
+            //                    sendCount = 0;
+            //                }
+            //            }
+            //            else
+            //            {
+            //                if (sendCount == 0)
+            //                {
+            //                    sendCount = 1;//只要大于0就行，方便下面做一次性判断
+            //                }
 
-                        }
-                        pro.HasSendCount += sendCount;
+            //            }
+            //            pro.HasSendCount += sendCount;
 
-                    }
-                    else
-                    {
-                        if (sendCount == 0)
-                        {
-                            sendCount = 1;//只要大于0就行，方便下面做一次性判断
-                        }
+            //        }
+            //        else
+            //        {
+            //            if (sendCount == 0)
+            //            {
+            //                sendCount = 1;//只要大于0就行，方便下面做一次性判断
+            //            }
 
-                    }
+            //        }
 
-                    JFHistory jh = null;
-                    ShopOrderItem handSaile = null;
-                    if (sendCount > 0)
-                    {
-                        switch (rt)
-                        {
-                            case RuleType.满额送优惠券:
+            //        JFHistory jh = null;
+            //        ShopOrderItem handSaile = null;
+            //        if (sendCount > 0)
+            //        {
+            //            switch (rt)
+            //            {
+            //                case RuleType.满额送优惠券:
 
-                                jh = CreateJfHistory(accuontID, now, JFType.优惠券, rt, sendCount, realOrder.ID, jFSouceSubID, pro.CouponID, pro.ID);
-                                Orderlist.Add(jh);
-                                Orderlist.Add(pro);
+            //                    jh = CreateJfHistory(accuontID, now, JFType.优惠券, rt, sendCount, realOrder.ID, jFSouceSubID, pro.CouponID, pro.ID);
+            //                    Orderlist.Add(jh);
+            //                    Orderlist.Add(pro);
 
-                                break;
-                            case RuleType.满额送积分:
-                                jh = CreateJfHistory(accuontID, now, JFType.积分, rt, sendCount, realOrder.ID, jFSouceSubID, null, pro.ID);
-                                Orderlist.Add(pro);
-                                Orderlist.Add(jh);
-                                break;
-                            case RuleType.满额送赠品:
-                                if (!string.IsNullOrWhiteSpace(pro.HandsaleProductId))
-                                {
-
-
-
-                                    View_ProductInfoBySkuid handproduct = Dal.From<View_ProductInfoBySkuid>().Join<ShopBrandInfo>(View_ProductInfoBySkuid._.BrandId == ShopBrandInfo._.ID, JoinType.leftJoin)
-                   .Join<ShopProductType>(View_ProductInfoBySkuid._.TypeId == ShopProductType._.ID)
-                   .Join<AttachFile>(View_ProductInfoBySkuid._.ID == AttachFile._.RefID, JoinType.leftJoin)
-               .Select(View_ProductInfoBySkuid._.ID.All, ShopBrandInfo._.Name.Alias("BrandName"), ShopProductType._.Name.Alias("ProductTypeName"),
-               AttachFile.GetThumbnaifilePath("")).Where(View_ProductInfoBySkuid._.ID == pro.HandsaleProductId && View_ProductInfoBySkuid._.SKUID == pro.HandsaleProductSKUID
-               ).ToFirst<View_ProductInfoBySkuid>();
-
-                                    handSaile = new ShopOrderItem()
-                                    {
-                                        ID = Guid.NewGuid().ToString(),
-                                        OrderID = realOrder.ID,
-                                        ProductID = pro.HandsaleProductId,
-                                        ProductSKU = pro.HandsaleProductSKUID,
-                                        ProductType = handproduct.TypeId,
-                                        ProductCode = handproduct.Code,
-                                        ProductName = handproduct.Name,
-                                        AttributeVal = handproduct.SKUName,
-                                        ProductThumb = handproduct.FilePath,
-                                        Unit = handproduct.Unit,
-                                        Count = sendCount,
-                                        IsHandsel = true,
-                                        HandselCount = sendCount,
-                                        ProductTypeName = handproduct.ProductTypeName,
-                                        BrandName = handproduct.BrandName,
-                                        ShortDescription = handproduct.ShortDescription,
-                                        Weight = handproduct.Weight,
-                                        IsVirtualProduct = handproduct.IsVirtualProduct
-                                    };
-                                    handsales.Add(handSaile);
-                                    jh = CreateJfHistory(accuontID, now, JFType.赠品, rt, sendCount, realOrder.ID, jFSouceSubID, handSaile.ProductSKU ?? handSaile.ProductID, pro.ID);
-                                    Orderlist.Add(pro);
-
-                                }
-
-                                break;
-                            case RuleType.满额免运费:
-                                //这个由于目前运费统一是0，所以这个暂不处理
-                                break;
-                            case RuleType.首单送优惠券:
-                                if (IsFirst == null)
-                                {
-                                    bool isHave = Dal.Exists<ShopOrder>(ShopOrder._.MemberID == accuontID);
-                                    IsFirst = isHave == false;
-                                }
-                                if (IsFirst.Value)
-                                {
-
-                                    jh = CreateJfHistory(accuontID, now, JFType.优惠券, rt, sendCount, realOrder.ID, jFSouceSubID, pro.CouponID, pro.ID);
-                                    Orderlist.Add(jh);
-                                    Orderlist.Add(pro);
-                                }
-                                break;
-                            case RuleType.首单送积分:
-                                if (IsFirst == null)
-                                {
-                                    bool isHave = Dal.Exists<ShopOrder>(ShopOrder._.MemberID == accuontID);
-                                    IsFirst = isHave == false;
-                                }
-                                if (IsFirst.Value)
-                                {
-                                    jh = CreateJfHistory(accuontID, now, JFType.积分, rt, sendCount, realOrder.ID, jFSouceSubID, null, pro.ID);
-                                    Orderlist.Add(jh);
-                                    Orderlist.Add(pro);
-                                }
-                                break;
-                            case RuleType.首单送赠品:
-                                if (!string.IsNullOrWhiteSpace(pro.HandsaleProductId))
-                                {
-                                    if (IsFirst == null)
-                                    {
-                                        bool isHave = Dal.Exists<ShopOrder>(ShopOrder._.MemberID == accuontID);
-                                        IsFirst = isHave == false;
-                                    }
-                                    if (IsFirst.Value)
-                                    {
-
-                                        View_ProductInfoBySkuid handproduct = Dal.From<View_ProductInfoBySkuid>().Join<ShopBrandInfo>(View_ProductInfoBySkuid._.BrandId == ShopBrandInfo._.ID, JoinType.leftJoin)
-                       .Join<ShopProductType>(View_ProductInfoBySkuid._.TypeId == ShopProductType._.ID)
-                       .Join<AttachFile>(View_ProductInfoBySkuid._.ID == AttachFile._.RefID, JoinType.leftJoin)
-                   .Select(View_ProductInfoBySkuid._.ID.All, ShopBrandInfo._.Name.Alias("BrandName"), ShopProductType._.Name.Alias("ProductTypeName"),
-                   AttachFile.GetThumbnaifilePath("")).Where(View_ProductInfoBySkuid._.ID == pro.HandsaleProductId && View_ProductInfoBySkuid._.SKUID == pro.HandsaleProductSKUID
-                   ).ToFirst<View_ProductInfoBySkuid>();
-                                        if (handproduct != null)
-                                        {
+            //                    break;
+            //                case RuleType.满额送积分:
+            //                    jh = CreateJfHistory(accuontID, now, JFType.积分, rt, sendCount, realOrder.ID, jFSouceSubID, null, pro.ID);
+            //                    Orderlist.Add(pro);
+            //                    Orderlist.Add(jh);
+            //                    break;
+            //                case RuleType.满额送赠品:
+            //                    if (!string.IsNullOrWhiteSpace(pro.HandsaleProductId))
+            //                    {
 
 
-                                            handSaile = new ShopOrderItem()
-                                            {
-                                                ID = Guid.NewGuid().ToString(),
-                                                OrderID = realOrder.ID,
-                                                ProductID = pro.HandsaleProductId,
-                                                ProductSKU = pro.HandsaleProductSKUID,
-                                                ProductType = handproduct.TypeId,
-                                                ProductCode = handproduct.Code,
-                                                ProductName = handproduct.Name,
-                                                AttributeVal = handproduct.SKUName,
-                                                ProductThumb = handproduct.FilePath,
-                                                Unit = handproduct.Unit,
-                                                Count = sendCount,
-                                                IsHandsel = true,
-                                                HandselCount = sendCount,
-                                                ProductTypeName = handproduct.ProductTypeName,
-                                                BrandName = handproduct.BrandName,
-                                                ShortDescription = handproduct.ShortDescription,
-                                                Weight = handproduct.Weight,
-                                                IsVirtualProduct = handproduct.IsVirtualProduct
-                                            };
+
+            //                        View_ProductInfoBySkuid handproduct = Dal.From<View_ProductInfoBySkuid>().Join<ShopBrandInfo>(View_ProductInfoBySkuid._.BrandId == ShopBrandInfo._.ID, JoinType.leftJoin)
+            //       .Join<ShopProductType>(View_ProductInfoBySkuid._.TypeId == ShopProductType._.ID)
+            //       .Join<AttachFile>(View_ProductInfoBySkuid._.ID == AttachFile._.RefID, JoinType.leftJoin)
+            //   .Select(View_ProductInfoBySkuid._.ID.All, ShopBrandInfo._.Name.Alias("BrandName"), ShopProductType._.Name.Alias("ProductTypeName"),
+            //   AttachFile.GetThumbnaifilePath("")).Where(View_ProductInfoBySkuid._.ID == pro.HandsaleProductId && View_ProductInfoBySkuid._.SKUID == pro.HandsaleProductSKUID
+            //   ).ToFirst<View_ProductInfoBySkuid>();
+
+            //                        handSaile = new ShopOrderItem()
+            //                        {
+            //                            ID = Guid.NewGuid().ToString(),
+            //                            OrderID = realOrder.ID,
+            //                            ProductID = pro.HandsaleProductId,
+            //                            ProductSKU = pro.HandsaleProductSKUID,
+            //                            ProductType = handproduct.TypeId,
+            //                            ProductCode = handproduct.Code,
+            //                            ProductName = handproduct.Name,
+            //                            AttributeVal = handproduct.SKUName,
+            //                            ProductThumb = handproduct.FilePath,
+            //                            Unit = handproduct.Unit,
+            //                            Count = sendCount,
+            //                            IsHandsel = true,
+            //                            HandselCount = sendCount,
+            //                            ProductTypeName = handproduct.ProductTypeName,
+            //                            BrandName = handproduct.BrandName,
+            //                            ShortDescription = handproduct.ShortDescription,
+            //                            Weight = handproduct.Weight,
+            //                            IsVirtualProduct = handproduct.IsVirtualProduct
+            //                        };
+            //                        handsales.Add(handSaile);
+            //                        jh = CreateJfHistory(accuontID, now, JFType.赠品, rt, sendCount, realOrder.ID, jFSouceSubID, handSaile.ProductSKU ?? handSaile.ProductID, pro.ID);
+            //                        Orderlist.Add(pro);
+
+            //                    }
+
+            //                    break;
+            //                case RuleType.满额免运费:
+            //                    //这个由于目前运费统一是0，所以这个暂不处理
+            //                    break;
+            //                case RuleType.首单送优惠券:
+            //                    if (IsFirst == null)
+            //                    {
+            //                        bool isHave = Dal.Exists<ShopOrder>(ShopOrder._.MemberID == accuontID);
+            //                        IsFirst = isHave == false;
+            //                    }
+            //                    if (IsFirst.Value)
+            //                    {
+
+            //                        jh = CreateJfHistory(accuontID, now, JFType.优惠券, rt, sendCount, realOrder.ID, jFSouceSubID, pro.CouponID, pro.ID);
+            //                        Orderlist.Add(jh);
+            //                        Orderlist.Add(pro);
+            //                    }
+            //                    break;
+            //                case RuleType.首单送积分:
+            //                    if (IsFirst == null)
+            //                    {
+            //                        bool isHave = Dal.Exists<ShopOrder>(ShopOrder._.MemberID == accuontID);
+            //                        IsFirst = isHave == false;
+            //                    }
+            //                    if (IsFirst.Value)
+            //                    {
+            //                        jh = CreateJfHistory(accuontID, now, JFType.积分, rt, sendCount, realOrder.ID, jFSouceSubID, null, pro.ID);
+            //                        Orderlist.Add(jh);
+            //                        Orderlist.Add(pro);
+            //                    }
+            //                    break;
+            //                case RuleType.首单送赠品:
+            //                    if (!string.IsNullOrWhiteSpace(pro.HandsaleProductId))
+            //                    {
+            //                        if (IsFirst == null)
+            //                        {
+            //                            bool isHave = Dal.Exists<ShopOrder>(ShopOrder._.MemberID == accuontID);
+            //                            IsFirst = isHave == false;
+            //                        }
+            //                        if (IsFirst.Value)
+            //                        {
+
+            //                            View_ProductInfoBySkuid handproduct = Dal.From<View_ProductInfoBySkuid>().Join<ShopBrandInfo>(View_ProductInfoBySkuid._.BrandId == ShopBrandInfo._.ID, JoinType.leftJoin)
+            //           .Join<ShopProductType>(View_ProductInfoBySkuid._.TypeId == ShopProductType._.ID)
+            //           .Join<AttachFile>(View_ProductInfoBySkuid._.ID == AttachFile._.RefID, JoinType.leftJoin)
+            //       .Select(View_ProductInfoBySkuid._.ID.All, ShopBrandInfo._.Name.Alias("BrandName"), ShopProductType._.Name.Alias("ProductTypeName"),
+            //       AttachFile.GetThumbnaifilePath("")).Where(View_ProductInfoBySkuid._.ID == pro.HandsaleProductId && View_ProductInfoBySkuid._.SKUID == pro.HandsaleProductSKUID
+            //       ).ToFirst<View_ProductInfoBySkuid>();
+            //                            if (handproduct != null)
+            //                            {
 
 
-                                            handsales.Add(handSaile);
-                                            Orderlist.Add(pro);
-                                            jh = CreateJfHistory(accuontID, now, JFType.赠品, rt, sendCount, realOrder.ID, jFSouceSubID, handSaile.ProductSKU ?? handSaile.ProductID, pro.ID);
-                                        }
-                                    }
-                                }
-                                break;
-                            case RuleType.首单免运费:
-                                if (IsFirst == null)
-                                {
-                                    bool isHave = Dal.Exists<ShopOrder>(ShopOrder._.MemberID == accuontID);
-                                    IsFirst = isHave == false;
-                                }
-                                if (IsFirst.Value)
-                                {
-                                    realOrder.Freight = 0;
-                                    jh = CreateJfHistory(accuontID, now, JFType.其他, rt, sendCount, realOrder.ID, jFSouceSubID, null, pro.ID);
-                                    Orderlist.Add(jh);
+            //                                handSaile = new ShopOrderItem()
+            //                                {
+            //                                    ID = Guid.NewGuid().ToString(),
+            //                                    OrderID = realOrder.ID,
+            //                                    ProductID = pro.HandsaleProductId,
+            //                                    ProductSKU = pro.HandsaleProductSKUID,
+            //                                    ProductType = handproduct.TypeId,
+            //                                    ProductCode = handproduct.Code,
+            //                                    ProductName = handproduct.Name,
+            //                                    AttributeVal = handproduct.SKUName,
+            //                                    ProductThumb = handproduct.FilePath,
+            //                                    Unit = handproduct.Unit,
+            //                                    Count = sendCount,
+            //                                    IsHandsel = true,
+            //                                    HandselCount = sendCount,
+            //                                    ProductTypeName = handproduct.ProductTypeName,
+            //                                    BrandName = handproduct.BrandName,
+            //                                    ShortDescription = handproduct.ShortDescription,
+            //                                    Weight = handproduct.Weight,
+            //                                    IsVirtualProduct = handproduct.IsVirtualProduct
+            //                                };
 
-                                }
-                                break;
-                            case RuleType.注册送优惠券:
-                                break;
-                            case RuleType.注册送积分:
-                                break;
-                            case RuleType.包邮:
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                }
-            }
-            return IsFirst;
+
+            //                                handsales.Add(handSaile);
+            //                                Orderlist.Add(pro);
+            //                                jh = CreateJfHistory(accuontID, now, JFType.赠品, rt, sendCount, realOrder.ID, jFSouceSubID, handSaile.ProductSKU ?? handSaile.ProductID, pro.ID);
+            //                            }
+            //                        }
+            //                    }
+            //                    break;
+            //                case RuleType.首单免运费:
+            //                    if (IsFirst == null)
+            //                    {
+            //                        bool isHave = Dal.Exists<ShopOrder>(ShopOrder._.MemberID == accuontID);
+            //                        IsFirst = isHave == false;
+            //                    }
+            //                    if (IsFirst.Value)
+            //                    {
+            //                        realOrder.Freight = 0;
+            //                        jh = CreateJfHistory(accuontID, now, JFType.其他, rt, sendCount, realOrder.ID, jFSouceSubID, null, pro.ID);
+            //                        Orderlist.Add(jh);
+
+            //                    }
+            //                    break;
+            //                case RuleType.注册送优惠券:
+            //                    break;
+            //                case RuleType.注册送积分:
+            //                    break;
+            //                case RuleType.包邮:
+            //                    break;
+            //                default:
+            //                    break;
+            //            }
+            //        }
+            //    }
+            //}
+            //return IsFirst;
         }
 
-        public JFHistory CreateJfHistory(string accountid, DateTime now, JFType jftype, RuleType rultType, decimal sendCount, string mainID, string mxid, string coupponIDoRProductID, string activityid, AddOrRemove addOrRemove = AddOrRemove.增加)
+        public JFHistory CreateJfHistory(string accountid, DateTime now, ActionType jftype, RuleType rultType, decimal sendCount, string mainID, string mxid, string coupponIDoRProductID, string activityid, AddOrRemove addOrRemove = AddOrRemove.增加)
         {
 
             return new JFHistory()
@@ -971,7 +1133,7 @@ namespace EasyCms.Dal
                 ActivityID = activityid
             };
         }
-        public List<ShopOrder> GetMyOrder(string host, ManagerUserInfo user, int queryPage, string queryStatusStr, string otherWhere, out string err,WhereClip otherWhereClip=null)
+        public List<ShopOrder> GetMyOrder(string host, ManagerUserInfo user, int queryPage, string queryStatusStr, string otherWhere, out string err, WhereClip otherWhereClip = null)
         {
             err = string.Empty;
             WhereClip where = ShopOrder._.MemberID == user.ID && ShopOrder._.HasDelete == false;
@@ -1110,41 +1272,41 @@ namespace EasyCms.Dal
                 List<string> promostionString = new List<string>();
                 foreach (var item in addList)
                 {
-                    switch (item.JFSouce)
-                    {
-                        case RuleType.满额送优惠券:
-                        case RuleType.首单送优惠券:
-                        case RuleType.注册送优惠券:
-                            //获取优惠券 金额  
-                            if (AllCoupon.Exists(p => p.ID == item.CouponID))
-                            {
-                                promostionString.Add(item.JFSouce.ToString() + ",面值" + AllCoupon.Find(p => p.ID == item.CouponID).JE);
-                            }
-                            break;
-                        case RuleType.满额送积分:
-                        case RuleType.首单送积分:
-                        case RuleType.注册送积分:
+                    ////卢永列注销switch (item.JFSouce)
+                    //{
+                    //    case RuleType.满额送优惠券:
+                    //    case RuleType.首单送优惠券:
+                    //    case RuleType.注册送优惠券:
+                    //        //获取优惠券 金额  
+                    //        if (AllCoupon.Exists(p => p.ID == item.CouponID))
+                    //        {
+                    //            promostionString.Add(item.JFSouce.ToString() + ",面值" + AllCoupon.Find(p => p.ID == item.CouponID).JE);
+                    //        }
+                    //        break;
+                    //    case RuleType.满额送积分:
+                    //    case RuleType.首单送积分:
+                    //    case RuleType.注册送积分:
 
-                            promostionString.Add(item.JFSouce.ToString() + ",数量" + item.JFCount);
-                            break;
-                        case RuleType.满额送赠品:
-                        case RuleType.首单送赠品:
-                            //获取赠品名称
-                            if (AllHandsalProducnt.Exists(p => p.ID == item.CouponID))
-                            {
-                                promostionString.Add(item.JFSouce.ToString() + "," + AllHandsalProducnt.Find(p => p.ID == item.CouponID).Name);
-                            }
-                            break;
-                        case RuleType.满额免运费:
-                        case RuleType.首单免运费:
-                        case RuleType.包邮:
-                            promostionString.Add(item.JFSouce.ToString());
-                            break;
-                        case RuleType.其他:
-                            break;
-                        default:
-                            break;
-                    }
+                    //        promostionString.Add(item.JFSouce.ToString() + ",数量" + item.JFCount);
+                    //        break;
+                    //    case RuleType.满额送赠品:
+                    //    case RuleType.首单送赠品:
+                    //        //获取赠品名称
+                    //        if (AllHandsalProducnt.Exists(p => p.ID == item.CouponID))
+                    //        {
+                    //            promostionString.Add(item.JFSouce.ToString() + "," + AllHandsalProducnt.Find(p => p.ID == item.CouponID).Name);
+                    //        }
+                    //        break;
+                    //    case RuleType.满额免运费:
+                    //    case RuleType.首单免运费:
+                    //    case RuleType.包邮:
+                    //        promostionString.Add(item.JFSouce.ToString());
+                    //        break;
+                    //    case RuleType.其他:
+                    //        break;
+                    //    default:
+                    //        break;
+                    //}
                 }
                 order.Promotion = promostionString;
                 //获取使用的优惠券
@@ -1352,7 +1514,7 @@ namespace EasyCms.Dal
                         case ActionEnum.导出订单:
                             break;
                         case ActionEnum.拒收:
-                            int[] CanJSStatus = new int[] {  
+                            int[] CanJSStatus = new int[] {
                                 (int)OrderStatus.等待商家发货, (int)OrderStatus.已发货 };
 
 
@@ -1368,7 +1530,7 @@ namespace EasyCms.Dal
 
                             break;
                         case ActionEnum.作废:
-                            int[] CanzfStatus = new int[] {  
+                            int[] CanzfStatus = new int[] {
                                 (int)OrderStatus.拒收, (int)OrderStatus.取消订单 , (int)OrderStatus.退货完成 };
 
                             if (!CanzfStatus.Contains(order.OrderStatus))
@@ -1420,144 +1582,144 @@ namespace EasyCms.Dal
                         {
                             //兑现促销活动  主要是优惠券和积分
 
-                            ParameterInfo buyGrowth = new ParameterInfoDal().GetEntity(StaticValue.GrowthValueBuy);
-                            decimal val = decimal.Parse(buyGrowth.Value), val2 = decimal.Parse(buyGrowth.Value2);
-                            int Gowthval = (int)(PublishIDS[item].PayMoney * (val2 / val));
-                            new ManagerUserInfoDal().ChangeOrder(PublishIDS[item].MemberID, Gowthval);
-                            List<JFHistory> listHistory = Dal.From<JFHistory>().Where(JFHistory._.JFSouceMainID == item).List<JFHistory>();
-                            AccountRange accountRage = Dal.From<AccountRange>().Where(AccountRange._.ID == PublishIDS[item].MemberID).ToFirst<AccountRange>();
-                            foreach (var jf in listHistory)
-                            {
-                                if (jf.JFState == JFStatus.在途)
-                                {
-                                    jf.JFState = JFStatus.完成;
-                                    switch (jf.JFType)
-                                    {
-                                        case JFType.其他:
-                                            break;
-                                        case JFType.积分://积分,只会增加积分，不会减少
-                                            if (accountRage != null)
-                                            {
-                                                if (jf.FX == 0)
-                                                {
-                                                    accountRage.JF += jf.JFCount;
-                                                }
-                                                else
-                                                {
-                                                    accountRage.JF -= jf.JFCount;
-                                                }
-                                            }
-                                            break;
-                                        case JFType.优惠券:
-                                            if (jf.FX == AddOrRemove.增加)
-                                            {
-                                                //获取优惠券 并生成会员优惠券关系
+                            ////卢永列注销ParameterInfo buyGrowth = new ParameterInfoDal().GetEntity(StaticValue.GrowthValueBuy);
+                            //decimal val = decimal.Parse(buyGrowth.Value), val2 = decimal.Parse(buyGrowth.Value2);
+                            //int Gowthval = (int)(PublishIDS[item].PayMoney * (val2 / val));
+                            //new ManagerUserInfoDal().ChangeOrder(PublishIDS[item].MemberID, Gowthval);
+                            //List<JFHistory> listHistory = Dal.From<JFHistory>().Where(JFHistory._.JFSouceMainID == item).List<JFHistory>();
+                            //AccountRange accountRage = Dal.From<AccountRange>().Where(AccountRange._.ID == PublishIDS[item].MemberID).ToFirst<AccountRange>();
+                            //foreach (var jf in listHistory)
+                            //{
+                            //    if (jf.JFState == JFStatus.在途)
+                            //    {
+                            //        jf.JFState = JFStatus.完成;
+                            //        switch (jf.JFType)
+                            //        {
+                            //            case JFType.其他:
+                            //                break;
+                            //            case JFType.积分://积分,只会增加积分，不会减少
+                            //                if (accountRage != null)
+                            //                {
+                            //                    if (jf.FX == 0)
+                            //                    {
+                            //                        accountRage.JF += jf.JFCount;
+                            //                    }
+                            //                    else
+                            //                    {
+                            //                        accountRage.JF -= jf.JFCount;
+                            //                    }
+                            //                }
+                            //                break;
+                            //            case JFType.优惠券:
+                            //                if (jf.FX == AddOrRemove.增加)
+                            //                {
+                            //                    //获取优惠券 并生成会员优惠券关系
 
-                                                if (!string.IsNullOrWhiteSpace(jf.CouponID))
-                                                {
-                                                    CouponRule cr = Dal.Find<CouponRule>(jf.CouponID);
-                                                    if (cr != null)
-                                                    {
-                                                        int sendCount = 0;
-                                                        if (cr.MaxCount > 0 && cr.SendCount > cr.MaxCount)
-                                                        {
-                                                            jf.Remark = "优惠券已送完，不在赠送";
+                            //                    if (!string.IsNullOrWhiteSpace(jf.CouponID))
+                            //                    {
+                            //                        CouponRule cr = Dal.Find<CouponRule>(jf.CouponID);
+                            //                        if (cr != null)
+                            //                        {
+                            //                            int sendCount = 0;
+                            //                            if (cr.MaxCount > 0 && cr.SendCount > cr.MaxCount)
+                            //                            {
+                            //                                jf.Remark = "优惠券已送完，不在赠送";
 
-                                                        }
-                                                        else
-                                                        {
-                                                            int sycount = cr.MaxCount - cr.SendCount;//剩余数量
-                                                            if ((int)jf.JFCount > sycount)
-                                                            {
-                                                                sendCount = sycount;
-                                                                cr.SendCount += sycount;
-                                                                jf.Remark = "优惠券只剩余" + sycount;
-                                                            }
-                                                            else
-                                                            {
-                                                                sendCount = (int)jf.JFCount;
-                                                                cr.SendCount += sendCount;
-                                                            }
+                            //                            }
+                            //                            else
+                            //                            {
+                            //                                int sycount = cr.MaxCount - cr.SendCount;//剩余数量
+                            //                                if ((int)jf.JFCount > sycount)
+                            //                                {
+                            //                                    sendCount = sycount;
+                            //                                    cr.SendCount += sycount;
+                            //                                    jf.Remark = "优惠券只剩余" + sycount;
+                            //                                }
+                            //                                else
+                            //                                {
+                            //                                    sendCount = (int)jf.JFCount;
+                            //                                    cr.SendCount += sendCount;
+                            //                                }
 
-                                                        }
-                                                        list.Add(cr);
+                            //                            }
+                            //                            list.Add(cr);
 
-                                                        CusomerAndCoupon cc = new CusomerAndCoupon()
-                                                        {
+                            //                            CusomerAndCoupon cc = new CusomerAndCoupon()
+                            //                            {
 
-                                                            ID = Guid.NewGuid().ToString(),
-                                                            CardValue = cr.JE,
-                                                            CustomerID = PublishIDS[item].MemberID,
-                                                            CouponID = cr.ID,
-                                                            HaveCount = sendCount,
-                                                            HasDate = now,
-                                                            Code = GetMaxNo(cr.PreName ?? "Q"),
-                                                        };
-                                                        if (cr.IsPwd)
-                                                        {
-                                                            cc.CardPwd = "123456";
-                                                        }
-                                                        if (cr.QxLx == 0)
-                                                        {
-                                                            //固定期限
+                            //                                ID = Guid.NewGuid().ToString(),
+                            //                                CardValue = cr.JE,
+                            //                                CustomerID = PublishIDS[item].MemberID,
+                            //                                CouponID = cr.ID,
+                            //                                HaveCount = sendCount,
+                            //                                HasDate = now,
+                            //                                Code = GetMaxNo(cr.PreName ?? "Q"),
+                            //                            };
+                            //                            if (cr.IsPwd)
+                            //                            {
+                            //                                cc.CardPwd = "123456";
+                            //                            }
+                            //                            if (cr.QxLx == 0)
+                            //                            {
+                            //                                //固定期限
 
-                                                            cc.EndDate = cr.EndDate;
-
-
-                                                        }
-                                                        else
-                                                        {
-                                                            if (cr.IsCongZengSongKaiShi)
-                                                            {
-                                                                cr.EndDate = now.AddDays(cr.QXTS);
-                                                            }
-                                                            else { cc.EndDate = cr.EndDate; }
-
-                                                        }
-                                                        list.Add(cc);
-                                                    }
-
-                                                }
-
-                                            }
-                                            else
-                                            {
-                                                //使用优惠券，减少会员优惠券关系个数及状态
-                                                if (!string.IsNullOrWhiteSpace(jf.CouponID))
-                                                {
-                                                    CouponRule cr = Dal.Find<CouponRule>(jf.CouponID);
-                                                    if (cr != null)
-                                                    {
-                                                        CusomerAndCoupon ca = Dal.From<CusomerAndCoupon>().Where(CusomerAndCoupon._.CouponID == cr.ID
-
-                                                            && CusomerAndCoupon._.IsOutDate == false && CusomerAndCoupon._.HaveCount >= jf.JFCount)
-                                                            .ToFirst<CusomerAndCoupon>();
-                                                        if (ca != null)
-                                                        {
-                                                            ca.HaveCount -= (int)jf.JFCount;
-                                                            ca.UsedCount += (int)jf.JFCount;
-                                                            list.Add(ca);
-                                                        }
+                            //                                cc.EndDate = cr.EndDate;
 
 
-                                                    }
-                                                }
+                            //                            }
+                            //                            else
+                            //                            {
+                            //                                if (cr.IsCongZengSongKaiShi)
+                            //                                {
+                            //                                    cr.EndDate = now.AddDays(cr.QXTS);
+                            //                                }
+                            //                                else { cc.EndDate = cr.EndDate; }
 
-                                            }
-                                            break;
-                                        case JFType.赠品:
-                                            break;
-                                        default:
-                                            break;
-                                    }
-                                }
-                                if (accountRage != null)
-                                {
+                            //                            }
+                            //                            list.Add(cc);
+                            //                        }
 
-                                    list.Add(accountRage);
-                                }
-                                list.Add(jf);
-                            }
+                            //                    }
+
+                            //                }
+                            //                else
+                            //                {
+                            //                    //使用优惠券，减少会员优惠券关系个数及状态
+                            //                    if (!string.IsNullOrWhiteSpace(jf.CouponID))
+                            //                    {
+                            //                        CouponRule cr = Dal.Find<CouponRule>(jf.CouponID);
+                            //                        if (cr != null)
+                            //                        {
+                            //                            CusomerAndCoupon ca = Dal.From<CusomerAndCoupon>().Where(CusomerAndCoupon._.CouponID == cr.ID
+
+                            //                                && CusomerAndCoupon._.IsOutDate == false && CusomerAndCoupon._.HaveCount >= jf.JFCount)
+                            //                                .ToFirst<CusomerAndCoupon>();
+                            //                            if (ca != null)
+                            //                            {
+                            //                                ca.HaveCount -= (int)jf.JFCount;
+                            //                                ca.UsedCount += (int)jf.JFCount;
+                            //                                list.Add(ca);
+                            //                            }
+
+
+                            //                        }
+                            //                    }
+
+                            //                }
+                            //                break;
+                            //            case JFType.赠品:
+                            //                break;
+                            //            default:
+                            //                break;
+                            //        }
+                            //    }
+                            //    if (accountRage != null)
+                            //    {
+
+                            //        list.Add(accountRage);
+                            //    }
+                            //    list.Add(jf);
+                            //}
 
 
                         }
@@ -1617,7 +1779,7 @@ namespace EasyCms.Dal
             return Dal.From<ShopOrder>().Select(ShopOrder._.PayTypeID).Where(ShopOrder._.ID == orderID).ToFirst<ShopOrder>();
         }
 
-        public void PaySuccess(string orderID, string traseNo,bool isTongBu)
+        public void PaySuccess(string orderID, string traseNo, bool isTongBu)
         {
 
             ShopOrder order = Dal.From<ShopOrder>().Where(ShopOrder._.ID == orderID).Select(ShopOrder._.ID, ShopOrder._.PayStatus, ShopOrder._.TraceNo,
@@ -1635,7 +1797,7 @@ namespace EasyCms.Dal
                     default:
                         break;
                 }
-                order.TraceNo = traseNo; 
+                order.TraceNo = traseNo;
                 Dal.Submit(order);
                 //生成订单动作日志
                 ShopOrderAction orderAction = new ShopOrderAction()
@@ -1647,7 +1809,7 @@ namespace EasyCms.Dal
                     Username = "支付宝",
                     OrderId = orderID,
                     ActionDate = DateTime.Now,
-                    Remark = traseNo + (isTongBu ? "同步付款" : "异步步付款") 
+                    Remark = traseNo + (isTongBu ? "同步付款" : "异步步付款")
                 };
                 Dal.Submit(orderAction);
             }
@@ -1732,15 +1894,15 @@ namespace EasyCms.Dal
                     ae = ActionEnum.申请取消订单;
                 }
                 ShopOrderAction orderAction = new ShopOrderAction()
-              {
+                {
 
-                  ID = Guid.NewGuid().ToString(),
-                  ActionCode = ae,
-                  ActionName = ae.ToString(),
-                  OrderId = orderid,
-                  ActionDate = DateTime.Now,
-                  Remark = error
-              };
+                    ID = Guid.NewGuid().ToString(),
+                    ActionCode = ae,
+                    ActionName = ae.ToString(),
+                    OrderId = orderid,
+                    ActionDate = DateTime.Now,
+                    Remark = error
+                };
                 Dal.Submit(orderAction, order);
             }
             return result;
@@ -1824,7 +1986,7 @@ ShopOrderItem._.Weight).ToDataTable();
             //}
             return Dal.From<ShopOrderItem>()
 
-                .Where(ShopOrderItem._.OrderID == orderID&& ShopOrderItem._.IsVirtualProduct==false)
+                .Where(ShopOrderItem._.OrderID == orderID && ShopOrderItem._.IsVirtualProduct == false)
 
                 .Select(ShopOrderItem._.ID, ShopOrderItem._.OrderID, ShopOrderItem._.ProductID, ShopOrderItem._.ProductSKU,
             new ExpressionClip("ProductName+AttributeVal").Alias("ProductName"), ShopOrderItem._.Count, ShopOrderItem._.Price,
@@ -1843,7 +2005,7 @@ ShopOrderItem._.Weight).ToDataTable();
             ShopReturnOrder order = Dal.From<ShopReturnOrder>()
 
                 .Where(where)
-                .Select( ShopReturnOrder._.OrderId.Alias("ID"), ShopReturnOrder._.CreatedDate,
+                .Select(ShopReturnOrder._.OrderId.Alias("ID"), ShopReturnOrder._.CreatedDate,
                 ShopReturnOrder._.Description, ShopReturnOrder._.UserId,
                 ShopReturnOrder._.ReturnType,
                 ShopReturnOrder._.Status,
@@ -1924,7 +2086,7 @@ ShopOrderItem._.Weight).ToDataTable();
                 foreach (ShopReturnOrder item in list)
                 {
                     item.OrderItems = orderItems.Where(p => p.ReturnOrderId == item.ID).OrderBy(p => p.ProductCode).ToList();
-                     
+
                 }
             }
             return list;

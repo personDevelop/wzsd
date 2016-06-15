@@ -123,22 +123,54 @@ namespace EasyCms.Dal
 
 
 
-        public DataTable GetAppEntityList(string id, string host)
+        public List<ShopCategoryApp> GetAppEntityList(string id, string host)
         {
+            List<ShopCategoryApp> result = new List<ShopCategoryApp>();
             WhereClip where = new WhereClip();
+            DataTable dt = null;
             if (string.IsNullOrWhiteSpace(id))
             {
                 where = ShopCategory._.ParentID.IsNullOrEmpty();
+                dt = Dal.From<ShopCategory>()
+               .Join<AttachFile>(ShopCategory._.SmallLogo == AttachFile._.RefID, JoinType.leftJoin)
+               .Where(where).Select(ShopCategory._.ID, ShopCategory._.Code, ShopCategory._.Name, ShopCategory._.ParentID, AttachFile.GetFilePath(host, "SmallLogo"))
+               .OrderBy(ShopCategory._.OrderNo).ToDataTable(7);
             }
             else
             {
-                where = ShopCategory._.ParentID == id;
+                string classCode = Dal.From<ShopCategory>().Where(ShopCategory._.ID == id).Select(ShopCategory._.ClassCode).ToScalar() as string;
+                where = ShopCategory._.ClassCode.StartsWith(classCode+";") ;
+                dt = Dal.From<ShopCategory>()
+               .Join<AttachFile>(ShopCategory._.SmallLogo == AttachFile._.RefID, JoinType.leftJoin)
+               .Where(where).Select(ShopCategory._.ID, ShopCategory._.Code, ShopCategory._.Name, ShopCategory._.ParentID, AttachFile.GetFilePath(host, "SmallLogo"))
+               .OrderBy(ShopCategory._.OrderNo).ToDataTable();
             }
-            DataTable dt = Dal.From<ShopCategory>()
-                .Join<AttachFile>(ShopCategory._.SmallLogo == AttachFile._.RefID, JoinType.leftJoin)
-                .Where(where).Select(ShopCategory._.ID, ShopCategory._.Code, ShopCategory._.Name, ShopCategory._.ClassCode, AttachFile.GetFilePath(host, "SmallLogo"))
-                .OrderBy(ShopCategory._.OrderNo).ToDataTable();
-            return dt;
+             
+
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                result = dt.ToList<ShopCategoryApp>();
+                result.Add(new ShopCategoryApp() {  ID=string.Empty,Code=string.Empty, Name="全部分类", SmallLogo= host+ "Content/Images/all.png" });
+            }
+            else
+            {
+                List<ShopCategory> temp= dt.ToList<ShopCategory>();
+                IEnumerable<ShopCategory> root = temp.Where(p=>p.ParentID==id);
+                foreach (var item in root)
+                {
+                    ShopCategoryApp tt = new ShopCategoryApp() {  ID=item.ID, Code=item.Code, Name=item.Name, SmallLogo=item.SmallLogo};
+                    IEnumerable<ShopCategory> child = temp.Where(p => p.ParentID == item.ID);
+                    tt.ChildList = new List<ShopCategoryApp>();
+                    foreach (var c in child)
+                    {
+                        ShopCategoryApp ttt = new ShopCategoryApp() { ID = c.ID, Code = c.Code, Name = c.Name, SmallLogo = c.SmallLogo };
+                        tt.ChildList.Add(ttt);
+                    }
+                    result.Add(tt);
+                }
+
+            }
+            return result;
         }
         public DataTable GetAppEntity(string id, string host)
         {

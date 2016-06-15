@@ -33,7 +33,8 @@ namespace EasyCms.Web.API
                 string err = string.Empty;
 
                 string userid = Request.GetAccountID();
-                order = new ShopOrderBll().CreateOrder(order, host, userid, out err);
+                order = new ShopOrderBll().CreateOrder(order, host, userid,ActionPlatform.APP客户端, out err);
+               
                 if (!string.IsNullOrWhiteSpace(err))
                 {
                     return err.FormatError();
@@ -41,7 +42,10 @@ namespace EasyCms.Web.API
                 }
                 else
                 {
+                    //可用余额
+                    order.UserBalance = new ManagerUserInfoBll().GetGetBalance(userid);
                     //获取默认地址
+
                     order.ShopAddress = new ShopShippingAddressBll().GetDefaultShopAddressForShow(userid);
                     //获取促销信息
                     //获取运费,先固定0
@@ -50,7 +54,7 @@ namespace EasyCms.Web.API
                     //获取配送信息  //先不获取了
                     if (string.IsNullOrWhiteSpace(err))
                     {
-                        return order.FormatObj(true, "ShopOrderModel.Freight",
+                        return order.FormatObj(true, "ShopOrderModel.Freight", "ShopOrderModel.UserBalance",
                             "ShopOrderModel.TotalPrice", ShopShippingAddress._.ID.FullName,
                             ShopShippingAddress._.Address.FullName,
                              ShopShippingAddress._.CelPhone.FullName,
@@ -116,7 +120,7 @@ namespace EasyCms.Web.API
                 bool mustGenerSign;
                 try
                 {
-                    string orderID = new ShopOrderBll().Submit(order, user, out mustGenerSign, out err);
+                    string orderID = new ShopOrderBll().Submit(order, user, ActionPlatform.APP客户端, out mustGenerSign, out err);
 
                     if (!string.IsNullOrWhiteSpace(err))
                     {

@@ -1,41 +1,36 @@
-﻿<div id="view-buy">
+﻿@model RecomandModel
+@using EasyCms.Model.ViewModel
+<div id="view-buy">
     <div class="mt">
         <h2>
-            推荐商品
+            @Model.Title
         </h2>
     </div>
     <div class="mc">
         <ul>
-            <li class="fore1">
-                <div class="p-img">
-                    <a target="_blank" href="//item.jd.com/1777837.html">
-                        <img height="100" width="100" src="http://img12.360buyimg.com/n4/jfs/t2776/197/120408794/126655/69d0a6b6/5703f34bN3884f143.jpg" class="">
-                    </a>
-                </div>
-                <div class="p-name">
-                    <a target="_blank" href="//item.jd.com/1777837.html">
-                        海信（Hisense）LED55EC520UA 55英寸 VIDAA3 14核 炫彩4K智能电视(黑色)
-                    </a>
-                </div>
-                <div class="p-price">
-                    <strong class="J-p-1777837">￥3599.00</strong>
-                </div>
-            </li>
-            <li class="fore1">
-                <div class="p-img">
-                    <a target="_blank" href="//item.jd.com/1777837.html">
-                        <img height="100" width="100" src="http://img12.360buyimg.com/n4/jfs/t2776/197/120408794/126655/69d0a6b6/5703f34bN3884f143.jpg" class="">
-                    </a>
-                </div>
-                <div class="p-name">
-                    <a target="_blank" href="//item.jd.com/1777837.html">
-                        海信（Hisense）LED55EC520UA 55英寸 VIDAA3 14核 炫彩4K智能电视(黑色)
-                    </a>
-                </div>
-                <div class="p-price">
-                    <strong class="J-p-1777837">￥3599.00</strong>
-                </div>
-            </li>
+            @if (Model.DataList != null)
+            {
+
+
+                foreach (ListProduct item in Model.DataList)
+                {
+                    <li class="fore1">
+                        <div class="p-img">
+                            <a target="_blank" href="@Url.Action("Index","Product",new { id=item.ID})">
+                                <img height="100" width="100" src="@item.FilePath" class="">
+                            </a>
+                        </div>
+                        <div class="p-name">
+                            <a target="_blank" href="@Url.Action("Index","Product",new { id=item.ID})">
+                                @item.Name
+                            </a>
+                        </div>
+                        <div class="p-price">
+                            <strong class="J-p-1777837">￥@item.SalePrice</strong>
+                        </div>
+                    </li>
+                }
+            }
         </ul>
     </div>
 </div>

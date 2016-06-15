@@ -54,10 +54,18 @@ namespace EasyCms.Business
         {
             return Dal.GetMyCards(userID);
         }
-
+        public List<ShopShoppingCarts> GetMyDBCards(string userID)
+        {
+            return Dal.GetMyDBCards(userID);
+        }
         public int Delete(WhereClip where)
         {
             return Dal.Delete(where);
+        }
+
+        public int Save(List<ShopShoppingCarts> cardList)
+        {
+            return Dal.Save(cardList);
         }
     }
 }

@@ -32,9 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Sharp.Common">
-      <HintPath>..\refdll\Sharp.Common.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -47,11 +44,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="frmShopCategoryImg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmShopCategoryImg.Designer.cs">
+      <DependentUpon>frmShopCategoryImg.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form2.Designer.cs">
+      <DependentUpon>Form2.cs</DependentUpon>
     </Compile>
     <Compile Include="frmDowLoadFile.cs">
       <SubType>Form</SubType>
@@ -61,6 +70,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="frmShopCategoryImg.resx">
+      <DependentUpon>frmShopCategoryImg.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -89,8 +101,17 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Config\System\DataBaseConnect.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="JavaScript1.js" />
     <Content Include="order.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EasyCms.Model\EasyCms.Model.csproj">
+      <Project>{5bf70ea8-ae93-4ed9-be80-a1be82b795fa}</Project>
+      <Name>EasyCms.Model</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

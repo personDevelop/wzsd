@@ -88,6 +88,10 @@ namespace EasyCms.Business
         {
             return Dal.GetMyCanEnableCoupon( accountID);
         }
-        
+
+        public string GetCouponName(string couponID)
+        {
+            return Dal.GetCouponName(couponID);
+        }
     }
 }

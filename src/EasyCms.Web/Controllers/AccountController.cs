@@ -6,6 +6,7 @@ using Sharp.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -73,6 +74,7 @@ namespace EasyCms.Web.Controllers
                     //SignInAsync(user, model.RememberMe);
                     AccountRange role = bll.GetAccountRange(user.ID);
                     EasyCms.Session.CmsSession.AddUser(user, role);
+                    AddCardProduct(Request, user.ID);
                     if (!isJson)
                     {
 
@@ -111,6 +113,75 @@ namespace EasyCms.Web.Controllers
                 return View(model);
         }
 
+        
+
+        private void AddCardProduct(HttpRequestBase request, string userid)
+        {  //还没有登录，从cookie获取
+
+            List<CookieCard> list = new List<CookieCard>();
+            bool isHasCookie = false;
+            string cookieValue = string.Empty;
+            //先判断cookie里是否已有该商品，如果有则数量加1，
+            foreach (string item in request.Cookies.Keys)
+            {
+                if (item == StaticValue.CardCookieName)
+                {
+                    isHasCookie = true;
+                    cookieValue = Request.Cookies[item].Value;
+                    break;
+                }
+            }
+            if (isHasCookie)
+            {
+                cookieValue = HttpUtility.UrlDecode(cookieValue, Encoding.UTF8);
+                list = JsonWithDataTable.Deserialize(cookieValue, typeof(List<CookieCard>)) as List<CookieCard>;
+                ShopProductInfoBll bll = new ShopProductInfoBll();
+                ShopShoppingCartsBll cartsBll = new ShopShoppingCartsBll();
+                List<ShopShoppingCarts> cardList = cartsBll.GetMyDBCards(userid);
+                foreach (var item in list)
+                {
+                    if (cardList.Exists(p => p.ProductId == item.ProductId && item.SKU == p.SKU))
+                    {
+                        cardList.Find(p => p.ProductId == item.ProductId && item.SKU == p.SKU).Quantity += item.Quantity;
+                    }
+                    else
+                    {
+                        ShopShoppingCarts sc = null;
+                        switch (item.BuyType)
+                        {
+                            case ShopBuyType.普通购物:
+                            case ShopBuyType.赠品: 
+
+                                //获取商品名称
+                                sc = bll.GetDbCardProduct(item.ProductId, item.SKU); 
+                                sc.ActivityID = item.ActivityID; 
+                                sc.Quantity = item.Quantity; 
+                                sc.ID = item.ID;
+                                sc.UserId = userid;
+                                break;
+                            case ShopBuyType.套餐:
+                                //暂时未实现套餐功能，可以用新建商品的方式 临时弄成套餐
+                                break;
+                            case ShopBuyType.团购:
+                            case ShopBuyType.秒杀:
+                                //这两种不加入购物车，直接购买
+                                continue;
+
+                            default:
+                                break;
+                        }
+                        if (sc != null)
+                        {
+                            cardList.Add(sc);
+                        }
+                    }
+
+                }
+               
+                cartsBll.Save(cardList);
+
+            }
+        }
         public ActionResult LogOut(string returnUrl)
         {
 
@@ -191,7 +262,7 @@ namespace EasyCms.Web.Controllers
             }
             if (ModelState.IsValid)
             {
-                string error = bll.Regist(model);
+                string error = bll.Regist(model, ActionPlatform.商城网站);
                 if (string.IsNullOrWhiteSpace(error))
                 {
 
@@ -270,7 +341,7 @@ namespace EasyCms.Web.Controllers
             {
                 ModelState.AddModelError("VaryCode", "验证码已失效，请重新获取.");
             }
-            if (ModelState.IsValid&&model.VaryCode.ToLower() != sessionValidateCode)
+            if (ModelState.IsValid && model.VaryCode.ToLower() != sessionValidateCode)
             {
                 ModelState.AddModelError("VaryCode", "验证码不正确.");
             }
@@ -285,11 +356,20 @@ namespace EasyCms.Web.Controllers
                 ManagerUserInfo user = bll.GetUserInfo(model.Account, out error);
                 if (string.IsNullOrWhiteSpace(error))
                 {
+                    if (string.IsNullOrWhiteSpace(user.Email))
+                    {
+                        return View("Error", new MessageModel("对不起，您的账号在注册时没有填写邮箱账号,请联系客服帮您找回密码", error, ShowMsgType.error));
+                    }
+                    else
+                         if (!Sharp.Common.CheckValid.IsEmail(user.Email))
+                    {
+                        return View("Error", new MessageModel("对不起，您的账号在注册时填写的不是正确的邮箱账号,请联系客服帮您找回密码", error, ShowMsgType.error));
+                    }
                     DateTime now = DateTime.Now;
                     string varifyCode = Guid.NewGuid().ToString();
                     string content = GetMsgInfo(now, varifyCode);
                     SendEmail.SendMsg(CmsSessionExtend.WebSite.EmailServer,
-                        CmsSessionExtend.WebSite.EmailPort, CmsSessionExtend.WebSite.EmailUser, 
+                        CmsSessionExtend.WebSite.EmailPort, CmsSessionExtend.WebSite.EmailUser,
                         CmsSessionExtend.WebSite.EmailPwd, user.Email, "红七商城找回密码", content, ref error);
 
                     EasyCms.Model.FindPwd m = new Model.FindPwd()
@@ -304,7 +384,9 @@ namespace EasyCms.Web.Controllers
                         VaryType = ValidType.邮箱
                     };
                     bll.Save(m);
-                    return View("Error", new MessageModel("提交申请成功", "您的申请已成功受理，重置信息已发送到您注册时的邮箱中，请在30分钟内到邮箱激活重置密码", ShowMsgType.success));
+                    string email = user.Email.EncriptEmail();
+
+                    return View("Error", new MessageModel("提交申请成功", "您的申请已成功受理，重置信息已发送到您注册时的邮箱【" + email + "】中，请在30分钟内到邮箱激活重置密码", ShowMsgType.success));
                 }
                 else
                 {
@@ -431,7 +513,7 @@ namespace EasyCms.Web.Controllers
                     {
                         return View("Error", new MessageModel("重置密码失败", "您好，您的重置密码链接已失效,请重新申请找回密码。", ShowMsgType.error));
                     }
-                    else if (fp.Code.ToLower()!=model.Account.ToLower())
+                    else if (fp.Code.ToLower() != model.Account.ToLower())
                     {
                         ModelState.AddModelError("Account", "用户名不正确");
                     }

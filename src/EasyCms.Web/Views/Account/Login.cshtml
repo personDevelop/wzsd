@@ -1,6 +1,6 @@
 ﻿@model EasyCms.Model.LoginModel
 @{
-    Layout = null; 
+    Layout = null;
     ViewBag.Title = "用户登录-" + CmsSessionExtend.WebSite.Name;
 }
 @using EasyCms.Model
@@ -8,17 +8,31 @@
 <!doctype html>
 <html>
 <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8"> 
     <title>@ViewBag.Title</title>
+    <script type="text/javascript">
+        function a(){ 
+            if (self != top) {
+                self.top.window.location.href =
+                    self.top.window.location.origin;
+            }
+
+            
+        }  
+        a();
+        
+
+    </script>
+    <link REL="Shortcut Icon" href="/Content/Images/favicon.ico">
     @Styles.Render("~/bundles/webcss")
     @Styles.Render("~/bundles/logincss")
-    @Scripts.Render("~/bundles/onlyjquery") 
+    @Scripts.Render("~/bundles/onlyjquery")
 </head>
 <body>
     <div style="width:990px;margin:0 auto;">
         <div id='topbar' style="margin: 10px 0 0;height: 90px;position:relative;">
-            <image src='@(CmsSessionExtend.WebSite.LogoUrl)' style=''>
-                <span style="position: absolute;top:32px;left: 220px;font-weight: 400;font-size:24px;font-family: 微软雅黑;">欢迎登录</span>
+            <a href="@Url.Action("index", "default", new { area = string.Empty })"><image src='@(CmsSessionExtend.WebSite.LogoUrl)' style=''></a>
+            <span style="position: absolute;top:32px;left: 220px;font-weight: 400;font-size:24px;font-family: 微软雅黑;">欢迎登录</span>
         </div>
     </div>
     <div id='mainbanner' style="background-color: #FB3E35;height: 480px;">
@@ -33,7 +47,7 @@
                     <div class="mt">
                         <h1>会员登录</h1>
                         <div class="extra-r">
-                            <div class="regist-link"><a href="#" target="_blank"><b></b>立即注册</a></div>
+                            <div class="regist-link"><a href="@Url.Action("Regist")" target="_blank"><b></b>立即注册</a></div>
                         </div>
                     </div>
                     <div class="msg-wrap">
@@ -42,47 +56,47 @@
                     </div>
                     <div class="mc">
                         <div class="form">
-                           @if (ViewBag.Msg!=null && ViewBag.Msg == "1")
-                           {
-                            <span class="error">注册成功，请登录系统</span>
-                                 
-                                }
-                           
+                            @if (ViewBag.Msg != null && ViewBag.Msg == "1")
+                            {
+                                <span class="error">注册成功，请登录系统</span>
+
+                            }
+
                             @using (Html.BeginForm("Login", "Account", new { ReturnUrl = "" }, FormMethod.Post, new { id = "formlogin" }))
                             {
                                 @Html.AntiForgeryToken()
-                                  <div class="item item-fore1 item-focus">
-                                   
-                                      @Html.TextBoxFor(Model => Model.Account, new { @class = "itxt", tabindex = "1" ,autocomplete = "off", placeholder = "请输入邮箱/用户名/已验证手机" })
-                                        @Html.ValidationMessageFor(Model => Model.Account)
-                                       <span class="clear-btn" style="display: inline;"></span>
+                                <div class="item item-fore1 item-focus">
+
+                                    @Html.TextBoxFor(Model => Model.Account, new { @class = "itxt", tabindex = "1", autocomplete = "off", placeholder = "请输入邮箱/用户名/已验证手机" })
+                                    @Html.ValidationMessageFor(Model => Model.Account)
+                                    <span class="clear-btn" style="display: inline;"></span>
                                 </div>
                                 <div id="entry" class="item item-fore2">
-                                  
+
                                     @Html.PasswordFor(Model => Model.Pwd, new { @class = "itxt itxt-error", tabindex = "2", autocomplete = "off", placeholder = "请输入密码" })
-                                    @Html.ValidationMessageFor(Model => Model.Pwd) 
-                                    <span class="clear-btn"  style="display: inline;"></span> 
+                                    @Html.ValidationMessageFor(Model => Model.Pwd)
+                                    <span class="clear-btn" style="display: inline;"></span>
                                 </div>
                                 <div id="o-authcode" class="item item-vcode item-fore4  hide ">
-                                  
+
                                     @Html.TextBoxFor(Model => Model.VaryCode, new { @class = "itxt itxt02", tabindex = "3" })
 
-                                  
+
                                     <img id="JD_Verification1" class="verify-code" src="@Url.Action("","VarifyCode")">
                                     <a href="javascript:void(0)" onclick="$('#JD_Verification1').click();">看不清楚换一张</a>
                                 </div>
                                 <div class="item item-fore3">
                                     <div class="safe">
                                         <span>
-                                            @Html.CheckBoxFor(Model => Model.RememberMe, new { @class = "jdcheckbox", tabindex = "4"   })
-                                            @Html.LabelFor(Model => Model.RememberMe ) 
+                                            @Html.CheckBoxFor(Model => Model.RememberMe, new { @class = "jdcheckbox", tabindex = "4" })
+                                            @Html.LabelFor(Model => Model.RememberMe)
                                         </span>
                                         <span class="forget-pw-safe">
                                             <a href="@Url.Action("FindPwd","Account")" class="" target="_blank">忘记密码?</a>
                                         </span>
                                     </div>
                                 </div>
-                               
+
                                 <div class="item item-fore5">
                                     <div class="login-btn">
                                         <a href="javascript:;" class="btn-img btn-entry" id="loginsubmit" tabindex="6">登&nbsp;&nbsp;&nbsp;&nbsp;录</a>
@@ -116,9 +130,9 @@
             $(".clear-btn").click(function () {
 
                 $(this).prev().val('');
-               
+
             });
-            
+
             $("#loginsubmit").click(function () {
 
 
@@ -142,7 +156,7 @@
 
                     $("#formlogin").submit();
                 }
-                
+
             });
 
         });

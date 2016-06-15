@@ -1,4 +1,6 @@
 ﻿@using MVCExtention;
+@using EasyCms.Model
+@using Sharp.Common
 @{
     ViewBag.Title = "促销活动";
 }
@@ -30,18 +32,20 @@
     <script type="text/javascript">
         $(document).ready(function () {
             var url = "@Url.Action("GetList")";
-           
-            var datafields = [{ name: 'ID' }, { name: 'RuleName' }, { name: 'BuyCategoryName' }, { name: 'BuyProductName' },
+
+            var datafields = [{ name: 'ID' }, { name: 'ActionType' }, { name: 'ActionEvent' }, { name: 'ActionPlatform' }, { name: 'BuyCategoryName' }, { name: 'BuyProductName' },
 
 		{ name: 'BuyCount' }, { name: 'CouponName' }, { name: 'MinPrice' }, { name: 'StartDate' },
 
-		{ name: 'EndDate' }, { name: 'ActiveStatus' }, { name: 'CreateUser' }, { name: 'CreateDate' }];
+		{ name: 'EndDate' }, { name: 'ActionStatus' }, { name: 'CreateUser' }, { name: 'CreateDate' }];
             var columns = [
-{ text: '促销规则', dataField: 'RuleName', cellsalign: "left", width: 150 },
+{ text: '活动类型', dataField: 'ActionType', width: 100,  @HelperExtend.ParseEnum(typeof(ActionType)) },
+     { text: '触发时机', dataField: 'ActionEvent', width: 100, @HelperExtend.ParseEnum(typeof(ActionEvent)) },
+        { text: '对应平台', dataField: 'ActionPlatform', width: 100, @HelperExtend.ParseEnum(typeof(ActionPlatform)) },
   { text: '开始时间', dataField: 'StartDate', width: 130 },
 
   { text: '结束时间', dataField: 'EndDate', width: 130 },
-
+    { text: '活动状态', dataField: 'ActionStatus', width: 100,  @HelperExtend.ParseEnum(typeof(AcitivyStatus)) }, 
   { text: '商品分类名称', dataField: 'BuyCategoryName', cellsalign: "left", width: 100 },
 
   { text: '商品名称', dataField: 'BuyProductName', cellsalign: "left", width: 200 },
@@ -49,13 +53,11 @@
   { text: '购买数量', dataField: 'BuyCount', cellsalign: "right", cellsalign: "right", width: 80 },
 
   { text: '赠送优惠券', dataField: 'CouponName', cellsalign: "left", width: 100 },
-  { text: '最低金额', dataField: 'MinPrice', cellsalign: "right", width: 80 },
 
-  { text: '创建人', dataField: 'CreateUser', width: 100 },
-
+  { text: '最低金额', dataField: 'MinPrice', cellsalign: "right", width: 80 }, 
   { text: '创建时间', dataField: 'CreateDate', width: 130 }];
             CreateGrid("jqxgrid", url, datafields, columns );
-            
+
 
 
         });

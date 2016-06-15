@@ -73,10 +73,12 @@ namespace EasyCms.Session
             {
                 return null;
             }
+            
             return Session[RoleNameKey] as string ;
         }
 
-
+      
+       
 
         public static void AddUser(dynamic user, dynamic role)
         {

@@ -66,15 +66,23 @@ namespace EasyCms.Dal
         public CouponRule GetEntity(string id)
         {
             CouponRule d = Dal.From<CouponRule>().Join<ShopCategory>(!CouponRule._.CategoryId.IsNullOrEmpty() && CouponRule._.CategoryId == ShopCategory._.ID, JoinType.leftJoin)
-                .Join<ShopProductInfo>(!CouponRule._.ProductId.IsNullOrEmpty() && CouponRule._.ProductId == ShopProductInfo._.ID)
-                .Join<ShopProductSKUInfo>(!CouponRule._.ProductSku.IsNullOrEmpty() && CouponRule._.ProductSku == ShopProductSKUInfo._.ID)
+                .Join<ShopProductInfo>(!CouponRule._.ProductId.IsNullOrEmpty() && CouponRule._.ProductId == ShopProductInfo._.ID, JoinType.leftJoin)
+                .Join<ShopProductSKUInfo>(!CouponRule._.ProductSku.IsNullOrEmpty() && CouponRule._.ProductSku == ShopProductSKUInfo._.ID, JoinType.leftJoin)
                 .Select(CouponRule._.ID.All, ShopCategory._.Name.Alias("ShopCategoryName"), ShopProductInfo._.Name.Alias("ShopName")
                 , ShopProductSKUInfo._.SKU.Alias("ShopSkuCode")).Where(CouponRule._.ID == id).ToFirst<CouponRule>();
 
             return d;
         }
+        public CouponRule GetSimpleEntity(string id)
+        {
+            CouponRule d = Dal.Find<CouponRule>(id) ;
 
-
+            return d;
+        }
+        public string GetCouponName(string couponID)
+        {
+           return Dal.From<CouponRule>().Select(CouponRule._.Name).Where(CouponRule._.ID==couponID).ToScalar() as string;
+        }
 
         public DataTable GetCoupon(string host, bool isAll = false)
         {
@@ -224,7 +232,7 @@ namespace EasyCms.Dal
         {
             //先更新过期日期小于今天的为无效
             CusomerAndCoupon updateCoupon = new CusomerAndCoupon() { RecordStatus = StatusType.update, IsOutDate = true };
-            updateCoupon.Where = CusomerAndCoupon._.EndDate < DateTime.Now;
+            updateCoupon.Where = CusomerAndCoupon._.EndDate < DateTime.Now   ;
             Dal.Submit(updateCoupon);
         }
 
@@ -289,7 +297,7 @@ namespace EasyCms.Dal
             }
             else
             {
-                cr = GetEntity(s.CouponID);
+                cr = GetSimpleEntity(s.CouponID);
                 string[] userId = null;
                 WhereClip where = ManagerUserInfo._.IsManager == false && ManagerUserInfo._.Status == (int)UserStatus.正常;
                 switch (s.SendType)

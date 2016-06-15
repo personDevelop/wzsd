@@ -17,7 +17,9 @@ ShopOrderModel order
           IsInvoice    是否要发票
 	  InvoiceInfo  发票抬头
 	  InvoiceNote  发票说明
-          Remark       订单说明	
+          Remark       订单说明
+	  PayMoney     需要支付金额包含运费 和减去优惠券金额 减去使用的余额  也就是实际付款金额）   代替原来的TotalPrice  原来的TotalPrice 值为 商品的总合计金额	
+          UserBalance  使用的余额	
 
     	<--新增加->
          UserBalance          使用余额

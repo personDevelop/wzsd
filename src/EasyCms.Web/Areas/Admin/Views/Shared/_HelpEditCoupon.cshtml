@@ -3,6 +3,7 @@
 
     HelpEditModel p = new HelpEditModel()
     {
+        OnCreateCtrol = "OnChangeRule",
         OtherField = Model.OtherField,
         ReturnOtherField = Model.ReturnOtherField,
         DisplayFieldValue = Model.DisplayFieldValue,
@@ -27,7 +28,7 @@
         Lable = Model.Lable,
         PlaceHolder = "请选择优惠券",
         IsMutiSelect = Model.IsMutiSelect,
-        IsViewModel = Model.IsViewModel, 
+        IsViewModel = Model.IsViewModel,
         OtherSet = "{adapter: {  formatData: function (data) {  data.Name = $('#" + Model.ValueField + "SearchText').val();  } }}"
 
     };

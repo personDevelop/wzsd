@@ -30,7 +30,7 @@ namespace EasyCms.Dal
 
         public List<SimpalFile> GetFiles(string host, List<string> refidList)
         {
-            return Dal.From<AttachFile>().Where(AttachFile._.RefID.In(refidList) && AttachFile._.OrderNo == 1)
+            return Dal.From<AttachFile>().Where(AttachFile._.RefID.In(refidList) && AttachFile._.OrderNo == 0)
                .Select(AttachFile._.ID, AttachFile._.RefID, AttachFile.GetThumbnaifilePath(host))
                .ToDataTable().ToList<SimpalFile>();
         }

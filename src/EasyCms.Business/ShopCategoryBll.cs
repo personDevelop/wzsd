@@ -69,7 +69,7 @@ namespace EasyCms.Business
 
 
 
-        public DataTable GetAppEntityList(string id, string host)
+        public List<ShopCategoryApp> GetAppEntityList(string id, string host)
         {
             return Dal.GetAppEntityList(id, host);
 

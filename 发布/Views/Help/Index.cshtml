@@ -1,0 +1,50 @@
+﻿@model EasyCms.Model.HelpContent
+@using EasyCms
+@using EasyCms.Model
+@{
+    Layout = "~/Views/Shared/_HelpCenter.cshtml";
+    ViewBag.Title = Model.AliasTableName+"-" + CmsSessionExtend.WebSite.Name;
+} 
+ 
+<style>
+    #detail h1 {
+        padding: 10px 0 15px;
+        margin-bottom: 10px;
+        height: 24px;
+        text-align: center;
+        border-bottom: 1px solid #EBEBEB;
+        font-family: \5fae\8f6f\96c5\9ed1;
+        line-height: 24px;
+        font-size: 20px;
+    }
+
+    #detail {
+        border: 1px solid #EBEBEB;
+        padding: 15px 30px 0;
+        font-family: \5fae\8f6f\96c5\9ed1;
+        margin-left: 220px;
+        color: #666;
+    }
+
+        #detail .summary {
+            text-align: center;
+            color: #999;
+        }
+
+        #detail .mc {
+            padding: 30px 10px;
+            font-size: 14px;
+            line-height: 2em;
+        }
+</style>
+<div  style="margin-top:10px;">
+    
+    <div id='detail'>
+         
+        <div class="mc">
+            @(new HtmlString(Model.ContentHtml.Replace("\\\"", "\"").Replace("\\r\\n", "")))
+        </div>
+
+    </div>
+
+</div>

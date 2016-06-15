@@ -26,7 +26,7 @@ namespace EasyCms.Model
 
         private string _ID;
 
-        private string _RuleID;
+        private ActionType _ActionType;
 
         private string _BuyCategoryId;
 
@@ -60,17 +60,21 @@ namespace EasyCms.Model
 
         private DateTime _EndDate;
 
-        private bool _IsEnable;
-
         private string _CreateUser;
 
         private DateTime _CreateDate;
 
         private string _Note;
 
-        private int _ActionStatus;
+        private AcitivyStatus _ActionStatus;
 
         private decimal _HasSendCount;
+
+        private ActionEvent _ActionEvent;
+
+        private ActionPlatform _ActionPlatform;
+
+        private bool _IsOne;
 
         #endregion
 
@@ -81,7 +85,7 @@ namespace EasyCms.Model
         /// </summary>
 
         [PrimaryKey]
-        [DbProperty(MapingColumnName = "ID", DbTypeString = "char", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ID", DbTypeString = "varchar", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
         public string ID
         {
@@ -92,26 +96,30 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("ID", this._ID, value);
+
+
                 this._ID = value;
             }
         }
 
         /// <summary>
-        ///  促销规则,
+        ///  活动类型,
         /// </summary>
 
-        [DbProperty(MapingColumnName = "RuleID", DbTypeString = "char", ColumnIsNull = false, IsUnique = true, ColumnLength = 36, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+        [DbProperty(MapingColumnName = "ActionType", DbTypeString = "int", ColumnIsNull = false, IsUnique = true, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public string RuleID
+        public ActionType ActionType
         {
             get
             {
-                return this._RuleID;
+                return this._ActionType;
             }
             set
             {
-                this.OnPropertyChanged("RuleID", this._RuleID, value);
-                this._RuleID = value;
+                this.OnPropertyChanged("ActionType", this._ActionType, value);
+
+
+                this._ActionType = value;
             }
         }
 
@@ -130,6 +138,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("BuyCategoryId", this._BuyCategoryId, value);
+
+
                 this._BuyCategoryId = value;
             }
         }
@@ -149,6 +159,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("BuyCategoryName", this._BuyCategoryName, value);
+
+
                 this._BuyCategoryName = value;
             }
         }
@@ -168,6 +180,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("BuyProductId", this._BuyProductId, value);
+
+
                 this._BuyProductId = value;
             }
         }
@@ -187,6 +201,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("BuyProductName", this._BuyProductName, value);
+
+
                 this._BuyProductName = value;
             }
         }
@@ -206,6 +222,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("BuySKUID", this._BuySKUID, value);
+
+
                 this._BuySKUID = value;
             }
         }
@@ -225,6 +243,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("BuyCount", this._BuyCount, value);
+
+
                 this._BuyCount = value;
             }
         }
@@ -244,6 +264,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("HandsaleProductId", this._HandsaleProductId, value);
+
+
                 this._HandsaleProductId = value;
             }
         }
@@ -263,6 +285,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("HandsaleProductSKUID", this._HandsaleProductSKUID, value);
+
+
                 this._HandsaleProductSKUID = value;
             }
         }
@@ -282,6 +306,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("CouponID", this._CouponID, value);
+
+
                 this._CouponID = value;
             }
         }
@@ -301,6 +327,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("CouponName", this._CouponName, value);
+
+
                 this._CouponName = value;
             }
         }
@@ -320,6 +348,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("HandsaleMaxCount", this._HandsaleMaxCount, value);
+
+
                 this._HandsaleMaxCount = value;
             }
         }
@@ -339,6 +369,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("HandsaleCount", this._HandsaleCount, value);
+
+
                 this._HandsaleCount = value;
             }
         }
@@ -358,6 +390,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("MinPrice", this._MinPrice, value);
+
+
                 this._MinPrice = value;
             }
         }
@@ -377,6 +411,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("MaxPrice", this._MaxPrice, value);
+
+
                 this._MaxPrice = value;
             }
         }
@@ -396,6 +432,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("StartDate", this._StartDate, value);
+
+
                 this._StartDate = value;
             }
         }
@@ -415,26 +453,9 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("EndDate", this._EndDate, value);
+
+
                 this._EndDate = value;
-            }
-        }
-
-        /// <summary>
-        ///  状态,
-        /// </summary>
-
-        [DbProperty(MapingColumnName = "IsEnable", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
-
-        public bool IsEnable
-        {
-            get
-            {
-                return this._IsEnable;
-            }
-            set
-            {
-                this.OnPropertyChanged("IsEnable", this._IsEnable, value);
-                this._IsEnable = value;
             }
         }
 
@@ -453,6 +474,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("CreateUser", this._CreateUser, value);
+
+
                 this._CreateUser = value;
             }
         }
@@ -472,6 +495,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("CreateDate", this._CreateDate, value);
+
+
                 this._CreateDate = value;
             }
         }
@@ -491,6 +516,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("Note", this._Note, value);
+
+
                 this._Note = value;
             }
         }
@@ -501,7 +528,7 @@ namespace EasyCms.Model
 
         [DbProperty(MapingColumnName = "ActionStatus", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
 
-        public int ActionStatus
+        public AcitivyStatus ActionStatus
         {
             get
             {
@@ -510,6 +537,8 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("ActionStatus", this._ActionStatus, value);
+
+
                 this._ActionStatus = value;
             }
         }
@@ -529,13 +558,78 @@ namespace EasyCms.Model
             set
             {
                 this.OnPropertyChanged("HasSendCount", this._HasSendCount, value);
+
+
                 this._HasSendCount = value;
+            }
+        }
+
+        /// <summary>
+        ///  活动触发事件,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "ActionEvent", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public ActionEvent ActionEvent
+        {
+            get
+            {
+                return this._ActionEvent;
+            }
+            set
+            {
+                this.OnPropertyChanged("ActionEvent", this._ActionEvent, value);
+
+
+                this._ActionEvent = value;
+            }
+        }
+
+        /// <summary>
+        ///  活动对应的平台,
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "ActionPlatform", DbTypeString = "int", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public ActionPlatform ActionPlatform
+        {
+            get
+            {
+                return this._ActionPlatform;
+            }
+            set
+            {
+                this.OnPropertyChanged("ActionPlatform", this._ActionPlatform, value);
+
+
+                this._ActionPlatform = value;
+            }
+        }
+
+        /// <summary>
+        ///  限制使用一次,是否限制一人只能使用一次
+        /// </summary>
+
+        [DbProperty(MapingColumnName = "IsOne", DbTypeString = "bit", ColumnIsNull = false, IsUnique = false, ColumnLength = 0, ColumnJingDu = 0, IsGenarator = false, StepSize = 0, ColumnDefaultValue = "")]
+
+        public bool IsOne
+        {
+            get
+            {
+                return this._IsOne;
+            }
+            set
+            {
+                this.OnPropertyChanged("IsOne", this._IsOne, value);
+
+
+                this._IsOne = value;
             }
         }
 
         #endregion
 
-        #region 列定义
+        #region 列定义 
         public class Column
         {
             public Column(string tableName)
@@ -543,7 +637,7 @@ namespace EasyCms.Model
 
                 ID = new PropertyItem("ID", tableName);
 
-                RuleID = new PropertyItem("RuleID", tableName);
+                ActionType = new PropertyItem("ActionType", tableName);
 
                 BuyCategoryId = new PropertyItem("BuyCategoryId", tableName);
 
@@ -577,8 +671,6 @@ namespace EasyCms.Model
 
                 EndDate = new PropertyItem("EndDate", tableName);
 
-                IsEnable = new PropertyItem("IsEnable", tableName);
-
                 CreateUser = new PropertyItem("CreateUser", tableName);
 
                 CreateDate = new PropertyItem("CreateDate", tableName);
@@ -589,6 +681,12 @@ namespace EasyCms.Model
 
                 HasSendCount = new PropertyItem("HasSendCount", tableName);
 
+                ActionEvent = new PropertyItem("ActionEvent", tableName);
+
+                ActionPlatform = new PropertyItem("ActionPlatform", tableName);
+
+                IsOne = new PropertyItem("IsOne", tableName);
+
 
             }
             /// <summary>
@@ -596,9 +694,9 @@ namespace EasyCms.Model
             /// </summary> 
             public PropertyItem ID = null;
             /// <summary>
-            /// 促销规则,
+            /// 活动类型,
             /// </summary> 
-            public PropertyItem RuleID = null;
+            public PropertyItem ActionType = null;
             /// <summary>
             /// 促销商品分类,
             /// </summary> 
@@ -664,10 +762,6 @@ namespace EasyCms.Model
             /// </summary> 
             public PropertyItem EndDate = null;
             /// <summary>
-            /// 状态,
-            /// </summary> 
-            public PropertyItem IsEnable = null;
-            /// <summary>
             /// 创建人,
             /// </summary> 
             public PropertyItem CreateUser = null;
@@ -687,6 +781,18 @@ namespace EasyCms.Model
             /// 已赠送数量,
             /// </summary> 
             public PropertyItem HasSendCount = null;
+            /// <summary>
+            /// 活动触发事件,
+            /// </summary> 
+            public PropertyItem ActionEvent = null;
+            /// <summary>
+            /// 活动对应的平台,
+            /// </summary> 
+            public PropertyItem ActionPlatform = null;
+            /// <summary>
+            /// 限制使用一次,是否限制一人只能使用一次
+            /// </summary> 
+            public PropertyItem IsOne = null;
         }
         #endregion
     }
@@ -696,7 +802,8 @@ namespace EasyCms.Model
         protected override void OnCreate()
         {
             CreateDate = DateTime.Now;
-            IsEnable = true;
+             
+            ActionStatus = AcitivyStatus.制单;
         }
         [NotDbCol]
         public string BuySKUCode { get; set; }

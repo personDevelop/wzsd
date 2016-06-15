@@ -38,7 +38,10 @@
 
                   },
                   loadComplete: function () {
+                      if (opts.isMutilSelect) {
+                          $(gridid).jqxGrid('clearselection'); 
 
+                      }
                   },
                   beforeprocessing: function (data) {
                       source.totalrecords = data.total;
@@ -98,10 +101,7 @@
     if (!opts.grid.pageable) {
         opts.grid.rendergridrows = null, opts.grid.virtualmode = false, opts.grid.pagerrenderer = null;
     }
-    if (opts.isMutilSelect) {
-        $(gridid).on("bindingcomplete", function (event) { $(gridid).jqxGrid('clearselection'); });
-            
-        }
+    
     $(gridid).jqxGrid(
      $.extend({
          width: "99%",
@@ -109,7 +109,7 @@
          source: dataAdapter,
          columnsresize: true,
          theme: "metro",
-         virtualmode: true,
+         virtualmode: false,
          selectionmode: selectionmode,
          altrows: true,
          rendergridrows: function (params) {

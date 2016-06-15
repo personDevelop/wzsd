@@ -124,7 +124,7 @@ namespace EasyCms.Dal
             ShopProductReviews sr = Dal.From<ShopProductReviews>()
                   .Join<ManagerUserInfo>(ShopProductReviews._.UserId == ManagerUserInfo._.ID)
                    .Join<ShopProductInfo>(ShopProductInfo._.ID == ShopProductReviews._.ProductId)
-                   .Join<AttachFile>(AttachFile._.RefID == ShopProductInfo._.ID && AttachFile._.OrderNo == 1, JoinType.leftJoin)
+                   .Join<AttachFile>(AttachFile._.RefID == ShopProductInfo._.ID && AttachFile._.OrderNo == 0, JoinType.leftJoin)
                   .Where(ShopProductReviews._.ID == id)
                   .Select(ShopProductReviews._.ID.All,
               ShopProductInfo._.Name.Alias("ProductName"),

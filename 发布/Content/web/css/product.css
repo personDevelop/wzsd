@@ -1,29 +1,4 @@
 
-#root-nav {
-    clear: both;
-}
-#root-nav {
-    background: #f2f2f2;
-}
-#root-nav .w .breadcrumb {
-    padding: 0 0 4px 6px;
-    overflow: hidden;
-    vertical-align: baseline;
-    margin-bottom: 0;
-    padding-bottom: 0;
-    height: 45px;
-    line-height: 45px;
-}
-.breadcrumb h1, .breadcrumb strong {
-    display: inline;
-    font-weight: 700;
-    line-height: 20px;
-    font-size: 18px;
-    font-family: "microsoft yahei";
-}
-.breadcrumb span {
-    font-family: simsun;
-}
 
 #preview {
     float: left;
@@ -39,9 +14,9 @@
     position: relative;
 }
 #itemInfo{
-    width: 810px;
+    width: 800px;
     float: left;
-    height: 400px;
+  
     
     padding-right: 22px;
 }
@@ -290,14 +265,11 @@ a.orange, .orange {
     float: left;
 }
 #choose .dt {
-    float: left;
-    width: 72px;
-   
-    display: inline;
-    
+    float: left; 
+    display: inline; 
     font-family: simsun;
 }
-#choose-suit .dt, #choose-type .dt, #choose-version .dt {
+#choose-suit .dt, #choose-type .dt, .choose-version .dt {
     margin-top: 8px;
 }
 
@@ -353,57 +325,6 @@ a.orange, .orange {
     color: #999
 }
 
-#view-buy{
-    float: left; width: 210px;
-    margin-top: 4px;
-}
-#p-box{
-    overflow: visible;
-}
-#view-buy .mt{
-    font: 14px/30px 'microsoft yahei';
-    height: 28px;
-   
-    line-height: 28px;
-    border: 1px solid #ddd;
-    background-color: #f7f7f7;
-}
-#view-buy .mt h2{
-    font-size: 14px;
-    color: #666;
-    padding: 0 8px;
-}
-#view-buy .mc {
-    border: 1px solid #ddd;
-    border-top: none;
-}
-
-#view-buy .mc ul {
-    padding: 0 8px;
-    overflow: hidden;
-    zoom: 1;
-}
-#view-buy .mc ul li {
-    padding: 8px 0;
-    border-top: 1px dotted #DEDEDE;
-}
-#view-buy .mc ul li .p-img {
-    padding: 5px 0;
-    text-align: center;
-}
-#view-buy .mc ul li .p-price {
-    text-align: center;
-}
-#view-buy .mc ul li .p-name {
-    word-break: break-all;
-    word-wrap: break-word;
-}
-#view-buy .mc ul li .p-price strong {
-    color: #E4393C;
-}
-#view-buy .mc .fore1 {
-    border-top: none;
-}
 
 #prd-detail{
     float: left;

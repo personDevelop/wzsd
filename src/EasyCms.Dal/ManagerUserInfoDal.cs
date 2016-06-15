@@ -1,4 +1,5 @@
-﻿using EasyCms.Model;
+﻿using EasyCms.Dal.PromotionRule;
+using EasyCms.Model;
 using EasyCms.Model.ViewModel;
 using Sharp.Common;
 using Sharp.Data;
@@ -77,7 +78,7 @@ namespace EasyCms.Dal
 
 
 
-        public string Regist(RegistModel registModel)
+        public string Regist(RegistModel registModel,ActionPlatform plat)
         {
             ManagerUserInfo user = user = new ManagerUserInfo()
             {
@@ -112,7 +113,10 @@ namespace EasyCms.Dal
                     Dal.Submit(user);
                     //同时更新其等级 和成长值
                     //获取注册获得的成长值
+                    BaseRule br = new BaseRule() {  UserInfo=user, Context=user};
+                    br.Run(plat, ActionEvent.注册);
                     ParameterInfo valPara = new ParameterInfoDal().GetEntity(StaticValue.GrowthValueRegist);
+
                     if (valPara != null)
                     {
                         int grothvalue = 0;
@@ -235,9 +239,17 @@ namespace EasyCms.Dal
             Dal.Submit(list);
         }
 
+        public decimal GetGetBalance(string id)
+        {
+            return Convert.ToDecimal(Dal.From<ManagerUserInfo>().Where(ManagerUserInfo._.ID==id ).Select(ManagerUserInfo._.Balance).ToScalar());
+        }
+
         public FindPwd GetFindPwdRecord(string id)
         {
-            return Dal.From<FindPwd>().Join<ManagerUserInfo>(FindPwd._.UserID== ManagerUserInfo._.ID).Select(FindPwd._.UserID,FindPwd._.EndTime,FindPwd._.ID,ManagerUserInfo._.Code).ToFirst<FindPwd>( );
+            return Dal.From<FindPwd>().Join<ManagerUserInfo>(FindPwd._.UserID== ManagerUserInfo._.ID)
+                .Where(FindPwd._.ID==id)
+                
+                .Select(FindPwd._.UserID,FindPwd._.EndTime,FindPwd._.ID,ManagerUserInfo._.Code).ToFirst<FindPwd>( );
         }
 
         public int Save(FindPwd m)
@@ -295,6 +307,7 @@ namespace EasyCms.Dal
                 ManagerUserInfo._.CreateDate,
                 ManagerUserInfo._.LastModifyDate,
                 ManagerUserInfo._.Status,
+                 ManagerUserInfo._.Balance,
                 ManagerUserInfo._.Note, AccountRange._.GrowthValue, AccountRange._.JF, RangeDict._.Name.Alias("RangeName"), RangeDict._.HasService, RangeDict._.Img.Alias("RangeImg"))
                 .ToDataTable().Rows[0].ToFirst<AccountModel>();
             user.RangeImg = Dal.From<AttachFile>().Where(AttachFile._.RefID == user.RangeImg).Select(AttachFile.GetCompressionfilePath(host)).ToScalar() as string;
@@ -573,7 +586,13 @@ namespace EasyCms.Dal
         {
             return Dal.Delete<TokenInfo>(token);
         }
+        public ManagerUserInfo GetSessionUserInfo(string token)
+        {
+            return Dal.From<TokenInfo>().Join<ManagerUserInfo>(TokenInfo._.UserID == ManagerUserInfo._.ID)
 
+                .Where(TokenInfo._.ID == token).Select(ManagerUserInfo._.ID.All).ToFirst<ManagerUserInfo>();
+                
+        }
         public ManagerUserInfo GetUserByToken(string token)
         {
             object o = Dal.From<TokenInfo>().Where(TokenInfo._.ID == token).Select(TokenInfo._.OutTime).ToScalar();

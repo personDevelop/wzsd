@@ -22,7 +22,10 @@
     </div>
 </div>
 <div class="tab-content">
+    <script type="text/javascript">
 
+        
+    </script>
     <script type="text/javascript">
         var selectType = 0;
         function AddValue(productID, type, rowindex) {
@@ -56,8 +59,8 @@
             $(".jqxExpander").jqxExpander({ width: '100%', height: 480, theme: "metro", toggleMode: 'none', showArrow: false });
             $("#BtnqryCateTj").jqxButton({ width: '100', template: "success" });
             $('#BtnqryCateTj').on('click', function () {
-
-                var source =
+              
+              var source =
             {
                 dataType: "json",
                 dataFields: [
@@ -88,8 +91,8 @@
                 },
                 downloadComplete: function (data, status, xhr) {
 
-                    source.totalRecords = data.TotalRecourdCount;
-                    source.value = data.Data;
+                    source.totalRecords = data.data.TotalRecourdCount;
+                    source.value = data.data.Data;
 
 
                 },
@@ -102,10 +105,11 @@
                 {
                     width: "99%",
                     source: dataAdapter,
-
+                    theme: "metro",
                     pageable: true,
                     pageSize: 20,
                     pagerButtonsCount: 5,
+                    serverProcessing: true,
                     enableHover: false,
                     selectionMode: 'none',
                     columns: [
@@ -140,7 +144,7 @@
 
 
                     ]
-                });
+                }); 
             });
 
         });
@@ -180,8 +184,8 @@
                 },
                 downloadComplete: function (data, status, xhr) {
 
-                    source.totalRecords = data.TotalRecourdCount;
-                    source.value = data.Data;
+                    source.totalRecords = data.data.TotalRecourdCount;
+                    source.value = data.data.Data;
 
 
                 },
@@ -194,8 +198,10 @@
             {
                 width: "99%",
                 source: dataAdapter,
-                pageable: true,
-                pageSize: 20,
+                theme: "metro",
+                pageable: true, 
+                pageSize: 200,
+                serverProcessing: true,
                 pagerButtonsCount: 5,
                 enableHover: false,
                 selectionMode: 'none',

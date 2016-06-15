@@ -53,10 +53,15 @@ namespace EasyCms.Dal
                   );
             }
 
-            return Dal.From<View_ProductInfoBySkuid>().Join<AttachFile>(View_ProductInfoBySkuid._.ID == AttachFile._.RefID && AttachFile._.OrderNo==1, JoinType.leftJoin)
+            return Dal.From<View_ProductInfoBySkuid>().Join<AttachFile>(View_ProductInfoBySkuid._.ID == AttachFile._.RefID && AttachFile._.OrderNo==0, JoinType.leftJoin)
                 .Select(View_ProductInfoBySkuid._.ID.All, AttachFile.GetThumbnaifilePath(host))
                 .Where( where )
                 .ToDataTable();
+        }
+
+        public int Save(List<ShopShoppingCarts> cardList)
+        {
+            return Dal.Submit(cardList);
         }
 
         public int Delete(WhereClip where)
@@ -69,6 +74,7 @@ namespace EasyCms.Dal
             List<ShopCardInfo> resultList = new List<ShopCardInfo>();
             List<ShopShoppingCarts> list= Dal.From<ShopShoppingCarts>().Where(ShopShoppingCarts._.UserId == userID)
                 .OrderBy(ShopShoppingCarts._.AddTime)
+
                 .List<ShopShoppingCarts>();
            
             foreach (var item in list)
@@ -82,7 +88,7 @@ namespace EasyCms.Dal
                 ShopProductInfo p = Dal.From<ShopProductInfo>().Where(ShopProductInfo._.ID == item.ProductId)
                     .Join<AttachFile>(AttachFile._.RefID == ShopProductInfo._.ID && AttachFile._.OrderNo == 0, JoinType.leftJoin)
 
-                    .Select(  ShopProductInfo._.SaleStatus, ShopProductInfo._.Stock, ShopProductInfo._.SalePrice, AttachFile.GetThumbnaifilePath("", "ThumbImgUrl")).ToFirst<ShopProductInfo>();
+                    .Select(ShopProductInfo._.Name,  ShopProductInfo._.SaleStatus, ShopProductInfo._.Stock, ShopProductInfo._.SalePrice, AttachFile.GetThumbnaifilePath("", "ThumbImgUrl")).ToFirst<ShopProductInfo>();
                
                 sc.ThumbImgUrl = p.ThumbImgUrl;
                 sc.Stock = p.Stock;
@@ -105,7 +111,17 @@ namespace EasyCms.Dal
 
             return resultList;
         }
+        public List<ShopShoppingCarts> GetMyDBCards(string userID)
+        {
+            
+            List<ShopShoppingCarts> list = Dal.From<ShopShoppingCarts>().Where(ShopShoppingCarts._.UserId == userID)
+                .OrderBy(ShopShoppingCarts._.AddTime) 
+                .List<ShopShoppingCarts>();
 
+            
+
+            return list;
+        }
         public ShopShoppingCarts GetEntity(WhereClip whereClip)
         {
             return Dal.Find<ShopShoppingCarts>(whereClip);

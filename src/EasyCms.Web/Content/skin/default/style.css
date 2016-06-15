@@ -3353,3 +3353,5 @@ textarea {
     background: url(Item_Master.gif)  ;  width:16px;
                         height:16px;
 }
+  .validation-summary-errors
+  { color:red;}

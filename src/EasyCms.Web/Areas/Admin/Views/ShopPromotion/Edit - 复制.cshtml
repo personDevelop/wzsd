@@ -1,0 +1,252 @@
+﻿@model ShopPromotion
+@{
+    ViewBag.Title = "编辑促销活动";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEdit.cshtml";
+}
+
+@Styles.Render("~/bundles/upimgcss")
+@Scripts.Render("~/bundles/ueditor")
+@Scripts.Render("~/bundles/uploadJs")
+
+@using EasyCms.Model
+<!--内容-->
+<div id="floatHead" class="content-tab-wrap">
+    <div class="content-tab">
+        <div class="content-tab-ul-wrap">
+            <ul>
+                <li><a class="selected" href="javascript:;">基本信息</a></li>
+               
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="tab-content">
+
+
+    @HelperExtend.HiddenFor("ID", Model.ID)
+    @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())
+
+
+    @Html.ValidationSummary()
+
+    @HelperExtend.DropDownList("RuleID", "促销规则", defaultval: Model.RuleID, downInfo: new DropDownListInfo()
+{
+    Url = Url.Action("GetListForSelecte", "RedeemRules", new { area = "Admin" }),
+    change = "OnChangeRule"
+})
+
+
+    
+    @HelperExtend.Number("BuyCount", "购买指定数量", defaultval: Model.BuyCount, hint: "")
+
+    @Html.Partial("_HelpEditProduct", new HelpEditShopProductModel()
+{
+    DisplayField = "HandProductName", 
+    DisplayFieldValue = Model.HandProductName, 
+    Lable = "赠送商品",
+    ValueField = "HandsaleProductId",
+    ValueFieldValue = Model.HandsaleProductId
+})
+
+    @Html.Partial("_HelpEdit", new HelpEditModel()
+{
+    DisplayField = "HandSKUCode",
+    DisplayFieldValue = Model.HandSKUCode,
+    Hint = "如果商品有启用规格，则必选",
+    Lable = "赠送商品SKU",
+    ValueField = "HandsaleProductSKUID",
+    ValueFieldValue = Model.HandsaleProductSKUID,
+    Columns = @"[
+                   { text: 'SKU编号', dataField: 'SKU',   width: 100 },
+                    { text: '规格', dataField: 'AttriVal',  width:  300  },
+                   { text: '市场价', dataField: 'MarketPrice',  width: 80 },
+                   { text: '销售价', dataField: 'SalePrice',  width: 80 }  ]",
+    DataFields = @"[
+
+               { name: 'SkuID', type: 'string' },
+
+
+
+               { name: 'SKU', type: 'string' },
+
+               { name: 'AttriVal', type: 'string' },
+      { name: 'MarketPrice', type: 'string' },
+      { name: 'SalePrice', type: 'string' }
+                            ]",
+    HelpTitle = "选择商品SKU",
+    ReturnDisplayField = "SKU",
+    ReturnValueField = "SkuID",
+    SearchField = "SKUName",
+    Url = Url.RouteUrl("ApiWithWeb", new { controller = "ShopProductApi", action = "GetSkuByProductID" }),
+    OtherSerchFieldFunction = "GetProductCondition",
+   
+    OtherSet = "{ data:{root: 'data'}}",
+
+})
+
+   
+
+
+       
+    @Html.Partial("_HelpEditCoupon", new HelpEditCouponModel()
+{
+    DisplayField = "CouponName",
+    DisplayFieldValue = Model.CouponName,
+    Hint = "",
+    Lable = "赠送优惠券",
+    ValueField = "CouponID",
+    ValueFieldValue = Model.CouponID
+})
+    
+
+    @HelperExtend.Number("HandsaleCount", "赠送数量", defaultval: Model.HandsaleCount, hint: "")
+    @HelperExtend.Number("HandsaleMaxCount", "最多赠送数量", defaultval: Model.HandsaleMaxCount, hint: "送完为止",max:int.MaxValue) 
+    @HelperExtend.Number("MinPrice", "限制最低金额", defaultval: Model.MinPrice, decimalDigits: 2, hint: "")
+
+    @HelperExtend.Number("MaxPrice", "限制最高金额", defaultval: Model.MaxPrice, hint: "",decimalDigits:2, max: int.MaxValue)
+
+    @HelperExtend.DateTime("StartDate", "活动开始时间", defaultval: Model.StartDate, hint: "")
+
+    @HelperExtend.DateTime("EndDate", "活动结束时间", defaultval: Model.EndDate, hint: "")
+
+    @HelperExtend.RadioGroup("IsEnable", "是否启用", "false,true", "否,是", defaultval: Model.IsEnable)
+    @Html.Partial("_HelpEditProductCategory", new HelpEditShopProductCategory()
+{
+    DisplayField = "BuyCategoryName",
+    DisplayFieldValue = Model.BuyCategoryName,
+    Hint = "不选择商品分类，就适合全部商品",
+    IsMutiSelect = false,
+    Lable = "商品分类",
+    ValueField = "BuyCategoryId",
+    ValueFieldValue = Model.BuyCategoryId
+})
+    @Html.Partial("_HelpEditProduct", new HelpEditShopProductModel()
+{
+    DisplayField = "BuyProductName",
+    DisplayFieldValue = Model.BuyProductName,
+    Hint = "不选择商品，就适合当前分类下所有商品",
+    Lable = "商品",
+    ValueField = "BuyProductId",
+    ValueFieldValue = Model.BuyProductId
+})
+
+    @Html.Partial("_HelpEdit", new HelpEditModel()
+{
+    DisplayField = "BuySKUCode",
+    DisplayFieldValue = Model.BuySKUCode,
+    Hint = "不选择SKU,就适合当前商品下所有规格类型商品",
+    Lable = "商品SKU",
+    ValueField = "BuySKUID",
+    ValueFieldValue = Model.BuySKUID,
+    Columns = @"[
+                   { text: 'SKU编号', dataField: 'SKU',   width: 100 },
+                    { text: '规格', dataField: 'AttriVal',  width:  300  },
+                   { text: '市场价', dataField: 'MarketPrice',  width: 80 },
+                   { text: '销售价', dataField: 'SalePrice',  width: 80 }  ]",
+    DataFields = @"[
+
+               { name: 'SkuID', type: 'string' },
+
+
+
+               { name: 'SKU', type: 'string' },
+
+               { name: 'AttriVal', type: 'string' },
+      { name: 'MarketPrice', type: 'string' },
+      { name: 'SalePrice', type: 'string' }
+                            ]",
+    HelpTitle = "选择商品SKU",
+    ReturnDisplayField = "SKU",
+    ReturnValueField = "SkuID",
+    SearchField = "SKUName",
+    Url = Url.RouteUrl("ApiWithWeb", new { controller = "ShopProductApi", action = "GetSkuByProductID" }),
+    OtherSerchFieldFunction = "GetBuyProductCondition",
+    OtherSet = "{ data:{root: 'data'}}",
+
+})
+      
+     
+
+    @HelperExtend.TextArea("Note", "备注", defaultval: Model.Note, hint: "")
+
+
+</div>
+@section  scripts{
+
+
+    <script type="text/javascript">
+        function GetProductCondition(data) {
+
+            data.id = $('#HandsaleProductId').val();
+
+        }
+        function GetBuyProductCondition(data) {
+
+            data.id = $('#BuyProductId').val();
+
+        }
+        function OnChangeRule(event) {
+            var index;
+            if (!event) {
+                index = $('#DropDownListRuleID').jqxDropDownList('getSelectedIndex');
+            } else {
+                index = args.index;
+            }
+
+            var source = $('#DropDownListRuleID').jqxDropDownList('source');
+            var dataarray = source.loadedData.Rows;
+            var data = dataarray[args.index];
+            var rtype = data.RuleTypeName;
+            $("#HandsaleProductId").closest("dl").hide();
+            $("#HandsaleProductSKUID").closest("dl").hide();
+            $("#CouponID").closest("dl").hide();
+            $("#HandsaleCount").closest("dl").show();
+            $("#HandsaleMaxCount").closest("dl").show();
+            if (rtype.indexOf("送优惠券") > -1) {
+                $("#CouponID").closest("dl").show();
+
+            } else if (rtype.indexOf("免运费") > -1 || rtype.indexOf("包邮") > -1) {
+                $("#HandsaleCount").closest("dl").hide();
+                $("#HandsaleMaxCount").closest("dl").hide();
+
+            } else if (rtype.indexOf("赠品") > -1) {
+                $("#HandsaleProductId").closest("dl").show();
+                $("#HandsaleProductSKUID").closest("dl").show();
+
+            } else if (rtype.indexOf("送积分") > -1) {
+
+            }
+
+        }
+        $(function () {
+
+            OnChangeRule();
+            //初始化表单验证
+            $("form").validate({
+                ignore: "",
+                rules: {
+                    "RuleID": {
+                        required: true
+                    }
+
+                },
+                messages: {
+                    RuleID: {
+                        required: "请选择促销规则"
+                    }
+                },
+                errorPlacement: errorPlace,
+                showErrors: function (errorMap, errorList) {
+                    $('#jqxLoader').jqxLoader('close');
+                    this.defaultShowErrors();
+                }
+
+            });
+        })
+    </script>
+
+    
+     
+          
+   
+}

@@ -3,48 +3,52 @@
 @using EasyCms.Model
 @using System.Data;
 @{
-  ViewBag.Title = Model.Name+ EasyCms.CmsSessionExtend.WebSite.Name;
+    ViewBag.Title = Model.Name + EasyCms.CmsSessionExtend.WebSite.Name;
+    ShopProductSKUInfo defaultSku = null;
+    if (Model.SKUInfolist.Count > 0 && Model.SKUInfolist.Exists(pm => pm.IsDefault))
+    {
 
+        defaultSku = Model.SKUInfolist.Find(pm => pm.IsDefault);
+    }
 
 }
 @Styles.Render("~/bundles/productcss")
-@Scripts.Render("~/bundles/product");
-<div id="root-nav" class="floor">
+@Scripts.Render("~/bundles/product")
+<div class="floor root-nav">
     <div class="w">
         <div class="breadcrumb">
-          
+
             @{
                 //获取商品的分类路径
-                
+
                 List<ShopCategory> catLocaList = new ShopProductInfoBll().GetLocationCateogry(Model.ID);
                 for (int i = 0; i < catLocaList.Count; i++)
                 {
                     ShopCategory c = catLocaList[i];
                     if (i == 0)
                     {
-                        <strong><a href="//book.jd.com" clstag="shangpin|keycount|product|mbNav-1">@c.Name</a></strong>
+            <strong><a href="@Url.Action("index","category",new {id=c.ID })">@c.Name</a></strong>
                     }
                     else
                     {
                         if (i == 1)
                         {
-                            @:<span>
+                            Html.Raw("<span>");
                         }
-                        @: &nbsp; &gt; &nbsp;<a href="//channel.jd.com/1713-3263.html" clstag="shangpin|keycount|product|mbNav-2">@c.Name</a>
-
-
+            @: &nbsp; &gt; &nbsp;<a href="@Url.Action("index","category",new {id=c.ID })">@c.Name</a>
 
 
                         if (i == catLocaList.Count - 1)
                         {
-                            @:&nbsp;&gt;&nbsp;</span>
+            @:&nbsp;&gt;&nbsp;
+                             Html.Raw("</span>");
                         }
                     }
 
 
                 }
-                @:<span><a href="//item.jd.com/11868592.html">@Model.Name</a></span>
-            } 
+            @:<span><a href="#">@Model.Name</a></span>
+            }
         </div>
     </div>
 </div>
@@ -52,38 +56,24 @@
     <!--商品预览图-->
     <div id='preview'>
         <div id="spec-n1" class="jqzoom">
-            @{
-    ShopSaleProductInfo modelimgs = new ShopProductInfoBll().GetSaleEntity(Model.ID, "");
-    int ccc = 0;
-    foreach (DataRow row in modelimgs.dtImg.Rows)
-    {
-        if (ccc == 0)
-        {
-            <img data-img="1" jqsrc='@row["filepath"].ToString()' width="350" height="350" src=" @row["filepath"].ToString() " alt=" ">
-
-        }
-        ccc++;
-    }
-}
-            
+            @if (Model.ImgPath != null && Model.ImgPath.Length > 0)
+            {
+            <img data-img="1" jqsrc='@Model.ImgPath[0]' width="350" height="350" src="@Model.ImgPath[0]" />
+            }
         </div>
         <div id="spec-list">
             <a href="javascript:;" class="spec-control" id="spec-forward"></a>
             <a href="javascript:;" class="spec-control" id="spec-backward"></a>
             <div class="spec-items" style="position: absolute;width: 310px;height: 54px;overflow: hidden;">
                 <ul class="lh" style="position: absolute;width: 999999px;">
-                    @{
-                        var imglistcount=0;
-                        foreach (DataRow row in modelimgs.dtImg.Rows)
+                    @if (Model.ImgPath != null && Model.ImgPath.Length > 0)
+                    {
+
+                        foreach (var item in Model.ImgPath)
                         {
-                            var classname="";
-                            if (imglistcount == 0) {
-                                classname = "img-hover";
-                            }
-                            <li><img class="@classname" bimg="@row["filepath"].ToString()" src="@row["filepath"].ToString()" onmousemove="preview(this);"></li>
+                    <li><img bimg="@item" src="@item" onmousemove="preview(this);"></li>
                         }
                     }
-                    
                 </ul>
             </div>
         </div>
@@ -100,27 +90,27 @@
                 <li>
                     <span class="f_r light_gray">
                         商品编号：
-                        <label id="data_goodsNo">@Model.Code</label>
+                        <label id="data_goodsNo">@(defaultSku != null ? defaultSku.SKU : Model.Code)</label>
                     </span>
                     品牌：@Model.BrandName
                 </li>
                 <li id="priceLi">
                     红七价：
-                    <b class="price red2"><span class="f30" id="real_price">￥@Model.SalePrice</span></b>
+                    <b class="price red2"><span class="f30" id="real_price">￥@(defaultSku != null ? defaultSku.SalePrice.ToString() : Model.SalePriceRange)</span></b>
                 </li>
                 <li>
-                    市场价：<s id="data_marketPrice">￥@Model.MarketPrice</s>
+                    市场价：<s id="data_marketPrice">￥@(defaultSku != null ? defaultSku.MarketPrice.ToString() : Model.MarketPriceRange)</s>
                 </li>
                 <li>
                     <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&amp;uin=1623591032&amp;site=qq&amp;menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=1:1623591032:7" alt="QQ客服红小七"></a>
                     <a target="_blank" href="http://www.taobao.com/webww/ww.php?ver=3&amp;touid=红小七2014&amp;siteid=cntaobao&amp;status=1&amp;charset=utf-8"><img border="0" src="http://amos.alicdn.com/realonline.aw?v=2&amp;uid=红小七2014&amp;site=cntaobao&amp;s=1&amp;charset=utf-8" alt="点击这里给我发消息"></a>
                 </li>
                 <li>
-                    库存：现货<span>(<label id="data_storeNums">@Model.Stock</label>)</span>
+                    库存：现货<span>(<label id="data_storeNums">@(defaultSku != null ? defaultSku.Stock : Model.Stock)</label>)</span>
                     <a class="favorite" onclick="favorite_add(this);" href="javascript:void(0)">收藏此商品</a>
                 </li>
 
-                <li>顾客评分： <div id="star" data-score="@Model.StarCount"/> (已有<text>@Model.CommentCount</text>人评价)</li>
+                <li>顾客评分： <div id="star" data-score="@Model.StarCount" /> (已有<text>@Model.CommentCount</text>人评价)</li>
 
                 <li>送积分：单件送<text>@Model.Points</text>分</li>
 
@@ -141,71 +131,61 @@
             </ul>
 
         </div>
-
         <div id='choose' class="p-choose-wrap">
-            <div id="choose-version" class="li p-choose">
-                <div class="dt">选择尺码：</div>
+            @{
+
+                IEnumerable<IGrouping<string, ShopExtendAttr>> query = Model.ShopProductSKU.GroupBy(pet => pet.AttributeId, pet => pet);
+
+                foreach (IGrouping<string, ShopExtendAttr> info in query)
+                {
+                    List<ShopExtendAttr> sl = info.ToList<ShopExtendAttr>();//分组后的集合
+
+            <div val="@sl[0].AttributeId" class="li p-choose choose-version">
+                <div class="dt">@sl[0].AttrName：</div>
                 <div class="dd">
-                    <div class="item disabled"><b style="display: none;"></b><a href="javascript:;" title="所选颜色该尺码商品在该地区无货">35</a></div>
-                    <div class="item disabled"><b style="display: none;"></b><a href="javascript:;" title="所选颜色该尺码商品在该地区无货">36</a></div>
-                    <div class="item disabled"><b style="display: none;"></b><a href="javascript:;" title="所选颜色该尺码商品在该地区无货">37</a></div>
-                    <div class="item disabled"><b style="display: none;"></b><a href="javascript:;" title="所选颜色该尺码商品在该地区无货">38</a></div>
-                    <div class="item  selected"><b></b><a href="javascript:;" title="39" clstag="shangpin|keycount|product|banben-39">39</a></div>
-                    <div class="item"><b></b><a href="javascript:;" title="40">40</a></div>
-                    <div class="item"><b></b><a href="javascript:;" title="41">41</a></div>
-                    <div class="item"><b></b><a href="javascript:;" title="42">42</a></div>
-                    <div class="item"><b></b><a href="javascript:;" title="43">43</a></div>
-                    <div class="item"><b></b><a href="javascript:;" title="44">44</a></div>
+                    @foreach (var item in sl)
+                            {
+                                string classItem = "item";
+                                if (defaultSku != null && defaultSku.Valueids.Contains(item.ValueId))
+                                {
+                                    classItem += " selected";
+
+                                }
+                                if (string.IsNullOrWhiteSpace(item.FilePath))
+                                {
+                            <div class="@classItem"><b></b><a value="@item.ValueId" href="javascript:;" title="@item.ValueStr">@item.ValueStr</a></div>
+                                }
+                                else
+                                {
+                            <div class="@classItem"><b></b><a href="javascript:;" value="@item.ValueId" title="@item.ValueStr"><img src="@item.FilePath" width="30px" height="30px" alt="@item.ValueStr" /></a></div>
+                                }
+                            }
                 </div>
             </div>
+                }
+            }
         </div>
-
-        <div id='choose-btns' style="clear: both;">
+        <div id='choose-btns' value="@(defaultSku!=null?defaultSku.ID:"")" style="clear: both;">
             <div class="choose-amount fl ">
                 <div class="wrap-input">
-                    <a class="btn-reduce" href="javascript:;" onclick="setAmount.reduce('#buy-num')">-</a>
-                    <a class="btn-add" href="javascript:;" onclick="setAmount.add('#buy-num')">+</a>
-                    <input class="text" id="buy-num" value="1" onkeyup="setAmount.modify('#buy-num');">
+                    <a class="btn-reduce" href="javascript:;" onclick="setAmount(0)">-</a>
+                    <a class="btn-add" href="javascript:;" onclick="setAmount(1)">+</a>
+                    <input class="text" id="buy-num" value="1">
                 </div>
             </div>
             <div class="btn" id="choose-btn-append">
-                <a class="btn-append " id="InitCartUrl" href="javascript:void(0);">加入购物车<b></b></a>
+                <a class="btn-append  disabled" id="InitCartUrl" href="javascript:void(0);">加入购物车<b></b></a>
             </div>
             <div class="btn buy">
-                <a class="btn-append " href="//cart.jd.com/gate.action?pid=11868341&amp;pcount=1&amp;ptype=1">立即购买<b></b></a>
+                <a class="btn-append " id="NowBuy" href="javascript:void(0);">立即购买<b></b></a>
             </div>
         </div>
     </div>
 </div>
 
- <div id='' class="floor" style="margin-bottom: 10px;overflow: auto;">
-    <div id='view-buy'>
-        <div class="mt">
-            <h2>
-                热门推荐
-            </h2>
-        </div>
-        <div class="mc">
-            <ul>
-                <li class="fore1">
-                    <div class="p-img">
-                        <a target="_blank" href="//item.jd.com/1777837.html">
-                            <img height="100" width="100" src="http://img12.360buyimg.com/n4/jfs/t2776/197/120408794/126655/69d0a6b6/5703f34bN3884f143.jpg"
-                                 class="">
-                        </a>
-                    </div>
-                    <div class="p-name">
-                        <a target="_blank" href="//item.jd.com/1777837.html">
-                            海信（Hisense）LED55EC520UA 55英寸 VIDAA3 14核 炫彩4K智能电视(黑色)
-                        </a>
-                    </div>
-                    <div class="p-price">
-                        <strong class="J-p-1777837">￥3599.00</strong>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </div>
+<div id='' class="floor" style="margin-bottom: 10px;overflow: auto;">
+    @FunctionExtend.HotProduct(StationMode.热卖商品,Model.ID)
+
     <div id='prd-detail'>
         <div class="m-tab-trigger-wrap">
             <ul class="m-tab-trigger">
@@ -229,7 +209,7 @@
         </div>
 
         <div class="ui-switchable-panel" id='product-detail-1'>
-             @(new HtmlString(Model.PCDescription.Replace("\\\"", "\"").Replace("\\r\\n","")))
+            @(new HtmlString(Model.PCDescription.Replace("\\\"", "\"").Replace("\\r\\n", "")))
 
         </div>
         <div class="ui-switchable-panel" style="display: none;" id='product-detail-2'>
@@ -248,26 +228,80 @@
 </div>
 
 <script type="text/javascript">
-    $(function () {
-        $('#star').raty({
-            score: function () {
-                return $(this).attr('data-score');
+    var guigeInfo = [];
+    var sku = [];
+    @if (Model.ShopProductSKU.Count>0)
+    {
+        @Html.Raw(" guigeInfo ="+JsonWithDataTable.Serialize(Model.ShopProductSKU) + "; ")
+    }
+
+
+    @if (Model.SKUInfolist.Count>0)
+     {
+                @Html.Raw(" sku =" + JsonWithDataTable.Serialize(Model.SKUInfolist) + ";")
+                 if (true)
+	{
+
+	}
+     }
+
+    function SetSku(skuValue) {
+        var isFind = false;
+        $.each(sku, function (i, n) {
+            if (n.Valueids == skuValue) {
+                $("#choose-btns").attr("value", n.ID);
+                //设置编号  设置价格  库存
+                $("#data_goodsNo").text(n.SKU);
+                $("#real_price").text(n.SalePrice);
+                $("#data_marketPrice").text(n.MarketPrice);
+                $("#data_storeNums").text(n.Stock);
+                if (n.IsSale) {
+                    $("#InitCartUrl").removeClass("disabled");
+                    $("#NowBuy").removeClass("disabled");
+                } else {
+                    $("#InitCartUrl").addClass("disabled");
+                    $("#NowBuy").addClass("disabled");
+                }
+                return;
             }
         });
+    }
+    $(function () {
+        //$('#star').raty({
+        //    score: function () {
+        //        return $(this).attr('data-score');
+        //    }
+        //});
+        $("#choose").find("a").click(function () {
+            if (!$(this).parent().hasClass("selected")) {
+                //把同辈元素的selected 去掉
+                $(this).parent().siblings(".selected").removeClass("selected");
+                $(this).parent().addClass("selected");
+                //计算sku 的value值
+                var skuidval = "";
+                $("#choose").find("div[class*='selected']").each(
+                    function () {
+                        skuidval += $(this).find("a").attr("value") + ";";
+
+                    }
+                    );
+                SetSku(skuidval);
+            }
+
+        });
         $("#InitCartUrl").click(function () {
-            var data = { buyType: 0, ActivityID:"",ProductId: "@Model.ID",SKU:"", Quantity: 1 };
+            var data = { buyType: 0, ActivityID: "", ProductId: "@Model.ID", SKU: $("#choose-btns").attr("value"), Quantity: $("#buy-num").val() };
             //删除数据库
             $.ajax({
 
-                url:"@Url.Action("Add", "Card")",
+                url: "@Url.Action("Add", "Card")",
                 data: data,
                 dataType: "json",
-                success:function(result){ 
+                success: function (result) {
                     if (result.IsSuccess) {
-                        alert("添加购物车成功")
-                    }else
-                    {
-                        alert(result.msg);
+                        openTips("添加购物车成功,赶快去购物车结算吧");
+                    } else {
+                        openTipsWrong(result.msg);
                     }
                 }
 
@@ -276,7 +310,45 @@
 
 
         });
+
+        $("#NowBuy").click(function () {
+            var url = "@Url.Action("buy", "Order",new {id=Model.ID })/";
+
+            var sku = $("#choose-btns").attr("value");
+            if (sku) {
+                url += sku;
+            }
+            var status = GetUserStauts("@Url.Action("GetUserIsLogin", "Account")");
+                 
+            if (status) {
+                location.href = url;
+
+
+            } else {
+                //让登录
+                showFormurl("会员登录",'@Url.Action("LoginBox","Account")', function (result) {
+                    if (result.result) {
+                        $("#NowBuy").trigger("click");
+                    } 
+
+                });
+            }
+
+
+        });
+
     });
 
+    function setAmount(isAdd) {
+        var oldValue = $("#buy-num").val() * 1;
+        if (isAdd) {
+            oldValue++;
+        } else {
 
+            if (oldValue > 1) {
+                oldValue--;
+            }
+        }
+        $("#buy-num").val(oldValue);
+    }
 </script>

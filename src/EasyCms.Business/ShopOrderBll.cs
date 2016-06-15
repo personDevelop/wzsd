@@ -37,14 +37,14 @@ namespace EasyCms.Business
 
 
 
-        public ShopOrderModel CreateOrder(ShopOrderModel order, string host, string accuontID, out string err)
+        public ShopOrderModel CreateOrder(ShopOrderModel order, string host, string accuontID, ActionPlatform plat, out string err)
         {
-            return Dal.CreateOrder(order, host, accuontID, out err);
+            return Dal.CreateOrder(order, host, accuontID, plat, out err);
         }
 
-        public string Submit(ShopOrderModel order, ManagerUserInfo accuont, out bool mustGenerSign, out string err)
+        public string Submit(ShopOrderModel order, ManagerUserInfo accuont,ActionPlatform plat, out bool mustGenerSign, out string err)
         {
-            return Dal.Submit(order, accuont, out   mustGenerSign, out err);
+            return Dal.Submit(order, accuont,plat, out   mustGenerSign, out err);
         }
 
         public List<ShopOrder> GetMyOrder(string host, ManagerUserInfo user, int queryPage, string queryStatus, string other, out string err, WhereClip otherWhereClip = null)

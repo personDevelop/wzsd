@@ -310,33 +310,56 @@ namespace EasyCms.Model
 
 
     }
-    public enum JFType
-    {
-        其他,
-        积分, 优惠券, 赠品
-    }
+   
 
 
     public enum RuleType
     {
-        满额送优惠券,
-        满额送积分,
-        满额送赠品,
-        满额免运费,
-        首单送优惠券,
-        首单送积分,
-        首单送赠品,
-        首单免运费,
-        注册送优惠券,
-        注册送积分,
-        包邮,
+        注册,
+        购物,
+        首单,
+        评价,
+        评论,
         系统派送 = 89,
         使用优惠券 = 90,
-        使用积分 = 91,
+        使用积分 = 91, 
         其他 = 99
 
 
     }
+
+
+    public enum ActionType
+    {
+        优惠券,
+        积分,
+        现金,
+        商品,
+        打折扣,
+        免运费,
+        经验值,
+    }
+
+
+    public enum ActionEvent
+    {
+
+        //全部, 不能支持全部，必须是互斥的 
+        注册,
+        购物,
+        首单,
+        评价,
+        评论
+    }
+
+    public enum ActionPlatform
+    {
+        全部,
+        商城网站,
+        APP客户端
+
+    }
+
 
     public enum ActionEnum
     {
@@ -676,16 +699,15 @@ namespace EasyCms.Model
 
     public enum AcitivyStatus
     {
-        制单,
-        开启,
-        停用, 
+        制单, 
+        停用,
         进行中,
         完成
     }
 
     public enum ActivityType
     {
-        单品促销,买送促销,赠品促销,套装促销,满赠促销,满减促销
+        单品促销, 买送促销, 赠品促销, 套装促销, 满赠促销, 满减促销
     }
 
 
@@ -696,7 +718,7 @@ namespace EasyCms.Model
 
     public enum AdType
     {
-       图片, flash, 文字,代码 
+        图片, flash, 文字, 代码
     }
 
     public enum AdLinkType
@@ -708,7 +730,7 @@ namespace EasyCms.Model
     }
     public enum AdShowType
     {
-        轮询, 即时,跑马灯
+        轮询, 即时, 跑马灯
     }
 
     public enum OpEvent
@@ -722,6 +744,6 @@ namespace EasyCms.Model
 
     public enum OpStatus
     {
-        未处理=0, 处理中=1, 成功=2, 失败=99
+        未处理 = 0, 处理中 = 1, 成功 = 2, 失败 = 99
     }
 }

@@ -91,7 +91,17 @@ namespace EasyCms.Web
                 _HelpTitle = value;
             }
         }
-
+        /// <summary>
+        /// 当控件创建完成后执行的js脚本方法名
+        /// </summary>
+        public string OnCreateCtrol
+        {
+            get ;
+            
+            set ;
+            
+        }
+        
         /// <summary>
         /// 帮助的label
         /// </summary>
@@ -291,7 +301,17 @@ namespace EasyCms.Web
 
 
     public class HelpEditShopProductModel
-    { 
+    {
+        /// <summary>
+        /// 当控件创建完成后执行的js脚本方法名
+        /// </summary>
+        public string OnCreateCtrol
+        {
+            get;
+
+            set;
+
+        }
         /// <summary>
         /// 帮助的label
         /// </summary>
@@ -347,7 +367,17 @@ namespace EasyCms.Web
 
     }
     public class HelpEditShopProductCategory
-    {
+    { 
+        /// <summary>
+      /// 当控件创建完成后执行的js脚本方法名
+      /// </summary>
+        public string OnCreateCtrol
+        {
+            get;
+
+            set;
+
+        }
         /// <summary>
         /// 帮助的label
         /// </summary>
@@ -405,6 +435,16 @@ namespace EasyCms.Web
     public class HelpEditCouponModel
     {
         /// <summary>
+        /// 当控件创建完成后执行的js脚本方法名
+        /// </summary>
+        public string OnCreateCtrol
+        {
+            get;
+
+            set;
+
+        }
+        /// <summary>
         /// 帮助的label
         /// </summary>
         public string Lable { get; set; }
@@ -460,7 +500,17 @@ namespace EasyCms.Web
     }
 
     public class HelpEditProductType
-    { 
+    {
+        /// <summary>
+        /// 当控件创建完成后执行的js脚本方法名
+        /// </summary>
+        public string OnCreateCtrol
+        {
+            get;
+
+            set;
+
+        }
         /// <summary>
         /// 帮助的值对应字段
         /// </summary>

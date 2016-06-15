@@ -38,7 +38,7 @@
     Hint = "空为一级分类",
     Lable = "上级分类",
     ValueField = "ParentID",
-    ValueFieldValue = Model.ParentID.ToString(),
+    ValueFieldValue = Model.ParentID?? string.Empty ,
     Columns = @"[
                    { text: '编号', dataField: 'Code',   width: 200, cellsalign: 'left'},
                     { text: '名称', dataField: 'Name',  width:  300  }  ]",
