@@ -116,13 +116,13 @@ namespace EasyCms.Dal.PromotionRule
                             cr.Status = 1;
                         }
                         jf.UserCouponID = cc.ID;
-                        if (cr.IsCongZengSongKaiShi)
+                        if (cr.QxLx == 1 && cr.IsCongZengSongKaiShi)
                         {
                             cc.EndDate = cc.HasDate.AddDays(cr.QXTS);
                         }
                         else
                         {
-                            cc.EndDate = cc.EndDate;
+                            cc.EndDate = cr.EndDate;
                         }
                         cr.SendCount += cc.HaveCount;
                         if (cr.MaxCount > 0 && cr.SendCount >= cr.MaxCount)
@@ -286,13 +286,13 @@ namespace EasyCms.Dal.PromotionRule
                             cr.Status = 1;
                         }
                         jf.UserCouponID = cc.ID;
-                        if (cr.IsCongZengSongKaiShi)
+                        if (cr.QxLx==1 && cr.IsCongZengSongKaiShi)
                         {
                             cc.EndDate = cc.HasDate.AddDays(cr.QXTS);
                         }
                         else
                         {
-                            cc.EndDate = cc.EndDate;
+                            cc.EndDate = cr.EndDate;
                         }
                         cr.SendCount += cc.HaveCount;
                         if (cr.MaxCount > 0 && cr.SendCount >= cr.MaxCount)

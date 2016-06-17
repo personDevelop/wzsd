@@ -188,7 +188,15 @@ namespace EasyCms.Model.ViewModel
             get;
             set;
         }
-
+        /// <summary>
+        ///  余额,
+        /// </summary> 
+        public decimal Balance
+        {
+            get;
+            set;
+        }
+        
         /// <summary>
         ///  等级可享有的服务,
         /// </summary> 
