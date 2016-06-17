@@ -1471,6 +1471,7 @@
     <Content Include="Views\Shared\_UserCenter.cshtml" />
     <Content Include="Views\Shared\_HelpCenter.cshtml" />
     <Content Include="Views\Help\Index.cshtml" />
+    <Content Include="Views\Account\MyAddress.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

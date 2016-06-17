@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using System.Data;
 using System.Web.Mvc;
 
 namespace EasyCms.Web.Controllers
@@ -113,7 +114,7 @@ namespace EasyCms.Web.Controllers
                 return View(model);
         }
 
-        
+
 
         private void AddCardProduct(HttpRequestBase request, string userid)
         {  //还没有登录，从cookie获取
@@ -150,12 +151,12 @@ namespace EasyCms.Web.Controllers
                         switch (item.BuyType)
                         {
                             case ShopBuyType.普通购物:
-                            case ShopBuyType.赠品: 
+                            case ShopBuyType.赠品:
 
                                 //获取商品名称
-                                sc = bll.GetDbCardProduct(item.ProductId, item.SKU); 
-                                sc.ActivityID = item.ActivityID; 
-                                sc.Quantity = item.Quantity; 
+                                sc = bll.GetDbCardProduct(item.ProductId, item.SKU);
+                                sc.ActivityID = item.ActivityID;
+                                sc.Quantity = item.Quantity;
                                 sc.ID = item.ID;
                                 sc.UserId = userid;
                                 break;
@@ -177,7 +178,7 @@ namespace EasyCms.Web.Controllers
                     }
 
                 }
-               
+
                 cartsBll.Save(cardList);
 
             }
@@ -232,9 +233,9 @@ namespace EasyCms.Web.Controllers
                 }
                 else
                     if (!bll.CheckRepeat(model.Email, false))
-                {
-                    ModelState.AddModelError("Email", "当前邮箱已被注册.");
-                }
+                    {
+                        ModelState.AddModelError("Email", "当前邮箱已被注册.");
+                    }
             }
             if (string.IsNullOrWhiteSpace(model.UserNo))
             {
@@ -361,10 +362,10 @@ namespace EasyCms.Web.Controllers
                         return View("Error", new MessageModel("对不起，您的账号在注册时没有填写邮箱账号,请联系客服帮您找回密码", error, ShowMsgType.error));
                     }
                     else
-                         if (!Sharp.Common.CheckValid.IsEmail(user.Email))
-                    {
-                        return View("Error", new MessageModel("对不起，您的账号在注册时填写的不是正确的邮箱账号,请联系客服帮您找回密码", error, ShowMsgType.error));
-                    }
+                        if (!Sharp.Common.CheckValid.IsEmail(user.Email))
+                        {
+                            return View("Error", new MessageModel("对不起，您的账号在注册时填写的不是正确的邮箱账号,请联系客服帮您找回密码", error, ShowMsgType.error));
+                        }
                     DateTime now = DateTime.Now;
                     string varifyCode = Guid.NewGuid().ToString();
                     string content = GetMsgInfo(now, varifyCode);
@@ -558,6 +559,67 @@ namespace EasyCms.Web.Controllers
             {
                 return View();
             }
+        }
+
+        public ActionResult MyAddress()
+        {
+            string userid = CmsSession.GetUserID();
+            if (string.IsNullOrWhiteSpace(userid))
+            {
+                return View("Login");
+            }
+            else
+            {
+                return View();
+            }
+        }
+
+        public string GetUserAddress()
+        {
+            string userid = CmsSession.GetUserID();
+            //新闻id，定标题，简介，缩略图，新闻url 
+            DataTable dt = new ShopShippingAddressBll().GetList(userid, false);
+            string result = JsonWithDataTable.Serialize(dt);
+            return result;
+
+
+
+
+        }
+
+        public string SetDefault(string id)
+        {
+            try
+            {
+                string userid = CmsSession.GetUserID();
+                //新闻id，定标题，简介，缩略图，新闻url 
+                new ShopShippingAddressBll().SetDefault(id);
+
+                return "{\"res\":true}";
+            }
+            catch (Exception ex)
+            {
+                return "{\"res\":false}";
+
+            }
+        }
+
+        public string delAddress(string id)
+        {
+            try
+            {
+                string userid = CmsSession.GetUserID();
+                //新闻id，定标题，简介，缩略图，新闻url 
+                new ShopShippingAddressBll().Delete(id);
+
+                return "{\"res\":true}";
+            }
+            catch (Exception ex)
+            {
+                return "{\"res\":false}";
+
+            }
+
         }
     }
 }
