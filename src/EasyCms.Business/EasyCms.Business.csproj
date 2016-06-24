@@ -52,6 +52,7 @@
     <Compile Include="AdministrativeRegionsBll.cs" />
     <Compile Include="AdPositonBll.cs" />
     <Compile Include="AppSetBll.cs" />
+    <Compile Include="APPVersionBll.cs" />
     <Compile Include="AsynchNotifyLogBll.cs" />
     <Compile Include="AttachFileBll.cs" />
     <Compile Include="AttributeTypeBll.cs" />

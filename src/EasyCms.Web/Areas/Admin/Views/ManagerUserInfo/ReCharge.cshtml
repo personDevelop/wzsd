@@ -1,0 +1,84 @@
+﻿@model ManagerUserInfo
+@{
+    ViewBag.Title = "会员充值";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEditNoForm.cshtml";
+}
+
+@Styles.Render("~/bundles/upimgcss")
+@Scripts.Render("~/bundles/ueditor")
+@Scripts.Render("~/bundles/uploadJs")
+
+@using EasyCms.Model
+<!--内容-->
+<div id="floatHead" class="content-tab-wrap">
+    <div class="content-tab">
+        <div class="content-tab-ul-wrap">
+            <ul>
+                <li><a class="selected" href="javascript:;">基本信息</a></li>
+               
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="tab-content">
+
+
+    
+   
+   
+    @HelperExtend.Lable(Model.Code, "会员账号")
+     
+    @HelperExtend.Lable(Model.Name, "会员姓名")
+    @HelperExtend.Lable(Model.NickyName, "会员昵称")
+    
+    @HelperExtend.Lable(Model.CreateDate.ToString("yyyy-MM-dd HH:mm:ss"), "注册日期")
+    @HelperExtend.Lable(Model.Status.ToString(), "状态")
+    @HelperExtend.Lable(Model.Balance.ToString(), "当前余额")
+@using (Html.BeginForm("SaveRecharge", null))
+{@HelperExtend.HiddenFor("ID", Model.ID)
+    @HelperExtend.Number("Recharge", "充值金额",defaultval: ViewBag.ChargeBanlance, max: 1000, hint: "一次最多只能充1000,一天内只能充值3次")
+    @Html.ValidationSummary()
+     <!--工具栏-->
+    <div class="page-footer">
+        <div class="btn-wrap">
+
+            <input type="submit" onclick="$('#jqxLoader').jqxLoader('open');$('#IsContinueAdd').val(0)" value="提交" class="btn" />
+            <input name="btnReturn" type="button" value="返回上一页" class="btn yellow" onclick="javascript:   window.location.href ='@Url.Action("index", new { id=ViewBag.Other})';" />
+        </div>
+    </div>
+    <!--/工具栏-->
+}
+
+</div>
+<div class="tab-content">
+
+
+    <div id="jqxgrid"></div>
+
+
+</div>
+@section  scripts{
+
+
+   <script type="text/javascript"> 
+        $(document).ready(function () {
+            var url = "@Url.Action("GetAccuontMoneyLog",new { id=Model.ID})";
+            var datafields = [{ name: 'OpType' }, { name: 'OpMoneyEvent' }, { name: 'OpTime' }, { name: 'Amount' }, { name: 'Balance' },
+                { name: 'Note' }, 
+		{ name: 'OpStatus' } ];
+            var columns = [
+    { text: '变化方向', dataField: 'OpType',  width: 100,  @HelperExtend.ParseEnum(typeof(AddOrRemove)) },
+
+  { text: '动作', dataField: 'OpMoneyEvent', width: 80 ,  @HelperExtend.ParseEnum(typeof(OpEvent))},
+     { text: '操作时间', dataField: 'OpTime', width: 140, cellsformat: "yyyy-MM-dd HH:mm:ss" },
+  { text: '变化金额', dataField: 'Amount', cellsalign: "right", width: 100 },
+    { text: '变化后余额', dataField: 'Balance', cellsalign: "right", width: 100 },
+     { text: '状态', dataField: 'OpStatus',   width: 100,  @HelperExtend.ParseEnum(typeof(OpStatus)) } ,
+ { text: '备注', dataField: 'Note' } 
+  ];
+            CreateGrid("jqxgrid", url, datafields, columns, { grid: { pageable:false}});
+
+
+        });
+</script>
+}

@@ -84,5 +84,10 @@ namespace EasyCms.Business
         {
             return Dal.GetAppEntity(id, host);
         }
+
+        public ShopCategory GetAppEntityWithBigLog(  )
+        {
+            return Dal.GetAppEntityWithBigLog(  new ParameterInfoBll().GetValue(StaticValue.Traval), "").ToFirst< ShopCategory>();
+        }
     }
 }

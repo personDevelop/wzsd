@@ -1,4 +1,4 @@
-﻿@using EasyCms.Model
+﻿ @using EasyCms.Model
 @using EasyCms
 @using EasyCms.Business
 @using EasyCms.Session
@@ -37,7 +37,7 @@
             else
             {
                 <li class="xuan">
-                    <div class="erwei"></div> 
+                    <div class="erwei"></div>
                     <a href="@Url.Action("LogOut", "Account", new { area = string.Empty })" class="aa">
                         退出
                     </a>
@@ -45,44 +45,68 @@
                 </li>
             }
         </ul>
-
-        <ul class="fr topright">
-            <li class="guanzhu bj">
-                <i class="ci-left"></i>
-                <a href="#">关注@(CmsSessionExtend.WebSite.Name)</a>
-                <i class="ci-right ">
-                    <s class="jt">◇</s>
-                </i>
-                <div class="guanzhu1"><img src="@(CmsSessionExtend.WebSite.WeiXinImgUrl)"></div>
-            </li>
-            @if (IsLogin)
+        
+        
+              
+                <ul class="fr topright">
+@if (!string.IsNullOrWhiteSpace(CmsSessionExtend.WebSite.AndroidImgUrl))
+{
+                    <li class="guanzhu bj">
+                        <i class="ci-left"></i>
+                        <a href="#">下载安卓APP</a>
+                        <i class="ci-right ">
+                            <s class="jt">◇</s>
+                        </i>
+                        <div class="guanzhu1"><a href="app/wzsd.apk"><img width="116" height="116" src="@(CmsSessionExtend.WebSite.AndroidImgUrl)"/></a></div>
+                    </li>
+    }
+@if (!string.IsNullOrWhiteSpace(CmsSessionExtend.WebSite.IosImgUrl))
+{
+    <li class="guanzhu bj">
+        <i class="ci-left"></i>
+        <a href="#">下载苹果APP</a>
+        <i class="ci-right ">
+            <s class="jt">◇</s>
+        </i>
+        <div class="guanzhu1"><img  width="116" height="116"  src="@(CmsSessionExtend.WebSite.IosImgUrl)"></div>
+    </li>
+}
+                    <li class="guanzhu bj">
+                        <i class="ci-left"></i>
+                        <a href="#">关注@(CmsSessionExtend.WebSite.Name)</a>
+                        <i class="ci-right ">
+                            <s class="jt">◇</s>
+                        </i>
+                        <div class="guanzhu1"><img src="@(CmsSessionExtend.WebSite.WeiXinImgUrl)"></div>
+                    </li>
+                    @if (IsLogin)
             {
-                <li class="" style='padding-left:30px;padding-right: 5px;'>
-                    <i class="ci-left-cart"></i>
-                    <a href="@Url.Action("MyOrder","Account")">我的订单</a>
+                        <li class="" style='padding-left:30px;padding-right: 5px;'>
+                            <i class="ci-left-cart"></i>
+                            <a href="@Url.Action("MyOrder","Account")">我的订单</a>
 
 
-                </li>
-            }
-            @if (IsManager)
+                        </li>
+                    }
+                    @if (IsManager)
             {
-                <li class="" style='padding-left:30px;padding-right: 5px;'>
-                    <i class="ci-left-cart"></i>
-                    <a href="@Url.Action("index","index",new { area="admin"})">管理后台</a>
+                        <li class="" style='padding-left:30px;padding-right: 5px;'>
+                            <i class="ci-left-cart"></i>
+                            <a href="@Url.Action("index","index",new { area="admin"})">管理后台</a>
 
 
-                </li>
-            }
-            <li class="" style='padding-left:30px;padding-right: 5px;'>
-                <i class="ci-left-cart"></i>
-                <a href="@Url.Action("","card")">我的购物车</a>
+                        </li>
+                    }
+                    <li class="" style='padding-left:30px;padding-right: 5px;'>
+                        <i class="ci-left-cart"></i>
+                        <a href="@Url.Action("","card")">我的购物车</a>
 
 
-            </li>
-            <li class="guanzhu " style='padding-left:10px;'>
-                <a href="@Url.Action("","help")">购物帮助</a>
-            </li>
-        </ul>
+                    </li>
+                    <li class="guanzhu " style='padding-left:10px;'>
+                        <a href="@Url.Action("","help")">购物帮助</a>
+                    </li>
+                </ul>
     </div>
 </div>
 <div id='top-banner' style='display: none;'>

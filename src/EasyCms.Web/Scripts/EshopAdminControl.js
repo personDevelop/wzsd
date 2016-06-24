@@ -99,6 +99,7 @@
         opts.grid.pageable = true;
     }
     if (!opts.grid.pageable) {
+
         opts.grid.rendergridrows = null, opts.grid.virtualmode = false, opts.grid.pagerrenderer = null;
     }
     
@@ -109,14 +110,14 @@
          source: dataAdapter,
          columnsresize: true,
          theme: "metro",
-         virtualmode: false,
+         
          selectionmode: selectionmode,
-         altrows: true,
-         rendergridrows: function (params) {
-             return params.data;
-         },
-         pagermode: 'simple',
-        /* pagerrenderer: pagerrenderer,*/
+         altrows: true, 
+         virtualmode: true,
+         rendergridrows: function (obj) {
+             return obj.data;
+         }, 
+      pagerrenderer: pagerrenderer, 
          pageSize: 20,
          pageable: true,
          columns: columns, localization: "zh-Hans"

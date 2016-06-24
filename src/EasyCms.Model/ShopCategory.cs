@@ -673,8 +673,9 @@ namespace EasyCms.Model
         }
         [NotDbCol]
         public string ParentName { get; set; }
-
+        [NotDbCol]
         public string LogoUrl { get; set; }
+        [NotDbCol]
         public string SmallLogoUrl { get; set; }
     }
 

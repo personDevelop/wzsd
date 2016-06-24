@@ -111,6 +111,33 @@
     }
 
 }
+@{
+
+    ShopCategory lyxl = new ShopCategoryBll().GetAppEntityWithBigLog();
+     
+    
+        <div class='floor' value="@lyxl.ID">
+            <div class="title mt mg-10">
+                <h2><i>@((++i) + "F")</i>旅游线路</h2>
+
+            </div>
+            <div style="border:1px solid #DDD;overflow: hidden;height: 448px;">
+                <div class='leftads'>
+                    <a href="@(Url.Action("Index","Category",new { id=lyxl.ID}))"><img src="@lyxl.LogoUrl" width="211" height="448"></a>
+                </div>
+                <div class='midads' value="@lyxl.ID">
+                    <ul></ul>
+                </div>
+                <div class='rightads'>
+                    <div class="mt"><h2>热门商品</h2> </div>
+                    <ul class="ranklist" value="@lyxl.ID"></ul>
+                </div>
+            </div>
+        </div>
+     
+
+}
+ 
 <script type="text/javascript">
     $(function(){
         $(".midads").each(function(i){

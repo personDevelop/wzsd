@@ -445,5 +445,25 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             return View("SelectProductCard", p);
 
         }
+
+
+        public ActionResult AllProduct()
+        {
+
+            DataSet dt = bll.GetList();
+            return View(dt);
+
+        }
+
+        [HttpPost]
+
+        public ActionResult UpdateOrderNo(string attacheID,string producntID)
+        {
+            string error = bll.UpdateOrderNo(attacheID, producntID);
+
+
+             return new  JsonResult(){   JsonRequestBehavior= JsonRequestBehavior.AllowGet, Data =new  {  isSuccess=string.IsNullOrWhiteSpace(error), Msg =error}  };
+
+        }
     }
 }

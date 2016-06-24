@@ -151,7 +151,7 @@ namespace EasyCms.Dal
             return Dal.From<ManagerUserInfo>().Where(where).OrderBy(ManagerUserInfo._.Code)
                 .Select(ManagerUserInfo._.ID, ManagerUserInfo._.Code, ManagerUserInfo._.Name, ManagerUserInfo._.NickyName, ManagerUserInfo._.Birthday, ManagerUserInfo._.Sex,
         ManagerUserInfo._.ContactPhone, ManagerUserInfo._.CreateDate, ManagerUserInfo._.LastModifyDate,
-          ManagerUserInfo._.Status)
+          ManagerUserInfo._.Status, ManagerUserInfo._.Balance)
                    .ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
 
 
@@ -237,6 +237,57 @@ namespace EasyCms.Dal
             }
             list.Add(ar);
             Dal.Submit(list);
+        }
+
+        public DataTable GetAccuontMoneyLog(string userID)
+        {
+            return Dal.From<AccuontMoneyLog>().Where(AccuontMoneyLog._.UserID == userID).OrderBy(AccuontMoneyLog._.OpTime)
+                   .ToDataTable();
+        }
+
+        public string ReCharge(string id, decimal charegeBanlance, string userID)
+        {
+            string err = string.Empty;
+            AccuontMoneyLog c = new AccuontMoneyLog();
+            object o = Dal.Count<AccuontMoneyLog>(AccuontMoneyLog._.UserID == id&& AccuontMoneyLog._.OpTime.ConvertDate(ConvertDateType.八位年月日)== DateTime.Now.ToString("yyyyMMdd"), AccuontMoneyLog._.ID,false);
+            if (o != DBNull.Value && (int)o >= 3)
+            {
+                return "您今天充值次数超过3次不能再充值了，请改天再充值";
+            }
+            else
+            {
+                ManagerUserInfo UserInfo =  Dal.From<ManagerUserInfo>().Where(ManagerUserInfo._.ID == id).Select(ManagerUserInfo._.ID, ManagerUserInfo._.Balance).ToFirst<ManagerUserInfo>() ;
+             
+                AccuontMoneyLog ml = new AccuontMoneyLog()
+                {
+                    Amount = charegeBanlance,
+                    Balance = UserInfo.Balance+ charegeBanlance,
+                    ID = Guid.NewGuid().ToString(),
+                    Note ="系统管理员充值",
+                    OpMoneyEvent = OpEvent.充值,
+                    OpStatus = OpStatus.成功,
+                    OpTime = DateTime.Now,
+                    OpType = AddOrRemove.增加,
+                    OpUserID = userID,
+                    UserID = UserInfo.ID
+                };
+
+                UserInfo.Balance += charegeBanlance;
+                SessionFactory dal = null;
+                IDbTransaction tr = Dal.BeginTransaction(out dal);
+                try
+                {
+                    dal.SubmitNew(tr, ref dal, UserInfo, ml);
+                    dal.CommitTransaction(tr);
+                }
+                catch (Exception ex)
+                {
+                    dal.RollbackTransaction(tr);
+                    err = ex.Message;
+                    throw;
+                } 
+            }
+            return err;
         }
 
         public decimal GetGetBalance(string id)

@@ -304,7 +304,7 @@
 
 		{ name: 'CostPrice' }, { name: 'Discount' }, { name: 'TotalPrice' },
 
-		{ name: 'PayMoney' }, { name: 'Remark' }, { name: 'OrderPoint' }, { name: 'ShipStatus' },
+		{ name: 'PayMoney' }, { name: 'Discount' }, { name: 'UserBalance' },
 
 		{ name: 'PayStatus' }, { name: 'OrderStatus' }, { name: 'HasReturn' }, { name: 'ReturnMoney' },
 
@@ -344,6 +344,9 @@
      { text: '收件人', dataField: 'ShipName', width: 80 },
   { text: '收件电话', dataField: 'ShipTel', width: 100 },
     { text: '总价格', dataField: 'TotalPrice', cellsalign: "right", width: 80 },
+     { text: '优惠金额', dataField: 'Discount', cellsalign: "right", width: 80 },
+      { text: '使用余额', dataField: 'UserBalance', cellsalign: "right", width: 80 },
+       { text: '应付金额', dataField: 'PayMoney', cellsalign: "right", width: 80 },
   { text: '付款状态', dataField: 'PayStatus', width: 80,@HelperExtend.ParseEnum(typeof(EasyCms.Model.PayStatus)) },
   { text: '订单状态', dataField: 'OrderStatus', width: 80,@HelperExtend.ParseEnum(typeof(EasyCms.Model.OrderStatus)) },
 

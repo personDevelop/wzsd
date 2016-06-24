@@ -1,0 +1,76 @@
+﻿@model DataSet
+@{
+    Layout = null;
+}
+@using System.Data
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>AllProduct</title>
+    @Scripts.Render("~/bundles/jquery")
+</head>
+<body>
+    <div>
+        <table border="1">
+            <thead>
+                <tr>
+                    <td>ID</td>
+                    <td>编号</td>
+                    <td>名称</td>
+                    <td>图片</td>
+                </tr>
+            </thead>
+
+
+            <tbody>
+                @{
+                    DataTable dt1 = Model.Tables[0];
+                    DataTable dt2 = Model.Tables[1];
+                    foreach (DataRow item in dt1.Rows)
+                    {
+                        <tr>
+                            <td>@item["ID"]</td>
+                            <td>@item["Code"]</td>
+                            <td>@item["Name"]</td>
+                            <td>
+                                 
+
+                                @foreach (DataRow itemFile in dt2.Select("RefID='"+ item["ID"] + "'","OrderNo"))
+                                {
+                                <img width="100" height="100" src="@itemFile["FilePath"]" />
+                                    <input type="button" onclick='UpdateOrder(this,"@itemFile["fileID"]","@item["ID"]");'  value="@itemFile["OrderNo"]" />
+                                }
+                            </td>
+                        </tr>
+                    }
+                     
+                }
+            </tbody>
+        </table>
+    </div>
+    <script type="text/javascript">
+
+
+        function UpdateOrder(element,fileID,productID)
+        {
+        
+            $.ajax({
+                url: "@Url.Action("UpdateOrderNo")",
+                type: "POST",
+                data: {attacheID:fileID,producntID:productID},
+            dataType: "json",
+            success: function (d) {
+                if (d.isSuccess) {
+                    $(element).attr("value", "成功");
+                 
+                } else {
+                    $(element).attr("value", d.Msg);
+                }
+            }
+        });
+        }
+    </script>
+</body>
+</html>

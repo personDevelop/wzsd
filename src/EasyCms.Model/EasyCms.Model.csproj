@@ -58,6 +58,7 @@
     <Compile Include="AdPositon.cs" />
     <Compile Include="Ali\PayPara.cs" />
     <Compile Include="AppSet.cs" />
+    <Compile Include="APPVersion.cs" />
     <Compile Include="AttachFile.cs" />
     <Compile Include="AttributeType.cs" />
     <Compile Include="CouponRule.cs" />

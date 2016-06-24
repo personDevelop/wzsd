@@ -1,0 +1,113 @@
+﻿@model APPVersion
+@{
+    ViewBag.Title = "APP版本管理";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEdit.cshtml";
+}
+ 
+@using EasyCms.Model 
+@using Sharp.Common
+<!--内容-->
+<div id="floatHead" class="content-tab-wrap">
+    <div class="content-tab">
+        <div class="content-tab-ul-wrap">
+            <ul>
+                <li><a class="selected" href="javascript:;">@ViewBag.Title</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="tab-content">
+
+    @Html.HiddenFor(model => model.ID) 
+    @HelperExtend.HiddenFor("RecordStatus", Model.RecordStatus.ToString())
+    
+    @Html.ValidationSummary()
+    @HelperExtend.TextBox("Code", "编号", defaultval: Model.Code, hint: "请输入编号，编号不能重复")
+    @HelperExtend.TextBox("Name", "名称", defaultval: Model.Name, hint: "请输入名称，名称不能重复.")
+    @HelperExtend.Number("Version", "当前版本", defaultval: Model.Version,max:10000, hint: "请输入当前版本.") 
+    @HelperExtend.TextBox("VersionName", "版本名称", defaultval: Model.VersionName, hint: "请输入版本名称，方便用户识别.")
+    @HelperExtend.TextArea("VersionNote", "更新日志", defaultval: Model.VersionNote, hint: "请输入本次更新说明，方便用户及时下载更新到新版本")
+    @HelperExtend.TextBox("SoftPath", "下载路径", defaultval: Model.SoftPath, hint: "请输入app的下载路径.") 
+    @HelperExtend.RadioGroup("PlatForm", "平台", vals: typeof(AppPlatform).GetEnumVal(),
+     texts: typeof(AppPlatform).GetEnumNamesStr(), defaultval: (int)Model.PlatForm, hint: "") 
+    @HelperExtend.TextArea("PlatformVersion", "对应平台的最低版本", defaultval: Model.PlatformVersion, hint: "对应平台的最低版本")
+   
+</div>
+
+
+@section  scripts{
+
+
+    <script type="text/javascript">
+
+        $(function () {
+            //初始化表单验证
+            $("form").validate({
+                rules: {
+                    "Code": {
+                        required: true,
+                        maxlength: 50,
+                        remote: {
+                            url: '@Url.Action("CheckRepeat")',
+                            data: {
+                                ID: function () { return $("#ID").val(); }, 
+                                RecordStatus: function () { return $("#RecordStatus").val(); },
+                                val: function () { return $("#Code").val(); },
+                                checkCode: 1
+                            }
+                        }
+                    },
+                    SoftPath: { required: true, },
+                    Name: {
+                        required: true,
+                        maxlength: 100,
+                        remote: {
+                            url: '@Url.Action("CheckRepeat")',
+                            data: {
+                                ID: function () { return $("#ID").val(); }, 
+                                RecordStatus: function () { return $("#RecordStatus").val(); },
+                                val: function () { return $("#Name").val(); },
+                                checkCode: 2
+                            }
+                        }
+                    },
+                    PlatForm: { 
+                        remote: {
+                            url: '@Url.Action("CheckRepeat")',
+                            data: {
+                                ID: function () { return $("#ID").val(); },
+                                RecordStatus: function () { return $("#RecordStatus").val(); },
+                                val: function () { return $("#PlatForm").val(); },
+                                checkCode: 3
+                            }
+                        }
+                    },
+                    "Version": {
+                        required: true 
+                    } 
+                },
+                messages: {
+                    Code: {
+                        required: "请输入编号",
+                        maxlength: $.validator.format("编号长度不能大于{0}个字符"),
+                        remote: "编号重复"
+                    },
+                    Name: {
+                        required: "请输入名称",
+                        maxlength: $.validator.format("名称长度不能大于{0}个字符"),
+                        remote: "名称重复"
+                    },
+                    PlatForm: { 
+                        remote: "当前平台已存在"
+                   
+                    },
+                    Version: {
+                        required: "请输入当前最新版本号"
+                    }
+                }
+            });
+        })
+    </script>
+
+     
+}

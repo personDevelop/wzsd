@@ -25,7 +25,11 @@ namespace EasyCms.Business
             return Dal.Save(item, list, spa, listSku, listSkuInfo,   StationModeList);
         }
 
-      
+        public string UpdateStationOrderNo(int station, string stationID, int newvalue )
+        {
+            return Dal.UpdateStationOrderNo(station, stationID, newvalue );
+        }
+
         public DataTable GetList(string categoryID, string Name, int pagenum, int pagesize, ref int recordCount )
         {
             return Dal.GetList(  categoryID, Name, pagenum, pagesize, ref   recordCount );
@@ -195,6 +199,14 @@ namespace EasyCms.Business
             return Dal.GetStationProductByProductID(  station, productID);
         }
 
-        
+        public DataSet GetList()
+        {
+            return Dal.GetList();
+        }
+
+        public string UpdateOrderNo(string attacheID, string producntID)
+        {
+            return Dal.UpdateOrderNo(  attacheID,   producntID);
+        }
     }
 }

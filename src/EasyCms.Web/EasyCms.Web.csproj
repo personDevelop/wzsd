@@ -229,6 +229,7 @@
     <Compile Include="Areas\Admin\Controllers\AdManageController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdPositonController.cs" />
     <Compile Include="Areas\Admin\Controllers\AppSetController.cs" />
+    <Compile Include="Areas\Admin\Controllers\APPVersionController.cs" />
     <Compile Include="Areas\Admin\Controllers\AttributeTypeController.cs" />
     <Compile Include="Areas\Admin\Controllers\CouponRuleController.cs" />
     <Compile Include="Areas\Admin\Controllers\CouponSendRecordController.cs" />
@@ -982,6 +983,10 @@
     <Content Include="App_Code\FunctionExtend.cshtml" />
     <Content Include="Areas\Admin\Views\ShopPromotion\Edit - 复制.cshtml" />
     <Content Include="Areas\Admin\Views\ManagerUserInfo\ModifyPwd.cshtml" />
+    <Content Include="Areas\Admin\Views\APPVersion\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\APPVersion\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\ShopProductInfo\AllProduct.cshtml" />
+    <Content Include="Areas\Admin\Views\ManagerUserInfo\ReCharge.cshtml" />
     <None Include="Properties\PublishProfiles\publish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\EshopAdminControl.js" />

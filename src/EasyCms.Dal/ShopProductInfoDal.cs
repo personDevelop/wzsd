@@ -71,18 +71,44 @@ namespace EasyCms.Dal
 
             }
             //处理推荐信息
+
             ShopProductStationMode deletestation = new ShopProductStationMode() { RecordStatus = StatusType.delete, Where = ShopProductStationMode._.ProductID == item.ID };
             List<ShopProductStationMode> listStationMode = new List<ShopProductStationMode>();
             listStationMode.Add(deletestation);
-            foreach (int staton in StationModeList)
+            if (StationModeList.Count > 0)
             {
-                listStationMode.Add(new ShopProductStationMode()
+                DataTable dt = Dal.From<ShopProductStationMode>().Select(ShopProductStationMode._.StationMode, ShopProductStationMode._.OrderNo.Max().Alias("OrderNo"))
+                  .GroupBy(ShopProductStationMode._.StationMode).ToDataTable();
+                Dictionary<int, int> stationOrderNum = new Dictionary<int, int>();
+
+                foreach (DataRow dr in dt.Rows)
                 {
-                    ID = Guid.NewGuid().ToString(),
-                    ProductID = item.ID,
-                    StationMode = staton,
-                    StationModeName = ((StationMode)staton).ToString()
-                });
+                    stationOrderNum.Add((int)dr["StationMode"], (int)dr["OrderNo"]);
+                }
+
+                foreach (int staton in StationModeList)
+                {
+                    int orderno = 0;
+                    if (stationOrderNum.ContainsKey(staton))
+                    {
+                        orderno = stationOrderNum[staton] + 1;
+
+                    }
+                    else
+                    {
+                        stationOrderNum.Add(staton, orderno);
+                    }
+                    listStationMode.Add(new ShopProductStationMode()
+                    {
+                        ID = Guid.NewGuid().ToString(),
+                        ProductID = item.ID,
+                        StationMode = staton,
+                        OrderNo = orderno,
+                        StationModeName = ((StationMode)staton).ToString()
+                    });
+                    stationOrderNum[staton] = orderno;
+
+                }
             }
             SessionFactory dal;
             IDbTransaction tr = Dal.BeginTransaction(out dal);
@@ -115,6 +141,89 @@ namespace EasyCms.Dal
             }
 
 
+        }
+
+        public string UpdateStationOrderNo(int station, string stationID, int newvalue)
+        {
+            string result = string.Empty;
+            int oldvalue = (int)Dal.From<ShopProductStationMode>().Where(ShopProductStationMode._.ID == stationID).Select(ShopProductStationMode._.OrderNo).ToScalar();
+            if (newvalue == oldvalue)
+            {
+                return "顺序没变，不用修改";
+            }
+            else
+            {
+                ShopProductStationMode ssm = new ShopProductStationMode() { ID = stationID, RecordStatus = StatusType.update, OrderNo = newvalue };
+                WhereClip where = ShopProductStationMode._.StationMode == station;
+                ShopProductStationMode plssm = new ShopProductStationMode() { RecordStatus = StatusType.update };
+
+                int cz = newvalue - oldvalue;
+                if (cz > 0)
+                {
+                    // 7 /改成9   原来的9 变成8  8变成7  10 不变
+
+                    plssm.Where = where && ShopProductStationMode._.OrderNo <= newvalue && ShopProductStationMode._.OrderNo > oldvalue;
+                    ExpressionClip orderexp = new ExpressionClip("OrderNo-1 ");
+                    plssm.SetModifiedProperty(ShopProductStationMode._.OrderNo, orderexp);
+                }
+                else
+                {
+                    //9//改成7  7 变8 8 变9
+                    plssm.Where = where && ShopProductStationMode._.OrderNo >= newvalue && ShopProductStationMode._.OrderNo < oldvalue;
+                    //顺序减1
+                    ExpressionClip orderexp = new ExpressionClip("OrderNo+1 ");
+
+                    plssm.SetModifiedProperty(ShopProductStationMode._.OrderNo, orderexp);
+                }
+                SessionFactory dal = null;
+                IDbTransaction tr = Dal.BeginTransaction(out dal);
+                try
+                {
+                    dal.SubmitNew(tr, ref dal, plssm, ssm);
+                    dal.CommitTransaction(tr);
+                }
+                catch
+                {
+                    dal.RollbackTransaction(tr);
+                    throw;
+                }
+                return result;
+            }
+        }
+
+        public string UpdateOrderNo(string attacheID, string producntID)
+        {
+            List<AttachFile> list = Dal.From<AttachFile>().Where(AttachFile._.RefID == producntID)
+                .OrderBy(AttachFile._.OrderNo)
+                
+                .List<AttachFile>();
+
+            int i = 1;
+            foreach (var item in list)
+            {
+                if (item.ID == attacheID)
+                {
+                    item.OrderNo = 0;
+                }
+                else
+                {
+                    item.OrderNo = i++;
+
+                }
+
+            }
+            Dal.Submit(list);
+            return string.Empty;
+        }
+
+        public DataSet GetList()
+        {
+           IDbCommand dt2 = Dal.From<ShopProductInfo>().Join<AttachFile>(ShopProductInfo._.ID == AttachFile._.RefID)
+                .Select(AttachFile._.ID.Alias("fileID"), AttachFile.GetThumbnaifilePath(""), AttachFile._.RefID,AttachFile._.OrderNo).ToDbCommand();
+
+            DataSet ds= Dal.From<ShopProductInfo>().Select(ShopProductInfo._.ID, ShopProductInfo._.Code, ShopProductInfo._.Name)
+                .ToDataSet(dt2);
+            return ds;
         }
 
         public ShopCardInfo GetProduct(string productId, string sKU)
@@ -185,7 +294,7 @@ namespace EasyCms.Dal
 
         public DataTable GetList(string categoryID, string Name, int pagenum, int pagesize, ref int recordCount)
         {
-            WhereClip where =  ShopProductInfo._.Name.Contains(Name) || ShopProductInfo._.Code.Contains(Name);
+            WhereClip where = ShopProductInfo._.Name.Contains(Name) || ShopProductInfo._.Code.Contains(Name);
             QuerySection qry = Dal.From<ShopProductInfo>();
             if (!string.IsNullOrWhiteSpace(categoryID))
             {
@@ -246,7 +355,7 @@ namespace EasyCms.Dal
             {
                 if (result.Count > 0)
                 {
-                    where = where && !ShopProductInfo._.ID.In(result.Select(p => p.ID));
+                    where = where && !ShopProductInfo._.ID.In(result.Select(p => p.ID).ToList());
                 }
                 DataTable dt1 = Dal.From<ShopProductStationMode>().Join<ShopProductInfo>(ShopProductStationMode._.ProductID == ShopProductInfo._.ID)
 
@@ -458,11 +567,11 @@ namespace EasyCms.Dal
 
         public ShopSaleProductInfo GetSaleEntity(string id, string host)
         {
-           
+
             ShopSaleProductInfo p = Dal.From<ShopProductInfo>()
                 .Join<ShopProductType>(ShopProductInfo._.TypeId == ShopProductType._.ID, JoinType.leftJoin)
                 .Where(ShopProductInfo._.ID == id && ShopProductInfo._.SaleStatus == 1).ToFirst<ShopSaleProductInfo>();
-            
+
 
             if (p != null)
             {
@@ -653,7 +762,14 @@ namespace EasyCms.Dal
 
         public int SaveStation(ShopProductStationMode s)
         {
-
+            int orderNo = 0;
+            object o = Dal.Max<ShopProductStationMode>(ShopProductStationMode._.StationMode == (int)s.StationMode, ShopProductStationMode._.OrderNo);
+            if (o != DBNull.Value)
+            {
+                orderNo = (int)o;
+            }
+            
+            s.OrderNo = orderNo + 1;
             return Dal.Submit(s);
         }
 
@@ -685,7 +801,27 @@ namespace EasyCms.Dal
 
         public int DeleteStation(string StationID)
         {
-            return Dal.Delete<ShopProductStationMode>(StationID);
+            int count = 0;
+            ShopProductStationMode ssm = Dal.Find<ShopProductStationMode>(StationID);
+            ssm.Where = ShopProductStationMode._.StationMode == ssm.StationMode && ShopProductStationMode._.OrderNo > ssm.OrderNo;
+            ExpressionClip orderexp = new ExpressionClip("OrderNo-1 ");
+
+            ssm.SetModifiedProperty(ShopProductStationMode._.OrderNo, orderexp);
+            SessionFactory dal = null;
+            IDbTransaction tr = Dal.BeginTransaction(out dal);
+            try
+            {
+                count = dal.SubmitNew(tr, ref dal, ssm);
+                dal.Delete<ShopProductStationMode>(tr, StationID);
+                dal.CommitTransaction(tr);
+            }
+            catch
+            {
+                dal.RollbackTransaction(tr);
+                throw;
+            }
+            return count;
+            
         }
 
         public DataSet GetProductsByMutilStation(string id, int pagesize, string host, out string error)
@@ -926,17 +1062,12 @@ namespace EasyCms.Dal
             searchWhere = ShopProductInfo._.SaleStatus == 1;
 
             searchWhere = searchWhere && (ShopProductInfo._.Name.Contains(searchKey) || ShopProductInfo._.ShortDescription.Contains(searchKey)
-                || ShopCategory._.Name.Contains(searchKey) || ShopCategory._.Description.Contains(searchKey)
-                || ShopBrandInfo._.Name.Contains(searchKey)
-                || ShopProductType._.Name.Contains(searchKey)
-                  );
-            DataTable dt = Dal.From<ShopProductCategory>().Join<ShopProductInfo>(
-         ShopProductCategory._.ProductID == ShopProductInfo._.ID)
-         .Join<ShopCategory>(ShopCategory._.ID == ShopProductCategory._.CategoryID)
+               );
+            DataTable dt = Dal.From<ShopProductInfo>()
          .Join<ShopBrandInfo>(ShopBrandInfo._.ID == ShopProductInfo._.BrandId, JoinType.leftJoin)
          .Join<ShopProductType>(ShopProductType._.ID == ShopProductInfo._.TypeId, JoinType.leftJoin)
          .Join<AttachFile>(AttachFile._.RefID == ShopProductInfo._.ID && AttachFile._.OrderNo == 0, JoinType.leftJoin)
-         .Select(ShopProductInfo._.ID, ShopProductCategory._.CategoryID, ShopProductInfo._.CommentCount, ShopCategory._.Name.Alias("CategoryName"), ShopProductInfo._.BrandId, ShopProductInfo._.TypeId, ShopProductInfo._.Code, ShopProductInfo._.Name, ShopProductInfo._.SKU, ShopProductInfo._.SaleCounts, ShopProductInfo._.SalePrice, ShopProductInfo._.MarketPrice, ShopBrandInfo._.Name.Alias("BrandName"), ShopProductType._.Name.Alias("TypeName"), AttachFile.GetThumbnaifilePath(host))
+         .Select(ShopProductInfo._.ID, ShopProductInfo._.CommentCount, ShopProductInfo._.BrandId, ShopProductInfo._.TypeId, ShopProductInfo._.Code, ShopProductInfo._.Name, ShopProductInfo._.SKU, ShopProductInfo._.SaleCounts, ShopProductInfo._.SalePrice, ShopProductInfo._.MarketPrice, ShopBrandInfo._.Name.Alias("BrandName"), ShopProductType._.Name.Alias("TypeName"), AttachFile.GetThumbnaifilePath(host))
          .OrderBy(orderby)
          .Where(searchWhere)
          .ToDataTable(20, pageIndex, ref pagecount, ref recordCount);

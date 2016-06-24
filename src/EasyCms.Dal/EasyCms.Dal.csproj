@@ -56,6 +56,7 @@
     <Compile Include="AdministrativeRegionsDal.cs" />
     <Compile Include="AdPositonDal.cs" />
     <Compile Include="AppSetDal.cs" />
+    <Compile Include="APPVersionDal.cs" />
     <Compile Include="AsynchNotifyLogDal.cs" />
     <Compile Include="AttachFileDal.cs" />
     <Compile Include="AttributeTypeDal.cs" />

@@ -182,6 +182,16 @@ namespace EasyCms.Dal
                 .OrderBy(ShopCategory._.OrderNo).ToDataTable();
             return dt;
         }
+        public DataTable GetAppEntityWithBigLog(string id, string host)
+        {
+            WhereClip where = ShopCategory._.ID == id;
+
+            DataTable dt = Dal.From<ShopCategory>()
+                .Join<AttachFile>(ShopCategory._.BigLogo == AttachFile._.RefID, JoinType.leftJoin)
+                .Where(where).Select(ShopCategory._.ID, ShopCategory._.Code, ShopCategory._.Name, ShopCategory._.ClassCode, AttachFile.GetFilePath(host, "LogoUrl"))
+                .OrderBy(ShopCategory._.OrderNo).ToDataTable();
+            return dt;
+        }
         public string[] GetClassCode(string categoryID)
         {
             string s= Dal.From<ShopCategory>().Where(ShopCategory._.ID == categoryID).Select(ShopCategory._.ClassCode).ToScalar() as string;

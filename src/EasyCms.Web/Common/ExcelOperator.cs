@@ -398,7 +398,9 @@ namespace EasyCms.Web
             using (Stream stream = File.Open(path, FileMode.OpenOrCreate, FileAccess.ReadWrite))
             {
                 workbook.Write(stream);
+                
             }
+            result = true;
             return result;
         }
         public static void delOldFile(string path)

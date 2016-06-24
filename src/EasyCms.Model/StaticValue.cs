@@ -746,4 +746,10 @@ namespace EasyCms.Model
     {
         未处理 = 0, 处理中 = 1, 成功 = 2, 失败 = 99
     }
+
+    public enum AppPlatform
+    {
+        安卓,
+        苹果
+    }
 }

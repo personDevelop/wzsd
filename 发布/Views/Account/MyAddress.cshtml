@@ -1,0 +1,196 @@
+﻿@using EasyCms
+@using EasyCms.Model
+@{
+    Layout = "~/Views/Shared/_UserCenter.cshtml";
+    ViewBag.Title = "会员中心-" + CmsSessionExtend.WebSite.Name;
+}
+
+<style>
+    .table {
+        font-family: 微软雅黑;
+        border-spacing: 0;
+        width: 100%;
+    }
+
+        .table th {
+            background: #F1F1F1;
+            padding: 8px 8px;
+            text-align: left;
+            font-weight: normal;
+            font-size: 14px;
+        }
+
+        .table td {
+            border-bottom: 1px solid #DDD;
+            padding: 10px 8px;
+        }
+
+        .table tr:hover {
+        }
+
+    .btn-group .btn {
+        display: inline-block;
+        height: 34px;
+        line-height: 36px;
+        font-size: 16px;
+        vertical-align: middle;
+    }
+
+    .btn-group .btn-tobback {
+        padding: 0 30px;
+        margin-right: 10px;
+        background: #fff;
+        color: #e4393c;
+        border: 1px solid #e4393c;
+    }
+
+    .btn-group .btn-addtocart {
+        position: relative;
+        padding-right: 20px;
+        padding-left: 20px;
+        width: auto;
+        background: #e4393c;
+        border: 1px solid #e4393c;
+        color: #fff;
+        margin-bottom: 10px;
+        font-family: 'Microsoft YaHei';
+    }
+
+    .btn-group .btn-tobback:hover {
+        border: 1px solid #e4393c;
+    }
+
+    .btn-group .btn-addtocart:hover {
+        background: #c91623;
+        color: #FFF;
+    }
+
+    .ad-op {
+        margin-right: 15px;
+    }
+</style>
+<script>
+    function AddAddr(url) {
+
+        showFormurl("新增收件人信息", url, onclosedialog, { width: 690, height: 417 });
+
+    }
+
+    function EditAdd(addrid) {
+        showFormurl("编辑收件人信息", "/addr/index/" + addrid, function (result) { onclosedialog() }, { width: 690, height: 417 });
+
+    }
+
+    function getData() {
+        $.ajax({
+            url: "@Url.Action("GetUserAddress", "Account")",
+            type: "get",
+            dataType: "json",
+            async: false,
+            success: function (reval) {
+
+                reobj = reval;
+            },
+            error: function (err) {
+                throw err.responseText;
+                return false;
+            }
+        });
+        return reobj;
+    }
+
+    function initTable(data) {
+        var htmlarr = [];
+
+        htmlarr.push("<table class='table'><tr><th>收货人</th><th>联系电话</th><th>收货地址</th><th>是否默认</th><th>操作</th></tr>");
+        for (var i = 0; i < data.length; i++) {
+            var isdef = data[i]["IsDefault"] ? '是' : '否';
+            htmlarr.push("<tr>");
+            htmlarr.push("<td>" + data[i]["ShipName"] + "</td>");
+            htmlarr.push("<td>" + data[i]["CelPhone"] + "</td>");
+            htmlarr.push("<td>" + data[i]["Address"] + "</td>");
+            htmlarr.push("<td>" + isdef + "</td>");
+            htmlarr.push('<td><a class="ad-op"  onclick="deleteOp(\'' + data[i]["ID"] + '\')"   href="#">删除</a><a class="ad-op"  href="#" onclick="EditAdd(\'' + data[i]["ID"] + '\')"  >编辑</a>');
+
+            if (!data[i]["IsDefault"]) {
+                htmlarr.push('<a  class="ad-op"  onclick="setDefault(\'' + data[i]["ID"] + '\')" href="#">设为默认</a>');
+            }
+            htmlarr.push("</td>");
+            htmlarr.push("</tr>");
+        }
+        htmlarr.push("</table>");
+        $("#addtable").empty();
+        $("#addtable").html(htmlarr.join(""));
+    }
+
+    function refresh() {
+        var data = getData();
+        initTable(data.Rows);
+    }
+    $(function () {
+        refresh();
+    });
+    function setDefault(id) {
+        if (confirm("确认要将改地址设为默认吗？")) {
+            $.ajax({
+                url: "setDefault/" + id,
+                type: "get",
+                dataType: "json",
+                async: false,
+                success: function (reval) {
+
+                    reobj = reval;
+                },
+                error: function (err) {
+                    throw err.responseText;
+                    return false;
+                }
+            });
+            if (reobj["res"]) {
+                refresh();
+            }
+
+        }
+
+    }
+    function deleteOp(id) {
+        if (confirm("确认要删除改地址吗？")) {
+            $.ajax({
+                url: "delAddress/" + id,
+                type: "get",
+                dataType: "json",
+                async: false,
+                success: function (reval) {
+
+                    reobj = reval;
+                },
+                error: function (err) {
+                    throw err.responseText;
+                    return false;
+                }
+            });
+            if (reobj["res"]) {
+                refresh();
+            }
+
+        }
+    }
+
+    function onclosedialog() {
+        refresh();
+    }
+</script>
+<div class="content">
+    <div class="mainbox mine">
+
+        <div class="btn-group">
+
+            <a class="btn btn-addtocart" href="#" onclick="AddAddr('/addr/index')" id="GotoShoppingCart"><b></b>添加地址</a>
+
+        </div>
+        <div id="addtable"></div>
+
+
+
+    </div>
+</div>

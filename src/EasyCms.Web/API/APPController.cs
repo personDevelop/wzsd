@@ -425,6 +425,8 @@ namespace EasyCms.Web.API
                 return dt.Format();
             }
         }
+
+       
         public HttpResponseMessage GetTravleList(int id=0, string pageIndex=null )
         {
             string travalCategoryID = new ParameterInfoBll().GetValue(StaticValue.Traval);
@@ -480,7 +482,13 @@ namespace EasyCms.Web.API
             return dt.Format();
             
         }
+        public HttpResponseMessage GetAppVersion()
 
-       
+        {
+            DataTable dt = new APPVersionBll().GetAppVersion();
+            return dt.Format();
+
+        }
+
     }
 }

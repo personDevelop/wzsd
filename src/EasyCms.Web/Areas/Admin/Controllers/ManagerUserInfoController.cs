@@ -265,7 +265,76 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             }
             return View(pwd);
         }
+        public ActionResult CZ(string id)
+        {
+            ViewBag.NewIndex = "ManagerIndex";
+            ManagerUserInfo p = null;
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                p = new ManagerUserInfo();
+            }
+            else
+                p = bll.GetEntity(id);
+            return View("Edit", p);
+        }
+        public ActionResult ReCharge(string id)
+        {
+            ViewBag.ChargeBanlance =0.00;
+            ManagerUserInfo p = null;
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                p = new ManagerUserInfo();
+                ModelState.AddModelError("id", "请先选择会员");
+            }
+            else
+                p = bll.GetEntity(id);
+            return View( p);
+        }
+        [HttpPost]
+        [ValidateInput(false)]
+        public ActionResult SaveReCharge(FormCollection collection)
+        {
+            string ChargeBanlanceStr = collection["Recharge"];
+            string id = collection["ID"];
+            decimal charegeBanlance = 0;
+            decimal.TryParse(ChargeBanlanceStr, out charegeBanlance); 
+            ViewBag.ChargeBanlance = charegeBanlance;
+           
 
+            if (charegeBanlance <= 0)
+            {
+                ModelState.AddModelError("Recharge", "充值金额必须大于0");
+            }
+            else if (charegeBanlance >1000)
+            {
+                ModelState.AddModelError("Recharge", "充值金额最多1000");
+            }else
+                if (!string.IsNullOrWhiteSpace(id))
+            {
+               string err= bll.ReCharge(id, charegeBanlance, CmsSession.GetUserID());
+                if (!string.IsNullOrWhiteSpace(err))
+                {
+                    ModelState.AddModelError("Recharge", err);
+                }
+            }
+            ManagerUserInfo p = null;
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                p = new ManagerUserInfo();
+                ModelState.AddModelError("id", "请先选择会员");
+            }
+            else
+                p = bll.GetEntity(id);
+
+            return View("ReCharge", p);
+        }
+
+        public string GetAccuontMoneyLog(string id)
+        {
+            System.Data.DataTable dt = bll.GetAccuontMoneyLog(id);
+            return JsonWithDataTable.Serialize(dt);
+
+        }
 
     }
 }

@@ -261,5 +261,15 @@ namespace EasyCms.Business
         {
             return Dal.GetGetBalance(id);
         }
+
+        public DataTable GetAccuontMoneyLog(string userID)
+        {
+            return Dal.GetAccuontMoneyLog(userID);
+        }
+
+        public string ReCharge(string id, decimal charegeBanlance, string userID)
+        {
+            return Dal.ReCharge(id, charegeBanlance,   userID);
+        }
     }
 }

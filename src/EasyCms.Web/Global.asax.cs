@@ -55,12 +55,33 @@ namespace EasyCms.Web
         }
 
 
-        protected void Session_Start()
+        protected void Session_Start(Object sender, EventArgs e)
         {
+            new LogBll().WriteException("记录session SessionID 为：" + Session.SessionID);
+
             CmsSession.Session = Session;
             DictionOrFilePathOperator.StartupPath = System.Web.HttpContext.Current.Request.PhysicalApplicationPath+"bin\\";
         }
 
-
+        protected void Session_End(Object sender, EventArgs e)
+        {
+            string err = "session 丢失 但是被抓到了";
+            if (Session!=null)
+            {
+                if (string.IsNullOrWhiteSpace(Session.SessionID))
+                {
+                    err += ";sessionID 为" + Session.SessionID;
+                }
+                else
+                {
+                    err += ";sessionID 已经空了"  ;
+                }
+            }
+            else
+            {
+                err += ";Session 已经null了";
+            }
+            new LogBll().WriteException(err);
+        }
     }
 }
