@@ -38,7 +38,7 @@ namespace EasyCms.Dal
         public DataTable GetForAddPersonList(string RoleID)
         {
             string[] hasRolePersonID = Dal.From<SysRoleAndUserRalation>().Where(SysRoleAndUserRalation._.RoleId == RoleID).Select(SysRoleAndUserRalation._.UserId).ToSinglePropertyArray();
-            WhereClip where =ManagerUserInfo._.IsManager==true&& ManagerUserInfo._.Status == (int)UserStatus.正常;
+            WhereClip where =ManagerUserInfo._.IsManager==true&& ManagerUserInfo._.Status == (int)Model.UserStatus.正常;
             if (hasRolePersonID != null && hasRolePersonID.Length > 0)
             {
                 where = where && !ManagerUserInfo._.ID.In(hasRolePersonID);

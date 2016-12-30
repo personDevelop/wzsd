@@ -47,6 +47,12 @@ namespace EasyCms.Business
 
         }
 
+        public decimal GetFreightWithRegion(int id, out string error)
+        {
+            return Dal.GetFreightWithRegion(id, out   error);
+            
+        }
+
         public string[] GetNameByParentId(int parentId)
         {
             return Dal.GetNameByParentId(parentId);
@@ -57,6 +63,12 @@ namespace EasyCms.Business
         public DataTable GetOne(int id)
         {
             return Dal.GetOne(id);
+        }
+
+        public decimal GetFreightWithAddress(string id, out string error)
+        {
+            return Dal.GetFreightWithAddress(id, out error);
+            
         }
 
         public DataTable GetPathByFullPath(string fullPath)

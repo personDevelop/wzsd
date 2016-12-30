@@ -57,7 +57,7 @@ namespace EasyCms.Business
                 item = null;
                 }
             }
-            else if (item.Status != UserStatus.正常)
+            else if (item.Status != Model.UserStatus.正常)
             {
 
                 error = "账号状态["+ item.Status + "]，不允许登陆！";
@@ -138,7 +138,7 @@ namespace EasyCms.Business
             return Dal.GetListForAccount(pagenum, pagesize, where, ref   recordCount);
         }
 
-        public string ChangeStatus(string id, UserStatus status)
+        public string ChangeStatus(string id, Model.UserStatus status)
         {
             return Dal.ChangeStatus(id, status);
         }

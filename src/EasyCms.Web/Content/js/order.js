@@ -192,12 +192,26 @@ function SetAddr(addressid, element) {
     }
     $(".trade-foot-detail-com").find(".fc-consignee-info > span").first().text("寄送至： " + addr);
     $(".trade-foot-detail-com").find(".fc-consignee-info > span").last().text("收件人：" + name + "   " + tel);
+    var crrentfreight = $("#freightPriceId").attr("value")*1;
+    if (crrentfreight !== 0 && crrentfreight!==29) {
+        $.getJSON($("#hidGetFright").val(), { id: addressid }, function (d) {
+             
+            $("#freightPriceId").attr("value", d.data).html('<font color="#ff6600"> ￥' + d.data + '</font>');
+            ComputPrice();
+
+        });
+    }
+  
+
 }
+
+
 function ComputPrice()
 { 
     var total = $("#warePriceId").attr("value") * 1;
     var useCouponValue = $("#useCouponValue").attr("value") * 1;
-    var balance =  $("#useBalanceLabel").text();
+    var balance = $("#useBalanceLabel").text();
+    var freigh = $("#freightPriceId").attr("value")*1;
     if (!$.isNumeric(balance)) {
         balance = 0;
         $("#useBalanceLabel").text(balance);
@@ -207,9 +221,9 @@ function ComputPrice()
     $("#couponPriceId").text("-￥" + useCouponValue);
     $("#usedBalanceId").text("-￥" + balance);
     $("#total").text("-￥" + (useCouponValue + balance));
-    var payMoey = total - useCouponValue - balance;
+    var payMoey = total - useCouponValue - balance + freigh;
     $("#order_PayMoney").val(payMoey);
-  
+    $("#order_Freight").val(freigh);
     $("#sumPayPriceId").text("￥" + payMoey);
 }
 $(function () {

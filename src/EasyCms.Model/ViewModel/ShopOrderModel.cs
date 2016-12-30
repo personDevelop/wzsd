@@ -213,4 +213,11 @@ namespace EasyCms.Model
             Promotion.Add(new ShopPromotionSimpal() { ID = item.ID, Name = item.RuleName, HandsaleProductName = item.HandProductName, HandsaleCouponName = item.CouponName });
         }
     }
+
+
+    public class ShopOrderModelInfo : ShopOrder
+    {
+        public bool CashOnDelivery { get; set; }
+        
+    }
 }

@@ -14,6 +14,8 @@ using EasyCms.Web.Common;
 
 using System.Web.Hosting;
 using EasyCms.Model.ViewModel;
+using System.Web;
+
 namespace EasyCms.Web.API
 {
     public class APPController : BaseAPIControl
@@ -490,5 +492,22 @@ namespace EasyCms.Web.API
 
         }
 
+
+        public HttpResponseMessage GetSessionInfo()
+        {
+         
+            string resulttemp = @"SessionID：{0};Session中的数据个数：{1};IsCookieless:{2};IsNewSession:{3};
+                     IsReadOnly;{4};Mode:{5}; Timeout:{6}";
+            string result1 = string.Format(resulttemp, HttpContext.Current.Session.SessionID, HttpContext.Current.Session.Count, HttpContext.Current.Session.IsCookieless
+                   , HttpContext.Current.Session.IsNewSession, HttpContext.Current.Session.IsReadOnly, HttpContext.Current.Session.Mode, HttpContext.Current.Session.Timeout);
+
+            string result2 = string.Format(resulttemp, Session.CmsSession.Session.SessionID, Session.CmsSession.Session.Count, Session.CmsSession.Session.IsCookieless
+                           , Session.CmsSession.Session.IsNewSession, Session.CmsSession.Session.IsReadOnly, Session.CmsSession.Session.Mode, Session.CmsSession.Session.Timeout);
+
+
+            return (result1 + "；session框架：" + result2).FormatSuccess();
+
+
+        }
     }
 }

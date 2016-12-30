@@ -881,7 +881,11 @@ namespace EasyCms.Dal
             IDbTransaction tr = Dal.BeginTransaction(out dal);
             try
             {
-                dal.SubmitNew(tr, ref dal, Savelist);
+                foreach (var item in Savelist)
+                {
+                    dal.SubmitNew(tr, ref dal, item);
+                }
+               
                 dal.CommitTransaction(tr);
 
             }
@@ -1213,6 +1217,7 @@ namespace EasyCms.Dal
                 ShopOrder._.ExpressCompanyName,
                 ShopOrder._.ShipOrderNum,
                 ShopOrder._.FreightActual,
+                ShopOrder._.Freight,
                 ShopOrder._.ShipStatus,
                 ShopOrder._.PayStatus,
                 ShopOrder._.OrderStatus,

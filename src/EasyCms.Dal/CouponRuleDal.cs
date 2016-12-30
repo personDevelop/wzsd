@@ -299,7 +299,7 @@ namespace EasyCms.Dal
             {
                 cr = GetSimpleEntity(s.CouponID);
                 string[] userId = null;
-                WhereClip where = ManagerUserInfo._.IsManager == false && ManagerUserInfo._.Status == (int)UserStatus.正常;
+                WhereClip where = ManagerUserInfo._.IsManager == false && ManagerUserInfo._.Status == (int)Model.UserStatus.正常;
                 switch (s.SendType)
                 {
                     case SendCouponType.全员发放:

@@ -130,7 +130,7 @@ namespace EasyCms
                 {
                     if (isRecord)
                     {
-                        SharpLogService.LogClientInstance.WriteException(ex);
+                       ( SharpLogService.LogClientInstance as ILog).Write(ex);
                     }
                 }
 
@@ -276,7 +276,7 @@ namespace EasyCms
             }
             if (!result)
             {
-                new LogBll().WriteException(string.Format("角色【{0}】域【{1}】控制器【{2}】方法【{3}】错误信息【{4}】", roleid, routeTemplate, controler, action, error));
+                new LogBll().Write(string.Format("角色【{0}】域【{1}】控制器【{2}】方法【{3}】错误信息【{4}】", roleid, routeTemplate, controler, action, error));
             }
             return result;
         }

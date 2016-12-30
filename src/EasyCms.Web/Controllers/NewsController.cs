@@ -12,8 +12,13 @@ namespace EasyCms.Web.Controllers
     public class NewsController : Controller
     {
         // GET: News
-        public ActionResult Index()
+        public ActionResult Index(int id=1)
         {
+            if (id==0)
+            {
+                id = 1;
+            }
+            ViewBag.CurrentPageIndex = id;
             return View();
         }
         public ActionResult Detail(string id)

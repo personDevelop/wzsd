@@ -5,6 +5,7 @@
 @using Sharp.Common
 @using System.Data
 @{
+    decimal Freight = 0;
     ShopShippingAddress defaultAddr = null;
     ViewBag.Title = "订单结算页-" + CmsSessionExtend.WebSite.Name;
     decimal balance = new ManagerUserInfoBll().GetMyBalance(EasyCms.Session.CmsSession.GetUserID());
@@ -24,10 +25,11 @@
 @Styles.Render("~/bundles/ordercss")
 @Scripts.Render("~/bundles/orderjs")
 @Scripts.Render("~/bundles/product")
+@Html.Hidden("hidGetFright", Url.RouteUrl("ApiWithWeb", new { controller = "Region", action = "GetFreightWithAddress" }))
 @using (Html.BeginForm("SubmitOrder", "Order"))
 {
     @Html.AntiForgeryToken()
-
+    
     <div id="container">
         <div class="work" id="content">
             <div class="m">
@@ -468,7 +470,19 @@
                     </div>
                     <div class="list">
                         <span><i class="freight-icon"></i>运费：</span>
-                        <em class="price" id="freightPriceId"><font color="#ff6600"> ￥0.00</font></em>
+                        @if (defaultAddr != null)
+                        {
+                            string er = string.Empty;
+                            Freight = new AdministrativeRegionsBll().GetFreightWithAddress(defaultAddr.ID,out er);
+                            //if (Model.OrderItems.Exists(p => p.ProductName.Contains("大韩名秀电动秀足套组迅速磨薄足底死皮令您足下生辉")))
+                            //{
+                            //    Freight = 69;
+                            //} else
+                            //{ Freight = new AdministrativeRegionsBll().GetFreightWithAddress(defaultAddr.ID, out er); }
+                            Model.PayMoney += Freight;
+                            Model.Freight = Freight;
+                        }
+                        <em class="price" id="freightPriceId" value="@Freight"><font color="#ff6600"> ￥@Freight</font></em>
                     </div>
                 </div>
                 <div class="clr"></div>
@@ -539,5 +553,6 @@
     @Html.Hidden("order.Coupon[0].UsingCount", "0")
     @Html.Hidden("order.TotalPrice", Model.TotalPrice)
     @Html.Hidden("order.PayMoney", Model.PayMoney)
+    @Html.Hidden("order.Freight", Model.Freight)
     @Html.Hidden("SubmitCheck", ViewBag.SubmitCheck as string)
 }

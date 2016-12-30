@@ -1,0 +1,29 @@
+﻿@model MessageModel
+@using EasyCms.Model
+@{
+    var temModel = Model;
+    if (temModel == null)
+    {
+        temModel = new MessageModel() { MsgType = ShowMsgType.error, Title = "系统繁忙", Msg = "系统正忙,请稍后再试,给您带来不便,敬请谅解！" };
+    }
+    ViewBag.Title = temModel.Title + "--" + EasyCms.CmsSessionExtend.WebSite.Name;
+}
+<div>
+    <div class='floor' style='width:980px;'>
+        <div style='margin: 20px  0;' class="alert-@temModel.MsgType alert-with-description">
+            <span class='alert-icon @temModel.MsgType'></span>
+            <span class="alert-message">@temModel.Title</span>
+            <span class="alert-description">
+                @temModel.Msg
+            </span>
+
+        </div>
+        <div class='btn-group'>
+            <a class="btn btn-tobback" href="@Url.Action("index","default")"  >返回首页</a>
+            <a class="btn btn-addtocart" href="@Url.Action("index", "card")" id="GotoShoppingCart"><b></b>去购物车结算</a>
+        </div>
+
+    </div>
+
+</div>
+

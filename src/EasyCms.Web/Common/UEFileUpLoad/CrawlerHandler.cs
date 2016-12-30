@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using EasyCms;
+using System.Drawing;
 
 /// <summary>
 /// Crawler 的摘要说明
@@ -57,6 +58,10 @@ public class Crawler
 
     public Crawler Fetch()
     {
+        if (this.SourceUrl.Contains("&tp=webp"))
+        {
+            this.SourceUrl = this.SourceUrl.Replace("&tp=webp", string.Empty);
+        }
         var request = HttpWebRequest.Create(this.SourceUrl) as HttpWebRequest;
         using (var response = request.GetResponse() as HttpWebResponse)
         {
@@ -70,7 +75,12 @@ public class Crawler
                 State = "Url is not an image";
                 return this;
             }
-            ServerUrl = PathFormatter.Format(Path.GetFileName(this.SourceUrl), Config.GetString("catcherPathFormat"));
+            string extend = Config.GetString("catcherPathFormat");
+            if (string.IsNullOrWhiteSpace(extend))
+            {
+                extend = ".jpg";
+            }
+            ServerUrl = PathFormatter.Format(Path.GetFileName(this.SourceUrl), extend);
             var savePath = Server.MapPathCms(ServerUrl);
             if (!Directory.Exists(Path.GetDirectoryName(savePath)))
             {
@@ -91,6 +101,8 @@ public class Crawler
                     }
                     bytes = ms.ToArray();
                 }
+            
+              
                 File.WriteAllBytes(savePath, bytes);
                 State = "SUCCESS";
             }

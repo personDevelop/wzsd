@@ -8,6 +8,8 @@ using Sharp.Common;
 using EasyCms.Session;
 using EasyCms.Business;
 using EasyCms.Model;
+using System;
+
 namespace EasyCms.Web
 {
     public class FilterConfig
@@ -32,46 +34,57 @@ namespace EasyCms.Web
         string error = string.Empty;
         protected override bool AuthorizeCore(HttpContextBase httpContext)
         {
-            string area = string.Empty, controler = string.Empty, action = string.Empty;
-            string[] s = httpContext.Request.Url.Segments;
-            if (httpContext.Request.ApplicationPath.Length == 1)
+            
+            try
             {
-                if (s.Length > 1)
+                string area = string.Empty, controler = string.Empty, action = string.Empty;
+                string[] s = httpContext.Request.Url.Segments;
+                if (httpContext.Request.ApplicationPath.Length == 1)
                 {
-                    area = s[1].Replace("/", "");
+                    if (s.Length > 1)
+                    {
+                        area = s[1].Replace("/", "");
+                    }
+                    if (s.Length > 2)
+                    {
+                        controler = s[2].Replace("/", "");
+                    }
+                    if (s.Length > 3)
+                    {
+                        action = s[3].Replace("/", "");
+                    }
                 }
-                if (s.Length > 2)
+                else
                 {
-                    controler = s[2].Replace("/", "");
+                    //有虚拟目录
+                    if (s.Length > 2)
+                    {
+                        area = s[2].Replace("/", "");
+                    }
+                    if (s.Length > 3)
+                    {
+                        controler = s[3].Replace("/", "");
+                    }
+                    if (s.Length > 4)
+                    {
+                        action = s[4].Replace("/", "");
+                    }
                 }
-                if (s.Length > 3)
-                {
-                    action = s[3].Replace("/", "");
-                }
+
+
+                string err = string.Empty;
+              
+                bool result = CmsSessionExtend.CheckRight(area, controler, action, false, out err);
+
+                error = err;
+                return result;
             }
-            else
+            catch (Exception e)
             {
-                //有虚拟目录
-                if (s.Length > 2)
-                {
-                    area = s[2].Replace("/", "");
-                }
-                if (s.Length > 3)
-                {
-                    controler = s[3].Replace("/", "");
-                }
-                if (s.Length > 4)
-                {
-                    action = s[4].Replace("/", "");
-                }
+               ( SharpLogService.LogClientInstance as ILog).Write(e);
+                //   string ip = HttpContext.Current.Request.Params["server.RemoteIpAddress"] as string;
+                throw;
             }
-
-
-            string err = string.Empty;
-            bool result = CmsSessionExtend.CheckRight(area, controler, action, false, out err);
-
-            error = err;
-            return result;
         }
         public override void OnAuthorization(AuthorizationContext filterContext)
         {
@@ -99,57 +112,69 @@ namespace EasyCms.Web
 
         public void OnException(ExceptionContext filterContext)
         {
-
-            string area = string.Empty, controler = string.Empty, actionName = string.Empty;
-            foreach (var item in filterContext.RouteData.DataTokens.Keys)
+            try
             {
-                if (item == "area")
+              
+                string area = string.Empty, controler = string.Empty, actionName = string.Empty;
+                foreach (var item in filterContext.RouteData.DataTokens.Keys)
                 {
-                    area = filterContext.RouteData.DataTokens[item] as string;
-                    break;
+                    if (item == "area")
+                    {
+                        area = filterContext.RouteData.DataTokens[item] as string;
+                        break;
+                    }
                 }
-            }
-            foreach (var item in filterContext.RouteData.Values.Keys)
-            {
-                if (item == "controller")
+                
+                foreach (var item in filterContext.RouteData.Values.Keys)
                 {
-                    controler = filterContext.RouteData.Values[item] as string;
+                    if (item == "controller")
+                    {
+                        controler = filterContext.RouteData.Values[item] as string;
 
+                    }
+                    else if (item == "action")
+                    {
+                        actionName = filterContext.RouteData.Values[item] as string;
+                    }
                 }
-                else if (item == "action")
+               
+                string err = string.Empty;
+                FunctionInfo f = FunctionInfoBll.FindFunc(area, controler, actionName, out err);
+                string context = "";
+                string funcID = string.Empty;
+                if (f == null)
                 {
-                    actionName = filterContext.RouteData.Values[item] as string;
+                    context = filterContext.RequestContext.HttpContext.Request.Url.ToString();
                 }
-            }
-            string err = string.Empty;
-            FunctionInfo f = FunctionInfoBll.FindFunc(area, controler, actionName, out err);
-            string context = "";
-            string funcID = string.Empty;
-            if (f == null)
-            {
-                context = filterContext.RequestContext.HttpContext.Request.Url.ToString();
-            }
-            else
-            {
-                funcID = f.ID;
-            }
-            string accountid = CmsSession.GetUserID();//获取accountID
-            Sharp.Common.SharpLogService.LogClientInstance.WriteException(filterContext.Exception, accountid, funcID, context);
-            if (filterContext.HttpContext.Request.IsAjaxRequest())
-            {
+                else
+                {
+                    funcID = f.ID;
+                }
+                string accountid = CmsSession.GetUserID();//获取accountID
+                (SharpLogService.LogClientInstance as ILog).Write( filterContext.Exception, accountid+ funcID+ context);
+                if (filterContext.HttpContext.Request.IsAjaxRequest())
+                {
 
-                filterContext.HttpContext.Response.StatusCode = 500;
-                filterContext.ExceptionHandled = true;
-                filterContext.Result = filterContext.Exception.FormatExceptionJsonResult();
-            }
-            else
-            {
-                filterContext.HttpContext.Response.StatusCode = 500;
-                filterContext.ExceptionHandled = true;
-                filterContext.Result = new ViewResult() { ViewName = "Error" };
-            }
+                    filterContext.HttpContext.Response.StatusCode = 500;
+                    filterContext.ExceptionHandled = true;
+                    filterContext.Result = filterContext.Exception.FormatExceptionJsonResult();
+                }
+                else
+                {
+                    filterContext.HttpContext.Response.StatusCode = 500;
+                    filterContext.ExceptionHandled = true;
+                    filterContext.Result = new ViewResult() { ViewName = "Error" };
+                    (SharpLogService.LogClientInstance as ILog).Write( "发生错误Error2" + area + controler + actionName);
+                }
 
 
+            }
+            catch (Exception e)
+            {
+                (SharpLogService.LogClientInstance as ILog).Write("发生错误Error异常" );
+                (SharpLogService.LogClientInstance as ILog).Write(e);
+                throw;
+            }
         }
 
         //public static void RedirectError(dynamic filterContext, string error)

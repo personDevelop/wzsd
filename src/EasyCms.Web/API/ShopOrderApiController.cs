@@ -33,8 +33,8 @@ namespace EasyCms.Web.API
                 string err = string.Empty;
 
                 string userid = Request.GetAccountID();
-                order = new ShopOrderBll().CreateOrder(order, host, userid,ActionPlatform.APP客户端, out err);
-               
+                order = new ShopOrderBll().CreateOrder(order, host, userid, ActionPlatform.APP客户端, out err);
+
                 if (!string.IsNullOrWhiteSpace(err))
                 {
                     return err.FormatError();
@@ -50,6 +50,15 @@ namespace EasyCms.Web.API
                     //获取促销信息
                     //获取运费,先固定0
                     order.Freight = 0;
+                 
+                    if (order.ShopAddress != null)
+                    {
+                        string errrr;
+                        order.Freight = new AdministrativeRegionsBll().GetFreightWithAddress(order.ShopAddress.ID,out errrr);
+                      
+
+
+                    }
 
                     //获取配送信息  //先不获取了
                     if (string.IsNullOrWhiteSpace(err))
@@ -207,6 +216,7 @@ namespace EasyCms.Web.API
             ShopOrder._.ExpressCompanyName.FullName,
             ShopOrder._.ShipOrderNum.FullName,
             ShopOrder._.FreightActual.FullName,
+              ShopOrder._.Freight.FullName,
             "ShopOrder.ShipStatusStr",
             ShopOrder._.ShipStatus.FullName,
               "ShopOrder.PayStatusStr",
@@ -258,8 +268,7 @@ namespace EasyCms.Web.API
                     ShopOrder._.ShipEmail.FullName, ShopOrder._.ShipModeID
                     .FullName, ShopOrder._.ShipModeName.FullName, ShopOrder._.PayTypeGateWay.FullName,
                     ShopOrder._.PayTypeID.FullName, ShopOrder._.ExpressCompanyID.FullName,
-                    ShopOrder._.FreightAdjust.FullName,
-                    ShopOrder._.FreightActual.FullName, ShopOrder._.Weight
+                    ShopOrder._.Weight
                     .FullName, ShopOrder._.CostPrice.FullName,
                     ShopOrder._.PayMoney.FullName, ShopOrder._.OrderPoint.FullName, ShopOrder._.ReturnMoney.FullName,
                     ShopOrder._.SellerID.FullName, ShopOrder._.SellerName.FullName, ShopOrder._.SellerEmail.FullName, ShopOrder._.SellerPhone.FullName, ShopOrder._.SupplierID
@@ -446,7 +455,7 @@ namespace EasyCms.Web.API
             }
             else
             {
-                return order.FormatObj(true, "ShopReturnOrder.ID",  "ShopReturnOrder.CreateDate",  
+                return order.FormatObj(true, "ShopReturnOrder.ID", "ShopReturnOrder.CreateDate",
                 ShopReturnOrder._.Description.FullName,
                 ShopReturnOrder._.ReturnType.FullName,
                 ShopReturnOrder._.Status.FullName,

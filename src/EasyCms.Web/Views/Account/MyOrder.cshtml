@@ -992,7 +992,12 @@
         res.push(' <span>总额 ¥' + obj.TotalPrice + '</span><br/><span class="ftx-13">' + obj.PayTypeName + '</span> </div></td> <td rowspan="1">');
         res.push('<div class="status"><span class="order-status ftx-03">' + obj.OrderStatusStr + '</span><br/>');
         res.push('<a href="@Url.Action("Info", "order")/' + obj.ID + '" target="_blank">订单详情</a> </div></td><td rowspan="1"><div class="operate"><div></div>');
-        res.push('<a href="javascript:void(0);" click="addCard(\'' + product.ProductID + '\',\'' + product.ProductSKU + '\')" class="btn-again" ><b></b>加入购物车</a><br></div> </td></tr></tbody>');
+        res.push('<a href="javascript:void(0);" click="addCard(\'' + product.ProductID + '\',\'' + product.ProductSKU + '\')" class="btn-again" ><b></b>加入购物车</a><br>');
+        if (obj.OrderStatusStr == "等待付款") {
+            res.push('<a  target="_blank" href="@Url.Action("pay","order")' + '/' + obj.ID + '" class="btn-again" ><b></b>继续付款</a><br>');
+      
+        }
+        res.push('</div> </td></tr></tbody>');
         return res.join('');
     }
 

@@ -263,9 +263,14 @@ namespace AliPayCommon
             for (i = 0; i < requestItem.Length; i++)
             {
                 string key = requestItem[i];
-                string value = request.Form[key];
-                sArray.Add(key, value);
-                content += key + "=" + value + "&";
+               
+                if (!string.IsNullOrWhiteSpace(key))
+                {
+                    string value = request.Form[key];
+                    sArray.Add(key, value);
+                    content += key + "=" + value + "&";
+                }
+             
             }
             notify = AliAsynchNotify.Phrase(sArray);
             return sArray;

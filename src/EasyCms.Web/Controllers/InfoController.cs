@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sharp.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -12,7 +13,8 @@ namespace EasyCms.Web.Controllers
         // GET: /Info/
         public ActionResult Index()
         {
-            throw new HttpException();
+           
+          //  throw new HttpException();
             return View();
         }
 	}

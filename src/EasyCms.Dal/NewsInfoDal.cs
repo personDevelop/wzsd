@@ -50,7 +50,7 @@ namespace EasyCms.Dal
         {
            
            
-                return Dal.From<NewsInfo>().Select(NewsInfo._.ID,NewsInfo._.NewsTitle,NewsInfo._.CreatedDate.ConvertDate( ConvertDateType.十位年月日短横线分割).Alias("CreatedDate") ).OrderBy(NewsInfo._.Sequence)
+                return Dal.From<NewsInfo>().Select(NewsInfo._.ID,NewsInfo._.NewsTitle,NewsInfo._.CreatedDate.ConvertDate( ConvertDateType.十位年月日短横线分割).Alias("CreatedDate") ).OrderBy(NewsInfo._.CreatedDate.Desc)
 
                     .ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
         }

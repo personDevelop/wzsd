@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.SessionState;
 
 namespace EasyCms.Session
 {
@@ -17,9 +18,9 @@ namespace EasyCms.Session
         public const string RoleNameKey = "RoleName";
         public const string RoleInfoKey = "RoleInfo";
 
-        public static dynamic GetUser()
+        public static dynamic GetUser( )
         {
-
+             
             if (Session == null)
             {
                 return null;
@@ -36,8 +37,17 @@ namespace EasyCms.Session
 
             return Session[key];
         }
+        
+        public static HttpSessionState Session 
+        {
+            get {
+           
+            return HttpContext.Current.Session;
+            }
+        }
 
-        public static System.Web.SessionState.HttpSessionState Session { get; set; }
+        
+        //public static System.Web.SessionState.HttpSessionState Session { get; set; }
 
         public static string GetUserID()
         {

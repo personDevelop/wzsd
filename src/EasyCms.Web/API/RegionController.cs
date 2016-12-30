@@ -27,16 +27,46 @@ namespace EasyCms.Web.API
 
         public HttpResponseMessage GetRegionPath(int id)
         {
-            
-                DataTable dt = new AdministrativeRegionsBll().GetOne(id);
 
-                if (dt.Rows[0]["FullPath"].ToString().Contains("|"))
-                {
-                    dt = new AdministrativeRegionsBll().GetPathByFullPath(dt.Rows[0]["FullPath"].ToString());
-                }
 
-                return dt.Format();
+            DataTable dt = new AdministrativeRegionsBll().GetOne(id);
+
+            if (dt.Rows[0]["FullPath"].ToString().Contains("|"))
+            {
+                dt = new AdministrativeRegionsBll().GetPathByFullPath(dt.Rows[0]["FullPath"].ToString());
+            }
+
+            return dt.Format();
+        }
+        public HttpResponseMessage GetFreightWithRegion(int id)
+        {
+            string error;
+         decimal Freight=new AdministrativeRegionsBll().GetFreightWithRegion(id,out error);
+            if (string.IsNullOrWhiteSpace(error))
+            {
+                return Freight.FormatObj(); 
+            }
+            else
+            {
+                return error.FormatError();
+            }
            
+
+        }
+        public HttpResponseMessage GetFreightWithAddress(string id)
+        {
+            
+            ShopShippingAddress address = new ShopShippingAddressBll().GetEntity(id);
+            if (address != null)
+            {
+                return GetFreightWithRegion(address.RegionId);
+
+            }
+            else
+            {
+
+                return "不存在该地址".FormatError();
+            } 
         }
     }
 }

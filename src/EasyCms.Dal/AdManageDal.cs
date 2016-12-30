@@ -77,7 +77,7 @@ namespace EasyCms.Dal
             QuerySection qry = Dal.From<AdManage>().Join<AttachFile>(AdManage._.ImgageID == AttachFile._.RefID, JoinType.leftJoin
 )
               .Select(AdManage._.Note, AdManage._.LinkUrl, AdManage._.Name, AttachFile.GetFilePath("", "AdImgUrl"))
-              .Where(AdManage._.PositionID == posionEntity.ID).OrderBy(AdManage._.OrderNo);
+              .Where(AdManage._.PositionID == posionEntity.ID).OrderBy(AdManage._.OrderNo.Desc);
             if (count > 0)
             {
                 return qry.ToDataTable(count).ToList<AdManage>();

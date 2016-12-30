@@ -50,17 +50,45 @@ namespace EasyCms.Web
             {
                 string account = CmsSession.GetUserID();
                 //找不到请求的错误。
-                SharpLogService.LogClientInstance.WriteException(ex, account);
+                (SharpLogService.LogClientInstance as ILog).Write(ex, account);
             }
         }
 
 
         protected void Session_Start(Object sender, EventArgs e)
         {
-            new LogBll().WriteException("记录session SessionID 为：" + Session.SessionID);
+            //string err = "session启动，开始涉足cookie;";
+            //new LogBll().WriteException("记录session SessionID 为：" + Session.SessionID);
+            //string tokenKey = "pctoken";
+            //HttpCookie cookie = Response.Cookies[tokenKey];
+            //if (cookie != null)
+            //{
+            //    err += "包含cookie值;";
+            //    if (Session[tokenKey] == null)
+            //    {
+            //        err += "还没有设置用户信息；";
+            //    }
+            //    else
+            //    {
 
-            CmsSession.Session = Session;
+            //        Session[tokenKey] += "已设置用户信息；";
+
+            //    }
+                
+                
+            //}
+            //else
+            //{
+
+
+            //}
+            //string tokenCookie = Response.Cookies[tokenKey].Value;
+            //Response.SetCookie(new HttpCookie(tokenKey) {  HttpOnly=true, Shareable=true, Value=""  });
+            //CmsSession.Session = Session;
+
             DictionOrFilePathOperator.StartupPath = System.Web.HttpContext.Current.Request.PhysicalApplicationPath+"bin\\";
+
+            //new LogBll().WriteException(err);
         }
 
         protected void Session_End(Object sender, EventArgs e)
@@ -81,7 +109,7 @@ namespace EasyCms.Web
             {
                 err += ";Session 已经null了";
             }
-            new LogBll().WriteException(err);
+            new LogBll().Write(err);
         }
     }
 }

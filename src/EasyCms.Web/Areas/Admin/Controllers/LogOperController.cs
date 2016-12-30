@@ -59,7 +59,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         [HttpPost]
         //
         // GET: /Admin/NewsInfo/Delete/5
-        public string Delete(string id)
+        public int Delete(string id)
         {
             return bll.Delete(id);
         }

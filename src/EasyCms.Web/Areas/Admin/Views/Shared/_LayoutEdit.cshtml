@@ -26,7 +26,8 @@
             <div class="btn-wrap">
                 <input type="submit" onclick="$('#jqxLoader').jqxLoader('open');$('#IsContinueAdd').val(1)" value="保存后继续新增" class="btn" />
                 <input type="submit" onclick="$('#jqxLoader').jqxLoader('open');$('#IsContinueAdd').val(0)" value="提交保存" class="btn" />
-                <input name="btnReturn" type="button" value="返回上一页" class="btn yellow" onclick="javascript:   window.location.href ='@Url.Action("index", new { id=ViewBag.Other})';" />
+                <a class="btn yellow" href='@Url.Action("index", new { id=ViewBag.Other})'>返回上一页</a> 
+                
             </div>
         </div>
     <!--/工具栏-->

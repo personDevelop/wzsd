@@ -221,7 +221,7 @@ namespace EasyCms.Dal
            IDbCommand dt2 = Dal.From<ShopProductInfo>().Join<AttachFile>(ShopProductInfo._.ID == AttachFile._.RefID)
                 .Select(AttachFile._.ID.Alias("fileID"), AttachFile.GetThumbnaifilePath(""), AttachFile._.RefID,AttachFile._.OrderNo).ToDbCommand();
 
-            DataSet ds= Dal.From<ShopProductInfo>().Select(ShopProductInfo._.ID, ShopProductInfo._.Code, ShopProductInfo._.Name)
+            DataSet ds= Dal.From<ShopProductInfo>().Select(ShopProductInfo._.ID.All)
                 .ToDataSet(dt2);
             return ds;
         }
@@ -778,7 +778,10 @@ namespace EasyCms.Dal
             return
                Dal.From<ShopProductInfo>().Join<ShopProductStationMode>(ShopProductInfo._.ID == ShopProductStationMode._.ProductID)
                .Join<AttachFile>(AttachFile._.RefID == ShopProductInfo._.ID && AttachFile._.OrderNo == 0)
-               .Where(ShopProductInfo._.SaleStatus == 1 && ShopProductStationMode._.StationMode == id).Select(ShopProductStationMode._.ID.Alias("StationID"), ShopProductInfo._.ID, ShopProductStationMode._.OrderNo, ShopProductInfo._.Code, ShopProductInfo._.Name, ShopProductInfo._.SalePrice, ShopProductInfo._.MarketPrice, AttachFile.GetCompressionfilePath(host))
+               .Where(ShopProductInfo._.SaleStatus == 1 && ShopProductStationMode._.StationMode == id)
+               .Select(ShopProductStationMode._.ID.Alias("StationID"), ShopProductInfo._.ID,
+               ShopProductStationMode._.OrderNo, ShopProductInfo._.Code, ShopProductInfo._.Name, 
+               ShopProductInfo._.SalePrice, ShopProductInfo._.MarketPrice, ShopProductInfo._.SaleCounts, AttachFile.GetCompressionfilePath(host))
                .OrderBy(ShopProductStationMode._.OrderNo.Desc)
                .ToDataTable(pageSize, pageIndex, ref pagecount, ref recordCount);
         }
@@ -1108,7 +1111,7 @@ namespace EasyCms.Dal
                 {
                     p.HtmlStr = dr["Description"] as string;
                     string key = "src=\"/upload/";
-                    p.HtmlStr = p.HtmlStr.Replace("src =\"/Upload/", key);
+                    p.HtmlStr = p.HtmlStr.Replace("src=\"/Upload/", key);
                     if (p.HtmlStr.Contains(key))
                     {
                         p.HtmlStr = p.HtmlStr.Replace(key, key = "src=\"" + host + "/upload/");

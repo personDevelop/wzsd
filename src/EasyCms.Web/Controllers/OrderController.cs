@@ -15,7 +15,7 @@ namespace EasyCms.Web.Controllers
 {
     public class OrderController : Controller
     {
-        [HttpPost]
+       
         [ValidateAntiForgeryToken]
         public ActionResult Index(ShopOrderModel order)
         {
@@ -141,7 +141,7 @@ namespace EasyCms.Web.Controllers
                                 }
                                 catch (Exception ep)
                                 {
-                                    SharpLogService.LogClientInstance.WriteException(ep, user.ID, "", "订单支付失败:" + JsonWithDataTable.Serialize(order));
+                                    (SharpLogService.LogClientInstance as ILog).Write(ep, user.ID+ "订单支付失败:" + JsonWithDataTable.Serialize(order));
                                     return View("Error", new MessageModel() { Msg = "订单支付失败,稍后请到我的订单里再次支付或联系我们的客服,给您带来不便,敬请谅解。", MsgType = ShowMsgType.error, Title = "订单在线支付失败：订单号：" + orderID });
 
                                 }
@@ -153,7 +153,7 @@ namespace EasyCms.Web.Controllers
                     }
                     catch (Exception ex)
                     {
-                        SharpLogService.LogClientInstance.WriteException(ex, user.ID, "", "提交订单:" + JsonWithDataTable.Serialize(order));
+                        (SharpLogService.LogClientInstance as ILog).Write(ex, user.ID+ "提交订单:" + JsonWithDataTable.Serialize(order));
                         Msg = "系统繁忙,请稍后再试";
                     }
                 }
@@ -172,7 +172,38 @@ namespace EasyCms.Web.Controllers
 
 
         }
+        public void Pay(string id)
+        {
+            string Msg;
+            ManagerUserInfo user =  EasyCms.Session.CmsSession.GetUser();
+            if (user == null)
+            {
+                Msg = "请先登录红七商城";
+            }
+            try
+            {
+                string sHtmlText = new ShopPaymentTypesBll().PayByPc(id, out Msg);
 
+                if (string.IsNullOrWhiteSpace(Msg))
+                {
+                    Response.Write(sHtmlText);
+                    Response.End();
+                }
+                else
+                {
+                    //return View("Error", new MessageModel() { Msg = "订单支付失败,稍后请到我的订单里再次支付或联系我们的客服,给您带来不便,敬请谅解。", MsgType = ShowMsgType.error, Title = "订单在线支付失败：订单号：" + id });
+
+                }
+            }
+            catch (Exception ep)
+            {
+                (SharpLogService.LogClientInstance as ILog).Write(ep, user.ID + "订单支付失败:" );
+                //return View("Error", new MessageModel() { Msg = "订单支付失败,稍后请到我的订单里再次支付或联系我们的客服,给您带来不便,敬请谅解。", MsgType = ShowMsgType.error, Title = "订单在线支付失败：订单号：" + id });
+
+            }
+            //ViewBag.Msg = Msg;
+            //return View();
+        }
 
         public ActionResult PayReturn()
         {
@@ -199,7 +230,7 @@ namespace EasyCms.Web.Controllers
             return View("Error", model);
         }
 
-
+        [HttpPost]
         public string Notify()
         {
             AliAsynchNotify notify = null;
@@ -230,7 +261,7 @@ namespace EasyCms.Web.Controllers
                         }
                         else
                         {
-                            bool verifyResult = Core.VarifySign(sPara, notify.notify_id, notify.sign, aliNotify);
+                            bool verifyResult = true;// Core.VarifySign(sPara, notify.notify_id, notify.sign, aliNotify);
 
                             if (verifyResult)//验证成功
                             {
@@ -306,7 +337,7 @@ namespace EasyCms.Web.Controllers
             catch (Exception ex)
             {
                 new LogBll().WriteException(ex);
-                new LogBll().WriteException(content);
+                new LogBll().Write(content);
                 throw;
             }
             return "success";
@@ -344,6 +375,20 @@ namespace EasyCms.Web.Controllers
             }
             List<ShopOrder> list = new ShopOrderBll().GetMyOrder("", CmsSession.GetUser(), 1, status, "", out err, where);
             return new JsonResult() {  JsonRequestBehavior= JsonRequestBehavior.AllowGet, Data=list};
+        }
+
+        public ActionResult Info(string id)
+        {
+            ShopOrderBll bll = new ShopOrderBll();
+               ShopOrderModelInfo order = bll.getDataTable(ShopOrder._.ID== id).ToFirst<ShopOrderModelInfo>();
+            string ShipRegion =new AdministrativeRegionsBll().GetPathByID ( order.RegionID).Replace("/", "");
+            order.ShipAddress = ShipRegion + order.ShipAddress;
+            if (order!=null)
+            {
+                order.OrderItems = bll.GetOrderDetail(id).ToList<ShopOrderItem>();
+                return View(order);
+            }
+            return View();
         }
     }
 }

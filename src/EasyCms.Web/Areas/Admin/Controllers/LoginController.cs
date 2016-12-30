@@ -18,28 +18,45 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             LoginModel p = new LoginModel();
             ManagerUserInfoBll bll = new ManagerUserInfoBll();
             string sessionid = CmsSession.Session.SessionID;
-           
-            ManagerUserInfo user = bll.GetSessionUserInfo(sessionid);
-            if (user != null)
+            if (string.IsNullOrWhiteSpace(sessionid))
             {
-
-                SysRoleInfo role = bll.GetRole(user.ID);
-                CmsSession.AddUser(user, role);
-                
                
-                return RedirectToAction("", "Index");
+                return View(p);
             }
             else
             {
-             
-                return View(p);
+                ManagerUserInfo user = bll.GetSessionUserInfo(sessionid);
+                if (user != null)
+                {
+                    try
+                    {
+                         
+                    
+                        SysRoleInfo role = bll.GetRole(user.ID);
+                        CmsSession.AddUser(user, role);
+
+                        
+                        return RedirectToAction("Index", "Index");
+                    }
+                    catch (Exception e)
+                    {
+                        new LogBll().WriteException(e);
+                        return View(p);
+                    }
+                }
+                else
+                {
+                   
+                    return View(p);
+                }
             }
+           
         }
 
         public ActionResult Login(string Account, string Pwd)
         {
             string error = string.Empty;
-
+           
             ManagerUserInfo user = null; SysRoleInfo role = null;
             if (Account == "root" && Pwd == "aaaaaa")
             {
@@ -63,10 +80,25 @@ namespace EasyCms.Web.Areas.Admin.Controllers
             }
             if (role != null)
             {
-                EasyCms.Session.CmsSession.AddUser(user, role);
-                TokenInfo ti = new TokenInfo() { ID = CmsSession.Session.SessionID, UserID = user.ID, DeviceID = role.ID, CreateTime = DateTime.Now, LastTime = DateTime.Now, OutTime = DateTime.Now };
-                bll.Save(ti);
-                return RedirectToAction("", "Index");
+                try
+                {
+                  
+                    EasyCms.Session.CmsSession.AddUser(user, role);
+                     
+                    TokenInfo ti = new TokenInfo() { ID = CmsSession.Session.SessionID, UserID = user.ID, DeviceID = role.ID, CreateTime = DateTime.Now, LastTime = DateTime.Now, OutTime = DateTime.Now };
+                   
+                    bll.Save(ti);
+                    
+                    return RedirectToAction("", "Index",new { area="Admin"});
+                }
+                catch (Exception e)
+                {
+                   
+                    new LogBll().WriteException(e);
+                   
+                    return View("Index");
+                    
+                }
 
             }
             else

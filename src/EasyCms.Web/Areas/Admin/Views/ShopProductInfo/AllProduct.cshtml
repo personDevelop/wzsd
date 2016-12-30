@@ -20,6 +20,7 @@
                     <td>编号</td>
                     <td>名称</td>
                     <td>图片</td>
+                    <td>详细信息</td>
                 </tr>
             </thead>
 
@@ -42,6 +43,10 @@
                                 <img width="100" height="100" src="@itemFile["FilePath"]" />
                                     <input type="button" onclick='UpdateOrder(this,"@itemFile["fileID"]","@item["ID"]");'  value="@itemFile["OrderNo"]" />
                                 }
+                            </td>
+                            <td>
+                                @(new HtmlString(item["PCDescription"].ToString().Replace("\\\"", "\"").Replace("\\r\\n", "")))
+                                               
                             </td>
                         </tr>
                     }

@@ -46,13 +46,19 @@
 
 </div>
 }
- 
+ <style>
+     #guessyou li {
+         padding-left:10px;
+    padding-top:5px;
+width:230px;
+     }
+ </style>
 <div class='lazyblock'>
     <div id="guessyou">
         <div class="mt"><h2>猜你喜欢</h2><a href="javascript:;" class="extra" clstag="0">换一批</a></div>
-        <div class='mc'>
+        <div class='mc' style="height:320px">
             <div class="spacer"><i></i></div>
-            <ul>
+            <ul style="height:320px; padding:0px">
                 
                 <script type="text/javascript">
                     $(function(){
@@ -64,8 +70,8 @@
                                 {
                                     var item=data.data.Data[i];
 
-                                    $("#guessyou").find("ul").append("<li class='fore"+i+"'>  <div class='p-img'> <a width='130' height='130' href='@Url.Action("index", "Product")"+"/"+item.ID+"' target='_blank'>  <img src='"
-                                        +item.FilePath+"' width='130' height='130' title='"+item.Name+"'> </a></div> <div class='p-info'><div class='p-name'><a href='@Url.Action("index", "Product")"+"/"+item.ID+"' target='_blank'>"
+                                    $("#guessyou").find("ul").append("<li class='fore"+i+"'>  <div class='p-img'> <a  href='@Url.Action("index", "Product")"+"/"+item.ID+"' target='_blank'>  <img src='"
+                                        +item.FilePath+"' width='230' height='230' title='"+item.Name+"'> </a></div> <div class='p-info'><div class='p-name'><a href='@Url.Action("index", "Product")"+"/"+item.ID+"' target='_blank'>"
                             +item.Name+"</a></div><div class='p-price'>惊喜价<i>¥</i>"+item.SalePrice
                             +" </div></div </li>");
                                 }
@@ -90,7 +96,9 @@
         <div class='floor' value="@item.ID" >
             <div class="title mt mg-10">
                 <h2><i>@(i+"F")</i>@item.Name</h2>
-
+<a href="@(Url.Action("Index","Category",new { id=item.ID}))"><span style="float:right ;padding-right:5px; font-size:14px; margin-top:10px;font-family:'microsoft yahei'">
+    更多>>
+</span></a>
             </div>
             <div style="border:1px solid #DDD;overflow: hidden;height: 448px;">
                 <div class='leftads'>

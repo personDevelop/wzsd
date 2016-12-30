@@ -10,7 +10,7 @@ using System.Text;
 namespace EasyCms.Business
 {
 
-    public class LogBll
+    public class LogBll:ILog
     {
 
         LogDal CurrentClient = new LogDal();
@@ -26,7 +26,7 @@ namespace EasyCms.Business
         /// <param name="ex"></param>
         public void WriteException(Exception ex, string accountid = null, string funcID = null, string extinfo = null)
         {
-            WriteException(ex.GetExceptionMsg(), LogOrder.严重错误, accountid, funcID, extinfo);
+            Write(ex.GetExceptionMsg(), LogOrder.严重错误, accountid, funcID, extinfo);
 
 
         }
@@ -34,19 +34,20 @@ namespace EasyCms.Business
         /// 记录错误信息
         /// </summary>
         /// <param name="ex"></param>
-        public void WriteException(string ex, LogOrder order = LogOrder.严重错误, string accountid = null, string funcID = null, string extinfo = null)
+         public int Write(string msg, LogOrder msgOrder = LogOrder.严重错误, string funName = "", string className = "", string modleName = "", string context = "")
         {
+           
 
             T_Log log = new T_Log();
             log.ID = Guid.NewGuid().ToString();
-            log.Info = ex;
-            log.msgOrder = (int)order;
+            log.Info = msg;
+            log.msgOrder = (int)msgOrder;
             log.CrateDate = DateTime.Now;
-            log.Createor = accountid;
-            log.FunNameSource = funcID;
-            log.ContextInfo = extinfo;
-            CurrentClient.Write(log);
-
+            log.Createor = modleName;
+            log.FunNameSource = funName;
+            log.ContextInfo = context;
+            return CurrentClient.Write(log);
+          
 
         }
         /// <summary>
@@ -65,9 +66,10 @@ namespace EasyCms.Business
             CurrentClient.Write(log);
         }
 
-        public string Delete(string id)
+        public int Delete(string id)
         {
-            return new T_LogDal().Delete(id);
+            new T_LogDal().Delete(id);
+            return  0;
         }
         public int DeleteByIds(List<string> idlist)
         {
@@ -118,5 +120,34 @@ namespace EasyCms.Business
             CurrentClient.Write(log);
 
         }
+
+        public int Write(T_Log msg)
+        {
+            throw new NotImplementedException();
+        }
+
+       
+
+        public void RegisterErrorSqlLogger()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void WriteSqlError(string msg)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Write(Exception ex)
+        {
+            WriteException(ex);
+        }
+
+        public void Write(Exception ex, string context)
+        {
+            WriteException(ex, context);
+        }
+
+        
     }
 }

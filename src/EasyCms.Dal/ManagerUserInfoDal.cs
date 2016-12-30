@@ -91,7 +91,7 @@ namespace EasyCms.Dal
                 CreateDate = DateTime.Now,
                 LastModifyDate = DateTime.Now,
                 StatusChangeDate = DateTime.Now,
-                Status = UserStatus.正常
+                Status = Model.UserStatus.正常
             };
             if (registModel.IsPc)
             {
@@ -148,8 +148,9 @@ namespace EasyCms.Dal
         public DataTable GetListForAccount(int pagenum, int pagesize, WhereClip where, ref int recordCount)
         {
             int pageCount = 0;
-            return Dal.From<ManagerUserInfo>().Where(where).OrderBy(ManagerUserInfo._.Code)
-                .Select(ManagerUserInfo._.ID, ManagerUserInfo._.Code, ManagerUserInfo._.Name, ManagerUserInfo._.NickyName, ManagerUserInfo._.Birthday, ManagerUserInfo._.Sex,
+            return Dal.From<ManagerUserInfo>().Where(where).OrderBy(ManagerUserInfo._.CreateDate.Desc)
+                .Select(ManagerUserInfo._.ID, ManagerUserInfo._.Code, ManagerUserInfo._.Name, ManagerUserInfo._.NickyName, ManagerUserInfo._.Birthday,
+                ManagerUserInfo._.Sex,
         ManagerUserInfo._.ContactPhone, ManagerUserInfo._.CreateDate, ManagerUserInfo._.LastModifyDate,
           ManagerUserInfo._.Status, ManagerUserInfo._.Balance)
                    .ToDataTable(pagesize, pagenum, ref pageCount, ref recordCount);
@@ -169,7 +170,7 @@ namespace EasyCms.Dal
             }
         }
 
-        public string ChangeStatus(string id, UserStatus status)
+        public string ChangeStatus(string id, Model.UserStatus status)
         {
             ManagerUserInfo user = new ManagerUserInfo() { RecordStatus = StatusType.update, ID = id, Status = status };
             Dal.Submit(user);

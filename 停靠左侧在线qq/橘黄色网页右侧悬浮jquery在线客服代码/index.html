@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>橘黄色网页右侧悬浮jquery在线客服代码</title>
+<link href="http://www.hong7.tv/content/css/lanren.css" type="text/css" rel="stylesheet" />
+</head>
+<body>
+
+<!-- 代码部分begin -->
+<div id="rightArrow"><a href="javascript:;" title="在线客户"></a></div>
+<div id="floatDivBoxs">
+  <div class="floatDtt">在线客服</div>
+  <div class="floatShadow">
+    <ul class="floatDqq">
+      <li><a target="_blank" href="tencent://message/?uin=1234567890&Site=sc.chinaz.com&Menu=yes"><img src="images/qq.png" align="absmiddle">在线客服1号</a></li>
+      <li><a target="_blank" href="tencent://message/?uin=1234567890&Site=sc.chinaz.com&Menu=yes"><img src="images/qq.png" align="absmiddle">在线客服2号</a></li>
+      <li><a target="_blank" href="tencent://message/?uin=1234567890&Site=sc.chinaz.com&Menu=yes"><img src="images/qq.png" align="absmiddle">在线客服3号</a></li>
+    </ul>
+   
+  <div class="floatDbg"></div>
+</div>
+ 
+<script>
+$(function(){
+	var flag=0;
+	$('#rightArrow').on("click",function(){
+		if(flag==1){
+			$("#floatDivBoxs").animate({right: '-175px'},300);
+			$(this).animate({right: '-5px'},300);
+			$(this).css('background-position','-50px 0');
+			flag=0;
+		}else{
+			$("#floatDivBoxs").animate({right: '0'},300);
+			$(this).animate({right: '170px'},300);
+			$(this).css('background-position','0px 0');
+			flag=1;
+		}
+	});
+});
+</script>
+<!-- 代码部分end -->
+
+</body>
+</html>

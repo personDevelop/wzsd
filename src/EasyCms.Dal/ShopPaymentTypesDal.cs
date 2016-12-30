@@ -137,9 +137,18 @@ namespace EasyCms.Dal
         {
            error = string.Empty;
             string result = string.Empty;
+            bool updatePayTYPE = false;
             ShopPaymentTypes spay = Dal.From<ShopPaymentTypes>().Join<ShopOrder>(ShopPaymentTypes._.ID == ShopOrder._.PayTypeID).Where(ShopOrder._.ID == orderID)
                      .Select(ShopPaymentTypes._.ID.All).ToFirst<ShopPaymentTypes>();
+            if (spay==null)
+            {
+                spay = Dal.Find<ShopPaymentTypes>( ShopPaymentTypes._.IsEnable == true && ShopPaymentTypes._.DrivePath.Contains("2") && ShopPaymentTypes._.Name=="支付宝" );
+                if (spay!=null)
+                {
+                    updatePayTYPE = true;
+                }
 
+            }
             if (spay == null)
             {
                 error = "当前订单没有支付方式" + orderID; 
@@ -170,6 +179,12 @@ namespace EasyCms.Dal
                     body = body
                 };
                 result = apy.GenerSign(spay.SecretKey);
+                if (updatePayTYPE)
+                {
+                    ShopOrder orderUpdate = new ShopOrder() { RecordStatus = StatusType.update, Where = ShopOrder._.ID == orderID, PayTypeID = spay.ID, PayTypeName = spay.Name };
+                    Dal.Submit(orderUpdate);
+                }
+               
             }
 
 

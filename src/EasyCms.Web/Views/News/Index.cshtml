@@ -10,7 +10,7 @@
 @Styles.Render("~/bundles/newscss")
 <div class="floor">
     @FunctionExtend.HotProduct(StationMode.热卖商品)
-    
+
     <div id='news-wrap'>
         <div class="mt">
             <h2>
@@ -18,9 +18,7 @@
             </h2>
         </div>
         <div class="mc">
-            <ul>
-                 
-            </ul>
+            <ul></ul>
         </div>
 
 
@@ -29,26 +27,28 @@
     </div>
     <div class="pagebar pagecenter cl" data-pages="675">
         <ul class="pagination-media pagination pagination-md cl">
-            <li class="firstpage disabled"><a href="javascript:;" class="first" rel="nofollow">首页</a></li>
-            <li class="prevpage disabled"><a href="javascript:;" class="prev" rel="nofollow">上一页</a></li>
-            <li class="pagebox active"><span>1</span></li>
-            <li class="pagebox"><a href="feed/index/page/2.html">2</a></li>
-            <li class="pagebox"><a href="feed/index/page/3.html">3</a></li>
-            <li class="pagebox"><a href="feed/index/page/4.html">4</a></li>
-            <li class="pagebox"><a href="feed/index/page/5.html">5</a></li>
+            <li class="firstpage disabled"><a href="@Url.Action("index",new  { id = 1})" class="first" rel="nofollow">首页</a></li>
+            <li class="prevpage disabled"><a href="" class="prev" rel="nofollow">上一页</a></li>
+           
+            <li class="pagebox page1"><a href="feed/index/page/1.html">1</a></li>
+            <li class="pagebox page2"><a href="feed/index/page/2.html">2</a></li>
+            <li class="pagebox page3"><a href="feed/index/page/3.html">3</a></li>
+            <li class="pagebox page4"><a href="feed/index/page/4.html">4</a></li>
+            <li class="pagebox page5"><a href="feed/index/page/5.html">5</a></li>
             <li class="pagejumpbox">
                 <span class="pagejump">
                     <label>
-                        <input type="text" name="custompage" size="3" title="输入页码，按回车快速跳转" value="1" data-hash="">
+                        <input id="custompage" type="text" name="custompage" size="3" title="输入页码，按回车快速跳转" value="@ViewBag.CurrentPageIndex" data-hash="">
                         <a href="feed/index/page/.html" class="pagejump_link hide"></a>
-                        <span title="共 675 页"> / 675 页</span>
+                        <span  totalPage="" id="lblPageCount" title="共 675 页"> / 675 页</span>
                     </label>
                 </span>
             </li>
-            <li class="nextpage"><a href="feed/index/page/2.html" class="nxt">下一页</a></li>
+            <li class="nextpage"><a href="feed/index/page/675.html " class="nxt">下一页</a></li>
             <li class="lastpage"><a href="feed/index/page/675.html" class="last">尾页</a></li>
         </ul>
     </div>
+    <div class="submit-error" id="submit_message"></div>
 </div>
 
 
@@ -59,14 +59,35 @@
     <script type="text/javascript">
 
         $(function () {
-
-
+            var url="@Url.Action("index","News",new { id=string.Empty})/";
+            $("#custompage").keydown(function(event){
+                if (event.keyCode==13)  {
+                    var jp= $("#custompage").val()*1;
+                    var totalPage= $("#lblPageCount").attr("totalPage")*1;
+                    if (jp<=0) {
+                        $("#submit_message").text("请输入正确的页号");
+                    }
+                    if (jp>totalPage) {
+                        $("#submit_message").text("请输入小于总页数的页号");
+                    }else
+                    {
+                        window.location.href=url+ jp;
+                       
+                    }
+                }
+               
+            });
+            
+            var currentPage= @ViewBag.CurrentPageIndex;
             $.ajax(
                 {
                     url: "@Url.Action("GetNews")",
-                    data: { pageNum: 1, pageSize: 20 },
+                    data: { pageNum:currentPage, pageSize: 20 },
                     dataType: "json",
                     success: function (result) {
+                        $("#lblPageCount").attr("title","共 "+result.pageCount+" 页");
+                        $("#lblPageCount").attr("totalPage", result.pageCount );
+                        $("#lblPageCount").text("/ " +result.pageCount+" 页");
                         var pageNum = result.pageNum;//当前页号从1开始计数
                         var totalPageCount = result.pageCount;//总页数
                         var totalRecordCount = result.recourdCount;//总记录数
@@ -75,7 +96,7 @@
                             var item = result.data[i];
                             var newsID = item.ID;
                             var newsTitle = item.NewsTitle;
-                            var newsDate = item.CreatedDate; 
+                            var newsDate = item.CreatedDate;
                             @{  <text>
                             $("#news-wrap>.mc").find("ul").append("<li><div><a href='@Url.Action("Detail")" + "/" + newsID + "'><font class='skcolor_ljg'></font>" + newsTitle
                             + "</a></div><span>" + newsDate + "</span> <div class='line'></div> </li>"); </text>
@@ -88,6 +109,124 @@
                             $(".pagebar").hide();//只有1页时隐藏
                         } else {
                             $(".pagebar").show();//有多页时显示页数 并控制该显示那些页数
+                            /*
+                            只显示5页的快捷键按钮
+                            */
+                            if (currentPage==1) {
+                                $(".firstpage,.prevpage").addClass("disabled");
+                            }else
+                            {
+                                $(".firstpage,.prevpage").removeClass("disabled");
+                                $(".prevpage").find("a").attr("href",url+ (currentPage - 1));
+
+                            }
+                            if (currentPage==result.pageCount) {
+                                $(".lastpage,.nextpage").addClass("disabled");
+                            }else
+                            {
+                                $(".lastpage,.nextpage").removeClass("disabled");
+                                $(".nextpage").find("a").attr("href",url+ (currentPage+1));
+                                $(".lastpage").find("a").attr("href",url+result.pageCount);
+
+                            }
+                            if (currentPage<6) {
+
+                                $(".page1").find("a").attr("href",url+ 1).text(1);
+                                $(".page2").find("a").attr("href",url+ 2).text(2);
+                                $(".page3").find("a").attr("href",url+ 3).text(3);
+                                $(".page4").find("a").attr("href",url+ 4).text(4);
+                                $(".page5").find("a").attr("href",url+ 5).text(5);
+                                switch (currentPage) {
+                                    case 1:
+                                        $(".page1").addClass("active").html("<span>"+1+"</span>");
+                                        break;
+                                    case 2:
+                                        $(".page2").addClass("active").html("<span>"+2+"</span>");
+                                        break;
+                                    case 3:
+                                        $(".page3").addClass("active").html("<span>"+3+"</span>");
+                                        break;
+                                    case 4:
+                                        $(".page4").addClass("active").html("<span>"+4+"</span>");
+                                        break;
+                                    case 5:
+                                        $(".page5").addClass("active").html("<span>"+5+"</span>");
+                                        break;
+                                    default:
+
+                                }
+                                $(".pagebox").hide();
+                                switch (totalPageCount) {
+                                    case 1:
+                                        $(".page1").show();
+                                        break;
+                                    case 2:
+                                        $(".page1").show();
+                                        $(".page2").show();
+                                    case 3:
+                                        $(".page1").show();
+                                        $(".page2").show();
+                                        $(".page3").show();
+                                        break;
+                                    case 4:
+                                        $(".page1").show();
+                                        $(".page2").show();
+                                        $(".page3").show();
+                                        $(".page4").show();
+                                        break;
+                                    case 5:
+                                        $(".page1").show();
+                                        $(".page2").show();
+                                        $(".page3").show();
+                                        $(".page4").show();
+                                        $(".page5").show();
+                                        break;
+                                    default:
+
+                                }
+
+                            }else
+                            {
+                                for (var i = 0; i <5; i++)
+                                {
+                                    $(".page"+(i+1)).find("a").attr("href",url+ (currentPage+i)).text( (currentPage+i));
+                                }
+                                $(".page"+(currentPage%5)).find("a").addClass("active").html("<span>"+currentPage+"</span>");;
+                               
+                                $(".pagebox").hide();
+                                switch (currentPage%5) { 
+                                    case 1:
+                                        $(".page1").show();
+                                        break;
+                                    case 2:
+                                        $(".page1").show();
+                                        $(".page2").show();
+                                    case 3:
+                                        $(".page1").show();
+                                        $(".page2").show();
+                                        $(".page3").show();
+                                        break;
+                                    case 4:
+                                        $(".page1").show();
+                                        $(".page2").show();
+                                        $(".page3").show();
+                                        $(".page4").show();
+                                        break;
+                                    case 5:
+                                        $(".page1").show();
+                                        $(".page2").show();
+                                        $(".page3").show();
+                                        $(".page4").show();
+                                        $(".page5").show();
+                                        break;
+                                    default:
+
+                                }
+                                
+                            }
+
+
+
                         }
 
                     }

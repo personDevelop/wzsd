@@ -79,6 +79,48 @@ namespace EasyCms.Dal
 
         }
 
+        public decimal GetFreightWithAddress(string id, out string error)
+        {
+            error = string.Empty;
+            ShopShippingAddress address = Dal.Find<ShopShippingAddress>(id);
+            if (address != null)
+            {
+                return GetFreightWithRegion(address.RegionId,out error);
+
+            }
+            else
+            {
+
+                error = "不存在该地址" ;
+            }
+            return 0;
+        }
+
+        public decimal GetFreightWithRegion(int id, out string error)
+        {
+            error = string.Empty;
+            DataTable dt =  GetOne(id);
+            if (dt.Rows.Count == 1)
+            {
+                string fullPath = dt.Rows[0]["FullPath"] as string;
+                if (fullPath.StartsWith("1|16"))
+                {
+                    return  0 ;
+
+                }else
+                {
+                    return 29 ;
+                }
+            }
+            else
+            {
+                error= "不存在该地址" + id;
+
+            }
+            return 0;
+            
+        }
+
         public string GetPathByID(int regeonID)
         {
             return Dal.From<AdministrativeRegions>().Where(AdministrativeRegions._.ID == regeonID).Select(AdministrativeRegions.PathName).ToScalar() as string;

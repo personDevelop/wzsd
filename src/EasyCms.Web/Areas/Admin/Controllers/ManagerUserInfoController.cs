@@ -184,7 +184,7 @@ namespace EasyCms.Web.Areas.Admin.Controllers
         [HttpPost]
         //
         // GET: /Admin/ManagerUserInfo/Delete/5
-        public string ChangeStatus(string id, UserStatus status)
+        public string ChangeStatus(string id, Model.UserStatus status)
         {
             return bll.ChangeStatus(id, status);
         }

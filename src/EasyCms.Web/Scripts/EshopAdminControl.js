@@ -469,15 +469,6 @@ function DelTree(treeid, url) {
     } else { ErrorMsg("请选择一条数据"); }
 }
 
-function errorPlace(error, element) {
-
-    if (element.is(":radio"))
-        error.insertAfter($(element).parent());
-    else if (element.is(":checkbox"))
-        error.insertAfter($(element).parent());
-    else
-        error.insertAfter(element);
-}
 
 var theme = "";
 
@@ -541,6 +532,15 @@ var pagerrenderer = function (gridid) {
     });
 
     return pageelement;
+}
+function errorPlace(error, element) {
+
+    if (element.is(":radio"))
+        error.insertAfter($(element).parent());
+    else if (element.is(":checkbox"))
+        error.insertAfter($(element).parent());
+    else
+        error.insertAfter(element);
 }
 
 $(function () {
